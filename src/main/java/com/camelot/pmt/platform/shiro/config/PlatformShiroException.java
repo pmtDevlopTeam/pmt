@@ -1,6 +1,6 @@
 package com.camelot.pmt.platform.shiro.config;
 
-public class ShiroException extends RuntimeException {
+public class PlatformShiroException extends RuntimeException {
 
 	/**
 	 * 

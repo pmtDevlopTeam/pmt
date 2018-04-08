@@ -32,7 +32,7 @@ import com.camelot.pmt.platform.shiro.PlatformUserRealm;
  */
 
 @Configuration
-public class SysShiroConfig {
+public class PlatformShiroConfig {
 	
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	

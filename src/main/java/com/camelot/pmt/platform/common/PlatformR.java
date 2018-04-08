@@ -7,55 +7,55 @@ import java.util.Map;
  * 返回数据
  * 
  */
-public class R extends HashMap<String, Object> {
+public class PlatformR extends HashMap<String, Object> {
 	private static final long serialVersionUID = 1L;
 	private Map<String,Object> data=new HashMap<String,Object>();
-	public R() {
+	public PlatformR() {
 		put("code", 0);
 		put("msg", "");
 		put("data", data);
 	}
 	
-	public static R error() {
+	public static PlatformR error() {
 		return error(500, "未知异常，请联系管理员");
 	}
 	
-	public static R error(String msg) {
+	public static PlatformR error(String msg) {
 		return error(500, msg);
 	}
 	
-	public static R error(int code, String msg) {
-		R r = new R();
+	public static PlatformR error(int code, String msg) {
+		PlatformR r = new PlatformR();
 		r.put("code", code);
 		r.put("msg", msg);
 		return r;
 	}
 
-	public static R ok(String msg) {
-		R r = new R();
+	public static PlatformR ok(String msg) {
+		PlatformR r = new PlatformR();
 		r.put("msg", msg);
 		return r;
 	}
 	
-	public static R ok(Map<String, Object> map) {
-		R r = new R();
+	public static PlatformR ok(Map<String, Object> map) {
+		PlatformR r = new PlatformR();
 		r.putAll(map);
 		return r;
 	}
 	
-	public static R ok() {
-		return new R();
+	public static PlatformR ok() {
+		return new PlatformR();
 	}
 
-	public R put(String key, Object value) {
+	public PlatformR put(String key, Object value) {
 		super.put(key, value);
 		return this;
 	}
-	public R data(String key,Object value){
+	public PlatformR data(String key,Object value){
 		data.put(key, value);
 		return this;
 	}
-	public R data(Map<String,Object> map){
+	public PlatformR data(Map<String,Object> map){
 		data.putAll(map);
 		return this;
 	}
