@@ -19,8 +19,6 @@ import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreato
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.camelot.pmt.platform.redis.RedisCacheManager;
-import com.camelot.pmt.platform.redis.RedisSessionDAO;
 import com.camelot.pmt.platform.shiro.PlatformUserRealm;
 
 /**
@@ -101,7 +99,7 @@ public class PlatformShiroConfig {
         advisor.setSecurityManager(securityManager);
         return advisor;
     }
-    @Bean(name = "redisCacheManager")
+/*    @Bean(name = "redisCacheManager")
     public RedisCacheManager redisCacheManager() {
         logger.debug("ShiroConfiguration.redisCacheManager()");
         return new RedisCacheManager();
@@ -110,7 +108,7 @@ public class PlatformShiroConfig {
     public RedisSessionDAO redisSessionDAO(){
         logger.debug("ShiroConfiguration.redisSessionDAO()");
         return new RedisSessionDAO();
-    }
+    }*/
     
     @Bean
     public SessionManager sessionManager() {

@@ -1,5 +1,7 @@
 package com.camelot.pmt;
 
+import java.util.UUID;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,6 +13,7 @@ public class PmtApplicationTests {
 
 	@Test
 	public void contextLoads() {
+		System.out.println(UUID.randomUUID().toString());
 	}
 
 }
