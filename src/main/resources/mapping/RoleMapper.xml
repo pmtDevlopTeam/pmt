@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.camelot.pmt.platform.role.mapper.RoleMapper" >
+    <resultMap id="BaseResultMap" type="com.camelot.pmt.platform.role.model.Role" >
+        <id column="id" property="id"/>
+        <result column="roleId" property="roleId"/>
+        <result column="parentId" property="parentId"/>
+        <result column="rolename" property="roleName"/>
+        <result column="state" property="state"/>
+        <result column="createtime" property="createTime"/>
+        <result column="modifytime" property="modifyTime"/>
+    </resultMap>
+    
+    <sql id="Base_Column_List" >
+        id,roleId,rolename,state,createtime,modifytime
+    </sql>
+
+    <select id="queryRoleArray" resultMap="BaseResultMap"  >
+       SELECT 
+       <include refid="Base_Column_List" />
+	   FROM pmt_platform_role
+    </select>
+</mapper>
