@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.camelot.pmt.task.mapper.TaskMapper" >
+  <resultMap id="BaseResultMap" type="com.camelot.pmt.task.model.Task" >
+    <id column="task_id" property="taskId" jdbcType="INTEGER" />
+    <result column="task_parent_id" property="taskParentId" jdbcType="INTEGER" />
+    <result column="project_id" property="projectId" jdbcType="INTEGER" />
+    <result column="demand_id" property="demandId" jdbcType="INTEGER" />
+    <result column="task_name" property="taskName" jdbcType="VARCHAR" />
+    <result column="priority" property="priority" jdbcType="VARCHAR" />
+    <result column="assign_user_id" property="assignUserId" jdbcType="INTEGER" />
+    <result column="beassign_user_id" property="beassignUserId" jdbcType="INTEGER" />
+    <result column="create_user_id" property="createUserId" jdbcType="INTEGER" />
+    <result column="task_create_time" property="taskCreateTime" jdbcType="DATE" />
+    <result column="assign_time" property="assignTime" jdbcType="DATE" />
+    <result column="estimate_start_time" property="estimateStartTime" jdbcType="DATE" />
+    <result column="estimate_end_time" property="estimateEndTime" jdbcType="DATE" />
+    <result column="actual_start_time" property="actualStartTime" jdbcType="DATE" />
+    <result column="actual_end_time" property="actualEndTime" jdbcType="DATE" />
+    <result column="task_type" property="taskType" jdbcType="INTEGER" />
+    <result column="task_speed" property="taskSpeed" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="abnormal_status" property="abnormalStatus" jdbcType="INTEGER" />
+    <result column="finish_user_id" property="finishUserId" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    task_id, task_parent_id, project_id, demand_id, task_name, priority, assign_user_id, 
+    beassign_user_id, create_user_id, task_create_time, assign_time, estimate_start_time, 
+    estimate_end_time, actual_start_time, actual_end_time, task_type, task_speed, status, 
+    abnormal_status, finish_user_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from pmt_task
+    where task_id = #{taskId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from pmt_task
+    where task_id = #{taskId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.camelot.pmt.task.model.Task" >
+    insert into pmt_task (task_id, task_parent_id, project_id, 
+      demand_id, task_name, priority, 
+      assign_user_id, beassign_user_id, create_user_id, 
+      task_create_time, assign_time, estimate_start_time, 
+      estimate_end_time, actual_start_time, actual_end_time, 
+      task_type, task_speed, status, 
+      abnormal_status, finish_user_id)
+    values (#{taskId,jdbcType=INTEGER}, #{taskParentId,jdbcType=INTEGER}, #{projectId,jdbcType=INTEGER}, 
+      #{demandId,jdbcType=INTEGER}, #{taskName,jdbcType=VARCHAR}, #{priority,jdbcType=VARCHAR}, 
+      #{assignUserId,jdbcType=INTEGER}, #{beassignUserId,jdbcType=INTEGER}, #{createUserId,jdbcType=INTEGER}, 
+      #{taskCreateTime,jdbcType=DATE}, #{assignTime,jdbcType=DATE}, #{estimateStartTime,jdbcType=DATE}, 
+      #{estimateEndTime,jdbcType=DATE}, #{actualStartTime,jdbcType=DATE}, #{actualEndTime,jdbcType=DATE}, 
+      #{taskType,jdbcType=INTEGER}, #{taskSpeed,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
+      #{abnormalStatus,jdbcType=INTEGER}, #{finishUserId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.camelot.pmt.task.model.Task" >
+    insert into pmt_task
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="taskId != null" >
+        task_id,
+      </if>
+      <if test="taskParentId != null" >
+        task_parent_id,
+      </if>
+      <if test="projectId != null" >
+        project_id,
+      </if>
+      <if test="demandId != null" >
+        demand_id,
+      </if>
+      <if test="taskName != null" >
+        task_name,
+      </if>
+      <if test="priority != null" >
+        priority,
+      </if>
+      <if test="assignUserId != null" >
+        assign_user_id,
+      </if>
+      <if test="beassignUserId != null" >
+        beassign_user_id,
+      </if>
+      <if test="createUserId != null" >
+        create_user_id,
+      </if>
+      <if test="taskCreateTime != null" >
+        task_create_time,
+      </if>
+      <if test="assignTime != null" >
+        assign_time,
+      </if>
+      <if test="estimateStartTime != null" >
+        estimate_start_time,
+      </if>
+      <if test="estimateEndTime != null" >
+        estimate_end_time,
+      </if>
+      <if test="actualStartTime != null" >
+        actual_start_time,
+      </if>
+      <if test="actualEndTime != null" >
+        actual_end_time,
+      </if>
+      <if test="taskType != null" >
+        task_type,
+      </if>
+      <if test="taskSpeed != null" >
+        task_speed,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="abnormalStatus != null" >
+        abnormal_status,
+      </if>
+      <if test="finishUserId != null" >
+        finish_user_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="taskId != null" >
+        #{taskId,jdbcType=INTEGER},
+      </if>
+      <if test="taskParentId != null" >
+        #{taskParentId,jdbcType=INTEGER},
+      </if>
+      <if test="projectId != null" >
+        #{projectId,jdbcType=INTEGER},
+      </if>
+      <if test="demandId != null" >
+        #{demandId,jdbcType=INTEGER},
+      </if>
+      <if test="taskName != null" >
+        #{taskName,jdbcType=VARCHAR},
+      </if>
+      <if test="priority != null" >
+        #{priority,jdbcType=VARCHAR},
+      </if>
+      <if test="assignUserId != null" >
+        #{assignUserId,jdbcType=INTEGER},
+      </if>
+      <if test="beassignUserId != null" >
+        #{beassignUserId,jdbcType=INTEGER},
+      </if>
+      <if test="createUserId != null" >
+        #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="taskCreateTime != null" >
+        #{taskCreateTime,jdbcType=DATE},
+      </if>
+      <if test="assignTime != null" >
+        #{assignTime,jdbcType=DATE},
+      </if>
+      <if test="estimateStartTime != null" >
+        #{estimateStartTime,jdbcType=DATE},
+      </if>
+      <if test="estimateEndTime != null" >
+        #{estimateEndTime,jdbcType=DATE},
+      </if>
+      <if test="actualStartTime != null" >
+        #{actualStartTime,jdbcType=DATE},
+      </if>
+      <if test="actualEndTime != null" >
+        #{actualEndTime,jdbcType=DATE},
+      </if>
+      <if test="taskType != null" >
+        #{taskType,jdbcType=INTEGER},
+      </if>
+      <if test="taskSpeed != null" >
+        #{taskSpeed,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="abnormalStatus != null" >
+        #{abnormalStatus,jdbcType=INTEGER},
+      </if>
+      <if test="finishUserId != null" >
+        #{finishUserId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.camelot.pmt.task.model.Task" >
+    update pmt_task
+    <set >
+      <if test="taskParentId != null" >
+        task_parent_id = #{taskParentId,jdbcType=INTEGER},
+      </if>
+      <if test="projectId != null" >
+        project_id = #{projectId,jdbcType=INTEGER},
+      </if>
+      <if test="demandId != null" >
+        demand_id = #{demandId,jdbcType=INTEGER},
+      </if>
+      <if test="taskName != null" >
+        task_name = #{taskName,jdbcType=VARCHAR},
+      </if>
+      <if test="priority != null" >
+        priority = #{priority,jdbcType=VARCHAR},
+      </if>
+      <if test="assignUserId != null" >
+        assign_user_id = #{assignUserId,jdbcType=INTEGER},
+      </if>
+      <if test="beassignUserId != null" >
+        beassign_user_id = #{beassignUserId,jdbcType=INTEGER},
+      </if>
+      <if test="createUserId != null" >
+        create_user_id = #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="taskCreateTime != null" >
+        task_create_time = #{taskCreateTime,jdbcType=DATE},
+      </if>
+      <if test="assignTime != null" >
+        assign_time = #{assignTime,jdbcType=DATE},
+      </if>
+      <if test="estimateStartTime != null" >
+        estimate_start_time = #{estimateStartTime,jdbcType=DATE},
+      </if>
+      <if test="estimateEndTime != null" >
+        estimate_end_time = #{estimateEndTime,jdbcType=DATE},
+      </if>
+      <if test="actualStartTime != null" >
+        actual_start_time = #{actualStartTime,jdbcType=DATE},
+      </if>
+      <if test="actualEndTime != null" >
+        actual_end_time = #{actualEndTime,jdbcType=DATE},
+      </if>
+      <if test="taskType != null" >
+        task_type = #{taskType,jdbcType=INTEGER},
+      </if>
+      <if test="taskSpeed != null" >
+        task_speed = #{taskSpeed,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="abnormalStatus != null" >
+        abnormal_status = #{abnormalStatus,jdbcType=INTEGER},
+      </if>
+      <if test="finishUserId != null" >
+        finish_user_id = #{finishUserId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where task_id = #{taskId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.camelot.pmt.task.model.Task" >
+    update pmt_task
+    set task_parent_id = #{taskParentId,jdbcType=INTEGER},
+      project_id = #{projectId,jdbcType=INTEGER},
+      demand_id = #{demandId,jdbcType=INTEGER},
+      task_name = #{taskName,jdbcType=VARCHAR},
+      priority = #{priority,jdbcType=VARCHAR},
+      assign_user_id = #{assignUserId,jdbcType=INTEGER},
+      beassign_user_id = #{beassignUserId,jdbcType=INTEGER},
+      create_user_id = #{createUserId,jdbcType=INTEGER},
+      task_create_time = #{taskCreateTime,jdbcType=DATE},
+      assign_time = #{assignTime,jdbcType=DATE},
+      estimate_start_time = #{estimateStartTime,jdbcType=DATE},
+      estimate_end_time = #{estimateEndTime,jdbcType=DATE},
+      actual_start_time = #{actualStartTime,jdbcType=DATE},
+      actual_end_time = #{actualEndTime,jdbcType=DATE},
+      task_type = #{taskType,jdbcType=INTEGER},
+      task_speed = #{taskSpeed,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      abnormal_status = #{abnormalStatus,jdbcType=INTEGER},
+      finish_user_id = #{finishUserId,jdbcType=INTEGER}
+    where task_id = #{taskId,jdbcType=INTEGER}
+  </update>
+</mapper>
