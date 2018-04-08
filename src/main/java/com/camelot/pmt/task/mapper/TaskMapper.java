@@ -1,7 +1,9 @@
 package com.camelot.pmt.task.mapper;
 
-import com.camelot.pmt.task.model.Task;
+import org.apache.ibatis.annotations.Mapper;
 
+import com.camelot.pmt.task.model.Task;
+@Mapper
 public interface TaskMapper {
     int deleteByPrimaryKey(Integer taskId);
 
