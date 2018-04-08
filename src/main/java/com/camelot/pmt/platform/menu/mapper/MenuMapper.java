@@ -12,8 +12,13 @@ import com.camelot.pmt.platform.menu.model.Menu;
  */
 public interface MenuMapper {
 	
-    int insert(Menu record);
+	/**
+	 * 增加一个菜单
+	 * @param menu
+	 * @return 1 
+	 */
+    int insert(Menu menu);
 	
-    int deleteByPrimaryKey(Integer id);
+    int deleteByMenuId(Integer id);
 
 }

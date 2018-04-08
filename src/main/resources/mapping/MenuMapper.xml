@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.camelot.pmt.platform.menu.mapper.MenuMapper">
+
+    <!-- 开启二级缓存 -->
+    <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>
+    
+    <!--  -->
+    <insert id="insert">
+		insert into pmt_platform_menu(
+		  menuId,
+		  parentId,
+		  menuName,
+		  menuType,
+		  menuURL,
+		  menuPermission,
+		  menuIcon,
+		  state,
+		  sortNum
+		)values (
+          ${menuId},
+          ${parentId},
+          ${menuName},
+          ${menuType},
+          ${menuURL},
+          ${menuPermission},
+          ${menuIcon},
+          ${state},
+          ${sortNum},
+		);
+    </insert>
+
+</mapper>

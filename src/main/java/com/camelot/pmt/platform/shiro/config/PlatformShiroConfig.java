@@ -75,7 +75,7 @@ public class PlatformShiroConfig {
         filterMap.put("/login.html", "anon");
         filterMap.put("/sys/login", "anon");
         //filterMap.put("/captcha.jpg", "anon");
-        filterMap.put("/**", "authc");
+//        filterMap.put("/**", "authc");
         shiroFilter.setFilterChainDefinitionMap(filterMap);
 
         return shiroFilter;
