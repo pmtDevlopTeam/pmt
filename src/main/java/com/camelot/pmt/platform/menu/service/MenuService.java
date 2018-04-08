@@ -1,6 +1,6 @@
 package com.camelot.pmt.platform.menu.service;
 
-import com.camelot.pmt.platform.common.ApiResponse;
+import com.alibaba.fastjson.JSONObject;
 import com.camelot.pmt.platform.menu.model.Menu;
 
 /**
@@ -18,6 +18,6 @@ public interface MenuService {
 	 * @param menu
 	 * @return 
 	 */
-	ApiResponse insert(Menu menu);
+	JSONObject createMenu(Menu menu);
 
 }

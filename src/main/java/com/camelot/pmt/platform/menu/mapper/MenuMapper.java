@@ -18,7 +18,7 @@ public interface MenuMapper {
 	 * @param menu
 	 * @return 1 
 	 */
-	int insert(Menu menu);
+	int createMenu(Menu menu);
 	
     int deleteByMenuId(Integer id);
 

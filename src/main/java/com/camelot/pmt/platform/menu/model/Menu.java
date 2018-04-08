@@ -35,6 +35,9 @@ public class Menu implements Serializable {
     private String parentId;
     @TableField("menuName")
     private String menuName;
+    /**
+     * 1目录  2菜单  3按钮
+     */
     @TableField("menuType")
     private String menuType;
     @TableField("menuURL")
@@ -55,8 +58,31 @@ public class Menu implements Serializable {
     private Date createtime;
     private Date modifytime;
 
+    
 
-    public Integer getId() {
+    public Menu() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public Menu(Integer id, String menuId, String parentId, String menuName, String menuType, String menuURL,
+			String menuPermission, String menuIcon, String state, Integer sortNum, Date createtime, Date modifytime) {
+		super();
+		this.id = id;
+		this.menuId = menuId;
+		this.parentId = parentId;
+		this.menuName = menuName;
+		this.menuType = menuType;
+		this.menuURL = menuURL;
+		this.menuPermission = menuPermission;
+		this.menuIcon = menuIcon;
+		this.state = state;
+		this.sortNum = sortNum;
+		this.createtime = createtime;
+		this.modifytime = modifytime;
+	}
+
+	public Integer getId() {
         return id;
     }
 
