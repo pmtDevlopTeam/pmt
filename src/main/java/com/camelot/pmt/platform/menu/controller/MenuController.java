@@ -27,18 +27,24 @@ public class MenuController {
 	
 	//@RequiresPermissions("platform:menu:menu")
 	@ApiOperation(value="创建菜单接口", notes="创建单个菜单")
-	@ApiImplicitParams({
-        @ApiImplicitParam(name = "menuName", value = "菜单名称", required = true, dataType = "String"),
-        @ApiImplicitParam(name = "menuType", value = "菜单类型", required = true, dataType = "String"),
-        @ApiImplicitParam(name = "menuURL", value = "菜单请求地址", required = true, dataType = "String"),
-        @ApiImplicitParam(name = "menuPermission", value = "菜单权限配置", required = true, dataType = "String"),
-        @ApiImplicitParam(name = "menuIcon", value = "菜单图标", required = true, dataType = "String"),
-        @ApiImplicitParam(name = "state", value = "菜单状态", required = true, dataType = "String")
-	})
 	@RequestMapping(value="/createMenu", method=RequestMethod.POST)
 	public JSONObject createMenu(Menu menu) {
 		String uuid = UUID.randomUUID().toString().replaceAll("-", "");
 		menu.setMenuId(uuid);
 		return menuService.createMenu(menu);
 	}
+	
+	@ApiOperation(value="删除菜单接口", notes="删除单个菜单")
+	@RequestMapping(value="/deleteMenuByMenuId", method=RequestMethod.POST)
+	public JSONObject deleteMenuByMenuId(String menuId) {
+		return menuService.deleteMenuByMenuId(menuId);
+	}
+	
+	@ApiOperation(value="修改菜单接口", notes="修改单个菜单")
+	@RequestMapping(value="/modifyMenuByMenuId", method=RequestMethod.POST)
+	public JSONObject modifyMenuByMenuId(Menu menu) {
+		return menuService.modifyMenuByMenuId(menu);
+	}
+	
+	
 }

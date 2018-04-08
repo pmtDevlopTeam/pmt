@@ -20,4 +20,17 @@ public interface MenuService {
 	 */
 	JSONObject createMenu(Menu menu);
 
+	/**
+	 * 根据菜单id 删除一个菜单
+	 * @param menuId
+	 * @return
+	 */
+	JSONObject deleteMenuByMenuId(String menuId);
+	
+	/**
+	 * 根据菜单id 修改一个菜单
+	 * @param menu
+	 * @return
+	 */
+	JSONObject modifyMenuByMenuId(Menu menu);
 }

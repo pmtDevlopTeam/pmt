@@ -16,10 +16,22 @@ public interface MenuMapper {
 	/**
 	 * 增加一个菜单
 	 * @param menu
-	 * @return 1 
+	 * @return 
 	 */
 	int createMenu(Menu menu);
 	
-    int deleteByMenuId(Integer id);
+	/**
+	 * 根据菜单id 删除一个菜单
+	 * @param menuId
+	 * @return
+	 */
+    int deleteMenuByMenuId(String menuId);
+	
+	/**
+	 * 根据菜单id 修改一个菜单
+	 * @param Menu
+	 * @return
+	 */
+    int modifyMenuByMenuId(Menu menu);
 
 }

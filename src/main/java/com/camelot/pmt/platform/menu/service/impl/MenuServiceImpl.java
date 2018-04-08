@@ -2,6 +2,7 @@ package com.camelot.pmt.platform.menu.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.DigestUtils;
 
 import com.alibaba.fastjson.JSONObject;
 import com.camelot.pmt.platform.common.ApiResponse;
@@ -23,7 +24,26 @@ public class MenuServiceImpl implements MenuService {
 			return ApiResponse.success();
 		}
 		return ApiResponse.error();
-		
 	}
+
+	@Override
+	public JSONObject deleteMenuByMenuId(String menuId) {
+		int deleteMenuByMenuId = MenuMapper.deleteMenuByMenuId(menuId);
+		if(deleteMenuByMenuId == 1) {
+			return ApiResponse.success();
+		}
+		return ApiResponse.error();
+	}
+
+	@Override
+	public JSONObject modifyMenuByMenuId(Menu menu) {
+		int modifyMenuByMenuId = MenuMapper.modifyMenuByMenuId(menu);
+		if(modifyMenuByMenuId == 1) {
+			return ApiResponse.success();
+		}
+		return ApiResponse.error();
+	}
+	
+	
 
 }
