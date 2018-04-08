@@ -1,6 +1,7 @@
 package com.camelot.pmt.platform.menu.mapper;
 
 import com.camelot.pmt.platform.menu.model.Menu;
+import org.springframework.stereotype.Repository;
 
 /**
  * <p>
@@ -17,7 +18,7 @@ public interface MenuMapper {
 	 * @param menu
 	 * @return 1 
 	 */
-    int insert(Menu menu);
+	int insert(Menu menu);
 	
     int deleteByMenuId(Integer id);
 

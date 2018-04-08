@@ -3,8 +3,8 @@
 <mapper namespace="com.camelot.pmt.platform.menu.mapper.MenuMapper">
 
     <!-- 开启二级缓存 -->
-    <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>
-    
+    <!--<cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>-->
+
     <!--  -->
     <insert id="insert">
 		insert into pmt_platform_menu(
