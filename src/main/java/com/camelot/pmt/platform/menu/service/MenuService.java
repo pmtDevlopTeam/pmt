@@ -33,4 +33,18 @@ public interface MenuService {
 	 * @return
 	 */
 	JSONObject modifyMenuByMenuId(Menu menu);
+	
+	/**
+	 * 根据菜单id 查询一个菜单
+	 * @param menu
+	 * @return
+	 */
+	JSONObject queryMenuByMenuId(String menuId);
+	
+	/**
+	 * 查询全部菜单树
+	 * @param menu
+	 * @return
+	 */
+	JSONObject queryAllMenu();
 }

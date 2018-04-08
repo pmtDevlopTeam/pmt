@@ -46,5 +46,22 @@ public class MenuController {
 		return menuService.modifyMenuByMenuId(menu);
 	}
 	
+	@ApiOperation(value="查询菜单接口", notes="查询单个菜单")
+	@RequestMapping(value="/queryMenuByMenuId", method=RequestMethod.POST)
+	public JSONObject queryMenuByMenuId(String menuId) {
+		return menuService.queryMenuByMenuId(menuId);
+	}
+
+	@ApiOperation(value="查询全部菜单树接口", notes="查询全部菜单树")
+	@RequestMapping(value="/queryAllMenu", method=RequestMethod.POST)
+	public JSONObject queryAllMenu() {
+		return menuService.queryAllMenu();
+	}
+
+	@ApiOperation(value="查询角色菜单树接口", notes="查询角色菜单树")
+	@RequestMapping(value="/queryMenuByRole", method=RequestMethod.POST)
+	public JSONObject queryMenuByRole() {
+		return menuService.queryAllMenu();
+	}
 	
 }

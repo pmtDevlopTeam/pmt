@@ -1,7 +1,8 @@
 package com.camelot.pmt.platform.menu.mapper;
 
 import com.camelot.pmt.platform.menu.model.Menu;
-import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * <p>
@@ -34,4 +35,17 @@ public interface MenuMapper {
 	 */
     int modifyMenuByMenuId(Menu menu);
 
+    /**
+     * 根据菜单id 查询一个菜单
+     * @param menuId
+     * @return
+     */
+    Menu queryMenuByMenuId(String menuId);
+    
+    /**
+     * 查询全部菜单树
+     * @param menuId
+     * @return
+     */
+    List<Menu> queryAllMenu();
 }
