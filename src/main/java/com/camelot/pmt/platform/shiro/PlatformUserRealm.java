@@ -19,10 +19,6 @@ import org.springframework.stereotype.Component;
 
 /**
  * 认证
- * 
- * 
- * 
- * @date 2016年11月10日 上午11:55:49
  */
 @Component
 public class PlatformUserRealm extends AuthorizingRealm {
