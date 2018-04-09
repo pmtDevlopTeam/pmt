@@ -1,29 +1,27 @@
 package com.camelot.pmt.task.model;
 
-import java.io.Serializable;
 import java.util.Date;
 
-public class Task implements Serializable{
-	
-	private static final long serialVersionUID = 1L;
+public class Task {
+    private Long taskId;
 
-	private Integer taskId;
+    private Long taskParentId;
 
-    private Integer taskParentId;
+    private Long projectId;
 
-    private Integer projectId;
-
-    private Integer demandId;
+    private Long demandId;
 
     private String taskName;
 
     private String priority;
 
-    private Integer assignUserId;
+    private String assignUserName;
 
-    private Integer beassignUserId;
+    private String beassignUserName;
 
-    private Integer createUserId;
+    private String createUserName;
+
+    private String finishUserName;
 
     private Date taskCreateTime;
 
@@ -37,45 +35,53 @@ public class Task implements Serializable{
 
     private Date actualEndTime;
 
-    private Integer taskType;
+    private String taskType;
 
     private String taskSpeed;
 
-    private Integer status;
+    private String status;
 
-    private Integer abnormalStatus;
+    private String abnormalStatus;
 
-    private Integer finishUserId;
+    private String taskDescribe;
 
-    public Integer getTaskId() {
+    private Integer estimateHour;
+
+    private Integer consumeHour;
+
+    private Integer remainHour;
+
+    private String taskMileage;
+
+    public Long getTaskId() {
         return taskId;
     }
 
-    public void setTaskId(Integer taskId) {
+    public void setTaskId(Long taskId) {
         this.taskId = taskId;
     }
 
-    public Integer getTaskParentId() {
+    public Long getTaskParentId() {
         return taskParentId;
     }
 
-    public void setTaskParentId(Integer taskParentId) {
+    public void setTaskParentId(Long taskParentId) {
         this.taskParentId = taskParentId;
     }
 
-    public Integer getProjectId() {
+    public Long getProjectId() {
         return projectId;
     }
 
-    public void setProjectId(Integer projectId) {
+    public void setProjectId(Long projectId) {
         this.projectId = projectId;
     }
 
-    public Integer getDemandId() {
+    public Long getDemandId() {
         return demandId;
     }
 
-    public void setDemandId(Integer demandId) {
+    public void setDemandId(Long demandId) {
         this.demandId = demandId;
     }
 
@@ -95,28 +101,36 @@ public class Task implements Serializable{
         this.priority = priority == null ? null : priority.trim();
     }
 
-    public Integer getAssignUserId() {
-        return assignUserId;
+    public String getAssignUserName() {
+        return assignUserName;
     }
 
-    public void setAssignUserId(Integer assignUserId) {
-        this.assignUserId = assignUserId;
+    public void setAssignUserName(String assignUserName) {
+        this.assignUserName = assignUserName == null ? null : assignUserName.trim();
     }
 
-    public Integer getBeassignUserId() {
-        return beassignUserId;
+    public String getBeassignUserName() {
+        return beassignUserName;
     }
 
-    public void setBeassignUserId(Integer beassignUserId) {
-        this.beassignUserId = beassignUserId;
+    public void setBeassignUserName(String beassignUserName) {
+        this.beassignUserName = beassignUserName == null ? null : beassignUserName.trim();
     }
 
-    public Integer getCreateUserId() {
-        return createUserId;
+    public String getCreateUserName() {
+        return createUserName;
     }
 
-    public void setCreateUserId(Integer createUserId) {
-        this.createUserId = createUserId;
+    public void setCreateUserName(String createUserName) {
+        this.createUserName = createUserName == null ? null : createUserName.trim();
+    }
+
+    public String getFinishUserName() {
+        return finishUserName;
+    }
+
+    public void setFinishUserName(String finishUserName) {
+        this.finishUserName = finishUserName == null ? null : finishUserName.trim();
     }
 
     public Date getTaskCreateTime() {
@@ -167,12 +181,12 @@ public class Task implements Serializable{
         this.actualEndTime = actualEndTime;
     }
 
-    public Integer getTaskType() {
+    public String getTaskType() {
         return taskType;
     }
 
-    public void setTaskType(Integer taskType) {
-        this.taskType = taskType;
+    public void setTaskType(String taskType) {
+        this.taskType = taskType == null ? null : taskType.trim();
     }
 
     public String getTaskSpeed() {
@@ -183,71 +197,59 @@ public class Task implements Serializable{
         this.taskSpeed = taskSpeed == null ? null : taskSpeed.trim();
     }
 
-    public Integer getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(Integer status) {
-        this.status = status;
+    public void setStatus(String status) {
+        this.status = status == null ? null : status.trim();
     }
 
-    public Integer getAbnormalStatus() {
+    public String getAbnormalStatus() {
         return abnormalStatus;
     }
 
-    public void setAbnormalStatus(Integer abnormalStatus) {
-        this.abnormalStatus = abnormalStatus;
+    public void setAbnormalStatus(String abnormalStatus) {
+        this.abnormalStatus = abnormalStatus == null ? null : abnormalStatus.trim();
     }
 
-    public Integer getFinishUserId() {
-        return finishUserId;
+    public String getTaskDescribe() {
+        return taskDescribe;
     }
 
-    public void setFinishUserId(Integer finishUserId) {
-        this.finishUserId = finishUserId;
+    public void setTaskDescribe(String taskDescribe) {
+        this.taskDescribe = taskDescribe == null ? null : taskDescribe.trim();
     }
-    
 
-	public Task(Integer taskId, Integer taskParentId, Integer projectId, Integer demandId, String taskName,
-			String priority, Integer assignUserId, Integer beassignUserId, Integer createUserId, Date taskCreateTime,
-			Date assignTime, Date estimateStartTime, Date estimateEndTime, Date actualStartTime, Date actualEndTime,
-			Integer taskType, String taskSpeed, Integer status, Integer abnormalStatus, Integer finishUserId) {
-		super();
-		this.taskId = taskId;
-		this.taskParentId = taskParentId;
-		this.projectId = projectId;
-		this.demandId = demandId;
-		this.taskName = taskName;
-		this.priority = priority;
-		this.assignUserId = assignUserId;
-		this.beassignUserId = beassignUserId;
-		this.createUserId = createUserId;
-		this.taskCreateTime = taskCreateTime;
-		this.assignTime = assignTime;
-		this.estimateStartTime = estimateStartTime;
-		this.estimateEndTime = estimateEndTime;
-		this.actualStartTime = actualStartTime;
-		this.actualEndTime = actualEndTime;
-		this.taskType = taskType;
-		this.taskSpeed = taskSpeed;
-		this.status = status;
-		this.abnormalStatus = abnormalStatus;
-		this.finishUserId = finishUserId;
-	}
-	
-	public Task() {
-		super();
-	}
+    public Integer getEstimateHour() {
+        return estimateHour;
+    }
 
-	@Override
-	public String toString() {
-		return "Task [taskId=" + taskId + ", taskParentId=" + taskParentId + ", projectId=" + projectId + ", demandId="
-				+ demandId + ", taskName=" + taskName + ", priority=" + priority + ", assignUserId=" + assignUserId
-				+ ", beassignUserId=" + beassignUserId + ", createUserId=" + createUserId + ", taskCreateTime="
-				+ taskCreateTime + ", assignTime=" + assignTime + ", estimateStartTime=" + estimateStartTime
-				+ ", estimateEndTime=" + estimateEndTime + ", actualStartTime=" + actualStartTime + ", actualEndTime="
-				+ actualEndTime + ", taskType=" + taskType + ", taskSpeed=" + taskSpeed + ", status=" + status
-				+ ", abnormalStatus=" + abnormalStatus + ", finishUserId=" + finishUserId + "]";
-	}
-    
+    public void setEstimateHour(Integer estimateHour) {
+        this.estimateHour = estimateHour;
+    }
+
+    public Integer getConsumeHour() {
+        return consumeHour;
+    }
+
+    public void setConsumeHour(Integer consumeHour) {
+        this.consumeHour = consumeHour;
+    }
+
+    public Integer getRemainHour() {
+        return remainHour;
+    }
+
+    public void setRemainHour(Integer remainHour) {
+        this.remainHour = remainHour;
+    }
+
+    public String getTaskMileage() {
+        return taskMileage;
+    }
+
+    public void setTaskMileage(String taskMileage) {
+        this.taskMileage = taskMileage == null ? null : taskMileage.trim();
+    }
 }
