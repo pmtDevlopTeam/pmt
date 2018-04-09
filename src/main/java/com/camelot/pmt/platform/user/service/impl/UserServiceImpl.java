@@ -153,10 +153,12 @@ public class UserServiceImpl implements UserService{
 				//3.记录存在，再检查用的输入密码与库里的密码是否匹配
 				String dbPassword = dbModel.getPassword();
 				String inputPassword = userModel.getPassword();
-				if(!dbPassword.equals(inputPassword)) {
+				String encryptPassword = new Sha256Hash(inputPassword).toHex();
+				if(!dbPassword.equals(encryptPassword)) {
 					result.setResultMessage("密码不正确!");
 					return result;
 				}
+				userModel.setPassword(dbPassword);
 				UserModel reusltUserModel = userMapper.checkUserLoginCodeAndPassword(userModel);
 				result.setResult(reusltUserModel);
 			}
