@@ -3,16 +3,15 @@ package com.camelot.pmt.platform.role.service;
 import com.camelot.pmt.platform.role.mapper.RoleMapper;
 import com.camelot.pmt.platform.role.model.Role;
 import com.camelot.pmt.platform.utils.ExecuteResult;
-import com.camelot.pmt.platform.utils.UUIDTool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class RoleServiceImpl implements IRoleService {
@@ -118,7 +117,7 @@ public class RoleServiceImpl implements IRoleService {
             } else {
                 role.setParentId(STATUS);
             }
-            role.setRoleId(UUIDTool.getUUID());
+            role.setRoleId(UUID.randomUUID().toString().replaceAll("-", ""));
             role.setState(STATUS);
         return role;
     }
