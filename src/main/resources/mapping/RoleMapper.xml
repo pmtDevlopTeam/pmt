@@ -14,7 +14,28 @@
     </resultMap>
     
     <sql id="Base_Column_List" >
-        id,roleId,rolename,state,createtime,modifytime
+        id,parentId,roleId,rolename,state,createtime,modifytime
+    </sql>
+    <sql id="add_Column_List" >
+        <trim suffixOverrides=",">
+            <if test="roleId != null">roleId,</if>
+            <if test="parentId != null">parentId,</if>
+            <if test="roleName != null">rolename,</if>
+            <if test="state != null">state,</if>
+            <if test="createTime != null">createtime,</if>
+            <if test="modifyTime != null">modifytime</if>
+        </trim>
+    </sql>
+
+    <sql id="sql_add_properties">
+        <trim suffixOverrides=",">
+            <if test="roleId != null">#{roleId},</if>
+            <if test="parentId != null">#{parentId},</if>
+            <if test="roleName != null">#{roleName},</if>
+            <if test="state != null">#{state},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="modifyTime != null">#{modifyTime},</if>
+        </trim>
     </sql>
 
     <select id="queryRoleArray" resultMap="BaseResultMap"  >
@@ -22,4 +43,33 @@
        <include refid="Base_Column_List" />
 	   FROM pmt_platform_role
     </select>
+
+    <insert id="addRole" parameterType="Role">
+        INSERT INTO pmt_platform_role(
+            <include refid="add_Column_List"/>
+            ) VALUES (
+            <include refid="sql_add_properties"/>
+        )
+    </insert>
+
+    <update id="editRole" parameterType="Role">
+        UPDATE pmt_platform_role
+        <set>
+            <if test="roleName != null">
+                rolename = #{roleName},
+            </if>
+            <if test="parentId != null">
+                parentId = #{parentId}
+            </if>
+        </set>
+        WHERE roleId = #{roleId}
+    </update>
+
+    <delete id="deleteRole" parameterType="Role">
+        DELETE FROM pmt_platform_role WHERE roleId = #{roleId}
+    </delete>
+
+    <delete id="deleteRoleMenu" parameterType="Role">
+        DELETE FROM pmt_platform_role_menu WHERE roleId = #{roleId}
+    </delete>
 </mapper>

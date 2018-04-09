@@ -1,6 +1,7 @@
 package com.camelot.pmt.platform.role.model;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 角色实体
@@ -34,6 +35,16 @@ public class Role {
      * 修改时间
      */
     private Date modifyTime;
+
+    private List<Role> list;
+
+    public List<Role> getList() {
+        return list;
+    }
+
+    public void setList(List<Role> list) {
+        this.list = list;
+    }
 
     public Long getId() {
         return id;
