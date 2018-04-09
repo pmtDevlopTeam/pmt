@@ -3,7 +3,6 @@ package com.camelot.pmt.platform.user.service;
 
 import java.util.List;
 
-import org.springframework.transaction.annotation.Transactional;
 
 import com.camelot.pmt.platform.user.model.UserModel;
 import com.camelot.pmt.platform.utils.DataGrid;
@@ -13,9 +12,8 @@ import com.camelot.pmt.platform.utils.Pager;
 /**
  * 
  * @Title:  UserService.java
- * @Description: TODO
- * @author: jh
- * @date:  2018年2月5日 下午2:57:12
+ * @Description: 用户管理的相关业务处理
+ * @author: maple
  */
 public interface UserService {
 	
@@ -24,7 +22,7 @@ public interface UserService {
 	 *<p>Description:[保存用户]</p>
 	 * @param userModel void
 	 * @return ExecuteResult<String>
-	 * @author [name]
+	 * @author [maple]
 	 */
     ExecuteResult<String> save(UserModel userModel);
     
@@ -41,7 +39,7 @@ public interface UserService {
 	  * 
 	  *<p>Description:[查询用户]</p>
 	  * @return List<UserModel>
-	  * @author [name]
+	  * @author [maple]
 	  */
 	 ExecuteResult<List<UserModel>> findAllUsers();
 	 
@@ -50,7 +48,7 @@ public interface UserService {
 	  * 
 	  *<p>Description:[查询用户]</p>
 	  * @return List<UserModel>
-	  * @author [name]
+	  * @author [maple]
 	  */
 	 ExecuteResult<UserModel> findUserById(String userId);
 	 
@@ -61,7 +59,17 @@ public interface UserService {
 	  * @author [maple]
 	  */
 	 ExecuteResult<UserModel> queryLoginCodeAndPassword(UserModel userModel);
-    
+	 
+	 /**
+	  * 
+	  *<p>Description:[分页查询用户列表]</p>
+	  *调用实现类方法:queryWorkbenchTaskList
+	  * @param page
+	  * @return ExecuteResult<DataGrid<UserModel>>
+	  * @author [maple]
+	  */
+	 ExecuteResult<DataGrid<UserModel>> queryUsers(Pager page);
+		
 //    /**
 //	 * 
 //	 *<p>Description:[根据用户ID更新一个用户]</p>

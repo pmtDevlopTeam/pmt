@@ -79,6 +79,22 @@ public interface UserMapper {
      */
     List<UserModel> selectUsersAll();
     
+    /**
+     * 
+     *<p>Description:[查询用户总数量]</p>
+     * @return Long 总数量
+     * @author [maple]
+     */
+    Long queryCount();
+    
+    /**
+     * 
+     *<p>Description:[分页查询用户]</p>
+     * @return List<UserModel>
+     * @author [maple]
+     */
+    List<UserModel> findUsersByPage(@Param(value = "page") Pager page);
+    
     
 //    /**
 //     * 

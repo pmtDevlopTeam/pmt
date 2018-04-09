@@ -6,7 +6,9 @@ import com.camelot.pmt.platform.common.APIStatus;
 import com.camelot.pmt.platform.common.ApiResponse;
 import com.camelot.pmt.platform.user.model.UserModel;
 import com.camelot.pmt.platform.user.service.UserService;
+import com.camelot.pmt.platform.utils.DataGrid;
 import com.camelot.pmt.platform.utils.ExecuteResult;
+import com.camelot.pmt.platform.utils.Pager;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -32,7 +34,6 @@ import java.util.List;
 /**
  * 用户管理模块
  * @author maple
- * @version  2018-02-01
  */
 @RestController
 @Api(value = "用户管理接口", description = "用户管理接口")
@@ -42,14 +43,13 @@ public class UserController {
     private UserService service;
 
     /**
-     * 查询所有用户
+     * <p>Description:[查询单个用户]</p>
      * @param  userId 用户UUID
-     * @return {"status": {"message": "请求处理成功.","code": 200}, "data": {添加用户成功!}]
+     * @return {"status": {"message": "请求处理成功.","code": 200}, "data": {userModel}]
      */
     @ApiOperation(value="根据userId查询单个用户", notes="查询单个用户")
     @RequestMapping(value = "user/queryUserById",method = RequestMethod.POST)
-    @ResponseBody
-    public JSONObject queryUserByUserId(@ApiParam(name="useId", value = "用户userId", required = true) @RequestParam(required = true) String userId){
+    public JSONObject queryUserByUserId(@ApiParam(value = "用户useId", required = true) @RequestParam(required = true) String userId){
         ExecuteResult<UserModel> result = new ExecuteResult<UserModel>();
         try {
             result = service.findUserById(userId);
@@ -63,13 +63,12 @@ public class UserController {
     }
 
     /**
-     * 查询所有用户
+     * <p>Description:[查询所有用户]</p>
      * @param  username 用户名,password 密码,role 角色,phone 电话,email 邮箱
-     * @return {"status": {"message": "请求处理成功.","code": 200}, "data": {添加用户成功!}]
+     * @return {"status": {"message": "请求处理成功.","code": 200}, "data": {userModel列表}]
      */
     @ApiOperation(value="查询所有用户", notes="查询所有用户")
     @RequestMapping(value = "user/queryUserAll",method = RequestMethod.GET)
-    @ResponseBody
     public JSONObject queryUserAll(){
         ExecuteResult<List<UserModel>> result = new ExecuteResult<List<UserModel>>();
         try {
@@ -84,8 +83,8 @@ public class UserController {
     }
 
     /**
-     * 添加用户
-     * @param  username 用户名,password 密码,role 角色,phone 电话,email 邮箱
+     * <p>Description:[添加用户]</p>
+     * @param  loginCode 登录账号,password 密码,username 用户名称
      * @return {"status": {"message": "请求处理成功.","code": 200}, "data": {添加用户成功!}]
      */
     @ApiOperation(value="添加用户", notes="添加用户")
@@ -127,9 +126,8 @@ public class UserController {
             @ApiImplicitParam(
                     name="id",value="用户id",required=true,paramType="query",dataType="Integer")
     })
-    @RequestMapping(value = "user/deleteUser",method = RequestMethod.POST)
-    @ResponseBody
-    public JSONObject deleteUser(@ApiIgnore UserModel userModel){
+    @RequestMapping(value = "user/deleteUserById",method = RequestMethod.POST)
+    public JSONObject deleteUserById(@ApiIgnore UserModel userModel){
     	ExecuteResult<String> result = new ExecuteResult<String>();
     	try {
     		if(userModel.getId() == 0) {
@@ -148,7 +146,7 @@ public class UserController {
     
     
     /**
-     * 添加用户
+     * <p>Description:[检查用户账号密码]</p>
      * @param  loginCode 登录账号,password 密码
      * @return {"status": {"message": "请求处理成功.","code": 200}, "data": {userModel}]
      */
@@ -179,6 +177,34 @@ public class UserController {
     		return ApiResponse.error();
 		}
 	}
+    
+    /**
+     * <p>Description:[分页查询用户列表]</p>
+     * @param  page 页码,rows 每页数量
+     * @return "data": {"total": 总数量,"rows":[查询的结果集],"status": {"code": 200,"message": "请求处理成功."}}
+     */
+    @ApiOperation(value="分页获取用户列表", notes="分页获取用户列表")
+    @RequestMapping(value = "user/queryUsersByPage",method = RequestMethod.GET)
+    @ApiImplicitParams({
+    	@ApiImplicitParam(name = "page", value = "页码", required = true, paramType = "query", dataType = "int"),
+    	@ApiImplicitParam(name = "rows", value = "每页数量", required = true, paramType = "query", dataType = "int")
+    })
+    public JSONObject queryUsersByPage(@ApiIgnore Pager page){
+    	ExecuteResult<DataGrid<UserModel>> result = new ExecuteResult<DataGrid<UserModel>>();
+    	try {
+    		if(page == null) {
+    			return ApiResponse.errorPara();
+    		}
+    		result = service.queryUsers(page);
+    		if(result.isSuccess()) {
+    			return ApiResponse.success(result.getResult());
+    		}
+    		return ApiResponse.error();
+    	}catch (Exception e) {
+    		return ApiResponse.error();
+    	}
+    }
+
 
 //    /**
 //     * 修改用户
@@ -220,34 +246,6 @@ public class UserController {
 //		}
 //    }
 //
-//    /**
-//     * 查询用户列表
-//     * @param  page 页码,rows 每页数量
-//     * @return 返回用户列表 {id 用户id,username 用户名,password 密码,role 角色,phone 电话,email 邮箱,project_id 项目id,createTime 用户创建时间}
-//     */
-//    @ApiOperation(value="获取用户列表", notes="获取用户列表")
-//    @RequiresPermissions(value="user:userList")
-//    @RequestMapping(value = "user/userList",method = RequestMethod.GET)
-//    @ResponseBody
-//    @ApiImplicitParams({
-//        @ApiImplicitParam(name = "page", value = "页码", required = true, paramType = "query", dataType = "int"),
-//        @ApiImplicitParam(name = "rows", value = "每页数量", required = true, paramType = "query", dataType = "int")
-//	})
-//    public JSONObject findUser(@ApiIgnore Pager page){
-//    	ExecuteResult<DataGrid<UserModel>> result = new ExecuteResult<DataGrid<UserModel>>();
-//    	try {
-//    		if(page == null) {
-//    			return ApiResponse.errorPara();
-//    		}
-//    		result = service.queryUsers(page);
-//    		if(result.isSuccess()) {
-//    			return ApiResponse.success(result.getResult());
-//    		}
-//    		return ApiResponse.error();
-//    	}catch (Exception e) {
-//    		return ApiResponse.error();
-//		}
-//    }
 
 
 //    /**

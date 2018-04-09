@@ -106,7 +106,7 @@
     
    <!-- 查询数量公共sql -->
 	<sql id="count_Tail">
-		select count(1) from user
+		select count(1) from pmt_platform_user
 	</sql>
 	
 	<!-- 查询总数量 -->

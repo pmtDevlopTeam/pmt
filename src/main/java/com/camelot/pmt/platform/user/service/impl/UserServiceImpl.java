@@ -168,6 +168,35 @@ public class UserServiceImpl implements UserService{
 		return result;
 	}
 
+
+	/**
+     * <p>Description:[分页查询用户列表]<p>
+     * @param page
+     * @return ExecuteResult<UserModel>
+     */
+	@Override
+	public ExecuteResult<DataGrid<UserModel>> queryUsers(Pager page) {
+		ExecuteResult<DataGrid<UserModel>> result = new ExecuteResult<DataGrid<UserModel>>();
+		try{
+            List<UserModel> list = userMapper.findUsersByPage(page);
+            //如果没有查询到数据，不继续进行
+            if (CollectionUtils.isEmpty(list)) {
+            	DataGrid<UserModel> dg = new DataGrid<UserModel>();
+            	result.setResult(dg);
+                return result;
+            }            
+            DataGrid<UserModel> dg = new DataGrid<UserModel>();
+            dg.setRows(list);
+            //查询总条数
+            Long total = userMapper.queryCount();
+            dg.setTotal(total);				
+            result.setResult(dg);
+		}catch(Exception e){
+			throw new RuntimeException(e);
+		}
+		return result;
+	}
+
     /**
      * <p>Description:[更新用户]<p>
      * 调用mapper方法:updateUserById
