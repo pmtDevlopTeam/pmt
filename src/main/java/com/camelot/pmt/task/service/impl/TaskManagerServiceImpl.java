@@ -15,8 +15,8 @@ import java.util.List;
 @Service
 public class TaskManagerServiceImpl implements TaskManagerService {
 
-    @Autowired
-    private TaskMapper taskMapper;
+//    @Autowired
+//    private TaskMapper taskMapper;
 
     @Override
     public List<Task> queryAllTask() {
