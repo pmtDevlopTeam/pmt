@@ -25,7 +25,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping(value = "/platform/role")
-@Api(value = "基础平台-角色管理", consumes = "基础平台-角色管理接口: 提供角色管理操作接口")
+@Api(value="基础平台-角色管理接口", description="角色管理接口")
 public class RoleController {
 
     @Autowired

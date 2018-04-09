@@ -9,6 +9,8 @@ import com.camelot.pmt.platform.role.service.IRoleToUserService;
 import com.camelot.pmt.platform.user.model.UserModel;
 import com.camelot.pmt.platform.utils.ExecuteResult;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -20,10 +22,12 @@ import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 
-
+/**
+ * 角色操作用户控制层
+ */
+@Api(value="基础平台-角色用户管理接口", description="角色用户管理接口")
 @RestController
 @RequestMapping(value = "/platform/roleToUser")
-@Api(value="基础平台-角色用户管理接口", consumes="基础平台-角色用户管理接口:提供角色可操控用户是否拥有权限接口")
 public class RoleToUserController {
 
     @Autowired
@@ -31,6 +35,10 @@ public class RoleToUserController {
 
     @ApiOperation(value = "根据角色绑定用户", notes = "根据角色绑定用户")
     @PostMapping(value = "/addUserByRole")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "roleIds", value = "角色id（格式：1,2 其中要有子ID和父ID）", required = true, paramType = "form", dataType = "string"),
+            @ApiImplicitParam(name = "userIds", value = "用户id（格式：1,2,3,4）", required = true, paramType = "form", dataType = "string"),
+    })
     public JSONObject addUserByRole(@ApiIgnore RoleToUser roleToUser){
         ExecuteResult result;
         try {
