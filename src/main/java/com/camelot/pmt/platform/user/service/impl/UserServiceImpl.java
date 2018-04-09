@@ -82,7 +82,6 @@ public class UserServiceImpl implements UserService{
     		userMapper.deleteUserById(userModel);
     		result.setResult("删除用户成功！");
     	} catch (Exception e) {
-			// TODO: handle exception
     		LOGGER.error(e.getMessage());
 			throw new RuntimeException(e);
 		}

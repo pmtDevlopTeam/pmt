@@ -49,7 +49,7 @@ public class UserController {
     @ApiOperation(value="根据userId查询单个用户", notes="查询单个用户")
     @RequestMapping(value = "user/queryUserById",method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject queryUserByUserId(@ApiParam(value = "useId", required = true) @RequestParam(required = true) String userId){
+    public JSONObject queryUserByUserId(@ApiParam(name="useId", value = "用户userId", required = true) @RequestParam(required = true) String userId){
         ExecuteResult<UserModel> result = new ExecuteResult<UserModel>();
         try {
             result = service.findUserById(userId);
