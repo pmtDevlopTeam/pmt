@@ -1,56 +1,111 @@
 package com.camelot.pmt.task.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Task {
-    private Long taskId;
+public class Task implements Serializable{
+	
+	private static final long serialVersionUID = 1L;
 
+	/**
+	 * 任务标识号
+	 */
+	private Long taskId;
+	/**
+	 * 父级任务标识号
+	 */
     private Long taskParentId;
-
+    /**
+     * 项目标识号
+     */
     private Long projectId;
-
+    /**
+     * 需求标识号
+     */
     private Long demandId;
-
+	/**
+	 * 任务名称
+	 */
     private String taskName;
-
+    /**
+     * 优先级
+     */
     private String priority;
-
+    /**
+     * 指派人
+     */
     private String assignUserName;
-
+    /**
+     * 被指派人
+     */
     private String beassignUserName;
-
+    /**
+     * 任务创建人
+     */
     private String createUserName;
-
+    /**
+     * 任务完成人
+     */
     private String finishUserName;
-
+    /**
+     * 任务创建时间
+     */
     private Date taskCreateTime;
-
+    /**
+     * 任务指派时间
+     */
     private Date assignTime;
-
+    /**
+     * 任务预计开始时间
+     */
     private Date estimateStartTime;
-
+    /**
+     * 任务预计结束时间
+     */
     private Date estimateEndTime;
-
+    /**
+     * 任务实际开始时间
+     */
     private Date actualStartTime;
-
+    /**
+     * 任务实际结束时间
+     */
     private Date actualEndTime;
-
+    /**
+     * 任务类型
+     */
     private String taskType;
-
+    /**
+     * 任务进度
+     */
     private String taskSpeed;
-
+    /**
+     * 任务状态
+     */
     private String status;
-
+    /**
+     * 任务异常状态
+     */
     private String abnormalStatus;
-
+    /**
+     * 任务描述
+     */
     private String taskDescribe;
-
+    /**
+     * 任务预计工时
+     */
     private Integer estimateHour;
-
+    /**
+     * 任务已消耗工时
+     */
     private Integer consumeHour;
-
+    /**
+     * 任务剩余工时
+     */
     private Integer remainHour;
-
+    /**
+     * 任务里程
+     */
     private String taskMileage;
 
     public Long getTaskId() {
