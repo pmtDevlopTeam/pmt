@@ -24,9 +24,6 @@ import com.camelot.pmt.platform.shiro.PlatformUserRealm;
 /**
  * Shiro配置
  *
- * 
- * 
- * @date 2017-04-20 18:33
  */
 
 @Configuration

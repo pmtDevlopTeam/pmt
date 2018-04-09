@@ -8,7 +8,6 @@ import java.util.List;
  * @Title:  Pager.java
  * @Description: TODO(分页工具类 一般配合DattaGrid工具类使用)
  * @author: jh
- * @date:  2018年2月1日 下午4:12:45
  */
 public class Pager<T> implements Serializable {
 	private static final long serialVersionUID = 1L;
