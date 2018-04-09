@@ -9,7 +9,6 @@ import java.util.List;
  * @Title:  DataGrid.java
  * @Description: TODO(分页工具类(配合Pager使用))
  * @author: jh
- * @date:  2018年2月1日 下午4:09:40
  */
 public class DataGrid <T> implements Serializable{
 
