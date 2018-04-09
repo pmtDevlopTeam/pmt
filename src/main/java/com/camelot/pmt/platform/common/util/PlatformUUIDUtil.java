@@ -1,4 +1,4 @@
-package com.camelot.pmt.platform.utils;
+package com.camelot.pmt.platform.common.util;
 
 import java.util.UUID;
 
