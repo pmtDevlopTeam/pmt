@@ -47,6 +47,19 @@ public class UserModel implements Serializable{
 		super();
 	}
 
+	public UserModel(Long id, String userId, String loginCode, String password, String username, String state,
+			Date createTime, Date modifyTime) {
+		super();
+		this.id = id;
+		this.userId = userId;
+		this.loginCode = loginCode;
+		this.password = password;
+		this.username = username;
+		this.state = state;
+		this.createTime = createTime;
+		this.modifyTime = modifyTime;
+	}
+
 	public long getId() {
 		return id;
 	}
