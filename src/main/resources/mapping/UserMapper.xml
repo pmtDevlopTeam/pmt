@@ -137,7 +137,7 @@
 
     <!-- 根据Id删除用户 -->
     <delete id="deleteUserById" parameterType="com.camelot.pmt.platform.user.model.UserModel">
-        delete FROM pmt_platform_user WHERE id = #{id}
+        delete FROM pmt_platform_user WHERE userId = #{userId}
     </delete>
 
     

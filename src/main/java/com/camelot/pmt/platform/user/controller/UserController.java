@@ -124,22 +124,21 @@ public class UserController {
     @ApiOperation(value="删除用户", notes="删除用户")
     @ApiImplicitParams({
             @ApiImplicitParam(
-                    name="id",value="用户id",required=true,paramType="query",dataType="Integer")
+                    name="userId",value="用户userId",required=true,paramType="query",dataType="String")
     })
-    @RequestMapping(value = "user/deleteUserById",method = RequestMethod.POST)
-    public JSONObject deleteUserById(@ApiIgnore UserModel userModel){
+    @RequestMapping(value = "user/deleteUserByUserId",method = RequestMethod.POST)
+    public JSONObject deleteUserByUserId(@ApiIgnore UserModel userModel){
     	ExecuteResult<String> result = new ExecuteResult<String>();
     	try {
-    		if(userModel.getId() == 0) {
+    		if(userModel.getUserId().equals("") || userModel.getUserId().equals("0") || userModel.getUserId() == null) {
     			return ApiResponse.jsonData(APIStatus.ERROR_400);
     		}
     		result = service.delete(userModel);
     		if(result.isSuccess()) {
-    			return ApiResponse.success();
+    			return ApiResponse.success(result.getResult());
     		}
     		return ApiResponse.error();
     	} catch (Exception e) {
-			// TODO: handle exception
     		return ApiResponse.error();
 		}
     }

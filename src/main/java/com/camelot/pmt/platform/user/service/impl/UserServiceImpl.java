@@ -149,7 +149,7 @@ public class UserServiceImpl implements UserService{
 					result.setResultMessage("该用户不存在！");
 					return result;
 				}
-				//3.记录存在，再检查用的输入密码与库里的密码是否匹配
+				//3.记录存在，再检查用的输入密码与库里的密码是否匹配 
 				String dbPassword = dbModel.getPassword();
 				String inputPassword = userModel.getPassword();
 				String encryptPassword = new Sha256Hash(inputPassword).toHex();
@@ -243,76 +243,6 @@ public class UserServiceImpl implements UserService{
 //		return result;
 //	}
     
-    /**
-     * <p>Description:[查询用户不分页]<p>
-     * 调用mapper方法:findUser
-     * @return ExecuteResult<List<UserModel>>
-     */
-//    @Override
-//    public ExecuteResult<List<UserModel>> findUser(){
-//    	ExecuteResult<List<UserModel>> result = new ExecuteResult<List<UserModel>>();
-//    	try {
-//    		List<UserModel> list = userMapper.findUser();
-//    		if(CollectionUtils.isEmpty(list)) {
-//				return result;
-//			}
-//    		result.setResult(list);
-//    	} catch (Exception e) {
-//			// TODO: handle exception
-//    		LOGGER.error(e.getMessage());
-//			throw new RuntimeException(e);
-//		}
-//       return result;
-//    }
 //
 //    
-//    /**
-//     * <p>Description:[更新用户]<p>
-//     * 调用mapper方法:deleteUser
-//     * @param userModel
-//     * @return ExecuteResult<String>
-//     */
-//    @Override
-//    public ExecuteResult<Long> delete(UserModel userModel) {
-//    	ExecuteResult<Long> result = new ExecuteResult<Long>();
-//    	try {
-//    		userMapper.deleteUser(userModel);
-//    		result.setResult(userModel.getId());
-//    	} catch (Exception e) {
-//			// TODO: handle exception
-//    		LOGGER.error(e.getMessage());
-//			throw new RuntimeException(e);
-//		}
-//        return result;
-//    }
-//
-//
-//
-//	/**
-//     * <p>Description:[查询用户分页]<p>
-//     * 调用mapper方法:findUsersByPage，queryCount
-//     * @return ExecuteResult<DataGrid<UserModel>>
-//     */
-//	@Override
-//	public ExecuteResult<DataGrid<UserModel>> queryUsers(Pager page) {
-//		ExecuteResult<DataGrid<UserModel>> result = new ExecuteResult<DataGrid<UserModel>>();
-//		try{
-//            List<UserModel> list = userMapper.findUsersByPage(page);
-//            //如果没有查询到数据，不继续进行
-//            if (CollectionUtils.isEmpty(list)) {
-//            	DataGrid<UserModel> dg = new DataGrid<UserModel>();
-//            	result.setResult(dg);
-//                return result;
-//            }            
-//            DataGrid<UserModel> dg = new DataGrid<UserModel>();
-//            dg.setRows(list);
-//            //查询总条数
-//            Long total = userMapper.queryCount();
-//            dg.setTotal(total);				
-//            result.setResult(dg);
-//		}catch(Exception e){
-//			throw new RuntimeException(e);
-//		}
-//		return result;
-//	}
 }
