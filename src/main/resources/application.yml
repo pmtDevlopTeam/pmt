@@ -26,7 +26,6 @@ spring:
 mybatis:
   mapper-locations: classpath:mapping/*.xml
   type-aliases-package: com.camelot.pmt
-
 #pagehelper分页插件
 pagehelper:
     helperDialect: mysql
