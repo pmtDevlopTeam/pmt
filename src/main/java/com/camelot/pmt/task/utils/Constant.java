@@ -1,8 +1,7 @@
 package com.camelot.pmt.task.utils;
 
 /**
- * 常量
- * 
+ * 常量类
  */
 public class Constant {
 	/** 超级管理员ID */

@@ -8,7 +8,7 @@ public class Task implements Serializable{
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * 任务标识号 
+	 * 任务标识号
 	 */
 	private Long taskId;
 	/**
