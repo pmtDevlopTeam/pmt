@@ -1,5 +1,6 @@
 package com.camelot.pmt.platform.shiro;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.shiro.authc.AuthenticationException;
@@ -16,16 +17,23 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.camelot.pmt.platform.menu.service.MenuService;
+import com.camelot.pmt.platform.user.model.UserModel;
+import com.camelot.pmt.platform.user.service.UserService;
+import com.camelot.pmt.platform.utils.ExecuteResult;
+
 
 /**
  * 认证
  */
 @Component
 public class PlatformUserRealm extends AuthorizingRealm {
-/*	@Autowired
-	private ISysUserService sysUserService;
+	
 	@Autowired
-	private ISysMenuService sysMenuService;*/
+	private UserService userService;
+
+	@Autowired
+	private MenuService menuService;
 
 	/**
 	 * 授权(验证权限时调用)
@@ -33,6 +41,14 @@ public class PlatformUserRealm extends AuthorizingRealm {
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(
 			PrincipalCollection principals) {
+		
+		
+		Set<String> permsSet = new HashSet<String>();
+		permsSet.add("platform:menu:queryAllMenu");
+		
+		SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+		info.setStringPermissions(permsSet);
+		
 		
 		
 /*		SysUser user = (SysUser) principals.getPrimaryPrincipal();
@@ -43,7 +59,7 @@ public class PlatformUserRealm extends AuthorizingRealm {
 		SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
 		info.setStringPermissions(permsSet);
 		return info;*/
-		return null;
+		return info;
 	}
 
 	/**
@@ -52,31 +68,33 @@ public class PlatformUserRealm extends AuthorizingRealm {
 	@Override
 	protected AuthenticationInfo doGetAuthenticationInfo(
 			AuthenticationToken token) throws AuthenticationException {
-		String loginName = (String) token.getPrincipal();
+		String logincode = (String) token.getPrincipal();
 		String password = new String((char[]) token.getCredentials());
-
-		/*// 查询用户信息
-		SysUser user = sysUserService.selectUserByLoginName(loginName);
-
+		System.out.println(logincode + "---" +password);
+		UserModel userModel = new UserModel();
+		userModel.setLoginCode(logincode);
+		userModel.setPassword(password);
+		ExecuteResult<UserModel> queryLoginCodeAndPassword = userService.queryLoginCodeAndPassword(userModel);
+		UserModel user = queryLoginCodeAndPassword.getResult();
+		
 		// 账号不存在
 		if (user == null) {
 			throw new UnknownAccountException("账号或密码不正确");
 		}
-
-		// 密码错误
-		if (!password.equals(user.getPassword())) {
-			throw new IncorrectCredentialsException("账号或密码不正确");
-		}
-
+	
+		// 账号停用
+		if ("1".equals(user.getState())) {
+			throw new LockedAccountException("账号已被停用,请联系管理员");
+		}	
+	
 		// 账号锁定
-		if (user.getStatus() == 0) {
+		if ("2".equals(user.getState())) {
 			throw new LockedAccountException("账号已被锁定,请联系管理员");
-		}
+		}		
 
-		SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(user,
+		SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(logincode,
 				password, getName());
-		return info;*/
-		return null;
+		return info;
 	}
 
 }

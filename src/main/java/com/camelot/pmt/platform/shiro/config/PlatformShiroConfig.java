@@ -64,13 +64,13 @@ public class PlatformShiroConfig {
         filterMap.put("/webjars/**", "anon");
         //filterMap.put("/api/**", "anon");
 
-//        //swagger配置
-//        filterMap.put("/swagger**", "anon");
-//        filterMap.put("/v2/api-docs", "anon");
-//        filterMap.put("/swagger-resources/configuration/ui", "anon");
+        //swagger配置
+        filterMap.put("/swagger**", "anon");
+        filterMap.put("/v2/api-docs", "anon");
+        filterMap.put("/swagger-resources/configuration/ui", "anon");
 
         filterMap.put("/login.html", "anon");
-        filterMap.put("/sys/login", "anon");
+        filterMap.put("/login", "anon");
         //filterMap.put("/captcha.jpg", "anon");
 //        filterMap.put("/**", "authc");
         filterMap.put("/**", "anon");

@@ -48,4 +48,5 @@ public interface MenuMapper {
      * @return
      */
     List<Menu> queryAllMenu();
+
 }
