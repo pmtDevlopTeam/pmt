@@ -36,6 +36,32 @@ public class Role {
      */
     private Date modifyTime;
 
+    /**
+     * 创建人ID
+     */
+    private String createUserId;
+
+    /**
+     * 修改人ID
+     */
+    private String modifyUserId;
+
+    public String getCreateUserId() {
+        return createUserId;
+    }
+
+    public void setCreateUserId(String createUserId) {
+        this.createUserId = createUserId;
+    }
+
+    public String getModifyUserId() {
+        return modifyUserId;
+    }
+
+    public void setModifyUserId(String modifyUserId) {
+        this.modifyUserId = modifyUserId;
+    }
+
     private List<Role> list;
 
     public List<Role> getList() {

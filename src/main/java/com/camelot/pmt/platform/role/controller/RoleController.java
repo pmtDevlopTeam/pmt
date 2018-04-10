@@ -50,7 +50,7 @@ public class RoleController {
             }
             return ApiResponse.error();
         } catch (Exception e) {
-            return ApiResponse.errorPara(e);
+            return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
         }
     }
 
@@ -60,6 +60,14 @@ public class RoleController {
     public JSONObject addRole(@ApiIgnore Role role) {
         ExecuteResult<Role> result;
         try {
+            //等获取登录人ID
+            role.setCreateUserId("ligen12138");
+            role.setModifyUserId("ligen12138");
+            if(StringUtils.isEmpty(role.getCreateUserId()) && StringUtils.isEmpty(role.getModifyUserId())){
+                ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
+            }
+            //
+
             if (StringUtils.isEmpty(role.getRoleName())) {
                 ApiResponse.jsonData(APIStatus.ERROR_400);
             }
@@ -69,7 +77,7 @@ public class RoleController {
             }
             return ApiResponse.error();
         } catch (Exception e) {
-            return ApiResponse.errorPara(e);
+            return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
         }
     }
 
@@ -78,6 +86,13 @@ public class RoleController {
     public JSONObject editRole(@ApiIgnore Role role) {
         ExecuteResult<Role> result;
         try {
+
+            //等获取登录人ID
+            role.setModifyUserId("ligen12138");
+            if(StringUtils.isEmpty(role.getModifyUserId())){
+                ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
+            }
+            //
             if (StringUtils.isEmpty(role.getRoleName()) && StringUtils.isEmpty(role.getRoleId())) {
                 ApiResponse.jsonData(APIStatus.ERROR_400);
             }
@@ -87,7 +102,7 @@ public class RoleController {
             }
             return ApiResponse.error();
         } catch (Exception e) {
-            return ApiResponse.errorPara(e);
+            return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
         }
     }
 
@@ -105,7 +120,7 @@ public class RoleController {
             }
             return ApiResponse.error();
         } catch (Exception e) {
-            return ApiResponse.errorPara(e);
+            return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
         }
     }
 }

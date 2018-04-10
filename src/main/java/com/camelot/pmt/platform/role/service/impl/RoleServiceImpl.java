@@ -139,6 +139,8 @@ public class RoleServiceImpl implements RoleService {
         role.setRoleName(r.getRoleName());
         role.setCreateTime(new Date(date));
         role.setModifyTime(new Date(date));
+        role.setCreateUserId(r.getCreateUserId());
+        role.setModifyUserId(r.getModifyUserId());
         if (r.getParentId() != null) {
             role.setParentId(r.getParentId());
         } else {
