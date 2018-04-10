@@ -8,9 +8,20 @@
     <result column="operation_time" property="operationTime" jdbcType="TIMESTAMP" />
     <result column="operation_type" property="operationType" jdbcType="VARCHAR" />
     <result column="operation_describe" property="operationDescribe" jdbcType="VARCHAR" />
+    <result column="create_user_id" property="createUserId" jdbcType="BIGINT" />
+    <result column="modify_user_id" property="modifyUserId" jdbcType="BIGINT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="Column_1" property="column1" jdbcType="VARCHAR" />
+    <result column="Column_2" property="column2" jdbcType="VARCHAR" />
+    <result column="Column_3" property="column3" jdbcType="VARCHAR" />
+    <result column="Column_4" property="column4" jdbcType="VARCHAR" />
+    <result column="Column_5" property="column5" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    task_log_id, task_id, user_name, operation_time, operation_type, operation_describe
+    task_log_id, task_id, user_name, operation_time, operation_type, operation_describe, 
+    create_user_id, modify_user_id, create_time, modify_time, Column_1, Column_2, Column_3, 
+    Column_4, Column_5
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -24,10 +35,16 @@
   </delete>
   <insert id="insert" parameterType="com.camelot.pmt.task.model.TaskLog" >
     insert into task_log (task_log_id, task_id, user_name, 
-      operation_time, operation_type, operation_describe
+      operation_time, operation_type, operation_describe, 
+      create_user_id, modify_user_id, create_time, 
+      modify_time, Column_1, Column_2, 
+      Column_3, Column_4, Column_5
       )
     values (#{taskLogId,jdbcType=BIGINT}, #{taskId,jdbcType=BIGINT}, #{userName,jdbcType=VARCHAR}, 
-      #{operationTime,jdbcType=TIMESTAMP}, #{operationType,jdbcType=VARCHAR}, #{operationDescribe,jdbcType=VARCHAR}
+      #{operationTime,jdbcType=TIMESTAMP}, #{operationType,jdbcType=VARCHAR}, #{operationDescribe,jdbcType=VARCHAR}, 
+      #{createUserId,jdbcType=BIGINT}, #{modifyUserId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{modifyTime,jdbcType=TIMESTAMP}, #{column1,jdbcType=VARCHAR}, #{column2,jdbcType=VARCHAR}, 
+      #{column3,jdbcType=VARCHAR}, #{column4,jdbcType=VARCHAR}, #{column5,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.camelot.pmt.task.model.TaskLog" >
@@ -51,6 +68,33 @@
       <if test="operationDescribe != null" >
         operation_describe,
       </if>
+      <if test="createUserId != null" >
+        create_user_id,
+      </if>
+      <if test="modifyUserId != null" >
+        modify_user_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+      <if test="column1 != null" >
+        Column_1,
+      </if>
+      <if test="column2 != null" >
+        Column_2,
+      </if>
+      <if test="column3 != null" >
+        Column_3,
+      </if>
+      <if test="column4 != null" >
+        Column_4,
+      </if>
+      <if test="column5 != null" >
+        Column_5,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="taskLogId != null" >
@@ -70,6 +114,33 @@
       </if>
       <if test="operationDescribe != null" >
         #{operationDescribe,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null" >
+        #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="modifyUserId != null" >
+        #{modifyUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="column1 != null" >
+        #{column1,jdbcType=VARCHAR},
+      </if>
+      <if test="column2 != null" >
+        #{column2,jdbcType=VARCHAR},
+      </if>
+      <if test="column3 != null" >
+        #{column3,jdbcType=VARCHAR},
+      </if>
+      <if test="column4 != null" >
+        #{column4,jdbcType=VARCHAR},
+      </if>
+      <if test="column5 != null" >
+        #{column5,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -91,6 +162,33 @@
       <if test="operationDescribe != null" >
         operation_describe = #{operationDescribe,jdbcType=VARCHAR},
       </if>
+      <if test="createUserId != null" >
+        create_user_id = #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="modifyUserId != null" >
+        modify_user_id = #{modifyUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="column1 != null" >
+        Column_1 = #{column1,jdbcType=VARCHAR},
+      </if>
+      <if test="column2 != null" >
+        Column_2 = #{column2,jdbcType=VARCHAR},
+      </if>
+      <if test="column3 != null" >
+        Column_3 = #{column3,jdbcType=VARCHAR},
+      </if>
+      <if test="column4 != null" >
+        Column_4 = #{column4,jdbcType=VARCHAR},
+      </if>
+      <if test="column5 != null" >
+        Column_5 = #{column5,jdbcType=VARCHAR},
+      </if>
     </set>
     where task_log_id = #{taskLogId,jdbcType=BIGINT}
   </update>
@@ -100,7 +198,16 @@
       user_name = #{userName,jdbcType=VARCHAR},
       operation_time = #{operationTime,jdbcType=TIMESTAMP},
       operation_type = #{operationType,jdbcType=VARCHAR},
-      operation_describe = #{operationDescribe,jdbcType=VARCHAR}
+      operation_describe = #{operationDescribe,jdbcType=VARCHAR},
+      create_user_id = #{createUserId,jdbcType=BIGINT},
+      modify_user_id = #{modifyUserId,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      Column_1 = #{column1,jdbcType=VARCHAR},
+      Column_2 = #{column2,jdbcType=VARCHAR},
+      Column_3 = #{column3,jdbcType=VARCHAR},
+      Column_4 = #{column4,jdbcType=VARCHAR},
+      Column_5 = #{column5,jdbcType=VARCHAR}
     where task_log_id = #{taskLogId,jdbcType=BIGINT}
   </update>
 </mapper>
