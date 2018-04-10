@@ -1,112 +1,65 @@
 package com.camelot.pmt.task.model;
 
-import java.io.Serializable;
 import java.util.Date;
 
-public class Task implements Serializable {
+public class Task {
+    private Long id;
 
-    private static final long serialVersionUID = 1L;
-
-    /**
-     * 任务标识号
-     */
-    private Long taskId;
-    /**
-     * 父级任务标识号
-     */
-    private Long taskParentId;
-    /**
-     * 项目标识号
-     */
-    private Long projectId;
-    /**
-     * 需求标识号
-     */
-    private Long demandId;
-    /**
-     * 任务名称
-     */
     private String taskName;
-    /**
-     * 优先级
-     */
+
+    private Long taskParentId;
+
+    private Long projectId;
+
+    private Long demandId;
+
     private String priority;
-    /**
-     * 指派人
-     */
-    private String assignUserName;
-    /**
-     * 被指派人
-     */
-    private String beassignUserName;
-    /**
-     * 任务创建人
-     */
-    private String createUserName;
-    /**
-     * 任务完成人
-     */
-    private String finishUserName;
-    /**
-     * 任务创建时间
-     */
-    private Date taskCreateTime;
-    /**
-     * 任务指派时间
-     */
+
+    private String assignUserId;
+
+    private String beassignUserId;
+
     private Date assignTime;
-    /**
-     * 任务预计开始时间
-     */
+
     private Date estimateStartTime;
-    /**
-     * 任务预计结束时间
-     */
+
     private Date estimateEndTime;
-    /**
-     * 任务实际开始时间
-     */
+
     private Date actualStartTime;
-    /**
-     * 任务实际结束时间
-     */
+
     private Date actualEndTime;
-    /**
-     * 任务类型
-     */
+
     private String taskType;
-    /**
-     * 任务进度
-     */
+
     private String taskSpeed;
-    /**
-     * 任务状态
-     */
+
     private String status;
-    /**
-     * 任务异常状态
-     */
+
     private String abnormalStatus;
-    /**
-     * 任务描述
-     */
+
     private String taskDescribe;
-    /**
-     * 任务预计工时
-     */
+
+    private String abnormalDescribe;
+
     private Integer estimateHour;
-    /**
-     * 任务已消耗工时
-     */
+
     private Integer consumeHour;
-    /**
-     * 任务剩余工时
-     */
+
     private Integer remainHour;
-    /**
-     * 任务里程
-     */
+
     private String taskMileage;
+
+    private String createUserId;
+
+    private String modifyUserId;
+
+    private Date createTime;
+
+    private Date modifyTime;
+
+    private Integer warningHour;
+
+    private Integer warningStatus;
 
     private String column1;
 
@@ -118,12 +71,20 @@ public class Task implements Serializable {
 
     private String column5;
 
-    public Long getTaskId() {
-        return taskId;
+    public Long getId() {
+        return id;
     }
 
-    public void setTaskId(Long taskId) {
-        this.taskId = taskId;
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getTaskName() {
+        return taskName;
+    }
+
+    public void setTaskName(String taskName) {
+        this.taskName = taskName == null ? null : taskName.trim();
     }
 
     public Long getTaskParentId() {
@@ -150,14 +111,6 @@ public class Task implements Serializable {
         this.demandId = demandId;
     }
 
-    public String getTaskName() {
-        return taskName;
-    }
-
-    public void setTaskName(String taskName) {
-        this.taskName = taskName == null ? null : taskName.trim();
-    }
-
     public String getPriority() {
         return priority;
     }
@@ -166,44 +119,20 @@ public class Task implements Serializable {
         this.priority = priority == null ? null : priority.trim();
     }
 
-    public String getAssignUserName() {
-        return assignUserName;
+    public String getAssignUserId() {
+        return assignUserId;
     }
 
-    public void setAssignUserName(String assignUserName) {
-        this.assignUserName = assignUserName == null ? null : assignUserName.trim();
+    public void setAssignUserId(String assignUserId) {
+        this.assignUserId = assignUserId == null ? null : assignUserId.trim();
     }
 
-    public String getBeassignUserName() {
-        return beassignUserName;
+    public String getBeassignUserId() {
+        return beassignUserId;
     }
 
-    public void setBeassignUserName(String beassignUserName) {
-        this.beassignUserName = beassignUserName == null ? null : beassignUserName.trim();
-    }
-
-    public String getCreateUserName() {
-        return createUserName;
-    }
-
-    public void setCreateUserName(String createUserName) {
-        this.createUserName = createUserName == null ? null : createUserName.trim();
-    }
-
-    public String getFinishUserName() {
-        return finishUserName;
-    }
-
-    public void setFinishUserName(String finishUserName) {
-        this.finishUserName = finishUserName == null ? null : finishUserName.trim();
-    }
-
-    public Date getTaskCreateTime() {
-        return taskCreateTime;
-    }
-
-    public void setTaskCreateTime(Date taskCreateTime) {
-        this.taskCreateTime = taskCreateTime;
+    public void setBeassignUserId(String beassignUserId) {
+        this.beassignUserId = beassignUserId == null ? null : beassignUserId.trim();
     }
 
     public Date getAssignTime() {
@@ -286,6 +215,14 @@ public class Task implements Serializable {
         this.taskDescribe = taskDescribe == null ? null : taskDescribe.trim();
     }
 
+    public String getAbnormalDescribe() {
+        return abnormalDescribe;
+    }
+
+    public void setAbnormalDescribe(String abnormalDescribe) {
+        this.abnormalDescribe = abnormalDescribe == null ? null : abnormalDescribe.trim();
+    }
+
     public Integer getEstimateHour() {
         return estimateHour;
     }
@@ -318,12 +255,60 @@ public class Task implements Serializable {
         this.taskMileage = taskMileage == null ? null : taskMileage.trim();
     }
 
+    public String getCreateUserId() {
+        return createUserId;
+    }
+
+    public void setCreateUserId(String createUserId) {
+        this.createUserId = createUserId == null ? null : createUserId.trim();
+    }
+
+    public String getModifyUserId() {
+        return modifyUserId;
+    }
+
+    public void setModifyUserId(String modifyUserId) {
+        this.modifyUserId = modifyUserId == null ? null : modifyUserId.trim();
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Date getModifyTime() {
+        return modifyTime;
+    }
+
+    public void setModifyTime(Date modifyTime) {
+        this.modifyTime = modifyTime;
+    }
+
+    public Integer getWarningHour() {
+        return warningHour;
+    }
+
+    public void setWarningHour(Integer warningHour) {
+        this.warningHour = warningHour;
+    }
+
+    public Integer getWarningStatus() {
+        return warningStatus;
+    }
+
+    public void setWarningStatus(Integer warningStatus) {
+        this.warningStatus = warningStatus;
+    }
+
     public String getColumn1() {
         return column1;
     }
 
     public void setColumn1(String column1) {
-        this.column1 = column1;
+        this.column1 = column1 == null ? null : column1.trim();
     }
 
     public String getColumn2() {
@@ -331,7 +316,7 @@ public class Task implements Serializable {
     }
 
     public void setColumn2(String column2) {
-        this.column2 = column2;
+        this.column2 = column2 == null ? null : column2.trim();
     }
 
     public String getColumn3() {
@@ -339,7 +324,7 @@ public class Task implements Serializable {
     }
 
     public void setColumn3(String column3) {
-        this.column3 = column3;
+        this.column3 = column3 == null ? null : column3.trim();
     }
 
     public String getColumn4() {
@@ -347,7 +332,7 @@ public class Task implements Serializable {
     }
 
     public void setColumn4(String column4) {
-        this.column4 = column4;
+        this.column4 = column4 == null ? null : column4.trim();
     }
 
     public String getColumn5() {
@@ -355,68 +340,6 @@ public class Task implements Serializable {
     }
 
     public void setColumn5(String column5) {
-        this.column5 = column5;
+        this.column5 = column5 == null ? null : column5.trim();
     }
-
-    public static long getSerialversionuid() {
-        return serialVersionUID;
-    }
-
-    @Override
-    public String toString() {
-        return "Task [taskId=" + taskId + ", taskParentId=" + taskParentId + ", projectId=" + projectId + ", demandId="
-                + demandId + ", taskName=" + taskName + ", priority=" + priority + ", assignUserName=" + assignUserName
-                + ", beassignUserName=" + beassignUserName + ", createUserName=" + createUserName + ", finishUserName="
-                + finishUserName + ", taskCreateTime=" + taskCreateTime + ", assignTime=" + assignTime
-                + ", estimateStartTime=" + estimateStartTime + ", estimateEndTime=" + estimateEndTime
-                + ", actualStartTime=" + actualStartTime + ", actualEndTime=" + actualEndTime + ", taskType=" + taskType
-                + ", taskSpeed=" + taskSpeed + ", status=" + status + ", abnormalStatus=" + abnormalStatus
-                + ", taskDescribe=" + taskDescribe + ", estimateHour=" + estimateHour + ", consumeHour=" + consumeHour
-                + ", remainHour=" + remainHour + ", taskMileage=" + taskMileage + ", column1=" + column1 + ", column2="
-                + column2 + ", column3=" + column3 + ", column4=" + column4 + ", column5=" + column5 + "]";
-    }
-
-    public Task(Long taskId, Long taskParentId, Long projectId, Long demandId, String taskName, String priority,
-            String assignUserName, String beassignUserName, String createUserName, String finishUserName,
-            Date taskCreateTime, Date assignTime, Date estimateStartTime, Date estimateEndTime, Date actualStartTime,
-            Date actualEndTime, String taskType, String taskSpeed, String status, String abnormalStatus,
-            String taskDescribe, Integer estimateHour, Integer consumeHour, Integer remainHour, String taskMileage,
-            String column1, String column2, String column3, String column4, String column5) {
-        super();
-        this.taskId = taskId;
-        this.taskParentId = taskParentId;
-        this.projectId = projectId;
-        this.demandId = demandId;
-        this.taskName = taskName;
-        this.priority = priority;
-        this.assignUserName = assignUserName;
-        this.beassignUserName = beassignUserName;
-        this.createUserName = createUserName;
-        this.finishUserName = finishUserName;
-        this.taskCreateTime = taskCreateTime;
-        this.assignTime = assignTime;
-        this.estimateStartTime = estimateStartTime;
-        this.estimateEndTime = estimateEndTime;
-        this.actualStartTime = actualStartTime;
-        this.actualEndTime = actualEndTime;
-        this.taskType = taskType;
-        this.taskSpeed = taskSpeed;
-        this.status = status;
-        this.abnormalStatus = abnormalStatus;
-        this.taskDescribe = taskDescribe;
-        this.estimateHour = estimateHour;
-        this.consumeHour = consumeHour;
-        this.remainHour = remainHour;
-        this.taskMileage = taskMileage;
-        this.column1 = column1;
-        this.column2 = column2;
-        this.column3 = column3;
-        this.column4 = column4;
-        this.column5 = column5;
-    }
-
-    public Task() {
-        super();
-    }
-
 }

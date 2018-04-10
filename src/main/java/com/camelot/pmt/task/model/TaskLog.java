@@ -1,35 +1,27 @@
 package com.camelot.pmt.task.model;
 
-import java.io.Serializable;
 import java.util.Date;
 
-public class TaskLog implements Serializable {
+public class TaskLog {
+    private Long id;
 
-    private static final long serialVersionUID = 1L;
-    /**
-     * 任务日志标识号
-     */
-    private Long taskLogId;
-    /**
-     * 任务标识号
-     */
     private Long taskId;
-    /**
-     * 操作人
-     */
+
     private String userName;
-    /**
-     * 操作时间
-     */
+
     private Date operationTime;
-    /**
-     * 操作状态
-     */
+
     private String operationType;
-    /**
-     * 操作描述
-     */
+
     private String operationDescribe;
+
+    private String createUserId;
+
+    private String modifyUserId;
+
+    private Date createTime;
+
+    private Date modifyTime;
 
     private String column1;
 
@@ -41,12 +33,12 @@ public class TaskLog implements Serializable {
 
     private String column5;
 
-    public Long getTaskLogId() {
-        return taskLogId;
+    public Long getId() {
+        return id;
     }
 
-    public void setTaskLogId(Long taskLogId) {
-        this.taskLogId = taskLogId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Long getTaskId() {
@@ -89,12 +81,44 @@ public class TaskLog implements Serializable {
         this.operationDescribe = operationDescribe == null ? null : operationDescribe.trim();
     }
 
+    public String getCreateUserId() {
+        return createUserId;
+    }
+
+    public void setCreateUserId(String createUserId) {
+        this.createUserId = createUserId == null ? null : createUserId.trim();
+    }
+
+    public String getModifyUserId() {
+        return modifyUserId;
+    }
+
+    public void setModifyUserId(String modifyUserId) {
+        this.modifyUserId = modifyUserId == null ? null : modifyUserId.trim();
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Date getModifyTime() {
+        return modifyTime;
+    }
+
+    public void setModifyTime(Date modifyTime) {
+        this.modifyTime = modifyTime;
+    }
+
     public String getColumn1() {
         return column1;
     }
 
     public void setColumn1(String column1) {
-        this.column1 = column1;
+        this.column1 = column1 == null ? null : column1.trim();
     }
 
     public String getColumn2() {
@@ -102,7 +126,7 @@ public class TaskLog implements Serializable {
     }
 
     public void setColumn2(String column2) {
-        this.column2 = column2;
+        this.column2 = column2 == null ? null : column2.trim();
     }
 
     public String getColumn3() {
@@ -110,7 +134,7 @@ public class TaskLog implements Serializable {
     }
 
     public void setColumn3(String column3) {
-        this.column3 = column3;
+        this.column3 = column3 == null ? null : column3.trim();
     }
 
     public String getColumn4() {
@@ -118,7 +142,7 @@ public class TaskLog implements Serializable {
     }
 
     public void setColumn4(String column4) {
-        this.column4 = column4;
+        this.column4 = column4 == null ? null : column4.trim();
     }
 
     public String getColumn5() {
@@ -126,44 +150,6 @@ public class TaskLog implements Serializable {
     }
 
     public void setColumn5(String column5) {
-        this.column5 = column5;
+        this.column5 = column5 == null ? null : column5.trim();
     }
-
-    public static long getSerialversionuid() {
-        return serialVersionUID;
-    }
-
-    @Override
-    public String toString() {
-        return "TaskLog [taskLogId=" + taskLogId + ", taskId=" + taskId + ", userName=" + userName + ", operationTime="
-                + operationTime + ", operationType=" + operationType + ", operationDescribe=" + operationDescribe
-                + ", column1=" + column1 + ", column2=" + column2 + ", column3=" + column3 + ", column4=" + column4
-                + ", column5=" + column5 + ", getTaskLogId()=" + getTaskLogId() + ", getTaskId()=" + getTaskId()
-                + ", getUserName()=" + getUserName() + ", getOperationTime()=" + getOperationTime()
-                + ", getOperationType()=" + getOperationType() + ", getOperationDescribe()=" + getOperationDescribe()
-                + ", getColumn1()=" + getColumn1() + ", getColumn2()=" + getColumn2() + ", getColumn3()=" + getColumn3()
-                + ", getColumn4()=" + getColumn4() + ", getColumn5()=" + getColumn5() + ", getClass()=" + getClass()
-                + ", hashCode()=" + hashCode() + ", toString()=" + super.toString() + "]";
-    }
-
-    public TaskLog(Long taskLogId, Long taskId, String userName, Date operationTime, String operationType,
-            String operationDescribe, String column1, String column2, String column3, String column4, String column5) {
-        super();
-        this.taskLogId = taskLogId;
-        this.taskId = taskId;
-        this.userName = userName;
-        this.operationTime = operationTime;
-        this.operationType = operationType;
-        this.operationDescribe = operationDescribe;
-        this.column1 = column1;
-        this.column2 = column2;
-        this.column3 = column3;
-        this.column4 = column4;
-        this.column5 = column5;
-    }
-
-    public TaskLog() {
-        super();
-    }
-
 }
