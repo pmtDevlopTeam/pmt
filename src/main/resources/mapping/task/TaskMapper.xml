@@ -844,4 +844,30 @@
       Column_5 = #{column5,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <sql id="Base_Column_List2" >
+    task_id, task_name, priority, assign_user_name,
+    beassign_user_name, assign_time, estimate_start_time, estimate_end_time,
+    actual_start_time, actual_end_time, task_type, task_speed, status, abnormal_status,
+    task_mileage, create_user_id
+  </sql>
+
+  <!--zlh-->
+  <!--查询所有任务列表-->
+  <select id="queryAllTask" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List2" />
+    from pmt_task
+  </select>
+
+  <!--&lt;!&ndash;zlh&ndash;&gt;-->
+  <!--&lt;!&ndash;根据条件模糊查询&ndash;&gt;-->
+  <!--<select id="queryAllTask" resultMap="BaseResultMap" parameterType="com.camelot.pmt.task.model.Task">-->
+    <!--select-->
+    <!--<include refid="Base_Column_List2" />-->
+    <!--from pmt_task-->
+    <!--<where>-->
+      <!--<if test=""></if>-->
+    <!--</where>-->
+  <!--</select>-->
 </mapper>

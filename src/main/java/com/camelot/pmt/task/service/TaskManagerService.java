@@ -1,5 +1,6 @@
 package com.camelot.pmt.task.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.camelot.pmt.task.model.Task;
 
 import java.util.List;
@@ -15,7 +16,7 @@ public interface TaskManagerService {
      * @description: 查询所有任务列表
      * @date: 16:54 2018/4/9
      */
-    List<Task> queryAllTask();
+    JSONObject queryAllTask();
 
     /**
      * @param task
@@ -23,5 +24,5 @@ public interface TaskManagerService {
      * @description: 根据条件查询任务
      * @return
      */
-    List<Task> queryTaskByTask(Task task);
+    JSONObject queryTaskByTask(Task task);
 }
