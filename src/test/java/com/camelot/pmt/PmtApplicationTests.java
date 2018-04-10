@@ -18,28 +18,23 @@ import com.camelot.pmt.platform.menu.service.MenuService;
 @MapperScan("com.camelot.pmt.platform.*.mapper")
 public class PmtApplicationTests {
 
-	@Autowired
-	MenuService menuService;
-	
-	@Test
-	public void contextLoads() {
-		String uuid = UUID.randomUUID().toString().replaceAll("-", "");
-		Menu menu = new Menu(null,uuid,"0","asdasd1","1","/menu","hahaha","test.ico","0",2,null,null,null);
-		JSONObject createMenu = menuService.createMenu(menu);
-		System.out.println(createMenu);
-		
-	}
-	
-	@Test
-	public void menuTreeTest() {
-		JSONObject queryAllMenu = menuService.queryAllMenu();
-		System.out.println(queryAllMenu);
-		
-	}
-	
+    @Autowired
+    MenuService menuService;
+
+    @Test
+    public void contextLoads() {
+        String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+        Menu menu = new Menu(null, uuid, "0", "asdasd1", "1", "/menu", "hahaha", "test.ico", "0", 2, null, null, null);
+        JSONObject createMenu = menuService.createMenu(menu);
+        System.out.println(createMenu);
+
+    }
+
+    @Test
+    public void menuTreeTest() {
+        JSONObject queryAllMenu = menuService.queryAllMenu();
+        System.out.println(queryAllMenu);
+
+    }
 
 }
-
-
-
-

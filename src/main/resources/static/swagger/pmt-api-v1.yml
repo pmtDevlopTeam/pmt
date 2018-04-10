@@ -1,0 +1,29 @@
+swagger: '2.0'
+info:
+  version: 0.0.1
+  title: pmt项目管理系统
+basePath: /api/v1
+schemes:
+- http
+produces:
+- application/json
+consumes:
+- application/json
+tags:
+- name: pmt
+  description: 项目管理系统
+paths:
+  /: 
+definitions:
+  Response:
+    type: object
+    description: 出错时候返回提示
+    properties:
+      traceId:
+        type: string
+        description: 跟踪码
+        example: '02910'
+      message:
+        type: string
+        description: 提示信息
+        example: 系统消息

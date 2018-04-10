@@ -11,42 +11,40 @@ import org.slf4j.LoggerFactory;
  * 
  */
 public class PlatformShiroUtils {
-	private static Logger logger=LoggerFactory.getLogger(PlatformShiroUtils.class);	
-	public static Session getSession() {
-		return SecurityUtils.getSubject().getSession();
-	}
+    private static Logger logger = LoggerFactory.getLogger(PlatformShiroUtils.class);
 
-	public static Subject getSubject() {
-		return SecurityUtils.getSubject();
-	}
-	
-	public static void setSessionAttribute(Object key, Object value) {
-		getSession().setAttribute(key, value);
-	}
+    public static Session getSession() {
+        return SecurityUtils.getSubject().getSession();
+    }
 
-	public static Object getSessionAttribute(Object key) {
-		return getSession().getAttribute(key);
-	}
+    public static Subject getSubject() {
+        return SecurityUtils.getSubject();
+    }
 
-	public static boolean isLogin() {
-		return SecurityUtils.getSubject().getPrincipal() != null;
-	}
+    public static void setSessionAttribute(Object key, Object value) {
+        getSession().setAttribute(key, value);
+    }
 
-	public static void logout() {
-		SecurityUtils.getSubject().logout();
-	}
-	
-/*	@SuppressWarnings("unchecked")
-	public static SysUser getUserObject(){
-		try{
-			return (SysUser) SecurityUtils.getSubject().getPrincipal();
-		}catch( ClassCastException cce){
-			//logger.warn("生产环境中请去掉spring devtool");
-			SecurityUtils.getSubject().logout();
-			throw new ShiroException();		
-		}
-		
-	
-	}*/
+    public static Object getSessionAttribute(Object key) {
+        return getSession().getAttribute(key);
+    }
+
+    public static boolean isLogin() {
+        return SecurityUtils.getSubject().getPrincipal() != null;
+    }
+
+    public static void logout() {
+        SecurityUtils.getSubject().logout();
+    }
+
+    /*
+     * @SuppressWarnings("unchecked") public static SysUser getUserObject(){ try{
+     * return (SysUser) SecurityUtils.getSubject().getPrincipal(); }catch(
+     * ClassCastException cce){ //logger.warn("生产环境中请去掉spring devtool");
+     * SecurityUtils.getSubject().logout(); throw new ShiroException(); }
+     * 
+     * 
+     * }
+     */
 
 }
