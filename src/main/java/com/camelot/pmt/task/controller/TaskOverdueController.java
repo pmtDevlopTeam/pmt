@@ -20,7 +20,7 @@ import com.camelot.pmt.platform.utils.DataGrid;
 import com.camelot.pmt.platform.utils.ExecuteResult;
 import com.camelot.pmt.platform.utils.Pager;
 import com.camelot.pmt.task.model.Task;
-import com.camelot.pmt.task.service.TaskService;
+import com.camelot.pmt.task.service.TaskOverdueService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -40,10 +40,10 @@ import springfox.documentation.annotations.ApiIgnore;
 @RestController
 @RequestMapping("/task")
 @Api(value = "任务管理接口", description = "任务管理接口")
-public class TaskController {
+public class TaskOverdueController {
 	
 	@Autowired
-	private TaskService taskService;
+	private TaskOverdueService taskService;
 	
 	/**
 	 * 
@@ -59,13 +59,13 @@ public class TaskController {
 	    	@ApiImplicitParam(name = "page", value = "页码", required = true, paramType = "query", dataType = "int"),
 	    	@ApiImplicitParam(name = "rows", value = "每页数量", required = true, paramType = "query", dataType = "int")
 	  })
-	public JSONObject queryoverdueTask(@ApiIgnore Pager page){
+	public JSONObject queryOverdueTask(@ApiIgnore Pager page){
 		ExecuteResult<DataGrid<Task>> result = new ExecuteResult<DataGrid<Task>>();
 		try {
 			if(page == null) {
     			return ApiResponse.errorPara();
     		}
-			result = taskService.queryoverdueTask(page);
+			result = taskService.queryOverdueTask(page);
 			if (result.isSuccess()) {
 				return ApiResponse.success(result.getResult());
 			}

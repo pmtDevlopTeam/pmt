@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.camelot.pmt.pro.mapper.DemandMapper" >
+  <resultMap id="BaseResultMap" type="com.camelot.pmt.pro.model.Demand" >
+    <id column="req_id" property="reqId" jdbcType="INTEGER" />
+    <result column="pro_id" property="proId" jdbcType="INTEGER" />
+    <result column="first_level_id" property="firstLevelId" jdbcType="INTEGER" />
+    <result column="req_name" property="reqName" jdbcType="VARCHAR" />
+    <result column="req_status" property="reqStatus" jdbcType="CHAR" />
+    <result column="req_level" property="reqLevel" jdbcType="CHAR" />
+    <result column="req_file" property="reqFile" jdbcType="VARCHAR" />
+    <result column="req_code" property="reqCode" jdbcType="VARCHAR" />
+    <result column="file_title" property="fileTitle" jdbcType="VARCHAR" />
+    <result column="req_source" property="reqSource" jdbcType="VARCHAR" />
+    <result column="source_notes" property="sourceNotes" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_user_id" property="modifyUserId" jdbcType="INTEGER" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="Column_1" property="column1" jdbcType="VARCHAR" />
+    <result column="Column_2" property="column2" jdbcType="VARCHAR" />
+    <result column="Column_3" property="column3" jdbcType="VARCHAR" />
+    <result column="Column_4" property="column4" jdbcType="VARCHAR" />
+    <result column="Column_5" property="column5" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.camelot.pmt.pro.model.DemandWithBLOBs" extends="BaseResultMap" >
+    <result column="req_desc" property="reqDesc" jdbcType="LONGVARCHAR" />
+    <result column="accp_standard" property="accpStandard" jdbcType="LONGVARCHAR" />
+    <result column="close_reason" property="closeReason" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    req_id, pro_id, first_level_id, req_name, req_status, req_level, req_file, req_code, 
+    file_title, req_source, source_notes, user_id, create_time, modify_user_id, modify_time, 
+    Column_1, Column_2, Column_3, Column_4, Column_5
+  </sql>
+  <sql id="Blob_Column_List" >
+    req_desc, accp_standard, close_reason
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from demand
+    where req_id = #{reqId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from demand
+    where req_id = #{reqId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.camelot.pmt.pro.model.DemandWithBLOBs" >
+    insert into demand (req_id, pro_id, first_level_id, 
+      req_name, req_status, req_level, 
+      req_file, req_code, file_title, 
+      req_source, source_notes, user_id, 
+      create_time, modify_user_id, modify_time, 
+      Column_1, Column_2, Column_3, 
+      Column_4, Column_5, req_desc, 
+      accp_standard, close_reason)
+    values (#{reqId,jdbcType=INTEGER}, #{proId,jdbcType=INTEGER}, #{firstLevelId,jdbcType=INTEGER}, 
+      #{reqName,jdbcType=VARCHAR}, #{reqStatus,jdbcType=CHAR}, #{reqLevel,jdbcType=CHAR}, 
+      #{reqFile,jdbcType=VARCHAR}, #{reqCode,jdbcType=VARCHAR}, #{fileTitle,jdbcType=VARCHAR}, 
+      #{reqSource,jdbcType=VARCHAR}, #{sourceNotes,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=INTEGER}, #{modifyTime,jdbcType=TIMESTAMP}, 
+      #{column1,jdbcType=VARCHAR}, #{column2,jdbcType=VARCHAR}, #{column3,jdbcType=VARCHAR}, 
+      #{column4,jdbcType=VARCHAR}, #{column5,jdbcType=VARCHAR}, #{reqDesc,jdbcType=LONGVARCHAR}, 
+      #{accpStandard,jdbcType=LONGVARCHAR}, #{closeReason,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.camelot.pmt.pro.model.DemandWithBLOBs" >
+    insert into demand
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="reqId != null" >
+        req_id,
+      </if>
+      <if test="proId != null" >
+        pro_id,
+      </if>
+      <if test="firstLevelId != null" >
+        first_level_id,
+      </if>
+      <if test="reqName != null" >
+        req_name,
+      </if>
+      <if test="reqStatus != null" >
+        req_status,
+      </if>
+      <if test="reqLevel != null" >
+        req_level,
+      </if>
+      <if test="reqFile != null" >
+        req_file,
+      </if>
+      <if test="reqCode != null" >
+        req_code,
+      </if>
+      <if test="fileTitle != null" >
+        file_title,
+      </if>
+      <if test="reqSource != null" >
+        req_source,
+      </if>
+      <if test="sourceNotes != null" >
+        source_notes,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="modifyUserId != null" >
+        modify_user_id,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+      <if test="column1 != null" >
+        Column_1,
+      </if>
+      <if test="column2 != null" >
+        Column_2,
+      </if>
+      <if test="column3 != null" >
+        Column_3,
+      </if>
+      <if test="column4 != null" >
+        Column_4,
+      </if>
+      <if test="column5 != null" >
+        Column_5,
+      </if>
+      <if test="reqDesc != null" >
+        req_desc,
+      </if>
+      <if test="accpStandard != null" >
+        accp_standard,
+      </if>
+      <if test="closeReason != null" >
+        close_reason,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="reqId != null" >
+        #{reqId,jdbcType=INTEGER},
+      </if>
+      <if test="proId != null" >
+        #{proId,jdbcType=INTEGER},
+      </if>
+      <if test="firstLevelId != null" >
+        #{firstLevelId,jdbcType=INTEGER},
+      </if>
+      <if test="reqName != null" >
+        #{reqName,jdbcType=VARCHAR},
+      </if>
+      <if test="reqStatus != null" >
+        #{reqStatus,jdbcType=CHAR},
+      </if>
+      <if test="reqLevel != null" >
+        #{reqLevel,jdbcType=CHAR},
+      </if>
+      <if test="reqFile != null" >
+        #{reqFile,jdbcType=VARCHAR},
+      </if>
+      <if test="reqCode != null" >
+        #{reqCode,jdbcType=VARCHAR},
+      </if>
+      <if test="fileTitle != null" >
+        #{fileTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="reqSource != null" >
+        #{reqSource,jdbcType=VARCHAR},
+      </if>
+      <if test="sourceNotes != null" >
+        #{sourceNotes,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyUserId != null" >
+        #{modifyUserId,jdbcType=INTEGER},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="column1 != null" >
+        #{column1,jdbcType=VARCHAR},
+      </if>
+      <if test="column2 != null" >
+        #{column2,jdbcType=VARCHAR},
+      </if>
+      <if test="column3 != null" >
+        #{column3,jdbcType=VARCHAR},
+      </if>
+      <if test="column4 != null" >
+        #{column4,jdbcType=VARCHAR},
+      </if>
+      <if test="column5 != null" >
+        #{column5,jdbcType=VARCHAR},
+      </if>
+      <if test="reqDesc != null" >
+        #{reqDesc,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="accpStandard != null" >
+        #{accpStandard,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="closeReason != null" >
+        #{closeReason,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.camelot.pmt.pro.model.DemandWithBLOBs" >
+    update demand
+    <set >
+      <if test="proId != null" >
+        pro_id = #{proId,jdbcType=INTEGER},
+      </if>
+      <if test="firstLevelId != null" >
+        first_level_id = #{firstLevelId,jdbcType=INTEGER},
+      </if>
+      <if test="reqName != null" >
+        req_name = #{reqName,jdbcType=VARCHAR},
+      </if>
+      <if test="reqStatus != null" >
+        req_status = #{reqStatus,jdbcType=CHAR},
+      </if>
+      <if test="reqLevel != null" >
+        req_level = #{reqLevel,jdbcType=CHAR},
+      </if>
+      <if test="reqFile != null" >
+        req_file = #{reqFile,jdbcType=VARCHAR},
+      </if>
+      <if test="reqCode != null" >
+        req_code = #{reqCode,jdbcType=VARCHAR},
+      </if>
+      <if test="fileTitle != null" >
+        file_title = #{fileTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="reqSource != null" >
+        req_source = #{reqSource,jdbcType=VARCHAR},
+      </if>
+      <if test="sourceNotes != null" >
+        source_notes = #{sourceNotes,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyUserId != null" >
+        modify_user_id = #{modifyUserId,jdbcType=INTEGER},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="column1 != null" >
+        Column_1 = #{column1,jdbcType=VARCHAR},
+      </if>
+      <if test="column2 != null" >
+        Column_2 = #{column2,jdbcType=VARCHAR},
+      </if>
+      <if test="column3 != null" >
+        Column_3 = #{column3,jdbcType=VARCHAR},
+      </if>
+      <if test="column4 != null" >
+        Column_4 = #{column4,jdbcType=VARCHAR},
+      </if>
+      <if test="column5 != null" >
+        Column_5 = #{column5,jdbcType=VARCHAR},
+      </if>
+      <if test="reqDesc != null" >
+        req_desc = #{reqDesc,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="accpStandard != null" >
+        accp_standard = #{accpStandard,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="closeReason != null" >
+        close_reason = #{closeReason,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where req_id = #{reqId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.camelot.pmt.pro.model.DemandWithBLOBs" >
+    update demand
+    set pro_id = #{proId,jdbcType=INTEGER},
+      first_level_id = #{firstLevelId,jdbcType=INTEGER},
+      req_name = #{reqName,jdbcType=VARCHAR},
+      req_status = #{reqStatus,jdbcType=CHAR},
+      req_level = #{reqLevel,jdbcType=CHAR},
+      req_file = #{reqFile,jdbcType=VARCHAR},
+      req_code = #{reqCode,jdbcType=VARCHAR},
+      file_title = #{fileTitle,jdbcType=VARCHAR},
+      req_source = #{reqSource,jdbcType=VARCHAR},
+      source_notes = #{sourceNotes,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modify_user_id = #{modifyUserId,jdbcType=INTEGER},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      Column_1 = #{column1,jdbcType=VARCHAR},
+      Column_2 = #{column2,jdbcType=VARCHAR},
+      Column_3 = #{column3,jdbcType=VARCHAR},
+      Column_4 = #{column4,jdbcType=VARCHAR},
+      Column_5 = #{column5,jdbcType=VARCHAR},
+      req_desc = #{reqDesc,jdbcType=LONGVARCHAR},
+      accp_standard = #{accpStandard,jdbcType=LONGVARCHAR},
+      close_reason = #{closeReason,jdbcType=LONGVARCHAR}
+    where req_id = #{reqId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.camelot.pmt.pro.model.Demand" >
+    update demand
+    set pro_id = #{proId,jdbcType=INTEGER},
+      first_level_id = #{firstLevelId,jdbcType=INTEGER},
+      req_name = #{reqName,jdbcType=VARCHAR},
+      req_status = #{reqStatus,jdbcType=CHAR},
+      req_level = #{reqLevel,jdbcType=CHAR},
+      req_file = #{reqFile,jdbcType=VARCHAR},
+      req_code = #{reqCode,jdbcType=VARCHAR},
+      file_title = #{fileTitle,jdbcType=VARCHAR},
+      req_source = #{reqSource,jdbcType=VARCHAR},
+      source_notes = #{sourceNotes,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modify_user_id = #{modifyUserId,jdbcType=INTEGER},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      Column_1 = #{column1,jdbcType=VARCHAR},
+      Column_2 = #{column2,jdbcType=VARCHAR},
+      Column_3 = #{column3,jdbcType=VARCHAR},
+      Column_4 = #{column4,jdbcType=VARCHAR},
+      Column_5 = #{column5,jdbcType=VARCHAR}
+    where req_id = #{reqId,jdbcType=INTEGER}
+  </update>
+</mapper>

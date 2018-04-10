@@ -13,7 +13,7 @@ import com.camelot.pmt.platform.utils.ExecuteResult;
 import com.camelot.pmt.platform.utils.Pager;
 import com.camelot.pmt.task.mapper.TaskMapper;
 import com.camelot.pmt.task.model.Task;
-import com.camelot.pmt.task.service.TaskService;
+import com.camelot.pmt.task.service.TaskOverdueService;
 
 /**
  * 
@@ -24,20 +24,20 @@ import com.camelot.pmt.task.service.TaskService;
  *
  */
 @Service
-public class TaskServiceImpl implements TaskService {
+public class TaskOverdueServiceImpl implements TaskOverdueService {
 
     @Autowired
     private TaskMapper taskMapper;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(TaskServiceImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TaskOverdueServiceImpl.class);
 
     /**
      * 查询所有逾期任务+分页
      */
-    public ExecuteResult<DataGrid<Task>> queryoverdueTask(Pager page) {
+    public ExecuteResult<DataGrid<Task>> queryOverdueTask(Pager page) {
         ExecuteResult<DataGrid<Task>> result = new ExecuteResult<DataGrid<Task>>();
         try {
-            List<Task> list = taskMapper.queryoverdueTask(page);
+            List<Task> list = taskMapper.queryOverdueTask(page);
             // 如果没有查询到数据，不继续进行
             if (CollectionUtils.isEmpty(list)) {
                 DataGrid<Task> dg = new DataGrid<Task>();
@@ -55,5 +55,7 @@ public class TaskServiceImpl implements TaskService {
         }
         return result;
     }
+
+	
 
 }
