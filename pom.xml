@@ -11,7 +11,6 @@
 	<name>pmt</name>
 	<description>Demo project for Spring Boot</description>
 
-
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
@@ -130,30 +129,11 @@
 			<artifactId>poi-ooxml-schemas</artifactId>
 			<version>${poi.version}</version>
 		</dependency>
-
-
-
 		<!-- alibaba的druid数据库连接池 -->
 		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>druid</artifactId>
 			<version>1.1.6</version>
-		</dependency>
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-databind</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.fasterxml.jackson.datatype</groupId>
-			<artifactId>jackson-datatype-joda</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.fasterxml.jackson.module</groupId>
-			<artifactId>jackson-module-parameter-names</artifactId>
 		</dependency>
 		<!-- 分页插件 -->
 		<dependency>
@@ -191,34 +171,6 @@
 					<overwrite>true</overwrite>
 					<verbose>true</verbose>
 				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>io.swagger</groupId>
-				<artifactId>swagger-codegen-maven-plugin</artifactId>
-				<version>2.2.1</version>
-				<configuration>
-					<language>java</language>
-					<modelPackage>com.camelot.api.model</modelPackage>
-					<configOptions>
-						<sourceFolder>src/gen/main/java</sourceFolder>
-						<dateLibrary>java8</dateLibrary>
-					</configOptions>
-					<library>feign</library>
-					<environmentVariables>
-						<models />
-					</environmentVariables>
-				</configuration>
-				<executions>
-					<execution>
-						<id>pmt</id>
-						<goals>
-							<goal>generate</goal>
-						</goals>
-						<configuration>
-							<inputSpec>src/main/resources/static/swagger/pmt-api-v1.yml</inputSpec>
-						</configuration>
-					</execution>
-				</executions>
 			</plugin>
 		</plugins>
 	</build>

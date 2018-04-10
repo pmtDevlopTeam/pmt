@@ -5,10 +5,8 @@ package com.camelot.pmt.platform.common;
  * <p>
  * Description: [API 请求结果-状态码]
  * </p>
- * Created on 2017年5月27日
- * 
- * @author <a href="mailto: hanshixiong@camelotchina.com">韩士雄</a>
- * @version 1.0 Copyright (c) 2017 北京柯莱特科技有限公司 交付部
+ *
+ * @version 1.0 Copyright (c) 北京柯莱特科技有限公司 交付部
  */
 public enum APIStatus {
     /** 404 Not Found. 访问的API不存在. */

@@ -17,6 +17,4 @@ public interface ProjectMapper {
 
     int updateByPrimaryKey(Project record);
 
-    // demo测试使用
-    Project getProjectInfo(Integer proId);
 }
