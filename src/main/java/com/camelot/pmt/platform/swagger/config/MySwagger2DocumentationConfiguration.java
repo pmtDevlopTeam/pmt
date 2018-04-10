@@ -1,7 +1,5 @@
 package com.camelot.pmt.platform.swagger.config;
 
-import static springfox.documentation.builders.PathSelectors.regex;
-
 import java.time.LocalDate;
 
 import org.springframework.context.annotation.Bean;
@@ -25,7 +23,6 @@ public class MySwagger2DocumentationConfiguration {
     public Docket petApi() {
         return new Docket(DocumentationType.SWAGGER_2).select()//
                 .apis(RequestHandlerSelectors.any())//
-                .paths(regex("/api/v1.*"))//
                 .build().pathMapping("/")//
                 .directModelSubstitute(LocalDate.class, String.class)//
                 .genericModelSubstitutes(ResponseEntity.class).useDefaultResponseMessages(false)
