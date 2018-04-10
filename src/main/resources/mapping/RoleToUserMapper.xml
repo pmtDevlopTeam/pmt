@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.camelot.pmt.platform.role.mapper.RoleToUserMapper" >
+    <resultMap id="BaseResultMap" type="com.camelot.pmt.platform.role.model.RoleToUser" >
+        <id column="id" property="id"/>
+        <result column="roleId" property="roleId"/>
+        <result column="parentId" property="parentId"/>
+        <result column="createtime" property="createTime"/>
+        <result column="modifytime" property="modifyTime"/>
+    </resultMap>
+    
+    <sql id="Base_Column_List" >
+        id,roleId,userId,createtime,modifytime
+    </sql>
+    <sql id="add_Column_List" >
+        <trim suffixOverrides=",">
+            <if test="roleId != null">roleId,</if>
+            <if test="userId != null">userId,</if>
+            <if test="createTime != null">createtime,</if>
+            <if test="modifyTime != null">modifytime</if>
+        </trim>
+    </sql>
+
+    <sql id="sql_add_properties">
+        <trim suffixOverrides=",">
+            <if test="roleId != null">#{roleId},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="modifyTime != null">#{modifyTime},</if>
+        </trim>
+    </sql>
+
+    <insert id="addUserByRole" parameterType="RoleToUser">
+        INSERT INTO pmt_platform_user_role(
+            <include refid="add_Column_List"/>
+            ) VALUES (
+            <include refid="sql_add_properties"/>
+        )
+    </insert>
+
+    <delete id="deleteUserByRoleId" parameterType="RoleToUser">
+        DELETE FROM pmt_platform_user_role WHERE roleId = #{roleId}
+    </delete>
+
+    <select id="queryUserByRole" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM pmt_platform_user_role
+        WHERE roleId = #{roleId}
+
+    </select>
+
+</mapper>

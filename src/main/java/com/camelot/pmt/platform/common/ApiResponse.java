@@ -74,6 +74,22 @@ public class ApiResponse {
 		return result;
 	}
 
+	/**
+	 * 
+	 * <p>Discription:[获取标准格式返回结果]</p>
+	 * @param status required APIStatus
+	 * @return {"status":{"code":xxx,"message":"xxx"}}
+	 * @author[tongxiying]
+	 */
+	public static JSONObject jsonData(APIStatus status, String message) {
+		JSONObject result = new JSONObject();
+		JSONObject statusJson = new JSONObject();
+		statusJson.put("code", status.getCode());
+		statusJson.put("message", message);
+		result.put("status", statusJson);
+		return result;
+	}
+
 //	/**
 //	 *
 //	 * <p>Discription:[获取标准格式返回结果，加入英文处理]</p>
@@ -133,6 +149,14 @@ public class ApiResponse {
 	 */
 	public static JSONObject error() {
 		return jsonData(APIStatus.ERROR_500);
+	}	
+	
+	/**
+	 * 系统错误返回结果
+	 * @return {"status":{"code":400,"message":"Bad Request."}}
+	 */
+	public static JSONObject error(String message) {
+		return jsonData(APIStatus.ERROR_500, message);
 	}
 	
 	

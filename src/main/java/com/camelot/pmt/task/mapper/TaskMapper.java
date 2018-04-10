@@ -2,12 +2,16 @@ package com.camelot.pmt.task.mapper;
 
 import java.util.List;
 
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.camelot.pmt.platform.utils.Pager;
 import com.camelot.pmt.task.model.Task;
-@Mapper
+
+import java.util.List;
+
+
 public interface TaskMapper {
     int deleteByPrimaryKey(Long taskId);
 
@@ -43,4 +47,6 @@ public interface TaskMapper {
 	Long queryCount();
 
 	
+
+
 }

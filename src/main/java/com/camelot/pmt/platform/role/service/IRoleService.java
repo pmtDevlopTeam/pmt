@@ -1,5 +1,6 @@
 package com.camelot.pmt.platform.role.service;
 
+import com.camelot.pmt.platform.common.util.Tree;
 import com.camelot.pmt.platform.role.model.Role;
 import com.camelot.pmt.platform.utils.ExecuteResult;
 
@@ -13,7 +14,7 @@ public interface IRoleService {
      * 查询角色列表
      * @return ExecuteResult<List<Role>>
      */
-    ExecuteResult<List<Role>> queryRoleArray();
+    ExecuteResult<List<Tree<Role>>> queryRoleArray();
 
     /**
      * 新增角色

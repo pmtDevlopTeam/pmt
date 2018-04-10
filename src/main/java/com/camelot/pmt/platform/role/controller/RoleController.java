@@ -3,9 +3,12 @@ package com.camelot.pmt.platform.role.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.camelot.pmt.platform.common.APIStatus;
 import com.camelot.pmt.platform.common.ApiResponse;
+import com.camelot.pmt.platform.common.util.Tree;
 import com.camelot.pmt.platform.role.model.Role;
 import com.camelot.pmt.platform.role.service.IRoleService;
 import com.camelot.pmt.platform.utils.ExecuteResult;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -22,6 +25,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping(value = "/platform/role")
+@Api(value="基础平台-角色管理接口", description="角色管理接口")
 public class RoleController {
 
     @Autowired
@@ -32,9 +36,10 @@ public class RoleController {
      * @return
      */
 //    @RequiresPermissions(value = "/platform/role/queryRoleArray")
+    @ApiOperation(value = "查询角色列表", notes = "查询角色列表")
     @GetMapping(value = "/queryRoleArray")
     public JSONObject queryRoleArray(){
-        ExecuteResult<List<Role>> result;
+        ExecuteResult<List<Tree<Role>>> result;
         try {
             result = roleService.queryRoleArray();
             if(result.isSuccess()) {
@@ -47,6 +52,7 @@ public class RoleController {
     }
 
     //@RequiresPermissions(value = "/platform/role/addRole")
+    @ApiOperation(value = "添加角色", notes = "添加角色")
     @PostMapping(value = "addRole")
     public JSONObject addRole(@ApiIgnore Role role){
         ExecuteResult<Role> result;
@@ -64,6 +70,7 @@ public class RoleController {
         }
     }
 
+    @ApiOperation(value = "编辑角色", notes = "编辑角色")
     @PostMapping(value = "/editRole")
     public JSONObject editRole(@ApiIgnore Role role){
         ExecuteResult<Role> result;
@@ -81,6 +88,7 @@ public class RoleController {
         }
     }
 
+    @ApiOperation(value = "删除角色", notes = "删除角色")
     @PostMapping(value = "/deleteRole")
     public JSONObject deleteRole(@ApiIgnore Role role){
         ExecuteResult<Role> result;

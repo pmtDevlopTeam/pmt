@@ -44,6 +44,13 @@
 	   FROM pmt_platform_role
     </select>
 
+    <!--根据roleId查询角色-->
+    <select id="queryRoleByroleId" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM pmt_platform_role WHERE roleId = #{role}
+    </select>
+
     <insert id="addRole" parameterType="Role">
         INSERT INTO pmt_platform_role(
             <include refid="add_Column_List"/>
@@ -61,6 +68,9 @@
             <if test="parentId != null">
                 parentId = #{parentId}
             </if>
+            <if test="modifyTime != null">
+                parentId = #{modifyTime}
+            </if>
         </set>
         WHERE roleId = #{roleId}
     </update>
@@ -72,4 +82,5 @@
     <delete id="deleteRoleMenu" parameterType="Role">
         DELETE FROM pmt_platform_role_menu WHERE roleId = #{roleId}
     </delete>
+
 </mapper>

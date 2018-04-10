@@ -5,7 +5,6 @@ import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
-@Mapper
 public interface RoleMapper {
 
     /**
@@ -37,4 +36,11 @@ public interface RoleMapper {
      * @param Role
      */
     void deleteRoleMenu(Role role);
+
+    /**
+     * 根据roleId查询角色
+     * @param role
+     * @return
+     */
+    List<Role> queryRoleByroleId(String role);
 }

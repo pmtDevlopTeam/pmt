@@ -9,14 +9,14 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
- * @author 郑李晖
+ * @author zlh
  * @date 2018/4/9 16:27
  */
 @Service
 public class TaskManagerServiceImpl implements TaskManagerService {
 
-    @Autowired
-    private TaskMapper taskMapper;
+//    @Autowired
+//    private TaskMapper taskMapper;
 
     @Override
     public List<Task> queryAllTask() {
