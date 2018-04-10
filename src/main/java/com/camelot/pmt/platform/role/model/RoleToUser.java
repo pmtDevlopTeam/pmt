@@ -1,7 +1,6 @@
 package com.camelot.pmt.platform.role.model;
 
 import java.util.Date;
-import java.util.List;
 
 public class RoleToUser {
 
@@ -25,9 +24,9 @@ public class RoleToUser {
     /**
      * 用户id集合
      */
-    private String [] userIds;
+    private String[] userIds;
 
-    private String [] roleIds;
+    private String[] roleIds;
 
     public String[] getRoleIds() {
         return roleIds;

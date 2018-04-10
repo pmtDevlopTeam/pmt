@@ -1,27 +1,27 @@
 package com.camelot.pmt.platform.role.service.impl;
 
-import com.camelot.pmt.platform.role.mapper.RoleMapper;
-import com.camelot.pmt.platform.role.mapper.RoleToUserMapper;
-import com.camelot.pmt.platform.role.model.Role;
-import com.camelot.pmt.platform.role.model.RoleToUser;
-import com.camelot.pmt.platform.role.service.IRoleToUserService;
-import com.camelot.pmt.platform.user.mapper.UserMapper;
-import com.camelot.pmt.platform.user.model.UserModel;
-import com.camelot.pmt.platform.utils.ExecuteResult;
-import org.apache.catalina.User;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import com.camelot.pmt.platform.role.mapper.RoleMapper;
+import com.camelot.pmt.platform.role.mapper.RoleToUserMapper;
+import com.camelot.pmt.platform.role.model.Role;
+import com.camelot.pmt.platform.role.model.RoleToUser;
+import com.camelot.pmt.platform.role.service.RoleToUserService;
+import com.camelot.pmt.platform.user.mapper.UserMapper;
+import com.camelot.pmt.platform.user.model.UserModel;
+import com.camelot.pmt.platform.utils.ExecuteResult;
 
 @Service
-public class RoleToUserServiceImpl implements IRoleToUserService {
+public class RoleToUserServiceImpl implements RoleToUserService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RoleToUserServiceImpl.class);
 
@@ -36,6 +36,7 @@ public class RoleToUserServiceImpl implements IRoleToUserService {
 
     /**
      * 根据角色绑定用户
+     * 
      * @return
      */
     @Override
@@ -45,10 +46,10 @@ public class RoleToUserServiceImpl implements IRoleToUserService {
         try {
             boolean isContains = true;
             List<String> roleId = Arrays.asList(roleToUser.getRoleIds());
-            for (int i = 0; i < roleId.size(); i++){
+            for (int i = 0; i < roleId.size(); i++) {
                 List<Role> list = roleMapper.queryRoleByroleId(roleId.get(i));
-                for (int j = 0; j < list.size(); j++){
-                    if(!list.get(j).getParentId().equals("0")) {
+                for (int j = 0; j < list.size(); j++) {
+                    if (!list.get(j).getParentId().equals("0")) {
                         isContains = Arrays.asList(roleToUser.getRoleIds()).contains(list.get(j).getParentId());
                         if (isContains == true) {
                             isContains = true;
@@ -58,11 +59,11 @@ public class RoleToUserServiceImpl implements IRoleToUserService {
                         }
                     }
                 }
-                if(isContains == false){
+                if (isContains == false) {
                     break;
                 }
             }
-            if(isContains == false){
+            if (isContains == false) {
                 return result;
             }
             for (String role : roleToUser.getRoleIds()) {
@@ -76,7 +77,7 @@ public class RoleToUserServiceImpl implements IRoleToUserService {
                 }
             }
             result.setResult(roleToUser);
-        } catch (Exception e){
+        } catch (Exception e) {
             LOGGER.error(e.getMessage());
             throw new RuntimeException(e);
         }
@@ -85,6 +86,7 @@ public class RoleToUserServiceImpl implements IRoleToUserService {
 
     /**
      * 根据角色修改用户
+     * 
      * @param roleToUser
      * @return
      */
@@ -94,10 +96,10 @@ public class RoleToUserServiceImpl implements IRoleToUserService {
         try {
             boolean isContains = true;
             List<String> roleId = Arrays.asList(roleToUser.getRoleIds());
-            for (int i = 0; i < roleId.size(); i++){
+            for (int i = 0; i < roleId.size(); i++) {
                 List<Role> list = roleMapper.queryRoleByroleId(roleId.get(i));
-                for (int j = 0; j < list.size(); j++){
-                    if(!list.get(j).getParentId().equals("0")) {
+                for (int j = 0; j < list.size(); j++) {
+                    if (!list.get(j).getParentId().equals("0")) {
                         isContains = Arrays.asList(roleToUser.getRoleIds()).contains(list.get(j).getParentId());
                         if (isContains == true) {
                             isContains = true;
@@ -107,11 +109,11 @@ public class RoleToUserServiceImpl implements IRoleToUserService {
                         }
                     }
                 }
-                if(isContains == false){
+                if (isContains == false) {
                     break;
                 }
             }
-            if(isContains == false){
+            if (isContains == false) {
                 return result;
             }
 
@@ -130,7 +132,7 @@ public class RoleToUserServiceImpl implements IRoleToUserService {
                 }
             }
             result.setResult(roleToUser);
-        } catch (Exception e){
+        } catch (Exception e) {
             LOGGER.error(e.getMessage());
             throw new RuntimeException();
         }
@@ -139,6 +141,7 @@ public class RoleToUserServiceImpl implements IRoleToUserService {
 
     /**
      * 根据角色id查询用户列表
+     * 
      * @param role
      * @return
      */
@@ -147,7 +150,7 @@ public class RoleToUserServiceImpl implements IRoleToUserService {
         ExecuteResult<List<UserModel>> result = new ExecuteResult<List<UserModel>>();
         try {
             List<RoleToUser> list = roleToUserMapper.queryUserByRole(role);
-            if(CollectionUtils.isEmpty(list)){
+            if (CollectionUtils.isEmpty(list)) {
                 return result;
             }
             List<UserModel> userModels = new ArrayList<UserModel>();
@@ -155,11 +158,11 @@ public class RoleToUserServiceImpl implements IRoleToUserService {
                 UserModel userModel = userMapper.selectUserById(roleToUser.getUserId());
                 userModels.add(userModel);
             }
-            if(CollectionUtils.isEmpty(userModels)){
+            if (CollectionUtils.isEmpty(userModels)) {
                 return result;
             }
             result.setResult(userModels);
-        } catch (Exception e){
+        } catch (Exception e) {
             LOGGER.error(e.getMessage());
             throw new RuntimeException(e);
         }

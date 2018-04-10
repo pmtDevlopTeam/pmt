@@ -11,21 +11,18 @@ import com.camelot.pmt.task.model.Task;
 
 /**
  * 任务接口
-	* @ClassName: TaskService
-	* @Description: TODO
-	* @author zhangao
-	* @date 2018年4月9日
-	*
+ * 
+ * @ClassName: TaskService
+ * @Description: TODO
+ * @author zhangao
+ * @date 2018年4月9日
+ *
  */
 public interface TaskService {
-	/**
-	 * 
-	* @Title: queryoverdueTask
-	* @Description: TODO
-	* @param @param page
-	* @param @return
-	* @return ExecuteResult<DataGrid<UserModel>> 
-	* @throws
-	 */
-	ExecuteResult<DataGrid<Task>> queryoverdueTask(Pager page);
+    /**
+     * 
+     * @Title: queryoverdueTask @Description: TODO @param @param
+     * page @param @return @return ExecuteResult<DataGrid<UserModel>> @throws
+     */
+    ExecuteResult<DataGrid<Task>> queryoverdueTask(Pager page);
 }

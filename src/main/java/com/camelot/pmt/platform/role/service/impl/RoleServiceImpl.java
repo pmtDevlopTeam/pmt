@@ -1,43 +1,50 @@
 package com.camelot.pmt.platform.role.service.impl;
 
-import com.camelot.pmt.platform.common.util.BuildTree;
-import com.camelot.pmt.platform.common.util.Tree;
-import com.camelot.pmt.platform.role.mapper.RoleMapper;
-import com.camelot.pmt.platform.role.model.Role;
-import com.camelot.pmt.platform.role.service.IRoleService;
-import com.camelot.pmt.platform.utils.ExecuteResult;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.util.*;
+import com.camelot.pmt.platform.common.util.BuildTree;
+import com.camelot.pmt.platform.common.util.Tree;
+import com.camelot.pmt.platform.role.mapper.RoleMapper;
+import com.camelot.pmt.platform.role.model.Role;
+import com.camelot.pmt.platform.role.service.RoleService;
+import com.camelot.pmt.platform.utils.ExecuteResult;
 
 @Service
-public class RoleServiceImpl implements IRoleService {
+public class RoleServiceImpl implements RoleService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RoleServiceImpl.class);
 
-    final String  STATUS = "0";
+    final String STATUS = "0";
 
     @Autowired
     private RoleMapper roleMapper;
 
     /**
      * 查询角色集合
+     * 
      * @return ExecuteResult<List<Role>>
      */
     @Override
     public ExecuteResult<List<Tree<Role>>> queryRoleArray() {
         ExecuteResult<List<Tree<Role>>> result = new ExecuteResult<List<Tree<Role>>>();
         List<Tree<Role>> trees = new ArrayList<Tree<Role>>();
-        try{
-            List<Role> list =  roleMapper.queryRoleArray();
-            if(CollectionUtils.isEmpty(list)){
+        try {
+            List<Role> list = roleMapper.queryRoleArray();
+            if (CollectionUtils.isEmpty(list)) {
                 return result;
             }
-            for(Role role : list){
+            for (Role role : list) {
                 Tree<Role> tree = new Tree<Role>();
                 tree.setId(role.getRoleId());
                 tree.setParentId(role.getParentId());
@@ -51,7 +58,7 @@ public class RoleServiceImpl implements IRoleService {
             }
             List<Tree<Role>> treeList = BuildTree.buildList(trees, "0");
             result.setResult(treeList);
-        } catch (Exception e){
+        } catch (Exception e) {
             LOGGER.error(e.getMessage());
             throw new RuntimeException(e);
         }
@@ -60,6 +67,7 @@ public class RoleServiceImpl implements IRoleService {
 
     /**
      * 添加角色
+     * 
      * @param role
      * @return ExecuteResult<Role>
      */
@@ -70,7 +78,7 @@ public class RoleServiceImpl implements IRoleService {
             role = setRoleModel(role);
             roleMapper.addRole(role);
             result.setResult(role);
-        } catch (Exception e){
+        } catch (Exception e) {
             LOGGER.error(e.getMessage());
             throw new RuntimeException(e);
         }
@@ -79,6 +87,7 @@ public class RoleServiceImpl implements IRoleService {
 
     /**
      * 修改角色
+     * 
      * @param role
      * @return
      */
@@ -90,7 +99,7 @@ public class RoleServiceImpl implements IRoleService {
             role.setModifyTime(new Date(date));
             roleMapper.editRole(role);
             result.setResult(role);
-        } catch (Exception e){
+        } catch (Exception e) {
             LOGGER.error(e.getMessage());
             throw new RuntimeException(e);
         }
@@ -99,6 +108,7 @@ public class RoleServiceImpl implements IRoleService {
 
     /**
      * 删除角色
+     * 
      * @param id
      * @return
      */
@@ -109,33 +119,33 @@ public class RoleServiceImpl implements IRoleService {
             roleMapper.deleteRole(role);
             roleMapper.deleteRoleMenu(role);
             result.setResult(role);
-        } catch (Exception e){
+        } catch (Exception e) {
             LOGGER.error(e.getMessage());
             throw new RuntimeException(e);
         }
         return result;
     }
 
-
     /**
      * 转换实体 添加后台数据
+     * 
      * @param r
      * @return
      * @throws Exception
      */
-    public Role  setRoleModel(Role r) throws Exception{
+    public Role setRoleModel(Role r) throws Exception {
         Role role = new Role();
-            long date = new Date().getTime();
-            role.setRoleName(r.getRoleName());
-            role.setCreateTime(new Date(date));
-            role.setModifyTime(new Date(date));
-            if(r.getParentId()!= null) {
-                role.setParentId(r.getParentId());
-            } else {
-                role.setParentId(STATUS);
-            }
-            role.setRoleId(UUID.randomUUID().toString().replaceAll("-", ""));
-            role.setState(STATUS);
+        long date = new Date().getTime();
+        role.setRoleName(r.getRoleName());
+        role.setCreateTime(new Date(date));
+        role.setModifyTime(new Date(date));
+        if (r.getParentId() != null) {
+            role.setParentId(r.getParentId());
+        } else {
+            role.setParentId(STATUS);
+        }
+        role.setRoleId(UUID.randomUUID().toString().replaceAll("-", ""));
+        role.setState(STATUS);
         return role;
     }
 }

@@ -1,14 +1,14 @@
 package com.camelot.pmt.platform.role.service;
 
-
 import com.alibaba.fastjson.JSONObject;
 
-public interface IRoleToMenuService {
-    
+public interface RoleToMenuService {
+
     /**
      * 根据角色 查询角色绑定菜单树
+     * 
      * @param roleId
      * @return
      */
-	JSONObject queryMenuByRoleId(String roleId);
+    JSONObject queryMenuByRoleId(String roleId);
 }

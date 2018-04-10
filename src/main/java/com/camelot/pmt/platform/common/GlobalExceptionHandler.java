@@ -18,9 +18,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class GlobalExceptionHandler {
 
     /**
-     * <p>运行时异常处理</p>
-     * @param e  UnknownAccountException
-     * @return  {"status":{"code":404,"message":"用户不存在."}}
+     * <p>
+     * 运行时异常处理
+     * </p>
+     * 
+     * @param e
+     *            UnknownAccountException
+     * @return {"status":{"code":404,"message":"用户不存在."}}
      */
     @ExceptionHandler(RuntimeException.class)
     @ResponseBody
@@ -29,9 +33,13 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * <p>异常处理</p>
-     * @param e  UnknownAccountException
-     * @return  {"status":{"code":404,"message":"."}}
+     * <p>
+     * 异常处理
+     * </p>
+     * 
+     * @param e
+     *            UnknownAccountException
+     * @return {"status":{"code":404,"message":"."}}
      */
     @ExceptionHandler(SrfException.class)
     @ResponseBody
@@ -40,20 +48,28 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * <p>用户不存在异常处理</p>
-     * @param e  UnknownAccountException
-     * @return  {"status":{"code":404,"message":"用户不存在."}}
+     * <p>
+     * 用户不存在异常处理
+     * </p>
+     * 
+     * @param e
+     *            UnknownAccountException
+     * @return {"status":{"code":404,"message":"用户不存在."}}
      */
     @ExceptionHandler(UnknownAccountException.class)
     @ResponseBody
     public JSONObject unknownAccountException(Exception e) {
         return ApiResponse.jsonData(APIStatus.NOT_USERNAME_404);
     }
-    
+
     /**
-     * <p>未授权</p>
-     * @param e  UnknownAccountException
-     * @return  {"status":{"code":404,"message":"未授权."}}
+     * <p>
+     * 未授权
+     * </p>
+     * 
+     * @param e
+     *            UnknownAccountException
+     * @return {"status":{"code":404,"message":"未授权."}}
      */
     @ExceptionHandler(UnauthorizedException.class)
     @ResponseBody
