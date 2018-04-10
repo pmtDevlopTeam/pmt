@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.camelot.pmt.platform.menu.mapper.MenuMapper">
+
+    <!-- 增加一个菜单 -->
+    <insert id="createMenu">
+		insert into pmt_platform_menu(
+		  menuId,
+		  parentId,
+		  menuName,
+		  menuType,
+		  menuURL,
+		  menuPermission,
+		  menuIcon,
+		  state,
+		  sortNum
+		)values (
+          #{menuId},
+          #{parentId},
+          #{menuName},
+          #{menuType},
+          #{menuURL},
+          #{menuPermission},
+          #{menuIcon},
+          #{state},
+          #{sortNum}
+		);
+    </insert>
+    <!-- 根据菜单id 删除一个菜单 -->
+	<delete id="deleteMenuByMenuId">
+        delete from pmt_platform_menu where menuId = #{menuId}
+	</delete>
+	<!-- 根据菜单id 修改一个菜单 -->
+	<update id="modifyMenuByMenuId">
+        update pmt_platform_menu
+		set
+		    parentId = #{parentId},
+		    menuName = #{menuName},
+            menuType = #{menuType},
+            menuURL = #{menuURL},
+            menuPermission = #{menuPermission},
+            menuIcon = #{menuIcon},
+            state = #{state},
+            sortNum = #{sortNum}
+		where menuId = #{menuId}
+	</update>
+	<!-- 根据菜单id 查询一个菜单 -->
+	<select id="queryMenuByMenuId" resultType="com.camelot.pmt.platform.menu.model.Menu">
+	   select * from pmt_platform_menu where menuId = #{menuId}
+	</select>
+	
+	<select id="queryAllMenu" resultType="com.camelot.pmt.platform.menu.model.Menu">
+	   select * from pmt_platform_menu
+	</select>
+
+</mapper>
