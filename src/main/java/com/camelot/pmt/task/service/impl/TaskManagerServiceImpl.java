@@ -10,8 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 /**
  * @author zlh
  * @date 2018/4/9 16:27

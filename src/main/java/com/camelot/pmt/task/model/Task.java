@@ -61,6 +61,12 @@ public class Task {
 
     private Integer warningStatus;
 
+    private String comment;
+
+    private String filepath;
+
+    private String filename;
+
     private String column1;
 
     private String column2;
@@ -301,6 +307,30 @@ public class Task {
 
     public void setWarningStatus(Integer warningStatus) {
         this.warningStatus = warningStatus;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment == null ? null : comment.trim();
+    }
+
+    public String getFilepath() {
+        return filepath;
+    }
+
+    public void setFilepath(String filepath) {
+        this.filepath = filepath == null ? null : filepath.trim();
+    }
+
+    public String getFilename() {
+        return filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename == null ? null : filename.trim();
     }
 
     public String getColumn1() {

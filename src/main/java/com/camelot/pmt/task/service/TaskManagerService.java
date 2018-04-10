@@ -3,8 +3,6 @@ package com.camelot.pmt.task.service;
 import com.alibaba.fastjson.JSONObject;
 import com.camelot.pmt.task.model.Task;
 
-import java.util.List;
-
 /**
  * @author zlh
  * @date 2018/4/9 16:25

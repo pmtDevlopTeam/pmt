@@ -1,6 +1,5 @@
 package com.camelot.pmt.task.mapper;
 
-import com.alibaba.fastjson.JSONObject;
 import com.camelot.pmt.platform.utils.Pager;
 import com.camelot.pmt.task.model.Task;
 
@@ -18,8 +17,8 @@ public interface TaskMapper {
     int updateByPrimaryKeySelective(Task record);
 
     int updateByPrimaryKey(Task record);
-
-    /**
+	
+	/**
      * @author: zlh
      * @param:
      * @description: 查询所有任务列表
