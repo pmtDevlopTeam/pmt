@@ -21,12 +21,41 @@ public class RoleToUser {
      * 修改时间
      */
     private Date modifyTime;
+
+    /**
+     * 创建人ID
+     */
+    private String createUserId;
+
+    /**
+     * 修改人ID
+     */
+    private String modifyUserId;
     /**
      * 用户id集合
      */
     private String[] userIds;
 
+    /**
+     * 角色ID集合
+     */
     private String[] roleIds;
+
+    public String getCreateUserId() {
+        return createUserId;
+    }
+
+    public void setCreateUserId(String createUserId) {
+        this.createUserId = createUserId;
+    }
+
+    public String getModifyUserId() {
+        return modifyUserId;
+    }
+
+    public void setModifyUserId(String modifyUserId) {
+        this.modifyUserId = modifyUserId;
+    }
 
     public String[] getRoleIds() {
         return roleIds;

@@ -42,6 +42,15 @@ public class RoleToUserController {
     public JSONObject addUserByRole(@ApiIgnore RoleToUser roleToUser) {
         ExecuteResult result;
         try {
+
+            //等获取登录人ID
+            roleToUser.setCreateUserId("ligen12138");
+            roleToUser.setModifyUserId("ligen12138");
+            if(StringUtils.isEmpty(roleToUser.getCreateUserId()) && StringUtils.isEmpty(roleToUser.getModifyUserId())){
+                ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
+            }
+            //
+
             if (StringUtils.isEmpty(roleToUser.getRoleIds()) && StringUtils.isEmpty(roleToUser.getUserIds())) {
                 return ApiResponse.jsonData(APIStatus.ERROR_400);
             }
@@ -54,7 +63,7 @@ public class RoleToUserController {
             }
             return ApiResponse.error();
         } catch (Exception e) {
-            return ApiResponse.errorPara(e);
+            return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
         }
     }
 
@@ -69,6 +78,15 @@ public class RoleToUserController {
     public JSONObject updateUserByRole(@ApiIgnore RoleToUser roleToUser) {
         ExecuteResult result;
         try {
+
+            //等获取登录人ID
+            roleToUser.setModifyUserId("ligen12138");
+            if(StringUtils.isEmpty(roleToUser.getModifyUserId())){
+                ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
+            }
+            //
+
+
             if (StringUtils.isEmpty(roleToUser.getRoleIds()) && StringUtils.isEmpty(roleToUser.getUserIds())) {
                 return ApiResponse.jsonData(APIStatus.ERROR_400);
             }
@@ -78,7 +96,7 @@ public class RoleToUserController {
             }
             return ApiResponse.success(result.getResult());
         } catch (Exception e) {
-            return ApiResponse.errorPara(e);
+            return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
         }
     }
 
@@ -98,7 +116,7 @@ public class RoleToUserController {
             result = roleToUserService.queryUserByRole(role);
             return ApiResponse.success(result.getResult());
         } catch (Exception e) {
-            return ApiResponse.errorPara(e);
+            return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
         }
 
     }
