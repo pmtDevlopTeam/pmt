@@ -1,5 +1,7 @@
 package com.camelot.pmt.task.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
+import com.camelot.pmt.platform.common.ApiResponse;
 import com.camelot.pmt.task.mapper.TaskMapper;
 import com.camelot.pmt.task.model.Task;
 import com.camelot.pmt.task.service.TaskManagerService;
@@ -17,8 +19,8 @@ import java.util.List;
 @Service
 public class TaskManagerServiceImpl implements TaskManagerService {
 
-    // @Autowired
-    // private TaskMapper taskMapper;
+    @Autowired
+    private TaskMapper taskMapper;
 
     /**
      * @author: zlh
@@ -27,20 +29,18 @@ public class TaskManagerServiceImpl implements TaskManagerService {
      * @date: 16:54 2018/4/9
      */
     @Override
-    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public List<Task> queryAllTask() {
-
-        return null;
+    @Transactional(readOnly = true,propagation = Propagation.SUPPORTS)
+    public JSONObject queryAllTask() {
+        return ApiResponse.success(taskMapper.queryAllTask());
     }
 
     /**
-     * @param task
-     *            模糊查询的条件
+     * @param task 模糊查询的条件
      * @description: 根据条件查询任务
      * @return
      */
     @Override
-    public List<Task> queryTaskByTask(Task task) {
+    public JSONObject queryTaskByTask(Task task) {
         return null;
     }
 }
