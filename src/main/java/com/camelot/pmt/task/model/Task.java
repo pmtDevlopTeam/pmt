@@ -108,6 +108,16 @@ public class Task implements Serializable {
      */
     private String taskMileage;
 
+    private String column1;
+
+    private String column2;
+
+    private String column3;
+
+    private String column4;
+
+    private String column5;
+
     public Long getTaskId() {
         return taskId;
     }
@@ -307,4 +317,106 @@ public class Task implements Serializable {
     public void setTaskMileage(String taskMileage) {
         this.taskMileage = taskMileage == null ? null : taskMileage.trim();
     }
+
+    public String getColumn1() {
+        return column1;
+    }
+
+    public void setColumn1(String column1) {
+        this.column1 = column1;
+    }
+
+    public String getColumn2() {
+        return column2;
+    }
+
+    public void setColumn2(String column2) {
+        this.column2 = column2;
+    }
+
+    public String getColumn3() {
+        return column3;
+    }
+
+    public void setColumn3(String column3) {
+        this.column3 = column3;
+    }
+
+    public String getColumn4() {
+        return column4;
+    }
+
+    public void setColumn4(String column4) {
+        this.column4 = column4;
+    }
+
+    public String getColumn5() {
+        return column5;
+    }
+
+    public void setColumn5(String column5) {
+        this.column5 = column5;
+    }
+
+    public static long getSerialversionuid() {
+        return serialVersionUID;
+    }
+
+    @Override
+    public String toString() {
+        return "Task [taskId=" + taskId + ", taskParentId=" + taskParentId + ", projectId=" + projectId + ", demandId="
+                + demandId + ", taskName=" + taskName + ", priority=" + priority + ", assignUserName=" + assignUserName
+                + ", beassignUserName=" + beassignUserName + ", createUserName=" + createUserName + ", finishUserName="
+                + finishUserName + ", taskCreateTime=" + taskCreateTime + ", assignTime=" + assignTime
+                + ", estimateStartTime=" + estimateStartTime + ", estimateEndTime=" + estimateEndTime
+                + ", actualStartTime=" + actualStartTime + ", actualEndTime=" + actualEndTime + ", taskType=" + taskType
+                + ", taskSpeed=" + taskSpeed + ", status=" + status + ", abnormalStatus=" + abnormalStatus
+                + ", taskDescribe=" + taskDescribe + ", estimateHour=" + estimateHour + ", consumeHour=" + consumeHour
+                + ", remainHour=" + remainHour + ", taskMileage=" + taskMileage + ", column1=" + column1 + ", column2="
+                + column2 + ", column3=" + column3 + ", column4=" + column4 + ", column5=" + column5 + "]";
+    }
+
+    public Task(Long taskId, Long taskParentId, Long projectId, Long demandId, String taskName, String priority,
+            String assignUserName, String beassignUserName, String createUserName, String finishUserName,
+            Date taskCreateTime, Date assignTime, Date estimateStartTime, Date estimateEndTime, Date actualStartTime,
+            Date actualEndTime, String taskType, String taskSpeed, String status, String abnormalStatus,
+            String taskDescribe, Integer estimateHour, Integer consumeHour, Integer remainHour, String taskMileage,
+            String column1, String column2, String column3, String column4, String column5) {
+        super();
+        this.taskId = taskId;
+        this.taskParentId = taskParentId;
+        this.projectId = projectId;
+        this.demandId = demandId;
+        this.taskName = taskName;
+        this.priority = priority;
+        this.assignUserName = assignUserName;
+        this.beassignUserName = beassignUserName;
+        this.createUserName = createUserName;
+        this.finishUserName = finishUserName;
+        this.taskCreateTime = taskCreateTime;
+        this.assignTime = assignTime;
+        this.estimateStartTime = estimateStartTime;
+        this.estimateEndTime = estimateEndTime;
+        this.actualStartTime = actualStartTime;
+        this.actualEndTime = actualEndTime;
+        this.taskType = taskType;
+        this.taskSpeed = taskSpeed;
+        this.status = status;
+        this.abnormalStatus = abnormalStatus;
+        this.taskDescribe = taskDescribe;
+        this.estimateHour = estimateHour;
+        this.consumeHour = consumeHour;
+        this.remainHour = remainHour;
+        this.taskMileage = taskMileage;
+        this.column1 = column1;
+        this.column2 = column2;
+        this.column3 = column3;
+        this.column4 = column4;
+        this.column5 = column5;
+    }
+
+    public Task() {
+        super();
+    }
+
 }

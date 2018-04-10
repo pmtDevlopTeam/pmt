@@ -10,7 +10,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @date 2018/3/26 16:28
  */
 @SpringBootApplication
-@MapperScan("com.camelot.pmt")
+// @MapperScan("com.camelot.pmt")
+@MapperScan("com.camelot.pmt.**.mapper")
 public class PmtApplication {
     public static void main(String[] args) {
         SpringApplication.run(PmtApplication.class, args);
