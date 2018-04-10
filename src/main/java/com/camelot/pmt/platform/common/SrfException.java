@@ -21,7 +21,7 @@ public class SrfException extends RuntimeException {
         super(message);
     }
 
-    public SrfException(JSONObject jsonObject,Throwable cause) {
+    public SrfException(JSONObject jsonObject, Throwable cause) {
         super(cause);
         this.jsonObject = jsonObject;
     }

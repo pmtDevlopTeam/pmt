@@ -8,17 +8,16 @@ import com.camelot.pmt.task.service.TaskService;
 
 /**
  * 
-	* @ClassName: TaskController
-	* @Description: TODO
-	* @author zhangao
-	* @date 2018年4月9日
-	*
+ * @ClassName: TaskController
+ * @Description: TODO
+ * @author zhangao
+ * @date 2018年4月9日
+ *
  */
-@RestController 
+@RestController
 public class TaskController {
-	
-	@Autowired
-	private TaskService taskService;
 
-}	
-	
+    @Autowired
+    private TaskService taskService;
+
+}

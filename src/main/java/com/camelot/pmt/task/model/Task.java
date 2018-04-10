@@ -3,17 +3,17 @@ package com.camelot.pmt.task.model;
 import java.io.Serializable;
 import java.util.Date;
 
-public class Task implements Serializable{
-	
-	private static final long serialVersionUID = 1L;
+public class Task implements Serializable {
 
-	/**
-	 * 任务标识号
-	 */
-	private Long taskId;
-	/**
-	 * 父级任务标识号
-	 */
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * 任务标识号
+     */
+    private Long taskId;
+    /**
+     * 父级任务标识号
+     */
     private Long taskParentId;
     /**
      * 项目标识号
@@ -23,9 +23,9 @@ public class Task implements Serializable{
      * 需求标识号
      */
     private Long demandId;
-	/**
-	 * 任务名称
-	 */
+    /**
+     * 任务名称
+     */
     private String taskName;
     /**
      * 优先级

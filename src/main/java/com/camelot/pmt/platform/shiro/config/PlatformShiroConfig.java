@@ -28,19 +28,19 @@ import com.camelot.pmt.platform.shiro.PlatformUserRealm;
 
 @Configuration
 public class PlatformShiroConfig {
-	
-	private Logger logger = LoggerFactory.getLogger(this.getClass());
-	
-//
-//    @Bean(name = "sessionManager")
-//    public SessionManager sessionManager(){
-//        DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
-//        //设置session过期时间为1小时(单位：毫秒)，默认为30分钟
-//        sessionManager.setGlobalSessionTimeout(60 * 60 * 1000);
-//        sessionManager.setSessionValidationSchedulerEnabled(true);
-//        sessionManager.setSessionIdUrlRewritingEnabled(false);
-//        return sessionManager;
-//    }
+
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    //
+    // @Bean(name = "sessionManager")
+    // public SessionManager sessionManager(){
+    // DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
+    // //设置session过期时间为1小时(单位：毫秒)，默认为30分钟
+    // sessionManager.setGlobalSessionTimeout(60 * 60 * 1000);
+    // sessionManager.setSessionValidationSchedulerEnabled(true);
+    // sessionManager.setSessionIdUrlRewritingEnabled(false);
+    // return sessionManager;
+    // }
 
     @Bean(name = "securityManager")
     public SecurityManager securityManager(PlatformUserRealm userRealm, SessionManager sessionManager) {
@@ -56,23 +56,23 @@ public class PlatformShiroConfig {
         ShiroFilterFactoryBean shiroFilter = new ShiroFilterFactoryBean();
         shiroFilter.setSecurityManager(securityManager);
         shiroFilter.setLoginUrl("/login.html");
-        //shiroFilter.setSuccessUrl("/index.html");
+        // shiroFilter.setSuccessUrl("/index.html");
         shiroFilter.setUnauthorizedUrl("/");
 
         Map<String, String> filterMap = new LinkedHashMap<>();
         filterMap.put("/public/**", "anon");
         filterMap.put("/webjars/**", "anon");
-        //filterMap.put("/api/**", "anon");
+        // filterMap.put("/api/**", "anon");
 
-        //swagger配置
+        // swagger配置
         filterMap.put("/swagger**", "anon");
         filterMap.put("/v2/api-docs", "anon");
         filterMap.put("/swagger-resources/configuration/ui", "anon");
 
         filterMap.put("/login.html", "anon");
         filterMap.put("/login", "anon");
-        //filterMap.put("/captcha.jpg", "anon");
-//        filterMap.put("/**", "authc");
+        // filterMap.put("/captcha.jpg", "anon");
+        // filterMap.put("/**", "authc");
         filterMap.put("/**", "anon");
         shiroFilter.setFilterChainDefinitionMap(filterMap);
 
@@ -97,39 +97,35 @@ public class PlatformShiroConfig {
         advisor.setSecurityManager(securityManager);
         return advisor;
     }
-/*    @Bean(name = "redisCacheManager")
-    public RedisCacheManager redisCacheManager() {
-        logger.debug("ShiroConfiguration.redisCacheManager()");
-        return new RedisCacheManager();
-    }
-    @Bean(name = "redisSessionDAO")
-    public RedisSessionDAO redisSessionDAO(){
-        logger.debug("ShiroConfiguration.redisSessionDAO()");
-        return new RedisSessionDAO();
-    }*/
-    
+    /*
+     * @Bean(name = "redisCacheManager") public RedisCacheManager
+     * redisCacheManager() { logger.debug("ShiroConfiguration.redisCacheManager()");
+     * return new RedisCacheManager(); }
+     * 
+     * @Bean(name = "redisSessionDAO") public RedisSessionDAO redisSessionDAO(){
+     * logger.debug("ShiroConfiguration.redisSessionDAO()"); return new
+     * RedisSessionDAO(); }
+     */
+
     @Bean
     public SessionManager sessionManager() {
         DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
-       
-      //设置session过期时间为1小时(单位：毫秒)，默认为30分钟
+
+        // 设置session过期时间为1小时(单位：毫秒)，默认为30分钟
         sessionManager.setGlobalSessionTimeout(60 * 60 * 1000);
-      //  sessionManager.setCacheManager(redisCacheManager());
-	    sessionManager.setSessionValidationSchedulerEnabled(true);
-	    sessionManager.setSessionIdUrlRewritingEnabled(false);
-        sessionManager.setDeleteInvalidSessions(true);
-      
-        
-        
-      //是否开启 检测，默认开启
+        // sessionManager.setCacheManager(redisCacheManager());
         sessionManager.setSessionValidationSchedulerEnabled(true);
-        //创建会话Cookie
+        sessionManager.setSessionIdUrlRewritingEnabled(false);
+        sessionManager.setDeleteInvalidSessions(true);
+
+        // 是否开启 检测，默认开启
+        sessionManager.setSessionValidationSchedulerEnabled(true);
+        // 创建会话Cookie
         Cookie cookie = new SimpleCookie(ShiroHttpSession.DEFAULT_SESSION_ID_NAME);
         cookie.setName("WEBID");
         cookie.setHttpOnly(true);
         sessionManager.setSessionIdCookie(cookie);
-        
-        
+
         return sessionManager;
     }
 
