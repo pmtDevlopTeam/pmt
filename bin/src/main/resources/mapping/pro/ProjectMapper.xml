@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.camelot.pmt.pro.mapper.ProjectMapper">
+<mapper namespace="com.camelot.pmt.project.mapper.ProjectMapper">
 
 	<select id="getProjectInfo" resultType="com.camelot.api.model.Response"
 		parameterType="java.lang.Integer">
@@ -8,7 +8,7 @@
 		where pro_id =
 		#{proId,jdbcType=INTEGER}
 	</select>
-	<resultMap id="BaseResultMap" type="com.camelot.pmt.pro.model.Project">
+	<resultMap id="BaseResultMap" type="com.camelot.pmt.project.model.Project">
 		<id column="pro_id" property="proId" jdbcType="INTEGER" />
 		<result column="user_id" property="userId" jdbcType="INTEGER" />
 		<result column="pro_code" property="proCode" jdbcType="CHAR" />
@@ -32,7 +32,7 @@
 		<result column="Column_4" property="column4" jdbcType="VARCHAR" />
 		<result column="Column_5" property="column5" jdbcType="VARCHAR" />
 	</resultMap>
-	<resultMap id="ResultMapWithBLOBs" type="com.camelot.pmt.pro.model.Project"
+	<resultMap id="ResultMapWithBLOBs" type="com.camelot.pmt.project.model.Project"
 		extends="BaseResultMap">
 		<result column="pro_desc" property="proDesc" jdbcType="LONGVARCHAR" />
 	</resultMap>
@@ -63,7 +63,7 @@
 		project
 		where pro_id = #{proId,jdbcType=INTEGER}
 	</delete>
-	<insert id="insert" parameterType="com.camelot.pmt.pro.model.Project">
+	<insert id="insert" parameterType="com.camelot.pmt.project.model.Project">
 		insert into project (pro_id,
 		user_id, pro_code,
 		pro_name, pro_status, error_state,
@@ -96,7 +96,7 @@
 		#{column5,jdbcType=VARCHAR},
 		#{proDesc,jdbcType=LONGVARCHAR})
 	</insert>
-	<insert id="insertSelective" parameterType="com.camelot.pmt.pro.model.Project">
+	<insert id="insertSelective" parameterType="com.camelot.pmt.project.model.Project">
 		insert into project
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="proId != null">
@@ -235,7 +235,7 @@
 			</if>
 		</trim>
 	</insert>
-	<update id="updateByPrimaryKeySelective" parameterType="com.camelot.pmt.pro.model.Project">
+	<update id="updateByPrimaryKeySelective" parameterType="com.camelot.pmt.project.model.Project">
 		update project
 		<set>
 			<if test="userId != null">
@@ -304,7 +304,7 @@
 		</set>
 		where pro_id = #{proId,jdbcType=INTEGER}
 	</update>
-	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.camelot.pmt.pro.model.Project">
+	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.camelot.pmt.project.model.Project">
 		update
 		project
 		set user_id = #{userId,jdbcType=INTEGER},
@@ -343,7 +343,7 @@
 		where pro_id =
 		#{proId,jdbcType=INTEGER}
 	</update>
-	<update id="updateByPrimaryKey" parameterType="com.camelot.pmt.pro.model.Project">
+	<update id="updateByPrimaryKey" parameterType="com.camelot.pmt.project.model.Project">
 		update project
 		set
 		user_id = #{userId,jdbcType=INTEGER},

@@ -1,6 +1,6 @@
-package com.camelot.pmt.pro.mapper;
+package com.camelot.pmt.project.mapper;
 
-import com.camelot.pmt.pro.model.Project;
+import com.camelot.pmt.project.model.Project;
 
 public interface ProjectMapper {
     int deleteByPrimaryKey(Integer proId);

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.camelot.pmt.pro.mapper.ProUserMapper" >
-  <resultMap id="BaseResultMap" type="com.camelot.pmt.pro.model.ProUser" >
+<mapper namespace="com.camelot.pmt.project.mapper.ProUserMapper" >
+  <resultMap id="BaseResultMap" type="com.camelot.pmt.project.model.ProUser" >
     <id column="pro_user_id" property="proUserId" jdbcType="INTEGER" />
     <result column="pro_id" property="proId" jdbcType="INTEGER" />
     <result column="user_id" property="userId" jdbcType="INTEGER" />
@@ -38,7 +38,7 @@
     delete from pro_user
     where pro_user_id = #{proUserId,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.camelot.pmt.pro.model.ProUser" >
+  <insert id="insert" parameterType="com.camelot.pmt.project.model.ProUser" >
     insert into pro_user (pro_user_id, pro_id, user_id, 
       inviter_id, remove_id, pre_join_time, 
       real_join_time, pre_out_time, real_out_time, 
@@ -54,7 +54,7 @@
       #{column1,jdbcType=VARCHAR}, #{column2,jdbcType=VARCHAR}, #{column3,jdbcType=VARCHAR}, 
       #{column4,jdbcType=VARCHAR}, #{column5,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.camelot.pmt.pro.model.ProUser" >
+  <insert id="insertSelective" parameterType="com.camelot.pmt.project.model.ProUser" >
     insert into pro_user
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="proUserId != null" >
@@ -181,7 +181,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.camelot.pmt.pro.model.ProUser" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.camelot.pmt.project.model.ProUser" >
     update pro_user
     <set >
       <if test="proId != null" >
@@ -244,7 +244,7 @@
     </set>
     where pro_user_id = #{proUserId,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.camelot.pmt.pro.model.ProUser" >
+  <update id="updateByPrimaryKey" parameterType="com.camelot.pmt.project.model.ProUser" >
     update pro_user
     set pro_id = #{proId,jdbcType=INTEGER},
       user_id = #{userId,jdbcType=INTEGER},

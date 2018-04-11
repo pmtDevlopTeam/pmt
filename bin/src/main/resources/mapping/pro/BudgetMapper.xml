@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.camelot.pmt.pro.mapper.BudgetMapper" >
-  <resultMap id="BaseResultMap" type="com.camelot.pmt.pro.model.Budget" >
+<mapper namespace="com.camelot.pmt.project.mapper.BudgetMapper" >
+  <resultMap id="BaseResultMap" type="com.camelot.pmt.project.model.Budget" >
     <id column="budget_id" property="budgetId" jdbcType="INTEGER" />
     <result column="pro_id" property="proId" jdbcType="INTEGER" />
     <result column="budget_money" property="budgetMoney" jdbcType="DECIMAL" />
@@ -32,7 +32,7 @@
     delete from budget
     where budget_id = #{budgetId,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.camelot.pmt.pro.model.Budget" >
+  <insert id="insert" parameterType="com.camelot.pmt.project.model.Budget" >
     insert into budget (budget_id, pro_id, budget_money, 
       avg_salary, equipment, other, 
       create_user, create_time, modify_user_id, 
@@ -46,7 +46,7 @@
       #{column3,jdbcType=VARCHAR}, #{column4,jdbcType=VARCHAR}, #{column5,jdbcType=VARCHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.camelot.pmt.pro.model.Budget" >
+  <insert id="insertSelective" parameterType="com.camelot.pmt.project.model.Budget" >
     insert into budget
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="budgetId != null" >
@@ -143,7 +143,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.camelot.pmt.pro.model.Budget" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.camelot.pmt.project.model.Budget" >
     update budget
     <set >
       <if test="proId != null" >
@@ -191,7 +191,7 @@
     </set>
     where budget_id = #{budgetId,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.camelot.pmt.pro.model.Budget" >
+  <update id="updateByPrimaryKey" parameterType="com.camelot.pmt.project.model.Budget" >
     update budget
     set pro_id = #{proId,jdbcType=INTEGER},
       budget_money = #{budgetMoney,jdbcType=DECIMAL},

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.camelot.pmt.pro.mapper.DemandMapper" >
-  <resultMap id="BaseResultMap" type="com.camelot.pmt.pro.model.Demand" >
+<mapper namespace="com.camelot.pmt.project.mapper.DemandMapper" >
+  <resultMap id="BaseResultMap" type="com.camelot.pmt.project.model.Demand" >
     <id column="req_id" property="reqId" jdbcType="INTEGER" />
     <result column="pro_id" property="proId" jdbcType="INTEGER" />
     <result column="first_level_id" property="firstLevelId" jdbcType="INTEGER" />
@@ -23,7 +23,7 @@
     <result column="Column_4" property="column4" jdbcType="VARCHAR" />
     <result column="Column_5" property="column5" jdbcType="VARCHAR" />
   </resultMap>
-  <resultMap id="ResultMapWithBLOBs" type="com.camelot.pmt.pro.model.DemandWithBLOBs" extends="BaseResultMap" >
+  <resultMap id="ResultMapWithBLOBs" type="com.camelot.pmt.project.model.DemandWithBLOBs" extends="BaseResultMap" >
     <result column="req_desc" property="reqDesc" jdbcType="LONGVARCHAR" />
     <result column="accp_standard" property="accpStandard" jdbcType="LONGVARCHAR" />
     <result column="close_reason" property="closeReason" jdbcType="LONGVARCHAR" />
@@ -48,7 +48,7 @@
     delete from demand
     where req_id = #{reqId,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.camelot.pmt.pro.model.DemandWithBLOBs" >
+  <insert id="insert" parameterType="com.camelot.pmt.project.model.DemandWithBLOBs" >
     insert into demand (req_id, pro_id, first_level_id, 
       req_name, req_status, req_level, 
       req_file, req_code, file_title, 
@@ -66,7 +66,7 @@
       #{column4,jdbcType=VARCHAR}, #{column5,jdbcType=VARCHAR}, #{reqDesc,jdbcType=LONGVARCHAR}, 
       #{accpStandard,jdbcType=LONGVARCHAR}, #{closeReason,jdbcType=LONGVARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.camelot.pmt.pro.model.DemandWithBLOBs" >
+  <insert id="insertSelective" parameterType="com.camelot.pmt.project.model.DemandWithBLOBs" >
     insert into demand
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="reqId != null" >
@@ -211,7 +211,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.camelot.pmt.pro.model.DemandWithBLOBs" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.camelot.pmt.project.model.DemandWithBLOBs" >
     update demand
     <set >
       <if test="proId != null" >
@@ -283,7 +283,7 @@
     </set>
     where req_id = #{reqId,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.camelot.pmt.pro.model.DemandWithBLOBs" >
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.camelot.pmt.project.model.DemandWithBLOBs" >
     update demand
     set pro_id = #{proId,jdbcType=INTEGER},
       first_level_id = #{firstLevelId,jdbcType=INTEGER},
@@ -309,7 +309,7 @@
       close_reason = #{closeReason,jdbcType=LONGVARCHAR}
     where req_id = #{reqId,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.camelot.pmt.pro.model.Demand" >
+  <update id="updateByPrimaryKey" parameterType="com.camelot.pmt.project.model.Demand" >
     update demand
     set pro_id = #{proId,jdbcType=INTEGER},
       first_level_id = #{firstLevelId,jdbcType=INTEGER},

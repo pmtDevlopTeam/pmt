@@ -1,4 +1,4 @@
-package com.camelot.pmt.pro.model;
+package com.camelot.pmt.project.model;
 
 import java.util.Date;
 
