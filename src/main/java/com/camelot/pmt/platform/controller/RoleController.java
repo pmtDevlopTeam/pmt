@@ -31,6 +31,24 @@ public class RoleController {
     @Autowired
     private RoleService roleService;
 
+    @ApiOperation(value = "验证角色名称是否存在", notes = "验证角色名称是否存在")
+    @GetMapping(value = "/getRoleNameVerification")
+    public JSONObject getRoleNameVerification(@ApiIgnore Role role){
+        ExecuteResult result;
+        try {
+            if(StringUtils.isEmpty(role.getRoleName())){
+                return ApiResponse.jsonData(APIStatus.ERROR_400);
+            }
+            result = roleService.getRoleNameVerification(role);
+            if(result.getResult() == null) {
+                return ApiResponse.jsonData(APIStatus.OK_205);
+            }
+            return ApiResponse.jsonData(APIStatus.OK_206);
+        } catch (Exception e){
+            return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
+        }
+    }
+
     /**
      * 查询角色集合
      * 

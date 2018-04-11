@@ -40,4 +40,11 @@ public interface RoleService {
      * @return
      */
     ExecuteResult<Role> deleteRole(Role role);
+
+    /**
+     * 验证角色名称是否可用
+     * @param role
+     * @return
+     */
+    ExecuteResult getRoleNameVerification(Role role);
 }

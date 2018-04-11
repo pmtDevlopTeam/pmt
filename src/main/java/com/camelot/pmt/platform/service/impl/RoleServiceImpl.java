@@ -121,6 +121,27 @@ public class RoleServiceImpl implements RoleService {
     }
 
     /**
+     * 验证角色名称是否可用
+     * @param role
+     * @return
+     */
+    @Override
+    public ExecuteResult getRoleNameVerification(Role role) {
+        ExecuteResult result = new ExecuteResult();
+        try {
+            List<Role> list = roleMapper.getRoleNameVerification(role);
+            if(CollectionUtils.isEmpty(list)){
+                return result;
+            }
+            result.setResult(list);
+        } catch (Exception e){
+            LOGGER.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+        return result;
+    }
+
+    /**
      * 转换实体 添加后台数据
      * 
      * @param r

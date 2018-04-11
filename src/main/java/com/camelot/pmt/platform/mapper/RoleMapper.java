@@ -49,4 +49,11 @@ public interface RoleMapper {
      * @return
      */
     List<Role> queryRoleByroleId(String role);
+
+    /**
+     * 验证角色名称是否存在
+     * @param role
+     * @return
+     */
+    List<Role> getRoleNameVerification(Role role);
 }
