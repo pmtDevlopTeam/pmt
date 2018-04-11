@@ -1,7 +1,7 @@
 package com.camelot.pmt.platform.shiro;
 
 import com.camelot.pmt.platform.common.ExecuteResult;
-import com.camelot.pmt.platform.model.UserModel;
+import com.camelot.pmt.platform.model.User;
 import com.camelot.pmt.platform.service.UserService;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -57,11 +57,11 @@ public class ShiroUserRealm extends AuthorizingRealm {
         String logincode = (String) token.getPrincipal();
         String password = new String((char[]) token.getCredentials());
         System.out.println(logincode + "---" + password);
-        UserModel userModel = new UserModel();
+        User userModel = new User();
         userModel.setLoginCode(logincode);
         userModel.setPassword(password);
-        ExecuteResult<UserModel> queryLoginCodeAndPassword = userService.queryLoginCodeAndPassword(userModel);
-        UserModel user = queryLoginCodeAndPassword.getResult();
+        ExecuteResult<User> queryLoginCodeAndPassword = userService.queryLoginCodeAndPassword(userModel);
+        User user = queryLoginCodeAndPassword.getResult();
 
         // 账号不存在
         if (user == null) {

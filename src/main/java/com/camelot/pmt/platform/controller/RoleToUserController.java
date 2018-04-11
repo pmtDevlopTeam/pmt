@@ -5,7 +5,7 @@ import com.camelot.pmt.platform.common.APIStatus;
 import com.camelot.pmt.platform.common.ApiResponse;
 import com.camelot.pmt.platform.common.ExecuteResult;
 import com.camelot.pmt.platform.model.RoleToUser;
-import com.camelot.pmt.platform.model.UserModel;
+import com.camelot.pmt.platform.model.User;
 import com.camelot.pmt.platform.service.RoleToUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -106,7 +106,7 @@ public class RoleToUserController {
     @GetMapping(value = "queryUserByRole")
     @ApiOperation(value = "根据角色id查询用户列表", notes = "根据角色id查询用户列表")
     public JSONObject queryUserByRole(@ApiIgnore RoleToUser role) {
-        ExecuteResult<List<UserModel>> result;
+        ExecuteResult<List<User>> result;
         try {
             if (StringUtils.isEmpty(role.getRoleId())) {
                 return ApiResponse.jsonData(APIStatus.ERROR_400);

@@ -3,7 +3,7 @@ package com.camelot.pmt.platform.service;
 
 import com.camelot.pmt.platform.common.ExecuteResult;
 import com.camelot.pmt.platform.model.RoleToUser;
-import com.camelot.pmt.platform.model.UserModel;
+import com.camelot.pmt.platform.model.User;
 
 import java.util.List;
 
@@ -30,5 +30,5 @@ public interface RoleToUserService {
      * @param role
      * @return
      */
-    ExecuteResult<List<UserModel>> queryUserByRole(RoleToUser role);
+    ExecuteResult<List<User>> queryUserByRole(RoleToUser role);
 }

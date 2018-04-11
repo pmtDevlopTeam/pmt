@@ -6,7 +6,7 @@ import com.camelot.pmt.platform.mapper.RoleToUserMapper;
 import com.camelot.pmt.platform.mapper.UserMapper;
 import com.camelot.pmt.platform.model.Role;
 import com.camelot.pmt.platform.model.RoleToUser;
-import com.camelot.pmt.platform.model.UserModel;
+import com.camelot.pmt.platform.model.User;
 import com.camelot.pmt.platform.service.RoleToUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -145,16 +145,16 @@ public class RoleToUserServiceImpl implements RoleToUserService {
      * @return
      */
     @Override
-    public ExecuteResult<List<UserModel>> queryUserByRole(RoleToUser role) {
-        ExecuteResult<List<UserModel>> result = new ExecuteResult<List<UserModel>>();
+    public ExecuteResult<List<User>> queryUserByRole(RoleToUser role) {
+        ExecuteResult<List<User>> result = new ExecuteResult<List<User>>();
         try {
             List<RoleToUser> list = roleToUserMapper.queryUserByRole(role);
             if (CollectionUtils.isEmpty(list)) {
                 return result;
             }
-            List<UserModel> userModels = new ArrayList<UserModel>();
+            List<User> userModels = new ArrayList<User>();
             for (RoleToUser roleToUser : list) {
-                UserModel userModel = userMapper.selectUserById(roleToUser.getUserId());
+            	User userModel = userMapper.selectUserById(roleToUser.getUserId());
                 userModels.add(userModel);
             }
             if (CollectionUtils.isEmpty(userModels)) {
