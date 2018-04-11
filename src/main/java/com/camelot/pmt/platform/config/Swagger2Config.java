@@ -21,7 +21,8 @@ public class Swagger2Config {
     @Bean
     public Docket petApi() {
         return new Docket(DocumentationType.SWAGGER_2).select()//
-                .apis(RequestHandlerSelectors.any())//
+                //.apis(RequestHandlerSelectors.any())
+        		.apis(RequestHandlerSelectors.basePackage("com.camelot.pmt"))
                 .build().pathMapping("/")//
                 .directModelSubstitute(LocalDate.class, String.class)//
                 .genericModelSubstitutes(ResponseEntity.class).useDefaultResponseMessages(false)
