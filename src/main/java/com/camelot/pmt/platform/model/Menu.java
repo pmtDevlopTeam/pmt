@@ -1,21 +1,18 @@
 package com.camelot.pmt.platform.model;
 
-import com.baomidou.mybatisplus.annotations.TableField;
-import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.enums.IdType;
-
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+
+import com.baomidou.mybatisplus.annotations.TableId;
+import java.io.Serializable;
 
 /**
  * <p>
- * 
+ * 权限菜单表
  * </p>
  *
  * @author gnerv
- * @since 2018-04-08
+ * @since 2018-04-11
  */
 public class Menu implements Serializable {
 
@@ -25,73 +22,66 @@ public class Menu implements Serializable {
      * 默认索引 不可作用于业务
      */
     @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
+    private Long id;
     /**
-     * 用户唯一32位UUID
+     * 菜单唯一32位UUID 
      */
-    @TableField("menuId")
     private String menuId;
     /**
-     * 默认 ‘0’ 0为顶级角色
+     * 上级菜单ID 默认 ‘0’  0级为顶级角色
      */
-    @TableField("parentId")
     private String parentId;
-    @TableField("menuName")
+    /**
+     * 菜单名称
+     */
     private String menuName;
     /**
-     * 1目录 2菜单 3按钮
+     * 菜单类型 1 目录 2 菜单 3 按钮
      */
-    @TableField("menuType")
     private String menuType;
-    @TableField("menuURL")
-    private String menuURL;
-    @TableField("menuPermission")
+    /**
+     * 菜单请求地址 /xxx/xxx
+     */
+    private String menuUrl;
+    /**
+     * 菜单授权 模块:功能:方法  platform:menu:createMenu
+     */
     private String menuPermission;
-    @TableField("menuIcon")
+    /**
+     * 菜单图标
+     */
     private String menuIcon;
     /**
-     * 0（默认）启用 1 停用 2 锁定
+     * 菜单状态  0（默认）启用 1 停用 2 锁定
      */
     private String state;
     /**
-     * 默认 1000
+     * 排序号 默认 1000
      */
-    @TableField("sortNum")
     private Integer sortNum;
-    private Date createtime;
-    private Date modifytime;
+    /**
+     * 创建时间
+     */
+    private Date createTime;
+    /**
+     * 创建人
+     */
+    private String createUserId;
+    /**
+     * 修改时间
+     */
+    private Date modifyTime;
+    /**
+     * 修改人
+     */
+    private String modifyUserId;
 
-    private List<Menu> children = new ArrayList<Menu>();
 
-    public Menu() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
-
-    public Menu(Integer id, String menuId, String parentId, String menuName, String menuType, String menuURL,
-                String menuPermission, String menuIcon, String state, Integer sortNum, Date createtime, Date modifytime,
-                List<Menu> children) {
-        super();
-        this.id = id;
-        this.menuId = menuId;
-        this.parentId = parentId;
-        this.menuName = menuName;
-        this.menuType = menuType;
-        this.menuURL = menuURL;
-        this.menuPermission = menuPermission;
-        this.menuIcon = menuIcon;
-        this.state = state;
-        this.sortNum = sortNum;
-        this.createtime = createtime;
-        this.modifytime = modifytime;
-        this.children = children;
-    }
-
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -127,12 +117,12 @@ public class Menu implements Serializable {
         this.menuType = menuType;
     }
 
-    public String getMenuURL() {
-        return menuURL;
+    public String getMenuUrl() {
+        return menuUrl;
     }
 
-    public void setMenuURL(String menuURL) {
-        this.menuURL = menuURL;
+    public void setMenuUrl(String menuUrl) {
+        this.menuUrl = menuUrl;
     }
 
     public String getMenuPermission() {
@@ -167,36 +157,55 @@ public class Menu implements Serializable {
         this.sortNum = sortNum;
     }
 
-    public Date getCreatetime() {
-        return createtime;
+    public Date getCreateTime() {
+        return createTime;
     }
 
-    public void setCreatetime(Date createtime) {
-        this.createtime = createtime;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
-    public Date getModifytime() {
-        return modifytime;
+    public String getCreateUserId() {
+        return createUserId;
     }
 
-    public void setModifytime(Date modifytime) {
-        this.modifytime = modifytime;
+    public void setCreateUserId(String createUserId) {
+        this.createUserId = createUserId;
     }
 
-    public List<Menu> getChildren() {
-        return children;
+    public Date getModifyTime() {
+        return modifyTime;
     }
 
-    public void setChildren(List<Menu> children) {
-        this.children = children;
+    public void setModifyTime(Date modifyTime) {
+        this.modifyTime = modifyTime;
+    }
+
+    public String getModifyUserId() {
+        return modifyUserId;
+    }
+
+    public void setModifyUserId(String modifyUserId) {
+        this.modifyUserId = modifyUserId;
     }
 
     @Override
     public String toString() {
-        return "Menu [id=" + id + ", menuId=" + menuId + ", parentId=" + parentId + ", menuName=" + menuName
-                + ", menuType=" + menuType + ", menuURL=" + menuURL + ", menuPermission=" + menuPermission
-                + ", menuIcon=" + menuIcon + ", state=" + state + ", sortNum=" + sortNum + ", createtime=" + createtime
-                + ", modifytime=" + modifytime + ", children=" + children + "]";
+        return "PlatformMenu{" +
+        ", id=" + id +
+        ", menuId=" + menuId +
+        ", parentId=" + parentId +
+        ", menuName=" + menuName +
+        ", menuType=" + menuType +
+        ", menuUrl=" + menuUrl +
+        ", menuPermission=" + menuPermission +
+        ", menuIcon=" + menuIcon +
+        ", state=" + state +
+        ", sortNum=" + sortNum +
+        ", createTime=" + createTime +
+        ", createUserId=" + createUserId +
+        ", modifyTime=" + modifyTime +
+        ", modifyUserId=" + modifyUserId +
+        "}";
     }
-
 }

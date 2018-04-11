@@ -23,7 +23,6 @@ public class MenuController {
     @Autowired
     MenuService menuService;
 
-    @RequiresPermissions("platform:menu:createMenu")
     @ApiOperation(value = "创建菜单接口", notes = "创建单个菜单")
     @RequestMapping(value = "/createMenu", method = RequestMethod.POST)
     public JSONObject createMenu(Menu menu) {
@@ -32,7 +31,6 @@ public class MenuController {
         return menuService.createMenu(menu);
     }
 
-    @RequiresPermissions("platform:menu:deleteMenuByMenuId")
     @ApiOperation(value = "删除菜单接口", notes = "删除单个菜单")
     @RequestMapping(value = "/deleteMenuByMenuId", method = RequestMethod.POST)
     public JSONObject deleteMenuByMenuId(String menuId) {
@@ -45,14 +43,12 @@ public class MenuController {
         return menuService.modifyMenuByMenuId(menu);
     }
 
-    @RequiresPermissions("platform:menu:queryMenuByMenuId")
     @ApiOperation(value = "查询菜单接口", notes = "查询单个菜单")
     @RequestMapping(value = "/queryMenuByMenuId", method = RequestMethod.POST)
     public JSONObject queryMenuByMenuId(String menuId) {
         return menuService.queryMenuByMenuId(menuId);
     }
 
-    @RequiresPermissions("platform:menu:queryAllMenu")
     @ApiOperation(value = "查询全部菜单树接口", notes = "查询全部菜单树")
     @RequestMapping(value = "/queryAllMenu", method = RequestMethod.POST)
     public JSONObject queryAllMenu() {

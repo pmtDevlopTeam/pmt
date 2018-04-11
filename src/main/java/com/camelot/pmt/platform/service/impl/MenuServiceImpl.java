@@ -68,7 +68,7 @@ public class MenuServiceImpl implements MenuService {
                 tree.setParentId(menu.getParentId());
                 tree.setText(menu.getMenuName());
                 Map<String, Object> attributes = new HashMap<>(16);
-                attributes.put("url", menu.getMenuURL());
+                attributes.put("url", menu.getMenuUrl());
                 attributes.put("permission", menu.getMenuPermission());
                 attributes.put("state", menu.getState());
                 attributes.put("sortNum", menu.getSortNum());
