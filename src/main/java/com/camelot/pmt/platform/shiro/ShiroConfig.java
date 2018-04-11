@@ -1,6 +1,5 @@
-package com.camelot.pmt.platform.shiro.config;
+package com.camelot.pmt.platform.shiro;
 
-import com.camelot.pmt.platform.shiro.PlatformUserRealm;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
@@ -26,7 +25,7 @@ import java.util.Map;
  */
 
 @Configuration
-public class PlatformShiroConfig {
+public class ShiroConfig {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -42,7 +41,7 @@ public class PlatformShiroConfig {
     // }
 
     @Bean(name = "securityManager")
-    public SecurityManager securityManager(PlatformUserRealm userRealm, SessionManager sessionManager) {
+    public SecurityManager securityManager(ShiroUserRealm userRealm, SessionManager sessionManager) {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         securityManager.setRealm(userRealm);
         securityManager.setSessionManager(sessionManager);

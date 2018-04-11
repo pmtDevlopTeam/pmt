@@ -2,7 +2,6 @@ package com.camelot.pmt.platform.shiro;
 
 import com.camelot.pmt.platform.common.ExecuteResult;
 import com.camelot.pmt.platform.model.UserModel;
-import com.camelot.pmt.platform.service.MenuService;
 import com.camelot.pmt.platform.service.UserService;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -19,13 +18,13 @@ import java.util.Set;
  * 认证
  */
 @Component
-public class PlatformUserRealm extends AuthorizingRealm {
+public class ShiroUserRealm extends AuthorizingRealm {
 
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private MenuService menuService;
+/*    @Autowired
+    private MenuService menuService;*/
 
     /**
      * 授权(验证权限时调用)

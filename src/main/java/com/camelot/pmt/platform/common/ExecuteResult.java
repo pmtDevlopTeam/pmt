@@ -8,7 +8,7 @@ import java.util.List;
  * 
  * @Title: ExecuteResult.java
  * @Description: TODO(用一句话描述该文件做什么)
- * @author: jh
+ * @author: 
  */
 public class ExecuteResult<T> implements Serializable {
 

@@ -2,7 +2,7 @@ package com.camelot.pmt.platform.login;
 
 import com.alibaba.fastjson.JSONObject;
 import com.camelot.pmt.platform.common.ApiResponse;
-import com.camelot.pmt.platform.shiro.PlatformShiroUtils;
+import com.camelot.pmt.platform.shiro.ShiroUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authc.*;
@@ -17,7 +17,7 @@ import java.io.IOException;
 @ResponseBody
 @RestController
 @Api(value = "用户登陆接口", description = "用户登陆接口")
-public class PlatformLogin {
+public class Login {
 
     /**
      * 登陆
@@ -26,7 +26,7 @@ public class PlatformLogin {
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public JSONObject login(String logincode, String password, String captcha) throws IOException {
         try {
-            Subject subject = PlatformShiroUtils.getSubject();
+            Subject subject = ShiroUtils.getSubject();
             // sha256加密
             // password = new Sha256Hash(password).toHex();
             UsernamePasswordToken token = new UsernamePasswordToken(logincode, password);
@@ -48,7 +48,7 @@ public class PlatformLogin {
      */
     @RequestMapping(value = "logout", method = RequestMethod.GET)
     public JSONObject logout() {
-        PlatformShiroUtils.logout();
+        ShiroUtils.logout();
         return ApiResponse.success();
     }
 }
