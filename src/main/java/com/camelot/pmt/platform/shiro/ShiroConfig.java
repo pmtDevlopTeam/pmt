@@ -29,17 +29,6 @@ public class ShiroConfig {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    //
-    // @Bean(name = "sessionManager")
-    // public SessionManager sessionManager(){
-    // DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
-    // //设置session过期时间为1小时(单位：毫秒)，默认为30分钟
-    // sessionManager.setGlobalSessionTimeout(60 * 60 * 1000);
-    // sessionManager.setSessionValidationSchedulerEnabled(true);
-    // sessionManager.setSessionIdUrlRewritingEnabled(false);
-    // return sessionManager;
-    // }
-
     @Bean(name = "securityManager")
     public SecurityManager securityManager(ShiroUserRealm userRealm, SessionManager sessionManager) {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
@@ -54,26 +43,26 @@ public class ShiroConfig {
         ShiroFilterFactoryBean shiroFilter = new ShiroFilterFactoryBean();
         shiroFilter.setSecurityManager(securityManager);
         shiroFilter.setLoginUrl("/login.html");
-        // shiroFilter.setSuccessUrl("/index.html");
         shiroFilter.setUnauthorizedUrl("/");
 
         Map<String, String> filterMap = new LinkedHashMap<>();
+        //公开静态文件 配置
         filterMap.put("/public/**", "anon");
-        filterMap.put("/webjars/**", "anon");
-        // filterMap.put("/api/**", "anon");
 
         // swagger配置
         filterMap.put("/swagger**", "anon");
         filterMap.put("/v2/api-docs", "anon");
         filterMap.put("/swagger-resources/configuration/ui", "anon");
-
+        
+        //登陆
         filterMap.put("/login.html", "anon");
         filterMap.put("/login", "anon");
-        // filterMap.put("/captcha.jpg", "anon");
+        
+        // 剩余全部地址 做权限拦截
         // filterMap.put("/**", "authc");
+        // 剩余全部地址 不做权限拦截 （开发）
         filterMap.put("/**", "anon");
         shiroFilter.setFilterChainDefinitionMap(filterMap);
-
         return shiroFilter;
     }
 
@@ -95,6 +84,8 @@ public class ShiroConfig {
         advisor.setSecurityManager(securityManager);
         return advisor;
     }
+    
+    //redis缓存 暂停
     /*
      * @Bean(name = "redisCacheManager") public RedisCacheManager
      * redisCacheManager() { logger.debug("ShiroConfiguration.redisCacheManager()");
