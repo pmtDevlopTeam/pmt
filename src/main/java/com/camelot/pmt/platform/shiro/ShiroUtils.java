@@ -10,8 +10,8 @@ import org.slf4j.LoggerFactory;
  * Shiro工具类
  * 
  */
-public class PlatformShiroUtils {
-    private static Logger logger = LoggerFactory.getLogger(PlatformShiroUtils.class);
+public class ShiroUtils {
+    private static Logger logger = LoggerFactory.getLogger(ShiroUtils.class);
 
     public static Session getSession() {
         return SecurityUtils.getSubject().getSession();

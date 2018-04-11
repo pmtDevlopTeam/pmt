@@ -16,7 +16,7 @@ import java.time.LocalDate;
 
 @Configuration
 @EnableSwagger2
-public class MySwagger2DocumentationConfiguration {
+public class Swagger2Config {
 
     @Bean
     public Docket petApi() {
