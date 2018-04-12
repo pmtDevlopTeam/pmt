@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.camelot.pmt.testmanage.casemanage.mapper.UseCaseProcedureImplementMapper" >
+  <resultMap id="BaseResultMap" type="com.camelot.pmt.testmanage.casemanage.model.UseCaseProcedureImplement" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="implement_id" property="implementId" jdbcType="BIGINT" />
+    <result column="procedure_id" property="procedureId" jdbcType="BIGINT" />
+    <result column="test_result" property="testResult" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, implement_id, procedure_id, test_result, description
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from use_case_procedure_implement
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from use_case_procedure_implement
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.camelot.pmt.testmanage.casemanage.model.UseCaseProcedureImplement" >
+    insert into use_case_procedure_implement (id, implement_id, procedure_id, 
+      test_result, description)
+    values (#{id,jdbcType=BIGINT}, #{implementId,jdbcType=BIGINT}, #{procedureId,jdbcType=BIGINT}, 
+      #{testResult,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.camelot.pmt.testmanage.casemanage.model.UseCaseProcedureImplement" >
+    insert into use_case_procedure_implement
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="implementId != null" >
+        implement_id,
+      </if>
+      <if test="procedureId != null" >
+        procedure_id,
+      </if>
+      <if test="testResult != null" >
+        test_result,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="implementId != null" >
+        #{implementId,jdbcType=BIGINT},
+      </if>
+      <if test="procedureId != null" >
+        #{procedureId,jdbcType=BIGINT},
+      </if>
+      <if test="testResult != null" >
+        #{testResult,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.camelot.pmt.testmanage.casemanage.model.UseCaseProcedureImplement" >
+    update use_case_procedure_implement
+    <set >
+      <if test="implementId != null" >
+        implement_id = #{implementId,jdbcType=BIGINT},
+      </if>
+      <if test="procedureId != null" >
+        procedure_id = #{procedureId,jdbcType=BIGINT},
+      </if>
+      <if test="testResult != null" >
+        test_result = #{testResult,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.camelot.pmt.testmanage.casemanage.model.UseCaseProcedureImplement" >
+    update use_case_procedure_implement
+    set implement_id = #{implementId,jdbcType=BIGINT},
+      procedure_id = #{procedureId,jdbcType=BIGINT},
+      test_result = #{testResult,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

@@ -2,7 +2,7 @@ package com.camelot.pmt.testmanage.casemanage.model;
 
 import java.util.Date;
 
-public class casemanage {
+public class UseCase {
     private Long id;
 
     private Long projectId;
