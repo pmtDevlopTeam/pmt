@@ -1,7 +1,9 @@
 package com.camelot.pmt.testmanage.casemanage.mapper;
 
-import com.camelot.pmt.testmanage.casemanage.model.UseCaseImplement;
+import org.apache.ibatis.annotations.Mapper;
 
+import com.camelot.pmt.testmanage.casemanage.model.UseCaseImplement;
+@Mapper
 public interface UseCaseImplementMapper {
     int deleteByPrimaryKey(Long id);
 
