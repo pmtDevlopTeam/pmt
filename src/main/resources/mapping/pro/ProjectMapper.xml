@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.camelot.pmt.project.mapper.ProjectMapper">
-
+<!-- 
 	<select id="getProjectInfo" resultType="com.camelot.api.model.Response"
 		parameterType="java.lang.Integer">
 		select * from project
 		where pro_id =
 		#{proId,jdbcType=INTEGER}
-	</select>
+	</select> -->
 	<resultMap id="BaseResultMap" type="com.camelot.pmt.project.model.Project">
 		<id column="pro_id" property="proId" jdbcType="INTEGER" />
 		<result column="user_id" property="userId" jdbcType="INTEGER" />

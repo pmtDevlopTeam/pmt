@@ -1,9 +1,12 @@
 package com.camelot.pmt.testmanage.casemanage.mapper;
 
+import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Mapper;
 
 import com.camelot.pmt.testmanage.casemanage.model.UseCase;
-@Mapper
+import com.github.pagehelper.Page;
 public interface UseCaseMapper {
     int deleteByPrimaryKey(Long id);
 
@@ -16,4 +19,7 @@ public interface UseCaseMapper {
     int updateByPrimaryKeySelective(UseCase record);
 
     int updateByPrimaryKey(UseCase record);
+    
+    
+    List<UseCase>selectUseCase(Page<UseCase> page,Map<String, Object> condition);
 }
