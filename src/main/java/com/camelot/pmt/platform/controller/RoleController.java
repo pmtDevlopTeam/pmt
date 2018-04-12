@@ -34,11 +34,11 @@ public class RoleController {
     private RoleService roleService;
 
     @ApiOperation(value = "验证角色名称是否存在", notes = "验证角色名称是否存在")
-    @GetMapping(value = "/getRoleNameVerification")
+    @GetMapping(value = "/checkRoleName")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "roleName", value = "角色名称", required = true, paramType = "form", dataType = "string"),})
+            @ApiImplicitParam(name = "roleName", value = "角色名称", required = true, paramType = "query", dataType = "string"),})
 
-    public JSONObject getRoleNameVerification(@ApiIgnore Role role){
+    public JSONObject checkRoleName(@ApiIgnore Role role){
         ExecuteResult result;
         try {
             if(StringUtils.isEmpty(role.getRoleName())){
@@ -108,6 +108,7 @@ public class RoleController {
     @ApiOperation(value = "编辑角色", notes = "编辑角色")
     @PostMapping(value = "/editRole")
     @ApiImplicitParams({
+            @ApiImplicitParam(name = "roleId", value = "角色id", required = true, paramType = "form", dataType = "string"),
             @ApiImplicitParam(name = "roleName", value = "角色名称", required = true, paramType = "form", dataType = "string"), })
     public JSONObject editRole(@ApiIgnore Role role) {
         ExecuteResult<Role> result;
