@@ -17,6 +17,7 @@ import com.camelot.pmt.platform.common.DataGrid;
 import com.camelot.pmt.platform.common.ExecuteResult;
 import com.camelot.pmt.platform.common.Pager;
 import com.camelot.pmt.platform.mapper.DictItemMapper;
+import com.camelot.pmt.platform.model.Dict;
 import com.camelot.pmt.platform.model.DictItem;
 import com.camelot.pmt.platform.service.DictItemService;
 
@@ -93,8 +94,8 @@ public class DictItemServiceImpl implements DictItemService {
 	}
 
 	@Override
-	public ExecuteResult<String> modifyDictItemByDictItemId(DictItem dictItem) {
-		ExecuteResult<String> result = new ExecuteResult<String>();
+	public ExecuteResult<DictItem> modifyDictItemByDictItemId(DictItem dictItem) {
+		ExecuteResult<DictItem> result = new ExecuteResult<DictItem>();
 	       try {
 				if(StringUtils.isEmpty(dictItem.getDictItemId()) ){
 					result.addErrorMessage("传入的字典项实体有误!");
@@ -102,8 +103,14 @@ public class DictItemServiceImpl implements DictItemService {
 				}
 	            long date = new Date().getTime();
 	            dictItem.setModifyTime(new Date(date));
+	            dictItem.setModifyUserId("2");
+	            //检查字典项编码与字典项名称是否唯一
+	            result = findDictItemCodeOrDictItemNameUpdate(dictItem);
+	            if(result.getResultMessage()==null) {
+	            	return result;
+	            }
 	            dictItemMapper.modifyDictItemByDictItemId(dictItem);
-	            result.setResult("修改字典项成功");
+	            result.setResultMessage("修改字典项成功");
 	        } catch (Exception e){
 	            LOGGER.error(e.getMessage());
 	            throw new RuntimeException(e);
@@ -127,11 +134,6 @@ public class DictItemServiceImpl implements DictItemService {
 	        }
 		return result;
 		
-//		int modifyDictItemByDictId = dictItemMapper.modifyDictItemByDictId(dictItem);
-//		if(modifyDictItemByDictId == 1) {
-//			return ApiResponse.success();
-//		}
-//		return ApiResponse.error();
 	}
 
 	@Override
@@ -143,7 +145,7 @@ public class DictItemServiceImpl implements DictItemService {
 				result.setResult(dictItem);
 				return result;
 			}
-			result.addErrorMessage("查询失败！");
+			result.addErrorMessage("dictItemId为null查询失败！");
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
 			throw new RuntimeException(e);
@@ -161,7 +163,7 @@ public class DictItemServiceImpl implements DictItemService {
 				result.setResult(dictItem);
 				return result;
 			}
-			result.addErrorMessage("查询失败！");
+			result.addErrorMessage("dictId为null查询失败！");
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
 			throw new RuntimeException(e);
@@ -193,7 +195,7 @@ public class DictItemServiceImpl implements DictItemService {
 		ExecuteResult<DataGrid<DictItem>> result = new ExecuteResult<DataGrid<DictItem>>();
 		try{
 			if(StringUtils.isEmpty(dictId) ) {
-				result.addErrorMessage("传入的参数有误！");
+				result.addErrorMessage("传入的参数有误!");
 				return result;
 			}
             List<DictItem> list = dictItemMapper.queryDictItemByDictIdPage(dictId, page);
@@ -206,7 +208,6 @@ public class DictItemServiceImpl implements DictItemService {
             DataGrid<DictItem> dg = new DataGrid<DictItem>();
             dg.setRows(list);
             //查询总条数
-//            Long total = dictItemMapper.queryCount();
             Long total = dictItemMapper.queryCountByDictId(dictId);
             dg.setTotal(total);				
             result.setResult(dg);
@@ -221,6 +222,10 @@ public class DictItemServiceImpl implements DictItemService {
 	public ExecuteResult<DataGrid<DictItem>> queryAllDictItemPage(Pager page) {
 		ExecuteResult<DataGrid<DictItem>> result = new ExecuteResult<DataGrid<DictItem>>();
 		try{
+			if(page==null) {
+				result.addErrorMessage("传入的参数有误!");
+				return result;
+			}
             List<DictItem> list = dictItemMapper.queryAllDictItemPage(page);
             //如果没有查询到数据，不继续进行
             if (CollectionUtils.isEmpty(list)) {
@@ -269,4 +274,55 @@ public class DictItemServiceImpl implements DictItemService {
 		return result;
 	}
 
+	
+	public ExecuteResult<DictItem> findDictItemCodeOrDictItemNameUpdate(DictItem dictItem) {
+		ExecuteResult<DictItem> result = new ExecuteResult<DictItem>();
+		//1.检查字典项编码与字典项名称是否存在
+		if (!StringUtils.isEmpty(dictItem.getDictItemCode()) && !StringUtils.isEmpty(dictItem.getDictItemName()) ){
+    		//2.检查字典项是否存在
+    		DictItem dictItemc = dictItemMapper.findDictItemCode(dictItem.getDictItemCode());
+    		DictItem dictItemn = dictItemMapper.findDictItemName(dictItem.getDictItemName());
+    		if(dictItemc == null && dictItemn == null) {
+    			result.setResultMessage("字典项编码,字典项名称不重复!");
+				return result;
+    		}
+    		if(dictItemc != null && dictItemn == null) {
+    			if(dictItemc.getDictItemId().equals(dictItem.getDictItemId())) {
+    				result.setResultMessage("字典项编码不重复!");
+    				return result;
+    			}
+    			result.addErrorMessage("字典项编码重复!");
+				return result;
+    		}
+    		if(dictItemc == null && dictItemn != null) {
+    			if(dictItemn.getDictItemId().equals(dictItem.getDictItemId())) {
+    				result.setResultMessage("字典项名称不重复!");
+    				return result;
+    			}
+    			result.addErrorMessage("字典项名称重复!");
+				return result;
+    		}
+    		if(dictItemc != null && dictItemn != null) {
+    			if(dictItem.getDictItemId().equals(dictItemc.getDictItemId())&&dictItem.getDictItemId().equals(dictItemn.getDictItemId())) {
+        			result.setResultMessage("字典项编码,字典项名称不重复!");
+    				return result;
+    			}
+    			if(!dictItem.getDictItemId().equals(dictItemc.getDictItemId())&&dictItem.getDictItemId().equals(dictItemn.getDictItemId())) {
+    				result.addErrorMessage("字典项编码重复!");
+    				return result;
+    			}
+    			if(dictItem.getDictItemId().equals(dictItemc.getDictItemId())&&!dictItem.getDictItemId().equals(dictItemn.getDictItemId())) {
+    				result.addErrorMessage("字典项名称重复!");
+    				return result;
+    			}
+    			if(!dictItem.getDictItemId().equals(dictItemc.getDictItemId())&&!dictItem.getDictItemId().equals(dictItemn.getDictItemId())) {
+    				result.addErrorMessage("字典项编码,字典项名称重复!");
+    				return result;
+    			}
+    			
+    		}
+    		
+        }
+		return result;
+	}
 }

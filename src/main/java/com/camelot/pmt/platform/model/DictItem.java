@@ -15,7 +15,7 @@ public class DictItem implements Serializable {
      * 默认索引 不可作用于业务
      */
     @TableId(value = "id", type = IdType.AUTO)
-	private Integer id;
+	private Long id;
     /**
      * 字典ID 
      */
@@ -49,13 +49,13 @@ public class DictItem implements Serializable {
      */
     private Date createTime;
     /**
-     * 修改时间
-     */
-    private Date modifyTime;
-    /**
      * 创建人
      */
     private String createUserId;
+    /**
+     * 修改时间
+     */
+    private Date modifyTime;
     /**
      * 修改人
      */
@@ -66,7 +66,7 @@ public class DictItem implements Serializable {
 		// TODO Auto-generated constructor stub
 	}
 
-	public DictItem(Integer id, String dictId, String dictItemId, String dictItemName, String dictItemCode,
+	public DictItem(Long id, String dictId, String dictItemId, String dictItemName, String dictItemCode,
 			String dictItemValue, String state, Integer sortNum, Date createTime, Date modifyTime, String createUserId,
 			String modifyUserId) {
 		super();
@@ -84,11 +84,11 @@ public class DictItem implements Serializable {
 		this.modifyUserId = modifyUserId;
 	}
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
