@@ -16,6 +16,7 @@ import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreato
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -85,16 +86,18 @@ public class ShiroConfig {
         return advisor;
     }
     
-    //redis缓存 暂停
-    /*
-     * @Bean(name = "redisCacheManager") public RedisCacheManager
-     * redisCacheManager() { logger.debug("ShiroConfiguration.redisCacheManager()");
-     * return new RedisCacheManager(); }
-     * 
-     * @Bean(name = "redisSessionDAO") public RedisSessionDAO redisSessionDAO(){
-     * logger.debug("ShiroConfiguration.redisSessionDAO()"); return new
-     * RedisSessionDAO(); }
-     */
+    //redis缓存
+/*    @Bean(name = "redisCacheManager") public RedisCacheManager
+    redisCacheManager() { 
+    	logger.debug("ShiroConfiguration.redisCacheManager()");
+    	return new RedisCacheManager(); 
+    }
+     
+    @Bean(name = "redisSessionDAO") public RedisSessionDAO redisSessionDAO(){
+    	logger.debug("ShiroConfiguration.redisSessionDAO()"); 
+    	return new RedisSessionDAO(); 
+    }*/
+    
 
     @Bean
     public SessionManager sessionManager() {
