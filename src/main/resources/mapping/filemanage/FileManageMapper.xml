@@ -1,10 +1,152 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.camelot.pmt.filemanage.mapper.FileManageMapper">
+  <resultMap id="BaseResultMap" type="com.camelot.pmt.filemanage.model.FileManage">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="group_id" jdbcType="BIGINT" property="groupId" />
+    <result column="file_title" jdbcType="VARCHAR" property="fileTitle" />
+    <result column="file_address" jdbcType="VARCHAR" property="fileAddress" />
+    <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modify_user_id" jdbcType="BIGINT" property="modifyUserId" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+    <result column="del_flag" jdbcType="CHAR" property="delFlag" />
+  </resultMap>
+  <!--<sql id="Base_Column_List">
+    id, group_id, file_title, file_address, create_user_id, create_time, modify_user_id, 
+    modify_time, del_flag
+  </sql>-->
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from file_manage
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from file_manage
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.camelot.pmt.filemanage.model.FileManage">
+    insert into file_manage (id, group_id, file_title, 
+      file_address, create_user_id, create_time, 
+      modify_user_id, modify_time, del_flag
+      )
+    values (#{id,jdbcType=BIGINT}, #{groupId,jdbcType=BIGINT}, #{fileTitle,jdbcType=VARCHAR}, 
+      #{fileAddress,jdbcType=VARCHAR}, #{createUserId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP},
+      #{modifyUserId,jdbcType=BIGINT}, #{modifyTime,jdbcType=TIMESTAMP}, #{delFlag,jdbcType=CHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.camelot.pmt.filemanage.model.FileManage">
+    insert into file_manage
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="groupId != null">
+        group_id,
+      </if>
+      <if test="fileTitle != null">
+        file_title,
+      </if>
+      <if test="fileAddress != null">
+        file_address,
+      </if>
+      <if test="createUserId != null">
+        create_user_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifyUserId != null">
+        modify_user_id,
+      </if>
+      <if test="modifyTime != null">
+        modify_time,
+      </if>
+      <if test="delFlag != null">
+        del_flag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="groupId != null">
+        #{groupId,jdbcType=BIGINT},
+      </if>
+      <if test="fileTitle != null">
+        #{fileTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="fileAddress != null">
+        #{fileAddress,jdbcType=BIGINT},
+      </if>
+      <if test="createUserId != null">
+        #{createUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyUserId != null">
+        #{modifyUserId,jdbcType=BIGINT},
+      </if>
+      <if test="modifyTime != null">
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delFlag != null">
+        #{delFlag,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.camelot.pmt.filemanage.model.FileManage">
+    update file_manage
+    <set>
+      <if test="groupId != null">
+        group_id = #{groupId,jdbcType=BIGINT},
+      </if>
+      <if test="fileTitle != null">
+        file_title = #{fileTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="fileAddress != null">
+        file_address = #{fileAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null">
+        create_user_id = #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyUserId != null">
+        modify_user_id = #{modifyUserId,jdbcType=BIGINT},
+      </if>
+      <if test="modifyTime != null">
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delFlag != null">
+        del_flag = #{delFlag,jdbcType=CHAR},
+      </if>
+
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.camelot.pmt.filemanage.model.FileManage">
+    update file_manage
+    set group_id = #{groupId,jdbcType=BIGINT},
+      file_title = #{fileTitle,jdbcType=VARCHAR},
+      file_address = #{fileAddress,jdbcType=VARCHAR},
+      create_user_id = #{createUserId,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modify_user_id = #{modifyUserId,jdbcType=BIGINT},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      del_flag = #{delFlag,jdbcType=CHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
 
 	<!-- 通用查询结果列-->
-	<sql id="Base_Column_List">
-		id, group_id AS groupId, file_title AS fileTitle, file_address AS fileAddress, create_id AS createId, create_time AS createTime, update_id AS updateId, update_time AS updateTime, del_flag AS delFlag
+<sql id="Base_Column_List">
+		id, group_id AS groupId, file_title AS fileTitle, file_address AS fileAddress, create_user_id AS createUserId, create_time AS createTime, modify_user_id AS modifyUserId, modify_time AS modifyTime, del_flag AS delFlag
 	</sql>
-
+<!--手动编写sql -->
+  <select id="selectFileByGroupID" parameterType="java.lang.Long" resultType="com.camelot.pmt.filemanage.model.FileManage">
+    select <include refid="Base_Column_List" /> from file_manage where group_id=#{id}
+  </select>
 </mapper>

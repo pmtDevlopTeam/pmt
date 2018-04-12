@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.camelot.pmt.testmanage.casemanage.mapper.UseCaseMapper" >
+  <resultMap id="BaseResultMap" type="com.camelot.pmt.testmanage.casemanage.model.UseCase" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="project_id" property="projectId" jdbcType="BIGINT" />
+    <result column="demand_id" property="demandId" jdbcType="BIGINT" />
+    <result column="case_title" property="caseTitle" jdbcType="VARCHAR" />
+    <result column="case_type" property="caseType" jdbcType="VARCHAR" />
+    <result column="version_id" property="versionId" jdbcType="BIGINT" />
+    <result column="case_level" property="caseLevel" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="execute_user_id" property="executeUserId" jdbcType="BIGINT" />
+    <result column="execute_time" property="executeTime" jdbcType="TIMESTAMP" />
+    <result column="case_status" property="caseStatus" jdbcType="VARCHAR" />
+    <result column="result" property="result" jdbcType="VARCHAR" />
+    <result column="create_user_id" property="createUserId" jdbcType="BIGINT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_user_id" property="modifyUserId" jdbcType="BIGINT" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="del_flag" property="delFlag" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, project_id, demand_id, case_title, case_type, version_id, case_level, description, 
+    execute_user_id, execute_time, case_status, result, create_user_id, create_time, 
+    modify_user_id, modify_time, del_flag
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from use_case
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from use_case
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.camelot.pmt.testmanage.casemanage.model.UseCase" >
+    insert into use_case (id, project_id, demand_id, 
+      case_title, case_type, version_id, 
+      case_level, description, execute_user_id, 
+      execute_time, case_status, result, 
+      create_user_id, create_time, modify_user_id, 
+      modify_time, del_flag)
+    values (#{id,jdbcType=BIGINT}, #{projectId,jdbcType=BIGINT}, #{demandId,jdbcType=BIGINT}, 
+      #{caseTitle,jdbcType=VARCHAR}, #{caseType,jdbcType=VARCHAR}, #{versionId,jdbcType=BIGINT}, 
+      #{caseLevel,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{executeUserId,jdbcType=BIGINT}, 
+      #{executeTime,jdbcType=TIMESTAMP}, #{caseStatus,jdbcType=VARCHAR}, #{result,jdbcType=VARCHAR}, 
+      #{createUserId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=BIGINT}, 
+      #{modifyTime,jdbcType=TIMESTAMP}, #{delFlag,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.camelot.pmt.testmanage.casemanage.model.UseCase" >
+    insert into use_case
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="projectId != null" >
+        project_id,
+      </if>
+      <if test="demandId != null" >
+        demand_id,
+      </if>
+      <if test="caseTitle != null" >
+        case_title,
+      </if>
+      <if test="caseType != null" >
+        case_type,
+      </if>
+      <if test="versionId != null" >
+        version_id,
+      </if>
+      <if test="caseLevel != null" >
+        case_level,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="executeUserId != null" >
+        execute_user_id,
+      </if>
+      <if test="executeTime != null" >
+        execute_time,
+      </if>
+      <if test="caseStatus != null" >
+        case_status,
+      </if>
+      <if test="result != null" >
+        result,
+      </if>
+      <if test="createUserId != null" >
+        create_user_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="modifyUserId != null" >
+        modify_user_id,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+      <if test="delFlag != null" >
+        del_flag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="projectId != null" >
+        #{projectId,jdbcType=BIGINT},
+      </if>
+      <if test="demandId != null" >
+        #{demandId,jdbcType=BIGINT},
+      </if>
+      <if test="caseTitle != null" >
+        #{caseTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="caseType != null" >
+        #{caseType,jdbcType=VARCHAR},
+      </if>
+      <if test="versionId != null" >
+        #{versionId,jdbcType=BIGINT},
+      </if>
+      <if test="caseLevel != null" >
+        #{caseLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="executeUserId != null" >
+        #{executeUserId,jdbcType=BIGINT},
+      </if>
+      <if test="executeTime != null" >
+        #{executeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="caseStatus != null" >
+        #{caseStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="result != null" >
+        #{result,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null" >
+        #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyUserId != null" >
+        #{modifyUserId,jdbcType=BIGINT},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delFlag != null" >
+        #{delFlag,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.camelot.pmt.testmanage.casemanage.model.UseCase" >
+    update use_case
+    <set >
+      <if test="projectId != null" >
+        project_id = #{projectId,jdbcType=BIGINT},
+      </if>
+      <if test="demandId != null" >
+        demand_id = #{demandId,jdbcType=BIGINT},
+      </if>
+      <if test="caseTitle != null" >
+        case_title = #{caseTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="caseType != null" >
+        case_type = #{caseType,jdbcType=VARCHAR},
+      </if>
+      <if test="versionId != null" >
+        version_id = #{versionId,jdbcType=BIGINT},
+      </if>
+      <if test="caseLevel != null" >
+        case_level = #{caseLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="executeUserId != null" >
+        execute_user_id = #{executeUserId,jdbcType=BIGINT},
+      </if>
+      <if test="executeTime != null" >
+        execute_time = #{executeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="caseStatus != null" >
+        case_status = #{caseStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="result != null" >
+        result = #{result,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null" >
+        create_user_id = #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyUserId != null" >
+        modify_user_id = #{modifyUserId,jdbcType=BIGINT},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delFlag != null" >
+        del_flag = #{delFlag,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.camelot.pmt.testmanage.casemanage.model.UseCase" >
+    update use_case
+    set project_id = #{projectId,jdbcType=BIGINT},
+      demand_id = #{demandId,jdbcType=BIGINT},
+      case_title = #{caseTitle,jdbcType=VARCHAR},
+      case_type = #{caseType,jdbcType=VARCHAR},
+      version_id = #{versionId,jdbcType=BIGINT},
+      case_level = #{caseLevel,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      execute_user_id = #{executeUserId,jdbcType=BIGINT},
+      execute_time = #{executeTime,jdbcType=TIMESTAMP},
+      case_status = #{caseStatus,jdbcType=VARCHAR},
+      result = #{result,jdbcType=VARCHAR},
+      create_user_id = #{createUserId,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modify_user_id = #{modifyUserId,jdbcType=BIGINT},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      del_flag = #{delFlag,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
