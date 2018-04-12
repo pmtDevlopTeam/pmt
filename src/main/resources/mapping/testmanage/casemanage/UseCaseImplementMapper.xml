@@ -1,93 +1,111 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.camelot.pmt.testmanage.casemanage.mapper.UseCaseImplementMapper" >
-  <resultMap id="BaseResultMap" type="com.camelot.pmt.testmanage.casemanage.model.UseCaseImplement" >
-    <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="use_case_id" property="useCaseId" jdbcType="BIGINT" />
-    <result column="implement_result" property="implementResult" jdbcType="VARCHAR" />
-    <result column="execute_time" property="executeTime" jdbcType="TIMESTAMP" />
-    <result column="execute_user_id" property="executeUserId" jdbcType="BIGINT" />
-  </resultMap>
-  <sql id="Base_Column_List" >
-    id, use_case_id, implement_result, execute_time, execute_user_id
-  </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select 
-    <include refid="Base_Column_List" />
-    from use_case_implement
-    where id = #{id,jdbcType=BIGINT}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
-    delete from use_case_implement
-    where id = #{id,jdbcType=BIGINT}
-  </delete>
-  <insert id="insert" parameterType="com.camelot.pmt.testmanage.casemanage.model.UseCaseImplement" >
-    insert into use_case_implement (id, use_case_id, implement_result, 
-      execute_time, execute_user_id)
-    values (#{id,jdbcType=BIGINT}, #{useCaseId,jdbcType=BIGINT}, #{implementResult,jdbcType=VARCHAR}, 
-      #{executeTime,jdbcType=TIMESTAMP}, #{executeUserId,jdbcType=BIGINT})
-  </insert>
-  <insert id="insertSelective" parameterType="com.camelot.pmt.testmanage.casemanage.model.UseCaseImplement" >
-    insert into use_case_implement
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        id,
-      </if>
-      <if test="useCaseId != null" >
-        use_case_id,
-      </if>
-      <if test="implementResult != null" >
-        implement_result,
-      </if>
-      <if test="executeTime != null" >
-        execute_time,
-      </if>
-      <if test="executeUserId != null" >
-        execute_user_id,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        #{id,jdbcType=BIGINT},
-      </if>
-      <if test="useCaseId != null" >
-        #{useCaseId,jdbcType=BIGINT},
-      </if>
-      <if test="implementResult != null" >
-        #{implementResult,jdbcType=VARCHAR},
-      </if>
-      <if test="executeTime != null" >
-        #{executeTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="executeUserId != null" >
-        #{executeUserId,jdbcType=BIGINT},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.camelot.pmt.testmanage.casemanage.model.UseCaseImplement" >
-    update use_case_implement
-    <set >
-      <if test="useCaseId != null" >
-        use_case_id = #{useCaseId,jdbcType=BIGINT},
-      </if>
-      <if test="implementResult != null" >
-        implement_result = #{implementResult,jdbcType=VARCHAR},
-      </if>
-      <if test="executeTime != null" >
-        execute_time = #{executeTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="executeUserId != null" >
-        execute_user_id = #{executeUserId,jdbcType=BIGINT},
-      </if>
-    </set>
-    where id = #{id,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.camelot.pmt.testmanage.casemanage.model.UseCaseImplement" >
-    update use_case_implement
-    set use_case_id = #{useCaseId,jdbcType=BIGINT},
-      implement_result = #{implementResult,jdbcType=VARCHAR},
-      execute_time = #{executeTime,jdbcType=TIMESTAMP},
-      execute_user_id = #{executeUserId,jdbcType=BIGINT}
-    where id = #{id,jdbcType=BIGINT}
-  </update>
+<mapper namespace="com.camelot.pmt.testmanage.casemanage.mapper.UseCaseImplementMapper">
+    <resultMap id="BaseResultMap" type="com.camelot.pmt.testmanage.casemanage.model.UseCaseImplement">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="use_case_id" property="useCaseId" jdbcType="BIGINT"/>
+        <result column="implement_result" property="implementResult" jdbcType="VARCHAR"/>
+        <result column="execute_time" property="executeTime" jdbcType="TIMESTAMP"/>
+        <result column="execute_user_id" property="executeUserId" jdbcType="BIGINT"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, use_case_id, implement_result, execute_time, execute_user_id
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from use_case_implement
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete from use_case_implement
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.camelot.pmt.testmanage.casemanage.model.UseCaseImplement">
+        insert into use_case_implement (id, use_case_id, implement_result,
+          execute_time, execute_user_id)
+        values (#{id,jdbcType=BIGINT}, #{useCaseId,jdbcType=BIGINT}, #{implementResult,jdbcType=VARCHAR},
+          #{executeTime,jdbcType=TIMESTAMP}, #{executeUserId,jdbcType=BIGINT})
+    </insert>
+    <insert id="insertSelective" parameterType="com.camelot.pmt.testmanage.casemanage.model.UseCaseImplement" useGeneratedKeys="true" keyProperty="id">
+        insert into use_case_implement
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="useCaseId != null">
+                use_case_id,
+            </if>
+            <if test="implementResult != null">
+                implement_result,
+            </if>
+            <if test="executeTime != null">
+                execute_time,
+            </if>
+            <if test="executeUserId != null">
+                execute_user_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="useCaseId != null">
+                #{useCaseId,jdbcType=BIGINT},
+            </if>
+            <if test="implementResult != null">
+                #{implementResult,jdbcType=VARCHAR},
+            </if>
+            <if test="executeTime != null">
+                #{executeTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="executeUserId != null">
+                #{executeUserId,jdbcType=BIGINT},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.camelot.pmt.testmanage.casemanage.model.UseCaseImplement">
+        update use_case_implement
+        <set>
+            <if test="useCaseId != null">
+                use_case_id = #{useCaseId,jdbcType=BIGINT},
+            </if>
+            <if test="implementResult != null">
+                implement_result = #{implementResult,jdbcType=VARCHAR},
+            </if>
+            <if test="executeTime != null">
+                execute_time = #{executeTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="executeUserId != null">
+                execute_user_id = #{executeUserId,jdbcType=BIGINT},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.camelot.pmt.testmanage.casemanage.model.UseCaseImplement">
+        update use_case_implement
+        set use_case_id = #{useCaseId,jdbcType=BIGINT},
+          implement_result = #{implementResult,jdbcType=VARCHAR},
+          execute_time = #{executeTime,jdbcType=TIMESTAMP},
+          execute_user_id = #{executeUserId,jdbcType=BIGINT}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="find" parameterType="java.util.Map" resultMap="findMap">
+        select
+        <include refid="Base_Column_List"/>
+        from use_case_implement
+        <where>
+            <if test="id != null">
+                and id = {id}
+            </if>
+            <if test="useCaseId != null">
+                and use_case_id = #{useCaseId}
+            </if>
+        </where>
+        order by execute_time desc
+    </select>
+    <resultMap id="findMap" type="com.camelot.pmt.testmanage.casemanage.model.UseCaseImplement" extends="BaseResultMap">
+        <collection property="detail" column="id" select="com.camelot.pmt.testmanage.casemanage.mapper.UseCaseProcedureImplementMapper.findByImplementId"/>
+    </resultMap>
 </mapper>
