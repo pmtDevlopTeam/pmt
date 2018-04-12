@@ -124,6 +124,7 @@
       <if test="delFlag != null">
         del_flag = #{delFlag,jdbcType=CHAR},
       </if>
+
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>

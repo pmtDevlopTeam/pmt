@@ -14,7 +14,8 @@
     <result column="isfile" jdbcType="INTEGER" property="isfile" />
   </resultMap>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select 
+    select
+
     <include refid="Base_Column_List" />
     from file_manage_group
     where id = #{id,jdbcType=BIGINT}

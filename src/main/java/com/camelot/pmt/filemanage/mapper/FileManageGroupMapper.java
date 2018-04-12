@@ -3,7 +3,9 @@ package com.camelot.pmt.filemanage.mapper;
 import com.camelot.pmt.filemanage.model.FileManageGroup;
 
 import java.util.List;
-
+/*
+张战
+ */
 public interface FileManageGroupMapper {
     int deleteByPrimaryKey(Long id);
 
