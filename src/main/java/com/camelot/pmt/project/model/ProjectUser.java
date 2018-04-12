@@ -51,7 +51,7 @@ public class ProjectUser {
     /**
      * 成员在项目角色
      */
-    private String userProRole;
+    private Long userProRole;
 
     /**
      * 创建人id
@@ -221,7 +221,7 @@ public class ProjectUser {
      * 成员在项目角色
      * @return user_pro_role 成员在项目角色
      */
-    public String getUserProRole() {
+    public Long getUserProRole() {
         return userProRole;
     }
 
@@ -229,8 +229,8 @@ public class ProjectUser {
      * 成员在项目角色
      * @param userProRole 成员在项目角色
      */
-    public void setUserProRole(String userProRole) {
-        this.userProRole = userProRole == null ? null : userProRole.trim();
+    public void setUserProRole(Long userProRole) {
+        this.userProRole = userProRole;
     }
 
     /**
