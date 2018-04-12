@@ -19,6 +19,10 @@ public enum APIStatus {
     UNAUTHORIZED_401(401, "未登录或登录状态已失效.", "No login or login status has expired."),
     /** 200 Ok. 请求处理成功. */
     OK_200(200, "请求处理成功.", "OK"),
+    /**  205 角色名称可用 */
+    OK_205(205, "角色名称可用","Role names are available"),
+    /** 206 角色名称不可用*/
+    OK_206(206, "角色名称不可用","Role name is not available"),
     /** 500 Internal Server Error. 服务器内部错误,请求处理失败. */
     ERROR_500(500, "服务器内部错误,请求处理失败.", "Internal Server Error."),
     /** 501 Unknown Cause Delete Failed. 未知原因,删除失败. */
