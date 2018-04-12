@@ -1,5 +1,6 @@
 package com.camelot.pmt.platform.mapper;
 
+import com.alibaba.fastjson.JSONObject;
 import com.camelot.pmt.platform.model.Menu;
 
 import java.util.List;
@@ -53,5 +54,5 @@ public interface MenuMapper {
      * @return
      */
     List<Menu> queryAllMenu();
-
+    
 }

@@ -83,4 +83,30 @@ public class MenuServiceImpl implements MenuService {
         return ApiResponse.error();
     }
 
+	@Override
+	public JSONObject queryListMenuByMenuId(String menuId) {
+        List<Tree<Menu>> trees = new ArrayList<Tree<Menu>>();
+        List<Menu> queryAllMenu = menuMapper.queryAllMenu();
+        if (queryAllMenu != null) {
+            for (Menu menu : queryAllMenu) {
+                Tree<Menu> tree = new Tree<Menu>();
+                tree.setId(menu.getMenuId());
+                tree.setParentId(menu.getParentId());
+                tree.setText(menu.getMenuName());
+                Map<String, Object> attributes = new HashMap<>(16);
+                attributes.put("url", menu.getMenuUrl());
+                attributes.put("permission", menu.getMenuPermission());
+                attributes.put("state", menu.getState());
+                attributes.put("sortNum", menu.getSortNum());
+                attributes.put("icon", menu.getMenuIcon());
+                tree.setAttributes(attributes);
+                trees.add(tree);
+            }
+            // 默认顶级菜单为０，根据数据库实际情况调整
+            List<Tree<Menu>> list = BuildTree.buildList(trees, menuId);
+            return ApiResponse.success(list);
+        }
+        return ApiResponse.error();
+	}
+
 }

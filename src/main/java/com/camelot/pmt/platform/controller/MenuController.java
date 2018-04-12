@@ -55,4 +55,10 @@ public class MenuController {
         return menuService.queryAllMenu();
     }
 
+    @ApiOperation(value = "查询指定菜单的子菜单树接口", notes = "查询指定菜单的子菜单树")
+    @RequestMapping(value = "/queryListMenuByMenuId", method = RequestMethod.POST)
+    public JSONObject queryListMenuByMenuId(String menuId) {
+        return menuService.queryListMenuByMenuId(menuId);
+    }
+
 }

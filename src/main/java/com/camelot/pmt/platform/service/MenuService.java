@@ -52,4 +52,12 @@ public interface MenuService {
      * @return
      */
     JSONObject queryAllMenu();
+    
+    /**
+     * 根据菜单id 查询指定菜单的子菜单树
+     * 
+     * @param menuId
+     * @return
+     */
+    JSONObject queryListMenuByMenuId(String menuId);
 }
