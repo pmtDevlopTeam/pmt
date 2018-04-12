@@ -128,7 +128,7 @@ public class DictController {
      * @param  dictId UUID
      * @return {"status": {"message": "请求处理成功.","code": 200}, "data": {Dict}]
      */
-	@ApiOperation(value="根据dictId查询单个字典", notes="查询单个字典")
+	@ApiOperation(value="根据字典dictId查询单个字典", notes="查询单个字典")
 	@RequestMapping(value="/queryDictByDictId", method=RequestMethod.POST)
 	public JSONObject queryDictByDictId(@ApiParam(value = "字典dictId", required = true) @RequestParam(required = true) String dictId) {
 		ExecuteResult<Dict> result = new ExecuteResult<Dict>();

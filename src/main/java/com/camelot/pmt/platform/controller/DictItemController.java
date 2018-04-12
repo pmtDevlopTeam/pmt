@@ -62,11 +62,9 @@ public class DictItemController {
 	    	if (StringUtils.isEmpty(dictIds)||StringUtils.isEmpty(dictItem.getDictItemName())
 	    		||StringUtils.isEmpty(dictItem.getDictItemCode())||StringUtils.isEmpty(dictItem.getDictItemValue()) )
 	    	{
-	    		System.out.println(dictIds+"------1----");
 	    		return ApiResponse.jsonData(APIStatus.ERROR_400);
             }
 	    	//不为空调用接口查询
-	    	System.out.println(dictIds+"------2----");
 	    	 dictItem.setDictId(dictIds);
 	    	 result = dictItemService.createDictItem(dictItem);
 	    	 if(result.isSuccess()){
@@ -102,6 +100,7 @@ public class DictItemController {
 		}
 	}
 	
+
 	@ApiOperation(value="修改字典项接口", notes="修改单个字典项")
     @ApiImplicitParams({
         @ApiImplicitParam(
@@ -119,7 +118,7 @@ public class DictItemController {
     })
 	@RequestMapping(value="/modifyDictItemByDictItemId", method=RequestMethod.POST)
 	public JSONObject modifyDictItemByDictItemId(@ApiIgnore DictItem dictItem) {
-		ExecuteResult<String> result = new ExecuteResult<String>();
+		ExecuteResult<DictItem> result = new ExecuteResult<DictItem>();
         try {
 
 	    	if(StringUtils.isEmpty(dictItem.getDictItemId())){
@@ -127,20 +126,20 @@ public class DictItemController {
 	        }
             result = dictItemService.modifyDictItemByDictItemId(dictItem);
             if(result.isSuccess()){
-                return ApiResponse.success(result.getResult());
+                return ApiResponse.success(result.getResultMessage());
             }
-           return ApiResponse.error();
+            return ApiResponse.error(result.getErrorMessage());
         } catch (Exception e){
             return ApiResponse.error();
         }
 	}
 	
     /**
-     * [查询单个字典项]
+     * [通过字典项dictItemId查询单个字典项]
      * @param  dictItemId UUID
      * @return {"status": {"message": "请求处理成功.","code": 200}, "data": {DictItem}]
      */
-	@ApiOperation(value="通过字典项dictItemId查询字典项接口", notes="查询单个字典项")
+	@ApiOperation(value="根据字典项dictItemId查询字典项接口", notes="查询单个字典项")
 	@RequestMapping(value="/queryDictItemByDictItemId", method=RequestMethod.POST)
 	public JSONObject queryDictItemByDictItemId(@ApiParam(value = "字典项dictItemId", required = true) @RequestParam(required = true) String dictItemId) {
 		ExecuteResult<DictItem> result = new ExecuteResult<DictItem>();
@@ -152,18 +151,18 @@ public class DictItemController {
             if(result.isSuccess()) {
                 return ApiResponse.success(result.getResult());
             }
-            return ApiResponse.error();
+            return ApiResponse.error(result.getErrorMessage());
         }catch (Exception e) {
             return ApiResponse.error();
         }
 		
 	}
     /**
-     * [查询字典项]
+     * [根据字典类型dictId查询字典项]
      * @param  dictId UUID
      * @return {"status": {"message": "请求处理成功.","code": 200}, "data": {List<DictItem>}]
      */
-	@ApiOperation(value="通过字典类型查询字典项接口 不分页", notes="查询字典项")
+	@ApiOperation(value="根据字典类型dictId查询字典项接口 不分页", notes="查询字典项")
 	@RequestMapping(value="/queryDictItemByDictId", method=RequestMethod.POST)
 	public JSONObject queryDictItemByDictId(@ApiParam(value = "字典项dictId", required = true) @RequestParam(required = true) String dictId) {
 		ExecuteResult<List<DictItem>> result = new ExecuteResult<List<DictItem>>();
@@ -175,7 +174,7 @@ public class DictItemController {
             if(result.isSuccess()) {
                 return ApiResponse.success(result.getResult());
             }
-            return ApiResponse.error();
+            return ApiResponse.error(result.getErrorMessage());
         }catch (Exception e) {
             return ApiResponse.error();
         }
@@ -183,11 +182,11 @@ public class DictItemController {
 	}
 	
 	/**
-     * <p>Description:[通过字典类型 分页查询字典项接口]</p>
-     * @param  page 页码,rows 每页数量
+     * [通过字典类型 分页查询字典项接口]
+     * @param  dictId UUID page 页码,rows 每页数量
      * @return "data": {"total": 总数量,"rows":[查询的结果集],"status": {"code": 200,"message": "请求处理成功."}}
      */
-    @ApiOperation(value="通过字典类型分页查询字典项接口", notes="通过字典类型 分页查询字典项接口")
+    @ApiOperation(value="根据字典类型dictId分页查询字典项接口", notes="通过字典类型 分页查询字典项接口")
     @RequestMapping(value = "/queryDictItemByDictIdPage",method = RequestMethod.POST)
     @ApiImplicitParams({
     	@ApiImplicitParam(name = "page", value = "页码", paramType = "query", dataType = "int"),
@@ -197,7 +196,6 @@ public class DictItemController {
     	ExecuteResult<DataGrid<DictItem>> result = new ExecuteResult<DataGrid<DictItem>>();
     	try {
     		if(page == null) {
-    			System.out.println("111");
     			return ApiResponse.errorPara();
     		}
             if(StringUtils.isEmpty(dictId)){
@@ -207,7 +205,7 @@ public class DictItemController {
     		if(result.isSuccess()) {
     			return ApiResponse.success(result.getResult());
     		}
-    		return ApiResponse.error();
+    		return ApiResponse.error(result.getErrorMessage());
     	}catch (Exception e) {
     		return ApiResponse.error();
     	}
@@ -223,16 +221,16 @@ public class DictItemController {
             if(result.isSuccess()) {
                 return ApiResponse.success(result.getResult());
             }
-            return ApiResponse.error();
+            return ApiResponse.error(result.getErrorMessage());
         }catch (Exception e) {
             return ApiResponse.error();
         }
         
 	}
 	/**
-     * <p>Description:[分页查询全部字典项列表]</p>
+     *[分页查询全部字典项列表]
      * @param  page 页码,rows 每页数量
-     * @return "data": {"total": 总数量,"rows":[查询的结果集],"status": {"code": 200,"message": "请求处理成功."}}
+     * @return "data": {"total": 总数量,"rows":[查询的结果集],"status": {"code": 200,"message": "请求处理成功"}}
      */
     @ApiOperation(value="分页查询全部字典项列表", notes="分页查询全部字典项列表")
     @RequestMapping(value = "/queryAllDictItemPage",method = RequestMethod.GET)
@@ -250,7 +248,7 @@ public class DictItemController {
     		if(result.isSuccess()) {
     			return ApiResponse.success(result.getResult());
     		}
-    		return ApiResponse.error();
+    		return ApiResponse.error(result.getErrorMessage());
     	}catch (Exception e) {
     		return ApiResponse.error();
     	}

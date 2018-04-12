@@ -201,53 +201,45 @@ public class DictServiceImpl implements DictService {
 	
 	public ExecuteResult<Dict> findDictCodeOrDictNameUpdate(Dict dict) {
 		ExecuteResult<Dict> result = new ExecuteResult<Dict>();
-    	if (!StringUtils.isEmpty(dict.getDictCode()) && !StringUtils.isEmpty(dict.getDictName()) ){
+		//1.检查字典编码与字典名称是否存在
+		if (!StringUtils.isEmpty(dict.getDictCode()) && !StringUtils.isEmpty(dict.getDictName()) ){
     		//2.检查字典是否存在
     		Dict dictc = dictMapper.findDictCode(dict.getDictCode());
     		Dict dictn = dictMapper.findDictName(dict.getDictName());
     		if(dictc == null && dictn == null) {
-    			System.out.println("11111");
     			result.setResultMessage("字典编码,字典名称不重复!");
 				return result;
     		}
     		if(dictc != null && dictn == null) {
     			if(dictc.getDictId().equals(dict.getDictId())) {
-    				System.out.println("22222");
     				result.setResultMessage("字典编码不重复!");
     				return result;
     			}
-    			System.out.println("33333");
     			result.addErrorMessage("字典编码重复!");
 				return result;
     		}
     		if(dictc == null && dictn != null) {
     			if(dict.getDictId().equals(dictn.getDictId())) {
-    				System.out.println("44444");
     				result.setResultMessage("字典名称不重复!");
     				return result;
     			}
-    			System.out.println("55555");
     			result.addErrorMessage("字典名称重复!");
 				return result;
     		}
     		if(dictc != null && dictn != null) {
     			if(dict.getDictId().equals(dictc.getDictId())&&dict.getDictId().equals(dictn.getDictId())) {
-    				System.out.println("66666");
         			result.setResultMessage("字典编码,字典名称不重复!");
     				return result;
     			}
     			if(!dict.getDictId().equals(dictc.getDictId())&&dict.getDictId().equals(dictn.getDictId())) {
-    				System.out.println("77777");
     				result.addErrorMessage("字典编码重复!");
     				return result;
     			}
     			if(dict.getDictId().equals(dictc.getDictId())&&!dict.getDictId().equals(dictn.getDictId())) {
-    				System.out.println("88888");
     				result.addErrorMessage("字典名称重复!");
     				return result;
     			}
     			if(!dict.getDictId().equals(dictc.getDictId())&&!dict.getDictId().equals(dictn.getDictId())) {
-    				System.out.println("99999");
     				result.addErrorMessage("字典编码,字典名称重复!");
     				return result;
     			}
