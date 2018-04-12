@@ -5,7 +5,9 @@ import com.camelot.pmt.platform.common.APIStatus;
 import com.camelot.pmt.platform.common.ApiResponse;
 import com.camelot.pmt.platform.common.ExecuteResult;
 import com.camelot.pmt.platform.model.Role;
+import com.camelot.pmt.platform.model.User;
 import com.camelot.pmt.platform.service.RoleService;
+import com.camelot.pmt.platform.shiro.ShiroUtils;
 import com.camelot.pmt.platform.util.Tree;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -84,14 +86,12 @@ public class RoleController {
     public JSONObject addRole(@ApiIgnore Role role) {
         ExecuteResult<Role> result;
         try {
-            //等获取登录人ID
-            role.setCreateUserId("ligen12138");
-            role.setModifyUserId("ligen12138");
-            if (StringUtils.isEmpty(role.getCreateUserId()) && StringUtils.isEmpty(role.getModifyUserId())) {
+            User user = (User) ShiroUtils.getSessionAttribute("user");
+            if (StringUtils.isEmpty(user.getUserId())) {
                 ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
             }
-            //
-
+            role.setCreateUserId(user.getUserId());
+            role.setModifyUserId(user.getUserId());
             if (StringUtils.isEmpty(role.getRoleName())) {
                 ApiResponse.jsonData(APIStatus.ERROR_400);
             }
@@ -115,12 +115,11 @@ public class RoleController {
         ExecuteResult<Role> result;
         try {
 
-            //等获取登录人ID
-            role.setModifyUserId("ligen12138");
-            if (StringUtils.isEmpty(role.getModifyUserId())) {
+            User user = (User) ShiroUtils.getSessionAttribute("user");
+            if (StringUtils.isEmpty(user.getUserId())) {
                 ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
             }
-            //
+            role.setModifyUserId(user.getUserId());
             if (StringUtils.isEmpty(role.getRoleName()) && StringUtils.isEmpty(role.getRoleId())) {
                 ApiResponse.jsonData(APIStatus.ERROR_400);
             }

@@ -7,6 +7,7 @@ import com.camelot.pmt.platform.common.ExecuteResult;
 import com.camelot.pmt.platform.model.RoleToUser;
 import com.camelot.pmt.platform.model.User;
 import com.camelot.pmt.platform.service.RoleToUserService;
+import com.camelot.pmt.platform.shiro.ShiroUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -41,14 +42,12 @@ public class RoleToUserController {
         ExecuteResult result;
         try {
 
-            //等获取登录人ID
-            roleToUser.setCreateUserId("ligen12138");
-            roleToUser.setModifyUserId("ligen12138");
-            if (StringUtils.isEmpty(roleToUser.getCreateUserId()) && StringUtils.isEmpty(roleToUser.getModifyUserId())) {
+            User user = (User) ShiroUtils.getSessionAttribute("user");
+            if (StringUtils.isEmpty(user.getUserId())) {
                 ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
             }
-            //
-
+            roleToUser.setCreateUserId(user.getUserId());
+            roleToUser.setModifyUserId(user.getUserId());
             if (StringUtils.isEmpty(roleToUser.getRoleIds()) && StringUtils.isEmpty(roleToUser.getUserIds())) {
                 return ApiResponse.jsonData(APIStatus.ERROR_400);
             }
@@ -79,15 +78,12 @@ public class RoleToUserController {
     public JSONObject updateUserByRole(@ApiIgnore RoleToUser roleToUser) {
         ExecuteResult result;
         try {
-
-            //等获取登录人ID
-            roleToUser.setModifyUserId("ligen12138");
-            if (StringUtils.isEmpty(roleToUser.getModifyUserId())) {
+            User user = (User) ShiroUtils.getSessionAttribute("user");
+            if (StringUtils.isEmpty(user.getUserId())) {
                 ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
             }
-            //
-
-
+            roleToUser.setCreateUserId(user.getUserId());
+            roleToUser.setModifyUserId(user.getUserId());
             if (StringUtils.isEmpty(roleToUser.getRoleIds()) && StringUtils.isEmpty(roleToUser.getUserIds())) {
                 return ApiResponse.jsonData(APIStatus.ERROR_400);
             }

@@ -6,7 +6,9 @@ import com.camelot.pmt.platform.common.ApiResponse;
 import com.camelot.pmt.platform.common.ExecuteResult;
 import com.camelot.pmt.platform.model.Menu;
 import com.camelot.pmt.platform.model.RoleToMenu;
+import com.camelot.pmt.platform.model.User;
 import com.camelot.pmt.platform.service.RoleToMenuService;
+import com.camelot.pmt.platform.shiro.ShiroUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -40,12 +42,12 @@ public class RoleToMenuController {
     public JSONObject addRoleToMenu(@ApiIgnore RoleToMenu roleToMenu) {
         ExecuteResult<RoleToMenu> result;
         try {
-            //-----------等获取登录用户ID------
-            roleToMenu.setCreateUserId("ligen12138");
-            if (StringUtils.isEmpty(roleToMenu.getCreateUserId())) {
-                return ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
+            User user = (User) ShiroUtils.getSessionAttribute("user");
+            if (StringUtils.isEmpty(user.getUserId())) {
+                ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
             }
-            //----------------------------------
+            roleToMenu.setCreateUserId(user.getUserId());
+            roleToMenu.setModifyUserId(user.getUserId());
             if (StringUtils.isEmpty(roleToMenu.getRoleId()) && StringUtils.isEmpty(roleToMenu.getMenuId())) {
                 return ApiResponse.jsonData(APIStatus.ERROR_400);
             }
@@ -73,12 +75,12 @@ public class RoleToMenuController {
     public JSONObject updateRoleToMenu(@ApiIgnore RoleToMenu roleToMenu) {
         ExecuteResult result;
         try {
-            //-----------等获取登录用户ID------
-            roleToMenu.setCreateUserId("ligen12138");
-            if (StringUtils.isEmpty(roleToMenu.getCreateUserId())) {
-                return ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
+            User user = (User) ShiroUtils.getSessionAttribute("user");
+            if (StringUtils.isEmpty(user.getUserId())) {
+                ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
             }
-            //----------------------------------
+            roleToMenu.setCreateUserId(user.getUserId());
+            roleToMenu.setModifyUserId(user.getUserId());
             if (StringUtils.isEmpty(roleToMenu.getRoleId()) && StringUtils.isEmpty(roleToMenu.getMenuIds())) {
                 return ApiResponse.jsonData(APIStatus.ERROR_400);
             }
