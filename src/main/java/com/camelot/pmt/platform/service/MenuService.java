@@ -16,7 +16,7 @@ public interface MenuService {
     /**
      * 增加一个菜单
      * 
-     * @param menu
+     * @param Menu menu
      * @return
      */
     JSONObject createMenu(Menu menu);
@@ -24,7 +24,7 @@ public interface MenuService {
     /**
      * 根据菜单id 删除一个菜单
      * 
-     * @param menuId
+     * @param String menuId
      * @return
      */
     JSONObject deleteMenuByMenuId(String menuId);
