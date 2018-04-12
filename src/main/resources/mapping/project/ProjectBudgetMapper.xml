@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.camelot.pmt.project.mapper.ProjectBudgetMapper" >
+  <resultMap id="BaseResultMap" type="com.camelot.pmt.project.model.ProjectBudget" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="project_id" property="projectId" jdbcType="BIGINT" />
+    <result column="actual_hours" property="actualHours" jdbcType="INTEGER" />
+    <result column="budgetary_hours" property="budgetaryHours" jdbcType="INTEGER" />
+    <result column="other" property="other" jdbcType="VARCHAR" />
+    <result column="create_user_id" property="createUserId" jdbcType="BIGINT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_user_id" property="modifyUserId" jdbcType="BIGINT" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, project_id, actual_hours, budgetary_hours, other, create_user_id, create_time, 
+    modify_user_id, modify_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from project_budget
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from project_budget
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.camelot.pmt.project.model.ProjectBudget" >
+    insert into project_budget (id, project_id, actual_hours, 
+      budgetary_hours, other, create_user_id, 
+      create_time, modify_user_id, modify_time
+      )
+    values (#{id,jdbcType=BIGINT}, #{projectId,jdbcType=BIGINT}, #{actualHours,jdbcType=INTEGER}, 
+      #{budgetaryHours,jdbcType=INTEGER}, #{other,jdbcType=VARCHAR}, #{createUserId,jdbcType=BIGINT}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=BIGINT}, #{modifyTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.camelot.pmt.project.model.ProjectBudget" >
+    insert into project_budget
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="projectId != null" >
+        project_id,
+      </if>
+      <if test="actualHours != null" >
+        actual_hours,
+      </if>
+      <if test="budgetaryHours != null" >
+        budgetary_hours,
+      </if>
+      <if test="other != null" >
+        other,
+      </if>
+      <if test="createUserId != null" >
+        create_user_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="modifyUserId != null" >
+        modify_user_id,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="projectId != null" >
+        #{projectId,jdbcType=BIGINT},
+      </if>
+      <if test="actualHours != null" >
+        #{actualHours,jdbcType=INTEGER},
+      </if>
+      <if test="budgetaryHours != null" >
+        #{budgetaryHours,jdbcType=INTEGER},
+      </if>
+      <if test="other != null" >
+        #{other,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null" >
+        #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyUserId != null" >
+        #{modifyUserId,jdbcType=BIGINT},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.camelot.pmt.project.model.ProjectBudget" >
+    update project_budget
+    <set >
+      <if test="projectId != null" >
+        project_id = #{projectId,jdbcType=BIGINT},
+      </if>
+      <if test="actualHours != null" >
+        actual_hours = #{actualHours,jdbcType=INTEGER},
+      </if>
+      <if test="budgetaryHours != null" >
+        budgetary_hours = #{budgetaryHours,jdbcType=INTEGER},
+      </if>
+      <if test="other != null" >
+        other = #{other,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null" >
+        create_user_id = #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyUserId != null" >
+        modify_user_id = #{modifyUserId,jdbcType=BIGINT},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.camelot.pmt.project.model.ProjectBudget" >
+    update project_budget
+    set project_id = #{projectId,jdbcType=BIGINT},
+      actual_hours = #{actualHours,jdbcType=INTEGER},
+      budgetary_hours = #{budgetaryHours,jdbcType=INTEGER},
+      other = #{other,jdbcType=VARCHAR},
+      create_user_id = #{createUserId,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modify_user_id = #{modifyUserId,jdbcType=BIGINT},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

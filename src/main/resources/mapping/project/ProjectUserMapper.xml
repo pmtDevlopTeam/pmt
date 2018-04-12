@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.camelot.pmt.project.mapper.ProjectUserMapper" >
+  <resultMap id="BaseResultMap" type="com.camelot.pmt.project.model.ProjectUser" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="req_id" property="reqId" jdbcType="BIGINT" />
+    <result column="project_id" property="projectId" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="pre_join_time" property="preJoinTime" jdbcType="TIMESTAMP" />
+    <result column="real_join_time" property="realJoinTime" jdbcType="TIMESTAMP" />
+    <result column="pre_out_time" property="preOutTime" jdbcType="TIMESTAMP" />
+    <result column="real_out_time" property="realOutTime" jdbcType="TIMESTAMP" />
+    <result column="user_status" property="userStatus" jdbcType="CHAR" />
+    <result column="user_pro_role" property="userProRole" jdbcType="VARCHAR" />
+    <result column="create_user_id" property="createUserId" jdbcType="BIGINT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_user_id" property="modifyUserId" jdbcType="BIGINT" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, req_id, project_id, user_id, pre_join_time, real_join_time, pre_out_time, real_out_time, 
+    user_status, user_pro_role, create_user_id, create_time, modify_user_id, modify_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from project_user
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from project_user
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.camelot.pmt.project.model.ProjectUser" >
+    insert into project_user (id, req_id, project_id, 
+      user_id, pre_join_time, real_join_time, 
+      pre_out_time, real_out_time, user_status, 
+      user_pro_role, create_user_id, create_time, 
+      modify_user_id, modify_time)
+    values (#{id,jdbcType=BIGINT}, #{reqId,jdbcType=BIGINT}, #{projectId,jdbcType=BIGINT}, 
+      #{userId,jdbcType=BIGINT}, #{preJoinTime,jdbcType=TIMESTAMP}, #{realJoinTime,jdbcType=TIMESTAMP}, 
+      #{preOutTime,jdbcType=TIMESTAMP}, #{realOutTime,jdbcType=TIMESTAMP}, #{userStatus,jdbcType=CHAR}, 
+      #{userProRole,jdbcType=VARCHAR}, #{createUserId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{modifyUserId,jdbcType=BIGINT}, #{modifyTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.camelot.pmt.project.model.ProjectUser" >
+    insert into project_user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="reqId != null" >
+        req_id,
+      </if>
+      <if test="projectId != null" >
+        project_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="preJoinTime != null" >
+        pre_join_time,
+      </if>
+      <if test="realJoinTime != null" >
+        real_join_time,
+      </if>
+      <if test="preOutTime != null" >
+        pre_out_time,
+      </if>
+      <if test="realOutTime != null" >
+        real_out_time,
+      </if>
+      <if test="userStatus != null" >
+        user_status,
+      </if>
+      <if test="userProRole != null" >
+        user_pro_role,
+      </if>
+      <if test="createUserId != null" >
+        create_user_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="modifyUserId != null" >
+        modify_user_id,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="reqId != null" >
+        #{reqId,jdbcType=BIGINT},
+      </if>
+      <if test="projectId != null" >
+        #{projectId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="preJoinTime != null" >
+        #{preJoinTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="realJoinTime != null" >
+        #{realJoinTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="preOutTime != null" >
+        #{preOutTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="realOutTime != null" >
+        #{realOutTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userStatus != null" >
+        #{userStatus,jdbcType=CHAR},
+      </if>
+      <if test="userProRole != null" >
+        #{userProRole,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null" >
+        #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyUserId != null" >
+        #{modifyUserId,jdbcType=BIGINT},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.camelot.pmt.project.model.ProjectUser" >
+    update project_user
+    <set >
+      <if test="reqId != null" >
+        req_id = #{reqId,jdbcType=BIGINT},
+      </if>
+      <if test="projectId != null" >
+        project_id = #{projectId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="preJoinTime != null" >
+        pre_join_time = #{preJoinTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="realJoinTime != null" >
+        real_join_time = #{realJoinTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="preOutTime != null" >
+        pre_out_time = #{preOutTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="realOutTime != null" >
+        real_out_time = #{realOutTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userStatus != null" >
+        user_status = #{userStatus,jdbcType=CHAR},
+      </if>
+      <if test="userProRole != null" >
+        user_pro_role = #{userProRole,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null" >
+        create_user_id = #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyUserId != null" >
+        modify_user_id = #{modifyUserId,jdbcType=BIGINT},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.camelot.pmt.project.model.ProjectUser" >
+    update project_user
+    set req_id = #{reqId,jdbcType=BIGINT},
+      project_id = #{projectId,jdbcType=BIGINT},
+      user_id = #{userId,jdbcType=BIGINT},
+      pre_join_time = #{preJoinTime,jdbcType=TIMESTAMP},
+      real_join_time = #{realJoinTime,jdbcType=TIMESTAMP},
+      pre_out_time = #{preOutTime,jdbcType=TIMESTAMP},
+      real_out_time = #{realOutTime,jdbcType=TIMESTAMP},
+      user_status = #{userStatus,jdbcType=CHAR},
+      user_pro_role = #{userProRole,jdbcType=VARCHAR},
+      create_user_id = #{createUserId,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modify_user_id = #{modifyUserId,jdbcType=BIGINT},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

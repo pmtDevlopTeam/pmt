@@ -1,9 +1,8 @@
 package com.camelot.pmt.project.mapper;
 
-import com.camelot.pmt.project.model.Demand;
-import com.camelot.pmt.project.model.DemandWithBLOBs;
+import com.camelot.pmt.project.model.ProjectMain;
 
-public interface DemandMapper {
+public interface ProjectMainMapper {
     /**
      *
      * @mbggenerated 2018-04-12
@@ -14,35 +13,35 @@ public interface DemandMapper {
      *
      * @mbggenerated 2018-04-12
      */
-    int insert(DemandWithBLOBs record);
+    int insert(ProjectMain record);
 
     /**
      *
      * @mbggenerated 2018-04-12
      */
-    int insertSelective(DemandWithBLOBs record);
+    int insertSelective(ProjectMain record);
 
     /**
      *
      * @mbggenerated 2018-04-12
      */
-    DemandWithBLOBs selectByPrimaryKey(Long id);
+    ProjectMain selectByPrimaryKey(Long id);
 
     /**
      *
      * @mbggenerated 2018-04-12
      */
-    int updateByPrimaryKeySelective(DemandWithBLOBs record);
+    int updateByPrimaryKeySelective(ProjectMain record);
 
     /**
      *
      * @mbggenerated 2018-04-12
      */
-    int updateByPrimaryKeyWithBLOBs(DemandWithBLOBs record);
+    int updateByPrimaryKeyWithBLOBs(ProjectMain record);
 
     /**
      *
      * @mbggenerated 2018-04-12
      */
-    int updateByPrimaryKey(Demand record);
+    int updateByPrimaryKey(ProjectMain record);
 }
