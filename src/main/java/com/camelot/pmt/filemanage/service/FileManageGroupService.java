@@ -8,7 +8,7 @@ import java.util.List;
 /**
  *
  * FileManageGroup 表数据服务层接口
- *
+ *张战
  */
 public interface FileManageGroupService {
     Boolean addFileManagerGroup(HttpServletRequest request, FileManageGroup fileManageGroup);//添加文件夹

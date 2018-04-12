@@ -9,7 +9,7 @@ import java.util.List;
 /**
  *
  * FileManage 表数据服务层接口
- *
+ *张战
  */
 public interface FileManageService {
     Boolean addFileManager(HttpServletRequest request, FileManage fileManage);
