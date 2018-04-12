@@ -72,6 +72,9 @@ public class RoleToUserController {
      * @return
      */
     @ApiOperation(value = "根据角色修改用户", notes = "根据角色修改用户")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "roleIds", value = "角色id（格式：1,2 其中要有子ID和父ID）", required = true, paramType = "form", dataType = "string"),
+            @ApiImplicitParam(name = "userIds", value = "用户id（格式：1,2,3,4）", required = true, paramType = "form", dataType = "string"), })
     @PostMapping(value = "/updateUserByRole")
     public JSONObject updateUserByRole(@ApiIgnore RoleToUser roleToUser) {
         ExecuteResult result;
@@ -105,6 +108,8 @@ public class RoleToUserController {
      */
     @GetMapping(value = "queryUserByRole")
     @ApiOperation(value = "根据角色id查询用户列表", notes = "根据角色id查询用户列表")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "roleId", value = "角色id", required = true, paramType = "query", dataType = "string"),})
     public JSONObject queryUserByRole(@ApiIgnore RoleToUser role) {
         ExecuteResult<List<User>> result;
         try {

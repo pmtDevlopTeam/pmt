@@ -46,16 +46,16 @@
         )
     </insert>
 
-    <!--<delete id="deleteUserByRoleId" parameterType="RoleToUser">-->
-        <!--DELETE FROM platform_user_role WHERE role_id = #{roleId}-->
-    <!--</delete>-->
+    <delete id="deleteRoleToMenu" parameterType="RoleToMenu">
+        DELETE FROM platform_role_menu WHERE role_id = #{roleId}
+    </delete>
 
-    <!--<select id="queryUserByRole" resultMap="BaseResultMap">-->
-        <!--SELECT-->
-        <!--<include refid="Base_Column_List"/>-->
-        <!--FROM platform_user_role-->
-        <!--WHERE role_id = #{roleId}-->
+    <select id="selectMenuByRoleId" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM platform_role_menu
+        WHERE role_id = #{roleId}
 
-    <!--</select>-->
+    </select>
 
 </mapper>
