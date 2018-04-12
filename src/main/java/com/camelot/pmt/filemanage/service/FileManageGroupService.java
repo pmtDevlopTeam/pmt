@@ -17,7 +17,7 @@ public interface FileManageGroupService {
 
     Boolean updateFileGroupById(FileManageGroup fileManageGroup);//修改文件夹
 
-    /*List<FileManageGroup> selectFileGroupByProjectID(FileManageGroup fileManageGroup);*/
+    /*List<FileManageGroup> selectFileGroupByProjectID(FileManageGroup fileManageGroup); */
 
     List<FileManageGroup> selectFileGroup(FileManageGroup fileManageGroup);
 }

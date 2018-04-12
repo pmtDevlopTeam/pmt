@@ -18,5 +18,5 @@ public interface FileManageService {
 
     Boolean updateFileById(FileManage fileManage);//文件修改
 
-    List<FileManage> selectFileByGroupID(FileManageGroup fileManageGroup);//文件详细信息查询
+    List<FileManage> selectFileByGroupID(FileManageGroup fileManageGroup);// 文件详细信息查询
 }
