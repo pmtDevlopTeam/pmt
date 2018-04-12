@@ -2,7 +2,10 @@ package com.camelot.pmt.platform.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.camelot.pmt.platform.model.Menu;
+import com.camelot.pmt.platform.model.User;
 import com.camelot.pmt.platform.service.MenuService;
+import com.camelot.pmt.platform.shiro.ShiroUtils;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -22,6 +25,8 @@ public class MenuController {
 
     @Autowired
     MenuService menuService;
+    @Autowired
+    ShiroUtils shiroUtils;
 
     @ApiOperation(value = "创建菜单接口", notes = "创建单个菜单")
     @RequestMapping(value = "/createMenu", method = RequestMethod.POST)
@@ -52,6 +57,7 @@ public class MenuController {
     @ApiOperation(value = "查询全部菜单树接口", notes = "查询全部菜单树")
     @RequestMapping(value = "/queryAllMenu", method = RequestMethod.POST)
     public JSONObject queryAllMenu() {
+    	User user = (User)ShiroUtils.getSessionAttribute("user");
         return menuService.queryAllMenu();
     }
 
