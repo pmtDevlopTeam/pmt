@@ -1,6 +1,10 @@
 package com.camelot.pmt.platform.service;
 
+import java.util.List;
+
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.plugins.pagination.Pagination;
 import com.camelot.pmt.platform.model.Menu;
 
 /**
@@ -60,4 +64,13 @@ public interface MenuService {
      * @return
      */
     JSONObject queryListMenuByMenuId(String menuId);
+    
+    
+    /**
+     * 菜单分页测试
+     * @param page
+     * @param state
+     * @return
+     */
+    Page<Menu> selectMenuPage(Page<Menu> page);
 }

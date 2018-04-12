@@ -1,6 +1,8 @@
 package com.camelot.pmt.platform.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.plugins.pagination.Pagination;
 import com.camelot.pmt.platform.common.ApiResponse;
 import com.camelot.pmt.platform.mapper.MenuMapper;
 import com.camelot.pmt.platform.model.Menu;
@@ -108,5 +110,11 @@ public class MenuServiceImpl implements MenuService {
         }
         return ApiResponse.error();
 	}
+
+	@Override
+	public Page<Menu> selectMenuPage(Page<Menu> page) {
+		return page.setRecords(menuMapper.selectMenuList(page));
+	}
+
 
 }

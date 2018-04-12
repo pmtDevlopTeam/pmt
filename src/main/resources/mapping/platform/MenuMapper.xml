@@ -92,5 +92,9 @@
     <select id="queryAllMenu" resultMap="BaseResultMap">
        select <include refid="Base_Column_List" /> from platform_menu
     </select>
+    
+    <select id="selectMenuList" resultMap="BaseResultMap">
+       select <include refid="Base_Column_List" /> from platform_menu
+    </select>
 
 </mapper>

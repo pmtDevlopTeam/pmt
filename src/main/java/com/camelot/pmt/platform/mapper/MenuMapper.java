@@ -1,6 +1,7 @@
 package com.camelot.pmt.platform.mapper;
 
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.plugins.pagination.Pagination;
 import com.camelot.pmt.platform.model.Menu;
 
 import java.util.List;
@@ -55,4 +56,11 @@ public interface MenuMapper {
      */
     List<Menu> queryAllMenu();
     
+    /**
+     * 菜单分页测试
+     * @param page
+     * @param state
+     * @return
+     */
+    List<Menu> selectMenuList(Pagination page);
 }

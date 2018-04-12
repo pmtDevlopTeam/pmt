@@ -1,6 +1,8 @@
 package com.camelot.pmt.platform.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.plugins.Page;
+import com.camelot.pmt.platform.common.ApiResponse;
 import com.camelot.pmt.platform.model.Menu;
 import com.camelot.pmt.platform.model.User;
 import com.camelot.pmt.platform.service.MenuService;
@@ -65,6 +67,15 @@ public class MenuController {
     @RequestMapping(value = "/queryListMenuByMenuId", method = RequestMethod.POST)
     public JSONObject queryListMenuByMenuId(String menuId) {
         return menuService.queryListMenuByMenuId(menuId);
+    }
+
+    @ApiOperation(value = "查询全部菜单树接口", notes = "查询全部菜单树")
+    @RequestMapping(value = "/queryAllMenuList", method = RequestMethod.POST)
+    public JSONObject queryAllMenuList(Integer j, Integer k) {
+		Page<Menu> page = new Page<Menu>(j, k);
+		Page<Menu> selectMenuPage = menuService.selectMenuPage(page);
+		JSONObject success = ApiResponse.success(selectMenuPage);
+        return success;
     }
 
 }
