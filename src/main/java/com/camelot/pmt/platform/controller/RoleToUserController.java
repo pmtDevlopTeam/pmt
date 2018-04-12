@@ -36,7 +36,7 @@ public class RoleToUserController {
     @PostMapping(value = "/addUserByRole")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "roleIds", value = "角色id（格式：1,2 其中要有子ID和父ID）", required = true, paramType = "form", dataType = "string"),
-            @ApiImplicitParam(name = "userIds", value = "用户id（格式：1,2,3,4）", required = true, paramType = "form", dataType = "string"), })
+            @ApiImplicitParam(name = "userIds", value = "用户id（格式：1,2,3,4）", required = true, paramType = "form", dataType = "string"),})
     public JSONObject addUserByRole(@ApiIgnore RoleToUser roleToUser) {
         ExecuteResult result;
         try {
@@ -44,7 +44,7 @@ public class RoleToUserController {
             //等获取登录人ID
             roleToUser.setCreateUserId("ligen12138");
             roleToUser.setModifyUserId("ligen12138");
-            if(StringUtils.isEmpty(roleToUser.getCreateUserId()) && StringUtils.isEmpty(roleToUser.getModifyUserId())){
+            if (StringUtils.isEmpty(roleToUser.getCreateUserId()) && StringUtils.isEmpty(roleToUser.getModifyUserId())) {
                 ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
             }
             //
@@ -67,14 +67,14 @@ public class RoleToUserController {
 
     /**
      * 根据角色修改用户
-     * 
+     *
      * @param roleToUser
      * @return
      */
     @ApiOperation(value = "根据角色修改用户", notes = "根据角色修改用户")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "roleIds", value = "角色id（格式：1,2 其中要有子ID和父ID）", required = true, paramType = "form", dataType = "string"),
-            @ApiImplicitParam(name = "userIds", value = "用户id（格式：1,2,3,4）", required = true, paramType = "form", dataType = "string"), })
+            @ApiImplicitParam(name = "userIds", value = "用户id（格式：1,2,3,4）", required = true, paramType = "form", dataType = "string"),})
     @PostMapping(value = "/updateUserByRole")
     public JSONObject updateUserByRole(@ApiIgnore RoleToUser roleToUser) {
         ExecuteResult result;
@@ -82,7 +82,7 @@ public class RoleToUserController {
 
             //等获取登录人ID
             roleToUser.setModifyUserId("ligen12138");
-            if(StringUtils.isEmpty(roleToUser.getModifyUserId())){
+            if (StringUtils.isEmpty(roleToUser.getModifyUserId())) {
                 ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
             }
             //
@@ -103,7 +103,7 @@ public class RoleToUserController {
 
     /**
      * 根据角色id查询用户列表
-     * 
+     *
      * @return
      */
     @GetMapping(value = "queryUserByRole")

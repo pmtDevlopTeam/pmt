@@ -36,31 +36,32 @@ public class RoleToMenuController {
     @PostMapping(value = "/addRoleToMenu")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "roleId", value = "角色id", required = true, paramType = "form", dataType = "string"),
-            @ApiImplicitParam(name = "menuIds", value = "菜单ids（格式：1,2,3,4）要有子id和父id", required = true, paramType = "form", dataType = "string"), })
-    public JSONObject addRoleToMenu(@ApiIgnore RoleToMenu roleToMenu){
+            @ApiImplicitParam(name = "menuIds", value = "菜单ids（格式：1,2,3,4）要有子id和父id", required = true, paramType = "form", dataType = "string"),})
+    public JSONObject addRoleToMenu(@ApiIgnore RoleToMenu roleToMenu) {
         ExecuteResult<RoleToMenu> result;
         try {
             //-----------等获取登录用户ID------
             roleToMenu.setCreateUserId("ligen12138");
-            if(StringUtils.isEmpty(roleToMenu.getCreateUserId())) {
+            if (StringUtils.isEmpty(roleToMenu.getCreateUserId())) {
                 return ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
             }
             //----------------------------------
-            if(StringUtils.isEmpty(roleToMenu.getRoleId()) && StringUtils.isEmpty(roleToMenu.getMenuId())) {
+            if (StringUtils.isEmpty(roleToMenu.getRoleId()) && StringUtils.isEmpty(roleToMenu.getMenuId())) {
                 return ApiResponse.jsonData(APIStatus.ERROR_400);
             }
             result = roleToMenuService.addRoleToMenu(roleToMenu);
-            if(result.getResult() == null){
+            if (result.getResult() == null) {
                 return ApiResponse.jsonData(APIStatus.ERROR_400);
             }
             return ApiResponse.jsonData(APIStatus.OK_200, result.getResult());
-        } catch (Exception e){
+        } catch (Exception e) {
             return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
         }
     }
 
     /**
      * 修改角色权限菜单
+     *
      * @param roleToMenu
      * @return
      */
@@ -68,26 +69,26 @@ public class RoleToMenuController {
     @ApiOperation(value = "修改角色绑定权限", notes = "修改角色绑定权限")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "roleId", value = "角色id", required = true, paramType = "form", dataType = "string"),
-            @ApiImplicitParam(name = "menuIds", value = "菜单ids（格式：1,2,3,4 要有子id和父id）", required = true, paramType = "form", dataType = "string"), })
-    public JSONObject updateRoleToMenu(@ApiIgnore RoleToMenu roleToMenu){
+            @ApiImplicitParam(name = "menuIds", value = "菜单ids（格式：1,2,3,4 要有子id和父id）", required = true, paramType = "form", dataType = "string"),})
+    public JSONObject updateRoleToMenu(@ApiIgnore RoleToMenu roleToMenu) {
         ExecuteResult result;
         try {
             //-----------等获取登录用户ID------
             roleToMenu.setCreateUserId("ligen12138");
-            if(StringUtils.isEmpty(roleToMenu.getCreateUserId())) {
+            if (StringUtils.isEmpty(roleToMenu.getCreateUserId())) {
                 return ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
             }
             //----------------------------------
-            if(StringUtils.isEmpty(roleToMenu.getRoleId()) && StringUtils.isEmpty(roleToMenu.getMenuIds())) {
+            if (StringUtils.isEmpty(roleToMenu.getRoleId()) && StringUtils.isEmpty(roleToMenu.getMenuIds())) {
                 return ApiResponse.jsonData(APIStatus.ERROR_400);
             }
 
             result = roleToMenuService.updateRoleToMenu(roleToMenu);
-            if(result.getResult() == null) {
+            if (result.getResult() == null) {
                 return ApiResponse.jsonData(APIStatus.ERROR_400);
             }
             return ApiResponse.success(result.getResult());
-        } catch (Exception e){
+        } catch (Exception e) {
             return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
         }
     }
@@ -97,15 +98,15 @@ public class RoleToMenuController {
             @ApiImplicitParam(name = "roleId", value = "角色id", required = true, paramType = "query", dataType = "string"),})
 
     @GetMapping(value = "/selectMenuByRoleId")
-    public JSONObject selectMenuByRoleId(@ApiIgnore RoleToMenu roleToMenu){
+    public JSONObject selectMenuByRoleId(@ApiIgnore RoleToMenu roleToMenu) {
         ExecuteResult<List<Menu>> result;
         try {
-            if(StringUtils.isEmpty(roleToMenu.getRoleId())){
+            if (StringUtils.isEmpty(roleToMenu.getRoleId())) {
                 return ApiResponse.jsonData(APIStatus.ERROR_400);
             }
             result = roleToMenuService.selectMenuByRoleId(roleToMenu);
             return ApiResponse.success(result.getResult());
-        } catch (Exception e){
+        } catch (Exception e) {
             return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
         }
     }

@@ -26,8 +26,8 @@ public class RoleServiceImpl implements RoleService {
 
     /**
      * 查询角色集合
-     * 
-     * @return ExecuteResult<List<Role>>
+     *
+     * @return ExecuteResult<List   <   Role>>
      */
     @Override
     public ExecuteResult<List<Tree<Role>>> queryRoleArray() {
@@ -61,7 +61,7 @@ public class RoleServiceImpl implements RoleService {
 
     /**
      * 添加角色
-     * 
+     *
      * @param role
      * @return ExecuteResult<Role>
      */
@@ -81,7 +81,7 @@ public class RoleServiceImpl implements RoleService {
 
     /**
      * 修改角色
-     * 
+     *
      * @param role
      * @return
      */
@@ -102,7 +102,7 @@ public class RoleServiceImpl implements RoleService {
 
     /**
      * 删除角色
-     * 
+     *
      * @param id
      * @return
      */
@@ -122,6 +122,7 @@ public class RoleServiceImpl implements RoleService {
 
     /**
      * 验证角色名称是否可用
+     *
      * @param role
      * @return
      */
@@ -130,11 +131,11 @@ public class RoleServiceImpl implements RoleService {
         ExecuteResult result = new ExecuteResult();
         try {
             List<Role> list = roleMapper.getRoleNameVerification(role);
-            if(CollectionUtils.isEmpty(list)){
+            if (CollectionUtils.isEmpty(list)) {
                 return result;
             }
             result.setResult(list);
-        } catch (Exception e){
+        } catch (Exception e) {
             LOGGER.error(e.getMessage());
             throw new RuntimeException(e);
         }
@@ -143,7 +144,7 @@ public class RoleServiceImpl implements RoleService {
 
     /**
      * 转换实体 添加后台数据
-     * 
+     *
      * @param r
      * @return
      * @throws Exception
@@ -162,7 +163,7 @@ public class RoleServiceImpl implements RoleService {
             role.setParentId(STATUS);
         }
         role.setRoleId(UUID.randomUUID().toString().replaceAll("-", ""));
-        if(r.getState() != null) {
+        if (r.getState() != null) {
             role.setState(r.getState());
         } else {
             role.setState(STATUS);

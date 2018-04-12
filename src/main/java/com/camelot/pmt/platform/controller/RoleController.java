@@ -23,7 +23,6 @@ import java.util.List;
 
 /**
  * 角色控制层
- *
  */
 @RestController
 @RequestMapping(value = "/platform/role")
@@ -38,25 +37,25 @@ public class RoleController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "roleName", value = "角色名称", required = true, paramType = "query", dataType = "string"),})
 
-    public JSONObject checkRoleName(@ApiIgnore Role role){
+    public JSONObject checkRoleName(@ApiIgnore Role role) {
         ExecuteResult result;
         try {
-            if(StringUtils.isEmpty(role.getRoleName())){
+            if (StringUtils.isEmpty(role.getRoleName())) {
                 return ApiResponse.jsonData(APIStatus.ERROR_400);
             }
             result = roleService.getRoleNameVerification(role);
-            if(result.getResult() == null) {
+            if (result.getResult() == null) {
                 return ApiResponse.jsonData(APIStatus.OK_205);
             }
             return ApiResponse.jsonData(APIStatus.OK_206);
-        } catch (Exception e){
+        } catch (Exception e) {
             return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
         }
     }
 
     /**
      * 查询角色集合
-     * 
+     *
      * @return
      */
     // @RequiresPermissions(value = "/platform/role/queryRoleArray")
@@ -81,14 +80,14 @@ public class RoleController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "parentId", value = "角色父id", required = false, paramType = "form", dataType = "string"),
             @ApiImplicitParam(name = "state", value = "角色状态", required = false, paramType = "form", dataType = "string"),
-            @ApiImplicitParam(name = "roleName", value = "角色名称", required = true, paramType = "form", dataType = "string"), })
+            @ApiImplicitParam(name = "roleName", value = "角色名称", required = true, paramType = "form", dataType = "string"),})
     public JSONObject addRole(@ApiIgnore Role role) {
         ExecuteResult<Role> result;
         try {
             //等获取登录人ID
             role.setCreateUserId("ligen12138");
             role.setModifyUserId("ligen12138");
-            if(StringUtils.isEmpty(role.getCreateUserId()) && StringUtils.isEmpty(role.getModifyUserId())){
+            if (StringUtils.isEmpty(role.getCreateUserId()) && StringUtils.isEmpty(role.getModifyUserId())) {
                 ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
             }
             //
@@ -111,14 +110,14 @@ public class RoleController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "roleId", value = "角色id", required = true, paramType = "form", dataType = "string"),
             @ApiImplicitParam(name = "state", value = "角色状态", required = false, paramType = "form", dataType = "string"),
-            @ApiImplicitParam(name = "roleName", value = "角色名称", required = true, paramType = "form", dataType = "string"), })
+            @ApiImplicitParam(name = "roleName", value = "角色名称", required = true, paramType = "form", dataType = "string"),})
     public JSONObject editRole(@ApiIgnore Role role) {
         ExecuteResult<Role> result;
         try {
 
             //等获取登录人ID
             role.setModifyUserId("ligen12138");
-            if(StringUtils.isEmpty(role.getModifyUserId())){
+            if (StringUtils.isEmpty(role.getModifyUserId())) {
                 ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
             }
             //
@@ -138,7 +137,7 @@ public class RoleController {
     @ApiOperation(value = "删除角色", notes = "删除角色")
     @PostMapping(value = "/deleteRole")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "roleId", value = "角色32位id", required = true, paramType = "form", dataType = "string"), })
+            @ApiImplicitParam(name = "roleId", value = "角色32位id", required = true, paramType = "form", dataType = "string"),})
     public JSONObject deleteRole(@ApiIgnore Role role) {
         ExecuteResult<Role> result;
         try {
