@@ -14,9 +14,9 @@ public class Warning {
     private String warnType;
 
     /**
-     * 负责人id
+     * 项目id
      */
-    private Long userId;
+    private Long proId;
 
     /**
      * 自定义预警时间（项目和任务用到）
@@ -59,6 +59,11 @@ public class Warning {
     private Date modifyTime;
 
     /**
+     * 任务id
+     */
+    private Long taskId;
+
+    /**
      * 预警id
      * @return id 预警id
      */
@@ -91,19 +96,19 @@ public class Warning {
     }
 
     /**
-     * 负责人id
-     * @return user_id 负责人id
+     * 项目id
+     * @return pro_id 项目id
      */
-    public Long getUserId() {
-        return userId;
+    public Long getProId() {
+        return proId;
     }
 
     /**
-     * 负责人id
-     * @param userId 负责人id
+     * 项目id
+     * @param proId 项目id
      */
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setProId(Long proId) {
+        this.proId = proId;
     }
 
     /**
@@ -232,5 +237,21 @@ public class Warning {
      */
     public void setModifyTime(Date modifyTime) {
         this.modifyTime = modifyTime;
+    }
+
+    /**
+     * 任务id
+     * @return task_id 任务id
+     */
+    public Long getTaskId() {
+        return taskId;
+    }
+
+    /**
+     * 任务id
+     * @param taskId 任务id
+     */
+    public void setTaskId(Long taskId) {
+        this.taskId = taskId;
     }
 }
