@@ -80,6 +80,7 @@ public class RoleController {
     @PostMapping(value = "addRole")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "parentId", value = "角色父id", required = false, paramType = "form", dataType = "string"),
+            @ApiImplicitParam(name = "state", value = "角色状态", required = false, paramType = "form", dataType = "string"),
             @ApiImplicitParam(name = "roleName", value = "角色名称", required = true, paramType = "form", dataType = "string"), })
     public JSONObject addRole(@ApiIgnore Role role) {
         ExecuteResult<Role> result;
@@ -109,6 +110,7 @@ public class RoleController {
     @PostMapping(value = "/editRole")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "roleId", value = "角色id", required = true, paramType = "form", dataType = "string"),
+            @ApiImplicitParam(name = "state", value = "角色状态", required = false, paramType = "form", dataType = "string"),
             @ApiImplicitParam(name = "roleName", value = "角色名称", required = true, paramType = "form", dataType = "string"), })
     public JSONObject editRole(@ApiIgnore Role role) {
         ExecuteResult<Role> result;

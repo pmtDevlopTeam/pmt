@@ -91,6 +91,9 @@
             <if test="modifyUserId != null">
                 modify_user_id = #{modifyUserId},
             </if>
+            <if test="state != null">
+                state = #{state},
+            </if>
         </set>
         WHERE role_id = #{roleId}
     </update>

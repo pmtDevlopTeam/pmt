@@ -162,7 +162,11 @@ public class RoleServiceImpl implements RoleService {
             role.setParentId(STATUS);
         }
         role.setRoleId(UUID.randomUUID().toString().replaceAll("-", ""));
-        role.setState(STATUS);
+        if(r.getState() != null) {
+            role.setState(r.getState());
+        } else {
+            role.setState(STATUS);
+        }
         return role;
     }
 }
