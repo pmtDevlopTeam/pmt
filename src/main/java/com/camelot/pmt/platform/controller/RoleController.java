@@ -8,6 +8,8 @@ import com.camelot.pmt.platform.model.Role;
 import com.camelot.pmt.platform.service.RoleService;
 import com.camelot.pmt.platform.util.Tree;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -33,6 +35,9 @@ public class RoleController {
 
     @ApiOperation(value = "验证角色名称是否存在", notes = "验证角色名称是否存在")
     @GetMapping(value = "/getRoleNameVerification")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "roleName", value = "角色名称", required = true, paramType = "form", dataType = "string"),})
+
     public JSONObject getRoleNameVerification(@ApiIgnore Role role){
         ExecuteResult result;
         try {
@@ -73,6 +78,9 @@ public class RoleController {
     // @RequiresPermissions(value = "/platform/role/addRole")
     @ApiOperation(value = "添加角色", notes = "添加角色")
     @PostMapping(value = "addRole")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "parentId", value = "角色父id", required = false, paramType = "form", dataType = "string"),
+            @ApiImplicitParam(name = "roleName", value = "角色名称", required = true, paramType = "form", dataType = "string"), })
     public JSONObject addRole(@ApiIgnore Role role) {
         ExecuteResult<Role> result;
         try {
@@ -99,6 +107,8 @@ public class RoleController {
 
     @ApiOperation(value = "编辑角色", notes = "编辑角色")
     @PostMapping(value = "/editRole")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "roleName", value = "角色名称", required = true, paramType = "form", dataType = "string"), })
     public JSONObject editRole(@ApiIgnore Role role) {
         ExecuteResult<Role> result;
         try {
@@ -124,6 +134,8 @@ public class RoleController {
 
     @ApiOperation(value = "删除角色", notes = "删除角色")
     @PostMapping(value = "/deleteRole")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "roleId", value = "角色32位id", required = true, paramType = "form", dataType = "string"), })
     public JSONObject deleteRole(@ApiIgnore Role role) {
         ExecuteResult<Role> result;
         try {
