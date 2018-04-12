@@ -1,6 +1,7 @@
 package com.camelot.pmt.testmanage.casemanage.model;
 
 import java.util.Date;
+import java.util.List;
 
 public class UseCaseImplement {
     private Long id;
@@ -12,6 +13,8 @@ public class UseCaseImplement {
     private Date executeTime;
 
     private Long executeUserId;
+
+    private List<UseCaseProcedureImplement> detail;
 
     public Long getId() {
         return id;
@@ -51,5 +54,13 @@ public class UseCaseImplement {
 
     public void setExecuteUserId(Long executeUserId) {
         this.executeUserId = executeUserId;
+    }
+
+    public List<UseCaseProcedureImplement> getDetail() {
+        return detail;
+    }
+
+    public void setDetail(List<UseCaseProcedureImplement> detail) {
+        this.detail = detail;
     }
 }

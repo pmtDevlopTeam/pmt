@@ -1,5 +1,8 @@
 package com.camelot.pmt.testmanage.casemanage.service;
 
-public interface UseCaseService {
+import com.camelot.pmt.platform.utils.PageBean;
 
+public interface UseCaseService {
+	
+	public void selectUseCase(PageBean pageBean);
 }
