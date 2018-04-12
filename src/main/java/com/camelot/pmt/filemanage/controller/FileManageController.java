@@ -36,8 +36,8 @@ public class FileManageController {
         return null;
     }
     @RequestMapping("/updatefile")
-    public Boolean updateFileByID(FileManage fileManage){
-        Boolean  b=fileManageService.updateFileById(fileManage);//文件修改
+    public Boolean updateFileByID(HttpServletRequest request,FileManage fileManage){
+        Boolean  b=fileManageService.updateFileById(request,fileManage);//文件修改
         return null;
     }
     @RequestMapping("/selectfile")

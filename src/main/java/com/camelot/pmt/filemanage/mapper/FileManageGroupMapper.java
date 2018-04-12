@@ -21,4 +21,7 @@ public interface FileManageGroupMapper {
 
     List<FileManageGroup> selectFileGroup(FileManageGroup fileManageGroup);
 
+    List<Long> selectFileManagerGroupByParentId(Long id);
+
+    void deleteBatchFileGroupById(List<Long> fileManageGroupIds);
 }

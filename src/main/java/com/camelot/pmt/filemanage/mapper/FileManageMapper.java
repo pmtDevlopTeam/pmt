@@ -20,4 +20,8 @@ public interface FileManageMapper {
     int updateByPrimaryKey(FileManage record);
 
     List<FileManage> selectFileByGroupID(Long id);
+
+    List selectFileManagerByGroupId(Long id);
+
+    void deleteBatchFileById(List fileManagerIds);
 }

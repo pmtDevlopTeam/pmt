@@ -34,21 +34,14 @@ public class FileManageGroupController {
         return null;
     }
     @RequestMapping("/updatefilegroup")
-    public Boolean updateFileGroupById(FileManageGroup fileManageGroup){
-      Boolean b= fileManageGroupService.updateFileGroupById(fileManageGroup);//修改文件夹
+    public Boolean updateFileGroupById(HttpServletRequest request,FileManageGroup fileManageGroup){
+      Boolean b= fileManageGroupService.updateFileGroupById(request,fileManageGroup);//修改文件夹
      return null;
     }
-   /* @RequestMapping("/selectFilegroupByProjectID")
-    @ResponseBody
-    public String  selectFileGroupByProjectID(FileManageGroup fileManageGroup){
-      List<FileManageGroup> filemanagegroup=fileManageGroupService.selectFileGroup(fileManageGroup);
-        String s = filemanagegroup.toString();
-        return s;
-    }*/
    @RequestMapping("/selectFileGroup")
     @ResponseBody
     public String selectFileGroupByParentID(FileManageGroup fileManageGroup){
-      List<FileManageGroup> filemanagegroup=fileManageGroupService.selectFileGroup(fileManageGroup);
+      List<FileManageGroup> filemanagegroup=fileManageGroupService.selectFileGroup(fileManageGroup);//根据条件查询文件夹
         String s = filemanagegroup.toString();
         return s;
 

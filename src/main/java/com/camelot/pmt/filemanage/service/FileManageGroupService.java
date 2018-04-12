@@ -15,9 +15,7 @@ public interface FileManageGroupService {
 
     Boolean deleteFileGroup(FileManageGroup fileManageGroup);//删除文件夹
 
-    Boolean updateFileGroupById(FileManageGroup fileManageGroup);//修改文件夹
+    Boolean updateFileGroupById(HttpServletRequest request,FileManageGroup fileManageGroup);//修改文件夹
 
-    /*List<FileManageGroup> selectFileGroupByProjectID(FileManageGroup fileManageGroup); */
-
-    List<FileManageGroup> selectFileGroup(FileManageGroup fileManageGroup);
+    List<FileManageGroup> selectFileGroup(FileManageGroup fileManageGroup);//通过条件查询文件夹
 }

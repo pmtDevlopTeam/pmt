@@ -168,9 +168,19 @@
      <if test="projectId!=null">
         project_id=#{projectId}
       </if>
-     <!-- <if test="parentID!=null">
+     <if test="parentId!=null">
         parent_id=#{parentId}
-      </if> -->
+      </if>
     </where>
   </select>
+  <select id="selectFileManagerGroupByParentId" parameterType="Long" resultType="Long">
+    select id from file_manage_group where parent_id=#{parentId}
+  </select>
+  <delete id="deleteBatchFileGroupById" parameterType="Long">
+  delete from file_manage_group where id in(
+    <foreach collection="list" item="q" separator=",">
+    #{q}
+    </foreach>
+  )
+ </delete>
 </mapper>

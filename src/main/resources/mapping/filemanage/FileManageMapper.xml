@@ -149,4 +149,14 @@
   <select id="selectFileByGroupID" parameterType="java.lang.Long" resultType="com.camelot.pmt.filemanage.model.FileManage">
     select <include refid="Base_Column_List" /> from file_manage where group_id=#{id}
   </select>
+<select id="selectFileManagerByGroupId" resultType="Long" parameterType="Long">
+  select id from file_manage where group_id=#{id}
+</select>
+  <delete id="deleteBatchFileById" parameterType="Long">
+  DELETE from file_manage where id in(
+    <foreach collection="list" item="d" separator=",">
+      #{d}
+    </foreach>
+    )
+</delete>
 </mapper>
