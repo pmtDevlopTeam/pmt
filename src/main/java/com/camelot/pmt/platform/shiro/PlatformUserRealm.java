@@ -17,10 +17,11 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.camelot.pmt.platform.menu.service.MenuService;
-import com.camelot.pmt.platform.user.model.UserModel;
-import com.camelot.pmt.platform.user.service.UserService;
-import com.camelot.pmt.platform.utils.ExecuteResult;
+import com.camelot.pmt.platform.common.ExecuteResult;
+import com.camelot.pmt.platform.model.User;
+import com.camelot.pmt.platform.service.MenuService;
+import com.camelot.pmt.platform.service.UserService;
+
 
 /**
  * 认证
@@ -65,11 +66,11 @@ public class PlatformUserRealm extends AuthorizingRealm {
         String logincode = (String) token.getPrincipal();
         String password = new String((char[]) token.getCredentials());
         System.out.println(logincode + "---" + password);
-        UserModel userModel = new UserModel();
+        User userModel = new User();
         userModel.setLoginCode(logincode);
         userModel.setPassword(password);
-        ExecuteResult<UserModel> queryLoginCodeAndPassword = userService.queryLoginCodeAndPassword(userModel);
-        UserModel user = queryLoginCodeAndPassword.getResult();
+        ExecuteResult<User> queryLoginCodeAndPassword = userService.queryLoginCodeAndPassword(userModel);
+        User user = queryLoginCodeAndPassword.getResult();
 
         // 账号不存在
         if (user == null) {
