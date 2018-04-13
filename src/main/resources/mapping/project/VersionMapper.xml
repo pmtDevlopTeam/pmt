@@ -1,164 +1,204 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.camelot.pmt.project.mapper.VersionMapper" >
-  <resultMap id="BaseResultMap" type="com.camelot.pmt.project.model.Version" >
-    <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="project_id" property="projectId" jdbcType="BIGINT" />
-    <result column="version" property="version" jdbcType="VARCHAR" />
-    <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
-    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
-    <result column="version_name" property="versionName" jdbcType="VARCHAR" />
-    <result column="version_type" property="versionType" jdbcType="CHAR" />
-    <result column="create_user_id" property="createUserId" jdbcType="VARCHAR" />
-    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-    <result column="modify_user_id" property="modifyUserId" jdbcType="VARCHAR" />
-    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.camelot.pmt.project.mapper.VersionMapper">
+  <resultMap id="BaseResultMap" type="com.camelot.pmt.project.model.Version">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="project_id" jdbcType="BIGINT" property="projectId" />
+    <result column="version" jdbcType="VARCHAR" property="version" />
+    <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="version_name" jdbcType="VARCHAR" property="versionName" />
+    <result column="version_type" jdbcType="CHAR" property="versionType" />
+    <result column="create_user_id" jdbcType="VARCHAR" property="createUserId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modify_user_id" jdbcType="VARCHAR" property="modifyUserId" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
   </resultMap>
-  <sql id="Base_Column_List" >
-    id, project_id, version, start_time, end_time, version_name, version_type, create_user_id, 
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.camelot.pmt.project.model.Version">
+    <result column="remarks" jdbcType="LONGVARCHAR" property="remarks" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, project_id, version, start_time, end_time, version_name, version_type, create_user_id,
     create_time, modify_user_id, modify_time
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select 
+  <sql id="Blob_Column_List">
+    remarks
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+    select
     <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
     from version
     where id = #{id,jdbcType=BIGINT}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from version
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.camelot.pmt.project.model.Version" >
-    insert into version (id, project_id, version, 
-      start_time, end_time, version_name, 
-      version_type, create_user_id, create_time, 
-      modify_user_id, modify_time)
-    values (#{id,jdbcType=BIGINT}, #{projectId,jdbcType=BIGINT}, #{version,jdbcType=VARCHAR}, 
-      #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, #{versionName,jdbcType=VARCHAR}, 
-      #{versionType,jdbcType=CHAR}, #{createUserId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{modifyUserId,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP})
+  <insert id="insert" parameterType="com.camelot.pmt.project.model.Version">
+    insert into version (id, project_id, version,
+    start_time, end_time, version_name,
+    version_type, create_user_id, create_time,
+    modify_user_id, modify_time, remarks
+    )
+    values (#{id,jdbcType=BIGINT}, #{projectId,jdbcType=BIGINT}, #{version,jdbcType=VARCHAR},
+    #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, #{versionName,jdbcType=VARCHAR},
+    #{versionType,jdbcType=CHAR}, #{createUserId,jdbcType=VARCHAR}, now(),
+    #{modifyUserId,jdbcType=VARCHAR}, now(), #{remarks,jdbcType=LONGVARCHAR}
+    )
   </insert>
-  <insert id="insertSelective" parameterType="com.camelot.pmt.project.model.Version" >
+  <insert id="insertSelective" parameterType="com.camelot.pmt.project.model.Version">
     insert into version
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
         id,
       </if>
-      <if test="projectId != null" >
+      <if test="projectId != null">
         project_id,
       </if>
-      <if test="version != null" >
+      <if test="version != null">
         version,
       </if>
-      <if test="startTime != null" >
+      <if test="startTime != null">
         start_time,
       </if>
-      <if test="endTime != null" >
+      <if test="endTime != null">
         end_time,
       </if>
-      <if test="versionName != null" >
+      <if test="versionName != null">
         version_name,
       </if>
-      <if test="versionType != null" >
+      <if test="versionType != null">
         version_type,
       </if>
-      <if test="createUserId != null" >
+      <if test="createUserId != null">
         create_user_id,
       </if>
-      <if test="createTime != null" >
+      <if test="createTime != null">
         create_time,
       </if>
-      <if test="modifyUserId != null" >
+      <if test="modifyUserId != null">
         modify_user_id,
       </if>
-      <if test="modifyTime != null" >
+      <if test="modifyTime != null">
         modify_time,
       </if>
+      <if test="remarks != null">
+        remarks,
+      </if>
     </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
         #{id,jdbcType=BIGINT},
       </if>
-      <if test="projectId != null" >
+      <if test="projectId != null">
         #{projectId,jdbcType=BIGINT},
       </if>
-      <if test="version != null" >
+      <if test="version != null">
         #{version,jdbcType=VARCHAR},
       </if>
-      <if test="startTime != null" >
+      <if test="startTime != null">
         #{startTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="endTime != null" >
+      <if test="endTime != null">
         #{endTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="versionName != null" >
+      <if test="versionName != null">
         #{versionName,jdbcType=VARCHAR},
       </if>
-      <if test="versionType != null" >
+      <if test="versionType != null">
         #{versionType,jdbcType=CHAR},
       </if>
-      <if test="createUserId != null" >
+      <if test="createUserId != null">
         #{createUserId,jdbcType=VARCHAR},
       </if>
-      <if test="createTime != null" >
-        #{createTime,jdbcType=TIMESTAMP},
+      <if test="createTime != null">
+        now(),
       </if>
-      <if test="modifyUserId != null" >
+      <if test="modifyUserId != null">
         #{modifyUserId,jdbcType=VARCHAR},
       </if>
-      <if test="modifyTime != null" >
-        #{modifyTime,jdbcType=TIMESTAMP},
+      <if test="modifyTime != null">
+        now(),
+      </if>
+      <if test="remarks != null">
+        #{remarks,jdbcType=LONGVARCHAR},
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.camelot.pmt.project.model.Version" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.camelot.pmt.project.model.Version">
     update version
-    <set >
-      <if test="projectId != null" >
+    <set>
+      <if test="projectId != null">
         project_id = #{projectId,jdbcType=BIGINT},
       </if>
-      <if test="version != null" >
+      <if test="version != null">
         version = #{version,jdbcType=VARCHAR},
       </if>
-      <if test="startTime != null" >
+      <if test="startTime != null">
         start_time = #{startTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="endTime != null" >
+      <if test="endTime != null">
         end_time = #{endTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="versionName != null" >
+      <if test="versionName != null">
         version_name = #{versionName,jdbcType=VARCHAR},
       </if>
-      <if test="versionType != null" >
+      <if test="versionType != null">
         version_type = #{versionType,jdbcType=CHAR},
       </if>
-      <if test="createUserId != null" >
+      <if test="createUserId != null">
         create_user_id = #{createUserId,jdbcType=VARCHAR},
       </if>
-      <if test="createTime != null" >
-        create_time = #{createTime,jdbcType=TIMESTAMP},
+      <if test="createTime != null">
+        create_time = now(),
       </if>
-      <if test="modifyUserId != null" >
+      <if test="modifyUserId != null">
         modify_user_id = #{modifyUserId,jdbcType=VARCHAR},
       </if>
-      <if test="modifyTime != null" >
-        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      <if test="modifyTime != null">
+        modify_time = now(),
+      </if>
+      <if test="remarks != null">
+        remarks = #{remarks,jdbcType=LONGVARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.camelot.pmt.project.model.Version" >
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.camelot.pmt.project.model.Version">
     update version
     set project_id = #{projectId,jdbcType=BIGINT},
-      version = #{version,jdbcType=VARCHAR},
-      start_time = #{startTime,jdbcType=TIMESTAMP},
-      end_time = #{endTime,jdbcType=TIMESTAMP},
-      version_name = #{versionName,jdbcType=VARCHAR},
-      version_type = #{versionType,jdbcType=CHAR},
-      create_user_id = #{createUserId,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      modify_user_id = #{modifyUserId,jdbcType=VARCHAR},
-      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+    version = #{version,jdbcType=VARCHAR},
+    start_time = #{startTime,jdbcType=TIMESTAMP},
+    end_time = #{endTime,jdbcType=TIMESTAMP},
+    version_name = #{versionName,jdbcType=VARCHAR},
+    version_type = #{versionType,jdbcType=CHAR},
+    create_user_id = #{createUserId,jdbcType=VARCHAR},
+    create_time = #{createTime,jdbcType=TIMESTAMP},
+    modify_user_id = #{modifyUserId,jdbcType=VARCHAR},
+    modify_time = now(),
+    remarks = #{remarks,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  <update id="updateByPrimaryKey" parameterType="com.camelot.pmt.project.model.Version">
+    update version
+    set project_id = #{projectId,jdbcType=BIGINT},
+    version = #{version,jdbcType=VARCHAR},
+    start_time = #{startTime,jdbcType=TIMESTAMP},
+    end_time = #{endTime,jdbcType=TIMESTAMP},
+    version_name = #{versionName,jdbcType=VARCHAR},
+    version_type = #{versionType,jdbcType=CHAR},
+    create_user_id = #{createUserId,jdbcType=VARCHAR},
+    create_time = #{createTime,jdbcType=TIMESTAMP},
+    modify_user_id = #{modifyUserId,jdbcType=VARCHAR},
+    modify_time = now()
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="getVetsionCode" resultType="String" parameterType="map">
+    SELECT version
+    FROM  version
+    WHERE project_id=#{projectId}
+    and version_type=#{versionType}
+  </select>
 </mapper>
