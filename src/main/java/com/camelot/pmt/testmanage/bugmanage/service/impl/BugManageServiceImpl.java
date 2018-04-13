@@ -39,7 +39,11 @@ private static final Logger LOGGER = LoggerFactory.getLogger(BugManageServiceImp
 	            }
 	            //创建时间
 	            bugManage.setCreateTime(DateUtils.format(new Date(),DateUtils.DATE_TIME_PATTERN));
-	            //bug默认状态
+	            if(!StringUtils.isEmpty(bugManage.getDesignatedId())){
+	            	 //bug默认状态 已确认
+		            bugManage.setBugStatus("1");
+	            }
+	            //bug默认状态 未确认
 	            bugManage.setBugStatus("0");
 	            //创建人*
 	            bugManage.setCreateUserId("1");
@@ -193,6 +197,27 @@ private static final Logger LOGGER = LoggerFactory.getLogger(BugManageServiceImp
             	
 	            bugManageMapper.updateByPrimaryKeySelective(bugManage);
 	            result.setResult("修改bug成功!");
+	        } catch (Exception e) {
+	            LOGGER.error(e.getMessage());
+	            throw new RuntimeException(e);
+	        }
+	        return result;
+	}
+
+	/**
+	 * 撤销bug
+	 */
+	@Transactional
+	public ExecuteResult<String> updateBugStatus(String bugId) {
+		ExecuteResult<String> result = new ExecuteResult<String>();
+		 try {
+			 	//判断传入的bug对象是否为空
+	            if (StringUtils.isEmpty(bugId)) {
+	                result.addErrorMessage("传入bugId错误");
+	                return result;
+	            }
+	            bugManageMapper.updateBugStatus(bugId);
+	            result.setResult("撤销bug成功!");
 	        } catch (Exception e) {
 	            LOGGER.error(e.getMessage());
 	            throw new RuntimeException(e);

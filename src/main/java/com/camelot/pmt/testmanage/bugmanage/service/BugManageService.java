@@ -30,5 +30,12 @@ public interface BugManageService {
     * @return
     */
    ExecuteResult<String> edit(BugManage bugManage);
+   
+   /**
+    * 撤销bug
+    * @param userModel
+    * @return
+    */
+   ExecuteResult<String> updateBugStatus(String bugId);
 
 }
