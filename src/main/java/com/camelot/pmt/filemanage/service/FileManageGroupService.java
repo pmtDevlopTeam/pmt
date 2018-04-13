@@ -9,7 +9,7 @@ import java.util.List;
 /**
  *
  * FileManageGroup 表数据服务层接口
- *张战
+ *张战1
  */
 public interface FileManageGroupService {
     ExecuteResult<String> addFileManagerGroup(HttpServletRequest request, FileManageGroup fileManageGroup);//添加文件夹
