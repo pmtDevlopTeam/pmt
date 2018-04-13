@@ -12,7 +12,7 @@ public class UseCaseImplement {
 
     private Date executeTime;
 
-    private Long executeUserId;
+    private String executeUserId;
 
     private List<UseCaseProcedureImplement> detail;
 
@@ -48,11 +48,11 @@ public class UseCaseImplement {
         this.executeTime = executeTime;
     }
 
-    public Long getExecuteUserId() {
+    public String getExecuteUserId() {
         return executeUserId;
     }
 
-    public void setExecuteUserId(Long executeUserId) {
+    public void setExecuteUserId(String executeUserId) {
         this.executeUserId = executeUserId;
     }
 

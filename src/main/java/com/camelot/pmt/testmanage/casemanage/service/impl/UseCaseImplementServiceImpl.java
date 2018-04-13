@@ -31,7 +31,7 @@ public class UseCaseImplementServiceImpl implements UseCaseImplementService {
 
         // 设置执行人
         if(userModel != null) {
-            useCaseImplement.setExecuteUserId(userModel.getId());
+            useCaseImplement.setExecuteUserId(userModel.getUserId());
             useCaseImplement.setExecuteTime(new Date());
         }
 

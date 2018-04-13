@@ -21,7 +21,7 @@ public class UseCaseImplementController {
     @Autowired
     private UseCaseImplementService useCaseImplementService;
 
-    @PostMapping
+  /*  @PostMapping
     public void add(HttpServletRequest request, @RequestBody UseCaseImplement useCaseImplement) {
         try {
             UserModel user = (UserModel) request.getSession().getAttribute("user");
@@ -39,5 +39,5 @@ public class UseCaseImplementController {
             e.printStackTrace();
         }
         return null;
-    }
+    }*/
 }

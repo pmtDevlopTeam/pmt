@@ -17,6 +17,12 @@
     from use_case_procedure
     where id = #{id,jdbcType=BIGINT}
   </select>
+  <select id="selectByUseCaseId" resultType="com.camelot.pmt.testmanage.casemanage.model.UseCaseProcedure" parameterType="java.lang.Long" >
+    select 
+    *
+    from use_case_procedure
+    where id = #{id,jdbcType=BIGINT}
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from use_case_procedure
     where id = #{id,jdbcType=BIGINT}

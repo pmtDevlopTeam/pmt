@@ -6,7 +6,7 @@
         <result column="use_case_id" property="useCaseId" jdbcType="BIGINT"/>
         <result column="implement_result" property="implementResult" jdbcType="VARCHAR"/>
         <result column="execute_time" property="executeTime" jdbcType="TIMESTAMP"/>
-        <result column="execute_user_id" property="executeUserId" jdbcType="BIGINT"/>
+        <result column="execute_user_id" property="executeUserId" jdbcType="VARCHAR"/>
     </resultMap>
     <sql id="Base_Column_List">
         id, use_case_id, implement_result, execute_time, execute_user_id
@@ -24,7 +24,7 @@
     <insert id="insert" parameterType="com.camelot.pmt.testmanage.casemanage.model.UseCaseImplement">
         insert into use_case_implement (id, use_case_id, implement_result,
           execute_time, execute_user_id)
-        values (#{id,jdbcType=BIGINT}, #{useCaseId,jdbcType=BIGINT}, #{implementResult,jdbcType=VARCHAR},
+        values (#{id,jdbcType=BIGINT}, #{useCaseId,jdbcType=VARCHAR}, #{implementResult,jdbcType=VARCHAR},
           #{executeTime,jdbcType=TIMESTAMP}, #{executeUserId,jdbcType=BIGINT})
     </insert>
     <insert id="insertSelective" parameterType="com.camelot.pmt.testmanage.casemanage.model.UseCaseImplement" useGeneratedKeys="true" keyProperty="id">
@@ -60,7 +60,7 @@
                 #{executeTime,jdbcType=TIMESTAMP},
             </if>
             <if test="executeUserId != null">
-                #{executeUserId,jdbcType=BIGINT},
+                #{executeUserId,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
@@ -77,7 +77,7 @@
                 execute_time = #{executeTime,jdbcType=TIMESTAMP},
             </if>
             <if test="executeUserId != null">
-                execute_user_id = #{executeUserId,jdbcType=BIGINT},
+                execute_user_id = #{executeUserId,jdbcType=VARCHAR},
             </if>
         </set>
         where id = #{id,jdbcType=BIGINT}
@@ -87,7 +87,7 @@
         set use_case_id = #{useCaseId,jdbcType=BIGINT},
           implement_result = #{implementResult,jdbcType=VARCHAR},
           execute_time = #{executeTime,jdbcType=TIMESTAMP},
-          execute_user_id = #{executeUserId,jdbcType=BIGINT}
+          execute_user_id = #{executeUserId,jdbcType=VARCHAR}
         where id = #{id,jdbcType=BIGINT}
     </update>
 

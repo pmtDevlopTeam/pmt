@@ -20,7 +20,7 @@ public class UseCase {
 
     private String description;
 
-    private Long executeUserId;
+    private String executeUserId;
 
     private Date executeTime;
 
@@ -28,11 +28,11 @@ public class UseCase {
 
     private String result;
 
-    private Long createUserId;
+    private String createUserId;
 
     private Date createTime;
 
-    private Long modifyUserId;
+    private String modifyUserId;
 
     private Date modifyTime;
 
@@ -104,14 +104,6 @@ public class UseCase {
         this.description = description == null ? null : description.trim();
     }
 
-    public Long getExecuteUserId() {
-        return executeUserId;
-    }
-
-    public void setExecuteUserId(Long executeUserId) {
-        this.executeUserId = executeUserId;
-    }
-
     public Date getExecuteTime() {
         return executeTime;
     }
@@ -136,28 +128,12 @@ public class UseCase {
         this.result = result == null ? null : result.trim();
     }
 
-    public Long getCreateUserId() {
-        return createUserId;
-    }
-
-    public void setCreateUserId(Long createUserId) {
-        this.createUserId = createUserId;
-    }
-
     public Date getCreateTime() {
         return createTime;
     }
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
-    }
-
-    public Long getModifyUserId() {
-        return modifyUserId;
-    }
-
-    public void setModifyUserId(Long modifyUserId) {
-        this.modifyUserId = modifyUserId;
     }
 
     public Date getModifyTime() {
@@ -183,4 +159,30 @@ public class UseCase {
     public void setProcedure(List<UseCaseProcedure> procedure) {
         this.procedure = procedure;
     }
+
+	public String getExecuteUserId() {
+		return executeUserId;
+	}
+
+	public void setExecuteUserId(String executeUserId) {
+		this.executeUserId = executeUserId;
+	}
+
+	public String getCreateUserId() {
+		return createUserId;
+	}
+
+	public void setCreateUserId(String createUserId) {
+		this.createUserId = createUserId;
+	}
+
+	public String getModifyUserId() {
+		return modifyUserId;
+	}
+
+	public void setModifyUserId(String modifyUserId) {
+		this.modifyUserId = modifyUserId;
+	}
+    
+    
 }
