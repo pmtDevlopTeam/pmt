@@ -24,7 +24,7 @@ public interface OrgService {
     
     /**
      * 新增部门
-     * @param org
+     * @param Org
      * @return ExecuteResult<Org>
      */
     ExecuteResult<String> addOrg(Org org);
