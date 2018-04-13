@@ -12,6 +12,7 @@ public class FileManageGroup {
     private Long projectId;
 
     private String name;
+    private String fdescribe;
 
     private Long  createUserId;
 
@@ -55,6 +56,14 @@ public class FileManageGroup {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getFdescribe() {
+        return fdescribe;
+    }
+
+    public void setFdescribe(String fdescribe) {
+        this.fdescribe = fdescribe;
     }
 
     public Long getCreateUserId() {
@@ -112,6 +121,7 @@ public class FileManageGroup {
                 ", parentId=" + parentId +
                 ", projectId=" + projectId +
                 ", name='" + name + '\'' +
+                ", fdescribe='" + fdescribe + '\'' +
                 ", createUserId=" + createUserId +
                 ", createTime=" + createTime +
                 ", modifyUserId=" + modifyUserId +

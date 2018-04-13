@@ -3,6 +3,7 @@ package com.camelot.pmt.filemanage.controller;
 import com.camelot.pmt.filemanage.model.FileManage;
 import com.camelot.pmt.filemanage.model.FileManageGroup;
 import com.camelot.pmt.filemanage.service.FileManageService;
+import io.swagger.annotations.Api;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,7 +15,7 @@ import java.util.List;
 /**
  *
  * FileManage 控制层
- *张战
+ *
  */
 @Controller
 @RequestMapping(value = "/file/manager")

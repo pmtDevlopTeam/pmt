@@ -6,6 +6,7 @@
     <result column="parent_id" jdbcType="BIGINT" property="parentId" />
     <result column="project_id" jdbcType="BIGINT" property="projectId" />
     <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="fdescribe" jdbcType="VARCHAR" property="fdescribe" />
     <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="modify_user_id" jdbcType="BIGINT" property="modifyUserId" />
@@ -26,11 +27,11 @@
   </delete>
   <insert id="insert" parameterType="com.camelot.pmt.filemanage.model.FileManageGroup">
     insert into file_manage_group (id, parent_id, project_id, 
-      name, create_user_id, create_time, 
+      name,fdescribe, create_user_id, create_time,
       modify_user_id, modify_time, del_flag, 
       isfile)
     values (#{id,jdbcType=BIGINT}, #{parentId,jdbcType=BIGINT}, #{projectId,jdbcType=BIGINT}, 
-      #{name,jdbcType=VARCHAR}, #{createUserId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP},
+      #{name,jdbcType=VARCHAR},#{fdescribe,jdbcType=VARCHAR}, #{createUserId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP},
       #{modifyUserId,jdbcType=BIGINT}, #{modifyTime,jdbcType=TIMESTAMP}, #{delFlag,jdbcType=CHAR},
       #{isfile,jdbcType=INTEGER})
   </insert>
@@ -48,6 +49,9 @@
       </if>
       <if test="name != null">
         name,
+      </if>
+      <if test="fdescribe!=null">
+        fdescribe,
       </if>
       <if test="createUserId != null">
         create_user_id,
@@ -81,6 +85,9 @@
       <if test="name != null">
         #{name,jdbcType=VARCHAR},
       </if>
+      <if test="fdescribe!=null">
+        #{fdescribe,jdbcType=VARCHAR},
+      </if>
       <if test="createUserId != null">
         #{createUserId,jdbcType=BIGINT},
       </if>
@@ -113,6 +120,9 @@
       <if test="name != null">
         name = #{name,jdbcType=VARCHAR},
       </if>
+      <if test="fdescribe!=null">
+        fdescribe=#{fdescribe,jdbcType=VARCHAR},
+      </if>
       <if test="createUserId != null">
         create_user_id = #{createUserId,jdbcType=BIGINT},
       </if>
@@ -139,6 +149,7 @@
     set parent_id = #{parentId,jdbcType=BIGINT},
       project_id = #{projectId,jdbcType=BIGINT},
       name = #{name,jdbcType=VARCHAR},
+      fdescribe=#{fdescribe,jdbcType=VARCHAR},
       create_user_id = #{createUserId,jdbcType=BIGINT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       modify_user_id = #{modifyUserId,jdbcType=BIGINT},
@@ -150,7 +161,7 @@
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
-		id, parent_id AS parentId, project_id AS projectId, `name`, create_user_id AS createUserId, create_time AS createTime, modify_user_id AS modifyUserId, modify_time AS modifyTime, del_flag AS delFlag
+		id, parent_id AS parentId, project_id AS projectId, `name`,fdescribe, create_user_id AS createUserId, create_time AS createTime, modify_user_id AS modifyUserId, modify_time AS modifyTime, del_flag AS delFlag
 	</sql>
   <!--
   <sql id="Base_Column_List">

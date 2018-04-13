@@ -29,12 +29,14 @@ public class FileManageServiceImpl implements FileManageService {
     @Transactional
     public Boolean addFileManager(HttpServletRequest request, FileManage fileManage) {
         String createUserId = (String) request.getSession().getAttribute("");//从session获取创建者id
-        Date createTime = new Date();//创建时间
         long l= fileManageMapper.insertSelective(fileManage);//添加结果
         FileManageGroup group = new FileManageGroup();//新创建组对象
         Long createUserId2 = (Long) request.getSession().getAttribute("");//从session获取创建者id
-        group.setCreateUserId(createUserId2);//设置创建时间
-        group.setCreateTime(createTime);//
+        if(createUserId2!=null){
+            Date createTime = new Date();//创建时间
+            group.setCreateUserId(createUserId2);//设置创建时间
+            group.setCreateTime(createTime);//
+        }
         group.setIsfile(1);//设置文件夹格式
         int insert = fileManageGroupMapper.insertSelective(group);//添加文件的文件夹
         Boolean b=true;
@@ -61,10 +63,12 @@ public class FileManageServiceImpl implements FileManageService {
     @Override
     @Transactional
     public Boolean updateFileById(HttpServletRequest request,FileManage fileManage) {
-        Date modifyTime = new Date();//获取当前时间
         Long  modifyUserId = (Long) request.getSession().getAttribute("");//获取修改人id
-        fileManage.setModifyUserId(modifyUserId);
-        fileManage.setModifyTime(modifyTime);
+        if(modifyUserId!=null){
+            Date modifyTime = new Date();//获取当前时间
+            fileManage.setModifyUserId(modifyUserId);
+            fileManage.setModifyTime(modifyTime);
+        }
         int i = fileManageMapper.updateByPrimaryKeySelective(fileManage);//文件修改
         Boolean b=true;
         if(i==0){
