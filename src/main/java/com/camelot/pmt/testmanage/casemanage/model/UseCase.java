@@ -1,6 +1,7 @@
 package com.camelot.pmt.testmanage.casemanage.model;
 
 import java.util.Date;
+import java.util.List;
 
 public class UseCase {
     private Long id;
@@ -36,6 +37,8 @@ public class UseCase {
     private Date modifyTime;
 
     private String delFlag;
+
+    private List<UseCaseProcedure> procedure;
 
     public Long getId() {
         return id;
@@ -171,5 +174,13 @@ public class UseCase {
 
     public void setDelFlag(String delFlag) {
         this.delFlag = delFlag == null ? null : delFlag.trim();
+    }
+
+    public List<UseCaseProcedure> getProcedure() {
+        return procedure;
+    }
+
+    public void setProcedure(List<UseCaseProcedure> procedure) {
+        this.procedure = procedure;
     }
 }

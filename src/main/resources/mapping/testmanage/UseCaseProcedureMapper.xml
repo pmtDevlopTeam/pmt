@@ -90,4 +90,11 @@
       use_case_id = #{useCaseId,jdbcType=BIGINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  <insert id="insertBatch" parameterType="java.util.List">
+    insert into use_case_procedure (step, expect, num, use_case_id)
+    values
+    <foreach collection="list" item="item" separator=",">
+      (#{item.step}, #{item.expect}, #{item.num}, #{item.useCaseId})
+    </foreach>
+  </insert>
 </mapper>
