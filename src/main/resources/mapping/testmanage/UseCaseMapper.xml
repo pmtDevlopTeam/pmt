@@ -243,4 +243,11 @@
     <include refid="Base_Column_List" />
     from use_case where del_flag=0
   </select>
+  <insert id="insertBatch" parameterType="java.util.List">
+    insert into use_case (project_id, demand_id, case_title, case_type, case_level, version_id)
+    values
+    <foreach collection="list" item="item" separator=",">
+      (#{item.projectId}, #{item.demandId}, #{item.caseTitle}, #{item.caseType}, #{item.caseLevel}, #{item.versionId})
+    </foreach>
+  </insert>
 </mapper>

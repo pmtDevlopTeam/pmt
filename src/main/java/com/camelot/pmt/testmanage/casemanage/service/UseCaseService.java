@@ -6,6 +6,8 @@ import com.camelot.pmt.testmanage.casemanage.model.UseCase;
 import com.camelot.pmt.testmanage.casemanage.util.ActionBean;
 import com.github.pagehelper.PageInfo;
 
+import java.util.List;
+
 public interface UseCaseService {
 	
 	public PageInfo<UseCase> selectUseCase(PageBean pageBean);
@@ -29,4 +31,12 @@ public interface UseCaseService {
 	 * @param id
 	 */
 	void updateUserCaseDelFlag(long id);
+
+	/**
+	 * 批量新增
+	 *
+	 * @param userModel 用户信息
+	 * @param list      用例集合
+	 */
+	void addBatch(UserModel userModel, List<UseCase> list);
 }

@@ -1,9 +1,9 @@
 package com.camelot.pmt.testmanage.casemanage.controller;
 
+import com.camelot.pmt.platform.user.model.UserModel;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.camelot.pmt.platform.utils.PageBean;
 import com.camelot.pmt.testmanage.casemanage.model.UseCase;
@@ -11,10 +11,8 @@ import com.camelot.pmt.testmanage.casemanage.service.UseCaseService;
 import com.camelot.pmt.testmanage.casemanage.util.ActionBean;
 import com.github.pagehelper.PageInfo;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @RestController
 @Api(value = "用例管理", description = "用例管理接口")
@@ -35,15 +33,27 @@ public class UseCaseController {
 			 return UseCaseService.selectUseCase(pageBean);
 	    }
 
-   /* @PostMapping
-    public void add(HttpServletRequest request, @RequestBody UseCase useCase) {
-        try {
-            UserModel user = (UserModel) request.getSession().getAttribute("user");
-            UseCaseService.add(user, useCase);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }*/
+	@ApiOperation(value = "新增用例")
+	@PostMapping(value = "userCase/add")
+	public void add(HttpServletRequest request, @RequestBody @ApiParam(value = "useCase", required = true) UseCase useCase) {
+		try {
+			UserModel user = (UserModel) request.getSession().getAttribute("user");
+			UseCaseService.add(user, useCase);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	@ApiOperation(value = "批量新增用例")
+	@PostMapping(value = "userCase/addBatch")
+	public void addBatch(HttpServletRequest request, @RequestBody @ApiParam(value = "list", required = true) List<UseCase> list) {
+		try {
+			UserModel user = (UserModel) request.getSession().getAttribute("user");
+			UseCaseService.addBatch(user, list);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	 
 	 
 	 @ApiOperation(value = "通过id获取用例信息", notes = "通过id获取用例信息")

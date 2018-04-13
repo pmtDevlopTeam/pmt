@@ -24,4 +24,6 @@ public interface UseCaseMapper {
     List<UseCase>selectUseCase(Map<String, Object> condition);
     
     int updateUserCaseDelFlag(Long id);
+
+    int insertBatch(List<UseCase> list);
 }

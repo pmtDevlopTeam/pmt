@@ -1,13 +1,5 @@
 package com.camelot.pmt.testmanage.casemanage.service.impl;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.camelot.pmt.platform.user.model.UserModel;
 import com.camelot.pmt.platform.utils.PageBean;
 import com.camelot.pmt.testmanage.casemanage.mapper.UseCaseMapper;
@@ -17,6 +9,13 @@ import com.camelot.pmt.testmanage.casemanage.model.UseCaseProcedure;
 import com.camelot.pmt.testmanage.casemanage.service.UseCaseService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 @Service
 public class UseCaseServiceImpl implements UseCaseService{
@@ -76,5 +75,21 @@ public class UseCaseServiceImpl implements UseCaseService{
 
 		// 批量插入
 		useCaseProcedureMapper.insertBatch(list);
+	}
+
+	@Override
+	public void addBatch(UserModel userModel, List<UseCase> list) {
+
+		// 设置创建人和时间
+		String id = null;
+		Date date = new Date();
+		if (userModel != null) id = userModel.getUserId();
+		for (UseCase useCase : list) {
+			useCase.setCreateUserId(id);
+			useCase.setCreateTime(date);
+		}
+
+		// 批量插入
+		useCaseMapper.insertBatch(list);
 	}
 }
