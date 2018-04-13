@@ -23,6 +23,8 @@ import com.camelot.pmt.platform.common.ExecuteResult;
 import com.camelot.pmt.platform.common.Pager;
 import com.camelot.pmt.platform.mapper.OrgMapper;
 import com.camelot.pmt.platform.model.Org;
+import com.camelot.pmt.platform.model.OrgToUser;
+import com.camelot.pmt.platform.model.User;
 import com.camelot.pmt.platform.service.OrgService;
 import com.camelot.pmt.platform.util.BuildTree;
 import com.camelot.pmt.platform.util.Tree;
@@ -280,11 +282,61 @@ public class OrgServiceImpl implements OrgService {
 		return result;
 		
 	}
-	
+	/** 组织机构列表详情(关系到用户  即部门负责人)
+	 * @param OrgToUser
+	 * @return JSONObject
+	 * 
+	 **/
 	@Override
-	public ExecuteResult<List<Org>> queryOrgsDetail() {
-		List<Org> orgList = orgMapper.selectOrgsDetail();
-		return null;
+	public ExecuteResult<List<OrgToUser>> queryOrgsDetail() {
+		ExecuteResult<List<OrgToUser>> result = new ExecuteResult<List<OrgToUser>>();
+		try {
+			List<OrgToUser> orgList = orgMapper.selectOrgsDetail();
+			List<OrgToUser> orgToUserList = new ArrayList<OrgToUser>();
+			List<User> userList = new ArrayList<User>();
+			OrgToUser otu = new OrgToUser();
+			User userObj = new User();
+			for (OrgToUser orgToUser : orgList) {
+				otu.setOrgCode(orgToUser.getOrgCode());
+				otu.setOrgname(orgToUser.getOrgname());
+				otu.setOrgParentName(orgToUser.getOrgParentName());
+				otu.setState(orgToUser.getState());
+				List<User> users = orgToUser.getUserList();
+				for (User user : users) {
+					userObj.setUsername(user.getUsername());
+					userList.add(userObj);
+				}
+				orgToUserList.add(otu);
+			}
+			result.setResult(orgList);
+		if (CollectionUtils.isEmpty(orgList)) {
+			result.addErrorMessage("组织机构部门不存在");
+		}
+		result.setResult(orgList);
+		}catch (Exception e) {
+			LOGGER.error(e.getMessage());
+			throw new RuntimeException(e);
+		}
+		return result;
+	}
+	/**
+	 * 组织机构   根据orgId查看详情(关系到用户  即部门负责人)
+	 */
+	@Override
+	public ExecuteResult<List<OrgToUser>> queryOrgsDetailByOrgId(String orgId) {
+		ExecuteResult<List<OrgToUser>> result = new ExecuteResult<List<OrgToUser>>();
+		try {
+			List<OrgToUser> orgToUserList = orgMapper.selectOrgsDetailByOrgId(orgId);
+		if(orgToUserList.size()<0){
+			return result;
+		}
+		result.setResult(orgToUserList);;
+		}catch (Exception e) {
+			LOGGER.error(e.getMessage());
+			throw new RuntimeException(e);
+		}
+		return result;
+		
 	}
 
 }

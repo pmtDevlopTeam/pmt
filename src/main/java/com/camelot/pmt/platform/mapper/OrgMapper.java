@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.camelot.pmt.platform.common.Pager;
 import com.camelot.pmt.platform.model.Org;
+import com.camelot.pmt.platform.model.OrgToUser;
 
 /**
  * <p>
@@ -77,7 +78,11 @@ public interface OrgMapper {
 	/**
 	 * 组织机构列表详情和查看(关系到用户  即部门负责人)
 	 */
-	List<Org> selectOrgsDetail();
+	List<OrgToUser> selectOrgsDetail();
+	/** 
+	 * 组织机构   根据orgId查看详情(关系到用户  即部门负责人)
+	 **/
+	List<OrgToUser> selectOrgsDetailByOrgId(String orgId);
     
     
 }

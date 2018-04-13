@@ -29,10 +29,21 @@ public class OrgToUser {
      */
     private String state;
     /**
-     * 用户信息
+     * 用户信息集合
      */
-    private List<User> User;
-    public Long getId() {
+    private List<User> userList;
+    /**
+     * 用户对象信息
+     */
+    private User user;
+    
+    public User getUser() {
+		return user;
+	}
+	public void setUser(User user) {
+		this.user = user;
+	}
+	public Long getId() {
 		return id;
 	}
 	public void setId(Long id) {
@@ -68,11 +79,12 @@ public class OrgToUser {
 	public void setState(String state) {
 		this.state = state;
 	}
-	public List<User> getUser() {
-		return User;
+	
+	public List<User> getUserList() {
+		return userList;
 	}
-	public void setUser(List<User> user) {
-		User = user;
+	public void setUserList(List<User> userList) {
+		this.userList = userList;
 	}
 	public Date getCreateTime() {
 		return createTime;

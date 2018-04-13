@@ -7,6 +7,7 @@ import com.camelot.pmt.platform.common.DataGrid;
 import com.camelot.pmt.platform.common.ExecuteResult;
 import com.camelot.pmt.platform.common.Pager;
 import com.camelot.pmt.platform.model.Org;
+import com.camelot.pmt.platform.model.OrgToUser;
 import com.camelot.pmt.platform.util.Tree;
 
 public interface OrgService {
@@ -57,9 +58,14 @@ public interface OrgService {
 	 */
 	ExecuteResult<String> deleteOrgByOrgId(String orgId);
 	/**
-	 * 组织机构列表详情和查看(关系到用户  即部门负责人)
+	 * 组织机构列表详情(关系到用户  即部门负责人)
 	 */
-	ExecuteResult<List<Org>> queryOrgsDetail();
+	ExecuteResult<List<OrgToUser>> queryOrgsDetail();
+	/**
+	 * 组织机构   根据orgId查看详情(关系到用户  即部门负责人)
+	 */
+	
+	ExecuteResult<List<OrgToUser>> queryOrgsDetailByOrgId(String orgId);
 	
 	
 	

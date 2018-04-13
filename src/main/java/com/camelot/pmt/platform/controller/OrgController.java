@@ -17,6 +17,7 @@ import com.camelot.pmt.platform.common.DataGrid;
 import com.camelot.pmt.platform.common.ExecuteResult;
 import com.camelot.pmt.platform.common.Pager;
 import com.camelot.pmt.platform.model.Org;
+import com.camelot.pmt.platform.model.OrgToUser;
 import com.camelot.pmt.platform.service.OrgService;
 import com.camelot.pmt.platform.util.Tree;
 
@@ -59,7 +60,7 @@ public class OrgController {
 	 * @param orgId 用户UUID
 	 */
 	@ApiOperation(value = "根据parentId查询子部门机构", notes = "查询子部门机构")
-	@RequestMapping(value = "/queryOrgByParentId", method = RequestMethod.POST)
+	@RequestMapping(value = "/queryOrgAndChildrenByOrgId", method = RequestMethod.POST)
 	public JSONObject queryUserByParentId(
 			@ApiParam(value = "orgId", required = true) @RequestParam(required = true) String orgId) {
 		ExecuteResult<List<Tree<Org>>> result = new ExecuteResult<List<Tree<Org>>>();
@@ -220,19 +221,18 @@ public class OrgController {
     		return ApiResponse.error();
     	}
     }
-    /**
-	 * 组织jigou列表详情和查看(关系到用户  即部门负责人)
-	 * @param Org
+    
+	 /** 组织机构列表详情(关系到用户  即部门负责人)
+	 * @param OrgToUser
 	 * @return JSONObject
 	 * 
-	 *//*
-    @ApiOperation(value="获取组织机构列表详情和查看列表详情", notes="获取组织机构列表详情和查看列表详情")
+	 **/
+    @ApiOperation(value="获取组织机构列表详情", notes="获取组织机构列表详情")
     @RequestMapping(value = "/queryOrgsDetail",method = RequestMethod.POST)
     
     public JSONObject queryOrgsDetail(){
-    	ExecuteResult<List<Org>> result = new ExecuteResult<List<Org>>();
+    	ExecuteResult<List<OrgToUser>> result = new ExecuteResult<List<OrgToUser>>();
     	try {
-    		
     		result = orgService.queryOrgsDetail();
     		if(result.isSuccess()) {
     			return ApiResponse.success(result.getResult());
@@ -242,5 +242,30 @@ public class OrgController {
     		return ApiResponse.error();
     	}
 
-    }*/
+    }
+    
+    /** 组织机构   根据orgId查看详情(关系到用户  即部门负责人)
+	 * @param OrgToUser
+	 * @return JSONObject
+	 * 
+	 **/
+    @ApiOperation(value="组织机构   根据orgId查看详情", notes="组织机构   根据orgId查看详情")
+    @RequestMapping(value = "/queryOrgsDetailByOrgId",method = RequestMethod.POST)
+    public JSONObject queryOrgsDetail(String orgId){
+    	ExecuteResult<List<OrgToUser>> result = new ExecuteResult<List<OrgToUser>>();
+    	try {
+    		if("".equals(orgId) && orgId ==null){
+    			return ApiResponse.error("传入的参数不正确");
+    		}
+    		result = orgService.queryOrgsDetailByOrgId(orgId);
+    		if(result.isSuccess()) {
+    			return ApiResponse.success(result.getResult());
+    		}
+    		return ApiResponse.success(result.getResult());
+    	}catch (Exception e) {
+    		return ApiResponse.error();
+    	}
+		
+
+    }
 }
