@@ -6,10 +6,11 @@ import com.camelot.pmt.platform.user.model.UserModel;
 import com.camelot.pmt.platform.utils.ExecuteResult;
 import com.camelot.pmt.platform.utils.PageBean;
 import com.camelot.pmt.testmanage.casemanage.model.UseCase;
+import com.github.pagehelper.PageInfo;
 
 public interface UseCaseService {
 	
-	ExecuteResult<String> selectUseCase(PageBean pageBean);
+	ExecuteResult<PageInfo> selectUseCase(PageBean pageBean);
 
 	/**
 	 * 新增测试用例

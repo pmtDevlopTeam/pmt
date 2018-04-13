@@ -19,6 +19,7 @@ import com.camelot.pmt.platform.utils.PageBean;
 import com.camelot.pmt.testmanage.casemanage.model.UseCase;
 import com.camelot.pmt.testmanage.casemanage.service.UseCaseService;
 import com.camelot.pmt.testmanage.casemanage.util.ActionBean;
+import com.github.pagehelper.PageInfo;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -42,7 +43,7 @@ public class UseCaseController {
 			 PageBean  pageBean=	new  PageBean();
 			 pageBean.setCurrentPage(currentPage);
 			 pageBean.setPageSize(pageSize);
-			 ExecuteResult<String> result = new ExecuteResult<String>();
+			 ExecuteResult<PageInfo> result = new ExecuteResult<PageInfo>();
 		        try {
 		            //调用添加bug接口
 		            result = UseCaseService.selectUseCase(pageBean);

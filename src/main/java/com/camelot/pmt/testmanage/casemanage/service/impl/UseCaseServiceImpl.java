@@ -34,20 +34,21 @@ public class UseCaseServiceImpl implements UseCaseService{
 	UseCaseMapper useCaseMapper;
 	
 	@Transactional
-	public  ExecuteResult<String> selectUseCase(PageBean pageBean){
+	public  ExecuteResult<PageInfo> selectUseCase(PageBean pageBean){
         
         
-        ExecuteResult<String> result = new ExecuteResult<String>();
+        ExecuteResult<PageInfo> result = new ExecuteResult<PageInfo>();
 		 try {
 			 	//判断传入的bug对象是否为空
 	            if (pageBean == null) {
-	                result.addErrorMessage("传入实体有误!");
+	                result.setResultMessage("传入实体有误!");
 	                return result;
 	            }
 	            PageHelper.startPage(pageBean.getCurrentPage(), pageBean.getPageSize());
 	            List<UseCase> docs = useCaseMapper.selectUseCase(new HashMap<String, Object>());
 	            PageInfo<UseCase> pageInfo = new PageInfo<UseCase>(docs);
-	            result.setResult("用例查询成功!");
+	            //result.setResult("用例查询成功!");
+	            result.setResult(pageInfo);
 	        } catch (Exception e) {
 	            LOGGER.error(e.getMessage());
 	            throw new RuntimeException(e);
