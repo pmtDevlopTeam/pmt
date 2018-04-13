@@ -13,6 +13,10 @@
     <result column="modify_time" property="modifyTime" />
     <result column="modify_user_id" property="modifyUserId" />
   </resultMap> 
+  <!-- 查询数量公共sql -->
+  <sql id="count_Tail">
+	  select count(1) from platform_dict
+  </sql>
   <sql id="Base_Column_List" >
     id, dict_id, dict_code, dict_type, dict_name, state, create_time, create_user_id, 
     modify_time, modify_user_id
@@ -114,13 +118,17 @@
     <include refid="Base_Column_List" />
     from platform_dict
   </select>
+  	<!-- 查询字典项总数量 -->
+	<select id="countDict" resultType="long">
+		<include refid="count_Tail"></include>
+	</select>
   
   <!-- 检查字典编码是否存在 -->
-  <select id="findDictCode" resultMap="BaseResultMap" parameterType="java.lang.String" >
+  <select id="checkDictCodeIsExist" resultMap="BaseResultMap" parameterType="java.lang.String" >
       select <include refid="Base_Column_List"/> from platform_dict where dict_code = #{dictCode}
   </select>
   <!-- 检查字典名称是否存在 -->
-  <select id="findDictName" resultMap="BaseResultMap" parameterType="java.lang.String" >
+  <select id="checkDictNameIsExist" resultMap="BaseResultMap" parameterType="java.lang.String" >
       select <include refid="Base_Column_List"/> from platform_dict where dict_name = #{dictName}
   </select>
 

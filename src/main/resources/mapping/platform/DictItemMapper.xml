@@ -77,11 +77,7 @@
 		delete from platform_dict_item
 		where dict_item_id = #{dictItemId}
 	</delete>
-	<!-- 根据字典类型id 删除字典项 -->
-	<delete id="deleteDictItemByDictId">
-		delete from platform_dict_item
-		where dict_id = #{dictId}
-	</delete>
+
 	<!-- 根据字典项id 修改一个字典项 -->
 	<update id="modifyDictItemByDictItemId">
 		update platform_dict_item
@@ -162,7 +158,7 @@
 		where dict_item_id = #{dictItemId}
 	</select>
 	<!-- 根据字典类型id 查询字典项 不分页-->
-	<select id="queryDictItemByDictId"
+	<select id="queryListDictItemByDictId"
 		resultMap="BaseResultMap" >
 		select
 		<include refid="Base_Column_List" />
@@ -170,7 +166,7 @@
 		where dict_id = #{dictId}
 	</select>
 	<!-- 根据字典类型id 查询字典项 分页 -->
-    <select id="queryDictItemByDictIdPage"
+    <select id="queryListDictItemByDictIdPage"
     	    resultMap="BaseResultMap" >
         select
         <include refid="Base_Column_List"/>
@@ -198,21 +194,21 @@
 		</if>
     </select>
     <!-- 通过字典类型查询字典项总数量 -->
-	<select id="queryCountByDictId" resultType="long">
+	<select id="countDictItemByDictId" resultType="long">
 		<include refid="count_Tail"></include>
 		where dict_id = #{dictId}
 	</select>
 	<!-- 查询字典项总数量 -->
-	<select id="queryCount" resultType="long">
+	<select id="countDictItem" resultType="long">
 		<include refid="count_Tail"></include>
 	</select>
 	
   <!-- 检查字典项编码是否存在 -->
-  <select id="findDictItemCode" resultMap="BaseResultMap" parameterType="java.lang.String" >
+  <select id="checkDictItemCodeIsExist" resultMap="BaseResultMap" parameterType="java.lang.String" >
       select <include refid="Base_Column_List"/> from platform_dict_item where dict_item_code = #{dictItemCode}
   </select>
   <!-- 检查字典项名称是否存在 -->
-  <select id="findDictItemName" resultMap="BaseResultMap" parameterType="java.lang.String" >
+  <select id="checkDictItemNameIsExist" resultMap="BaseResultMap" parameterType="java.lang.String" >
       select <include refid="Base_Column_List"/> from platform_dict_item where dict_item_name = #{dictItemName}
   </select>
 

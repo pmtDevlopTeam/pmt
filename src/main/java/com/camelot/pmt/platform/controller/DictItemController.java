@@ -17,6 +17,7 @@ import com.camelot.pmt.platform.common.ApiResponse;
 import com.camelot.pmt.platform.common.DataGrid;
 import com.camelot.pmt.platform.common.ExecuteResult;
 import com.camelot.pmt.platform.common.Pager;
+import com.camelot.pmt.platform.model.Dict;
 import com.camelot.pmt.platform.model.DictItem;
 import com.camelot.pmt.platform.service.DictItemService;
 
@@ -36,6 +37,12 @@ public class DictItemController {
 	DictItemService dictItemService;
 	
 	
+    /**
+     *  根据一个字典项对象  创建一个字典项
+     *  
+     *  @param String dictIds,DictItem dictItem
+     *  @return JSONObject  {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
+     */
 	@ApiOperation(value="创建字典项接口", notes="创建单个字典项")
     @ApiImplicitParams({
         @ApiImplicitParam(
@@ -62,7 +69,7 @@ public class DictItemController {
 	    	if (StringUtils.isEmpty(dictIds)||StringUtils.isEmpty(dictItem.getDictItemName())
 	    		||StringUtils.isEmpty(dictItem.getDictItemCode())||StringUtils.isEmpty(dictItem.getDictItemValue()) )
 	    	{
-	    		return ApiResponse.jsonData(APIStatus.ERROR_400);
+	    		return ApiResponse.errorPara();
             }
 	    	//不为空调用接口查询
 	    	 dictItem.setDictId(dictIds);
@@ -78,6 +85,12 @@ public class DictItemController {
 		}
 	}
 	
+    /**
+     *  根据一个字典项dictItemId  删除一个字典项
+     *  
+     *  @param String dictItemId
+     *  @return JSONObject  {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
+     */
 	@ApiOperation(value="删除字典项接口", notes="删除单个字典项")
     @ApiImplicitParams({
         @ApiImplicitParam(
@@ -88,7 +101,7 @@ public class DictItemController {
 		ExecuteResult<String> result = new ExecuteResult<String>();
 	   	try {
     		if(StringUtils.isEmpty(dictItemId)) {
-    			return ApiResponse.jsonData(APIStatus.ERROR_400);
+    			return ApiResponse.errorPara();
     		}
     		result = dictItemService.deleteDictItemByDictItemId(dictItemId);
     		if(result.isSuccess()) {
@@ -100,7 +113,12 @@ public class DictItemController {
 		}
 	}
 	
-
+    /**
+     *  根据一个字典项对象  修改一个字典项
+     *  
+     *  @param DictItem dictItem
+     *  @return JSONObject  {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
+     */
 	@ApiOperation(value="修改字典项接口", notes="修改单个字典项")
     @ApiImplicitParams({
         @ApiImplicitParam(
@@ -120,9 +138,8 @@ public class DictItemController {
 	public JSONObject modifyDictItemByDictItemId(@ApiIgnore DictItem dictItem) {
 		ExecuteResult<DictItem> result = new ExecuteResult<DictItem>();
         try {
-
 	    	if(StringUtils.isEmpty(dictItem.getDictItemId())){
-		    		return ApiResponse.jsonData(APIStatus.ERROR_400);
+	    		return ApiResponse.errorPara();
 	        }
             result = dictItemService.modifyDictItemByDictItemId(dictItem);
             if(result.isSuccess()){
@@ -135,9 +152,10 @@ public class DictItemController {
 	}
 	
     /**
-     * [通过字典项dictItemId查询单个字典项]
-     * @param  dictItemId UUID
-     * @return {"status": {"message": "请求处理成功.","code": 200}, "data": {DictItem}]
+     * 根据一个字典项dictItemId  查询一个字典项
+     * 
+     * @param String dictItemId
+     * @return {"status": {"code":xxx,"message":"xxx"}, "data": {xxx}]
      */
 	@ApiOperation(value="根据字典项dictItemId查询字典项接口", notes="查询单个字典项")
 	@RequestMapping(value="/queryDictItemByDictItemId", method=RequestMethod.POST)
@@ -145,7 +163,7 @@ public class DictItemController {
 		ExecuteResult<DictItem> result = new ExecuteResult<DictItem>();
 		try {
             if(StringUtils.isEmpty(dictItemId)){
-            	return ApiResponse.jsonData(APIStatus.ERROR_400);
+            	return ApiResponse.errorPara();
             }
             result = dictItemService.queryDictItemByDictItemId(dictItemId);
             if(result.isSuccess()) {
@@ -158,19 +176,20 @@ public class DictItemController {
 		
 	}
     /**
-     * [根据字典类型dictId查询字典项]
-     * @param  dictId UUID
-     * @return {"status": {"message": "请求处理成功.","code": 200}, "data": {List<DictItem>}]
+     * 根据字典dictId 查询字典项 
+     * 
+     * @param String dictId
+     * @return {"status":{"code":xxx,"message":"xxx"},"data":{xxx}]
      */
 	@ApiOperation(value="根据字典类型dictId查询字典项接口 不分页", notes="查询字典项")
-	@RequestMapping(value="/queryDictItemByDictId", method=RequestMethod.POST)
-	public JSONObject queryDictItemByDictId(@ApiParam(value = "字典项dictId", required = true) @RequestParam(required = true) String dictId) {
+	@RequestMapping(value="/queryListDictItemByDictId", method=RequestMethod.POST)
+	public JSONObject queryListDictItemByDictId(@ApiParam(value = "字典项dictId", required = true) @RequestParam(required = true) String dictId) {
 		ExecuteResult<List<DictItem>> result = new ExecuteResult<List<DictItem>>();
 		try {
             if(StringUtils.isEmpty(dictId)){
-            	return ApiResponse.jsonData(APIStatus.ERROR_400);
+            	return ApiResponse.errorPara();
             }
-            result = dictItemService.queryDictItemByDictId(dictId);
+            result = dictItemService.queryListDictItemByDictId(dictId);
             if(result.isSuccess()) {
                 return ApiResponse.success(result.getResult());
             }
@@ -181,18 +200,19 @@ public class DictItemController {
 		
 	}
 	
-	/**
-     * [通过字典类型 分页查询字典项接口]
-     * @param  dictId UUID page 页码,rows 每页数量
-     * @return "data": {"total": 总数量,"rows":[查询的结果集],"status": {"code": 200,"message": "请求处理成功."}}
+    /**
+     * 根据字典dictId 分页查询字典项
+     * 
+     * @param String dictId,Pager page
+     * @return {"status":{"code":xxx,"message":"xxx"},"data":{xxx}]
      */
-    @ApiOperation(value="根据字典类型dictId分页查询字典项接口", notes="通过字典类型 分页查询字典项接口")
-    @RequestMapping(value = "/queryDictItemByDictIdPage",method = RequestMethod.POST)
+    @ApiOperation(value="根据字典dictId分页查询字典项接口", notes="通过字典类型 分页查询字典项接口")
+    @RequestMapping(value = "/queryListDictItemByDictIdPage",method = RequestMethod.POST)
     @ApiImplicitParams({
     	@ApiImplicitParam(name = "page", value = "页码", paramType = "query", dataType = "int"),
     	@ApiImplicitParam(name = "rows", value = "每页数量", paramType = "query", dataType = "int")
     })
-    public JSONObject queryDictItemByDictIdPage(@ApiParam(value = "字典项dictId", required = true) @RequestParam(required = true) String dictId,@ApiIgnore Pager page){
+    public JSONObject queryListDictItemByDictIdPage(@ApiParam(value = "字典项dictId", required = true) @RequestParam(required = true) String dictId,@ApiIgnore Pager page){
     	ExecuteResult<DataGrid<DictItem>> result = new ExecuteResult<DataGrid<DictItem>>();
     	try {
     		if(page == null) {
@@ -201,7 +221,7 @@ public class DictItemController {
             if(StringUtils.isEmpty(dictId)){
             	return ApiResponse.errorPara();
             }
-    		result = dictItemService.queryDictItemByDictIdPage(dictId,page);
+    		result = dictItemService.queryListDictItemByDictIdPage(dictId,page);
     		if(result.isSuccess()) {
     			return ApiResponse.success(result.getResult());
     		}
@@ -211,7 +231,13 @@ public class DictItemController {
     	}
     	
     }
-	
+    
+    /**
+     * 查询全部字典项
+     * 
+     * @param  
+     * @return {"status": {"code":xxx,"message":"xxx"}, "data": {xxx}]
+     */
 	@ApiOperation(value="查询全部字典项接口 不分页", notes="查询全部字典项")
 	@RequestMapping(value="/queryAllDictItem", method=RequestMethod.POST)
 	public JSONObject queryAllDictItem() {
@@ -227,10 +253,12 @@ public class DictItemController {
         }
         
 	}
-	/**
-     *[分页查询全部字典项列表]
-     * @param  page 页码,rows 每页数量
-     * @return "data": {"total": 总数量,"rows":[查询的结果集],"status": {"code": 200,"message": "请求处理成功"}}
+	
+    /**
+     * 查询全部字典项 分页
+     * 
+     * @param Pager page
+     * @return {"status": {"code":xxx,"message":"xxx"}, "data": {xxx}]
      */
     @ApiOperation(value="分页查询全部字典项列表", notes="分页查询全部字典项列表")
     @RequestMapping(value = "/queryAllDictItemPage",method = RequestMethod.GET)
@@ -254,5 +282,39 @@ public class DictItemController {
     	}
     	
     }
+    
+    /**
+     * 检查字典项编码与字典项名称是否存在
+     * 
+     * @param DictItem dictItem
+     * @return {"status":{"code":xxx,"message":"xxx"},"data":{xxx}
+     */
+  @ApiOperation(value="检查字典项编码与字典项名称是否存在", notes="检查字典项编码与字典项名称是否存在")
+  @ApiImplicitParams({
+          @ApiImplicitParam(
+                  name="dictItemCode",value="字典项编码",required=true,paramType="form",dataType="String"),
+          @ApiImplicitParam(
+                  name="dictItemName",value="字典项名称",required=true,paramType="form",dataType="String"),
+  })
+  @RequestMapping(value = "/checkDictItemCodeOrDictItemNameIsExist",method = RequestMethod.POST)
+  public JSONObject checkDictItemCodeOrDictItemNameIsExist(@ApiIgnore DictItem dictItem) {
+  	ExecuteResult<DictItem> result = new ExecuteResult<DictItem>();
+		try {
+  		//判断非空
+	    	if(dictItem == null){
+	    		return ApiResponse.errorPara();
+	    	}
+	    	//不为空调用接口查询
+	    	 result = dictItemService.checkDictItemCodeOrDictItemNameIsExist(dictItem);
+	    	 if(result.isSuccess()) {
+	    		 return ApiResponse.success(result.getResultMessage());
+	    	 }
+	    	//成功返回
+	    	return ApiResponse.error(result.getErrorMessage());
+  	} catch (Exception e) {
+  		//异常
+  		return ApiResponse.error();
+		}
+	}
     
 }

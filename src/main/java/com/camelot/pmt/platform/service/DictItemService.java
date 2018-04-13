@@ -10,7 +10,7 @@ import com.camelot.pmt.platform.model.DictItem;
 
 /**
  * <p>
- *  Mapper 接口
+ *  字典项Service类
  * </p>
  *
  * @author sqw
@@ -19,66 +19,75 @@ import com.camelot.pmt.platform.model.DictItem;
 public interface DictItemService {
 
 	/**
-	 * 增加一个字典项
-	 * @param DictItem
-	 * @return 
+	 * 根据一个字典项  增加一个字典项 
+	 * 
+	 * @param DictItem dictItem
+	 * @return ExecuteResult<DictItem>
 	 */
 	ExecuteResult<DictItem> createDictItem(DictItem dictItem);
 	/**
-	 * 根据字典项id 删除一个字典项
-	 * @param dictItemId
-	 * @return
+	 * 根据字典项dictItemId 删除一个字典项
+	 * 
+	 * @param String dictItemId
+	 * @return ExecuteResult<String>
 	 */
 	ExecuteResult<String> deleteDictItemByDictItemId(String dictItemId);
 	/**
-	 * 根据字典类型id 删除字典项
-	 * @param dictId
-	 * @return
-	 */
-	ExecuteResult<String> deleteDictItemByDictId(String dictId);
-	/**
-	 * 根据字典项id 修改一个字典项
-	 * @param DictItem
-	 * @return
+	 * 根据字典项dictItemId 修改一个字典项
+	 * 
+	 * @param DictItem dictItem
+	 * @return ExecuteResult<DictItem>
 	 */
 	ExecuteResult<DictItem> modifyDictItemByDictItemId(DictItem dictItem);
 	/**
 	 * 根据字典类型id 修改字典项
-	 * @param DictItem
-	 * @return
+	 * 
+	 * @param DictItem dictItem
+	 * @return ExecuteResult<String>
 	 */
 	ExecuteResult<String> modifyDictItemByDictId(DictItem dictItem);
     /**
-     * 根据字典项id 查询一个字典项
-     * @param dictItemId
-     * @return
+     * 根据字典项dictItemId 查询一个字典项
+     * 
+     * @param String dictItemId
+     * @return ExecuteResult<DictItem>
      */
 	ExecuteResult<DictItem> queryDictItemByDictItemId(String dictItemId);
     /**
-     * 根据字典类型id 查询字典项 不分页
-     * @param dictItemId
-     * @return
+     * 根据字典dictId 查询字典项 不分页
+     * 
+     * @param String dictId
+     * @return ExecuteResult<List<DictItem>>
      */
-	ExecuteResult<List<DictItem>> queryDictItemByDictId(String dictId);
+	ExecuteResult<List<DictItem>> queryListDictItemByDictId(String dictId);
 	 /**
-	  * 
-	  *根据字典类型id 查询字典项  分页
-	  * @param page dictId
+	  *根据字典dictId 查询字典项  分页
+	  *
+	  * @param String dictId,Pager page
 	  * @return ExecuteResult<DataGrid<DictItem>>
 	  */
-	 ExecuteResult<DataGrid<DictItem>> queryDictItemByDictIdPage(String dictId,Pager page);
+	 ExecuteResult<DataGrid<DictItem>> queryListDictItemByDictIdPage(String dictId,Pager page);
     /**
      * 查询全部字典项 不分页
-     * @param dictId
-     * @return
+     * 
+     * @param 
+     * @return ExecuteResult<List<DictItem>>
      */
 	ExecuteResult<List<DictItem>> queryAllDictItem();
 	 /**
 	  * 
 	  * 查询全部字典项 分页
-	  * @param page
+	  * 
+	  * @param Pager page
 	  * @return ExecuteResult<DataGrid<DictItem>>
 	  */
 	 ExecuteResult<DataGrid<DictItem>> queryAllDictItemPage(Pager page);
+	 /**
+	  * 检查字典项编码与字典项名称是否存在
+	  * 
+	  * @param DictItem dictItem
+	  * @return ExecuteResult<DictItem>
+	  */
+	 ExecuteResult<DictItem> checkDictItemCodeOrDictItemNameIsExist(DictItem dictItem);
 	
 }
