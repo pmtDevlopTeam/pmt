@@ -42,12 +42,12 @@ public class ProjectBudgetController {
 	 */
 	@ApiOperation(value = "添加项目预算", notes = "添加预算")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "project_id", value = "项目id", required = true, paramType = "form", dataType = "Long"),
-            @ApiImplicitParam(name = "actual_hours", value = "实际工时", required = true, paramType = "form", dataType = "Long"),
-            @ApiImplicitParam(name = "budgetary_hours", value = "预计工时", required = true, paramType = "form", dataType = "Long"),
-			@ApiImplicitParam(name = "other", value = "其他预算", required = true, paramType = "form", dataType = "String"),
-            @ApiImplicitParam(name = "create_user_id", value = "创建人id", required = true, paramType = "form", dataType = "String"), 
-            @ApiImplicitParam(name = "modify_user_id", value = "修改人id", required = true, paramType = "form", dataType = "String")})
+            @ApiImplicitParam(name = "project_id", value = "项目id", required = true, paramType = "query", dataType = "Long"),
+            @ApiImplicitParam(name = "actual_hours", value = "实际工时", required = true, paramType = "query", dataType = "int"),
+            @ApiImplicitParam(name = "budgetary_hours", value = "预计工时", required = true, paramType = "query", dataType = "int"),
+			@ApiImplicitParam(name = "other", value = "其他预算", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "create_user_id", value = "创建人id", required = true, paramType = "query", dataType = "String"), 
+            @ApiImplicitParam(name = "modify_user_id", value = "修改人id", required = true, paramType = "query", dataType = "String")})
 	@PostMapping("/addProjectBudget")
 	public JSONObject addProjectBudget(@ApiIgnore ProjectBudget projectBudget){
         ExecuteResult<String> result = new ExecuteResult<String>();
@@ -90,13 +90,13 @@ public class ProjectBudgetController {
 	 */
 	@ApiOperation(value = "添加项目预算", notes = "添加预算")
     @ApiImplicitParams({
-    	 @ApiImplicitParam(name = "id", value = "项目预算id", required = true, paramType = "form", dataType = "Long"),
-    	 @ApiImplicitParam(name = "project_id", value = "项目id", required = true, paramType = "form", dataType = "Long"),
-         @ApiImplicitParam(name = "actual_hours", value = "实际工时", required = true, paramType = "form", dataType = "Long"),
-         @ApiImplicitParam(name = "budgetary_hours", value = "预计工时", required = true, paramType = "form", dataType = "Long"),
-		 @ApiImplicitParam(name = "other", value = "其他预算", required = true, paramType = "form", dataType = "String"),
-         @ApiImplicitParam(name = "create_user_id", value = "创建人id", required = true, paramType = "form", dataType = "String"), 
-         @ApiImplicitParam(name = "modify_user_id", value = "修改人id", required = true, paramType = "form", dataType = "String")})
+    	 @ApiImplicitParam(name = "id", value = "项目预算id", required = true, paramType = "query", dataType = "Long"),
+    	 @ApiImplicitParam(name = "project_id", value = "项目id", required = true, paramType = "query", dataType = "Long"),
+         @ApiImplicitParam(name = "actual_hours", value = "实际工时", required = true, paramType = "query", dataType = "int"),
+         @ApiImplicitParam(name = "budgetary_hours", value = "预计工时", required = true, paramType = "query", dataType = "int"),
+		 @ApiImplicitParam(name = "other", value = "其他预算", required = true, paramType = "query", dataType = "String"),
+         @ApiImplicitParam(name = "create_user_id", value = "创建人id", required = true, paramType = "query", dataType = "String"), 
+         @ApiImplicitParam(name = "modify_user_id", value = "修改人id", required = true, paramType = "query", dataType = "String")})
 	@PostMapping("/modifyProjectBudget")
 	public JSONObject editProjectBudget(@ApiIgnore ProjectBudget projectBudget){
         ExecuteResult<String> result = new ExecuteResult<String>();
