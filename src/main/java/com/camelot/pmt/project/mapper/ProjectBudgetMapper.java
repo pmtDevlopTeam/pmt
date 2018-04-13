@@ -38,4 +38,11 @@ public interface ProjectBudgetMapper {
      * @mbggenerated 2018-04-13
      */
     int updateByPrimaryKey(ProjectBudget record);
+
+    /**
+     * 根据项目id查询项目预算
+     * @param proId
+     * @return ProjectBudget
+     */
+	ProjectBudget selectProjectBudgetByProId(Long proId);
 }

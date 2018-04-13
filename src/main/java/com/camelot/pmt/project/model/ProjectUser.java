@@ -2,8 +2,21 @@ package com.camelot.pmt.project.model;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
+
 public class ProjectUser {
-    /**
+	
+	/** 进入  */
+    public static final String STATUS_IN = "01";
+    /** 未进入  */
+    public static final String STATUS_NOT_IN = "02";
+    /**  已出 */
+    public static final String STATUS_OUT = "03";
+    /** 暂离   */
+    public static final String STATUS_AFK = "04";
+
+	/**
      * id
      */
     private Long id;
@@ -21,21 +34,25 @@ public class ProjectUser {
     /**
      * 预计进项目日期
      */
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date preJoinTime;
 
     /**
      * 实际进项目日期
      */
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date realJoinTime;
 
     /**
      * 预计出项目日期
      */
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date preOutTime;
 
     /**
      * 实际出项目日期
      */
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date realOutTime;
 
     /**
@@ -61,6 +78,7 @@ public class ProjectUser {
     /**
      * 创建时间
      */
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date createTime;
 
     /**
@@ -71,11 +89,12 @@ public class ProjectUser {
     /**
      * 修改时间
      */
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date modifyTime;
 
     /**
      * id
-     * @return id id
+     * @return id
      */
     public Long getId() {
         return id;

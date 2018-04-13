@@ -1,7 +1,12 @@
 package com.camelot.pmt.project.mapper;
 
+import com.camelot.pmt.platform.utils.ExecuteResult;
+import com.camelot.pmt.platform.utils.Pager;
 import com.camelot.pmt.project.model.Demand;
 import com.camelot.pmt.project.model.DemandWithBLOBs;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface DemandMapper {
     /**
@@ -45,4 +50,12 @@ public interface DemandMapper {
      * @mbggenerated 2018-04-13
      */
     int updateByPrimaryKey(Demand record);
+
+    /**
+     * 查询需求分页
+     * @param demandWithBLOBs
+     * @return
+     */
+    List<DemandWithBLOBs> findAllByPage(@Param(value="pager") Pager pager, @Param(value="demandWithBLOBs") DemandWithBLOBs demandWithBLOBs);
+    Long queryCount(DemandWithBLOBs record);
 }

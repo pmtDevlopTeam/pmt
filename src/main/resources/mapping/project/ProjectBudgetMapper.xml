@@ -139,4 +139,10 @@
       modify_time = #{modifyTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  <!-- 根据项目ID查询项目预计工时 -->
+  <select id="selectProjectBudgetByProId" parameterType="long" resultMap="BaseResultMap">
+  	select  <include refid="Base_Column_List" />
+  	from project_budget
+  	where project_id = #{projectId,jdbcType=BIGINT}
+  </select>
 </mapper>
