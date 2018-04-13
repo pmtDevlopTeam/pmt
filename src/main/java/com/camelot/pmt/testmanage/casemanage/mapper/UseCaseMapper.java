@@ -21,5 +21,5 @@ public interface UseCaseMapper {
     int updateByPrimaryKey(UseCase record);
     
     
-    List<UseCase>selectUseCase(Page<UseCase> page,Map<String, Object> condition);
+    List<UseCase>selectUseCase(Map<String, Object> condition);
 }

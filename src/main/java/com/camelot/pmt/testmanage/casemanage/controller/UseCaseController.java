@@ -5,11 +5,13 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.camelot.pmt.platform.utils.PageBean;
 import com.camelot.pmt.testmanage.casemanage.model.UseCase;
 import com.camelot.pmt.testmanage.casemanage.service.UseCaseService;
+import com.github.pagehelper.PageInfo;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -26,15 +28,16 @@ public class UseCaseController {
 	
 	 @ApiOperation(value = "分页获取用户列表", notes = "分页获取用户列表")
 	    @RequestMapping(value = "userCase/queryUserCase", method = RequestMethod.GET)
+	 @ResponseBody
 	    @ApiImplicitParams({
 	            @ApiImplicitParam(name = "currentPage", value = "页码", required = true, paramType = "query", dataType = "int"),
 	            @ApiImplicitParam(name = "pageSize", value = "每页数量", required = true, paramType = "query", dataType = "int") })
-	    public void queryUsersByPage(@ApiIgnore PageBean<UseCase> pageBean) {
-		 
-		 	UseCaseService.selectUseCase(pageBean);
-		 	
-		 	
-		 
+	    public PageInfo<UseCase> queryUsersByPage(Integer currentPage,Integer pageSize) {
+		 PageBean  pageBean=	new  PageBean();
+		 pageBean.setCurrentPage(currentPage);
+		 pageBean.setPageSize(pageSize);
+		 return UseCaseService.selectUseCase(pageBean);
+		 	//return  UseCaseService.selectUseCase(pageBean);
 	    }
 	
 }
