@@ -57,24 +57,36 @@ public class UseCaseController {
 
 	@ApiOperation(value = "新增用例")
 	@PostMapping(value = "userCase/add")
-	public void add(HttpServletRequest request, @RequestBody @ApiParam(value = "useCase", required = true) UseCase useCase) {
-		try {
+	public ActionBean add(HttpServletRequest request, @RequestBody @ApiParam(value = "useCase", required = true) UseCase useCase) {
+		ActionBean actionBean = new ActionBean();
+	 	try {
 			UserModel user = (UserModel) request.getSession().getAttribute("user");
 			UseCaseService.add(user, useCase);
+			actionBean.setCode(200);
+			actionBean.setResult(true);
 		} catch (Exception e) {
-			e.printStackTrace();
+			actionBean.setCode(500);
+			actionBean.setResult(false);
+			actionBean.setErrorMessage(e.getMessage());
 		}
+		return actionBean;
 	}
 
 	@ApiOperation(value = "批量新增用例")
 	@PostMapping(value = "userCase/addBatch")
-	public void addBatch(HttpServletRequest request, @RequestBody @ApiParam(value = "list", required = true) List<UseCase> list) {
-		try {
+	public ActionBean addBatch(HttpServletRequest request, @RequestBody @ApiParam(value = "list", required = true) List<UseCase> list) {
+		ActionBean actionBean = new ActionBean();
+	 	try {
 			UserModel user = (UserModel) request.getSession().getAttribute("user");
 			UseCaseService.addBatch(user, list);
+			actionBean.setCode(200);
+			actionBean.setResult(true);
 		} catch (Exception e) {
-			e.printStackTrace();
+			actionBean.setCode(500);
+			actionBean.setResult(false);
+			actionBean.setErrorMessage(e.getMessage());
 		}
+		return actionBean;
 	}
 	 
 	 

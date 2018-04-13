@@ -2,7 +2,9 @@ package com.camelot.pmt.testmanage.casemanage.service.impl;
 
 import com.camelot.pmt.platform.user.model.UserModel;
 import com.camelot.pmt.testmanage.casemanage.mapper.UseCaseImplementMapper;
+import com.camelot.pmt.testmanage.casemanage.mapper.UseCaseMapper;
 import com.camelot.pmt.testmanage.casemanage.mapper.UseCaseProcedureImplementMapper;
+import com.camelot.pmt.testmanage.casemanage.model.UseCase;
 import com.camelot.pmt.testmanage.casemanage.model.UseCaseImplement;
 import com.camelot.pmt.testmanage.casemanage.model.UseCaseProcedureImplement;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,14 +27,27 @@ public class UseCaseImplementServiceImpl implements UseCaseImplementService {
     @Autowired
     private UseCaseProcedureImplementMapper useCaseProcedureImplementMapper;
 
+    @Autowired
+    private UseCaseMapper useCaseMapper;
+
     @Override
     @Transactional
     public void add(UserModel userModel, UseCaseImplement useCaseImplement) {
 
-        // 设置执行人
-        if(userModel != null) {
-            useCaseImplement.setExecuteUserId(userModel.getUserId());
-            useCaseImplement.setExecuteTime(new Date());
+        UseCase useCase = null;
+
+        // 设置执行人和执行时间
+        if (userModel != null) {
+            String id = userModel.getUserId();
+            Date date = new Date();
+            useCaseImplement.setExecuteUserId(id);
+            useCaseImplement.setExecuteTime(date);
+
+            useCase = new UseCase();
+            useCase.setId(useCaseImplement.getUseCaseId());
+            useCase.setExecuteUserId(id);
+            useCase.setExecuteTime(date);
+
         }
 
         // 若执行过程有1步失败或者阻塞,则当前执行信息为失败或阻塞
@@ -57,6 +72,9 @@ public class UseCaseImplementServiceImpl implements UseCaseImplementService {
 
         // 批量插入
         useCaseProcedureImplementMapper.insertBatch(list);
+
+        // 更新测试用例的执行人和执行时间
+        if (useCase != null) useCaseMapper.updateByPrimaryKeySelective(useCase);
     }
 
     @Override
