@@ -4,12 +4,15 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+
 /**
  * 
  * @Title: ExecuteResult.java
  * @Description: TODO(用一句话描述该文件做什么)
  * @author: 
  */
+@Component
 public class ExecuteResult<T> implements Serializable {
 
     private static final long serialVersionUID = -1854616725284151074L;
