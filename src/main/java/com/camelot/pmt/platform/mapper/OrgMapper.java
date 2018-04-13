@@ -3,9 +3,13 @@ package com.camelot.pmt.platform.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.camelot.pmt.platform.common.Pager;
 import com.camelot.pmt.platform.model.Org;
+import com.camelot.pmt.platform.model.OrgAndUser;
 import com.camelot.pmt.platform.model.OrgToUser;
+
 
 /**
  * <p>
@@ -83,6 +87,19 @@ public interface OrgMapper {
 	 * 组织机构   根据orgId查看详情(关系到用户  即部门负责人)
 	 **/
 	List<OrgToUser> selectOrgsDetailByOrgId(String orgId);
+	/** 
+	 * 组织机构与用户的绑定(关系到用户 )
+	 **/
+	int createOrgToUser(Org org);
+	/** 
+	 * 删除组织机构与用户的已绑定(关系到用户 )
+	 **/
+	int deleteOrgByUserIdAndOrgId(@Param("userId") String userId, @Param("orgId") String orgId);
+	/** 
+	 * 查询组织机构与用户的已绑定(关系到用户 )
+	 * @return 
+	 **/
+	OrgAndUser selectOrgAndUserByOrgIdAndUserId(@Param("userId") String userId, @Param("orgId") String orgId);
     
     
 }

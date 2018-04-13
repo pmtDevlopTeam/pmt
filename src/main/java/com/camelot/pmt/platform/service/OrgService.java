@@ -15,33 +15,33 @@ public interface OrgService {
      * 查询部门列表
      * @return ExecuteResult<List<Org>>
      */
-	ExecuteResult<List<Tree<Org>>> findAllOrgs();
+	ExecuteResult<List<Tree<Org>>> queryAllOrgs();
     /**
      * 查询单个部门
      * @return ExecuteResult<List<Org>>
      */
-    ExecuteResult<Org> findOrgById(String orgId);
+    ExecuteResult<Org> queryOrgByOrgId(String orgId);
     
     /**
      * 新增部门
      * @param org
      * @return ExecuteResult<Org>
      */
-    ExecuteResult<String> addOrg(Org org);
+    ExecuteResult<String> creatOrg(Org org);
 
     /**
      * 修改部门
      * @param org
      * @return ExecuteResult<Org>
      */
-    ExecuteResult<String> editOrg(Org org);
+    ExecuteResult<String> modifyOrgByOrgId(Org org);
     
     /**
      * 删除角色
      * @param org
      * @return
      */
-    ExecuteResult<String> deleteOrg(Org org);
+    ExecuteResult<String> deleteOrgByOrgId(Org org);
     /**
      * 分页查询部门列表
      * @param org
@@ -52,7 +52,7 @@ public interface OrgService {
      * 查询多个子部门
      * @return ExecuteResult<List<Org>>
      */
-	ExecuteResult<List<Tree<Org>>> selectOrgAndChildrenById(String orgId);
+	ExecuteResult<List<Tree<Org>>> queryOrgAndChildrenById(String orgId);
 	/**
 	 * 删除多个子部门机构  递归删除
 	 */
@@ -66,6 +66,10 @@ public interface OrgService {
 	 */
 	
 	ExecuteResult<List<OrgToUser>> queryOrgsDetailByOrgId(String orgId);
+	/** 
+	 * 组织机构与用户的绑定(关系到用户 )
+	 **/
+	ExecuteResult<String> addOrgToUser(Org org);
 	
 	
 	

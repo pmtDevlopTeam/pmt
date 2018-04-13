@@ -1,9 +1,10 @@
 package com.camelot.pmt.platform.model;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-public class OrgToUser {
+public class OrgToUser implements Serializable{
 	/**
      * id
      */
