@@ -33,6 +33,13 @@ public class RoleToUserController {
     @Autowired
     private RoleToUserService roleToUserService;
 
+
+    /**
+     * 根据角色绑定用户
+     *
+     * @param String roleIds, String  userId
+     * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
+     */
     @ApiOperation(value = "根据角色绑定用户", notes = "根据角色绑定用户")
     @PostMapping(value = "/addUserByRole")
     @ApiImplicitParams({
@@ -67,8 +74,8 @@ public class RoleToUserController {
     /**
      * 根据角色修改用户
      *
-     * @param roleToUser
-     * @return
+     * @param String roleIds, String userIds
+     * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
     @ApiOperation(value = "根据角色修改用户", notes = "根据角色修改用户")
     @ApiImplicitParams({
@@ -100,7 +107,8 @@ public class RoleToUserController {
     /**
      * 根据角色id查询用户列表
      *
-     * @return
+     * @param String roleId
+     * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
     @GetMapping(value = "queryUserByRole")
     @ApiOperation(value = "根据角色id查询用户列表", notes = "根据角色id查询用户列表")
