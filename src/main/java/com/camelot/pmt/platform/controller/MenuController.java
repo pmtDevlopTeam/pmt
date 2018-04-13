@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @ControllerAdvice
 @RequestMapping(value = "/platform/menu")
-@Api(value = "基础平台-菜单管理接口", description = "基础平台-菜单管理接口:提供统一菜单权限管理")
+@Api(value = "基础平台-菜单管理接口", description = "基础平台-菜单管理接口")
 public class MenuController {
 
     @Autowired

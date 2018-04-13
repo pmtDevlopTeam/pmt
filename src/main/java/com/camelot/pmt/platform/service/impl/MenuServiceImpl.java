@@ -71,6 +71,7 @@ public class MenuServiceImpl implements MenuService {
     @Override
     public ExecuteResult<Menu> modifyMenuByMenuId(Menu menu) {
         try {
+        	menu = modifyMenuModel(menu);
             int modifyMenuByMenuId = menuMapper.modifyMenuByMenuId(menu);
             if (modifyMenuByMenuId == 1) {
             }else {
@@ -181,29 +182,34 @@ public class MenuServiceImpl implements MenuService {
 	}
 	
 	public Menu createMenuModel(Menu menu) {
-		User user = (User) ShiroUtils.getSessionAttribute("user");
 		menu.setMenuId(UUIDUtil.getUUID());
-		long date = new Date().getTime();
-		menu.setCreateTime(new Date(date));
-		menu.setCreateUserId(user.getUserId());
-		menu.setModifyTime(new Date(date));
-		menu.setModifyUserId(user.getUserId());
         if (menu.getState() != null) {
         } else {
         	menu.setState(BaseState.ZERO);
         }
+		long date = new Date().getTime();
+		menu.setCreateTime(new Date(date));
+		menu.setModifyTime(new Date(date));
+		User user = (User) ShiroUtils.getSessionAttribute("user");
+		if(user != null) {
+			menu.setCreateUserId(user.getUserId());
+			menu.setModifyUserId(user.getUserId());
+		}
 		return menu;
 	}
 	
 	public Menu modifyMenuModel(Menu menu) {
-		User user = (User) ShiroUtils.getSessionAttribute("user");
-		long date = new Date().getTime();
-		menu.setModifyTime(new Date(date));
-		menu.setModifyUserId(user.getUserId());
+		menu.setMenuId(UUIDUtil.getUUID());
         if (menu.getState() != null) {
         } else {
         	menu.setState(BaseState.ZERO);
         }
+		long date = new Date().getTime();
+		menu.setModifyTime(new Date(date));
+		User user = (User) ShiroUtils.getSessionAttribute("user");
+		if(user != null) {
+			menu.setModifyUserId(user.getUserId());
+		}
 		return menu;
 	}
 
