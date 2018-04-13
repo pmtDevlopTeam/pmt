@@ -49,7 +49,7 @@
       #{createUserId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=BIGINT}, 
       #{modifyTime,jdbcType=TIMESTAMP}, #{delFlag,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.camelot.pmt.testmanage.casemanage.model.UseCase" >
+  <insert id="insertSelective" parameterType="com.camelot.pmt.testmanage.casemanage.model.UseCase" useGeneratedKeys="true" keyProperty="id">
     insert into use_case
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
