@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.camelot.pmt.platform.mapper.DictMapper" >
+   <resultMap id="BaseResultMap" type="com.camelot.pmt.platform.model.Dict" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="dict_id" property="dictId" />
+    <result column="dict_code" property="dictCode" />
+    <result column="dict_type" property="dictType" />
+    <result column="dict_name" property="dictName" />
+    <result column="state" property="state" />
+    <result column="create_time" property="createTime" />
+    <result column="create_user_id" property="createUserId" />
+    <result column="modify_time" property="modifyTime" />
+    <result column="modify_user_id" property="modifyUserId" />
+  </resultMap> 
+  <sql id="Base_Column_List" >
+    id, dict_id, dict_code, dict_type, dict_name, state, create_time, create_user_id, 
+    modify_time, modify_user_id
+  </sql>
+  <!-- 新增字典 开始 -->
+    <!-- 新增列处理 -->
+	<sql id="sql_add_dict_columns">
+		<trim suffixOverrides=",">
+			<if test="dictId != null">dict_id,</if>
+			<if test="dictCode != null">dict_code,</if>
+			<if test="dictType != null">dict_type,</if>
+			<if test="dictName != null">dict_name,</if>
+			<if test="state != null">state,</if>
+			<if test="createUserId != null">create_user_id,</if>
+			<if test="modifyUserId != null">modify_user_id,</if>
+			<if test="createTime != null">create_time</if>
+			<if test="modifyTime != null">modify_time</if>
+		</trim>
+	</sql>
+	<!-- 新增列属性 -->
+	<sql id="sql_add_dict_properties">
+		<trim suffixOverrides=",">
+			<if test="dictId != null">#{dictId},</if>
+			<if test="dictCode != null">#{dictCode},</if>
+			<if test="dictType != null">#{dictType},</if>
+			<if test="dictName != null">#{dictName},</if>
+			<if test="state != null">#{state},</if>
+			<if test="createUserId != null">#{createUserId},</if>
+			<if test="modifyUserId != null">#{modifyUserId},</if>
+			<if test="createTime != null">#{createTime},</if>
+			<if test="modifyTime != null">#{modifyTime}</if>
+		</trim>
+	</sql>
+  <!-- 增加一个字典 -->
+  <insert id="createDict" >
+    insert into platform_dict (
+	     <include refid="sql_add_dict_columns"/>
+		)values(
+			<include refid="sql_add_dict_properties"/>
+	     );
+  </insert>
+  <!-- 根据字典id 删除一个字典 -->
+  <delete id="deleteDictByDictId">
+    delete from platform_dict
+    where dict_id = #{dictId}
+  </delete>
+  <!-- 根据字典id 删除字典项 -->
+  <delete id="deleteDictItemByDictId">
+    delete from platform_dict_item
+    where dict_id = #{dictId}
+  </delete>
+  <!-- 根据字典id 修改一个字典 -->
+  <update id="modifyDictByDictId">
+    update platform_dict
+    	<set>
+    	    <if test="dictCode != null">
+                dict_code = #{dictCode},
+            </if>
+            <if test="dictType != null">
+                dict_type = #{dictType},
+            </if>
+            <if test="dictName != null">
+                dict_name = #{dictName},
+            </if>
+            <if test="state != null">
+                state = #{state},
+            </if>
+            <if test="createUserId != null">
+                create_user_id = #{createUserId}
+            </if>
+            <if test="modifyUserId != null">
+                modify_user_id = #{modifyUserId}
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime}
+            </if>
+            <if test="createTime != null">
+                modify_time = #{modifyTime}
+            </if>
+        </set>
+    where dict_id = #{dictId}
+  </update>
+  <!-- 根据字典id 查询一个字典 -->
+  <select id="queryDictByDictId" resultMap="BaseResultMap"  >
+    select 
+    <include refid="Base_Column_List"/>
+    from platform_dict
+    where dict_id = #{dictId}
+  </select>
+  <!-- 根据字典id 查询字典项 -->
+<!--   <select id="queryDictItemByDictId"  >
+    select *from platform_dict_item
+    where dict_id = #{dictId}
+  </select> -->
+  
+   <!-- 根据字典all -->
+  <select id="queryAllDict" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from platform_dict
+  </select>
+  
+  <!-- 检查字典编码是否存在 -->
+  <select id="findDictCode" resultMap="BaseResultMap" parameterType="java.lang.String" >
+      select <include refid="Base_Column_List"/> from platform_dict where dict_code = #{dictCode}
+  </select>
+  <!-- 检查字典名称是否存在 -->
+  <select id="findDictName" resultMap="BaseResultMap" parameterType="java.lang.String" >
+      select <include refid="Base_Column_List"/> from platform_dict where dict_name = #{dictName}
+  </select>
+
+</mapper>

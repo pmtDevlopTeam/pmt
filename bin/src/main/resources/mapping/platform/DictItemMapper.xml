@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.camelot.pmt.platform.mapper.DictItemMapper">
+  <resultMap id="BaseResultMap" type="com.camelot.pmt.platform.model.DictItem" >
+    <id column="id" property="id"  />
+    <result column="dict_item_id" property="dictItemId" />
+    <result column="dict_id" property="dictId" />
+    <result column="dict_item_name" property="dictItemName"  />
+    <result column="dict_item_code" property="dictItemCode"  />
+    <result column="dict_item_value" property="dictItemValue"  />
+    <result column="state" property="state"  />
+    <result column="sort_num" property="sortNum"  />
+    <result column="create_time" property="createTime"  />
+    <result column="create_user_id" property="createUserId"  />
+    <result column="modify_time" property="modifyTime"  />
+    <result column="modify_user_id" property="modifyUserId"  />
+  </resultMap>
+	<!-- 字典项查询字段 -->
+	<sql id="Base_Column_List">
+    id, dict_item_id, dict_id, dict_item_name, dict_item_code, dict_item_value, state, 
+    sort_num, create_time, create_user_id, modify_time, modify_user_id
+	</sql>
+	<!-- 新增字典项 开始 -->
+	<!-- 新增列处理 -->
+	<sql id="sql_add_dictItem_columns">
+		<trim suffixOverrides=",">
+			<if test="dictId != null">dict_id,</if>
+			<if test="dictItemId != null">dict_item_id,</if>
+			<if test="dictItemName != null">dict_item_name,</if>
+			<if test="dictItemCode != null">dict_item_code,</if>
+			<if test="dictItemValue != null">dict_item_value,</if>
+			<if test="state != null">state,</if>
+			<if test="sortNum != null">sort_num</if>
+			<if test="createUserId != null">create_user_id,</if>
+			<if test="modifyUserId != null">modify_user_id,</if>
+			<if test="createTime != null">create_time</if>
+			<if test="modifyTime != null">modify_time</if>
+		</trim>
+	</sql>
+	<!-- 新增列属性 -->
+	<sql id="sql_add_dictItem_properties">
+		<trim suffixOverrides=",">
+			<if test="dictId != null">#{dictId},</if>
+			<if test="dictItemId != null">#{dictItemId},</if>
+			<if test="dictItemName != null">#{dictItemName},</if>
+			<if test="dictItemCode != null">#{dictItemCode},</if>
+			<if test="dictItemValue != null">#{dictItemValue},</if>
+			<if test="state != null">#{state},</if>
+			<if test="sortNum != null">#{sortNum},</if>
+			<if test="createUserId != null">#{createUserId},</if>
+			<if test="modifyUserId != null">#{modifyUserId},</if>
+			<if test="createTime != null">#{createTime},</if>
+			<if test="modifyTime != null">#{modifyTime}</if>
+		</trim>
+	</sql>
+	<!-- 查询数量公共sql -->
+	<sql id="count_Tail">
+		select count(1) from platform_dict_item
+	</sql>
+	<!-- 分页公共sql -->
+	<sql id="pagination_tail">
+	  limit #{page.pageOffset} , #{page.rows}
+	</sql>
+	
+	
+	<!-- 增加一个字典项 -->
+	<insert id="createDictItem">
+		insert into platform_dict_item (
+		<include refid="sql_add_dictItem_columns" />
+		)values(
+		<include refid="sql_add_dictItem_properties" />
+		);
+	</insert>
+	<!-- 根据字典项id 删除一个字典项 -->
+	<delete id="deleteDictItemByDictItemId">
+		delete from platform_dict_item
+		where dict_item_id = #{dictItemId}
+	</delete>
+	<!-- 根据字典类型id 删除字典项 -->
+	<delete id="deleteDictItemByDictId">
+		delete from platform_dict_item
+		where dict_id = #{dictId}
+	</delete>
+	<!-- 根据字典项id 修改一个字典项 -->
+	<update id="modifyDictItemByDictItemId">
+		update platform_dict_item
+		<set>
+			<if test="dictId != null">
+				dict_id = #{dictId},
+			</if>
+			<if test="dictItemName != null">
+				dict_item_name = #{dictItemName},
+			</if>
+			<if test="dictItemCode != null">
+				dict_item_code = #{dictItemCode},
+			</if>
+			<if test="dictItemValue != null">
+				dict_item_value = #{dictItemValue},
+			</if>
+			<if test="state != null">
+				state = #{state},
+			</if>
+			<if test="sortNum != null">
+				sort_num = #{sortNum}
+			</if>
+            <if test="createUserId != null">
+                create_user_id = #{createUserId}
+            </if>
+            <if test="modifyUserId != null">
+                modify_user_id = #{modifyUserId}
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime}
+            </if>
+            <if test="createTime != null">
+                modify_time = #{modifyTime}
+            </if>
+		</set>
+		where dict_item_id= #{dictItemId}
+	</update>
+	<!-- 根据字典类型id 修改字典项 -->
+	<update id="modifyDictItemByDictId">
+		update platform_dict_item
+				<set>
+			<if test="dictItemName != null">
+				dict_item_name = #{dictItemName},
+			</if>
+			<if test="dictItemCode != null">
+				dict_item_code = #{dictItemCode},
+			</if>
+			<if test="dictItemValue != null">
+				dict_item_value = #{dictItemValue},
+			</if>
+			<if test="state != null">
+				state = #{state},
+			</if>
+			<if test="sortNum != null">
+				sort_num = #{sortNum}
+			</if>
+            <if test="createUserId != null">
+                create_user_id = #{createUserId}
+            </if>
+            <if test="modifyUserId != null">
+                modify_user_id = #{modifyUserId}
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime}
+            </if>
+            <if test="createTime != null">
+                modify_time = #{modifyTime}
+            </if>
+		</set>
+		where dict_id= #{dictId}
+	</update>
+	<!-- 根据字典项id 查询一个字典项 -->
+	<select id="queryDictItemByDictItemId"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from platform_dict_item
+		where dict_item_id = #{dictItemId}
+	</select>
+	<!-- 根据字典类型id 查询字典项 不分页-->
+	<select id="queryDictItemByDictId"
+		resultMap="BaseResultMap" >
+		select
+		<include refid="Base_Column_List" />
+		from platform_dict_item
+		where dict_id = #{dictId}
+	</select>
+	<!-- 根据字典类型id 查询字典项 分页 -->
+    <select id="queryDictItemByDictIdPage"
+    	    resultMap="BaseResultMap" >
+        select
+        <include refid="Base_Column_List"/>
+        from platform_dict_item
+        where dict_id = #{dictId}
+        <if test="page!=null">
+			<include refid="pagination_tail" />
+		</if>
+    </select>
+	<!-- 查询全部字典项  不分页-->
+	<select id="queryAllDictItem"
+		resultMap="BaseResultMap" >
+		select
+		<include refid="Base_Column_List" />
+		from platform_dict_item
+	</select>
+	<!-- 分页查询所有字典项列表 -->
+    <select id="queryAllDictItemPage"
+    	    resultMap="BaseResultMap" >
+        select
+        <include refid="Base_Column_List"/>
+        from platform_dict_item
+        <if test="page!=null">
+			<include refid="pagination_tail" />
+		</if>
+    </select>
+    <!-- 通过字典类型查询字典项总数量 -->
+	<select id="queryCountByDictId" resultType="long">
+		<include refid="count_Tail"></include>
+		where dict_id = #{dictId}
+	</select>
+	<!-- 查询字典项总数量 -->
+	<select id="queryCount" resultType="long">
+		<include refid="count_Tail"></include>
+	</select>
+	
+  <!-- 检查字典项编码是否存在 -->
+  <select id="findDictItemCode" resultMap="BaseResultMap" parameterType="java.lang.String" >
+      select <include refid="Base_Column_List"/> from platform_dict_item where dict_item_code = #{dictItemCode}
+  </select>
+  <!-- 检查字典项名称是否存在 -->
+  <select id="findDictItemName" resultMap="BaseResultMap" parameterType="java.lang.String" >
+      select <include refid="Base_Column_List"/> from platform_dict_item where dict_item_name = #{dictItemName}
+  </select>
+
+</mapper>

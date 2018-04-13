@@ -35,7 +35,7 @@ public class RoleToUserServiceImpl implements RoleToUserService {
 
     /**
      * 根据角色绑定用户
-     * 
+     *
      * @return
      */
     @Override
@@ -85,7 +85,7 @@ public class RoleToUserServiceImpl implements RoleToUserService {
 
     /**
      * 根据角色修改用户
-     * 
+     *
      * @param roleToUser
      * @return
      */
@@ -140,7 +140,7 @@ public class RoleToUserServiceImpl implements RoleToUserService {
 
     /**
      * 根据角色id查询用户列表
-     * 
+     *
      * @param role
      * @return
      */
@@ -154,7 +154,7 @@ public class RoleToUserServiceImpl implements RoleToUserService {
             }
             List<User> userModels = new ArrayList<User>();
             for (RoleToUser roleToUser : list) {
-            	User userModel = userMapper.selectUserById(roleToUser.getUserId());
+                User userModel = userMapper.selectUserById(roleToUser.getUserId());
                 userModels.add(userModel);
             }
             if (CollectionUtils.isEmpty(userModels)) {

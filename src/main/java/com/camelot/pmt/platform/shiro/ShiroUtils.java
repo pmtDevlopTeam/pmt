@@ -5,11 +5,13 @@ import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 /**
  * Shiro工具类
  * 
  */
+@Component
 public class ShiroUtils {
     private static Logger logger = LoggerFactory.getLogger(ShiroUtils.class);
 

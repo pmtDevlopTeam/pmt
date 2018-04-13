@@ -26,15 +26,15 @@ public class RoleServiceImpl implements RoleService {
 
     /**
      * 查询角色集合
-     * 
+     *
      * @return ExecuteResult<List<Role>>
      */
     @Override
-    public ExecuteResult<List<Tree<Role>>> queryRoleArray() {
+    public ExecuteResult<List<Tree<Role>>> queryAllRole() {
         ExecuteResult<List<Tree<Role>>> result = new ExecuteResult<List<Tree<Role>>>();
         List<Tree<Role>> trees = new ArrayList<Tree<Role>>();
         try {
-            List<Role> list = roleMapper.queryRoleArray();
+            List<Role> list = roleMapper.queryAllRole();
             if (CollectionUtils.isEmpty(list)) {
                 return result;
             }
@@ -61,16 +61,16 @@ public class RoleServiceImpl implements RoleService {
 
     /**
      * 添加角色
-     * 
+     *
      * @param role
      * @return ExecuteResult<Role>
      */
     @Override
-    public ExecuteResult<Role> addRole(Role role) {
+    public ExecuteResult<Role> createRole(Role role) {
         ExecuteResult result = new ExecuteResult();
         try {
             role = setRoleModel(role);
-            roleMapper.addRole(role);
+            roleMapper.createRole(role);
             result.setResult(role);
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
@@ -81,17 +81,17 @@ public class RoleServiceImpl implements RoleService {
 
     /**
      * 修改角色
-     * 
+     *
      * @param role
      * @return
      */
     @Override
-    public ExecuteResult<Role> editRole(Role role) {
+    public ExecuteResult<Role> modifyRoleById(Role role) {
         ExecuteResult<Role> result = new ExecuteResult<Role>();
         try {
             long date = new Date().getTime();
             role.setModifyTime(new Date(date));
-            roleMapper.editRole(role);
+            roleMapper.modifyRoleById(role);
             result.setResult(role);
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
@@ -102,16 +102,20 @@ public class RoleServiceImpl implements RoleService {
 
     /**
      * 删除角色
-     * 
+     *
      * @param id
      * @return
      */
     @Override
-    public ExecuteResult<Role> deleteRole(Role role) {
+    public ExecuteResult<Role> deleteRoleById(Role role) {
         ExecuteResult<Role> result = new ExecuteResult<Role>();
         try {
-            roleMapper.deleteRole(role);
-            roleMapper.deleteRoleMenu(role);
+            int status = roleMapper.deleteRoleById(role);
+            if(status == 1) {
+                roleMapper.deleteRoleMenuById(role);
+            }else {
+                return result;
+            }
             result.setResult(role);
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
@@ -122,6 +126,7 @@ public class RoleServiceImpl implements RoleService {
 
     /**
      * 验证角色名称是否可用
+     *
      * @param role
      * @return
      */
@@ -130,11 +135,11 @@ public class RoleServiceImpl implements RoleService {
         ExecuteResult result = new ExecuteResult();
         try {
             List<Role> list = roleMapper.getRoleNameVerification(role);
-            if(CollectionUtils.isEmpty(list)){
+            if (CollectionUtils.isEmpty(list)) {
                 return result;
             }
             result.setResult(list);
-        } catch (Exception e){
+        } catch (Exception e) {
             LOGGER.error(e.getMessage());
             throw new RuntimeException(e);
         }
@@ -143,7 +148,7 @@ public class RoleServiceImpl implements RoleService {
 
     /**
      * 转换实体 添加后台数据
-     * 
+     *
      * @param r
      * @return
      * @throws Exception
@@ -162,7 +167,11 @@ public class RoleServiceImpl implements RoleService {
             role.setParentId(STATUS);
         }
         role.setRoleId(UUID.randomUUID().toString().replaceAll("-", ""));
-        role.setState(STATUS);
+        if (r.getState() != null) {
+            role.setState(r.getState());
+        } else {
+            role.setState(STATUS);
+        }
         return role;
     }
 }

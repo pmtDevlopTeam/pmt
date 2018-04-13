@@ -1,11 +1,14 @@
 package com.camelot.pmt.platform.service;
 
-import com.alibaba.fastjson.JSONObject;
+import java.util.List;
+
+import com.baomidou.mybatisplus.plugins.Page;
+import com.camelot.pmt.platform.common.ExecuteResult;
 import com.camelot.pmt.platform.model.Menu;
 
 /**
  * <p>
- * 服务类
+ * 权限菜单服务接口类
  * </p>
  *
  * @author gnerv
@@ -14,42 +17,58 @@ import com.camelot.pmt.platform.model.Menu;
 public interface MenuService {
 
     /**
-     * 增加一个菜单
+     * 根据一个菜单对象 增加一个菜单
      * 
-     * @param menu
-     * @return
+     * @param Menu menu
+     * @return ExecuteResult<Menu>
      */
-    JSONObject createMenu(Menu menu);
+	ExecuteResult<Menu> createMenu(Menu menu);
 
     /**
      * 根据菜单id 删除一个菜单
      * 
-     * @param menuId
-     * @return
+     * @param String menuId
+     * @return ExecuteResult<Menu>
      */
-    JSONObject deleteMenuByMenuId(String menuId);
+	ExecuteResult<Menu> deleteMenuByMenuId(String menuId);
 
     /**
      * 根据菜单id 修改一个菜单
      * 
-     * @param menu
-     * @return
+     * @param Menu menu
+     * @return ExecuteResult<Menu>
      */
-    JSONObject modifyMenuByMenuId(Menu menu);
+	ExecuteResult<Menu> modifyMenuByMenuId(Menu menu);
 
     /**
      * 根据菜单id 查询一个菜单
      * 
-     * @param menu
-     * @return
+     * @param String menuId
+     * @return ExecuteResult<Menu>
      */
-    JSONObject queryMenuByMenuId(String menuId);
+	ExecuteResult<Menu> queryMenuByMenuId(String menuId);
 
     /**
      * 查询全部菜单树
      * 
-     * @param menu
+     * @param 
+     * @return ExecuteResult<List<Menu>>
+     */
+	ExecuteResult<List<Menu>> queryAllMenu();
+    
+    /**
+     * 根据菜单id 查询指定菜单的子菜单树
+     * 
+     * @param String menuId
+     * @return ExecuteResult<List<Menu>>
+     */
+	ExecuteResult<List<Menu>> querySubMenuByMenuId(String menuId);
+    
+    /**
+     * 菜单分页测试
+     * @param page
+     * @param state
      * @return
      */
-    JSONObject queryAllMenu();
+    Page<Menu> selectMenuPage(Page<Menu> page);
 }

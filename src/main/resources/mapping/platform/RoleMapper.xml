@@ -52,7 +52,7 @@
     </select>
 
     <!--查询所有角色列表-->
-    <select id="queryRoleArray" resultMap="BaseResultMap"  >
+    <select id="queryAllRole" resultMap="BaseResultMap"  >
        SELECT 
        <include refid="Base_Column_List" />
 	   FROM platform_role
@@ -66,7 +66,7 @@
     </select>
 
     <!--添加角色-->
-    <insert id="addRole" parameterType="Role">
+    <insert id="createRole" parameterType="Role">
         INSERT INTO platform_role(
             <include refid="add_Column_List"/>
             ) VALUES (
@@ -75,7 +75,7 @@
     </insert>
 
     <!--修改角色-->
-    <update id="editRole" parameterType="Role">
+    <update id="modifyRoleById" parameterType="Role">
         UPDATE platform_role
         <set>
             <if test="roleName != null">
@@ -90,16 +90,20 @@
             <if test="modifyUserId != null">
                 modify_user_id = #{modifyUserId},
             </if>
+            <if test="state != null">
+                state = #{state},
+            </if>
         </set>
         WHERE role_id = #{roleId}
     </update>
 
     <!--删除角色-->
-    <delete id="deleteRole" parameterType="Role">
+    <delete id="deleteRoleById" parameterType="Role">
         DELETE FROM platform_role WHERE role_id = #{roleId}
     </delete>
 
-    <delete id="deleteRoleMenu" parameterType="Role">
+    <!--清除角色权限-->
+    <delete id="deleteRoleMenuById" parameterType="Role">
         DELETE FROM platform_role_menu WHERE role_id = #{roleId}
     </delete>
 

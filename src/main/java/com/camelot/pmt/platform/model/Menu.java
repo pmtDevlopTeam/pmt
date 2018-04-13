@@ -77,7 +77,32 @@ public class Menu implements Serializable {
     private String modifyUserId;
 
 
-    public Long getId() {
+    public Menu() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public Menu(Long id, String menuId, String parentId, String menuName, String menuType, String menuUrl,
+			String menuPermission, String menuIcon, String state, Integer sortNum, Date createTime, String createUserId,
+			Date modifyTime, String modifyUserId) {
+		super();
+		this.id = id;
+		this.menuId = menuId;
+		this.parentId = parentId;
+		this.menuName = menuName;
+		this.menuType = menuType;
+		this.menuUrl = menuUrl;
+		this.menuPermission = menuPermission;
+		this.menuIcon = menuIcon;
+		this.state = state;
+		this.sortNum = sortNum;
+		this.createTime = createTime;
+		this.createUserId = createUserId;
+		this.modifyTime = modifyTime;
+		this.modifyUserId = modifyUserId;
+	}
+
+	public Long getId() {
         return id;
     }
 
