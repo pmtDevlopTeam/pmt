@@ -64,5 +64,25 @@ public class UseCaseController {
 			}
 		 	return actionBean;
 	    }
+	 
+	 
+	 @ApiOperation(value = "根据id删除用例信息", notes = "根据id删除用例信息")
+	    @RequestMapping(value = "userCase/updateUserCaseDelFlag", method = RequestMethod.GET)
+	    @ApiImplicitParams({
+	            @ApiImplicitParam(name = "id", value = "用例id", required = true, paramType = "query", dataType = "long") })
+	    public ActionBean updateUserCaseDelFlag(Long id) {
+		 ActionBean  actionBean  =new ActionBean();
+		 	try {
+		 		UseCaseService.updateUserCaseDelFlag(id);
+		 		actionBean.setCode(200);
+		 		actionBean.setErrorMessage("成功");
+		 		actionBean.setResult(true);
+			} catch (Exception e) {
+				actionBean.setCode(500);
+				actionBean.setErrorMessage(e.getMessage());
+				actionBean.setResult(false);
+			}
+		 	return actionBean;
+	    }
 	
 }

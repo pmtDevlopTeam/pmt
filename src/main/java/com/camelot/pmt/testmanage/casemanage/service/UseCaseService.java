@@ -17,6 +17,16 @@ public interface UseCaseService {
 	 */
 	void add(UserModel userModel, UseCase useCase);
 	
-	
+	/**
+	 * 根据用例id获取用例
+	 * @param id
+	 * @return
+	 */
 	UseCase getUseCaseByUseCaseId (long id);
+	
+	/**
+	 * 修改用例状态
+	 * @param id
+	 */
+	void updateUserCaseDelFlag(long id);
 }

@@ -232,6 +232,12 @@
       del_flag = #{delFlag,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+   <update id="updateUserCaseDelFlag" parameterType="java.lang.Long" >
+    update use_case
+    set
+      del_flag = 1
+    where id = #{id,jdbcType=BIGINT}
+  </update>
   <select id="selectUseCase" resultType="com.camelot.pmt.testmanage.casemanage.model.UseCase"  >
     select 
     <include refid="Base_Column_List" />

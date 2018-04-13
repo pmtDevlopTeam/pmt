@@ -51,7 +51,9 @@ public class UseCaseServiceImpl implements UseCaseService{
 		return useCaseMapper.selectByPrimaryKey(id);
 	}
 	
-	
+	public void updateUserCaseDelFlag(long id){
+		useCaseMapper.updateUserCaseDelFlag(id);
+	}
 	@Override
 	@Transactional
 	public void add(UserModel userModel, UseCase useCase) {
