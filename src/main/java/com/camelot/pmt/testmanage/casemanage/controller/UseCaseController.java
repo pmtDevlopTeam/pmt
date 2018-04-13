@@ -47,7 +47,7 @@ public class UseCaseController {
 	 
 	 
 	 @ApiOperation(value = "通过id获取用例信息", notes = "通过id获取用例信息")
-	    @RequestMapping(value = "userCase/queryUserCase", method = RequestMethod.GET)
+	    @RequestMapping(value = "userCase/getUseCaseByUseCaseId", method = RequestMethod.GET)
 	    @ApiImplicitParams({
 	            @ApiImplicitParam(name = "id", value = "用例id", required = true, paramType = "query", dataType = "long") })
 	    public ActionBean getUseCaseByUseCaseId(Long id) {
