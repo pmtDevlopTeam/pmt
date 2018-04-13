@@ -28,16 +28,14 @@ public class UseCaseController {
 	
 	 @ApiOperation(value = "分页获取用户列表", notes = "分页获取用户列表")
 	    @RequestMapping(value = "userCase/queryUserCase", method = RequestMethod.GET)
-	 @ResponseBody
 	    @ApiImplicitParams({
 	            @ApiImplicitParam(name = "currentPage", value = "页码", required = true, paramType = "query", dataType = "int"),
 	            @ApiImplicitParam(name = "pageSize", value = "每页数量", required = true, paramType = "query", dataType = "int") })
 	    public PageInfo<UseCase> queryUsersByPage(Integer currentPage,Integer pageSize) {
-		 PageBean  pageBean=	new  PageBean();
-		 pageBean.setCurrentPage(currentPage);
-		 pageBean.setPageSize(pageSize);
-		 return UseCaseService.selectUseCase(pageBean);
-		 	//return  UseCaseService.selectUseCase(pageBean);
+			 PageBean  pageBean=	new  PageBean();
+			 pageBean.setCurrentPage(currentPage);
+			 pageBean.setPageSize(pageSize);
+			 return UseCaseService.selectUseCase(pageBean);
 	    }
 	
 }

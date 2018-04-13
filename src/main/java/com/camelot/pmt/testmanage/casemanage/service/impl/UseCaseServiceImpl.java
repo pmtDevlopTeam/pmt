@@ -29,27 +29,14 @@ public class UseCaseServiceImpl implements UseCaseService{
 	     pageHelper.setProperties(properties);
 	     return pageHelper;
 	}
+	
 	@Autowired
 	UseCaseMapper useCaseMapper;
 	
 	public PageInfo<UseCase> selectUseCase(PageBean pageBean){
-		UseCase seCase=useCaseMapper.selectByPrimaryKey(1L);
 		PageHelper.startPage(pageBean.getCurrentPage(), pageBean.getPageSize());
-		/* PageInfo<UseCase> pageInfo = new PageInfo<UseCase>(seCase,5);
-		PageHelper.startPage(Integer.parseInt(currentPage), Integer.parseInt(pageSize));
-		  List<LytBbsTz> publishTz = bbsTzDao.getPublishTz(userId);
-		  PageInfo<LytBbsTz> info = new PageInfo<LytBbsTz>(publishTz);
-		UseCase UseCase=useCaseMapper.selectByPrimaryKey(1L);
-		PageHelper.startPage(pageBean.getCurrentPage(), pageBean.getPageSize());*/
         List<UseCase> docs = useCaseMapper.selectUseCase(new HashMap<String, Object>());
         PageInfo<UseCase> pageInfo = new PageInfo<UseCase>(docs);
-        
         return pageInfo;
-      /*  PageInfo<Doc> pageInfo = new PageInfo<>(docs);
-		Page<UseCase> page = new Page<UseCase>(pageBean.getCurrentPage(),
-				pageBean.getPageSize());
-	        List<UseCase> list = useCaseMapper.selectUseCase(page, pageBean.getCondition());
-	        pageBean.setTotalNum(new Long(page.getTotal()).intValue());
-	        pageBean.setItems(list);*/
 	}
 }
