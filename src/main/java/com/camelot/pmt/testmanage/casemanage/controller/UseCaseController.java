@@ -1,18 +1,30 @@
 package com.camelot.pmt.testmanage.casemanage.controller;
 
-import com.camelot.pmt.platform.user.model.UserModel;
-import io.swagger.annotations.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.alibaba.fastjson.JSONObject;
+import com.camelot.pmt.platform.common.ApiResponse;
+import com.camelot.pmt.platform.user.model.UserModel;
+import com.camelot.pmt.platform.utils.ExecuteResult;
 import com.camelot.pmt.platform.utils.PageBean;
 import com.camelot.pmt.testmanage.casemanage.model.UseCase;
 import com.camelot.pmt.testmanage.casemanage.service.UseCaseService;
 import com.camelot.pmt.testmanage.casemanage.util.ActionBean;
-import com.github.pagehelper.PageInfo;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.List;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 
 @RestController
 @Api(value = "用例管理", description = "用例管理接口")
@@ -26,11 +38,20 @@ public class UseCaseController {
 	    @ApiImplicitParams({
 	            @ApiImplicitParam(name = "currentPage", value = "页码", required = true, paramType = "query", dataType = "int"),
 	            @ApiImplicitParam(name = "pageSize", value = "每页数量", required = true, paramType = "query", dataType = "int") })
-	    public PageInfo<UseCase> queryUsersByPage(Integer currentPage,Integer pageSize) {
+	    public JSONObject queryUsersByPage(Integer currentPage,Integer pageSize) {
 			 PageBean  pageBean=	new  PageBean();
 			 pageBean.setCurrentPage(currentPage);
 			 pageBean.setPageSize(pageSize);
-			 return UseCaseService.selectUseCase(pageBean);
+			 ExecuteResult<String> result = new ExecuteResult<String>();
+		        try {
+		            //调用添加bug接口
+		            result = UseCaseService.selectUseCase(pageBean);
+		            // 成功返回
+		            return ApiResponse.success(result.getResult());
+		        } catch (Exception e) {
+		            // 异常
+		            return ApiResponse.error();
+		        }
 	    }
 
 	@ApiOperation(value = "新增用例")

@@ -1,6 +1,17 @@
 package com.camelot.pmt.testmanage.casemanage.service.impl;
 
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.camelot.pmt.platform.user.model.UserModel;
+import com.camelot.pmt.platform.utils.ExecuteResult;
 import com.camelot.pmt.platform.utils.PageBean;
 import com.camelot.pmt.testmanage.casemanage.mapper.UseCaseMapper;
 import com.camelot.pmt.testmanage.casemanage.mapper.UseCaseProcedureMapper;
@@ -9,16 +20,11 @@ import com.camelot.pmt.testmanage.casemanage.model.UseCaseProcedure;
 import com.camelot.pmt.testmanage.casemanage.service.UseCaseService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
 
 @Service
 public class UseCaseServiceImpl implements UseCaseService{
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(UseCaseServiceImpl.class);
 
 	@Autowired
 	private UseCaseProcedureMapper useCaseProcedureMapper;
@@ -28,11 +34,25 @@ public class UseCaseServiceImpl implements UseCaseService{
 	UseCaseMapper useCaseMapper;
 	
 	@Transactional
-	public PageInfo<UseCase> selectUseCase(PageBean pageBean){
-		PageHelper.startPage(pageBean.getCurrentPage(), pageBean.getPageSize());
-        List<UseCase> docs = useCaseMapper.selectUseCase(new HashMap<String, Object>());
-        PageInfo<UseCase> pageInfo = new PageInfo<UseCase>(docs);
-        return pageInfo;
+	public  ExecuteResult<String> selectUseCase(PageBean pageBean){
+        
+        
+        ExecuteResult<String> result = new ExecuteResult<String>();
+		 try {
+			 	//判断传入的bug对象是否为空
+	            if (pageBean == null) {
+	                result.addErrorMessage("传入实体有误!");
+	                return result;
+	            }
+	            PageHelper.startPage(pageBean.getCurrentPage(), pageBean.getPageSize());
+	            List<UseCase> docs = useCaseMapper.selectUseCase(new HashMap<String, Object>());
+	            PageInfo<UseCase> pageInfo = new PageInfo<UseCase>(docs);
+	            result.setResult("用例查询成功!");
+	        } catch (Exception e) {
+	            LOGGER.error(e.getMessage());
+	            throw new RuntimeException(e);
+	        }
+	        return result;
 	}
 	
 	/**
