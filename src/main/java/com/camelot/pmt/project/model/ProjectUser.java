@@ -9,11 +9,6 @@ public class ProjectUser {
     private Long id;
 
     /**
-     * 需求id
-     */
-    private Long reqId;
-
-    /**
      * 项目id
      */
     private Long projectId;
@@ -21,7 +16,7 @@ public class ProjectUser {
     /**
      * 用户id
      */
-    private Long userId;
+    private String userId;
 
     /**
      * 预计进项目日期
@@ -44,19 +39,24 @@ public class ProjectUser {
     private Date realOutTime;
 
     /**
+     * 预计工时
+     */
+    private Integer preManHour;
+
+    /**
      * 成员在项目状态  01进入，02未进入，03已出 04 暂离
      */
     private String userStatus;
 
     /**
-     * 成员在项目角色
+     * 成员在项目角色id
      */
     private Long userProRole;
 
     /**
      * 创建人id
      */
-    private Long createUserId;
+    private String createUserId;
 
     /**
      * 创建时间
@@ -66,7 +66,7 @@ public class ProjectUser {
     /**
      * 修改人id
      */
-    private Long modifyUserId;
+    private String modifyUserId;
 
     /**
      * 修改时间
@@ -90,22 +90,6 @@ public class ProjectUser {
     }
 
     /**
-     * 需求id
-     * @return req_id 需求id
-     */
-    public Long getReqId() {
-        return reqId;
-    }
-
-    /**
-     * 需求id
-     * @param reqId 需求id
-     */
-    public void setReqId(Long reqId) {
-        this.reqId = reqId;
-    }
-
-    /**
      * 项目id
      * @return project_id 项目id
      */
@@ -125,7 +109,7 @@ public class ProjectUser {
      * 用户id
      * @return user_id 用户id
      */
-    public Long getUserId() {
+    public String getUserId() {
         return userId;
     }
 
@@ -133,8 +117,8 @@ public class ProjectUser {
      * 用户id
      * @param userId 用户id
      */
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setUserId(String userId) {
+        this.userId = userId == null ? null : userId.trim();
     }
 
     /**
@@ -202,6 +186,22 @@ public class ProjectUser {
     }
 
     /**
+     * 预计工时
+     * @return pre_man_hour 预计工时
+     */
+    public Integer getPreManHour() {
+        return preManHour;
+    }
+
+    /**
+     * 预计工时
+     * @param preManHour 预计工时
+     */
+    public void setPreManHour(Integer preManHour) {
+        this.preManHour = preManHour;
+    }
+
+    /**
      * 成员在项目状态  01进入，02未进入，03已出 04 暂离
      * @return user_status 成员在项目状态  01进入，02未进入，03已出 04 暂离
      */
@@ -218,16 +218,16 @@ public class ProjectUser {
     }
 
     /**
-     * 成员在项目角色
-     * @return user_pro_role 成员在项目角色
+     * 成员在项目角色id
+     * @return user_pro_role 成员在项目角色id
      */
     public Long getUserProRole() {
         return userProRole;
     }
 
     /**
-     * 成员在项目角色
-     * @param userProRole 成员在项目角色
+     * 成员在项目角色id
+     * @param userProRole 成员在项目角色id
      */
     public void setUserProRole(Long userProRole) {
         this.userProRole = userProRole;
@@ -237,7 +237,7 @@ public class ProjectUser {
      * 创建人id
      * @return create_user_id 创建人id
      */
-    public Long getCreateUserId() {
+    public String getCreateUserId() {
         return createUserId;
     }
 
@@ -245,8 +245,8 @@ public class ProjectUser {
      * 创建人id
      * @param createUserId 创建人id
      */
-    public void setCreateUserId(Long createUserId) {
-        this.createUserId = createUserId;
+    public void setCreateUserId(String createUserId) {
+        this.createUserId = createUserId == null ? null : createUserId.trim();
     }
 
     /**
@@ -269,7 +269,7 @@ public class ProjectUser {
      * 修改人id
      * @return modify_user_id 修改人id
      */
-    public Long getModifyUserId() {
+    public String getModifyUserId() {
         return modifyUserId;
     }
 
@@ -277,8 +277,8 @@ public class ProjectUser {
      * 修改人id
      * @param modifyUserId 修改人id
      */
-    public void setModifyUserId(Long modifyUserId) {
-        this.modifyUserId = modifyUserId;
+    public void setModifyUserId(String modifyUserId) {
+        this.modifyUserId = modifyUserId == null ? null : modifyUserId.trim();
     }
 
     /**

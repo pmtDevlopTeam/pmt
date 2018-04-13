@@ -16,7 +16,7 @@ public class DemandOperate {
     /**
      * 创建人id
      */
-    private Long createUserId;
+    private String createUserId;
 
     /**
      * 创建时间
@@ -64,7 +64,7 @@ public class DemandOperate {
      * 创建人id
      * @return create_user_id 创建人id
      */
-    public Long getCreateUserId() {
+    public String getCreateUserId() {
         return createUserId;
     }
 
@@ -72,8 +72,8 @@ public class DemandOperate {
      * 创建人id
      * @param createUserId 创建人id
      */
-    public void setCreateUserId(Long createUserId) {
-        this.createUserId = createUserId;
+    public void setCreateUserId(String createUserId) {
+        this.createUserId = createUserId == null ? null : createUserId.trim();
     }
 
     /**

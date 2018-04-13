@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="com.camelot.pmt.project.model.DemandOperate" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="demand_id" property="demandId" jdbcType="BIGINT" />
-    <result column="create_user_id" property="createUserId" jdbcType="BIGINT" />
+    <result column="create_user_id" property="createUserId" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <resultMap id="ResultMapWithBLOBs" type="com.camelot.pmt.project.model.DemandOperate" extends="BaseResultMap" >
@@ -31,7 +31,7 @@
   <insert id="insert" parameterType="com.camelot.pmt.project.model.DemandOperate" >
     insert into demand_operate (id, demand_id, create_user_id, 
       create_time, operate_desc)
-    values (#{id,jdbcType=BIGINT}, #{demandId,jdbcType=BIGINT}, #{createUserId,jdbcType=BIGINT}, 
+    values (#{id,jdbcType=BIGINT}, #{demandId,jdbcType=BIGINT}, #{createUserId,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{operateDesc,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.camelot.pmt.project.model.DemandOperate" >
@@ -61,7 +61,7 @@
         #{demandId,jdbcType=BIGINT},
       </if>
       <if test="createUserId != null" >
-        #{createUserId,jdbcType=BIGINT},
+        #{createUserId,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
@@ -78,7 +78,7 @@
         demand_id = #{demandId,jdbcType=BIGINT},
       </if>
       <if test="createUserId != null" >
-        create_user_id = #{createUserId,jdbcType=BIGINT},
+        create_user_id = #{createUserId,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -92,7 +92,7 @@
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.camelot.pmt.project.model.DemandOperate" >
     update demand_operate
     set demand_id = #{demandId,jdbcType=BIGINT},
-      create_user_id = #{createUserId,jdbcType=BIGINT},
+      create_user_id = #{createUserId,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       operate_desc = #{operateDesc,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=BIGINT}
@@ -100,7 +100,7 @@
   <update id="updateByPrimaryKey" parameterType="com.camelot.pmt.project.model.DemandOperate" >
     update demand_operate
     set demand_id = #{demandId,jdbcType=BIGINT},
-      create_user_id = #{createUserId,jdbcType=BIGINT},
+      create_user_id = #{createUserId,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>

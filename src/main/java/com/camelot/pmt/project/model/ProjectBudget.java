@@ -31,7 +31,7 @@ public class ProjectBudget {
     /**
      * 创建人id
      */
-    private Long createUserId;
+    private String createUserId;
 
     /**
      * 创建时间
@@ -41,7 +41,7 @@ public class ProjectBudget {
     /**
      * 修改人id
      */
-    private Long modifyUserId;
+    private String modifyUserId;
 
     /**
      * 修改时间
@@ -132,7 +132,7 @@ public class ProjectBudget {
      * 创建人id
      * @return create_user_id 创建人id
      */
-    public Long getCreateUserId() {
+    public String getCreateUserId() {
         return createUserId;
     }
 
@@ -140,8 +140,8 @@ public class ProjectBudget {
      * 创建人id
      * @param createUserId 创建人id
      */
-    public void setCreateUserId(Long createUserId) {
-        this.createUserId = createUserId;
+    public void setCreateUserId(String createUserId) {
+        this.createUserId = createUserId == null ? null : createUserId.trim();
     }
 
     /**
@@ -164,7 +164,7 @@ public class ProjectBudget {
      * 修改人id
      * @return modify_user_id 修改人id
      */
-    public Long getModifyUserId() {
+    public String getModifyUserId() {
         return modifyUserId;
     }
 
@@ -172,8 +172,8 @@ public class ProjectBudget {
      * 修改人id
      * @param modifyUserId 修改人id
      */
-    public void setModifyUserId(Long modifyUserId) {
-        this.modifyUserId = modifyUserId;
+    public void setModifyUserId(String modifyUserId) {
+        this.modifyUserId = modifyUserId == null ? null : modifyUserId.trim();
     }
 
     /**

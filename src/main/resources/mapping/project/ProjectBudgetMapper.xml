@@ -7,9 +7,9 @@
     <result column="actual_hours" property="actualHours" jdbcType="INTEGER" />
     <result column="budgetary_hours" property="budgetaryHours" jdbcType="INTEGER" />
     <result column="other" property="other" jdbcType="VARCHAR" />
-    <result column="create_user_id" property="createUserId" jdbcType="BIGINT" />
+    <result column="create_user_id" property="createUserId" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-    <result column="modify_user_id" property="modifyUserId" jdbcType="BIGINT" />
+    <result column="modify_user_id" property="modifyUserId" jdbcType="VARCHAR" />
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
@@ -32,8 +32,8 @@
       create_time, modify_user_id, modify_time
       )
     values (#{id,jdbcType=BIGINT}, #{projectId,jdbcType=BIGINT}, #{actualHours,jdbcType=INTEGER}, 
-      #{budgetaryHours,jdbcType=INTEGER}, #{other,jdbcType=VARCHAR}, #{createUserId,jdbcType=BIGINT}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=BIGINT}, #{modifyTime,jdbcType=TIMESTAMP}
+      #{budgetaryHours,jdbcType=INTEGER}, #{other,jdbcType=VARCHAR}, #{createUserId,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.camelot.pmt.project.model.ProjectBudget" >
@@ -84,13 +84,13 @@
         #{other,jdbcType=VARCHAR},
       </if>
       <if test="createUserId != null" >
-        #{createUserId,jdbcType=BIGINT},
+        #{createUserId,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="modifyUserId != null" >
-        #{modifyUserId,jdbcType=BIGINT},
+        #{modifyUserId,jdbcType=VARCHAR},
       </if>
       <if test="modifyTime != null" >
         #{modifyTime,jdbcType=TIMESTAMP},
@@ -113,13 +113,13 @@
         other = #{other,jdbcType=VARCHAR},
       </if>
       <if test="createUserId != null" >
-        create_user_id = #{createUserId,jdbcType=BIGINT},
+        create_user_id = #{createUserId,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="modifyUserId != null" >
-        modify_user_id = #{modifyUserId,jdbcType=BIGINT},
+        modify_user_id = #{modifyUserId,jdbcType=VARCHAR},
       </if>
       <if test="modifyTime != null" >
         modify_time = #{modifyTime,jdbcType=TIMESTAMP},
@@ -133,9 +133,9 @@
       actual_hours = #{actualHours,jdbcType=INTEGER},
       budgetary_hours = #{budgetaryHours,jdbcType=INTEGER},
       other = #{other,jdbcType=VARCHAR},
-      create_user_id = #{createUserId,jdbcType=BIGINT},
+      create_user_id = #{createUserId,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
-      modify_user_id = #{modifyUserId,jdbcType=BIGINT},
+      modify_user_id = #{modifyUserId,jdbcType=VARCHAR},
       modify_time = #{modifyTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
