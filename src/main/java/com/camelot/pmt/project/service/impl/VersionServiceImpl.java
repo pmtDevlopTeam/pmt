@@ -10,12 +10,13 @@ import groovy.util.logging.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
  * @Package: com.camelot.pmt.project.service.impl
  * @ClassName: VersionServiceImpl
- * @Description: TODO
+ * @Description: 版本控制service实现类
  * @author: xueyj
  * @date: 2018-04-13 11:00
  */
@@ -34,7 +35,9 @@ public class VersionServiceImpl implements VersionService{
         // 获取当前版本的类型与版本编号，用于自动生成版本编号
         String versionType = version.getVersionType();
         // 根据项目id，版本类型查询对应版本编号
-        String versionCode = versionMapper.getVetsionCode(projectId,versionType);
+        List<Version> versionList = versionMapper.queryListByProIdAndVerType(projectId, versionType);
+        // 获取最后添加版本信息的版本编号
+        String versionCode = versionList.get(0).getVersion();
         // 设置版本编号
         version.setVersion(getVersionCode(versionCode,versionType));
         // 项目id
@@ -50,7 +53,44 @@ public class VersionServiceImpl implements VersionService{
             return  ApiResponse.error("新增版本失败！");
         }
     }
-
+    /**
+      * @Description: 逻辑删除版本信息
+      * @param: 
+      * @return: 
+      * @author: xueyj
+      * @date: 2018/4/13 19:16
+      */
+    public JSONObject deleteVersionInfoById(String userId,Long versionId){
+        Version version = versionMapper.selectByPrimaryKey(versionId);
+        // 设置版本修改人信息
+        version.setModifyUserId(userId);
+        // 设置版本状态
+        //version.setVersionStstus();
+        int i = versionMapper.insertSelective(version);
+        if (i > 0) {
+            return  ApiResponse.success("删除版本成功！");
+        }else{
+            return  ApiResponse.error("删除版本失败！");
+        }
+    }
+    /**
+      * @Description: 根据指定id修改version信息
+      * @param: 
+      * @return: 
+      * @author: xueyj
+      * @date: 2018/4/13 18:49
+      */
+    public JSONObject updateVersonInfo(String userId, Long versionId){
+        Version version = versionMapper.selectByPrimaryKey(versionId);
+        // 设置版本修改人信息
+        version.setModifyUserId(userId);
+        int i = versionMapper.insertSelective(version);
+        if (i > 0) {
+            return  ApiResponse.success("修改版本成功！");
+        }else{
+            return  ApiResponse.error("修改版本失败！");
+        }
+    }
     /**
       * @Description: 根据指定id查询版本信息
       * @param: version
@@ -64,13 +104,37 @@ public class VersionServiceImpl implements VersionService{
     }
 
     /**
-     * TODO : 待实现
-     * @param versionId
-     * @return
-     */
-    public JSONObject getVersionListInfo(Long versionId){
+      * @Description: 根据项目id查询所有版本信息
+      * @param:
+      * @return:
+      * @author: xueyj
+      * @date: 2018/4/13 18:30
+      */
+    public JSONObject getVersionListInfo(Long projectId){
+        List<Version> versionList = versionMapper.selectVersionListByProId(projectId);
+        return  ApiResponse.success(versionList);
+    }
+    
+    /**
+      * @Description: 根据指定id查询version信息
+      * @param: 
+      * @return: 
+      * @author: xueyj
+      * @date: 2018/4/13 18:44
+      */
+    public JSONObject getVersionInfoById(Long versionId){
         Version version = versionMapper.selectByPrimaryKey(versionId);
         return  ApiResponse.success(version);
+    }
+    /**
+     * 根据项目id，版本类型，查询版本信息
+     * @param projectId
+     * @param versionType
+     * @return
+     */
+    public JSONObject getVersionListInfo(Long projectId,String versionType){
+        List<Version> versionList = versionMapper.queryListByProIdAndVerType(projectId,versionType);
+        return  ApiResponse.success(versionList);
     }
     /**
      * 根据不同的版本状态自动生成不同的版本编号

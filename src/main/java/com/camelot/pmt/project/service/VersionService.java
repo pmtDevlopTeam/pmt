@@ -20,4 +20,39 @@ public interface VersionService {
      * @return
      */
     JSONObject insertVersonInfo(Long projectId, String userId, Version version);
+
+    /**
+      * @Description: 根据项目id查询版本信息
+      * @param:
+      * @return:
+      * @author: xueyj
+      * @date: 2018/4/13 19:14
+      */
+    JSONObject getVersionListInfo(Long projectId);
+
+    /**
+      * @Description: 根据versionid查询version信息
+      * @param:
+      * @return:
+      * @author: xueyj
+      * @date: 2018/4/13 19:14
+      */
+    JSONObject getVersionInfoById(Long versionId);
+
+    /**
+      * @Description: 根据指定id修改version信息
+      * @param:
+      * @return:
+      * @author: xueyj
+      * @date: 2018/4/13 19:15
+      */
+    JSONObject updateVersonInfo(String userId, Long versionId);
+    /**
+      * @Description: 逻辑删除版本信息
+      * @param:
+      * @return:
+      * @author: xueyj
+      * @date: 2018/4/13 19:14
+      */
+    JSONObject deleteVersionInfoById(String userId,Long versionId);
 }

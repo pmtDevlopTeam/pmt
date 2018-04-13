@@ -195,10 +195,17 @@
     modify_time = now()
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <select id="getVetsionCode" resultType="String" parameterType="map">
-    SELECT version
-    FROM  version
-    WHERE project_id=#{projectId}
-    and version_type=#{versionType}
+  <select id="selectVersionListByProId" resultMap="BaseResultMap" parameterType="long">
+    SELECT
+    <include refid="Base_Column_List"/>
+    FROM version
+    WHERE project_id = #{projectId} ORDER BY create_time DESC
+  </select>
+  <select id="queryListByProIdAndVerType" resultMap="BaseResultMap" parameterType="map">
+    SELECT
+    <include refid="Base_Column_List"/>
+    FROM version
+    WHERE project_id = #{projectId}
+    AND version_type=#{versionType} ORDER BY create_time DESC
   </select>
 </mapper>
