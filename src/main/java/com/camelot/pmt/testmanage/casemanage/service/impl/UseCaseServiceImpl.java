@@ -26,7 +26,7 @@ public class UseCaseServiceImpl implements UseCaseService{
 	@Autowired
 	private UseCaseProcedureMapper useCaseProcedureMapper;
 	
-	@Bean
+	/*@Bean
 	public PageHelper pageHelper(){
 	      PageHelper pageHelper = new PageHelper();
 	      Properties properties = new Properties();
@@ -36,7 +36,7 @@ public class UseCaseServiceImpl implements UseCaseService{
 	      properties.setProperty("dialect","mysql");    //配置mysql数据库的方言
 	     pageHelper.setProperties(properties);
 	     return pageHelper;
-	}
+	}*/
 	
 	@Autowired
 	UseCaseMapper useCaseMapper;

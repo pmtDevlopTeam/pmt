@@ -5,7 +5,7 @@ import com.camelot.pmt.filemanage.mapper.FileManageMapper;
 import com.camelot.pmt.filemanage.model.FileManage;
 import com.camelot.pmt.filemanage.model.FileManageGroup;
 import com.camelot.pmt.filemanage.service.FileManageService;
-import org.apache.catalina.servlet4preview.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequest;
 import org.apache.tools.ant.taskdefs.condition.Http;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
