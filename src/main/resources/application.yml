@@ -25,9 +25,9 @@ spring:
         maxOpenPreparedStatements: 20
     redis:
         database: 1
-        host: 172.21.127.81
+        host: 59.110.173.46
         port: 6379
-        password: redis81
+        password: uAiqwVwjJ8-i
         timeout: 0
         pool: 
            max-active: 8  # 最大可用连接数（默认为8，负数表示无限）

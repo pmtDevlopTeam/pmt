@@ -36,6 +36,7 @@ public class ShiroUserRealm extends AuthorizingRealm {
 
         Set<String> permsSet = new HashSet<String>();
         permsSet.add("platform:menu:queryAllMenu");
+        permsSet.add("platform:menu:queryAllMenu");
 
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         info.setStringPermissions(permsSet);

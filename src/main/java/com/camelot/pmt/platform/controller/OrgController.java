@@ -42,6 +42,7 @@ public class OrgController {
 	 * @param String orgId 用户UUID
 	 * @return Org 对象
 	 */
+	
 	@ApiOperation(value = "根据orgId查询单个部门机构", notes = "查询单个部门机构")
 	@RequestMapping(value = "/queryOrgByOrgId", method = RequestMethod.POST)
 	public JSONObject queryOrgByOrgId(

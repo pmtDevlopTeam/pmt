@@ -10,41 +10,44 @@ import java.util.List;
  * 角色接口层
  */
 public interface RoleService {
-    /**
-     * 查询角色列表
-     * 
-     * @return ExecuteResult<List<Role>>
-     */
-    ExecuteResult<List<Tree<Role>>> queryRoleArray();
+
 
     /**
      * 新增角色
-     * 
-     * @param role
+     *
+     * @param String parentId, String roleName, String state
      * @return ExecuteResult<Role>
      */
-    ExecuteResult<Role> addRole(Role role);
-
-    /**
-     * 修改角色
-     * 
-     * @param role
-     * @return ExecuteResult<Role>
-     */
-    ExecuteResult<Role> editRole(Role role);
+    ExecuteResult<Role> createRole(Role role);
 
     /**
      * 删除角色
-     * 
-     * @param Role
-     * @return
+     *
+     * @param String roleId
+     * @return ExecuteResult<Role>
      */
-    ExecuteResult<Role> deleteRole(Role role);
+    ExecuteResult<Role> deleteRoleById(Role role);
+
+    /**
+     * 修改角色
+     *
+     * @param String roleId, String roleName, String state
+     * @return ExecuteResult<Role>
+     */
+    ExecuteResult<Role> modifyRoleById(Role role);
+
+    /**
+     * 查询角色列表
+     *
+     * @return ExecuteResult<List<Role>>
+     */
+    ExecuteResult<List<Tree<Role>>> queryAllRole();
 
     /**
      * 验证角色名称是否可用
-     * @param role
-     * @return
+     *
+     * @param String roleName
+     * @return ExecuteResult<Role>
      */
     ExecuteResult getRoleNameVerification(Role role);
 }

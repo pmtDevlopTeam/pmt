@@ -34,7 +34,7 @@ public class RoleToMenuServiceImpl implements RoleToMenuService {
      * @return
      */
     @Override
-    public ExecuteResult<RoleToMenu> addRoleToMenu(RoleToMenu roleToMenu) {
+    public ExecuteResult<RoleToMenu> createRoleToMenu(RoleToMenu roleToMenu) {
         ExecuteResult<RoleToMenu> result = new ExecuteResult<RoleToMenu>();
         try {
             boolean isContains = true;
@@ -60,7 +60,7 @@ public class RoleToMenuServiceImpl implements RoleToMenuService {
 
             for (String ids : roleToMenu.getMenuIds()) {
                 roleToMenu.setMenuId(ids);
-                roleToMenuMapper.addRoleToMenu(roleToMenu);
+                roleToMenuMapper.createRoleToMenu(roleToMenu);
             }
             result.setResult(roleToMenu);
         } catch (Exception e) {
@@ -103,7 +103,7 @@ public class RoleToMenuServiceImpl implements RoleToMenuService {
             roleToMenuMapper.deleteRoleToMenu(roleToMenu);
             for (String ids : roleToMenu.getMenuIds()) {
                 roleToMenu.setMenuId(ids);
-                roleToMenuMapper.addRoleToMenu(roleToMenu);
+                roleToMenuMapper.createRoleToMenu(roleToMenu);
             }
             result.setResult(roleToMenu);
         } catch (Exception e) {

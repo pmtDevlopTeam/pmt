@@ -11,24 +11,25 @@ public interface RoleToUserService {
 
     /**
      * 根据角色绑定用户
-     * 
-     * @return
+     *
+     * @param String roleIds, String userIds, String createUserId, String modifyUserId
+     * @return ExecuteResult
      */
     ExecuteResult addUserByRole(RoleToUser roleToUser);
 
     /**
      * 根据角色修改用户
      * 
-     * @param roleToUser
-     * @return
+     * @param String roleIds, String userIds, String createUserId, String modifyUserId
+     * @return ExecuteResult
      */
     ExecuteResult updateUserByRole(RoleToUser roleToUser);
 
     /**
      * 根据角色id查询用户列表
      * 
-     * @param role
-     * @return
+     * @param String roleId
+     * @return ExecuteResult<List<User>>
      */
     ExecuteResult<List<User>> queryUserByRole(RoleToUser role);
 }

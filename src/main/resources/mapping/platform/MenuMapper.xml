@@ -88,7 +88,7 @@
     <select id="queryMenuByMenuId" resultMap="BaseResultMap">
        select <include refid="Base_Column_List" /> from platform_menu where menu_id = #{menuId}
     </select>
-    
+    <!-- 查询全部菜单 -->
     <select id="queryAllMenu" resultMap="BaseResultMap">
        select <include refid="Base_Column_List" /> from platform_menu
     </select>

@@ -38,7 +38,8 @@
         </trim>
     </sql>
 
-    <insert id="addRoleToMenu" parameterType="RoleToMenu">
+    <!--添加角色权限-->
+    <insert id="createRoleToMenu" parameterType="RoleToMenu">
         INSERT INTO platform_role_menu(
             <include refid="add_Column_List"/>
             ) VALUES (
@@ -46,10 +47,12 @@
         )
     </insert>
 
+    <!--清除角色权限-->
     <delete id="deleteRoleToMenu" parameterType="RoleToMenu">
         DELETE FROM platform_role_menu WHERE role_id = #{roleId}
     </delete>
 
+    <!--根据角色id查询权限列表-->
     <select id="selectMenuByRoleId" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>

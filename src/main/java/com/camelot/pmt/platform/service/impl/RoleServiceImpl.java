@@ -27,14 +27,14 @@ public class RoleServiceImpl implements RoleService {
     /**
      * 查询角色集合
      *
-     * @return ExecuteResult<List   <   Role>>
+     * @return ExecuteResult<List<Role>>
      */
     @Override
-    public ExecuteResult<List<Tree<Role>>> queryRoleArray() {
+    public ExecuteResult<List<Tree<Role>>> queryAllRole() {
         ExecuteResult<List<Tree<Role>>> result = new ExecuteResult<List<Tree<Role>>>();
         List<Tree<Role>> trees = new ArrayList<Tree<Role>>();
         try {
-            List<Role> list = roleMapper.queryRoleArray();
+            List<Role> list = roleMapper.queryAllRole();
             if (CollectionUtils.isEmpty(list)) {
                 return result;
             }
@@ -66,11 +66,11 @@ public class RoleServiceImpl implements RoleService {
      * @return ExecuteResult<Role>
      */
     @Override
-    public ExecuteResult<Role> addRole(Role role) {
+    public ExecuteResult<Role> createRole(Role role) {
         ExecuteResult result = new ExecuteResult();
         try {
             role = setRoleModel(role);
-            roleMapper.addRole(role);
+            roleMapper.createRole(role);
             result.setResult(role);
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
@@ -86,12 +86,12 @@ public class RoleServiceImpl implements RoleService {
      * @return
      */
     @Override
-    public ExecuteResult<Role> editRole(Role role) {
+    public ExecuteResult<Role> modifyRoleById(Role role) {
         ExecuteResult<Role> result = new ExecuteResult<Role>();
         try {
             long date = new Date().getTime();
             role.setModifyTime(new Date(date));
-            roleMapper.editRole(role);
+            roleMapper.modifyRoleById(role);
             result.setResult(role);
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
@@ -107,11 +107,15 @@ public class RoleServiceImpl implements RoleService {
      * @return
      */
     @Override
-    public ExecuteResult<Role> deleteRole(Role role) {
+    public ExecuteResult<Role> deleteRoleById(Role role) {
         ExecuteResult<Role> result = new ExecuteResult<Role>();
         try {
-            roleMapper.deleteRole(role);
-            roleMapper.deleteRoleMenu(role);
+            int status = roleMapper.deleteRoleById(role);
+            if(status == 1) {
+                roleMapper.deleteRoleMenuById(role);
+            }else {
+                return result;
+            }
             result.setResult(role);
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
