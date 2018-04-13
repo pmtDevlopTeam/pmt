@@ -34,12 +34,19 @@ public class RoleToMenuController {
     @Autowired
     private RoleToMenuService roleToMenuService;
 
+
+    /**
+     * 角色绑定权限
+     *
+     * @param String roleId, String menuId
+     * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
+     */
     @ApiOperation(value = "角色绑定权限", notes = "角色绑定权限")
-    @PostMapping(value = "/addRoleToMenu")
+    @PostMapping(value = "/createRoleToMenu")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "roleId", value = "角色id", required = true, paramType = "form", dataType = "string"),
             @ApiImplicitParam(name = "menuIds", value = "菜单ids（格式：1,2,3,4）要有子id和父id", required = true, paramType = "form", dataType = "string"),})
-    public JSONObject addRoleToMenu(@ApiIgnore RoleToMenu roleToMenu) {
+    public JSONObject createRoleToMenu(@ApiIgnore RoleToMenu roleToMenu) {
         ExecuteResult<RoleToMenu> result;
         try {
             User user = (User) ShiroUtils.getSessionAttribute("user");
@@ -51,7 +58,7 @@ public class RoleToMenuController {
             if (StringUtils.isEmpty(roleToMenu.getRoleId()) && StringUtils.isEmpty(roleToMenu.getMenuId())) {
                 return ApiResponse.jsonData(APIStatus.ERROR_400);
             }
-            result = roleToMenuService.addRoleToMenu(roleToMenu);
+            result = roleToMenuService.createRoleToMenu(roleToMenu);
             if (result.getResult() == null) {
                 return ApiResponse.jsonData(APIStatus.ERROR_400);
             }
@@ -62,10 +69,10 @@ public class RoleToMenuController {
     }
 
     /**
-     * 修改角色权限菜单
+     * 修改角色绑定权限
      *
-     * @param roleToMenu
-     * @return
+     * @param String roleId, String menuIds
+     * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
     @PostMapping(value = "/updateRoleToMenu")
     @ApiOperation(value = "修改角色绑定权限", notes = "修改角色绑定权限")
@@ -95,6 +102,13 @@ public class RoleToMenuController {
         }
     }
 
+
+    /**
+     * 根据角色id查询权限菜单
+     *
+     * @param String roleId
+     * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
+     */
     @ApiOperation(value = "根据角色id查询权限菜单", notes = "根据角色id查询权限菜单")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "roleId", value = "角色id", required = true, paramType = "query", dataType = "string"),})

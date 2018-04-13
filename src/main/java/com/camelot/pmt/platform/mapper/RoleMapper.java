@@ -12,35 +12,35 @@ public interface RoleMapper {
      * 
      * @return
      */
-    List<Role> queryRoleArray();
+    List<Role> queryAllRole();
 
     /**
      * 新增列表
      * 
      * @param role
      */
-    void addRole(Role role);
+    void createRole(Role role);
 
     /**
      * 修改角色
      * 
      * @param role
      */
-    void editRole(Role role);
+    void modifyRoleById(Role role);
 
     /**
      * 删除角色
      * 
      * @param Role
      */
-    void deleteRole(Role role);
+    int deleteRoleById(Role role);
 
     /**
      * 删除角色权限
      * 
      * @param Role
      */
-    void deleteRoleMenu(Role role);
+    void deleteRoleMenuById(Role role);
 
     /**
      * 根据roleId查询角色
