@@ -38,4 +38,11 @@ public interface UseCaseService {
 	 * @param list      用例集合
 	 */
 	void addBatch(UserModel userModel, List<UseCase> list);
+	
+	/***
+	 * 修改用例
+	 * @param userModel
+	 * @param useCase
+	 */
+	 void edit(UserModel userModel, UseCase useCase);
 }

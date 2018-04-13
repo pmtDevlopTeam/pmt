@@ -96,6 +96,27 @@ public class UseCaseServiceImpl implements UseCaseService{
 		// 批量插入
 		useCaseProcedureMapper.insertBatch(list);
 	}
+	
+	
+	@Override
+	@Transactional
+	public void edit(UserModel userModel, UseCase useCase) {
+
+		// 设置修改人和修改时间时间
+		if (userModel != null) {
+			useCase.setModifyUserId(userModel.getUserId());
+			useCase.setModifyTime(new Date());
+		}
+
+		// 修改
+		useCaseMapper.updateByPrimaryKeySelective(useCase);
+
+		List<UseCaseProcedure> list = useCase.getProcedure();
+		for (UseCaseProcedure useCaseProcedure : list) {
+			//批量修改
+			useCaseProcedureMapper.updateByPrimaryKeySelective(useCaseProcedure);
+		}
+	}
 
 	@Override
 	public void addBatch(UserModel userModel, List<UseCase> list) {

@@ -115,5 +115,17 @@ public class UseCaseController {
 			}
 		 	return actionBean;
 	    }
+	 
+	 
+	 @ApiOperation(value = "编辑用例")
+		@PostMapping(value = "userCase/edit")
+		public void edit(HttpServletRequest request, @RequestBody @ApiParam(value = "useCase", required = true) UseCase useCase) {
+			try {
+				UserModel user = (UserModel) request.getSession().getAttribute("user");
+				UseCaseService.edit(user, useCase);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	
 }
