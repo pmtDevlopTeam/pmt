@@ -3,6 +3,7 @@
 <mapper namespace="com.camelot.pmt.testmanage.bugmanage.mapper.BugManageMapper">
   <resultMap id="BaseResultMap" type="com.camelot.pmt.testmanage.bugmanage.model.BugManage">
     <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="bug_no" jdbcType="VARCHAR" property="bugNo" />
     <result column="bug_title" jdbcType="VARCHAR" property="bugTitle" />
     <result column="project_id" jdbcType="BIGINT" property="projectId" />
     <result column="demand_id" jdbcType="BIGINT" property="demandId" />
@@ -33,7 +34,7 @@
     <result column="close_stauts" jdbcType="VARCHAR" property="closeStauts" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, bug_title, project_id, demand_id, task_id, designated_id, version_id, bug_type, 
+    id, bug_title, bug_no,project_id, demand_id, task_id, designated_id, version_id, bug_type, 
     case_terminal, case_environment, bug_level, bug_status, create_user_id, DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%s') as create_time, 
     DATE_FORMAT(end_time,'%Y-%m-%d %H:%i:%s') as end_time, modify_user_id, DATE_FORMAT(modify_time,'%Y-%m-%d %H:%i:%s') as modify_time, del_flag, steps_reproduce, DATE_FORMAT(solve_time,'%Y-%m-%d %H:%i:%s') as solve_time, solve_program, 
     solve_id, DATE_FORMAT(close_time,'%Y-%m-%d %H:%i:%s') as close_time, close_id, serious_degree, close_reason, case_id, bug_describe, 
@@ -55,6 +56,9 @@
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
+      </if>
+      <if test="bugNo != null">
+        bug_no,
       </if>
       <if test="bugTitle != null">
         bug_title,
@@ -144,6 +148,9 @@
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
         #{id,jdbcType=BIGINT},
+      </if>
+      <if test="bugNo != null">
+        #{bugNo,jdbcType=VARCHAR},
       </if>
       <if test="bugTitle != null">
         #{bugTitle,jdbcType=VARCHAR},
@@ -319,6 +326,12 @@
         bug_title = #{bugTitle,jdbcType=VARCHAR},
       </if>
     </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <update id="updateBugStatus">
+    update bug_manage
+    set bug_status=4
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

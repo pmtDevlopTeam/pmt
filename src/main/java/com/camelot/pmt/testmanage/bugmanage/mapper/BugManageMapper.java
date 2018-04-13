@@ -13,4 +13,6 @@ public interface BugManageMapper {
      BugManage selectByPrimaryKey(Long id);
 
      int updateByPrimaryKeySelective(BugManage record);
+     
+     int updateBugStatus(String bugId);
 }
