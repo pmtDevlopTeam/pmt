@@ -28,21 +28,20 @@ private static final Logger LOGGER = LoggerFactory.getLogger(BugManageServiceImp
 	@Autowired
 	private BugManageMapper bugManageMapper;
 	
+	/**
+	 * 添加bug
+	 */
 	@Transactional
 	public ExecuteResult<String> save(BugManage bugManage) {
 		ExecuteResult<String> result = new ExecuteResult<String>();
 		 try {
 			 	//判断传入的bug对象是否为空
-	            if (bugManage == null) {
+	            if (bugManage == null || bugManage.getId()==null) {
 	                result.addErrorMessage("传入的bug实体有误!");
 	                return result;
 	            }
 	            //创建时间
 	            bugManage.setCreateTime(DateUtils.format(new Date(),DateUtils.DATE_TIME_PATTERN));
-	            if(!StringUtils.isEmpty(bugManage.getDesignatedId())){
-	            	 //bug默认状态 已确认
-		            bugManage.setBugStatus("1");
-	            }
 	            //bug默认状态 未确认
 	            bugManage.setBugStatus("0");
 	            //创建人*
@@ -56,6 +55,9 @@ private static final Logger LOGGER = LoggerFactory.getLogger(BugManageServiceImp
 	        return result;
 	}
 
+	/**
+	 * 根据id查询bug
+	 */
 	@Override
 	public ExecuteResult<BugManage> getBugById(Long id) {
 		
@@ -74,14 +76,22 @@ private static final Logger LOGGER = LoggerFactory.getLogger(BugManageServiceImp
 		return result;
 	}
 
+	/**
+	 * 编辑bug
+	 */
 	@Transactional
 	public ExecuteResult<String> edit(BugManage bugManage) {
 		ExecuteResult<String> result = new ExecuteResult<String>();
 		 try {
 			 	//判断传入的bug对象是否为空
-	            if (bugManage == null) {
+	            if (bugManage == null || bugManage.getId()==null) {
 	                result.addErrorMessage("传入的bug实体有误!");
 	                return result;
+	            }
+	            BugManage currentBugManage = bugManageMapper.selectByPrimaryKey(bugManage.getId());
+	            if(currentBugManage.getDesignatedId()!=null){
+	            	 result.addErrorMessage("bug已经被指派，不可编辑");
+		             return result;
 	            }
 	            //更新时间
 	            bugManage.setModifyTime(DateUtils.format(new Date(),DateUtils.DATE_TIME_PATTERN));
@@ -208,15 +218,20 @@ private static final Logger LOGGER = LoggerFactory.getLogger(BugManageServiceImp
 	 * 撤销bug
 	 */
 	@Transactional
-	public ExecuteResult<String> updateBugStatus(String bugId) {
+	public ExecuteResult<String> updateBugStatusRevoke(Long id) {
 		ExecuteResult<String> result = new ExecuteResult<String>();
 		 try {
 			 	//判断传入的bug对象是否为空
-	            if (StringUtils.isEmpty(bugId)) {
+	            if (id==null) {
 	                result.addErrorMessage("传入bugId错误");
 	                return result;
 	            }
-	            bugManageMapper.updateBugStatus(bugId);
+	            BugManage bugManage = bugManageMapper.selectByPrimaryKey(id);
+	            //更新时间
+	            bugManage.setModifyTime(DateUtils.format(new Date(),DateUtils.DATE_TIME_PATTERN));
+	            //更新人*
+	            bugManage.setModifyUserId("1");
+	            bugManageMapper.updateBugStatusRevoke(id);
 	            result.setResult("撤销bug成功!");
 	        } catch (Exception e) {
 	            LOGGER.error(e.getMessage());
@@ -224,4 +239,113 @@ private static final Logger LOGGER = LoggerFactory.getLogger(BugManageServiceImp
 	        }
 	        return result;
 	}
+
+	/**
+	 * 关闭bug
+	 */
+	@Transactional
+	public ExecuteResult<String> updateBugStatusClose(BugManage bugManage) {
+		ExecuteResult<String> result = new ExecuteResult<String>();
+		 try {
+			 	//判断传入的bug对象是否为空
+	            if (bugManage==null||bugManage.getId()==null) {
+	                result.addErrorMessage("传入参数错误");
+	                return result;
+	            }
+	            //更新时间
+	            bugManage.setModifyTime(DateUtils.format(new Date(),DateUtils.DATE_TIME_PATTERN));
+	            //更新人*
+	            bugManage.setModifyUserId("1");
+	            bugManageMapper.updateBugStatusClose(bugManage);
+	            result.setResult("关闭bug成功!");
+	        } catch (Exception e) {
+	            LOGGER.error(e.getMessage());
+	            throw new RuntimeException(e);
+	        }
+	        return result;
+	}
+
+	/**
+	 * 确认bug
+	 */
+	@Transactional
+	public ExecuteResult<String> updateBugStatusYes(BugManage bugManage) {
+		ExecuteResult<String> result = new ExecuteResult<String>();
+		 try {
+			 	//判断传入的bug对象是否为空
+	            if (bugManage==null||bugManage.getId()==null) {
+	                result.addErrorMessage("传入参数错误");
+	                return result;
+	            }
+	            //更新时间
+	            bugManage.setModifyTime(DateUtils.format(new Date(),DateUtils.DATE_TIME_PATTERN));
+	            //更新人*
+	            bugManage.setModifyUserId("1");
+	            bugManageMapper.updateBugStatusYes(bugManage);
+	            result.setResult("确认bug成功!");
+	        } catch (Exception e) {
+	            LOGGER.error(e.getMessage());
+	            throw new RuntimeException(e);
+	        }
+	        return result;
+	}
+
+	/**
+	 * 指派bug
+	 */
+	@Transactional
+	public ExecuteResult<String> updateBugAssign(BugManage bugManage) {
+		ExecuteResult<String> result = new ExecuteResult<String>();
+		 try {
+			 	//判断传入的bug对象是否为空
+	            if (bugManage==null||bugManage.getId()==null) {
+	                result.addErrorMessage("传入参数错误");
+	                return result;
+	            }
+	            //更新时间
+	            bugManage.setModifyTime(DateUtils.format(new Date(),DateUtils.DATE_TIME_PATTERN));
+	            //更新人*
+	            bugManage.setModifyUserId("1");
+	            bugManageMapper.updateBugAssign(bugManage);
+	            result.setResult("指派bug成功!");
+	        } catch (Exception e) {
+	            LOGGER.error(e.getMessage());
+	            throw new RuntimeException(e);
+	        }
+	        return result;
+	}
+	
+	/**
+	 * 解决bug
+	 */
+	@Transactional
+	public ExecuteResult<String> updateBugSolve(BugManage bugManage) {
+		ExecuteResult<String> result = new ExecuteResult<String>();
+		try {
+			//判断传入的bug对象是否为空
+			if (bugManage==null||bugManage.getId()==null) {
+				result.addErrorMessage("传入参数错误");
+				return result;
+			}
+            //更新时间
+            bugManage.setModifyTime(DateUtils.format(new Date(),DateUtils.DATE_TIME_PATTERN));
+            //更新人*
+            bugManage.setModifyUserId("1");
+			//如果没有填写解决日期 默认添加为当前时间
+			if(StringUtils.isEmpty(bugManage.getSolveTime())){
+				bugManage.setSolveTime(DateUtils.format(new Date(),DateUtils.DATE_TIME_PATTERN));
+			}
+			//解决者*
+			bugManage.setSolveId("1");
+			bugManageMapper.updateBugSolve(bugManage);
+			result.setResult("指派bug成功!");
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage());
+			throw new RuntimeException(e);
+		}
+		return result;
+	}
+	
+	
+
 }

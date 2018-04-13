@@ -1,7 +1,6 @@
 package com.camelot.pmt.testmanage.bugmanage.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,6 +28,7 @@ import springfox.documentation.annotations.ApiIgnore;
 @RestController
 @Api(value = "bug管理接口", description = "bug管理接口")
 public class BugManageController {
+	
 	@Autowired
 	private BugManageService bugManageService;
 	
@@ -37,6 +37,7 @@ public class BugManageController {
 	            @ApiImplicitParam(name = "projectId", value = "项目id", required = true, paramType = "form", dataType = "Long"),
 	            @ApiImplicitParam(name = "demandId", value = "需求id", required = false, paramType = "form", dataType = "Long"),
 	            @ApiImplicitParam(name = "taskId", value = "任务id", required = false, paramType = "form", dataType = "Long"),
+	            @ApiImplicitParam(name = "task1Id", value = "所属一级任务id", required = false, paramType = "form", dataType = "Long"),
 	            @ApiImplicitParam(name = "designatedId", value = "指派给", required = false, paramType = "form", dataType = "String"),
 	            @ApiImplicitParam(name = "versionId", value = "影响版本", required = true, paramType = "form", dataType = "Long"),
 	            @ApiImplicitParam(name = "bugTitle", value = "bug标题", required = true, paramType = "form", dataType = "String"),
@@ -93,6 +94,7 @@ public class BugManageController {
 		            @ApiImplicitParam(name = "projectId", value = "项目id", required = true, paramType = "form", dataType = "Long"),
 		            @ApiImplicitParam(name = "demandId", value = "需求id", required = false, paramType = "form", dataType = "Long"),
 		            @ApiImplicitParam(name = "taskId", value = "任务id", required = false, paramType = "form", dataType = "Long"),
+		            @ApiImplicitParam(name = "task1Id", value = "所属一级任务id", required = false, paramType = "form", dataType = "Long"),
 		            @ApiImplicitParam(name = "caseId", value = "用例id", required = false, paramType = "form", dataType = "Long"),
 		            
 		            @ApiImplicitParam(name = "bugTitle", value = "bug标题", required = false, paramType = "form", dataType = "String"),
@@ -128,6 +130,107 @@ public class BugManageController {
 		        }
 		    }
 		
+	    
+	    	@ApiOperation(value = "撤销bug", notes = "撤销bug")
+		    @RequestMapping(value = "bug/updateBugStatusRevoke", method = RequestMethod.POST)
+		    public JSONObject updateBugStatusRevoke(@ApiParam(name = "id", value = "bugId", required = true) @RequestParam(required = true)  Long id) {
+		        ExecuteResult<String> result = new ExecuteResult<String>();
+		        try {
+		            //调用添加bug接口
+		            result = bugManageService.updateBugStatusRevoke(id);
+		            // 成功返回
+		            return ApiResponse.success(result.getResult());
+		        } catch (Exception e) {
+		            // 异常
+		            return ApiResponse.error();
+		        }
+		    }
+	    	
+	    	@ApiOperation(value = "关闭bug", notes = "关闭bug")
+	    	@ApiImplicitParams({
+	            @ApiImplicitParam(name = "id", value = "bugId", required = true, paramType = "form", dataType = "Long"),
+	            @ApiImplicitParam(name = "bugDescribe", value = "备注", required = false, paramType = "form", dataType = "String")
+	            })
+	    	@RequestMapping(value = "bug/updateBugStatusClose", method = RequestMethod.POST)
+	    	public JSONObject updateBugStatusClose(@ApiIgnore  BugManage bugManage) {
+	    		ExecuteResult<String> result = new ExecuteResult<String>();
+	    		try {
+	    			//调用添加bug接口
+	    			result = bugManageService.updateBugStatusClose(bugManage);
+	    			// 成功返回
+	    			return ApiResponse.success(result.getResult());
+	    		} catch (Exception e) {
+	    			// 异常
+	    			return ApiResponse.error();
+	    		}
+	    	}
+	    	
+	    	
+	    	@ApiOperation(value = "确认bug", notes = "确认bug")
+	    	@ApiImplicitParams({
+	    		@ApiImplicitParam(name = "id", value = "bugId", required = true, paramType = "form", dataType = "Long"),
+	    		@ApiImplicitParam(name = "designatedId", value = "指派人", required = true, paramType = "form", dataType = "String"),
+	    		@ApiImplicitParam(name = "bugType", value = "bug类型", required = true, paramType = "form", dataType = "String"),
+	    		@ApiImplicitParam(name = "bugLevel", value = "优先级", required = true, paramType = "form", dataType = "String"),
+	    		@ApiImplicitParam(name = "bugDescribe", value = "备注", required = false, paramType = "form", dataType = "String")
+	    	})
+	    	@RequestMapping(value = "bug/updateBugStatusYes", method = RequestMethod.POST)
+	    	public JSONObject updateBugStatusYes(@ApiIgnore  BugManage bugManage) {
+	    		ExecuteResult<String> result = new ExecuteResult<String>();
+	    		try {
+	    			//调用添加bug接口
+	    			result = bugManageService.updateBugStatusYes(bugManage);
+	    			// 成功返回
+	    			return ApiResponse.success(result.getResult());
+	    		} catch (Exception e) {
+	    			// 异常
+	    			return ApiResponse.error();
+	    		}
+	    	}
+	    	
+	    	@ApiOperation(value = "指派bug", notes = "指派bug")
+	    	@ApiImplicitParams({
+	    		@ApiImplicitParam(name = "id", value = "bugId", required = true, paramType = "form", dataType = "Long"),
+	    		@ApiImplicitParam(name = "designatedId", value = "指派人", required = true, paramType = "form", dataType = "String"),
+	    		@ApiImplicitParam(name = "bugType", value = "bug类型", required = true, paramType = "form", dataType = "String"),
+	    		@ApiImplicitParam(name = "bugLevel", value = "优先级", required = true, paramType = "form", dataType = "String"),
+	    		@ApiImplicitParam(name = "bugDescribe", value = "备注", required = false, paramType = "form", dataType = "String")
+	    	})
+	    	@RequestMapping(value = "bug/updateBugAssign", method = RequestMethod.POST)
+	    	public JSONObject updateBugAssign(@ApiIgnore  BugManage bugManage) {
+	    		ExecuteResult<String> result = new ExecuteResult<String>();
+	    		try {
+	    			//调用添加bug接口
+	    			result = bugManageService.updateBugAssign(bugManage);
+	    			// 成功返回
+	    			return ApiResponse.success(result.getResult());
+	    		} catch (Exception e) {
+	    			// 异常
+	    			return ApiResponse.error();
+	    		}
+	    	}
+	    	
+	    	@ApiOperation(value = "解决bug", notes = "解决bug")
+	    	@ApiImplicitParams({
+	    		@ApiImplicitParam(name = "id", value = "bugId", required = true, paramType = "form", dataType = "Long"),
+	    		@ApiImplicitParam(name = "designatedId", value = "指派人", required = false, paramType = "form", dataType = "String"),
+	    		@ApiImplicitParam(name = "solveProgram", value = "解决方案", required = true, paramType = "form", dataType = "String"),
+	    		@ApiImplicitParam(name = "solveTime", value = "解决日期", required = false, paramType = "form", dataType = "String"),
+	    		@ApiImplicitParam(name = "bugDescribe", value = "备注", required = false, paramType = "form", dataType = "String")
+	    	})
+	    	@RequestMapping(value = "bug/updateBugSolve", method = RequestMethod.POST)
+	    	public JSONObject updateBugSolve(@ApiIgnore  BugManage bugManage) {
+	    		ExecuteResult<String> result = new ExecuteResult<String>();
+	    		try {
+	    			//调用添加bug接口
+	    			result = bugManageService.updateBugSolve(bugManage);
+	    			// 成功返回
+	    			return ApiResponse.success(result.getResult());
+	    		} catch (Exception e) {
+	    			// 异常
+	    			return ApiResponse.error();
+	    		}
+	    	}
 	    
 
 }

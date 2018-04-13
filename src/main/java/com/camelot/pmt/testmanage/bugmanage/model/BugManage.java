@@ -3,6 +3,8 @@ package com.camelot.pmt.testmanage.bugmanage.model;
 
 public class BugManage{
 	private Long id;
+	
+	private String bugNo;
 	 //标题
 	private String bugTitle;
 	//项目ID
@@ -11,6 +13,8 @@ public class BugManage{
     private Long demandId;
     //相关任务ID
     private Long taskId;
+    //所属一级任务模块
+    private Long task1Id;
     //指派人
     private String designatedId;
     //影响版本ID
@@ -55,7 +59,7 @@ public class BugManage{
     private String closeReason;
     //用例ID
     private Long caseId;
-    //bug描述
+    //备注
     private String bugDescribe;
     //关闭状态（正常，不正常）
     private String closeStauts;
@@ -233,6 +237,19 @@ public class BugManage{
 	public void setCloseStauts(String closeStauts) {
 		this.closeStauts = closeStauts;
 	}
+	public String getBugNo() {
+		return bugNo;
+	}
+	public void setBugNo(String bugNo) {
+		this.bugNo = bugNo;
+	}
+	public Long getTask1Id() {
+		return task1Id;
+	}
+	public void setTask1Id(Long task1Id) {
+		this.task1Id = task1Id;
+	}
+	
     
     
 }

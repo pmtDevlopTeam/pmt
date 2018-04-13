@@ -36,6 +36,34 @@ public interface BugManageService {
     * @param userModel
     * @return
     */
-   ExecuteResult<String> updateBugStatus(String bugId);
+   ExecuteResult<String> updateBugStatusRevoke(Long id);
+  
+   /**
+    * 关闭bug
+    * @param userModel
+    * @return
+    */
+   ExecuteResult<String> updateBugStatusClose(BugManage bugManage);
+   
+   /**
+    * 确认bug
+    * @param userModel
+    * @return
+    */
+   ExecuteResult<String> updateBugStatusYes(BugManage bugManage);
+   
+   /**
+    * 指派bug
+    * @param userModel
+    * @return
+    */
+   ExecuteResult<String> updateBugAssign(BugManage bugManage);
+  
+   /**
+    * 解决bug
+    * @param userModel
+    * @return
+    */
+   ExecuteResult<String> updateBugSolve(BugManage bugManage);
 
 }
