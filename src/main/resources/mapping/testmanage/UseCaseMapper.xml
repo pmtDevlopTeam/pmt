@@ -235,6 +235,6 @@
   <select id="selectUseCase" resultType="com.camelot.pmt.testmanage.casemanage.model.UseCase"  >
     select 
     <include refid="Base_Column_List" />
-    from use_case
+    from use_case where del_flag=0
   </select>
 </mapper>
