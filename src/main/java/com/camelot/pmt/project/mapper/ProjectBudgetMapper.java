@@ -41,8 +41,9 @@ public interface ProjectBudgetMapper {
 
     /**
      * 根据项目id查询项目预算
+     * 
      * @param proId
      * @return ProjectBudget
      */
-	ProjectBudget selectProjectBudgetByProId(Long proId);
+    ProjectBudget selectProjectBudgetByProId(Long proId);
 }

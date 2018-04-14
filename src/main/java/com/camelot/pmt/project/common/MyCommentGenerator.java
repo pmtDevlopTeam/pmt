@@ -22,13 +22,12 @@ import org.mybatis.generator.config.PropertyRegistry;
 
 /**
  * 描述：
+ * 
  * @since 1.9.10
  * @version 1.9.10
- * @作者：niexiaohui
- * @创建时间：2016年11月22日
- * @修改记录：
+ * @作者：niexiaohui @创建时间：2016年11月22日 @修改记录：
  */
-public class MyCommentGenerator implements CommentGenerator{
+public class MyCommentGenerator implements CommentGenerator {
     private Properties properties;
     private Properties systemPro;
     private boolean suppressDate;
@@ -71,10 +70,9 @@ public class MyCommentGenerator implements CommentGenerator{
     }
 
     /**
-     * This method adds the custom javadoc tag for. You may do nothing if you do
-     * not wish to include the Javadoc tag - however, if you do not include the
-     * Javadoc tag then the Java merge capability of the eclipse plugin will
-     * break.
+     * This method adds the custom javadoc tag for. You may do nothing if you do not
+     * wish to include the Javadoc tag - however, if you do not include the Javadoc
+     * tag then the Java merge capability of the eclipse plugin will break.
      *
      * @param javaElement
      *            the java element
@@ -96,9 +94,9 @@ public class MyCommentGenerator implements CommentGenerator{
     }
 
     /**
-     * This method returns a formated date string to include in the Javadoc tag
-     * and XML comments. You may return null if you do not want the date in
-     * these documentation elements.
+     * This method returns a formated date string to include in the Javadoc tag and
+     * XML comments. You may return null if you do not want the date in these
+     * documentation elements.
      *
      * @return a string representing the current timestamp, or null
      */
@@ -137,7 +135,7 @@ public class MyCommentGenerator implements CommentGenerator{
     }
 
     public void addFieldComment(Field field, IntrospectedTable introspectedTable,
-                                IntrospectedColumn introspectedColumn) {
+            IntrospectedColumn introspectedColumn) {
         if (suppressAllComments) {
             return;
         }
@@ -171,7 +169,7 @@ public class MyCommentGenerator implements CommentGenerator{
     }
 
     public void addGetterComment(Method method, IntrospectedTable introspectedTable,
-                                 IntrospectedColumn introspectedColumn) {
+            IntrospectedColumn introspectedColumn) {
         if (suppressAllComments) {
             return;
         }
@@ -190,7 +188,7 @@ public class MyCommentGenerator implements CommentGenerator{
     }
 
     public void addSetterComment(Method method, IntrospectedTable introspectedTable,
-                                 IntrospectedColumn introspectedColumn) {
+            IntrospectedColumn introspectedColumn) {
         if (suppressAllComments) {
             return;
         }

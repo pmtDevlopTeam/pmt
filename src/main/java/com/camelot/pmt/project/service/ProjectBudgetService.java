@@ -7,12 +7,11 @@ import com.camelot.pmt.project.model.ProjectBudget;
 
 public interface ProjectBudgetService {
 
-	ExecuteResult<Map<String, Object>> findBudgetByProId(Long proId);
+    ExecuteResult<Map<String, Object>> findBudgetByProId(Long proId);
 
-	ExecuteResult<String> saveProjectBudget(ProjectBudget projectBudget);
+    ExecuteResult<String> saveProjectBudget(ProjectBudget projectBudget);
 
-	ExecuteResult<String> modifyProjectBudget(ProjectBudget projectBudget);
+    ExecuteResult<String> modifyProjectBudget(ProjectBudget projectBudget);
 
-	ExecuteResult<ProjectBudget> findProjectBudgeByProjectId(Long projectId);
-
+    ExecuteResult<ProjectBudget> findProjectBudgeByProjectId(Long projectId);
 }

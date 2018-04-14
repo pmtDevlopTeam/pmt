@@ -1,6 +1,18 @@
 package com.camelot.pmt.project.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
+import javax.annotation.Resource;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.web.bind.ServletRequestDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
 import com.camelot.pmt.platform.common.APIStatus;
@@ -10,38 +22,27 @@ import com.camelot.pmt.platform.utils.ExecuteResult;
 import com.camelot.pmt.platform.utils.Pager;
 import com.camelot.pmt.project.model.DemandWithBLOBs;
 import com.camelot.pmt.project.service.DemandService;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.propertyeditors.CustomDateEditor;
-import org.springframework.web.bind.ServletRequestDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
-import javax.annotation.Resource;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 /**
- *@Author:fjy
- *@Description: 需求控制器类
- *@Date:2018/4/12_16:11
+ * @Author:fjy
+ * @Description: 需求控制器类
+ * @Date:2018/4/12_16:11
  */
 @RestController
 @Api(value = "项目管理-需求模块", description = "项目管理-需求模块的控制器类")
 public class DemandController {
 
-    private static final Logger logger=LoggerFactory.getLogger(DemandController.class);
+    private static final Logger logger = LoggerFactory.getLogger(DemandController.class);
     @Resource
     DemandService demandService;
 
-    //@RequiresPermissions
+    // @RequiresPermissions
     @ApiOperation(value = "查询需求列表", notes = "查询需求列表")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "demandNum", value = "需求编号", required = false, paramType = "form", dataType = "String"),
@@ -53,19 +54,19 @@ public class DemandController {
             @ApiImplicitParam(name = "rows", value = "显示行数", required = true, paramType = "form", dataType = "int"),
             @ApiImplicitParam(name = "username", value = "用户名称", required = false, paramType = "form", dataType = "String") })
     @RequestMapping(value = "demand/queryDemandAll", method = RequestMethod.POST)
-    public JSONObject queryDemandAll(@ApiIgnore DemandWithBLOBs demandWithBLOBs,@ApiIgnore Pager pager){
+    public JSONObject queryDemandAll(@ApiIgnore DemandWithBLOBs demandWithBLOBs, @ApiIgnore Pager pager) {
         ExecuteResult<DataGrid<DemandWithBLOBs>> result = new ExecuteResult<DataGrid<DemandWithBLOBs>>();
-        try{
-            if(pager==null){
+        try {
+            if (pager == null) {
                 pager.setPage(1);
                 pager.setRows(10);
             }
             result = demandService.findAllByPage(pager, demandWithBLOBs);
-            if(result.isSuccess()){
+            if (result.isSuccess()) {
                 return ApiResponse.success(result.getResult());
             }
             return ApiResponse.error();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return ApiResponse.error();
         }
@@ -93,7 +94,7 @@ public class DemandController {
     public JSONObject insertDemand(DemandWithBLOBs demandWithBLOBs) {
         ExecuteResult<String> result = new ExecuteResult<String>();
         try {
-            //非空判断
+            // 非空判断
             if (demandWithBLOBs == null) {
                 return ApiResponse.error("");
             }
@@ -109,7 +110,5 @@ public class DemandController {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         binder.registerCustomEditor(Date.class, new CustomDateEditor(sdf, true));
     }
-
-
 
 }

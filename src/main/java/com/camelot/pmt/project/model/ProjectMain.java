@@ -1,8 +1,16 @@
 package com.camelot.pmt.project.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class ProjectMain {
+import org.springframework.format.annotation.DateTimeFormat;
+
+public class ProjectMain implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     /**
      * 主键
      */
@@ -31,11 +39,13 @@ public class ProjectMain {
     /**
      * 起始时间（是立项时预计）
      */
+    @DateTimeFormat(pattern = "yyyy-MM-ddHH:mm:ss")
     private Date startTime;
 
     /**
      * 结束时间（是立项时预计）
      */
+    @DateTimeFormat(pattern = "yyyy-MM-ddHH:mm:ss")
     private Date endTime;
 
     /**
@@ -46,6 +56,7 @@ public class ProjectMain {
     /**
      * 创建时间
      */
+    @DateTimeFormat(pattern = "yyyy-MM-ddHH:mm:ss")
     private Date createTime;
 
     /**
@@ -56,6 +67,7 @@ public class ProjectMain {
     /**
      * 修改时间
      */
+    @DateTimeFormat(pattern = "yyyy-MM-ddHH:mm:ss")
     private Date modifyTime;
 
     /**
@@ -65,6 +77,7 @@ public class ProjectMain {
 
     /**
      * 主键
+     * 
      * @return id 主键
      */
     public Long getId() {
@@ -73,7 +86,9 @@ public class ProjectMain {
 
     /**
      * 主键
-     * @param id 主键
+     * 
+     * @param id
+     *            主键
      */
     public void setId(Long id) {
         this.id = id;
@@ -81,6 +96,7 @@ public class ProjectMain {
 
     /**
      * 负责人id
+     * 
      * @return user_id 负责人id
      */
     public String getUserId() {
@@ -89,7 +105,9 @@ public class ProjectMain {
 
     /**
      * 负责人id
-     * @param userId 负责人id
+     * 
+     * @param userId
+     *            负责人id
      */
     public void setUserId(String userId) {
         this.userId = userId == null ? null : userId.trim();
@@ -97,6 +115,7 @@ public class ProjectMain {
 
     /**
      * 编号
+     * 
      * @return project_num 编号
      */
     public String getProjectNum() {
@@ -105,7 +124,9 @@ public class ProjectMain {
 
     /**
      * 编号
-     * @param projectNum 编号
+     * 
+     * @param projectNum
+     *            编号
      */
     public void setProjectNum(String projectNum) {
         this.projectNum = projectNum == null ? null : projectNum.trim();
@@ -113,6 +134,7 @@ public class ProjectMain {
 
     /**
      * 名称
+     * 
      * @return project_name 名称
      */
     public String getProjectName() {
@@ -121,7 +143,9 @@ public class ProjectMain {
 
     /**
      * 名称
-     * @param projectName 名称
+     * 
+     * @param projectName
+     *            名称
      */
     public void setProjectName(String projectName) {
         this.projectName = projectName == null ? null : projectName.trim();
@@ -129,6 +153,7 @@ public class ProjectMain {
 
     /**
      * 状态 01未开始 02进行中 03完成 04延期 05挂起 06关闭
+     * 
      * @return project_status 状态 01未开始 02进行中 03完成 04延期 05挂起 06关闭
      */
     public String getProjectStatus() {
@@ -137,7 +162,9 @@ public class ProjectMain {
 
     /**
      * 状态 01未开始 02进行中 03完成 04延期 05挂起 06关闭
-     * @param projectStatus 状态 01未开始 02进行中 03完成 04延期 05挂起 06关闭
+     * 
+     * @param projectStatus
+     *            状态 01未开始 02进行中 03完成 04延期 05挂起 06关闭
      */
     public void setProjectStatus(String projectStatus) {
         this.projectStatus = projectStatus == null ? null : projectStatus.trim();
@@ -145,6 +172,7 @@ public class ProjectMain {
 
     /**
      * 起始时间（是立项时预计）
+     * 
      * @return start_time 起始时间（是立项时预计）
      */
     public Date getStartTime() {
@@ -153,7 +181,9 @@ public class ProjectMain {
 
     /**
      * 起始时间（是立项时预计）
-     * @param startTime 起始时间（是立项时预计）
+     * 
+     * @param startTime
+     *            起始时间（是立项时预计）
      */
     public void setStartTime(Date startTime) {
         this.startTime = startTime;
@@ -161,6 +191,7 @@ public class ProjectMain {
 
     /**
      * 结束时间（是立项时预计）
+     * 
      * @return end_time 结束时间（是立项时预计）
      */
     public Date getEndTime() {
@@ -169,7 +200,9 @@ public class ProjectMain {
 
     /**
      * 结束时间（是立项时预计）
-     * @param endTime 结束时间（是立项时预计）
+     * 
+     * @param endTime
+     *            结束时间（是立项时预计）
      */
     public void setEndTime(Date endTime) {
         this.endTime = endTime;
@@ -177,6 +210,7 @@ public class ProjectMain {
 
     /**
      * 创建人id
+     * 
      * @return create_user_id 创建人id
      */
     public String getCreateUserId() {
@@ -185,7 +219,9 @@ public class ProjectMain {
 
     /**
      * 创建人id
-     * @param createUserId 创建人id
+     * 
+     * @param createUserId
+     *            创建人id
      */
     public void setCreateUserId(String createUserId) {
         this.createUserId = createUserId == null ? null : createUserId.trim();
@@ -193,6 +229,7 @@ public class ProjectMain {
 
     /**
      * 创建时间
+     * 
      * @return create_time 创建时间
      */
     public Date getCreateTime() {
@@ -201,7 +238,9 @@ public class ProjectMain {
 
     /**
      * 创建时间
-     * @param createTime 创建时间
+     * 
+     * @param createTime
+     *            创建时间
      */
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
@@ -209,6 +248,7 @@ public class ProjectMain {
 
     /**
      * 修改人id
+     * 
      * @return modify_user_id 修改人id
      */
     public String getModifyUserId() {
@@ -217,7 +257,9 @@ public class ProjectMain {
 
     /**
      * 修改人id
-     * @param modifyUserId 修改人id
+     * 
+     * @param modifyUserId
+     *            修改人id
      */
     public void setModifyUserId(String modifyUserId) {
         this.modifyUserId = modifyUserId == null ? null : modifyUserId.trim();
@@ -225,6 +267,7 @@ public class ProjectMain {
 
     /**
      * 修改时间
+     * 
      * @return modify_time 修改时间
      */
     public Date getModifyTime() {
@@ -233,7 +276,9 @@ public class ProjectMain {
 
     /**
      * 修改时间
-     * @param modifyTime 修改时间
+     * 
+     * @param modifyTime
+     *            修改时间
      */
     public void setModifyTime(Date modifyTime) {
         this.modifyTime = modifyTime;
@@ -241,6 +286,7 @@ public class ProjectMain {
 
     /**
      * 描述
+     * 
      * @return project_desc 描述
      */
     public String getProjectDesc() {
@@ -249,7 +295,9 @@ public class ProjectMain {
 
     /**
      * 描述
-     * @param projectDesc 描述
+     * 
+     * @param projectDesc
+     *            描述
      */
     public void setProjectDesc(String projectDesc) {
         this.projectDesc = projectDesc == null ? null : projectDesc.trim();

@@ -19,7 +19,8 @@ public interface ProjectUserMapper {
     int insert(ProjectUser record);
 
     /**
-     *	项目添加成员
+     * 项目添加成员
+     * 
      * @mbggenerated 2018-04-13
      */
     int insertSelective(ProjectUser record);
@@ -48,12 +49,13 @@ public interface ProjectUserMapper {
      * @param pu
      * @return
      */
-	void confirmUser(ProjectUser pu);
-	
-	/**
-	 * 查询成员
-	 * @param projectId
-	 * @return
-	 */
-	List<ProjectUserShow> searchUserByProjectId(Long projectId);
+    void confirmUser(ProjectUser pu);
+
+    /**
+     * 查询成员
+     * 
+     * @param projectId
+     * @return
+     */
+    List<ProjectUserShow> searchUserByProjectId(Long projectId);
 }

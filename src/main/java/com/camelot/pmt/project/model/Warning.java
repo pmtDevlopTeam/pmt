@@ -2,6 +2,8 @@ package com.camelot.pmt.project.model;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 public class Warning {
     /**
      * 预警id
@@ -21,6 +23,7 @@ public class Warning {
     /**
      * 自定义预警时间（项目和任务用到）
      */
+    @DateTimeFormat(pattern = "yyyy-MM-ddHH:mm:ss")
     private Date warnTime;
 
     /**
@@ -46,6 +49,7 @@ public class Warning {
     /**
      * 创建时间
      */
+    @DateTimeFormat(pattern = "yyyy-MM-ddHH:mm:ss")
     private Date createTime;
 
     /**
@@ -56,6 +60,7 @@ public class Warning {
     /**
      * 修改时间
      */
+    @DateTimeFormat(pattern = "yyyy-MM-ddHH:mm:ss")
     private Date modifyTime;
 
     /**
@@ -65,6 +70,7 @@ public class Warning {
 
     /**
      * 预警id
+     * 
      * @return id 预警id
      */
     public Long getId() {
@@ -73,7 +79,9 @@ public class Warning {
 
     /**
      * 预警id
-     * @param id 预警id
+     * 
+     * @param id
+     *            预警id
      */
     public void setId(Long id) {
         this.id = id;
@@ -81,6 +89,7 @@ public class Warning {
 
     /**
      * 预警类型
+     * 
      * @return warn_type 预警类型
      */
     public String getWarnType() {
@@ -89,7 +98,9 @@ public class Warning {
 
     /**
      * 预警类型
-     * @param warnType 预警类型
+     * 
+     * @param warnType
+     *            预警类型
      */
     public void setWarnType(String warnType) {
         this.warnType = warnType == null ? null : warnType.trim();
@@ -97,6 +108,7 @@ public class Warning {
 
     /**
      * 项目id
+     * 
      * @return pro_id 项目id
      */
     public Long getProId() {
@@ -105,7 +117,9 @@ public class Warning {
 
     /**
      * 项目id
-     * @param proId 项目id
+     * 
+     * @param proId
+     *            项目id
      */
     public void setProId(Long proId) {
         this.proId = proId;
@@ -113,6 +127,7 @@ public class Warning {
 
     /**
      * 自定义预警时间（项目和任务用到）
+     * 
      * @return warn_time 自定义预警时间（项目和任务用到）
      */
     public Date getWarnTime() {
@@ -121,7 +136,9 @@ public class Warning {
 
     /**
      * 自定义预警时间（项目和任务用到）
-     * @param warnTime 自定义预警时间（项目和任务用到）
+     * 
+     * @param warnTime
+     *            自定义预警时间（项目和任务用到）
      */
     public void setWarnTime(Date warnTime) {
         this.warnTime = warnTime;
@@ -129,6 +146,7 @@ public class Warning {
 
     /**
      * bug最小条数预警
+     * 
      * @return min_num bug最小条数预警
      */
     public Integer getMinNum() {
@@ -137,7 +155,9 @@ public class Warning {
 
     /**
      * bug最小条数预警
-     * @param minNum bug最小条数预警
+     * 
+     * @param minNum
+     *            bug最小条数预警
      */
     public void setMinNum(Integer minNum) {
         this.minNum = minNum;
@@ -145,6 +165,7 @@ public class Warning {
 
     /**
      * bug最大条数预警
+     * 
      * @return max_num bug最大条数预警
      */
     public Integer getMaxNum() {
@@ -153,7 +174,9 @@ public class Warning {
 
     /**
      * bug最大条数预警
-     * @param maxNum bug最大条数预警
+     * 
+     * @param maxNum
+     *            bug最大条数预警
      */
     public void setMaxNum(Integer maxNum) {
         this.maxNum = maxNum;
@@ -161,6 +184,7 @@ public class Warning {
 
     /**
      * 预警状态
+     * 
      * @return warn_status 预警状态
      */
     public String getWarnStatus() {
@@ -169,7 +193,9 @@ public class Warning {
 
     /**
      * 预警状态
-     * @param warnStatus 预警状态
+     * 
+     * @param warnStatus
+     *            预警状态
      */
     public void setWarnStatus(String warnStatus) {
         this.warnStatus = warnStatus == null ? null : warnStatus.trim();
@@ -177,6 +203,7 @@ public class Warning {
 
     /**
      * 创建人id
+     * 
      * @return create_user_id 创建人id
      */
     public String getCreateUserId() {
@@ -185,7 +212,9 @@ public class Warning {
 
     /**
      * 创建人id
-     * @param createUserId 创建人id
+     * 
+     * @param createUserId
+     *            创建人id
      */
     public void setCreateUserId(String createUserId) {
         this.createUserId = createUserId == null ? null : createUserId.trim();
@@ -193,6 +222,7 @@ public class Warning {
 
     /**
      * 创建时间
+     * 
      * @return create_time 创建时间
      */
     public Date getCreateTime() {
@@ -201,7 +231,9 @@ public class Warning {
 
     /**
      * 创建时间
-     * @param createTime 创建时间
+     * 
+     * @param createTime
+     *            创建时间
      */
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
@@ -209,6 +241,7 @@ public class Warning {
 
     /**
      * 修改人id
+     * 
      * @return modify_user_id 修改人id
      */
     public String getModifyUserId() {
@@ -217,7 +250,9 @@ public class Warning {
 
     /**
      * 修改人id
-     * @param modifyUserId 修改人id
+     * 
+     * @param modifyUserId
+     *            修改人id
      */
     public void setModifyUserId(String modifyUserId) {
         this.modifyUserId = modifyUserId == null ? null : modifyUserId.trim();
@@ -225,6 +260,7 @@ public class Warning {
 
     /**
      * 修改时间
+     * 
      * @return modify_time 修改时间
      */
     public Date getModifyTime() {
@@ -233,7 +269,9 @@ public class Warning {
 
     /**
      * 修改时间
-     * @param modifyTime 修改时间
+     * 
+     * @param modifyTime
+     *            修改时间
      */
     public void setModifyTime(Date modifyTime) {
         this.modifyTime = modifyTime;
@@ -241,6 +279,7 @@ public class Warning {
 
     /**
      * 任务id
+     * 
      * @return task_id 任务id
      */
     public Long getTaskId() {
@@ -249,7 +288,9 @@ public class Warning {
 
     /**
      * 任务id
-     * @param taskId 任务id
+     * 
+     * @param taskId
+     *            任务id
      */
     public void setTaskId(Long taskId) {
         this.taskId = taskId;

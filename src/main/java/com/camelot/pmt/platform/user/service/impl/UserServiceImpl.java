@@ -1,13 +1,14 @@
 package com.camelot.pmt.platform.user.service.impl;
 
-import org.apache.shiro.authc.UsernamePasswordToken;
+import java.util.List;
+import java.util.UUID;
+
 import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import com.camelot.pmt.platform.user.mapper.UserMapper;
@@ -16,10 +17,6 @@ import com.camelot.pmt.platform.user.service.UserService;
 import com.camelot.pmt.platform.utils.DataGrid;
 import com.camelot.pmt.platform.utils.ExecuteResult;
 import com.camelot.pmt.platform.utils.Pager;
-
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
 
 /**
  * 

@@ -30,6 +30,7 @@ public class DemandOperate {
 
     /**
      * 主键
+     * 
      * @return id 主键
      */
     public Long getId() {
@@ -38,7 +39,9 @@ public class DemandOperate {
 
     /**
      * 主键
-     * @param id 主键
+     * 
+     * @param id
+     *            主键
      */
     public void setId(Long id) {
         this.id = id;
@@ -46,6 +49,7 @@ public class DemandOperate {
 
     /**
      * 需求id
+     * 
      * @return demand_id 需求id
      */
     public Long getDemandId() {
@@ -54,7 +58,9 @@ public class DemandOperate {
 
     /**
      * 需求id
-     * @param demandId 需求id
+     * 
+     * @param demandId
+     *            需求id
      */
     public void setDemandId(Long demandId) {
         this.demandId = demandId;
@@ -62,6 +68,7 @@ public class DemandOperate {
 
     /**
      * 创建人id
+     * 
      * @return create_user_id 创建人id
      */
     public String getCreateUserId() {
@@ -70,7 +77,9 @@ public class DemandOperate {
 
     /**
      * 创建人id
-     * @param createUserId 创建人id
+     * 
+     * @param createUserId
+     *            创建人id
      */
     public void setCreateUserId(String createUserId) {
         this.createUserId = createUserId == null ? null : createUserId.trim();
@@ -78,6 +87,7 @@ public class DemandOperate {
 
     /**
      * 创建时间
+     * 
      * @return create_time 创建时间
      */
     public Date getCreateTime() {
@@ -86,7 +96,9 @@ public class DemandOperate {
 
     /**
      * 创建时间
-     * @param createTime 创建时间
+     * 
+     * @param createTime
+     *            创建时间
      */
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
@@ -94,6 +106,7 @@ public class DemandOperate {
 
     /**
      * 操作描述
+     * 
      * @return operate_desc 操作描述
      */
     public String getOperateDesc() {
@@ -102,7 +115,9 @@ public class DemandOperate {
 
     /**
      * 操作描述
-     * @param operateDesc 操作描述
+     * 
+     * @param operateDesc
+     *            操作描述
      */
     public void setOperateDesc(String operateDesc) {
         this.operateDesc = operateDesc == null ? null : operateDesc.trim();

@@ -19,7 +19,7 @@ public class TaskManagerController {
 
     @PostMapping(value = "/queryAllTask")
     @ApiOperation(value = "查询所有任务列表", notes = "查询所有任务列表")
-    public JSONObject queryAllTask(){
+    public JSONObject queryAllTask() {
         return taskManagerService.queryAllTask();
     }
 }

@@ -2,5 +2,5 @@ package com.camelot.pmt.project.model;
 
 public class OperationHistory {
 
-	private String remark;
+    private String remark;
 }
