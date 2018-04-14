@@ -5,6 +5,8 @@ import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class ProjectMain implements Serializable {
     /**
      * 
@@ -40,12 +42,14 @@ public class ProjectMain implements Serializable {
      * 起始时间（是立项时预计）
      */
     @DateTimeFormat(pattern = "yyyy-MM-ddHH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date startTime;
 
     /**
      * 结束时间（是立项时预计）
      */
     @DateTimeFormat(pattern = "yyyy-MM-ddHH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date endTime;
 
     /**
@@ -57,6 +61,7 @@ public class ProjectMain implements Serializable {
      * 创建时间
      */
     @DateTimeFormat(pattern = "yyyy-MM-ddHH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date createTime;
 
     /**
@@ -68,6 +73,7 @@ public class ProjectMain implements Serializable {
      * 修改时间
      */
     @DateTimeFormat(pattern = "yyyy-MM-ddHH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date modifyTime;
 
     /**

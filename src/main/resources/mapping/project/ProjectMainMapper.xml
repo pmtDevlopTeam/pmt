@@ -1,6 +1,77 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.camelot.pmt.project.mapper.ProjectMainMapper">
+	<!-- 按修改人Id查询 -->
+	<select id="findByModifyUserId" resultMap="ResultMapWithBLOBs"
+		parameterType="String">
+		select
+		user_id,
+		project_num, project_name,
+		project_status,start_time,
+		end_time
+		from
+		project_main
+		where
+		modify_user_id=#{modify_user_id}
+	</select>
+	<!-- 按创建人Id查询 -->
+	<select id="findByCreateUserId" resultMap="ResultMapWithBLOBs"
+		parameterType="String">
+		select
+		user_id,
+		project_num, project_name,
+		project_status,start_time,
+		end_time
+		from
+		project_main
+		where
+		create_user_id=#{create_user_id}
+	</select>
+	<!-- 按负责人Id查询 -->
+	<select id="findByUserId" resultMap="ResultMapWithBLOBs"
+		parameterType="String">
+		select
+		user_id,
+		project_num, project_name,
+		project_status,start_time,
+		end_time
+		from
+		project_main
+		where
+		user_id=#{user_id}
+	</select>
+	<!-- 按状态分类查询 -->
+	<select id="findByProjectStatus" resultMap="ResultMapWithBLOBs"
+		parameterType="String">
+		select
+		user_id,
+		project_num, project_name, project_status
+		from
+		project_main
+		where
+		project_status=#{project_status}
+	</select>
+	<!-- 查询所有数量 -->
+	<select id="findAll" resultType="long">
+		select count(1) from
+		project_main
+	</select>
+	<!-- 分页查询所有 -->
+	<select id="findAllByPage" resultMap="ResultMapWithBLOBs">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from
+		project_main
+		<if test="page!=null">
+			<include refid="pagination_tail" />
+		</if>
+	</select>
+	<!-- 分页公共sql -->
+	<sql id="pagination_tail">
+		limit #{page.pageOffset} , #{page.rows}
+	</sql>
 	<resultMap id="BaseResultMap" type="com.camelot.pmt.project.model.ProjectMain">
 		<id column="id" property="id" jdbcType="BIGINT" />
 		<result column="user_id" property="userId" jdbcType="VARCHAR" />
@@ -22,9 +93,11 @@
 		<result column="project_desc" property="projectDesc" jdbcType="LONGVARCHAR" />
 	</resultMap>
 	<sql id="Base_Column_List">
-		id, user_id, project_num, project_name, project_status, start_time,
+		id, user_id, project_num, project_name, project_status,
+		start_time,
 		end_time, create_user_id,
-		create_time, modify_user_id, modify_time
+		create_time, modify_user_id,
+		modify_time
 	</sql>
 	<sql id="Blob_Column_List">
 		project_desc
@@ -39,22 +112,29 @@
 		where id = #{id,jdbcType=BIGINT}
 	</select>
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-		delete from project_main
+		delete from
+		project_main
 		where id = #{id,jdbcType=BIGINT}
 	</delete>
 	<insert id="insert" parameterType="com.camelot.pmt.project.model.ProjectMain"
 		useGeneratedKeys="true" keyProperty="id">
-		insert into project_main (id, user_id, project_num,
+		insert into project_main (id,
+		user_id, project_num,
 		project_name, project_status, start_time,
 		end_time, create_user_id, create_time,
-		modify_user_id, modify_time, project_desc
+		modify_user_id, modify_time,
+		project_desc
 		)
-		values (#{id,jdbcType=BIGINT}, #{userId,jdbcType=VARCHAR},
+		values (#{id,jdbcType=BIGINT},
+		#{userId,jdbcType=VARCHAR},
 		#{projectNum,jdbcType=CHAR},
-		#{projectName,jdbcType=VARCHAR}, #{projectStatus,jdbcType=CHAR}, #{startTime,jdbcType=TIMESTAMP},
-		#{endTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=VARCHAR},
+		#{projectName,jdbcType=VARCHAR}, #{projectStatus,jdbcType=CHAR},
+		#{startTime,jdbcType=TIMESTAMP},
+		#{endTime,jdbcType=TIMESTAMP},
+		#{createUserId,jdbcType=VARCHAR},
 		#{createTime,jdbcType=TIMESTAMP},
-		#{modifyUserId,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP}, #{projectDesc,jdbcType=LONGVARCHAR}
+		#{modifyUserId,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP},
+		#{projectDesc,jdbcType=LONGVARCHAR}
 		)
 	</insert>
 	<insert id="insertSelective" parameterType="com.camelot.pmt.project.model.ProjectMain">
@@ -138,7 +218,7 @@
 	</insert>
 	<update id="updateByPrimaryKeySelective" parameterType="com.camelot.pmt.project.model.ProjectMain">
 		update project_main
-		<set>
+		<trim prefix="set" suffixOverrides=",">
 			<if test="userId != null">
 				user_id = #{userId,jdbcType=VARCHAR},
 			</if>
@@ -157,12 +237,6 @@
 			<if test="endTime != null">
 				end_time = #{endTime,jdbcType=TIMESTAMP},
 			</if>
-			<if test="createUserId != null">
-				create_user_id = #{createUserId,jdbcType=VARCHAR},
-			</if>
-			<if test="createTime != null">
-				create_time = #{createTime,jdbcType=TIMESTAMP},
-			</if>
 			<if test="modifyUserId != null">
 				modify_user_id = #{modifyUserId,jdbcType=VARCHAR},
 			</if>
@@ -172,36 +246,33 @@
 			<if test="projectDesc != null">
 				project_desc = #{projectDesc,jdbcType=LONGVARCHAR},
 			</if>
-		</set>
+		</trim>
 		where id = #{id,jdbcType=BIGINT}
 	</update>
 	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.camelot.pmt.project.model.ProjectMain">
-		update project_main
+		update
+		project_main
 		set user_id = #{userId,jdbcType=VARCHAR},
-		project_num = #{projectNum,jdbcType=CHAR},
-		project_name = #{projectName,jdbcType=VARCHAR},
-		project_status = #{projectStatus,jdbcType=CHAR},
-		start_time = #{startTime,jdbcType=TIMESTAMP},
-		end_time = #{endTime,jdbcType=TIMESTAMP},
-		create_user_id = #{createUserId,jdbcType=VARCHAR},
-		create_time = #{createTime,jdbcType=TIMESTAMP},
-		modify_user_id = #{modifyUserId,jdbcType=VARCHAR},
-		modify_time = #{modifyTime,jdbcType=TIMESTAMP},
-		project_desc = #{projectDesc,jdbcType=LONGVARCHAR}
+		project_num =
+		#{projectNum,jdbcType=CHAR},
+		project_name =
+		#{projectName,jdbcType=VARCHAR},
+		project_status =
+		#{projectStatus,jdbcType=CHAR},
+		start_time =
+		#{startTime,jdbcType=TIMESTAMP},
+		end_time =
+		#{endTime,jdbcType=TIMESTAMP},
+		create_user_id =
+		#{createUserId,jdbcType=VARCHAR},
+		create_time =
+		#{createTime,jdbcType=TIMESTAMP},
+		modify_user_id =
+		#{modifyUserId,jdbcType=VARCHAR},
+		modify_time =
+		#{modifyTime,jdbcType=TIMESTAMP},
+		project_desc =
+		#{projectDesc,jdbcType=LONGVARCHAR}
 		where id = #{id,jdbcType=BIGINT}
-	</update>
-	<update id="updateByPrimaryKey" parameterType="com.camelot.pmt.project.model.ProjectMain">
-		update project_main
-		set user_id = #{userId,jdbcType=VARCHAR},
-		project_num = #{projectNum,jdbcType=CHAR},
-		project_name = #{projectName,jdbcType=VARCHAR},
-		project_status = #{projectStatus,jdbcType=CHAR},
-		start_time = #{startTime,jdbcType=TIMESTAMP},
-		end_time = #{endTime,jdbcType=TIMESTAMP},
-		create_user_id = #{createUserId,jdbcType=VARCHAR},
-		create_time = #{createTime,jdbcType=TIMESTAMP},
-		modify_user_id = #{modifyUserId,jdbcType=VARCHAR},
-		modify_time = #{modifyTime,jdbcType=TIMESTAMP}
-		where id = #{id,jdbcType=BIGINT}
-	</update>
+		</update>
 </mapper>

@@ -1,14 +1,18 @@
 package com.camelot.pmt.project.service.impl;
 
 import java.util.Date;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
+import com.camelot.pmt.platform.utils.DataGrid;
 import com.camelot.pmt.platform.utils.ExecuteResult;
+import com.camelot.pmt.platform.utils.Pager;
 import com.camelot.pmt.project.mapper.ProjectBudgetMapper;
 import com.camelot.pmt.project.mapper.ProjectMainMapper;
 import com.camelot.pmt.project.mapper.ProjectOperateMapper;
@@ -66,6 +70,165 @@ public class ProjectMainServiceImpl implements ProjectMainService {
             warning.setModifyTime(new Date());
             warningMapper.insert(warning);
             result.setResult("添加数据成功!");
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+        return result;
+    }
+
+    /**
+     * 分页查询 进度条提供数据
+     */
+    @Override
+    public ExecuteResult<DataGrid<ProjectMain>> findAllByPage(Pager<?> page) {
+        ExecuteResult<DataGrid<ProjectMain>> result = new ExecuteResult<DataGrid<ProjectMain>>();
+        try {
+            List<ProjectMain> list = projectMainMapper.findAllByPage(page);
+            // 如果没有查询到数据，不继续进行
+            if (CollectionUtils.isEmpty(list)) {
+                DataGrid<ProjectMain> dg = new DataGrid<ProjectMain>();
+                result.setResult(dg);
+                return result;
+            }
+            DataGrid<ProjectMain> dg = new DataGrid<ProjectMain>();
+            dg.setRows(list);
+            // 查询总条数
+            Long total = projectMainMapper.findAll();
+            dg.setTotal(total);
+            result.setResult(dg);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+        return result;
+    }
+
+    /**
+     * 按状态分类查询
+     * 
+     * @param projectStatus
+     * @return
+     */
+    @Override
+    public ExecuteResult<List<ProjectMain>> findByProjectStatus(String projectStatus) {
+        ExecuteResult<List<ProjectMain>> result = new ExecuteResult<List<ProjectMain>>();
+        try {
+            List<ProjectMain> list = projectMainMapper.findByProjectStatus(projectStatus);
+            if (list.size() <= 0) {
+                return result;
+            }
+            result.setResult(list);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+        return result;
+    }
+
+    /**
+     * 按负责人id查询 进度条
+     * 
+     * @param userId
+     * @return
+     */
+    @Override
+    public ExecuteResult<List<ProjectMain>> findByUserId(String userId) {
+        ExecuteResult<List<ProjectMain>> result = new ExecuteResult<List<ProjectMain>>();
+        try {
+            List<ProjectMain> list = projectMainMapper.findByUserId(userId);
+            if (list.size() <= 0) {
+                return result;
+            }
+            result.setResult(list);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+        return result;
+    }
+
+    /**
+     * 按创建人id查询 进度条
+     * 
+     * @param createUserId
+     * @return
+     */
+    @Override
+    public ExecuteResult<List<ProjectMain>> findByCreateUserId(String createUserId) {
+        ExecuteResult<List<ProjectMain>> result = new ExecuteResult<List<ProjectMain>>();
+        try {
+            List<ProjectMain> list = projectMainMapper.findByCreateUserId(createUserId);
+            if (list.size() <= 0) {
+                return result;
+            }
+            result.setResult(list);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+        return result;
+    }
+
+    /**
+     * 按修改人id查询 进度条
+     * 
+     * @param createUserId
+     * @return
+     */
+    @Override
+    public ExecuteResult<List<ProjectMain>> findByModifyUserId(String modifyUserId) {
+        ExecuteResult<List<ProjectMain>> result = new ExecuteResult<List<ProjectMain>>();
+        try {
+            List<ProjectMain> list = projectMainMapper.findByModifyUserId(modifyUserId);
+            if (list.size() <= 0) {
+                return result;
+            }
+            result.setResult(list);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+        return result;
+    }
+
+    /**
+     * 按照主键id进行修改
+     * 
+     * @param id
+     * @return
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public ExecuteResult<String> updateByPrimaryKeySelective(ProjectMain projectMain) {
+        ExecuteResult<String> result = new ExecuteResult<>();
+        try {
+            projectMain.setModifyTime(new Date());
+            projectMainMapper.updateByPrimaryKeySelective(projectMain);
+            result.setResult("更新数据成功!");
+
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+        return result;
+    }
+
+    /**
+     * 删除项目 项目成员表
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public ExecuteResult<String> deleteByPrimaryKey(Long id) {
+        ExecuteResult<String> result = new ExecuteResult<>();
+        try {
+            ProjectMain projectMainSelect = projectMainMapper.selectByPrimaryKey(id);
+            if ("01".equals(projectMainSelect.getProjectStatus())) {
+                projectMainMapper.deleteByPrimaryKey(id);
+                result.setResult("删除数据成功！");
+            } else {
+                result.setResult("项目进行中，不允许删除！");
+            }
         } catch (Exception e) {
             logger.error(e.getMessage());
             throw new RuntimeException(e);
