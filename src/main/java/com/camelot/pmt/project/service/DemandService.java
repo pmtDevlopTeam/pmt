@@ -9,4 +9,8 @@ public interface DemandService {
     ExecuteResult<String> save(DemandWithBLOBs demandWithBLOBs);
 
     ExecuteResult<DataGrid<DemandWithBLOBs>> findAllByPage(Pager pager, DemandWithBLOBs demandWithBLOBs);
+
+    ExecuteResult<DemandWithBLOBs> findById(Long id);
+
+    ExecuteResult<String>  deleteById(Long id);
 }
