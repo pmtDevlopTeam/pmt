@@ -28,22 +28,22 @@
         <result column="modify_user_id" property="modifyUserId" jdbcType="VARCHAR"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP"/>
-        <association property="createUser"  javaType="com.camelot.pmt.project.model.Project">
-            <result property="proId" column="id"/>
-            <result property="proName" column="project_name"/>
+        <association property="demand"  javaType="com.camelot.pmt.project.model.Demand">
+            <result property="id" column="did"/>
+            <result property="demandDesc" column="demand_desc"/>
         </association>
         <association property="createUser"  javaType="com.camelot.pmt.platform.model.User">
-            <result property="id" column="id"/>
+            <result property="id" column="cid"/>
             <result property="userId" column="user_id"/>
             <result property="username" column="user_name"/>
         </association>
         <association property="assignUser"  javaType="com.camelot.pmt.platform.model.User">
-            <result property="id" column="id"/>
+            <result property="id" column="aid"/>
             <result property="userId" column="user_id"/>
             <result property="username" column="user_name"/>
         </association>
         <association property="beassignUser"  javaType="com.camelot.pmt.platform.model.User">
-            <result property="id" column="id"/>
+            <result property="id" column="bid"/>
             <result property="userId" column="user_id"/>
             <result property="username" column="user_name"/>
         </association>
