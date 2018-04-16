@@ -349,4 +349,16 @@ public class ProjectMainController {
             return ApiResponse.error();
         }
     }
+
+    // 根据项目id更新项目状态 项目成员表成员状态 需求状态 任务状态 bug用例状态
+
+    // 项目id 修改人 修改时间 项目状态 projectMain
+
+    //项目操作表存数据
+    
+    //需求表更改状态
+    
+    //任务表更改状态
+    
+    //bug用例状态
 }
