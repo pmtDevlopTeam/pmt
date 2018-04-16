@@ -4,7 +4,7 @@ server:
 spring:
     datasource:
         name: test
-        url: jdbc:mysql://120.78.165.147:3306/pmt?useUnicode=true&characterEncoding=utf8
+        url: jdbc:mysql://172.21.127.81:3306/pmt?useUnicode=true&characterEncoding=utf8
         username: root
         password: camelot!123
         # 使用druid数据源
@@ -45,5 +45,4 @@ pagehelper:
     reasonable: true
     supportMethodsArguments: true
     params: count=countSql
-
 
