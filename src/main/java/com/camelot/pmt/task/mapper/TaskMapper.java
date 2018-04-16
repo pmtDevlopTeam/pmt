@@ -101,7 +101,7 @@ public interface TaskMapper {
 
 
     /**
-     *
+     * @author: gxl
      * @Title: queryMyTaskTreeByTaskId
      * @Description: TODO(查询taskId下的一级子节点)
      * @param @param taskId taskType beassignUserId
@@ -112,7 +112,7 @@ public interface TaskMapper {
     List<Task> queryMyTaskListNodeByParentId(Long taskId,String taskType,Long beassignUserId);
 
     /**
-     *
+     * @author: gxl
      * @Title: queryTaskListNodeByParentId
      * @Description: TODO(查询taskId下的一级子节点)
      * @param @param taskId taskType
@@ -123,7 +123,7 @@ public interface TaskMapper {
     List<Task> queryTaskListNodeByParentId(Long taskId,String taskType);
 
     /**
-     *
+     * @author: gxl
      * @Title: queryAllTaskList
      * @Description: TODO(查询整个任务表)
      * @param @return    设定文件
@@ -133,7 +133,7 @@ public interface TaskMapper {
     List<Task> queryAllTaskList(String taskType,Long beassignUserId);
 
     /**
-     *
+     * @author: gxl
      * @Title: queryTopTaskNameList
      * @Description: TODO(查询顶级我的待办任务)
      * @param @return    设定文件
@@ -143,7 +143,7 @@ public interface TaskMapper {
     List<Task> queryTopTaskNameList(String taskType,Long beassignUserId);
 
     /**
-     *
+     * @author: gxl
      * @Title: updateTaskPendingToDelay
      * @Description: TODO(我的待办任务转为延期,会将该节点及节点下的所有子节点变为延期状态)
      * @param @param taskId taskType
@@ -154,7 +154,7 @@ public interface TaskMapper {
     void updateTaskPendingToDelay(Long id,String taskType,String delayDescribe,String estimateStartTime);
 
     /**
-     *
+     * @author: gxl
      * @Title: updateTaskPendingToRuning
      * @Description: TODO(我的待办任务转为正在进行)
      * @param @param taskId
@@ -165,7 +165,7 @@ public interface TaskMapper {
     void updateTaskPendingToRuning(Long id,String taskType);
 
     /**
-     *
+     * @author: gxl
      * @Title: updateTaskToAssign
      * @Description: TODO(更新指派人和被指派人标识号)
      * @param @param id
@@ -178,7 +178,7 @@ public interface TaskMapper {
     void updateTaskToAssign(Long id,Long assignUserId,Long beassignUserId);
 
     /**
-     *
+     * @author: gxl
      * @Title: queryParentTaskNodeById
      * @Description: TODO(查询根据任务Id查询父级任务对象)
      * @param @param id
@@ -229,7 +229,7 @@ public interface TaskMapper {
     Long saveHistoryLog(TaskLog taskLog);
 
     /**
-     *
+     * @author: gxl
      * @Title: updateTaskPendingToDelay
      * @Description: TODO(我的待办任务转为延期,会将该节点及节点下的所有子节点变为延期状态)
      * @param @param taskId taskType
@@ -240,7 +240,7 @@ public interface TaskMapper {
     void updateTaskAlreadyToRunning(Long id,String taskType,String delayDescribe,String estimateStartTime);
 
     /**
-     *
+     * @author: gxl
      * @Title: updateTaskPendingToRuning
      * @Description: TODO(我的待办任务转为正在进行)
      * @param @param taskId
