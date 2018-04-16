@@ -68,7 +68,7 @@ public class UseCaseServiceImpl implements UseCaseService{
 		if(useCaseProcedureList!=null){
 			useCase.setProcedure(useCaseProcedureList);
 		}
-		return useCaseMapper.selectByPrimaryKey(id);
+		return useCase;
 	}
 	
 	public void updateUserCaseDelFlag(long id){
