@@ -42,8 +42,10 @@ public class UseCaseController {
 	    	 	@ApiImplicitParam(name = "projectId", value = "项目id", required = true, paramType = "query", dataType = "int"),
 	    	 	@ApiImplicitParam(name = "caseTitle", value = "用例标题", required = false, paramType = "query", dataType = "string"),
 	            @ApiImplicitParam(name = "currentPage", value = "页码", required = true, paramType = "query", dataType = "int"),
-	            @ApiImplicitParam(name = "pageSize", value = "每页数量", required = true, paramType = "query", dataType = "int") })
-	    public JSONObject queryUsersByPage(Long projectId,String caseTitle,Integer currentPage,Integer pageSize) {
+	            @ApiImplicitParam(name = "pageSize", value = "每页数量", required = true, paramType = "query", dataType = "int"),
+	            @ApiImplicitParam(name = "caseStatus", value = "用例状态(0:正常；1:被阻塞；2：研究中)", required = false, paramType = "query", dataType = "string"),
+	    	 	})
+	    public JSONObject queryUsersByPage(Long projectId,String caseTitle,Integer currentPage,Integer pageSize,String caseStatus) {
 			 PageBean  pageBean=	new  PageBean();
 			 pageBean.setCurrentPage(currentPage);
 			 pageBean.setPageSize(pageSize);
@@ -54,6 +56,10 @@ public class UseCaseController {
 			 }
 			 if(!StringUtils.isEmpty(caseTitle)){
 				 map.put("caseTitle", caseTitle);
+				 
+			 }
+			 if(!StringUtils.isEmpty(caseStatus)){
+				 map.put("caseStatus", caseStatus);
 				 
 			 }
 			 ExecuteResult<PageInfo> result = new ExecuteResult<PageInfo>();

@@ -246,6 +246,10 @@
       and
         project_id = #{projectId,jdbcType=BIGINT}
       </if>
+      <if test="case_status != null" >
+      and
+        case_status = #{case_status,jdbcType=VARCHAR}
+      </if>
      <if test="case_title != null" >
       and
         case_title like "%"#{case_title}"%"
