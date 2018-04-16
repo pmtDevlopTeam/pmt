@@ -1,5 +1,6 @@
 package com.camelot.pmt.project.service;
 
+import java.util.List;
 import java.util.Map;
 
 import com.camelot.pmt.platform.utils.ExecuteResult;
@@ -14,4 +15,11 @@ public interface ProjectBudgetService {
     ExecuteResult<String> modifyProjectBudget(ProjectBudget projectBudget);
 
     ExecuteResult<ProjectBudget> findProjectBudgeByProjectId(Long projectId);
+
+    ExecuteResult<List<Map<String, Object>>> findDemandTaskByDeamdId(Long demandId);
+
+    ExecuteResult<List<Map<String, Object>>> findDemandUseCaseByDeamdId(Long demandId);
+
+    ExecuteResult<List<Map<String, Object>>> findDemandBugByDeamdId(Long demandId);
+
 }

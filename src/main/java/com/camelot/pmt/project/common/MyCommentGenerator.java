@@ -70,9 +70,10 @@ public class MyCommentGenerator implements CommentGenerator {
     }
 
     /**
-     * This method adds the custom javadoc tag for. You may do nothing if you do not
-     * wish to include the Javadoc tag - however, if you do not include the Javadoc
-     * tag then the Java merge capability of the eclipse plugin will break.
+     * This method adds the custom javadoc tag for. You may do nothing if you do
+     * not wish to include the Javadoc tag - however, if you do not include the
+     * Javadoc tag then the Java merge capability of the eclipse plugin will
+     * break.
      *
      * @param javaElement
      *            the java element
@@ -94,9 +95,9 @@ public class MyCommentGenerator implements CommentGenerator {
     }
 
     /**
-     * This method returns a formated date string to include in the Javadoc tag and
-     * XML comments. You may return null if you do not want the date in these
-     * documentation elements.
+     * This method returns a formated date string to include in the Javadoc tag
+     * and XML comments. You may return null if you do not want the date in
+     * these documentation elements.
      *
      * @return a string representing the current timestamp, or null
      */
@@ -134,8 +135,7 @@ public class MyCommentGenerator implements CommentGenerator {
         innerEnum.addJavaDocLine(" */");
     }
 
-    public void addFieldComment(Field field, IntrospectedTable introspectedTable,
-            IntrospectedColumn introspectedColumn) {
+    public void addFieldComment(Field field, IntrospectedTable introspectedTable, IntrospectedColumn introspectedColumn) {
         if (suppressAllComments) {
             return;
         }

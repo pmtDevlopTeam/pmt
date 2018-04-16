@@ -96,8 +96,7 @@ public class ProjectUserController {
 
     @RequestMapping(value = "/find", method = RequestMethod.GET)
     @ApiOperation("查找项目成员")
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "projectId", dataType = "Long", value = "项目id", required = true), })
+    @ApiImplicitParams({ @ApiImplicitParam(paramType = "query", name = "projectId", dataType = "Long", value = "项目id", required = true), })
     public JSONObject findUser(Long projectId) {
         try {
             List<ProjectUserShow> list = projectUserService.searchUserByProjectId(projectId);

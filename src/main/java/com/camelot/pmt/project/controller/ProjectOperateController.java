@@ -36,8 +36,7 @@ public class ProjectOperateController {
      */
     @ApiOperation(value = "按创建人id查询", notes = "按创建人id查询")
     @GetMapping(value = "/api/projectOperate/findByCreateUserId")
-    public JSONObject findByCreateUserId(
-            @ApiParam(value = "创建人id", required = true) @RequestParam String createUserId) {
+    public JSONObject findByCreateUserId(@ApiParam(value = "创建人id", required = true) @RequestParam String createUserId) {
         logger.info("入参封装的数据为：createUserId={}", createUserId);
         ExecuteResult<List<ProjectOperate>> result = new ExecuteResult<>();
         try {

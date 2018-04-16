@@ -246,7 +246,8 @@ public class ProjectMainController {
      */
     @ApiOperation(value = "按主键id更新数据", notes = "按主键id更新数据")
     @PutMapping(value = "/api/projectMain/updateByPrimaryKeySelective")
-    public JSONObject updateByPrimaryKeySelective(//
+    public JSONObject updateByPrimaryKeySelective(
+            //
             @ApiParam(value = "id", required = true) @RequestParam Long id, //
             @ApiParam(value = "创建人id", required = true) @RequestParam String createUserId, //
             @ApiParam(value = "负责人Id", required = true) @RequestParam String userId, //
@@ -303,7 +304,8 @@ public class ProjectMainController {
      */
     @ApiOperation(value = "根据id删除项目", notes = "根据id删除项目")
     @DeleteMapping(value = "/api/projectMain/deleteByPrimaryKey")
-    public JSONObject deleteByPrimaryKey(//
+    public JSONObject deleteByPrimaryKey(
+            //
             @ApiParam(value = "id", required = true) @RequestParam Long id, //
             @ApiParam(value = "创建人id", required = true) @RequestParam String createUserId, //
             @ApiParam(value = "operateDesc", required = true) @RequestParam String operateDesc) {
@@ -402,5 +404,11 @@ public class ProjectMainController {
             return ApiResponse.error();
         }
     }
+    // 项目操作表存数据
 
+    // 需求表更改状态
+
+    // 任务表更改状态
+
+    // bug用例状态
 }
