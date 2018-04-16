@@ -27,7 +27,10 @@ public class DemandOperate {
      * 操作描述
      */
     private String operateDesc;
-
+    /**
+     * 操作描述
+     */
+    private String runType;
     /**
      * 主键
      * 
@@ -121,5 +124,13 @@ public class DemandOperate {
      */
     public void setOperateDesc(String operateDesc) {
         this.operateDesc = operateDesc == null ? null : operateDesc.trim();
+    }
+
+    public String getRunType() {
+        return runType;
+    }
+
+    public void setRunType(String runType) {
+        this.runType = runType;
     }
 }

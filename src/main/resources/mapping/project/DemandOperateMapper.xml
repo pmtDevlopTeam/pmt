@@ -9,13 +9,36 @@
   </resultMap>
   <resultMap id="ResultMapWithBLOBs" type="com.camelot.pmt.project.model.DemandOperate" extends="BaseResultMap" >
     <result column="operate_desc" property="operateDesc" jdbcType="LONGVARCHAR" />
+    <result column="run_type" property="runType" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, demand_id, create_user_id, create_time
+    id, demand_id, create_user_id, create_time,run_type
   </sql>
   <sql id="Blob_Column_List" >
     operate_desc
   </sql>
+  <sql id="dynamicWhere">
+    <where>
+      <if test="demand.id!=null"> AND id=#{demand.id} </if>
+      <if test="demand.pid!= null"> AND pid=#{demand.pid} </if>
+      <if test="demand.projectId!= null"> AND project_id=#{demand.projectId} </if>
+      <if test="demand.demandName!= null"> AND demand_name=#{demand.demandName} </if>
+      <if test="demand.demandNum!= null"> AND demand_num=#{demand.demandNum} </if>
+      <if test="demand.demandStatus!= null"> AND demand_status=#{demand.demandStatus} </if>
+      <if test="demand.demandLevel!= null"> AND demand_level=#{demand.demandLevel} </if>
+      <if test="demand.demandSource!= null"> AND demand_source=#{demand.demandSource} </if>
+      <if test="demand.sourceRemark!= null"> AND source_remark=#{demand.sourceRemark} </if>
+      <if test="demand.createUserId!= null"> AND create_user_id=#{demand.createUserId} </if>
+      <if test="demand.createTime!= null"> AND create_time=#{demand.createTime} </if>
+      <if test="demand.modifyUserId!= null"> AND modify_user_id=#{demand.modifyUserId} </if>
+      <if test="demand.modifyTime!= null"> AND modify_time=#{demand.modifyTime} </if>
+      <if test="demand.reviewedWith!= null"> AND find_in_set(${demand.reviewedWith},reviewed_with)>0 </if>
+    </where>
+  </sql>
+
+
+
+
   <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
     select 
     <include refid="Base_Column_List" />
@@ -104,4 +127,11 @@
       create_time = #{createTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <select id="findWithOperate">
+
+
+
+  </select>
+
 </mapper>
