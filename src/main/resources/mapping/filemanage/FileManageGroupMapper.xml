@@ -169,7 +169,11 @@
     del_flag, isfile
   </sql>
   -->
+<<<<<<< Updated upstream
   <!--手动编写sql-->
+=======
+  <!--手动编写sql -->
+>>>>>>> Stashed changes
   <!--<select id="selectFileGroupByProjectID" parameterType="Long" resultType="com.camelot.pmt.filemanage.model.FileManageGroup">
     select * from file_manage_group where project_id=#{projectId}
   </select>-->

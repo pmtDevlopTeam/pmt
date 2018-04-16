@@ -17,7 +17,11 @@ import java.util.List;
 /**
  *
  * FileManageGroup 表数据服务层接口实现类1
+<<<<<<< Updated upstream
  *
+=======
+ *zz
+>>>>>>> Stashed changes
  */
 @Service
 public class FileManageGroupServiceImpl implements FileManageGroupService {

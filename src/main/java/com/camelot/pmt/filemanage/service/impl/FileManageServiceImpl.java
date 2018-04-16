@@ -17,7 +17,11 @@ import java.util.List;
 /**
  *
  * FileManage 表数据服务层接口实现类
+<<<<<<< Updated upstream
  *张战
+=======
+ *张战zz
+>>>>>>> Stashed changes
  */
 @Service
 public class FileManageServiceImpl implements FileManageService {
