@@ -27,9 +27,6 @@ public class MenuController {
     MenuService menuService;
     
     @Autowired
-    ShiroUtils shiroUtils;
-    
-    @Autowired
     ExecuteResult result;
     
     /**
