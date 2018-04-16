@@ -32,25 +32,81 @@ public class CaseRepertoryServiceImpl implements CaseRepertoryService {
 
 	@Autowired
 	private CaseRepertoryStepMapper caseRepertoryStepMapper;
-    
+
 	@Override
 	public ExecuteResult<PageInfo> selectCondition(Map<String, Object> map) {
-		 ExecuteResult<PageInfo> result = new ExecuteResult<PageInfo>();
-		 try {
-			 PageBean pageBean = (PageBean) map.get("pageBean");
-	            if (pageBean == null) {
-	                result.setResultMessage("传入实体有误!");
-	                return result;
-	            }
-	            PageHelper.startPage(pageBean.getCurrentPage(), pageBean.getPageSize());
-	            List<SelectBugManage> docs = caseRepertoryMapper.selectCondition(map);
-	            PageInfo<SelectBugManage> pageInfo = new PageInfo<SelectBugManage>(docs);
-	            result.setResult(pageInfo);
-	        } catch (Exception e) {
-	            LOGGER.error(e.getMessage());
-	            throw new RuntimeException(e);
-	        }
-	        return result;
+		ExecuteResult<PageInfo> result = new ExecuteResult<PageInfo>();
+		try {
+			PageBean pageBean = (PageBean) map.get("pageBean");
+			if (pageBean == null) {
+				result.setResultMessage("传入实体有误!");
+				return result;
+			}
+			PageHelper.startPage(pageBean.getCurrentPage(), pageBean.getPageSize());
+			List<CaseRepertory> docs = caseRepertoryMapper.selectCondition(map);
+			PageInfo<CaseRepertory> pageInfo = new PageInfo<CaseRepertory>(docs);
+			result.setResult(pageInfo);
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage());
+			throw new RuntimeException(e);
+		}
+		return result;
+	}
+
+	@Override
+	@Transactional
+	public ExecuteResult<String> addCaseRepertoryByCaseid(String ids) {
+		ExecuteResult<String> result = new ExecuteResult<String>();
+		try {
+			String[] params=ids.split(",");
+			for (int i = 0; i < params.length; i++) {
+				String param= params[i].toString().trim();
+				long param1 =Long.parseLong(param);
+				CaseRepertory caseRepertory=new CaseRepertory();
+				caseRepertory.setId(param1);
+				//复制数据到用例库主表并返回主键id
+				caseRepertoryMapper.addCaseRepertoryByCaseid(caseRepertory);
+				//复制步骤数到用例库步骤表中并且更新父id为 result1
+				long id=caseRepertory.getId();
+				Map<String,Object> map=new HashMap<String,Object>();
+				map.put("param1", param1);
+				map.put("result1", id);
+				int result2 = caseRepertoryMapper.addCaseRepertoryStepByCaseid(map);
+			}
+			result.setResult("成功");
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage());
+			throw new RuntimeException(e);
+		}
+		return result;
+	}
+
+	@Override
+	@Transactional
+	public ExecuteResult<String> addUserCaseByCaseRepertoryid(String ids) {
+		ExecuteResult<String> result = new ExecuteResult<String>();
+		try {
+			String[] params=ids.split(",");
+			for (int i = 0; i < params.length; i++) {
+				String param= params[i].toString().trim();
+				long param1 =Long.parseLong(param);
+				CaseRepertory caseRepertory=new CaseRepertory();
+				caseRepertory.setId(param1);
+				//复制数据到用例主表并返回主键id
+				caseRepertoryMapper.addUserCaseByCaseRepertoryid(caseRepertory);
+				//复制步骤数到用例步骤表中并且更新父id为 result1
+				long id=caseRepertory.getId();
+				Map<String,Object> map=new HashMap<String,Object>();
+				map.put("param1", param1);
+				map.put("result1", id);
+				caseRepertoryMapper.addUserCaseStepByCaseRepertoryid(map);
+			}
+			result.setResult("成功");
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage());
+			throw new RuntimeException(e);
+		}
+		return result;
 	}
 
 	@Override

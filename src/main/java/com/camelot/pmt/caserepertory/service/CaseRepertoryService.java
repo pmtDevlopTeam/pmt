@@ -11,6 +11,10 @@ public interface CaseRepertoryService {
 
 	ExecuteResult<PageInfo> selectCondition(Map<String, Object> map);
 
+	ExecuteResult<String> addCaseRepertoryByCaseid(String ids);
+
+	ExecuteResult<String> addUserCaseByCaseRepertoryid(String ids);
+
 	/**
 	 * 根据ID查询用例和用例步骤
 	 *

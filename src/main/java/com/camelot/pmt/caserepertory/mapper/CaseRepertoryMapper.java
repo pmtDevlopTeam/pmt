@@ -56,11 +56,19 @@ public interface CaseRepertoryMapper {
      */
     int updateByPrimaryKey(CaseRepertory record);
 
-	List<SelectBugManage> selectCondition(Map<String, Object> map);
-
     int insertBatch(List<CaseRepertory> list);
 
     List<CaseRepertory> find(Map<String, Object> param);
 
     int remove(Map<String, Object> param);
+
+    List<CaseRepertory> selectCondition(Map<String, Object> map);
+
+    int  addCaseRepertoryByCaseid(CaseRepertory caseRepertory);
+
+    int addCaseRepertoryStepByCaseid(Map<String, Object> map);
+
+    int addUserCaseByCaseRepertoryid(CaseRepertory caseRepertory);
+
+    int addUserCaseStepByCaseRepertoryid(Map<String, Object> map);
 }
