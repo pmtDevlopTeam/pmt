@@ -5,6 +5,8 @@
  */
 package com.camelot.pmt.project.controller;
 
+import java.util.Map;
+
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -41,14 +43,13 @@ public class ProjectWarningController {
 	@ApiOperation(value = "开启项目预警功能", notes = "开启项目预警功能")
 	@ApiImplicitParams({
         @ApiImplicitParam(name = "proId", value = "项目id", required = true, paramType = "form", dataType = "int"),
-        @ApiImplicitParam(name = "id", value = "id", required = true, paramType = "form", dataType = "int"),
+        @ApiImplicitParam(name = "id", value = "id", required = true, paramType = "form", dataType = "Long"),
         @ApiImplicitParam(name = "warnType", value = "预警类型", required = true, paramType = "form", dataType = "String"),
         @ApiImplicitParam(name = "warnStatus", value = "预警状态", required = true, paramType = "form", dataType = "String"),
-        @ApiImplicitParam(name = "createUserId", value = "创建人id", required = true, paramType = "form", dataType = "int"),
-        @ApiImplicitParam(name = "modifyUserId", value = "修改人id", required = true, paramType = "form", dataType = "int")})
+        @ApiImplicitParam(name = "modifyUserId", value = "修改人id", required = true, paramType = "form", dataType = "String")})
 	@PostMapping("start")
 	public JSONObject start(@RequestBody String param){
-		 ExecuteResult<DataGrid<UserModel>> result = new ExecuteResult<DataGrid<UserModel>>();
+		 ExecuteResult<Map<String, Object>> result = new ExecuteResult<Map<String, Object>>();
 		if("".equals(param)){
 			return ApiResponse.error();
 		}

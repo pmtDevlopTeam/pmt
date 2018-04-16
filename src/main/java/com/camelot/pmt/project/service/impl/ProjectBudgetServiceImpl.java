@@ -5,15 +5,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
-import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.camelot.pmt.platform.user.model.UserModel;
 import com.camelot.pmt.platform.utils.ExecuteResult;
 import com.camelot.pmt.project.mapper.ProjectBudgetMapper;
 import com.camelot.pmt.project.model.ProjectBudget;
@@ -49,10 +46,8 @@ public class ProjectBudgetServiceImpl implements ProjectBudgetService {
 				return result;
 			}
 			// 对象不为空则添加新的项目实体
-			Long id = 0L;
 			projectBudget.setCreateTime(currentDate);
 			projectBudget.setModifyTime(currentDate);
-			projectBudget.setId(id);
 			int resu = proBuggetMapper.insertSelective(projectBudget);
 			if (resu > 0) {
 				result.setResult("添加项目预算成功!");
@@ -130,27 +125,15 @@ public class ProjectBudgetServiceImpl implements ProjectBudgetService {
 					result.setResultMessage("查询项目预计工时失败--不存在此项目预计工时！");
 					return result;
 				}
-				map.put("budgetaryHours", proBudget.getBudgetaryHours());
-				List<ProjectUser> proUserList = new ArrayList<>();// 调用项目成员dao,获取所有进入项目成员信息
-				Long totalHours = 0L;// 总耗时时间
+				//查询任务表中所有已完成任务的实际工时
+				Long totalActualHours = proBuggetMapper.queryTotalActualHours(proId);
 				/**
 				 * 总消耗工时来源于已完成任务工时的累加和
 				 * 等待与任务组对接===========================
 				 */
-				if ((null != proUserList) && (proUserList.size() > 0)) {
-					Date realJoinTime;// 实际进入时间
-					Date realOutTime;// 实际出项目时间
-					for (ProjectUser projectUser : proUserList) {
-						realJoinTime = projectUser.getRealJoinTime();
-						realOutTime = projectUser.getRealOutTime();
-						if (null != realOutTime) {
-							// ..........
-						} else {
-							// 以当前时间做为实际出项目时间
-						}
-					}
-				}
-				map.put("totalHours", totalHours);
+				map.put("budgetaryHours", proBudget.getBudgetaryHours());//项目预计时间
+				map.put("otherbudget", proBudget.getOther());//其他预算
+				map.put("totalHours", totalActualHours);//项目实际消耗时间
 				result.setResult(map);
 				return result;
 			}
@@ -159,6 +142,53 @@ public class ProjectBudgetServiceImpl implements ProjectBudgetService {
 			LOGGER.error(e.getMessage());
 			throw new RuntimeException(e);
 		}
+		return result;
+	}
+
+	/**
+	 * 统计影响需求的任务
+	 */
+	@Override
+	public ExecuteResult<List<Map<String,Object>>> findDemandTaskByDeamdId(Long demandId) {
+		ExecuteResult<List<Map<String,Object>>> result = new ExecuteResult<>();
+		if((null == demandId)||(0 == demandId)){
+			result.addErrorMessage("传入的需求id有误");
+			return result;//---------待调整
+		}
+		List<Map<String,Object>> taskList = proBuggetMapper.findDemandTaskByDeamdId(demandId);
+		result.setResult(taskList);
+		return result;
+	}
+
+	/**
+	 * 根据需求id查询影响变更需求影响的用例信息
+	 */
+	@Override
+	public ExecuteResult<List<Map<String, Object>>> findDemandUseCaseByDeamdId(
+			Long demandId) {
+		ExecuteResult<List<Map<String,Object>>> result = new ExecuteResult<>();
+		if((null == demandId)||(0 == demandId)){
+			result.addErrorMessage("传入的需求id有误");
+			return result;//---------待调整
+		}
+		List<Map<String,Object>> taskList = proBuggetMapper.findDemandUseCaseByDeamdId(demandId);
+		result.setResult(taskList);
+		return result;
+	}
+
+	/**
+	 * 查询影响需求变更的bug信息
+	 */
+	@Override
+	public ExecuteResult<List<Map<String, Object>>> findDemandBugByDeamdId(
+			Long demandId) {
+		ExecuteResult<List<Map<String,Object>>> result = new ExecuteResult<>();
+		if((null == demandId)||(0 == demandId)){
+			result.addErrorMessage("传入的需求id有误");
+			return result;//---------待调整
+		}
+		List<Map<String,Object>> taskList = proBuggetMapper.findDemandBugByDeamdId(demandId);
+		result.setResult(taskList);
 		return result;
 	}
 
