@@ -14,4 +14,6 @@ public interface TaskLogMapper {
     int updateByPrimaryKeySelective(TaskLog record);
 
     int updateByPrimaryKey(TaskLog record);
+
+	int insertTaskLog(TaskLog tasklog);
 }
