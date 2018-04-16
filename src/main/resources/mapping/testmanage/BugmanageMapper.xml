@@ -82,6 +82,9 @@
 		select id,bug_no,bug_title,serious_degree,create_user_id,designated_id,solve_id,bug_status,bug_level
 		from bug_manage
 		<where>
+			<if test="projectId!=null">
+				AND project_id=#{projectId}
+			</if>
 			<if test="status==1">
 				AND designated_id=#{userId}
 			</if>
@@ -102,6 +105,9 @@
 			</if>
 			<if test="qEndTime!=null">
 		        AND create_time <![CDATA[ <=#{qEndTime}]]>
+			 </if>
+			 <if test="bugNo!=null and bugNo!=''">
+			 	AND bugNo=#{bugNo}
 			 </if> 
 			 <if test="bugStatus!=null and bugStatus!=''">
 				AND bug_status=#{bugStatus}
@@ -113,11 +119,12 @@
 		</where>
 	</select>
 	
-	<delete id="deleteByPrimaryKey">
-		delete from bug_manage
-		where id = #{id,jdbcType=BIGINT}
-	</delete>
-
+	<select id="selectByPUS" resultMap="SelectBaseResultMap">
+		select id,bug_no,bug_title,serious_degree,create_user_id,designated_id,solve_id,bug_status,bug_level
+		from bug_manage
+		where project_id=#{projectId} and designated_id=#{userId} and bug_status in(0,1)
+	</select>
+	
 	<insert id="insertSelective" useGeneratedKeys="true" keyProperty="id">
 		insert into bug_manage
 		<trim prefix="(" suffix=")" suffixOverrides=",">

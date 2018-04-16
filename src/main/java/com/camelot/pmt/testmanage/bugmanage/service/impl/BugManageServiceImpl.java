@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.camelot.pmt.platform.user.mapper.UserMapper;
+import com.camelot.pmt.platform.user.model.UserModel;
 import com.camelot.pmt.platform.utils.ExecuteResult;
 import com.camelot.pmt.platform.utils.PageBean;
 import com.camelot.pmt.task.utils.DateUtils;
@@ -557,5 +558,16 @@ public class BugManageServiceImpl implements BugManageService {
         bugHistory.setOperationFunction(operation);
         bugHistoryMapper.insertSelective(bugHistory);
 	}
+
+	@Override
+	public Boolean selectByPUS(Map<String, Object> map) {
+		List<SelectBugManage> selectByPUS = bugManageMapper.selectByPUS(map);
+		if(selectByPUS!=null&&selectByPUS.size()>0){
+			return true;
+		}
+		return false;
+	}
+
+
 
 }

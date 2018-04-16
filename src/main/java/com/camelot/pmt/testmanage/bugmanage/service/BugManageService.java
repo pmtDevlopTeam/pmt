@@ -1,9 +1,11 @@
 package com.camelot.pmt.testmanage.bugmanage.service;
 
+import java.util.List;
 import java.util.Map;
 
 import com.camelot.pmt.platform.utils.ExecuteResult;
 import com.camelot.pmt.testmanage.bugmanage.model.BugManage;
+import com.camelot.pmt.testmanage.bugmanage.model.SelectBugManage;
 import com.github.pagehelper.PageInfo;
 
 /**
@@ -14,11 +16,18 @@ import com.github.pagehelper.PageInfo;
 public interface BugManageService {
 	
 	/**
-	    * bug列表
-	    * @param userModel
-	    * @return
-	    */
+     * bug列表
+     * @param userModel
+     * @return
+     */
    ExecuteResult<PageInfo> selectCondition(Map<String,Object> map);
+   
+   /**
+    * bug 通过项目id ,指派给,状态 条件查询
+    * @param map
+    * @return
+    */
+   Boolean selectByPUS(Map<String,Object> map);
 	
 	 /**
 	  * 添加 bug

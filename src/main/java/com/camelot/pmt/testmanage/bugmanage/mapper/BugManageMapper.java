@@ -29,4 +29,6 @@ public interface BugManageMapper {
      int updateBugSolve(BugManage record);
      
      List<SelectBugManage> selectCondition(Map<String,Object> map);
+     
+     List<SelectBugManage> selectByPUS(Map<String,Object> map);
 }

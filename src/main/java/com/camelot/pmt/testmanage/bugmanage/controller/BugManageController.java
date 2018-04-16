@@ -50,18 +50,21 @@ public class BugManageController {
 	    @ApiImplicitParams({
 	            @ApiImplicitParam(name = "currentPage", value = "页码", required = true, paramType = "query", dataType = "int"),
 	            @ApiImplicitParam(name = "pageSize", value = "每页数量", required = true, paramType = "query", dataType = "int"),
+	            @ApiImplicitParam(name = "projectId", value = "项目id", required = true, paramType = "query", dataType = "String"),
 	            @ApiImplicitParam(name = "status", value = "条件（1.由我负责 2.由我创建 3.由我解决 4.未指派 5.未解决）", required = false, paramType = "query", dataType = "String"),
+	            @ApiImplicitParam(name = "bugNo", value = "bug编号", required = false, paramType = "query", dataType = "String"),
 	            @ApiImplicitParam(name = "bugStatus", value = "bug状态", required = false, paramType = "query", dataType = "String"),
 	            @ApiImplicitParam(name = "bugTitle", value = "bug名称", required = false, paramType = "query", dataType = "String"),
 	            @ApiImplicitParam(name = "qStartTime", value = "开始日期", required = false, paramType = "query", dataType = "String"),
 	            @ApiImplicitParam(name = "qEndTime", value = "结束日期", required = false, paramType = "query", dataType = "String")
 	    })
-	    public JSONObject queryUsersByPage(Integer currentPage,Integer pageSize,Integer status,String qStartTime,String qEndTime,String bugStatus,String bugTitle) {
+	    public JSONObject queryUsersByPage(Integer currentPage,Integer pageSize,Integer status,String qStartTime,String qEndTime,String bugStatus,String bugTitle,String bugNo,String projectId) {
 			 PageBean  pageBean=	new  PageBean();
 			 pageBean.setCurrentPage(currentPage);
 			 pageBean.setPageSize(pageSize);
 			 Map<String,Object> map=new HashMap<String,Object>();
 			 map.put("pageBean", pageBean);
+			 map.put("projectId", projectId);
 			 //用户id
 			 map.put("userId", 1);
 			 if(status!=null){
@@ -79,7 +82,9 @@ public class BugManageController {
 			 if(!StringUtils.isEmpty(bugTitle)){
 				 map.put("bugTitle",bugTitle);
 			 }
-			 
+			 if(!StringUtils.isEmpty(bugNo)){
+				 map.put("bugNo", bugNo);
+			 }
 			 ExecuteResult<PageInfo> result = new ExecuteResult<PageInfo>();
 		        try {
 		            //调用查询bug分页接口
