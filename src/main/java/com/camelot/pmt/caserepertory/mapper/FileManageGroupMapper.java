@@ -1,7 +1,9 @@
 package com.camelot.pmt.caserepertory.mapper;
 
-import com.camelot.pmt.caserepertory.model.FileManageGroup;
+import org.apache.ibatis.annotations.Mapper;
 
+import com.camelot.pmt.caserepertory.model.FileManageGroup;
+@Mapper
 public interface FileManageGroupMapper {
     int deleteByPrimaryKey(Long id);
 
