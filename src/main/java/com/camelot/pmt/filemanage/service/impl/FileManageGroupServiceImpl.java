@@ -17,11 +17,7 @@ import java.util.List;
 /**
  *
  * FileManageGroup 表数据服务层接口实现类1
-<<<<<<< Updated upstream
- *
-=======
- *zz
->>>>>>> Stashed changes
+
  */
 @Service
 public class FileManageGroupServiceImpl implements FileManageGroupService {
@@ -59,7 +55,7 @@ public class FileManageGroupServiceImpl implements FileManageGroupService {
             fileManageGroup.setCreateUserId(createId);
             fileManageGroup.setIsfile(0);
             fileManageGroupMapper.insertSelective(fileManageGroup);//添加结果
-            result.setResult("添加用户成功!");
+            result.setResult("添加文件夹成功!");
         }catch (Exception e){
             LOGGER.error(e.getMessage());
             throw new RuntimeException(e);
@@ -74,7 +70,7 @@ public class FileManageGroupServiceImpl implements FileManageGroupService {
         try{
             Long id = fileManageGroup.getId();//文件夹id
             fileManageGroupMapper.deleteByPrimaryKey(id);
-            result.setResult("删除文件成功！");
+            result.setResult("删除文件夹成功！");
         }catch (Exception e){
             LOGGER.error(e.getMessage());
             throw new RuntimeException(e);
@@ -87,7 +83,7 @@ public class FileManageGroupServiceImpl implements FileManageGroupService {
         ExecuteResult<String> result = new ExecuteResult<String>();
         try{
             if(fileManageGroup.getId()==null){
-                result.setResult("该用户不存在!");
+                result.setResult("该文件夹不存在!");
                 return result;
             }
             Date date = new Date();//修改时间

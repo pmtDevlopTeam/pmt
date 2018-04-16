@@ -11,21 +11,21 @@ import java.util.List;
 
  */
 public interface FileManageMapper {
-    int deleteByPrimaryKey(Long id);
+    int deleteByPrimaryKey(Long id);//根据id进行删除
 
-    int insert(FileManage record);
+    int insert(FileManage record);//添加文件
 
-    int insertSelective(FileManage record);
+    int insertSelective(FileManage record);//添加文件
 
-    FileManage selectByPrimaryKey(Long id);
+    FileManage selectByPrimaryKey(Long id);//根据id查询
 
-    int updateByPrimaryKeySelective(FileManage record);
+    int updateByPrimaryKeySelective(FileManage record);//根据id修改
 
-    int updateByPrimaryKey(FileManage record);
+    int updateByPrimaryKey(FileManage record);//根据id修改
 
-    List<FileManage> selectFileByGroupID(Long id);
+    List<FileManage> selectFileByGroupID(Long id);//根据组id查询
 
-    List selectFileManagerByGroupId(Long id);
+    List selectFileManagerByGroupId(Long id);//根据组id查询
 
-    void deleteBatchFileById(List fileManagerIds);
+    void deleteBatchFileById(List fileManagerIds);//根据id进行批量删除
 }

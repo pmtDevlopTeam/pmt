@@ -22,6 +22,9 @@ public class FileManage {
     private Date modifyTime;
 
     private String delFlag;
+    private int currentPage;
+    private int pageSize;
+    private int indexPage;
 
     public Long getId() {
         return id;
@@ -95,6 +98,30 @@ public class FileManage {
         this.delFlag = delFlag;
     }
 
+    public int getCurrentPage() {
+        return currentPage;
+    }
+
+    public void setCurrentPage(int currentPage) {
+        this.currentPage = currentPage;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
+    }
+
+    public int getIndexPage() {
+        return indexPage;
+    }
+
+    public void setIndexPage(int indexPage) {
+        this.indexPage = indexPage;
+    }
+
     @Override
     public String toString() {
         return "FileManage{" +
@@ -107,6 +134,9 @@ public class FileManage {
                 ", modifyUserId=" + modifyUserId +
                 ", modifyTime=" + modifyTime +
                 ", delFlag='" + delFlag + '\'' +
+                ", currentPage=" + currentPage +
+                ", pageSize=" + pageSize +
+                ", indexPage=" + indexPage +
                 '}';
     }
 }

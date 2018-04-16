@@ -146,7 +146,7 @@
 		id, group_id AS groupId, file_title AS fileTitle, file_address AS fileAddress, create_user_id AS createUserId, create_time AS createTime, modify_user_id AS modifyUserId, modify_time AS modifyTime, del_flag AS delFlag
 	</sql>
 <!--手动编写sql -->
-  <select id="selectFileByGroupID" parameterType="java.lang.Long" resultType="com.camelot.pmt.filemanage.model.FileManage">
+  <select id="selectFileByGroupID" parameterType="com.camelot.pmt.filemanage.model.FileManage" resultType="com.camelot.pmt.filemanage.model.FileManage">
     select <include refid="Base_Column_List" /> from file_manage where group_id=#{id}
   </select>
 <select id="selectFileManagerByGroupId" resultType="long" parameterType="long">

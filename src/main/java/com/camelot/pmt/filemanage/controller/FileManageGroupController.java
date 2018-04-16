@@ -20,11 +20,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.List;
 
 /**
-<<<<<<< Updated upstream
- *1
-=======
+
  *1zz
->>>>>>> Stashed changes
+
  * FileManageGroup 控制层
  *
  *
@@ -40,6 +38,14 @@ public class FileManageGroupController {
     @Autowired
     private FileManageGroupService fileManageGroupService;
     @ApiOperation(value = "添加文件夹功能", notes = "添加文件夹功能")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "currentPage", value = "页码", required = true, paramType = "query", dataType = "int"),
+            @ApiImplicitParam(name = "pageSize", value = "每页数量", required = true, paramType = "query", dataType = "int"),
+            @ApiImplicitParam(name = "parentId", value = "父级id", required = false, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "projectId", value = "项目id", required = false, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "name", value = "文件夹名称", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "fdescribe", value = "文件夹描述", required = true, paramType = "query", dataType = "String"),
+    })
     @RequestMapping(value="/addfilegroup",method = RequestMethod.POST)
     @ResponseBody
     public JSONObject addFileManagerGroup(HttpServletRequest request, FileManageGroup fileManageGroup)
@@ -82,6 +88,12 @@ public class FileManageGroupController {
     }
     @ApiOperation(value = "根据条件修改文件夹功能", notes = "根据条件修改文件夹功能")
     @ApiImplicitParams({
+            @ApiImplicitParam(name = "isFile", value = "是否是文件", required = false, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "createUserId", value = "创建人id", required = false, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "parentId", value = "父级id", required = false, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "projectId", value = "项目id", required = false, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "name", value = "文件夹名称", required = false, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "fdescribe", value = "文件夹描述", required = false, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "id", value = "文件夹id", required = true, paramType = "query", dataType = "String")
     })
     @RequestMapping(value="/updatefilegroup",method = RequestMethod.POST)
@@ -100,8 +112,11 @@ public class FileManageGroupController {
     }
 
     @ApiOperation(value = "根据条件查询文件夹功能", notes = "根据条件查询文件夹功能")
-
-
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "parentId", value = "父级id", required = false, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "projectId", value = "项目id", required = false, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "id", value = "文件夹id", required = false, paramType = "query", dataType = "String")
+    })
    @RequestMapping(value="/selectFileGroup",method = RequestMethod.GET)
     @ResponseBody
     public JSONObject selectFileGroupByParentID(FileManageGroup fileManageGroup){//根据parentId查询根据projectId查询
@@ -116,7 +131,29 @@ public class FileManageGroupController {
             return ApiResponse.error();
         }
     }
+    /*@RequestMapping("/batechDeleteFileGroupByIds")
+public JSONObject batechDeleteFileGroupByIds(List<Long> ids){
+        ExecuteResult<String> result = new ExecuteResult<String>();
+        try{
+            FileManageGroup group = new FileManageGroup();
+            for (Long id:
+                    ids) {
+                group.setId(id);
+                result=   fileManageGroupService.deleteFileGroup(group);
+            }
+            if (result.isSuccess()) {
+                return ApiResponse.success(result.getResult());
+            }
+            return ApiResponse.error();
+        }catch (Exception e){
+            return ApiResponse.error();
+        }
 
+
+
+
+
+    }*/
 
 
             }
