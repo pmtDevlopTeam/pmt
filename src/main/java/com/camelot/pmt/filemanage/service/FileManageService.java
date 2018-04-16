@@ -10,14 +10,22 @@ import java.util.List;
 /**
  *
  * FileManage 表数据服务层接口
+<<<<<<< Updated upstream
  *张战
+=======
+ *张战zz
+>>>>>>> Stashed changes
  */
 public interface FileManageService {
     Boolean addFileManager(HttpServletRequest request, FileManage fileManage);
 
     Boolean deleteFileById(FileManage fileManage);//文件删除
 
+<<<<<<< Updated upstream
     Boolean updateFileById(HttpServletRequest request,FileManage fileManage);//文件修改
+=======
+    Boolean updateFileById(HttpServletRequest request, FileManage fileManage);//文件修改
+>>>>>>> Stashed changes
 
     List<FileManage> selectFileByGroupID(FileManageGroup fileManageGroup);// 文件详细信息查询
 }

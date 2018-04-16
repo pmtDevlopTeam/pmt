@@ -4,6 +4,9 @@ import com.camelot.pmt.filemanage.model.FileManage;
 import com.camelot.pmt.filemanage.model.FileManageGroup;
 import com.camelot.pmt.filemanage.service.FileManageService;
 import io.swagger.annotations.Api;
+
+import io.swagger.annotations.ApiOperation;
+
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,13 +18,22 @@ import java.util.List;
 /**
  *
  * FileManage 控制层
+
  *
  */
 @Controller
+
+
+@Api(value = "文件数据接口", description = "文件数据接口")
+
 @RequestMapping(value = "/file/manager")
 public class FileManageController {
     @Autowired
     private FileManageService fileManageService;
+
+
+    @ApiOperation(value = "添加文件功能", notes = "添加文件功能")
+
     @RequestMapping(value = "/addfile")//添加文件
     public Boolean addFileManager(HttpServletRequest request, FileManage fileManage){
        // System.out.println("1111111");/*前台接收创建人createuserid，文件夹名称name ，文件标题filetitle，文件路径fileaddress*/
@@ -31,6 +43,10 @@ public class FileManageController {
        // Boolean b=fileManageService.addFileManager(request,fileManage);//添加文件
         return null;
     }
+
+
+    @ApiOperation(value = "删除文件功能", notes = "删除文件功能")
+
     @RequestMapping("/deletefile")
     public Boolean deldeteFileById(FileManage fileManage){
         Boolean b=fileManageService.deleteFileById(fileManage);//删除文件

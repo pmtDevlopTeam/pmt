@@ -5,39 +5,43 @@ import java.util.List;
 
 public class UseCase {
     private Long id;
-
+    //项目id
     private Long projectId;
-
+    //需求id
     private Long demandId;
-
+    //标题
     private String caseTitle;
-
+    //用例类型(字典表ID)
     private String caseType;
-
+    //相关版本
     private Long versionId;
-
+    //优先级
     private String caseLevel;
-
+    //用例描述
     private String description;
-
+    //执行人ID
     private String executeUserId;
-
+    //执行时间
     private Date executeTime;
-
+    //用例状态(0:正常；1:被阻塞；2：研究中)
     private String caseStatus;
-
+    //结果(0:通过；1：失败)
     private String result;
-
+    //创建人时间
     private String createUserId;
-
+    //创建时间
     private Date createTime;
-
+    //修改人id
     private String modifyUserId;
-
+    //修改时间
     private Date modifyTime;
-
+    //删除标记(0:正常；1：删除)
     private String delFlag;
-
+    //前置条件
+    private String precondition;
+    //适用阶段
+    private String applyPhase;
+    //用例步骤
     private List<UseCaseProcedure> procedure;
 
     public Long getId() {
@@ -182,6 +186,22 @@ public class UseCase {
 
 	public void setModifyUserId(String modifyUserId) {
 		this.modifyUserId = modifyUserId;
+	}
+
+	public String getPrecondition() {
+		return precondition;
+	}
+
+	public void setPrecondition(String precondition) {
+		this.precondition = precondition;
+	}
+
+	public String getApplyPhase() {
+		return applyPhase;
+	}
+
+	public void setApplyPhase(String applyPhase) {
+		this.applyPhase = applyPhase;
 	}
     
     

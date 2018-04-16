@@ -20,13 +20,21 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.List;
 
 /**
+<<<<<<< Updated upstream
  *1
+=======
+ *1zz
+>>>>>>> Stashed changes
  * FileManageGroup 控制层
  *
  *
  */
 @Controller
-@Api(value = "产出物添加接口", description = "产出物添加接口")
+
+
+
+@Api(value = "产出物接口", description = "产出物接口")
+
 @RequestMapping(value = "/file/manager/group")
 public class FileManageGroupController {
     @Autowired
@@ -90,7 +98,10 @@ public class FileManageGroupController {
             return ApiResponse.error();
         }
     }
+
     @ApiOperation(value = "根据条件查询文件夹功能", notes = "根据条件查询文件夹功能")
+
+
    @RequestMapping(value="/selectFileGroup",method = RequestMethod.GET)
     @ResponseBody
     public JSONObject selectFileGroupByParentID(FileManageGroup fileManageGroup){//根据parentId查询根据projectId查询
@@ -106,4 +117,7 @@ public class FileManageGroupController {
         }
     }
 
-}
+
+
+            }
+
