@@ -3,203 +3,449 @@ package com.camelot.pmt.project.model;
 import java.util.Date;
 
 public class Demand {
-    private Integer reqId;
+    /**
+     * 需求id
+     */
+    private Long id;
 
-    private Integer proId;
+    /**
+     * 所属一级需求id
+     */
+    private Long pid;
 
-    private Integer firstLevelId;
+    /**
+     * 项目id
+     */
+    private Long projectId;
 
-    private String reqName;
+    /**
+     * 需求名称
+     */
+    private String demandName;
 
-    private String reqStatus;
+    /**
+     * 需求编号
+     */
+    private String demandNum;
 
-    private String reqLevel;
+    /**
+     * 需求状态:01未激活/02已激活/03已关闭/04已变更
+     */
+    private String demandStatus;
 
-    private String reqFile;
+    /**
+     * 优先级
+     */
+    private String demandLevel;
 
-    private String reqCode;
+    /**
+     * 需求来源
+     */
+    private String demandSource;
 
-    private String fileTitle;
+    /**
+     * 需求来源备注
+     */
+    private String sourceRemark;
 
-    private String reqSource;
+    /**
+     * 创建人id
+     */
+    private String createUserId;
 
-    private String sourceNotes;
-
-    private Integer userId;
-
+    /**
+     * 创建时间
+     */
     private Date createTime;
+    /**
+     * 修改人id
 
-    private Integer modifyUserId;
+     */
+    private String modifyUserId;
 
+    /**
+     * 修改时间
+     */
     private Date modifyTime;
+    /**
+     * 评审时间
+     */
+    private Date reviewTime;
 
-    private String column1;
+    /**
+     * 评审结果
+     */
+    private String reviewResults;
+    /**
+     * 指派给
+     */
+    private String assignedTo;
+    /**
+     * 由谁评审
+     */
+    private String reviewedWith;
+    /**
+     * 评审备注
+     */
+    private String reviewRemark;
+    /**
+     * 拒绝原因
+     */
+    private String reasonsejection;
+    /**
+     * 需求层级
+     */
+    private String demandNeed;
 
-    private String column2;
 
-    private String column3;
-
-    private String column4;
-
-    private String column5;
-
-    public Integer getReqId() {
-        return reqId;
+    /**
+     * 需求id
+     * 
+     * @return id 需求id
+     */
+    public Long getId() {
+        return id;
     }
 
-    public void setReqId(Integer reqId) {
-        this.reqId = reqId;
+    /**
+     * 需求id
+     * 
+     * @param id
+     *            需求id
+     */
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public Integer getProId() {
-        return proId;
+    /**
+     * 所属一级需求id
+     * 
+     * @return pid 所属一级需求id
+     */
+    public Long getPid() {
+        return pid;
     }
 
-    public void setProId(Integer proId) {
-        this.proId = proId;
+    /**
+     * 所属一级需求id
+     * 
+     * @param pid
+     *            所属一级需求id
+     */
+    public void setPid(Long pid) {
+        this.pid = pid;
     }
 
-    public Integer getFirstLevelId() {
-        return firstLevelId;
+    /**
+     * 项目id
+     * 
+     * @return project_id 项目id
+     */
+    public Long getProjectId() {
+        return projectId;
     }
 
-    public void setFirstLevelId(Integer firstLevelId) {
-        this.firstLevelId = firstLevelId;
+    /**
+     * 项目id
+     * 
+     * @param projectId
+     *            项目id
+     */
+    public void setProjectId(Long projectId) {
+        this.projectId = projectId;
     }
 
-    public String getReqName() {
-        return reqName;
+    /**
+     * 需求名称
+     * 
+     * @return demand_name 需求名称
+     */
+    public String getDemandName() {
+        return demandName;
     }
 
-    public void setReqName(String reqName) {
-        this.reqName = reqName == null ? null : reqName.trim();
+    /**
+     * 需求名称
+     * 
+     * @param demandName
+     *            需求名称
+     */
+    public void setDemandName(String demandName) {
+        this.demandName = demandName == null ? null : demandName.trim();
     }
 
-    public String getReqStatus() {
-        return reqStatus;
+    /**
+     * 需求编号
+     * 
+     * @return demand_num 需求编号
+     */
+    public String getDemandNum() {
+        return demandNum;
     }
 
-    public void setReqStatus(String reqStatus) {
-        this.reqStatus = reqStatus == null ? null : reqStatus.trim();
+    /**
+     * 需求编号
+     * 
+     * @param demandNum
+     *            需求编号
+     */
+    public void setDemandNum(String demandNum) {
+        this.demandNum = demandNum == null ? null : demandNum.trim();
     }
 
-    public String getReqLevel() {
-        return reqLevel;
+    /**
+     * 新建默认01：待评审,02：通过,03：不通过，04：冻结
+     * 
+     * @return demand_status 新建默认01：待评审,02：通过,03：不通过，04：冻结
+     */
+    public String getDemandStatus() {
+        return demandStatus;
     }
 
-    public void setReqLevel(String reqLevel) {
-        this.reqLevel = reqLevel == null ? null : reqLevel.trim();
+    /**
+     * 新建默认01：待评审,02：通过,03：不通过，04：冻结
+     * 
+     * @param demandStatus
+     *            新建默认01：待评审,02：通过,03：不通过，04：冻结
+     */
+    public void setDemandStatus(String demandStatus) {
+        this.demandStatus = demandStatus == null ? null : demandStatus.trim();
     }
 
-    public String getReqFile() {
-        return reqFile;
+    /**
+     * 优先级
+     * 
+     * @return demand_level 优先级
+     */
+    public String getDemandLevel() {
+        return demandLevel;
     }
 
-    public void setReqFile(String reqFile) {
-        this.reqFile = reqFile == null ? null : reqFile.trim();
+    /**
+     * 优先级
+     * 
+     * @param demandLevel
+     *            优先级
+     */
+    public void setDemandLevel(String demandLevel) {
+        this.demandLevel = demandLevel == null ? null : demandLevel.trim();
     }
 
-    public String getReqCode() {
-        return reqCode;
+    /**
+     * 需求来源
+     * 
+     * @return demand_source 需求来源
+     */
+    public String getDemandSource() {
+        return demandSource;
     }
 
-    public void setReqCode(String reqCode) {
-        this.reqCode = reqCode == null ? null : reqCode.trim();
+    /**
+     * 需求来源
+     * 
+     * @param demandSource
+     *            需求来源
+     */
+    public void setDemandSource(String demandSource) {
+        this.demandSource = demandSource == null ? null : demandSource.trim();
     }
 
-    public String getFileTitle() {
-        return fileTitle;
+    /**
+     * 需求来源备注
+     * 
+     * @return source_remark 需求来源备注
+     */
+    public String getSourceRemark() {
+        return sourceRemark;
     }
 
-    public void setFileTitle(String fileTitle) {
-        this.fileTitle = fileTitle == null ? null : fileTitle.trim();
+    /**
+     * 需求来源备注
+     * 
+     * @param sourceRemark
+     *            需求来源备注
+     */
+    public void setSourceRemark(String sourceRemark) {
+        this.sourceRemark = sourceRemark == null ? null : sourceRemark.trim();
     }
 
-    public String getReqSource() {
-        return reqSource;
+    /**
+     * 创建人id
+     * 
+     * @return create_user_id 创建人id
+     */
+    public String getCreateUserId() {
+        return createUserId;
     }
 
-    public void setReqSource(String reqSource) {
-        this.reqSource = reqSource == null ? null : reqSource.trim();
+    /**
+     * 创建人id
+     * 
+     * @param createUserId
+     *            创建人id
+     */
+    public void setCreateUserId(String createUserId) {
+        this.createUserId = createUserId == null ? null : createUserId.trim();
     }
 
-    public String getSourceNotes() {
-        return sourceNotes;
-    }
-
-    public void setSourceNotes(String sourceNotes) {
-        this.sourceNotes = sourceNotes == null ? null : sourceNotes.trim();
-    }
-
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
-
+    /**
+     * 创建时间
+     * 
+     * @return create_time 创建时间
+     */
     public Date getCreateTime() {
         return createTime;
     }
 
+    /**
+     * 创建时间
+     * 
+     * @param createTime
+     *            创建时间
+     */
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 
-    public Integer getModifyUserId() {
+    /**
+     * 修改人id
+     * 
+     * @return modify_user_id 修改人id
+     */
+    public String getModifyUserId() {
         return modifyUserId;
     }
 
-    public void setModifyUserId(Integer modifyUserId) {
-        this.modifyUserId = modifyUserId;
+    /**
+     * 修改人id
+     * 
+     * @param modifyUserId
+     *            修改人id
+     */
+    public void setModifyUserId(String modifyUserId) {
+        this.modifyUserId = modifyUserId == null ? null : modifyUserId.trim();
     }
 
+    /**
+     * 修改时间
+     * 
+     * @return modify_time 修改时间
+     */
     public Date getModifyTime() {
         return modifyTime;
     }
 
+    /**
+     * 修改时间
+     * 
+     * @param modifyTime
+     *            修改时间
+     */
     public void setModifyTime(Date modifyTime) {
         this.modifyTime = modifyTime;
     }
 
-    public String getColumn1() {
-        return column1;
+    public Date getReviewTime() {
+        return reviewTime;
     }
 
-    public void setColumn1(String column1) {
-        this.column1 = column1 == null ? null : column1.trim();
+    public void setReviewTime(Date reviewTime) {
+        this.reviewTime = reviewTime;
     }
 
-    public String getColumn2() {
-        return column2;
+    public String getReviewResults() {
+        return reviewResults;
     }
 
-    public void setColumn2(String column2) {
-        this.column2 = column2 == null ? null : column2.trim();
+    public void setReviewResults(String reviewResults) {
+        this.reviewResults = reviewResults;
     }
 
-    public String getColumn3() {
-        return column3;
+    public String getAssignedTo() {
+        return assignedTo;
     }
 
-    public void setColumn3(String column3) {
-        this.column3 = column3 == null ? null : column3.trim();
+    public void setAssignedTo(String assignedTo) {
+        this.assignedTo = assignedTo;
     }
 
-    public String getColumn4() {
-        return column4;
+    public String getReviewedWith() {
+        return reviewedWith;
     }
 
-    public void setColumn4(String column4) {
-        this.column4 = column4 == null ? null : column4.trim();
+    public void setReviewedWith(String reviewedWith) {
+        this.reviewedWith = reviewedWith;
     }
 
-    public String getColumn5() {
-        return column5;
+    public String getReviewRemark() {
+        return reviewRemark;
     }
 
-    public void setColumn5(String column5) {
-        this.column5 = column5 == null ? null : column5.trim();
+    public void setReviewRemark(String reviewRemark) {
+        this.reviewRemark = reviewRemark;
+    }
+
+    public String getReasonsejection() {
+        return reasonsejection;
+    }
+
+    public void setReasonsejection(String reasonsejection) {
+        this.reasonsejection = reasonsejection;
+    }
+
+    public String getDemandNeed() {
+        return demandNeed;
+    }
+
+    public void setDemandNeed(String demandNeed) {
+        this.demandNeed = demandNeed;
+    }
+
+    /**
+     * 需求描述
+     */
+    private String demandDesc;
+
+    /**
+     * 关闭原因
+     */
+    private String closeReason;
+
+    /**
+     * 需求描述
+     *
+     * @return demand_desc 需求描述
+     */
+    public String getDemandDesc() {
+        return demandDesc;
+    }
+
+    /**
+     * 需求描述
+     *
+     * @param demandDesc
+     *            需求描述
+     */
+    public void setDemandDesc(String demandDesc) {
+        this.demandDesc = demandDesc == null ? null : demandDesc.trim();
+    }
+
+    /**
+     * 关闭原因
+     *
+     * @return close_reason 关闭原因
+     */
+    public String getCloseReason() {
+        return closeReason;
+    }
+
+    /**
+     * 关闭原因
+     *
+     * @param closeReason
+     *            关闭原因
+     */
+    public void setCloseReason(String closeReason) {
+        this.closeReason = closeReason == null ? null : closeReason.trim();
     }
 }

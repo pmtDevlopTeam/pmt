@@ -1,6 +1,5 @@
 package com.camelot.pmt.project.mapper;
 
-import com.camelot.pmt.project.model.Demand;
 import com.camelot.pmt.project.model.DemandWithBLOBs;
 
 public interface DemandMapper {

@@ -4,15 +4,10 @@ package com.camelot.pmt.project.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.camelot.pmt.platform.common.ApiResponse;
-import com.camelot.pmt.project.model.Demand;
 import com.camelot.pmt.project.model.DemandWithBLOBs;
 import com.camelot.pmt.project.service.DemandService;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
