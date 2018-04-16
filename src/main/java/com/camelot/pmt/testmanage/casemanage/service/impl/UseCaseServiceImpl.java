@@ -1,8 +1,8 @@
 package com.camelot.pmt.testmanage.casemanage.service.impl;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +34,7 @@ public class UseCaseServiceImpl implements UseCaseService{
 	UseCaseMapper useCaseMapper;
 	
 	@Transactional
-	public  ExecuteResult<PageInfo> selectUseCase(PageBean pageBean){
+	public  ExecuteResult<PageInfo> selectUseCase(PageBean pageBean,Map<String,Object> map){
         
         
         ExecuteResult<PageInfo> result = new ExecuteResult<PageInfo>();
@@ -45,7 +45,7 @@ public class UseCaseServiceImpl implements UseCaseService{
 	                return result;
 	            }
 	            PageHelper.startPage(pageBean.getCurrentPage(), pageBean.getPageSize());
-	            List<UseCase> docs = useCaseMapper.selectUseCase(pageBean.getCondition());
+	            List<UseCase> docs = useCaseMapper.selectUseCase(map);
 	            PageInfo<UseCase> pageInfo = new PageInfo<UseCase>(docs);
 	            //result.setResult("用例查询成功!");
 	            result.setResult(pageInfo);

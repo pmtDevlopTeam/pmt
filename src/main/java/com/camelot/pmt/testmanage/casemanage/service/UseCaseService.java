@@ -1,6 +1,7 @@
 package com.camelot.pmt.testmanage.casemanage.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.camelot.pmt.platform.user.model.UserModel;
 import com.camelot.pmt.platform.utils.ExecuteResult;
@@ -10,7 +11,7 @@ import com.github.pagehelper.PageInfo;
 
 public interface UseCaseService {
 	
-	ExecuteResult<PageInfo> selectUseCase(PageBean pageBean);
+	ExecuteResult<PageInfo> selectUseCase(PageBean pageBean,Map<String,Object> map);
 
 	/**
 	 * 新增测试用例

@@ -1,6 +1,8 @@
 package com.camelot.pmt.testmanage.casemanage.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -45,18 +47,19 @@ public class UseCaseController {
 			 PageBean  pageBean=	new  PageBean();
 			 pageBean.setCurrentPage(currentPage);
 			 pageBean.setPageSize(pageSize);
+			 Map<String,Object> map=new HashMap<String,Object>();
 			 if(projectId!=null){
-				 pageBean.getCondition().put("projectId", projectId);
+				 map.put("projectId", projectId);
 				 
 			 }
 			 if(projectId!=null){
-				 pageBean.getCondition().put("caseTitle", caseTitle);
+				 map.put("caseTitle", caseTitle);
 				 
 			 }
 			 ExecuteResult<PageInfo> result = new ExecuteResult<PageInfo>();
 		        try {
 		            //调用添加bug接口
-		            result = UseCaseService.selectUseCase(pageBean);
+		            result = UseCaseService.selectUseCase(pageBean,map);
 		            // 成功返回
 		            return ApiResponse.success(result.getResult());
 		        } catch (Exception e) {
