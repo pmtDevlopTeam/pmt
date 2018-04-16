@@ -169,11 +169,7 @@
     del_flag, isfile
   </sql>
   -->
-<<<<<<< Updated upstream
-  <!--手动编写sql-->
-=======
   <!--手动编写sql -->
->>>>>>> Stashed changes
   <!--<select id="selectFileGroupByProjectID" parameterType="Long" resultType="com.camelot.pmt.filemanage.model.FileManageGroup">
     select * from file_manage_group where project_id=#{projectId}
   </select>-->
@@ -188,10 +184,10 @@
       </if>
     </where>
   </select>
-  <select id="selectFileManagerGroupByParentId" parameterType="Long" resultType="Long">
+  <select id="selectFileManagerGroupByParentId" parameterType="long" resultType="long">
     select id from file_manage_group where parent_id=#{parentId}
   </select>
-  <delete id="deleteBatchFileGroupById" parameterType="Long">
+  <delete id="deleteBatchFileGroupById" parameterType="long">
   delete from file_manage_group where id in(
     <foreach collection="list" item="q" separator=",">
     #{q}

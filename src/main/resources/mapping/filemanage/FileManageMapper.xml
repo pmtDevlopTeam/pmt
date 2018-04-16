@@ -145,18 +145,14 @@
 <sql id="Base_Column_List">
 		id, group_id AS groupId, file_title AS fileTitle, file_address AS fileAddress, create_user_id AS createUserId, create_time AS createTime, modify_user_id AS modifyUserId, modify_time AS modifyTime, del_flag AS delFlag
 	</sql>
-<<<<<<< Updated upstream
 <!--手动编写sql -->
-=======
-<!--手动编写sql  -->
->>>>>>> Stashed changes
   <select id="selectFileByGroupID" parameterType="java.lang.Long" resultType="com.camelot.pmt.filemanage.model.FileManage">
     select <include refid="Base_Column_List" /> from file_manage where group_id=#{id}
   </select>
-<select id="selectFileManagerByGroupId" resultType="Long" parameterType="Long">
+<select id="selectFileManagerByGroupId" resultType="long" parameterType="long">
   select id from file_manage where group_id=#{id}
 </select>
-  <delete id="deleteBatchFileById" parameterType="Long">
+  <delete id="deleteBatchFileById" parameterType="long">
   DELETE from file_manage where id in(
     <foreach collection="list" item="d" separator=",">
       #{d}
