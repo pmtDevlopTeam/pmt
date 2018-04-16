@@ -244,11 +244,11 @@
     from use_case where del_flag=0
     <if test="projectId != null" >
       and
-        projectId = #{projectId,jdbcType=BIGINT}
+        project_id = #{projectId,jdbcType=BIGINT}
       </if>
-     <if test="projectId != null" >
+     <if test="case_title != null" >
       and
-        case_title like "%"#{projectId}"%"
+        case_title like "%"#{case_title}"%"
       </if>
   </select>
   <insert id="insertBatch" parameterType="java.util.List">
