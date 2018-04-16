@@ -38,18 +38,9 @@ public class VersionServiceImpl implements VersionService{
         // 获取当前版本的类型与版本编号，用于自动生成版本编号
         String versionType = versionVo.getVersionType();
         Version version = new Version();
-       /* // 初始化版本编号位null；
-        String versionCode =null;
-
-        // 根据项目id，版本类型查询对应版本编号
-        List<Version> versionList = versionMapper.queryListByProIdAndVerType(projectId, versionType);
-        System.out.println("查询结果的数组长度为：------"+versionList.size());
-        if (versionList.size() > 0){
-            // 获取最后添加版本信息的版本编号
-            versionCode = versionList.get(0).getVersion();
-        }*/
         // 设置版本名称
         version.setVersionName(versionVo.getVersionName());
+        version.setVersionType(versionType);
         // 设置版本起止时间
         version.setStartTime(versionVo.getStartTime());
         version.setEndTime(versionVo.getEndTime());
@@ -183,7 +174,6 @@ public class VersionServiceImpl implements VersionService{
         String versionCode =null;
         // 根据项目id，版本类型查询对应版本编号
         List<Version> versionList = versionMapper.queryListByProIdAndVerType(projectId, versionType);
-        System.out.println("查询结果的数组长度为：------"+versionList.size());
         if (versionList.size() > 0){
             // 获取最后添加版本信息的版本编号
             versionCode = versionList.get(0).getVersion();
