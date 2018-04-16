@@ -104,23 +104,23 @@ public interface TaskMapper {
      * @author: gxl
      * @Title: queryMyTaskTreeByTaskId
      * @Description: TODO(查询taskId下的一级子节点)
-     * @param @param taskId taskType beassignUserId
+     * @param @param id taskType beassignUserId
      * @param @return    设定文件
      * @return List<Task>    返回类型
      * @throws
      */
-    List<Task> queryMyTaskListNodeByParentId(Long taskId,String taskType,Long beassignUserId);
+    List<Task> queryMyTaskListNodeByParentId(Long id,String taskType,Long beassignUserId);
 
     /**
      * @author: gxl
      * @Title: queryTaskListNodeByParentId
      * @Description: TODO(查询taskId下的一级子节点)
-     * @param @param taskId taskType
+     * @param @param id taskType
      * @param @return    设定文件
      * @return List<Task>    返回类型
      * @throws
      */
-    List<Task> queryTaskListNodeByParentId(Long taskId,String taskType);
+    List<Task> queryTaskListNodeByParentId(Long id,String taskType);
 
     /**
      * @author: gxl
@@ -162,7 +162,7 @@ public interface TaskMapper {
      * @return int    返回类型
      * @throws
      */
-    void updateTaskPendingToRuning(Long id,String taskType);
+    void updateTaskPendingToRunning(Long id,String taskType);
 
     /**
      * @author: gxl

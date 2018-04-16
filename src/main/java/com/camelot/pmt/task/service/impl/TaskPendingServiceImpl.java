@@ -177,15 +177,15 @@ public class TaskPendingServiceImpl implements TaskPendingService{
 	* @return ExecuteResult<List<Task>>    返回类型 
 	* @throws
 	 */
-	public ExecuteResult<List<Task>> queryMyTaskListNodeByParentId(Long taskId,String taskType,Long beassignUserId){
+	public ExecuteResult<List<Task>> queryMyTaskListNodeByParentId(Long id,String taskType,Long beassignUserId){
 		ExecuteResult<List<Task>> result = new ExecuteResult<List<Task>>();
 		try{
 			//对象检查是否为空
-			if(taskId==null){
+			if(id==null){
 				result.addErrorMessage("查询我的一级子任务时，taskId不能为空!");
 				return result;
 			}
-			List<Task> taskList = taskMapper.queryMyTaskListNodeByParentId(taskId,taskType,beassignUserId);
+			List<Task> taskList = taskMapper.queryMyTaskListNodeByParentId(id,taskType,beassignUserId);
 			result.setResult(taskList);
 		}
 		catch (Exception e) {
@@ -204,15 +204,15 @@ public class TaskPendingServiceImpl implements TaskPendingService{
 	* @return ExecuteResult<List<Task>>    返回类型 
 	* @throws
 	 */
-	public ExecuteResult<List<Task>> queryTaskListNodeByParentId(Long taskId,String taskType){
+	public ExecuteResult<List<Task>> queryTaskListNodeByParentId(Long id,String taskType){
 		ExecuteResult<List<Task>> result = new ExecuteResult<List<Task>>();
 		try{
 			//对象检查是否为空
-			if(taskId==null){
+			if(id==null){
 				result.addErrorMessage("查询一级子任务时，taskId不能为空!");
 				return result;
 			}
-			List<Task> taskList = taskMapper.queryTaskListNodeByParentId(taskId,taskType);
+			List<Task> taskList = taskMapper.queryTaskListNodeByParentId(id,taskType);
 			result.setResult(taskList);
 		}
 		catch (Exception e) {
@@ -380,7 +380,7 @@ public class TaskPendingServiceImpl implements TaskPendingService{
 	* @throws
 	 */
 	@Override
-	public ExecuteResult<String> updateTaskPendingToRuning(Long id,String taskType) {
+	public ExecuteResult<String> updateTaskPendingToRunning(Long id,String taskType) {
 		ExecuteResult<String> result = new ExecuteResult<String>();
 		try{
 			if(id==null){
@@ -391,14 +391,14 @@ public class TaskPendingServiceImpl implements TaskPendingService{
 			if("0".equals(taskType)){
 				//根据id更新任务状态为正在进行
 				//sql:update task set t.status = #{taskType,jdbcType=VARCHAR} where t.id = #{id,jdbcType=BIGINT}
-				taskMapper.updateTaskPendingToRuning(id,taskType);
+				taskMapper.updateTaskPendingToRunning(id,taskType);
 				//查询taskId下的所有子节点
 				//select * from task t where t.task_parent_id = #{id}
 				Task parentTaskNodes = taskMapper.queryParentTaskNodeById(id);
 				//判断是否有父节点
 				if(parentTaskNodes!=null){
 					//递归
-					return updateTaskPendingToRuning(parentTaskNodes.getId(),parentTaskNodes.getStatus());
+					return updateTaskPendingToRunning(parentTaskNodes.getId(),parentTaskNodes.getStatus());
 				}
 			}
 			result.setResult("修改任务状态成功！");
