@@ -15,7 +15,9 @@ import com.camelot.pmt.platform.common.ExecuteResult;
 import com.camelot.pmt.platform.common.Pager;
 import com.camelot.pmt.platform.mapper.UserMapper;
 import com.camelot.pmt.platform.model.User;
+import com.camelot.pmt.platform.model.vo.UserVo;
 import com.camelot.pmt.platform.service.UserService;
+import com.camelot.pmt.platform.util.UUIDUtil;
 
 import java.util.List;
 import java.util.UUID;
@@ -41,12 +43,11 @@ public class UserServiceImpl implements UserService{
 
     /**
      * <p>Description:[新增用户]<p>
-     * 调用mapper方法:insertUser
-     * @param User
+     * @param User user
      * @return ExecuteResult<User>
      */
     @Override
-    public ExecuteResult<String> save(User user) {
+    public ExecuteResult<String> createUser(User user) {
     	ExecuteResult<String> result = new ExecuteResult<String>();
 		try{
 			if(user == null){
@@ -54,18 +55,29 @@ public class UserServiceImpl implements UserService{
 				return result;
 			}
 			//1.插入用户表
-			String userId = UUID.randomUUID().toString().replace("-", "").toLowerCase();
+			String userId = UUIDUtil.getUUID();
 			user.setUserId(userId);
 			String inputPassword = user.getPassword();
 			String encryptPassword = new Sha256Hash(inputPassword).toHex();
 			user.setPassword(encryptPassword);
-			userMapper.insertUser(user);
 			//2.插入用户信息表
+			  //检查用户名是否存在，不存在的话再插入用户表
+			User dbModel = userMapper.findUserByLoginCode(user.getLoginCode());
+			if(dbModel != null) {
+				result.setResult("该用户已经存在");
+				return result;
+			}
+			userMapper.insertUser(user);
 			userMapper.insertUserInfo(user);
-			//3.插入用户组织表
+			//3.如果指定了部门，就插入用户组织表
+			if(!"".equals(user.getOrgId()) && user.getOrgId() !=null) {
 			userMapper.insertUserOrg(user);
-			//4.插入用户角色表
+			}
+			//4.如果指定了角色，就插入用户角色表
+			if(!"".equals(user.getRoleId()) && user.getRoleId() != null) {
 			userMapper.insertUserRole(user);
+			}
+			//5.通过邮件发送新添加的用户信息
 			result.setResult("添加用户成功!");
 		}catch(Exception e){
 			LOGGER.error(e.getMessage());
@@ -76,15 +88,15 @@ public class UserServiceImpl implements UserService{
 
 
     /**
-     * <p>Description:[删除用户]<p>
-     * @param User
+     * <p>Description:[根据ID删除用户]<p>
+     * @param User user
      * @return ExecuteResult<String>
      */
 	@Override
-	public ExecuteResult<String> delete(User user) {
+	public ExecuteResult<String> deleteUserByUserId(User user) {
 		ExecuteResult<String> result = new ExecuteResult<String>();
     	try {
-    		userMapper.deleteUserById(user);
+    		userMapper.deleteUserByUserId(user);
     		result.setResult("删除用户成功！");
     	} catch (Exception e) {
     		LOGGER.error(e.getMessage());
@@ -95,14 +107,16 @@ public class UserServiceImpl implements UserService{
 
 
 	/**
-     * <p>Description:[查询所有用户不分页]<p>
-     * @return ExecuteResult<List<User>>
-     */
+	 * 
+	 * Description:[查询所有用户]
+	 * @return ExecuteResult<List<User>>
+	 * @author [maple]
+	 */
 	@Override
-	public ExecuteResult<List<User>> findAllUsers() {
+	public ExecuteResult<List<User>> queryAllUsers() {
     	ExecuteResult<List<User>> result = new ExecuteResult<List<User>>();
     	try {
-    		List<User> list = userMapper.selectUsersAll();
+    		List<User> list = userMapper.queryAllUsers();
     		if(list.size() <= 0) {
 				return result;
 			}
@@ -116,14 +130,15 @@ public class UserServiceImpl implements UserService{
 
 
 	/**
-     * <p>Description:[根据userId获取单个用户信息]<p>
+     * Description:[根据userId获取单个用户信息]
+     * @param String userId
      * @return ExecuteResult<User>
      */
 	@Override
-	public ExecuteResult<User> findUserById(String userId) {
+	public ExecuteResult<User> findUserByUserId(String userId) {
 		ExecuteResult<User> result = new ExecuteResult<User>();
 		try {
-			if(!userId.equals("") && !userId.equals("0")) {
+			if(!"".equals(userId) && userId != null) {
 				User queryResult = userMapper.selectUserById(userId);
 				result.setResult(queryResult);
 				return result;
@@ -137,15 +152,15 @@ public class UserServiceImpl implements UserService{
 	}
 
 	/**
-     * <p>Description:[根据用户登录账号和密码检查用户信息]<p>
+     * Description:[根据用户登录账号和密码检查用户信息]
+     * @param User user
      * @return ExecuteResult<User>
      */
 	@Override
 	public ExecuteResult<User> queryLoginCodeAndPassword(User user) {
-		//返回
 		ExecuteResult<User> result = new ExecuteResult<User>();
 		try {
-			if(user != null && !user.getLoginCode().equals("") && user.getLoginCode() != null ) {
+			if(user != null && !"".equals(user.getLoginCode()) && user.getLoginCode() != null ) {
 				//1.获取用户输入的登录账号
 				String inputLoginCode = user.getLoginCode();
 				//2.根据登录账号去库中获取用户信息,检查用户是否存在
@@ -175,12 +190,12 @@ public class UserServiceImpl implements UserService{
 
 
 	/**
-     * <p>Description:[分页查询用户列表]<p>
+     * Description:[分页查询用户列表]
      * @param page
-     * @return ExecuteResult<User>
+     * @return ExecuteResult<DataGrid<User>>
      */
 	@Override
-	public ExecuteResult<DataGrid<User>> queryUsers(Pager page) {
+	public ExecuteResult<DataGrid<User>> queryUsersByPage(Pager page) {
 		ExecuteResult<DataGrid<User>> result = new ExecuteResult<DataGrid<User>>();
 		try{
             List<User> list = userMapper.findUsersByPage(page);
@@ -193,7 +208,7 @@ public class UserServiceImpl implements UserService{
             DataGrid<User> dg = new DataGrid<User>();
             dg.setRows(list);
             //查询总条数
-            Long total = userMapper.queryCount();
+            Long total = userMapper.countUser();
             dg.setTotal(total);				
             result.setResult(dg);
 		}catch(Exception e){
@@ -202,52 +217,114 @@ public class UserServiceImpl implements UserService{
 		return result;
 	}
 
-    /**
-     * <p>Description:[更新用户]<p>
-     * 调用mapper方法:updateUserById
-     * @param User
-     * @return ExecuteResult<String>
-     */
-//    @Override
-//	public ExecuteResult<String> editUserById(User User) {
-//    	ExecuteResult<String> result = new ExecuteResult<String>();
-//		try{
-//			if(User.getId() == 0 || User.getId() == null){
-//				result.setResult("该用户不存在!");
-//				return result;
-//			}
-//			//不更新密码的情况下编辑
-//			if(User.getPassword() == null || User.getPassword().equals("") || User.getNewPassword() == null || User.getNewPassword().equals("")){
-//				Integer count = userMapper.updateUserById(User);
-//				if(count == 0){
-//					result.setResult("更新用户失败!");
-//					return result;
-//				}
-//			}
-//			//更新密码的情况下编辑
-//			if(User.getPassword() != null && !User.getPassword().equals("") && User.getNewPassword() != null && !User.getNewPassword().equals("")){
-//				String password = User.getPassword();
-//				String oldPassword = userMapper.findUserPasswordById(User);
-//				if(password.equals(oldPassword)){
-//					User.setPwdStatus((byte)2);
-//					Integer count = userMapper.updateUserById(User);
-//					if(count == 0){
-//						result.setResult("更新用户失败!");
-//						return result;
-//					}
-//				}else if(!password.equals(oldPassword)){
-//					result.setResult("旧密码输入不正确!");
-//					return result;
-//				}
-//			}
-//		}catch(Exception e){
-//			LOGGER.error(e.getMessage());
-//			throw new RuntimeException(e);
-//		}
-//		result.setResult("更新用户成功!");
-//		return result;
-//	}
-    
-//
-//    
+
+	/**
+	  * 
+	  * Description:[列表展示用户]
+	  * @param UserVo userVo
+	  * @return ExecuteResult<List<UserVo>>
+	  * @author [maple]
+	  * 2018年4月13日下午3:15:16
+	  */
+	@Override
+	public ExecuteResult<List<UserVo>> queryUsersList(UserVo userVo) {
+		ExecuteResult<List<UserVo>> result = new ExecuteResult<List<UserVo>>();
+    	try {
+    		//利用userVo做 条件查询，默认查询所有的
+    		List<UserVo> usersList = userMapper.selectUsersList(userVo);
+    		if(usersList.size() <= 0) {
+				return result;
+			}
+    		result.setResult(usersList);
+    	} catch (Exception e) {
+    		LOGGER.error(e.getMessage());
+			throw new RuntimeException(e);
+		}
+       return result;
+	}
+
+	/**
+	 * 
+	 * Description:[根据用户ID更新一个用户详情]
+	 * @param User 
+	 * @return ExecuteResult<String>
+	 * @author [maple]
+	 */
+	@Override
+	public ExecuteResult<String> modifyUserDetailsByUserId(User user) {
+		ExecuteResult<String> result = new ExecuteResult<String>();
+		try {
+			//1.判断用户表需要更新的字段
+			if(user.getUsername() !=null || user.getLoginCode() != null || user.getPassword() != null || user.getState() != null || user.getModifyUserId() != null){
+				if(user.getPassword() != null && !"".equals(user.getPassword())) {
+					String encryptPassword = new Sha256Hash(user.getPassword()).toHex();
+					user.setPassword(encryptPassword);
+				}
+				int updateResult = userMapper.modifyUserByUserId(user);
+				if(updateResult == 0) {
+					result.addErrorMessage("更新用户失败！");
+					return result;
+				}
+			}
+			//2.判断用户信息表更新
+			if(user.getUserPhone() != null || user.getUserMail() != null || user.getModifyUserId() != null) {
+				int updateResult = userMapper.modifyUserInfoByUserId(user);
+				if(updateResult == 0) {
+					result.addErrorMessage("更新用户失败！");
+					return result;
+				}
+			}
+			//3.判断用户组织表
+			if(!"".equals(user.getOrgId()) && user.getOrgId() !=null){
+				int updateResult = userMapper.modifyUserOrgByUserId(user);
+				if(updateResult == 0) {
+					result.addErrorMessage("更新用户失败！");
+					return result;
+				}
+			}
+			//4.用户信角色表更新
+			if(!"".equals(user.getRoleId()) && user.getRoleId() != null) {
+				int updateResult = userMapper.modifyUserRoleByUserId(user);
+				if(updateResult == 0) {
+					result.addErrorMessage("更新用户失败！");
+					return result;
+				}
+			}
+			result.setResult("更新用户成功！");
+    	} catch (Exception e) {
+    		LOGGER.error(e.getMessage());
+			throw new RuntimeException(e);
+		}
+       return result;
+	}
+
+	
+	/**
+	 * 
+	 * Description:[根据用户ID更新一个用户信息详情]
+	 * @param String userId 
+	 * @return ExecuteResult<User>
+	 * @author [maple]
+	 */
+	@Override
+	public ExecuteResult<User> queryUserInfoById(String userId) {
+		ExecuteResult<User> result = new ExecuteResult<User>();
+		try {
+			if(!"".equals(userId) && userId != null) {
+				User queryResult = userMapper.queryUserInfoById(userId);
+				if(queryResult == null) {
+					result.setResultMessage("查询的用户信息不存在！");
+					return result;
+				}
+				result.setResult(queryResult);
+				return result;
+				}
+			result.addErrorMessage("查询失败！");
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage());
+			throw new RuntimeException(e);
+		}
+		return result;
+	}
+	
 }

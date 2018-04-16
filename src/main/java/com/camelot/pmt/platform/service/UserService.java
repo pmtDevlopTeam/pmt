@@ -1,113 +1,113 @@
 package com.camelot.pmt.platform.service;
 
-
 import java.util.List;
 
 import com.camelot.pmt.platform.common.DataGrid;
 import com.camelot.pmt.platform.common.ExecuteResult;
 import com.camelot.pmt.platform.common.Pager;
 import com.camelot.pmt.platform.model.User;
-
-
-
+import com.camelot.pmt.platform.model.vo.UserVo;
 
 /**
  * 
- * @Title:  UserService.java
+ * @Title: UserService.java
  * @Description: 用户管理的相关业务处理
  * @author: maple
  */
 public interface UserService {
-	
+
 	/**
 	 * 
-	 *<p>Description:[保存用户]</p>
-	 * @param User void
+	 * <p>
+	 * Description:[添加用户]
+	 * </p>
+	 * 
+	 * @param User
 	 * @return ExecuteResult<String>
 	 * @author [maple]
 	 */
-    ExecuteResult<String> save(User user);
+	ExecuteResult<String> createUser(User user);
+
+	/**
+	 * 
+	 * Description:[删除用户]
+	 * 
+	 * @param User
+	 * @author [maple]
+	 * @return
+	 */
+	ExecuteResult<String> deleteUserByUserId(User user);
+
+	/**
+	 * 
+	 * Description:[查询用户]
+	 * 
+	 * @return ExecuteResult<List<User>>
+	 * @author [maple]
+	 */
+	ExecuteResult<List<User>> queryAllUsers();
+
+	/**
+	 * 
+	 * Description:[]
+	 * @param String userId
+	 * @return ExecuteResult<User>
+	 * @author [maple] 2018年4月13日下午3:13:54
+	 */
+	ExecuteResult<User> findUserByUserId(String userId);
+
+	/**
+	 * 
+	 * Description:[检查登录账号和密码]
+	 * 
+	 * @param User
+	 *            user
+	 * @return ExecuteResult<User>
+	 * @author [maple] 2018年4月13日下午3:14:20
+	 */
+	ExecuteResult<User> queryLoginCodeAndPassword(User user);
+
+	/**
+	 * 
+	 * Description:[分页查询用户列表]
+	 * 
+	 * @param Pager
+	 *            page
+	 * @return ExecuteResult<DataGrid<User>>
+	 * @author [maple]
+	 */
+	ExecuteResult<DataGrid<User>> queryUsersByPage(Pager page);
+
+	/**
+	 * 
+	 * Description:[列表展示用户]
+	 * 
+	 * @param UserVo
+	 *            userVo
+	 * @return ExecuteResult<List<UserVo>>
+	 * @author [maple] 2018年4月13日下午3:15:16
+	 */
+	ExecuteResult<List<UserVo>> queryUsersList(UserVo userVo);
+
+	/**
+	 * 
+	 * Description:[根据用户ID更新一个用户详情]
+	 * 
+	 * @param User
+	 * @return ExecuteResult<String>
+	 * @author [maple]
+	 */
+	ExecuteResult<String> modifyUserDetailsByUserId(User user);
+
+	/**
+	 * 
+	 * Description:[根据用户ID查询一个用户详情信息]
+	 * @param String userId
+	 * @return ExecuteResult<User>
+	 * @author [maple]
+	 * 2018年4月16日上午10:34:21
+	 */
+	ExecuteResult<User> queryUserInfoById(String userId);
     
-	 /**
-	  * 
-	  *<p>Description:[删除用户]</p>
-	  * @param User void
-	  * @author [maple]
-	  * @return 
-	  */
-	 ExecuteResult<String> delete(User user);
-	 
-	 /**
-	  * 
-	  *<p>Description:[查询用户]</p>
-	  * @return List<User>
-	  * @author [maple]
-	  */
-	 ExecuteResult<List<User>> findAllUsers();
-	 
-	 
-	 /**
-	  * 
-	  *<p>Description:[查询用户]</p>
-	  * @return List<User>
-	  * @author [maple]
-	  */
-	 ExecuteResult<User> findUserById(String userId);
-	 
-	 /**
-	  * 
-	  *<p>Description:[检查用户登录账号和密码]</p>
-	  * @return List<User>
-	  * @author [maple]
-	  */
-	 ExecuteResult<User> queryLoginCodeAndPassword(User user);
-	 
-	 /**
-	  * 
-	  *<p>Description:[分页查询用户列表]</p>
-	  *调用实现类方法:queryWorkbenchTaskList
-	  * @param page
-	  * @return ExecuteResult<DataGrid<User>>
-	  * @author [maple]
-	  */
-	 ExecuteResult<DataGrid<User>> queryUsers(Pager page);
-		
-//    /**
-//	 * 
-//	 *<p>Description:[根据用户ID更新一个用户]</p>
-//	 * @param User 
-//	 * @return ExecuteResult<String>
-//	 * @author [name]
-//	 */
-////    ExecuteResult<String> editUserById(User User);
-//    /**
-//     * 
-//     *<p>Description:[查询用户]</p>
-//     * @return List<User>
-//     * @author [name]
-//     */
-//    ExecuteResult<List<User>> findUser();
-//    
-//    /**
-//	 * 
-//	 *<p>Description:[分页查询用户列表]</p>
-//	 *调用实现类方法:queryWorkbenchTaskList
-//	 * @param page
-//	 * @return ExecuteResult<DataGrid<User>>
-//	 * @author [name]
-//	 */
-//	ExecuteResult<DataGrid<User>> queryUsers(Pager page);
-//
-//    /**
-//     * 
-//     *<p>Description:[删除用户]</p>
-//     * @param User void
-//     * @author [tongxiying]
-//     * @return 
-//     */
-//    ExecuteResult<Long> delete(User User);
-
-
-
 
 }

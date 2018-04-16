@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.camelot.pmt.platform.common.Pager;
 import com.camelot.pmt.platform.model.User;
+import com.camelot.pmt.platform.model.vo.UserVo;
 
 
 
@@ -22,32 +23,32 @@ import com.camelot.pmt.platform.model.User;
 public interface UserMapper {
 	/**
 	 * 
-	 *<p>Description:[添加用户]</p>
-	 * @param userModel void
+	 * Description:[添加用户]
+	 * @param User userModel
 	 * @author [maple]
 	 */
     void insertUser(User userModel);
     
     /**
 	 * 
-	 *<p>Description:[插入用户信息表]</p>
-	 * @param userModel void
+	 * Description:[插入用户信息表]
+	 * @param User userModel
 	 * @author [maple]
 	 */
     void insertUserInfo(User userModel);
     
     /**
 	 * 
-	 *<p>Description:[插入用户组织表]</p>
-	 * @param userModel void
+	 * Description:[插入用户组织表]
+	 * @param User userModel
 	 * @author [maple]
 	 */
     void insertUserOrg(User userModel);
     
     /**
 	 * 
-	 *<p>Description:[插入用户角色表]</p>
-	 * @param userModel void
+	 * Description:[插入用户角色表]
+	 * @param User userModel
 	 * @author [maple]
 	 */
     void insertUserRole(User userModel);
@@ -55,35 +56,35 @@ public interface UserMapper {
   
     /**
      * 
-     *<p>Description:[删除用户]</p>
+     * Description:[删除用户]
      * @param userModel void
      * @author [name]
      */
-    void deleteUserById(User userModel);
+    void deleteUserByUserId(User userModel);
     
     
     /**
      * 
-     *<p>Description:[根据登录账号查询用户]</p>
-     * @param username
-     * @return UserModel
+     * Description:[根据登录账号查询用户]
+     * @param String loginCode
+     * @return User
      * @author [maple]
      */
     User findUserByLoginCode(String loginCode);
     
     /**
      * 
-     *<p>Description:[检查登录的账号密码]</p>
-     * @param username
-     * @return UserModel
+     * Description:[检查登录的账号密码]
+     * @param User userModel
+     * @return User
      * @author [maple]
      */
     User checkUserLoginCodeAndPassword(User userModel);
     
     /**
      * 
-     *<p>Description:[根据登录账号查询用户的密码]</p>
-     * @param loginCode
+     * Description:[根据登录账号查询用户的密码]
+     * @param String loginCode
      * @return String
      * @author [maple]
      */
@@ -91,100 +92,100 @@ public interface UserMapper {
     
     /**
      * 
-     *<p>Description:[根据id查询出用户]</p>
+     * Description:[根据id查询出用户]
      * @param userId
      * @return UserModel
      * @author [maple]
      */
-    
     User selectUserById(String userId);
     
     /**
-     * 查询所有用户  不分页
+     * Description:[查询用户不分页]
      * @return List<UserModel>
      */
-    List<User> selectUsersAll();
+    List<User> queryAllUsers();
     
     /**
      * 
-     *<p>Description:[查询用户总数量]</p>
+     * Description:[查询用户总数量]
      * @return Long 总数量
      * @author [maple]
      */
-    Long queryCount();
+    Long countUser();
     
     /**
      * 
-     *<p>Description:[分页查询用户]</p>
+     * Description:[分页查询用户]
      * @return List<UserModel>
      * @author [maple]
      */
     List<User> findUsersByPage(@Param(value = "page") Pager page);
     
+    /**
+     * 
+     * Description:[连表查询获取用户列表]
+     * @param UserVo userVo
+     * @return  List<UserVo>
+     * @author [maple]
+     * 2018年4月13日下午3:06:37
+     */
+    List<UserVo> selectUsersList(UserVo userVo);
     
-//    /**
-//     * 
-//     *<p>Description:[查询用户]</p>
-//     * @return List<UserModel>
-//     * @author [name]
-//     */
-//    List<UserModel> findUser();
     
-//    /**
-//	 * 
-//	 *<p>Description:[更新用户]</p>
-//	 * @param userModel 
-//	 * @return Integer
-//	 * @author [name]
-//	 */
-//    Integer updateUserById(UserModel userModel);
+    /**
+	 * 
+	 * Description:[更新用户表]
+	 * @param userModel 
+	 * @return int
+	 * @author [maple]
+	 */
+    int modifyUserByUserId(User userModel);
     
-//    /**
-//	 * 
-//	 *<p>Description:[根据用户id查询用户密码]</p>
-//	 * @param userModel 
-//	 * @return Integer
-//	 * @author [name]
-//	 */
-//    String findUserPasswordById(UserModel userModel);
-
-
-//    /**
-//     * 
-//     *<p>Description:[分页查询用户]</p>
-//     * @return List<UserModel>
-//     * @author [name]
-//     */
-//    List<UserModel> findUsersByPage(@Param(value = "page") Pager page);
-//    
-//    /**
-//     * 
-//     *<p>Description:[查询用户总数量]</p>
-//     * @return Long 总数量
-//     * @author [name]
-//     */
-//    Long queryCount();
-//    
-
-//    /**
-//     * 
-//     *<p>Description:[编辑用户]</p>
-//     * @param userModel void
-//     * @author [name]
-//     */
-//    void editUser(UserModel userModel);
-
-  
-	
-//    
-//    /**
-//     *
-//     *<p>Description:[修改密码]</p>
-//     * @param userModel
-//     * @return UserModel
-//     * @author [tongxiying]
-//     */
-//    Byte editByPassword(UserModel userModel);
+    /**
+	 * 
+	 * Description:[更新用户信息表]
+	 * @param userModel 
+	 * @return int
+	 * @author [maple]
+	 */
+    int modifyUserInfoByUserId(User userModel);
+    
+    /**
+	 * 
+	 * Description:[更新用户部门表]
+	 * @param userModel 
+	 * @return int
+	 * @author [maple]
+	 */
+    int modifyUserOrgByUserId(User userModel);
+    
+    /**
+   	 * 
+   	 * Description:[更新用户角色表]
+   	 * @param userModel 
+   	 * @return int
+   	 * @author [maple]
+   	 */
+    int modifyUserRoleByUserId(User userModel);
+    
+    /**
+     * 
+     * Description:[获取所有的用户信息表 记录]
+     * @return List<User>
+     * @author [maple]
+     * 2018年4月13日下午3:38:28
+     */
+    List<User> queryAllUserInfo();
+    
+    /**
+     * 
+     * Description:[根据用户userId 获取用户信息记录]
+     * @param 
+     * @return 
+     * @author [maple]
+     * 2018年4月13日下午3:39:51
+     */
+    User queryUserInfoById(String userId);
 
    
 }
