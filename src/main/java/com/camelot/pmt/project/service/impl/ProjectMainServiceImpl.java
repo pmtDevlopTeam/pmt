@@ -64,7 +64,7 @@ public class ProjectMainServiceImpl implements ProjectMainService {
             projectBudget.setCreateTime(new Date());
             projectBudget.setModifyTime(new Date());
             projectBudgetMapper.insert(projectBudget);
-            // 保存projectBudget
+            // 保存warning
             warning.setProId(projectMain.getId());
             warning.setCreateTime(new Date());
             warning.setModifyTime(new Date());
@@ -78,14 +78,14 @@ public class ProjectMainServiceImpl implements ProjectMainService {
     }
 
     /**
-     * 分页查询 进度条提供数据
+     * 分页查询
      */
     @Override
     public ExecuteResult<DataGrid<ProjectMain>> findAllByPage(Pager<?> page) {
         ExecuteResult<DataGrid<ProjectMain>> result = new ExecuteResult<DataGrid<ProjectMain>>();
         try {
             List<ProjectMain> list = projectMainMapper.findAllByPage(page);
-            // 如果没有查询到数据，不继续进行
+            // 查询出数据为空的话，直接返回
             if (CollectionUtils.isEmpty(list)) {
                 DataGrid<ProjectMain> dg = new DataGrid<ProjectMain>();
                 result.setResult(dg);
@@ -127,7 +127,7 @@ public class ProjectMainServiceImpl implements ProjectMainService {
     }
 
     /**
-     * 按负责人id查询 进度条
+     * 按负责人id查询
      * 
      * @param userId
      * @return
@@ -149,7 +149,7 @@ public class ProjectMainServiceImpl implements ProjectMainService {
     }
 
     /**
-     * 按创建人id查询 进度条
+     * 按创建人id查询
      * 
      * @param createUserId
      * @return
@@ -171,7 +171,7 @@ public class ProjectMainServiceImpl implements ProjectMainService {
     }
 
     /**
-     * 按修改人id查询 进度条
+     * 按修改人id查询
      * 
      * @param createUserId
      * @return
@@ -200,11 +200,19 @@ public class ProjectMainServiceImpl implements ProjectMainService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public ExecuteResult<String> updateByPrimaryKeySelective(ProjectMain projectMain) {
+    public ExecuteResult<String> updateByPrimaryKeySelective(ProjectMain projectMain, String createUserId,
+            String operateDesc) {
         ExecuteResult<String> result = new ExecuteResult<>();
         try {
-            projectMain.setModifyTime(new Date());
             projectMainMapper.updateByPrimaryKeySelective(projectMain);
+
+            ProjectOperate projectOperate = new ProjectOperate();
+            projectOperate.setCreateTime(new Date());
+            projectOperate.setProjectId(projectMain.getId());
+            projectOperate.setCreateUserId(createUserId);
+            projectOperate.setOperateDesc(operateDesc);
+
+            projectOperateMapper.insert(projectOperate);
             result.setResult("更新数据成功!");
 
         } catch (Exception e) {
@@ -219,16 +227,43 @@ public class ProjectMainServiceImpl implements ProjectMainService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public ExecuteResult<String> deleteByPrimaryKey(Long id) {
+    public ExecuteResult<String> deleteByPrimaryKey(Long id, String createUserId, String operateDesc) {
         ExecuteResult<String> result = new ExecuteResult<>();
         try {
             ProjectMain projectMainSelect = projectMainMapper.selectByPrimaryKey(id);
-            if ("01".equals(projectMainSelect.getProjectStatus())) {
+            if (projectMainSelect != null && "01".equals(projectMainSelect.getProjectStatus())) {
                 projectMainMapper.deleteByPrimaryKey(id);
+
+                ProjectOperate projectOperate = new ProjectOperate();
+                projectOperate.setCreateTime(new Date());
+                projectOperate.setProjectId(id);
+                projectOperate.setCreateUserId(createUserId);
+                projectOperate.setOperateDesc(operateDesc);
+
+                projectOperateMapper.insert(projectOperate);
                 result.setResult("删除数据成功！");
             } else {
                 result.setResult("项目进行中，不允许删除！");
             }
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+        return result;
+    }
+
+    /**
+     * 根据项目主键查询
+     */
+    @Override
+    public ExecuteResult<ProjectMain> selectByPrimaryKey(Long id) {
+        ExecuteResult<ProjectMain> result = new ExecuteResult<ProjectMain>();
+        try {
+            ProjectMain projectMain = projectMainMapper.selectByPrimaryKey(id);
+            if (projectMain == null) {
+                return result;
+            }
+            result.setResult(projectMain);
         } catch (Exception e) {
             logger.error(e.getMessage());
             throw new RuntimeException(e);

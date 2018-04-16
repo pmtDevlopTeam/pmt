@@ -42,7 +42,7 @@ public class ProjectMain implements Serializable {
      * 起始时间（是立项时预计）
      */
     @DateTimeFormat(pattern = "yyyy-MM-ddHH:mm:ss")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date startTime;
 
     /**

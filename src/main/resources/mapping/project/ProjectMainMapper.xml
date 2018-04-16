@@ -102,6 +102,7 @@
 	<sql id="Blob_Column_List">
 		project_desc
 	</sql>
+	<!--根据项目id查询详情 -->
 	<select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs"
 		parameterType="java.lang.Long">
 		select
@@ -274,5 +275,5 @@
 		project_desc =
 		#{projectDesc,jdbcType=LONGVARCHAR}
 		where id = #{id,jdbcType=BIGINT}
-		</update>
+	</update>
 </mapper>

@@ -68,7 +68,8 @@ public interface ProjectMainMapper {
     int insertSelective(ProjectMain record);
 
     /**
-     *
+     * 根据项目id查询详情
+     * 
      * @mbggenerated 2018-04-13
      */
     ProjectMain selectByPrimaryKey(Long id);

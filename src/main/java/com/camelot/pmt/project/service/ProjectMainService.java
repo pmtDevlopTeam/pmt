@@ -17,6 +17,14 @@ import com.camelot.pmt.project.model.Warning;
  */
 public interface ProjectMainService {
     /**
+     * 根据项目主键查询
+     * 
+     * @param id
+     * @return
+     */
+    ExecuteResult<ProjectMain> selectByPrimaryKey(Long id);
+
+    /**
      * 保存立项时相关联表数据
      * 
      * @param projectMain
@@ -74,7 +82,7 @@ public interface ProjectMainService {
      * @param projectMain
      * @return
      */
-    ExecuteResult<String> updateByPrimaryKeySelective(ProjectMain projectMain);
+    ExecuteResult<String> updateByPrimaryKeySelective(ProjectMain projectMain, String createUserId, String operateDesc);
 
     /**
      * 删除项目
@@ -82,5 +90,5 @@ public interface ProjectMainService {
      * @param id
      * @return
      */
-    ExecuteResult<String> deleteByPrimaryKey(Long id);
+    ExecuteResult<String> deleteByPrimaryKey(Long id, String createUserId, String operateDesc);
 }
