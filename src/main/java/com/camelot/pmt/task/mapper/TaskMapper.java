@@ -192,7 +192,7 @@ public interface TaskMapper {
      * 查询正在进行的任务，根据时间和优先级进行排序
      * myp
      * */
-    List<Map<String,Object>> listTaskRunning(@Param(value = "page") Pager page, @Param(value = "id") Long id);
+    List<Map<String,Object>> listTaskRunning(@Param(value = "page") Pager page,String id);
 
     /**
      * 查询正在进行任务个数 @Title: queryCount @Description: TODO @param @return @return

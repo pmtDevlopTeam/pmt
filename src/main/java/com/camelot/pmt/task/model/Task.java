@@ -4,67 +4,127 @@ import com.camelot.pmt.platform.model.User;
 import com.camelot.pmt.project.model.Demand;
 import com.camelot.pmt.project.model.Project;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class Task {
+public class Task implements Serializable{
+	/**
+	 * 任务ID（主键）
+	 */
     private Long id;
-
+    /**
+     * 任务编号
+     */
     private String taskNum;
-
+    /**
+     * 任务名称
+     */
     private String taskName;
-
+    /**
+     * 父级任务ID
+     */
     private Long taskParentId;
-
+    /**
+     * 项目
+     */
     private Project project;
-
+    /**
+     * 需求
+     */
     private Demand demand;
-
+    /**
+     * 优先级
+     */
     private String priority;
-
+    /**
+     * 指派人ID
+     */
     private User assignUser;
-
+    /**
+     * 负责人ID
+     */
     private User beassignUser;
-
+    /**
+     * 任务指派时间
+     */
     private Date assignTime;
-
+    /**
+     * 任务预计开始时间
+     */
     private Date estimateStartTime;
-
+    /**
+     * 任务预计结束时间
+     */
     private Date estimateEndTime;
-
+    /**
+     * 任务实际开始时间
+     */
     private Date actualStartTime;
-
+    /**
+     * 任务实际结束时间
+     */
     private Date actualEndTime;
-
+    /**
+     * 任务类型
+     */
     private String taskType;
-
+    /**
+     * 任务进度
+     */
     private String taskSpeed;
-
+    /**
+     * 任务状态（0 未开始 1 正在进行 2 已完成 3 延期 4 关闭）
+     */
     private String status;
-
+    /**
+     * 节点等级（1，2，3，4）
+     */
     private String nodeLv;
-
+    /**
+     * 任务描述
+     */
     private String taskDescribe;
-
+    /**
+     * 需求是否变更
+     */
     private String demandChange;
-
+    /**
+     * 延期原因
+     */
     private String delayDescribe;
-
+    /**
+     * 任务预计工时
+     */
     private Long estimateHour;
-
+    /**
+     * 任务实际工时
+     */
     private Long infactHour;
-
+    /**
+     * 任务里程
+     */
     private String taskMileage;
-
+    /**
+     * 创建人ID
+     */
     private User createUser;
-
+    /**
+     * 修改人ID
+     */
     private String modifyUserId;
-
+    /**
+     * 创建时间
+     */
     private Date createTime;
-
+    /**
+     * 修改时间
+     */
     private Date modifyTime;
-
+    /**
+     * 子任务集合
+     */
     private List<Task> children = new ArrayList<Task>();
 
     public Task() {
