@@ -27,13 +27,14 @@ public class TaskManagerServiceImpl implements TaskManagerService {
      * @date: 16:54 2018/4/9
      */
     @Override
-    @Transactional(readOnly = true,propagation = Propagation.SUPPORTS)
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public JSONObject queryAllTask() {
         return ApiResponse.success(taskMapper.queryAllTask());
     }
 
     /**
-     * @param task 模糊查询的条件
+     * @param task
+     *            模糊查询的条件
      * @description: 根据条件查询任务
      * @return
      */

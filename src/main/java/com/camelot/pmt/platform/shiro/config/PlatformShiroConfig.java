@@ -97,10 +97,12 @@ public class PlatformShiroConfig {
         advisor.setSecurityManager(securityManager);
         return advisor;
     }
+
     /*
      * @Bean(name = "redisCacheManager") public RedisCacheManager
-     * redisCacheManager() { logger.debug("ShiroConfiguration.redisCacheManager()");
-     * return new RedisCacheManager(); }
+     * redisCacheManager() {
+     * logger.debug("ShiroConfiguration.redisCacheManager()"); return new
+     * RedisCacheManager(); }
      * 
      * @Bean(name = "redisSessionDAO") public RedisSessionDAO redisSessionDAO(){
      * logger.debug("ShiroConfiguration.redisSessionDAO()"); return new

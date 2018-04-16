@@ -145,4 +145,35 @@
   	from project_budget
   	where project_id = #{projectId,jdbcType=BIGINT}
   </select>
+  <!-- 根据需求id查询影响变更需求的任务信息 -->
+  <select id="findDemandTaskByDeamdId" parameterType="long" resultType="map">
+  	select t.task_num,t.priority,t.task_name,t.estimate_start_time,t.estimate_end_time,u.user_name,t.status
+  	from task t
+  	left join platform_user u on t.beassign_user_id = u.user_id
+  	where t.demand_id = #{demandId,jdbcType=BIGINT}
+  	order by t.priority desc
+  </select>
+  <!-- 根据需求id查询影响变更需求的用例信息 -->
+  <select id="findDemandUseCaseByDeamdId" parameterType="long" resultType="map">
+  	select uc.case_title,uc.case_level,uc.description,uc.case_status,uc.apply_phase,uc.precondition,uc.execute_time
+  	,pu.user_name
+  	from use_case uc
+  	left join platform_user pu on uc.execute_user_id = pu.user_id
+  	where uc.demand_id = #{demandId,jdbcType=BIGINT} and del_flag = '0'
+  	order by uc.case_level desc
+  </select>
+  <!-- 根据需求id查询影响变更需求的bug信息 -->
+  <select id="findDemandBugByDeamdId" parameterType="long" resultType="map">
+  	select bm.bug_no,bm.bug_title,bm.bug_type,bm.bug_level,bm.bug_status,bm.create_time
+  	,bm.end_time,bm.solve_time,bm.solve_program,bm.serious_degree,pu.user_name
+  	from bug_manage bm
+  	left join platform_user pu on bm.designated_id = pu.user_id
+  	where bm.demand_id = #{demandId,jdbcType=BIGINT}
+  	order by bm.bug_level desc
+  </select>
+  <!-- 获取项目实际已消耗总工时 -->
+  <select id="queryTotalActualHours" parameterType="long" resultType="long">
+  	select sum(infact_hour) from task
+  	where project_id = #{projectId,jdbcType = VARCHAR} and status = '2'
+  </select>
 </mapper>

@@ -5,6 +5,8 @@
  */
 package com.camelot.pmt.project.controller;
 
+import java.util.Map;
+
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -22,40 +24,44 @@ import com.camelot.pmt.platform.utils.DataGrid;
 import com.camelot.pmt.platform.utils.ExecuteResult;
 import com.camelot.pmt.project.service.ProjectWarningService;
 
-/** 
- * @ClassName: ProjectWarningController 
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+
+/**
+ * @ClassName: ProjectWarningController
  * @Description: 项目预警controller
  * @author lixiaokang
- * @date 2018年4月12日 下午4:40:30  
+ * @date 2018年4月12日 下午4:40:30
  */
 @RestController
 @RequestMapping("/projectwarning")
 public class ProjectWarningController {
-	
-	@Autowired
-	private ProjectWarningService projectWarningService;
 
-	/*
-	 * 开启项目预警
-	 */
-	@ApiOperation(value = "开启项目预警功能", notes = "开启项目预警功能")
-	@ApiImplicitParams({
-        @ApiImplicitParam(name = "proId", value = "项目id", required = true, paramType = "form", dataType = "int"),
-        @ApiImplicitParam(name = "id", value = "id", required = true, paramType = "form", dataType = "int"),
-        @ApiImplicitParam(name = "warnType", value = "预警类型", required = true, paramType = "form", dataType = "String"),
-        @ApiImplicitParam(name = "warnStatus", value = "预警状态", required = true, paramType = "form", dataType = "String"),
-        @ApiImplicitParam(name = "createUserId", value = "创建人id", required = true, paramType = "form", dataType = "int"),
-        @ApiImplicitParam(name = "modifyUserId", value = "修改人id", required = true, paramType = "form", dataType = "int")})
-	@PostMapping("start")
-	public JSONObject start(@RequestBody String param){
-		 ExecuteResult<DataGrid<UserModel>> result = new ExecuteResult<DataGrid<UserModel>>();
-		if("".equals(param)){
-			return ApiResponse.error();
-		}
-		projectWarningService.startProjectWarning(param);
+    @Autowired
+    private ProjectWarningService projectWarningService;
+
+    /*
+     * 开启项目预警
+     */
+    @ApiOperation(value = "开启项目预警功能", notes = "开启项目预警功能")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "proId", value = "项目id", required = true, paramType = "form", dataType = "int"),
+            @ApiImplicitParam(name = "id", value = "id", required = true, paramType = "form", dataType = "int"),
+            @ApiImplicitParam(name = "warnType", value = "预警类型", required = true, paramType = "form", dataType = "String"),
+            @ApiImplicitParam(name = "warnStatus", value = "预警状态", required = true, paramType = "form", dataType = "String"),
+            @ApiImplicitParam(name = "createUserId", value = "创建人id", required = true, paramType = "form", dataType = "int"),
+            @ApiImplicitParam(name = "modifyUserId", value = "修改人id", required = true, paramType = "form", dataType = "int") })
+    @PostMapping("start")
+    public JSONObject start(@RequestBody String param) {
+        ExecuteResult<DataGrid<UserModel>> result = new ExecuteResult<DataGrid<UserModel>>();
+        if ("".equals(param)) {
+            return ApiResponse.error();
+        }
+        projectWarningService.startProjectWarning(param);
         if (result.isSuccess()) {
             return ApiResponse.success(result.getResult());
         }
         return ApiResponse.error();
-	}
+    }
 }

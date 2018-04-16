@@ -77,6 +77,7 @@ public class Version {
 
     /**
      * 版本号_id
+     * 
      * @return id 版本号_id
      */
     public Long getId() {
@@ -85,7 +86,9 @@ public class Version {
 
     /**
      * 版本号_id
-     * @param id 版本号_id
+     * 
+     * @param id
+     *            版本号_id
      */
     public void setId(Long id) {
         this.id = id;
@@ -93,6 +96,7 @@ public class Version {
 
     /**
      * 项目id
+     * 
      * @return project_id 项目id
      */
     public Long getProjectId() {
@@ -101,7 +105,9 @@ public class Version {
 
     /**
      * 项目id
-     * @param projectId 项目id
+     * 
+     * @param projectId
+     *            项目id
      */
     public void setProjectId(Long projectId) {
         this.projectId = projectId;
@@ -109,6 +115,7 @@ public class Version {
 
     /**
      * 版本编号
+     * 
      * @return version 版本编号
      */
     public String getVersion() {
@@ -117,7 +124,9 @@ public class Version {
 
     /**
      * 版本编号
-     * @param version 版本编号
+     * 
+     * @param version
+     *            版本编号
      */
     public void setVersion(String version) {
         this.version = version == null ? null : version.trim();
@@ -125,6 +134,7 @@ public class Version {
 
     /**
      * 开始时间
+     * 
      * @return start_time 开始时间
      */
     public Date getStartTime() {
@@ -133,7 +143,9 @@ public class Version {
 
     /**
      * 开始时间
-     * @param startTime 开始时间
+     * 
+     * @param startTime
+     *            开始时间
      */
     public void setStartTime(Date startTime) {
         this.startTime = startTime;
@@ -141,6 +153,7 @@ public class Version {
 
     /**
      * 结束时间
+     * 
      * @return end_time 结束时间
      */
     public Date getEndTime() {
@@ -149,7 +162,9 @@ public class Version {
 
     /**
      * 结束时间
-     * @param endTime 结束时间
+     * 
+     * @param endTime
+     *            结束时间
      */
     public void setEndTime(Date endTime) {
         this.endTime = endTime;
@@ -157,6 +172,7 @@ public class Version {
 
     /**
      * 版本名称
+     * 
      * @return version_name 版本名称
      */
     public String getVersionName() {
@@ -165,7 +181,9 @@ public class Version {
 
     /**
      * 版本名称
-     * @param versionName 版本名称
+     * 
+     * @param versionName
+     *            版本名称
      */
     public void setVersionName(String versionName) {
         this.versionName = versionName == null ? null : versionName.trim();
@@ -173,6 +191,7 @@ public class Version {
 
     /**
      * 版本类型
+     * 
      * @return version_type 版本类型
      */
     public String getVersionType() {
@@ -181,7 +200,9 @@ public class Version {
 
     /**
      * 版本类型
-     * @param versionType 版本类型
+     * 
+     * @param versionType
+     *            版本类型
      */
     public void setVersionType(String versionType) {
         this.versionType = versionType == null ? null : versionType.trim();
@@ -189,6 +210,7 @@ public class Version {
 
     /**
      * 创建人id
+     * 
      * @return create_user_id 创建人id
      */
     public String getCreateUserId() {
@@ -197,7 +219,9 @@ public class Version {
 
     /**
      * 创建人id
-     * @param createUserId 创建人id
+     * 
+     * @param createUserId
+     *            创建人id
      */
     public void setCreateUserId(String createUserId) {
         this.createUserId = createUserId == null ? null : createUserId.trim();
@@ -205,6 +229,7 @@ public class Version {
 
     /**
      * 创建时间
+     * 
      * @return create_time 创建时间
      */
     public Date getCreateTime() {
@@ -213,7 +238,9 @@ public class Version {
 
     /**
      * 创建时间
-     * @param createTime 创建时间
+     * 
+     * @param createTime
+     *            创建时间
      */
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
@@ -221,6 +248,7 @@ public class Version {
 
     /**
      * 修改人id
+     * 
      * @return modify_user_id 修改人id
      */
     public String getModifyUserId() {
@@ -229,7 +257,9 @@ public class Version {
 
     /**
      * 修改人id
-     * @param modifyUserId 修改人id
+     * 
+     * @param modifyUserId
+     *            修改人id
      */
     public void setModifyUserId(String modifyUserId) {
         this.modifyUserId = modifyUserId == null ? null : modifyUserId.trim();
@@ -237,6 +267,7 @@ public class Version {
 
     /**
      * 修改时间
+     * 
      * @return modify_time 修改时间
      */
     public Date getModifyTime() {
@@ -245,7 +276,9 @@ public class Version {
 
     /**
      * 修改时间
-     * @param modifyTime 修改时间
+     * 
+     * @param modifyTime
+     *            修改时间
      */
     public void setModifyTime(Date modifyTime) {
         this.modifyTime = modifyTime;

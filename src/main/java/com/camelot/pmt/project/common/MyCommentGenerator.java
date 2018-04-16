@@ -22,13 +22,12 @@ import org.mybatis.generator.config.PropertyRegistry;
 
 /**
  * 描述：
+ * 
  * @since 1.9.10
  * @version 1.9.10
- * @作者：niexiaohui
- * @创建时间：2016年11月22日
- * @修改记录：
+ * @作者：niexiaohui @创建时间：2016年11月22日 @修改记录：
  */
-public class MyCommentGenerator implements CommentGenerator{
+public class MyCommentGenerator implements CommentGenerator {
     private Properties properties;
     private Properties systemPro;
     private boolean suppressDate;
@@ -136,8 +135,7 @@ public class MyCommentGenerator implements CommentGenerator{
         innerEnum.addJavaDocLine(" */");
     }
 
-    public void addFieldComment(Field field, IntrospectedTable introspectedTable,
-                                IntrospectedColumn introspectedColumn) {
+    public void addFieldComment(Field field, IntrospectedTable introspectedTable, IntrospectedColumn introspectedColumn) {
         if (suppressAllComments) {
             return;
         }
@@ -171,7 +169,7 @@ public class MyCommentGenerator implements CommentGenerator{
     }
 
     public void addGetterComment(Method method, IntrospectedTable introspectedTable,
-                                 IntrospectedColumn introspectedColumn) {
+            IntrospectedColumn introspectedColumn) {
         if (suppressAllComments) {
             return;
         }
@@ -190,7 +188,7 @@ public class MyCommentGenerator implements CommentGenerator{
     }
 
     public void addSetterComment(Method method, IntrospectedTable introspectedTable,
-                                 IntrospectedColumn introspectedColumn) {
+            IntrospectedColumn introspectedColumn) {
         if (suppressAllComments) {
             return;
         }

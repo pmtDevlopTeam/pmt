@@ -5,8 +5,6 @@ import com.camelot.pmt.platform.utils.ExecuteResult;
 import com.camelot.pmt.platform.utils.Pager;
 import com.camelot.pmt.project.model.DemandWithBLOBs;
 
-import java.util.List;
-
 public interface DemandService {
     ExecuteResult<String> save(DemandWithBLOBs demandWithBLOBs);
 
