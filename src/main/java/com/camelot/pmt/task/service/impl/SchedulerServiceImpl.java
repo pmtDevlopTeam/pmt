@@ -1,7 +1,8 @@
 package com.camelot.pmt.task.service.impl;
 
-import java.util.List;
-
+import com.camelot.pmt.platform.mapper.UserMapper;
+import com.camelot.pmt.task.mapper.TaskMapper;
+import com.camelot.pmt.task.service.SchedulerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,13 +10,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
-
-import com.camelot.pmt.platform.user.mapper.UserMapper;
-import com.camelot.pmt.platform.user.model.UserModel;
-import com.camelot.pmt.platform.utils.ExecuteResult;
-import com.camelot.pmt.task.mapper.TaskMapper;
-import com.camelot.pmt.task.model.Task;
-import com.camelot.pmt.task.service.SchedulerService;
 
 /**
  * 定时延期任务是否发送邮件接口

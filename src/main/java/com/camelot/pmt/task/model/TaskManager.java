@@ -1,7 +1,7 @@
 package com.camelot.pmt.task.model;
 
-import com.camelot.pmt.platform.user.model.UserModel;
-import com.camelot.pmt.pro.model.Project;
+import com.camelot.pmt.platform.model.User;
+import com.camelot.pmt.project.model.Project;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.io.Serializable;
@@ -25,9 +25,9 @@ public class TaskManager implements Serializable{
 
     private String priority;
 
-    private UserModel assignUser;
+    private User assignUser;
 
-    private UserModel beassignUser;
+    private User beassignUser;
 
     private Date assignTime;
 
@@ -60,7 +60,7 @@ public class TaskManager implements Serializable{
 
     private String taskMileage;
 
-    private UserModel createUser;
+    private User createUser;
 
     private String modifyUserId;
 
@@ -141,22 +141,6 @@ public class TaskManager implements Serializable{
 
 	public void setPriority(String priority) {
 		this.priority = priority;
-	}
-
-	public UserModel getAssignUser() {
-		return assignUser;
-	}
-
-	public void setAssignUser(UserModel assignUser) {
-		this.assignUser = assignUser;
-	}
-
-	public UserModel getBeassignUser() {
-		return beassignUser;
-	}
-
-	public void setBeassignUser(UserModel beassignUser) {
-		this.beassignUser = beassignUser;
 	}
 
 	public Date getAssignTime() {
@@ -279,14 +263,6 @@ public class TaskManager implements Serializable{
 		this.taskMileage = taskMileage;
 	}
 
-	public UserModel getCreateUser() {
-		return createUser;
-	}
-
-	public void setCreateUser(UserModel createUser) {
-		this.createUser = createUser;
-	}
-
 	public String getModifyUserId() {
 		return modifyUserId;
 	}
@@ -391,6 +367,38 @@ public class TaskManager implements Serializable{
 		this.column5 = column5;
 	}
 
+	public void setAssignUser(User assignUser) {
+		this.assignUser = assignUser;
+	}
+
+	public void setBeassignUser(User beassignUser) {
+		this.beassignUser = beassignUser;
+	}
+
+	public User getCreateUser() {
+		return createUser;
+	}
+
+	public void setCreateUser(User createUser) {
+		this.createUser = createUser;
+	}
+
+	public List<TaskManager> getChildren() {
+		return children;
+	}
+
+	public void setChildren(List<TaskManager> children) {
+		this.children = children;
+	}
+
+	public User getAssignUser() {
+		return assignUser;
+	}
+
+	public User getBeassignUser() {
+		return beassignUser;
+	}
+
 	@Override
 	public String toString() {
 		return "TaskManager{" +
@@ -435,7 +443,7 @@ public class TaskManager implements Serializable{
 				'}';
 	}
 
-	public TaskManager(Long id, String taskName, Long taskParentId, Project project, Long demandId, String priority, UserModel assignUser, UserModel beassignUser, Date assignTime, Date estimateStartTime, Date estimateEndTime, Date actualStartTime, Date actualEndTime, String taskType, String taskSpeed, String status, String abnormalStatus, String taskDescribe, String abnormalDescribe, Integer estimateHour, Integer consumeHour, Integer remainHour, String taskMileage, UserModel createUser, String modifyUserId, Date createTime, Date modifyTime, Integer warningHour, Integer warningStatus, String comment, String filepath, String filename, String column1, String column2, String column3, String column4, String column5, List<TaskManager> children) {
+	public TaskManager(Long id, String taskName, Long taskParentId, Project project, Long demandId, String priority, User assignUser, User beassignUser, Date assignTime, Date estimateStartTime, Date estimateEndTime, Date actualStartTime, Date actualEndTime, String taskType, String taskSpeed, String status, String abnormalStatus, String taskDescribe, String abnormalDescribe, Integer estimateHour, Integer consumeHour, Integer remainHour, String taskMileage, User createUser, String modifyUserId, Date createTime, Date modifyTime, Integer warningHour, Integer warningStatus, String comment, String filepath, String filename, String column1, String column2, String column3, String column4, String column5, List<TaskManager> children) {
 		this.id = id;
 		this.taskName = taskName;
 		this.taskParentId = taskParentId;

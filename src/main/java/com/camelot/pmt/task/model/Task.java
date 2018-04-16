@@ -1,6 +1,8 @@
 package com.camelot.pmt.task.model;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Task {
     private Long id;
@@ -58,6 +60,16 @@ public class Task {
     private Date createTime;
 
     private Date modifyTime;
+
+    private List<Task> children = new ArrayList<Task>();
+
+    public List<Task> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<Task> children) {
+        this.children = children;
+    }
 
     public Long getId() {
         return id;
