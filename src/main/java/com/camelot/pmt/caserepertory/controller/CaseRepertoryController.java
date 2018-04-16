@@ -39,34 +39,19 @@ public class CaseRepertoryController {
 	            @ApiImplicitParam(name = "currentPage", value = "页码", required = true, paramType = "query", dataType = "int"),
 	            @ApiImplicitParam(name = "pageSize", value = "每页数量", required = true, paramType = "query", dataType = "int")
 	    })
-	    public JSONObject queryCaseRepertoryByPage() {
+	    public JSONObject queryCaseRepertoryByPage(Integer currentPage,Integer pageSize) {
 			 PageBean  pageBean=	new  PageBean();
 			 pageBean.setCurrentPage(currentPage);
 			 pageBean.setPageSize(pageSize);
 			 Map<String,Object> map=new HashMap<String,Object>();
 			 map.put("pageBean", pageBean);
 			 //用户id
-			 map.put("userId", 1);
-			 if(status!=null){
-				 map.put("status",status);
-			 }
-			 if(!StringUtils.isEmpty(qStartTime)){
-				 map.put("qStartTime",qStartTime);
-			 }
-			 if(!StringUtils.isEmpty(qEndTime)){
-				 map.put("qEndTime",qEndTime);
-			 }
-			 if(!StringUtils.isEmpty(bugStatus)){
-				 map.put("bugStatus",bugStatus);
-			 }
-			 if(!StringUtils.isEmpty(bugTitle)){
-				 map.put("bugTitle",bugTitle);
-			 }
+			
 			 
 			 ExecuteResult<PageInfo> result = new ExecuteResult<PageInfo>();
 		        try {
 		            //调用查询bug分页接口
-		            result = bugManageService.selectCondition(map);
+		            result = caseRepertoryService.selectCondition(map);
 		            if(result.getErrorMessages().size()!=0){
 		            	return ApiResponse.error(result.getErrorMessage());
 		            }
