@@ -43,7 +43,7 @@ public class VersionController {
             @ApiImplicitParam(name = "endTime", value = "结束时间", required = true, paramType = "form", dataType = "String"),
             @ApiImplicitParam(name = "remarks", value = "备注", required = true, paramType = "form", dataType = "String")
     })
-    @RequestMapping(value = "version/addVersion", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/version/createVersion", method = RequestMethod.POST)
     public JSONObject insertVersonInfo(Long projectId,String userId,VersionVo versionVo){
         return versionService.insertVersonInfo(projectId,userId,versionVo);
     }
@@ -56,7 +56,7 @@ public class VersionController {
       * @date: 2018/4/13 18:39
       */
     @ApiOperation(value = "查询版本列表信息", notes = "查询版本列表信息")
-    @RequestMapping(value = "version/queryVersionList", method = RequestMethod.GET)
+    @RequestMapping(value = "/api/version/findVersionList", method = RequestMethod.GET)
     public JSONObject queryVersonListByProId(Long projectId){
         return versionService.getVersionListInfo(projectId);
     }
@@ -68,7 +68,7 @@ public class VersionController {
       * @date: 2018/4/13 18:55
       */
     @ApiOperation(value = "查询版本信息", notes = "查询版本信息")
-    @RequestMapping(value = "version/queryVersionList", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/version/findVersionList", method = RequestMethod.GET)
     public JSONObject queryVersonById(Version version){
         return versionService.getVersionInfoById(version.getId());
     }
@@ -88,7 +88,7 @@ public class VersionController {
             @ApiImplicitParam(name = "endTime", value = "结束时间", required = true, paramType = "form", dataType = "String"),
             @ApiImplicitParam(name = "remarks", value = "备注", required = true, paramType = "form", dataType = "String")
     })
-    @RequestMapping(value = "version/updateVersion", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/version/updateVersion", method = RequestMethod.POST)
     public JSONObject updateVersonInfo(Long projectId,String userId,VersionVo versionVo){
         return versionService.updateVersonInfo(projectId,userId,versionVo);
     }
@@ -100,7 +100,7 @@ public class VersionController {
       * @date: 2018/4/13 19:22
       */
     @ApiOperation(value = "删除版本信息", notes = "删除版本信息")
-    @RequestMapping(value = "version/deleteVersionInfo", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/version/deleteVersionInfo", method = RequestMethod.POST)
     public JSONObject deleteVersonById(String userId,Version version){
         return versionService.deleteVersionInfoById(userId,version.getId());
     }
