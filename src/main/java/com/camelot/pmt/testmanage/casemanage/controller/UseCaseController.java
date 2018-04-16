@@ -41,17 +41,22 @@ public class UseCaseController {
 	    @ApiImplicitParams({
 	    	 	@ApiImplicitParam(name = "projectId", value = "项目id", required = true, paramType = "query", dataType = "int"),
 	    	 	@ApiImplicitParam(name = "caseTitle", value = "用例标题", required = false, paramType = "query", dataType = "string"),
-	            @ApiImplicitParam(name = "currentPage", value = "页码", required = true, paramType = "query", dataType = "int"),
+	    	 	@ApiImplicitParam(name = "demandId", value = "需求id", required = false, paramType = "query", dataType = "int"),
+	            @ApiImplicitParam(name = "currentPage", value = "页码", required = true, paramType = "query", dataType = "long"),
 	            @ApiImplicitParam(name = "pageSize", value = "每页数量", required = true, paramType = "query", dataType = "int"),
 	            @ApiImplicitParam(name = "caseStatus", value = "用例状态(0:正常；1:被阻塞；2：研究中)", required = false, paramType = "query", dataType = "string"),
 	    	 	})
-	    public JSONObject queryUsersByPage(Long projectId,String caseTitle,Integer currentPage,Integer pageSize,String caseStatus) {
+	    public JSONObject queryUsersByPage(Long projectId,Long demandId,String caseTitle,Integer currentPage,Integer pageSize,String caseStatus) {
 			 PageBean  pageBean=	new  PageBean();
 			 pageBean.setCurrentPage(currentPage);
 			 pageBean.setPageSize(pageSize);
 			 Map<String,Object> map=new HashMap<String,Object>();
 			 if(projectId!=null){
 				 map.put("projectId", projectId);
+				 
+			 }
+			 if(demandId!=null){
+				 map.put("demandId", demandId);
 				 
 			 }
 			 if(!StringUtils.isEmpty(caseTitle)){
