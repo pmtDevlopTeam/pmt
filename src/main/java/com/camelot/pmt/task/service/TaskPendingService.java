@@ -1,10 +1,10 @@
 package com.camelot.pmt.task.service;
 
+import com.camelot.pmt.platform.common.ExecuteResult;
+import com.camelot.pmt.task.model.Task;
+
 import java.util.Date;
 import java.util.List;
-
-import com.camelot.pmt.platform.utils.ExecuteResult;
-import com.camelot.pmt.task.model.Task;
 
 /**
  * 
@@ -121,7 +121,7 @@ public interface TaskPendingService {
 	* @return ExecuteResult<Task>    返回类型 
 	* @throws
 	 */
-	ExecuteResult<Task> queryTaskTreeByTaskId(Long id,String taskType,Long beassignUserId);
+	ExecuteResult<Task> queryTaskTreeByTaskId(Long id, String taskType, Long beassignUserId);
 	
 	/**
 	 * 

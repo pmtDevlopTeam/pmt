@@ -1,6 +1,6 @@
 package com.camelot.pmt.task.service.impl;
 
-import com.camelot.pmt.platform.utils.ExecuteResult;
+import com.camelot.pmt.platform.common.ExecuteResult;
 import com.camelot.pmt.task.mapper.TaskMapper;
 import com.camelot.pmt.task.model.Task;
 import com.camelot.pmt.task.service.TaskPendingService;
@@ -273,7 +273,7 @@ public class TaskPendingServiceImpl implements TaskPendingService{
 	* @return Task    返回类型 
 	* @throws
 	 */
-	public ExecuteResult<Task> queryTaskTreeByTaskId(Long id,String taskType,Long beassignUserId){
+	public ExecuteResult<Task> queryTaskTreeByTaskId(Long id, String taskType, Long beassignUserId){
 		ExecuteResult<Task> result = new ExecuteResult<Task>();
 		try{
 			Task taskNode = new Task();
