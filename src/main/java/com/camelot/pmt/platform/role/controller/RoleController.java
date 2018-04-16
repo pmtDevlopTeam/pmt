@@ -60,10 +60,10 @@ public class RoleController {
     public JSONObject addRole(@ApiIgnore Role role) {
         ExecuteResult<Role> result;
         try {
-            //等获取登录人ID
+            // 等获取登录人ID
             role.setCreateUserId("ligen12138");
             role.setModifyUserId("ligen12138");
-            if(StringUtils.isEmpty(role.getCreateUserId()) && StringUtils.isEmpty(role.getModifyUserId())){
+            if (StringUtils.isEmpty(role.getCreateUserId()) && StringUtils.isEmpty(role.getModifyUserId())) {
                 ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
             }
             //
@@ -87,9 +87,9 @@ public class RoleController {
         ExecuteResult<Role> result;
         try {
 
-            //等获取登录人ID
+            // 等获取登录人ID
             role.setModifyUserId("ligen12138");
-            if(StringUtils.isEmpty(role.getModifyUserId())){
+            if (StringUtils.isEmpty(role.getModifyUserId())) {
                 ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
             }
             //

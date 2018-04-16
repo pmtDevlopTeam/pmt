@@ -6,17 +6,17 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 
 public class ProjectUser {
-	
-	/** 进入  */
+
+    /** 进入 */
     public static final String STATUS_IN = "01";
-    /** 未进入  */
+    /** 未进入 */
     public static final String STATUS_NOT_IN = "02";
-    /**  已出 */
+    /** 已出 */
     public static final String STATUS_OUT = "03";
-    /** 暂离   */
+    /** 暂离 */
     public static final String STATUS_AFK = "04";
 
-	/**
+    /**
      * id
      */
     private Long id;
@@ -61,7 +61,7 @@ public class ProjectUser {
     private Integer preManHour;
 
     /**
-     * 成员在项目状态  01进入，02未进入，03已出 04 暂离
+     * 成员在项目状态 01进入，02未进入，03已出 04 暂离
      */
     private String userStatus;
 
@@ -94,6 +94,7 @@ public class ProjectUser {
 
     /**
      * id
+     * 
      * @return id
      */
     public Long getId() {
@@ -102,7 +103,9 @@ public class ProjectUser {
 
     /**
      * id
-     * @param id id
+     * 
+     * @param id
+     *            id
      */
     public void setId(Long id) {
         this.id = id;
@@ -110,6 +113,7 @@ public class ProjectUser {
 
     /**
      * 项目id
+     * 
      * @return project_id 项目id
      */
     public Long getProjectId() {
@@ -118,7 +122,9 @@ public class ProjectUser {
 
     /**
      * 项目id
-     * @param projectId 项目id
+     * 
+     * @param projectId
+     *            项目id
      */
     public void setProjectId(Long projectId) {
         this.projectId = projectId;
@@ -126,6 +132,7 @@ public class ProjectUser {
 
     /**
      * 用户id
+     * 
      * @return user_id 用户id
      */
     public String getUserId() {
@@ -134,7 +141,9 @@ public class ProjectUser {
 
     /**
      * 用户id
-     * @param userId 用户id
+     * 
+     * @param userId
+     *            用户id
      */
     public void setUserId(String userId) {
         this.userId = userId == null ? null : userId.trim();
@@ -142,6 +151,7 @@ public class ProjectUser {
 
     /**
      * 预计进项目日期
+     * 
      * @return pre_join_time 预计进项目日期
      */
     public Date getPreJoinTime() {
@@ -150,7 +160,9 @@ public class ProjectUser {
 
     /**
      * 预计进项目日期
-     * @param preJoinTime 预计进项目日期
+     * 
+     * @param preJoinTime
+     *            预计进项目日期
      */
     public void setPreJoinTime(Date preJoinTime) {
         this.preJoinTime = preJoinTime;
@@ -158,6 +170,7 @@ public class ProjectUser {
 
     /**
      * 实际进项目日期
+     * 
      * @return real_join_time 实际进项目日期
      */
     public Date getRealJoinTime() {
@@ -166,7 +179,9 @@ public class ProjectUser {
 
     /**
      * 实际进项目日期
-     * @param realJoinTime 实际进项目日期
+     * 
+     * @param realJoinTime
+     *            实际进项目日期
      */
     public void setRealJoinTime(Date realJoinTime) {
         this.realJoinTime = realJoinTime;
@@ -174,6 +189,7 @@ public class ProjectUser {
 
     /**
      * 预计出项目日期
+     * 
      * @return pre_out_time 预计出项目日期
      */
     public Date getPreOutTime() {
@@ -182,7 +198,9 @@ public class ProjectUser {
 
     /**
      * 预计出项目日期
-     * @param preOutTime 预计出项目日期
+     * 
+     * @param preOutTime
+     *            预计出项目日期
      */
     public void setPreOutTime(Date preOutTime) {
         this.preOutTime = preOutTime;
@@ -190,6 +208,7 @@ public class ProjectUser {
 
     /**
      * 实际出项目日期
+     * 
      * @return real_out_time 实际出项目日期
      */
     public Date getRealOutTime() {
@@ -198,7 +217,9 @@ public class ProjectUser {
 
     /**
      * 实际出项目日期
-     * @param realOutTime 实际出项目日期
+     * 
+     * @param realOutTime
+     *            实际出项目日期
      */
     public void setRealOutTime(Date realOutTime) {
         this.realOutTime = realOutTime;
@@ -206,6 +227,7 @@ public class ProjectUser {
 
     /**
      * 预计工时
+     * 
      * @return pre_man_hour 预计工时
      */
     public Integer getPreManHour() {
@@ -214,23 +236,28 @@ public class ProjectUser {
 
     /**
      * 预计工时
-     * @param preManHour 预计工时
+     * 
+     * @param preManHour
+     *            预计工时
      */
     public void setPreManHour(Integer preManHour) {
         this.preManHour = preManHour;
     }
 
     /**
-     * 成员在项目状态  01进入，02未进入，03已出 04 暂离
-     * @return user_status 成员在项目状态  01进入，02未进入，03已出 04 暂离
+     * 成员在项目状态 01进入，02未进入，03已出 04 暂离
+     * 
+     * @return user_status 成员在项目状态 01进入，02未进入，03已出 04 暂离
      */
     public String getUserStatus() {
         return userStatus;
     }
 
     /**
-     * 成员在项目状态  01进入，02未进入，03已出 04 暂离
-     * @param userStatus 成员在项目状态  01进入，02未进入，03已出 04 暂离
+     * 成员在项目状态 01进入，02未进入，03已出 04 暂离
+     * 
+     * @param userStatus
+     *            成员在项目状态 01进入，02未进入，03已出 04 暂离
      */
     public void setUserStatus(String userStatus) {
         this.userStatus = userStatus == null ? null : userStatus.trim();
@@ -238,6 +265,7 @@ public class ProjectUser {
 
     /**
      * 成员在项目角色id
+     * 
      * @return user_pro_role 成员在项目角色id
      */
     public Long getUserProRole() {
@@ -246,7 +274,9 @@ public class ProjectUser {
 
     /**
      * 成员在项目角色id
-     * @param userProRole 成员在项目角色id
+     * 
+     * @param userProRole
+     *            成员在项目角色id
      */
     public void setUserProRole(Long userProRole) {
         this.userProRole = userProRole;
@@ -254,6 +284,7 @@ public class ProjectUser {
 
     /**
      * 创建人id
+     * 
      * @return create_user_id 创建人id
      */
     public String getCreateUserId() {
@@ -262,7 +293,9 @@ public class ProjectUser {
 
     /**
      * 创建人id
-     * @param createUserId 创建人id
+     * 
+     * @param createUserId
+     *            创建人id
      */
     public void setCreateUserId(String createUserId) {
         this.createUserId = createUserId == null ? null : createUserId.trim();
@@ -270,6 +303,7 @@ public class ProjectUser {
 
     /**
      * 创建时间
+     * 
      * @return create_time 创建时间
      */
     public Date getCreateTime() {
@@ -278,7 +312,9 @@ public class ProjectUser {
 
     /**
      * 创建时间
-     * @param createTime 创建时间
+     * 
+     * @param createTime
+     *            创建时间
      */
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
@@ -286,6 +322,7 @@ public class ProjectUser {
 
     /**
      * 修改人id
+     * 
      * @return modify_user_id 修改人id
      */
     public String getModifyUserId() {
@@ -294,7 +331,9 @@ public class ProjectUser {
 
     /**
      * 修改人id
-     * @param modifyUserId 修改人id
+     * 
+     * @param modifyUserId
+     *            修改人id
      */
     public void setModifyUserId(String modifyUserId) {
         this.modifyUserId = modifyUserId == null ? null : modifyUserId.trim();
@@ -302,6 +341,7 @@ public class ProjectUser {
 
     /**
      * 修改时间
+     * 
      * @return modify_time 修改时间
      */
     public Date getModifyTime() {
@@ -310,7 +350,9 @@ public class ProjectUser {
 
     /**
      * 修改时间
-     * @param modifyTime 修改时间
+     * 
+     * @param modifyTime
+     *            修改时间
      */
     public void setModifyTime(Date modifyTime) {
         this.modifyTime = modifyTime;

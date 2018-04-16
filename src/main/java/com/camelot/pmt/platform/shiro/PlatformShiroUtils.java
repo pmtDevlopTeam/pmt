@@ -38,8 +38,8 @@ public class PlatformShiroUtils {
     }
 
     /*
-     * @SuppressWarnings("unchecked") public static SysUser getUserObject(){ try{
-     * return (SysUser) SecurityUtils.getSubject().getPrincipal(); }catch(
+     * @SuppressWarnings("unchecked") public static SysUser getUserObject(){
+     * try{ return (SysUser) SecurityUtils.getSubject().getPrincipal(); }catch(
      * ClassCastException cce){ //logger.warn("生产环境中请去掉spring devtool");
      * SecurityUtils.getSubject().logout(); throw new ShiroException(); }
      * 

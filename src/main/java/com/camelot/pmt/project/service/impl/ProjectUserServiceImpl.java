@@ -12,29 +12,29 @@ import com.camelot.pmt.project.service.ProjectUserService;
 
 @Service
 public class ProjectUserServiceImpl implements ProjectUserService {
-	
-	@Autowired
-	private ProjectUserMapper projectUserMapper;
 
-	/**
-	 * 确认成员进入项目
-	 */
-	@Override
-	public void confirmUser(ProjectUser pu) {
-		projectUserMapper.confirmUser(pu);
-	}
+    @Autowired
+    private ProjectUserMapper projectUserMapper;
 
-	@Override
-	public void insertSelective(ProjectUser pu) {
-		projectUserMapper.insertSelective(pu);
-	}
+    /**
+     * 确认成员进入项目
+     */
+    @Override
+    public void confirmUser(ProjectUser pu) {
+        projectUserMapper.confirmUser(pu);
+    }
 
-	/**
-	 * 查询项目成员
-	 */
-	@Override
-	public List<ProjectUserShow> searchUserByProjectId(Long projectId) {
-		return projectUserMapper.searchUserByProjectId(projectId);
-	}
+    @Override
+    public void insertSelective(ProjectUser pu) {
+        projectUserMapper.insertSelective(pu);
+    }
+
+    /**
+     * 查询项目成员
+     */
+    @Override
+    public List<ProjectUserShow> searchUserByProjectId(Long projectId) {
+        return projectUserMapper.searchUserByProjectId(projectId);
+    }
 
 }

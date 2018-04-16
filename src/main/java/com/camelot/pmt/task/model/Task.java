@@ -3,7 +3,7 @@ package com.camelot.pmt.task.model;
 import java.io.Serializable;
 import java.util.Date;
 
-public class Task implements Serializable{
+public class Task implements Serializable {
     private static final long serialVersionUID = -4807200873251253588L;
     private Long id;
 

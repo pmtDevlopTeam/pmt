@@ -43,10 +43,10 @@ public class RoleToUserController {
         ExecuteResult result;
         try {
 
-            //等获取登录人ID
+            // 等获取登录人ID
             roleToUser.setCreateUserId("ligen12138");
             roleToUser.setModifyUserId("ligen12138");
-            if(StringUtils.isEmpty(roleToUser.getCreateUserId()) && StringUtils.isEmpty(roleToUser.getModifyUserId())){
+            if (StringUtils.isEmpty(roleToUser.getCreateUserId()) && StringUtils.isEmpty(roleToUser.getModifyUserId())) {
                 ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
             }
             //
@@ -79,13 +79,12 @@ public class RoleToUserController {
         ExecuteResult result;
         try {
 
-            //等获取登录人ID
+            // 等获取登录人ID
             roleToUser.setModifyUserId("ligen12138");
-            if(StringUtils.isEmpty(roleToUser.getModifyUserId())){
+            if (StringUtils.isEmpty(roleToUser.getModifyUserId())) {
                 ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
             }
             //
-
 
             if (StringUtils.isEmpty(roleToUser.getRoleIds()) && StringUtils.isEmpty(roleToUser.getUserIds())) {
                 return ApiResponse.jsonData(APIStatus.ERROR_400);

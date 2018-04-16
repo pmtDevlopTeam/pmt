@@ -32,13 +32,13 @@ public class TaskOverdueServiceImpl implements TaskOverdueService {
     private static final Logger LOGGER = LoggerFactory.getLogger(TaskOverdueServiceImpl.class);
 
     /**
-     * 查询所有逾期任务+分页   
+     * 查询所有逾期任务+分页
      */
     public ExecuteResult<DataGrid<Task>> queryOverdueTask(Pager page) {
         ExecuteResult<DataGrid<Task>> result = new ExecuteResult<DataGrid<Task>>();
         try {
             List<Task> list = taskMapper.queryOverdueTask(page);
-            //  如果没有查询到数据，不继续进行
+            // 如果没有查询到数据，不继续进行
             if (CollectionUtils.isEmpty(list)) {
                 DataGrid<Task> dg = new DataGrid<Task>();
                 result.setResult(dg);
@@ -55,7 +55,5 @@ public class TaskOverdueServiceImpl implements TaskOverdueService {
         }
         return result;
     }
-
-	
 
 }
