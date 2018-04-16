@@ -100,6 +100,12 @@ public interface OrgMapper {
 	 * @return 
 	 **/
 	OrgAndUser selectOrgAndUserByOrgIdAndUserId(@Param("userId") String userId, @Param("orgId") String orgId);
+	 /** 组织机构与用户的绑定 根据orgId查询所有用户(关系到用户 )
+		 * @param orgId 
+		 * @return List<User>
+		 * 
+		 **/
+	List<OrgAndUser> selectUsersByOrgId(String orgId);
     
     
 }

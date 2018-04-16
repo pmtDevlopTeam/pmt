@@ -8,6 +8,7 @@ import com.camelot.pmt.platform.common.ExecuteResult;
 import com.camelot.pmt.platform.common.Pager;
 import com.camelot.pmt.platform.model.Org;
 import com.camelot.pmt.platform.model.OrgToUser;
+import com.camelot.pmt.platform.model.User;
 import com.camelot.pmt.platform.util.Tree;
 
 public interface OrgService {
@@ -70,6 +71,13 @@ public interface OrgService {
 	 * 组织机构与用户的绑定(关系到用户 )
 	 **/
 	ExecuteResult<String> addOrgToUser(Org org);
+	
+	/** 组织机构与用户的绑定 根据orgId查询所有用户(关系到用户 )
+	 * @param orgId 
+	 * @return List<User>
+	 * 
+	 **/
+	ExecuteResult<List<User>> queryOrgToUser(String orgId);
 	
 	
 	

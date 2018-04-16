@@ -164,6 +164,12 @@
 	   FROM platform_user_org where user_id=#{userId} and org_id=#{orgId}
     </select>
     
+    <select id="selectUsersByOrgId"  parameterType="java.lang.String" resultMap="OrgAndUserresultMap">
+       SELECT 
+       id,user_id,org_id,create_time,modify_time,create_user_id,modify_user_id
+	   FROM platform_user_org where org_id=#{orgId}
+    </select>
+    
  
     <select id="queryAllOrg" resultMap="BaseResultMap"  >
        SELECT 
