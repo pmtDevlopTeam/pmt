@@ -186,7 +186,7 @@ public interface TaskMapper {
      * @return Task    返回类型
      * @throws
      */
-    Task queryParentTaskNodeById(Long id);
+    Task queryParentTaskNodeById(Long taskParentId);
 
     /**
      * 查询正在进行的任务，根据时间和优先级进行排序

@@ -319,18 +319,18 @@ public class TaskPendingServiceImpl implements TaskPendingService{
 	* @return Task    返回类型 
 	* @throws
 	 */
-	public ExecuteResult<List<Task>> queryTopAllTaskTreeByTaskId(Long id){
+	public ExecuteResult<List<Task>> queryTopAllTaskTreeByTaskId(Long taskParentId){
 		ExecuteResult<List<Task>> result = new ExecuteResult<List<Task>>();
 		try{
 			Task taskNode = new Task();
 			List<Task> topAllTaskList = new ArrayList<Task>();
 			//判断删除的任务Id是否存在
-			if(id==null){
+			if(taskParentId==null){
 				result.addErrorMessage("任务id为空");
 				return result;
 			}
 			//根据taskId获取节点对象
-			taskNode = taskMapper.queryParentTaskNodeById(id);
+			taskNode = taskMapper.queryParentTaskNodeById(taskParentId);
 			//遍历子节点
 			if(taskNode!=null && taskNode.getTaskParentId()!=null){
 				//添加task对象
