@@ -21,11 +21,7 @@ public interface FileManageService {
 
     Boolean deleteFileById(FileManage fileManage);//文件删除
 
-<<<<<<< Updated upstream
     Boolean updateFileById(HttpServletRequest request,FileManage fileManage);//文件修改
-=======
-    Boolean updateFileById(HttpServletRequest request, FileManage fileManage);//文件修改
->>>>>>> Stashed changes
 
     List<FileManage> selectFileByGroupID(FileManageGroup fileManageGroup);// 文件详细信息查询
 }

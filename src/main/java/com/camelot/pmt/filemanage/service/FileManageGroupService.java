@@ -20,11 +20,7 @@ public interface FileManageGroupService {
 
     ExecuteResult<String> deleteFileGroup(FileManageGroup fileManageGroup);//删除文件夹
 
-<<<<<<< Updated upstream
     ExecuteResult<String> updateFileGroupById(HttpServletRequest request,FileManageGroup fileManageGroup);//修改文件夹
-=======
-    ExecuteResult<String> updateFileGroupById(HttpServletRequest request, FileManageGroup fileManageGroup);//修改文件夹
->>>>>>> Stashed changes
 
     ExecuteResult<List<FileManageGroup>> selectFileGroup(FileManageGroup fileManageGroup);//通过条件查询文件夹
 }
