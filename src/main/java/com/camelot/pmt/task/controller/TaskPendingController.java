@@ -1,31 +1,23 @@
 package com.camelot.pmt.task.controller;
 
-import java.util.Date;
-import java.util.List;
-
+import com.alibaba.fastjson.JSONObject;
+import com.camelot.pmt.platform.common.APIStatus;
+import com.camelot.pmt.platform.common.ApiResponse;
+import com.camelot.pmt.platform.utils.ExecuteResult;
+import com.camelot.pmt.task.model.Task;
+import com.camelot.pmt.task.service.TaskPendingService;
+import com.camelot.pmt.task.utils.Constant.TaskType;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.alibaba.fastjson.JSONObject;
-import com.camelot.pmt.platform.common.APIStatus;
-import com.camelot.pmt.platform.common.ApiResponse;
-import com.camelot.pmt.platform.user.model.UserModel;
-import com.camelot.pmt.platform.utils.ExecuteResult;
-import com.camelot.pmt.task.model.Task;
-import com.camelot.pmt.task.service.TaskPendingService;
-import com.camelot.pmt.task.utils.Constant;
-import com.camelot.pmt.task.utils.Constant.TaskType;
-
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import springfox.documentation.annotations.ApiIgnore;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * 
@@ -234,7 +226,14 @@ public class TaskPendingController {
 			return ApiResponse.jsonData(APIStatus.ERROR_500,e.getMessage());
 		}
 	}
-	
+
+	/**
+	 * 我的待办任务转为延期
+	 * @param taskId
+	 * @param delayDescribe
+	 * @param estimateStartTime
+	 * @return
+	 */
 	@ApiOperation(value = "我的待办任务转为延期", notes = "我的待办任务转为延期")
 	@RequestMapping(value = "/updateTaskPendingToDelay", method = RequestMethod.POST)
 	public JSONObject updateTaskPendingToDelay(
