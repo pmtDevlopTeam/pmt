@@ -114,6 +114,9 @@ public class UseCaseServiceImpl implements UseCaseService{
 
 		List<UseCaseProcedure> list = useCase.getProcedure();
 		for (UseCaseProcedure useCaseProcedure : list) {
+			if(useCase.getId()!=null){
+				useCaseProcedure.setUseCaseId(useCase.getId());
+			}
 			//批量修改
 			if(useCaseProcedure.getId()==null){
 				//为空为添加
