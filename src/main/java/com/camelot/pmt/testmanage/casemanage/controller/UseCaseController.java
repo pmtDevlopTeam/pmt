@@ -52,7 +52,7 @@ public class UseCaseController {
 				 map.put("projectId", projectId);
 				 
 			 }
-			 if(projectId!=null){
+			 if(caseTitle!=null){
 				 map.put("caseTitle", caseTitle);
 				 
 			 }
