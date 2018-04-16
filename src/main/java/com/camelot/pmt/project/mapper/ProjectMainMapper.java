@@ -10,6 +10,14 @@ import com.camelot.pmt.project.model.ProjectMain;
 public interface ProjectMainMapper {
 
     /**
+     * 关闭时，按主键id更新数据
+     * 
+     * @param userId
+     * @return
+     */
+    int updateById(ProjectMain projectMain);
+
+    /**
      * 按修改人Id查询
      * 
      * @param userId
