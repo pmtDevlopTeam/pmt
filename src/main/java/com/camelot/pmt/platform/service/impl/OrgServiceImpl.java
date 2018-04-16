@@ -1,7 +1,4 @@
 package com.camelot.pmt.platform.service.impl;
-
-import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -26,6 +23,7 @@ import com.camelot.pmt.platform.common.ExecuteResult;
 import com.camelot.pmt.platform.common.Pager;
 import com.camelot.pmt.platform.mapper.OrgMapper;
 import com.camelot.pmt.platform.mapper.UserMapper;
+import com.camelot.pmt.platform.model.Menu;
 import com.camelot.pmt.platform.model.Org;
 import com.camelot.pmt.platform.model.OrgAndUser;
 import com.camelot.pmt.platform.model.OrgToUser;
@@ -377,6 +375,29 @@ public class OrgServiceImpl implements OrgService {
             LOGGER.error(e.getMessage());
             throw new RuntimeException(e);
         }
+		return result;
+	}
+
+	@Override
+	public ExecuteResult<List<User>> queryOrgToUser(String orgId) {
+		ExecuteResult<List<User>> result = new ExecuteResult<List<User>>();
+		try {
+			List<OrgAndUser> OrgAndUserList = orgMapper.selectUsersByOrgId(orgId);
+			if (CollectionUtils.isEmpty(OrgAndUserList)) {
+                return result;
+            }
+			List<User> usersList = new ArrayList<User>();
+			for (OrgAndUser orgAndUser : OrgAndUserList) {
+				User user = userMapper.selectUserById(orgAndUser.getUserId());
+				if (user != null) {
+					usersList.add(user);
+				}
+			}
+			result.setResult(usersList);
+		}catch (Exception e) {
+			LOGGER.error(e.getMessage());
+			throw new RuntimeException(e);
+		}
 		return result;
 	}
 }

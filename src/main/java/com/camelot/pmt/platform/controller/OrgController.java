@@ -20,6 +20,7 @@ import com.camelot.pmt.platform.common.Pager;
 import com.camelot.pmt.platform.model.Org;
 import com.camelot.pmt.platform.model.OrgToUser;
 import com.camelot.pmt.platform.model.RoleToMenu;
+import com.camelot.pmt.platform.model.User;
 import com.camelot.pmt.platform.service.OrgService;
 import com.camelot.pmt.platform.util.Tree;
 
@@ -276,6 +277,35 @@ public class OrgController {
 
     }
     
+    
+    /** 组织机构与用户的绑定 根据orgId查询所有用户(关系到用户 )
+	 * @param orgId 
+	 * @return List<User>
+	 * 
+	 **/
+    @ApiOperation(value = "组织机构绑定用户  根据orgId查询所有用户", notes = "组织机构绑定用户  根据orgId查询所有用户")
+    @PostMapping(value = "/queryOrgToUserByOrgId")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "orgId", value = "部门id", required = true, paramType = "form", dataType = "string")
+            })
+    
+    public JSONObject queryOrgToUser(String orgId){
+    	ExecuteResult<List<User>> result = new ExecuteResult<List<User>>();
+    	try {
+    		if("".equals(orgId) && orgId ==null){
+    			return ApiResponse.error("传入的参数不正确");
+    		}
+    		result = orgService.queryOrgToUser(orgId);
+    		if(result.isSuccess()) {
+    			return ApiResponse.success(result.getResult());
+    		}
+    		return ApiResponse.error();
+    	}catch (Exception e) {
+    		return ApiResponse.error();
+    	}
+
+    }
+    
     /** 组织机构   根据orgId查看详情(关系到用户  即部门负责人)
 	 * @param OrgToUser
 	 * @return JSONObject
@@ -328,5 +358,7 @@ public class OrgController {
     		return ApiResponse.error();
     	}
     }*/
+    
+    
     
 }
