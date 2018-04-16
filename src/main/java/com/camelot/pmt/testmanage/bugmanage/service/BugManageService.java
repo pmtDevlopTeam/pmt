@@ -1,7 +1,10 @@
 package com.camelot.pmt.testmanage.bugmanage.service;
 
+import java.util.Map;
+
 import com.camelot.pmt.platform.utils.ExecuteResult;
 import com.camelot.pmt.testmanage.bugmanage.model.BugManage;
+import com.github.pagehelper.PageInfo;
 
 /**
  *
@@ -9,6 +12,13 @@ import com.camelot.pmt.testmanage.bugmanage.model.BugManage;
  *
  */
 public interface BugManageService {
+	
+	/**
+	    * bug列表
+	    * @param userModel
+	    * @return
+	    */
+   ExecuteResult<PageInfo> selectCondition(Map<String,Object> map);
 	
 	 /**
 	  * 添加 bug
@@ -36,7 +46,7 @@ public interface BugManageService {
     * @param userModel
     * @return
     */
-   ExecuteResult<String> updateBugStatusRevoke(Long id);
+   ExecuteResult<String> updateBugStatusRevoke(BugManage bugManage);
   
    /**
     * 关闭bug

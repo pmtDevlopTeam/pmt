@@ -1,6 +1,8 @@
 package com.camelot.pmt.testmanage.bugmanage.service.impl;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -9,11 +11,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.camelot.pmt.platform.user.mapper.UserMapper;
 import com.camelot.pmt.platform.utils.ExecuteResult;
+import com.camelot.pmt.platform.utils.PageBean;
 import com.camelot.pmt.task.utils.DateUtils;
+import com.camelot.pmt.testmanage.bugmanage.mapper.BugHistoryMapper;
 import com.camelot.pmt.testmanage.bugmanage.mapper.BugManageMapper;
+import com.camelot.pmt.testmanage.bugmanage.model.BugHistory;
 import com.camelot.pmt.testmanage.bugmanage.model.BugManage;
+import com.camelot.pmt.testmanage.bugmanage.model.SelectBugManage;
 import com.camelot.pmt.testmanage.bugmanage.service.BugManageService;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 
 /**
  *
@@ -22,11 +31,15 @@ import com.camelot.pmt.testmanage.bugmanage.service.BugManageService;
  */
 @Service
 public class BugManageServiceImpl implements BugManageService {
-	
-private static final Logger LOGGER = LoggerFactory.getLogger(BugManageServiceImpl.class);
-	
+	private static final Logger LOGGER = LoggerFactory.getLogger(BugManageServiceImpl.class);
 	@Autowired
 	private BugManageMapper bugManageMapper;
+	
+	@Autowired
+	private UserMapper userMapper;
+	
+	@Autowired
+	private BugHistoryMapper bugHistoryMapper;
 	
 	/**
 	 * 添加bug
@@ -36,7 +49,7 @@ private static final Logger LOGGER = LoggerFactory.getLogger(BugManageServiceImp
 		ExecuteResult<String> result = new ExecuteResult<String>();
 		 try {
 			 	//判断传入的bug对象是否为空
-	            if (bugManage == null || bugManage.getId()==null) {
+	            if (bugManage == null) {
 	                result.addErrorMessage("传入的bug实体有误!");
 	                return result;
 	            }
@@ -47,6 +60,7 @@ private static final Logger LOGGER = LoggerFactory.getLogger(BugManageServiceImp
 	            //创建人*
 	            bugManage.setCreateUserId("1");
 	            bugManageMapper.insertSelective(bugManage);
+	            selectStatus(bugManage,"1","添加");
 	            result.setResult("创建bug成功!");
 	        } catch (Exception e) {
 	            LOGGER.error(e.getMessage());
@@ -205,33 +219,37 @@ private static final Logger LOGGER = LoggerFactory.getLogger(BugManageServiceImp
             		
             	}
             	
-	            bugManageMapper.updateByPrimaryKeySelective(bugManage);
+               selectStatus(bugManage,"1","编辑");
+	           bugManageMapper.updateByPrimaryKeySelective(bugManage);
 	            result.setResult("修改bug成功!");
 	        } catch (Exception e) {
+	        	e.printStackTrace();
 	            LOGGER.error(e.getMessage());
 	            throw new RuntimeException(e);
 	        }
 	        return result;
 	}
 
+	
+
 	/**
 	 * 撤销bug
 	 */
 	@Transactional
-	public ExecuteResult<String> updateBugStatusRevoke(Long id) {
+	public ExecuteResult<String> updateBugStatusRevoke(BugManage bugManage) {
 		ExecuteResult<String> result = new ExecuteResult<String>();
 		 try {
 			 	//判断传入的bug对象是否为空
-	            if (id==null) {
+	            if (bugManage==null||bugManage.getId()==null) {
 	                result.addErrorMessage("传入bugId错误");
 	                return result;
 	            }
-	            BugManage bugManage = bugManageMapper.selectByPrimaryKey(id);
 	            //更新时间
 	            bugManage.setModifyTime(DateUtils.format(new Date(),DateUtils.DATE_TIME_PATTERN));
 	            //更新人*
 	            bugManage.setModifyUserId("1");
-	            bugManageMapper.updateBugStatusRevoke(id);
+	            selectStatus(bugManage,"1","编辑");
+	            bugManageMapper.updateBugStatusRevoke(bugManage);
 	            result.setResult("撤销bug成功!");
 	        } catch (Exception e) {
 	            LOGGER.error(e.getMessage());
@@ -256,6 +274,11 @@ private static final Logger LOGGER = LoggerFactory.getLogger(BugManageServiceImp
 	            bugManage.setModifyTime(DateUtils.format(new Date(),DateUtils.DATE_TIME_PATTERN));
 	            //更新人*
 	            bugManage.setModifyUserId("1");
+	            //关闭时间
+	            bugManage.setCloseTime(DateUtils.format(new Date(),DateUtils.DATE_TIME_PATTERN));
+	            //关闭人*
+	            bugManage.setCloseId("1");
+	            selectStatus(bugManage,"1","编辑");
 	            bugManageMapper.updateBugStatusClose(bugManage);
 	            result.setResult("关闭bug成功!");
 	        } catch (Exception e) {
@@ -281,6 +304,7 @@ private static final Logger LOGGER = LoggerFactory.getLogger(BugManageServiceImp
 	            bugManage.setModifyTime(DateUtils.format(new Date(),DateUtils.DATE_TIME_PATTERN));
 	            //更新人*
 	            bugManage.setModifyUserId("1");
+	            selectStatus(bugManage,"1","编辑");
 	            bugManageMapper.updateBugStatusYes(bugManage);
 	            result.setResult("确认bug成功!");
 	        } catch (Exception e) {
@@ -306,6 +330,7 @@ private static final Logger LOGGER = LoggerFactory.getLogger(BugManageServiceImp
 	            bugManage.setModifyTime(DateUtils.format(new Date(),DateUtils.DATE_TIME_PATTERN));
 	            //更新人*
 	            bugManage.setModifyUserId("1");
+	            selectStatus(bugManage,"1","编辑");
 	            bugManageMapper.updateBugAssign(bugManage);
 	            result.setResult("指派bug成功!");
 	        } catch (Exception e) {
@@ -331,21 +356,206 @@ private static final Logger LOGGER = LoggerFactory.getLogger(BugManageServiceImp
             bugManage.setModifyTime(DateUtils.format(new Date(),DateUtils.DATE_TIME_PATTERN));
             //更新人*
             bugManage.setModifyUserId("1");
+            //解决人
+            bugManage.setSolveId("1");
 			//如果没有填写解决日期 默认添加为当前时间
 			if(StringUtils.isEmpty(bugManage.getSolveTime())){
 				bugManage.setSolveTime(DateUtils.format(new Date(),DateUtils.DATE_TIME_PATTERN));
 			}
 			//解决者*
 			bugManage.setSolveId("1");
+			selectStatus(bugManage,"1","编辑");
 			bugManageMapper.updateBugSolve(bugManage);
-			result.setResult("指派bug成功!");
+			result.setResult("解决bug成功!");
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
 			throw new RuntimeException(e);
 		}
 		return result;
 	}
+
+	@Override
+	public ExecuteResult<PageInfo> selectCondition(Map<String, Object> map) {
+		
+		  ExecuteResult<PageInfo> result = new ExecuteResult<PageInfo>();
+			 try {
+				 PageBean pageBean = (PageBean) map.get("pageBean");
+				 	//判断传入的bug对象是否为空
+		            if (pageBean == null) {
+		                result.setResultMessage("传入实体有误!");
+		                return result;
+		            }
+		            PageHelper.startPage(pageBean.getCurrentPage(), pageBean.getPageSize());
+		            List<SelectBugManage> docs = bugManageMapper.selectCondition(map);
+		            PageInfo<SelectBugManage> pageInfo = new PageInfo<SelectBugManage>(docs);
+		            //result.setResult("用例查询成功!");
+		            result.setResult(pageInfo);
+		        } catch (Exception e) {
+		            LOGGER.error(e.getMessage());
+		            throw new RuntimeException(e);
+		        }
+		        return result;
+	}
 	
+	private String getStatus(BugManage bug) {
+		String bugStatus=bug.getBugStatus();
+		if("0".equals(bugStatus)){
+			return "未确认"; 
+		}
+		if("1".equals(bugStatus)){
+			return "已确认"; 
+		}
+		if("2".equals(bugStatus)){
+			return "已解决"; 
+		}
+		if("3".equals(bugStatus)){
+			return "已关闭"; 
+		}
+		if("4".equals(bugStatus)){
+			return "已撤销"; 
+		}
+		return null;
+	}
 	
+	public void selectStatus(BugManage bugManage,String userId,String operation){
+		 StringBuilder operationRecord=new StringBuilder();
+		 BugHistory bugHistory=new BugHistory();
+         BugManage bug = bugManageMapper.selectByPrimaryKey(bugManage.getId());
+         if(!"添加".equals(operation)){
+        	  if(bugManage.getBugTitle()!=null){
+               	if(bug.getBugTitle()!=bugManage.getBugTitle()){
+               		operationRecord.append("修改了 bug标题 ,旧值为'"+bug.getBugTitle()+"' , 新值为'"+bugManage.getBugTitle()+"'。");
+               	}
+               }
+               if(bugManage.getStepsReproduce()!=null){
+               	if(bug.getStepsReproduce()!=bugManage.getStepsReproduce()){
+               		operationRecord.append("修改了 重现步骤 ,旧值为'"+bug.getStepsReproduce()+"' , 新值为'"+bugManage.getStepsReproduce()+"'。");
+               	}
+               }
+               if(bugManage.getBugDescribe()!=null){
+               	if(bug.getBugDescribe()!=bugManage.getBugDescribe()){
+               		operationRecord.append("修改了 备注 ,旧值为'"+bug.getBugDescribe()+"' , 新值为'"+bugManage.getBugDescribe()+"'。");
+               	}
+               }
+               if(bugManage.getDesignatedId()!=null){
+               	if(bug.getDesignatedId()!=bugManage.getDesignatedId()){
+               		String username = userMapper.selectUserById(bug.getDesignatedId()).getUsername();
+               		String newusername = userMapper.selectUserById(bug.getDesignatedId()).getUsername();
+               		operationRecord.append("修改了 指派人 ,旧值为'"+username+"' , 新值为'"+newusername+"'。");
+               	}
+               }
+               if(bugManage.getVersionId()!=null){
+               	if(bug.getVersionId()!=bugManage.getVersionId()){
+               		operationRecord.append("修改了 版本 ,旧值为'"+bug.getVersionId()+"' , 新值为'"+bugManage.getVersionId()+"'。");
+               	}
+               }
+               if(bugManage.getBugType()!=null){
+               	if(bug.getBugType()!=bugManage.getBugType()){
+               		operationRecord.append("修改了 bug类型 ,旧值为'"+bug.getBugType()+"' , 新值为'"+bugManage.getBugType()+"'。");
+               	}
+               }
+               if(bugManage.getSeriousDegree()!=null){
+               	if(bug.getSeriousDegree()!=bugManage.getSeriousDegree()){
+               		operationRecord.append("修改了 bug严重程度 ,旧值为'"+bug.getSeriousDegree()+"' , 新值为'"+bugManage.getSeriousDegree()+"'。");
+               	}
+               	
+               }
+               if(bugManage.getBugLevel()!=null){
+               	if(!bugManage.getBugLevel().equals(bug.getBugLevel())){
+               		operationRecord.append("修改了 bug优先级  ,旧值为'"+bug.getBugLevel()+"' , 新值为'"+bugManage.getBugLevel()+"'。");
+               	}
+               }
+               if(bugManage.getBugStatus()!=null){
+               	if(!bugManage.getBugStatus().equals(bug.getBugStatus())){
+               		String status=getStatus(bug);
+               		String newStatus=getStatus(bugManage);
+               		operationRecord.append("修改了 bug状态 ,旧值为'"+status+"' , 新值为'"+newStatus+"'。");
+               	}
+               }
+               if(bugManage.getEndTime()!=null){
+               	if(bug.getEndTime()!=bugManage.getEndTime()){
+               		operationRecord.append("修改了 截止日期  ,旧值为'"+bug.getEndTime()+"' , 新值为'"+bugManage.getEndTime()+"'。");
+               	}
+               }
+               if(bugManage.getCaseEnvironment()!=null){
+               	if(bug.getCaseEnvironment()!=bugManage.getCaseEnvironment()){
+               		operationRecord.append("修改了 测试环境  ,旧值为'"+bug.getCaseEnvironment()+"' , 新值为'"+bugManage.getCaseEnvironment()+"'。");
+               	}
+               }
+               if(bugManage.getCaseTerminal()!=null){
+               	if(bug.getCaseTerminal()!=bugManage.getCaseTerminal()){
+               		operationRecord.append("修改了 测试终端  ,旧值为'"+bug.getCaseTerminal()+"' , 新值为'"+bugManage.getCaseTerminal()+"'。");
+               	}
+               }
+               if(bugManage.getProjectId()!=null){
+               	if(bug.getProjectId()!=bugManage.getProjectId()){
+               		operationRecord.append("修改了 所属项目 ,旧值为'"+bug.getProjectId()+"' , 新值为'"+bugManage.getProjectId()+"'。");
+               	}
+               }
+               if(bugManage.getDemandId()!=null){
+               	if(bug.getDemandId()!=bugManage.getDemandId()){
+               		operationRecord.append("修改了 相关需求 ,旧值为'"+bug.getDemandId()+"' , 新值为'"+bugManage.getDemandId()+"'。");
+               	}
+               }
+               if(bugManage.getTaskId()!=null){
+               	if(bug.getTaskId()!=bugManage.getTaskId()){
+               		operationRecord.append("修改了 相关任务 ,旧值为'"+bug.getTaskId()+"' , 新值为'"+bugManage.getTaskId()+"'。");
+               	}
+               }
+               if(bugManage.getCaseId()!=null){
+               	if(bug.getCaseId()!=bugManage.getCaseId()){
+               		operationRecord.append("修改了 相关用例 ,旧值为'"+bug.getCaseId()+"' , 新值为'"+bugManage.getCaseId()+"'。");
+               	}
+               }
+               if(bugManage.getSolveId()!=null){
+               	if(bug.getSolveId()!=bugManage.getSolveId()){
+               		String username = userMapper.selectUserById(bug.getSolveId()).getUsername();
+               		String newusername = userMapper.selectUserById(bug.getSolveId()).getUsername();
+               		operationRecord.append("修改了 解决者 ,旧值为'"+username+"' , 新值为'"+newusername+"'。");
+               	}
+               }
+               if(bugManage.getSolveProgram()!=null){
+               	if(bug.getSolveProgram()!=bugManage.getSolveProgram()){
+               		operationRecord.append("修改了 解决方案 ,旧值为'"+bug.getSolveProgram()+"' , 新值为'"+bugManage.getSolveProgram()+"'。");
+               	}
+               }
+               if(bugManage.getCloseId()!=null){
+               	if(bug.getCloseId()!=bugManage.getCloseId()){
+               		String username = userMapper.selectUserById(bug.getCloseId()).getUsername();
+               		String newusername = userMapper.selectUserById(bug.getCloseId()).getUsername();
+               		operationRecord.append("修改了 关闭人 ,旧值为'"+username+"' , 新值为'"+newusername+"'。");
+               	}
+               	
+               }
+               if(bugManage.getCloseTime()!=null){
+               	if(bug.getCloseTime()!=bugManage.getCloseTime()){
+               		operationRecord.append("修改了关闭日期,旧值为'"+bug.getCloseTime()+"' , 新值为'"+bugManage.getCloseTime()+"'。");
+               	}
+               	
+               }
+               //历史详情
+               String or=operationRecord.toString();
+               //历史详情
+               bugHistory.setOperationRecord(or);
+         }
+       
+         BugHistory history = bugHistoryMapper.getBugHistoryByBugId(bugManage.getId());
+         //编号
+         if(history==null||StringUtils.isEmpty(history.getNum())){
+         	bugHistory.setNum("1");
+         }else{
+         	bugHistory.setNum((Integer.parseInt(history.getNum())+1)+"");
+         }
+        
+        //关联bugId 
+        bugHistory.setBugId(bugManage.getId());
+        //操作时间
+        bugHistory.setOperationTime(DateUtils.format(new Date(),DateUtils.DATE_TIME_PATTERN));
+        //操作人*
+        bugHistory.setOperationId(userId);
+        //操作功能
+        bugHistory.setOperationFunction(operation);
+        bugHistoryMapper.insertSelective(bugHistory);
+	}
 
 }
