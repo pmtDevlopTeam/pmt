@@ -3,7 +3,7 @@ package com.camelot.pmt.task.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.camelot.pmt.platform.common.APIStatus;
 import com.camelot.pmt.platform.common.ApiResponse;
-import com.camelot.pmt.platform.utils.ExecuteResult;
+import com.camelot.pmt.platform.common.ExecuteResult;
 import com.camelot.pmt.task.model.TaskManager;
 import com.camelot.pmt.task.service.TaskManagerService;
 import io.swagger.annotations.Api;
