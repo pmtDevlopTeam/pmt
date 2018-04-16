@@ -22,7 +22,7 @@ import com.camelot.pmt.testmanage.casemanage.model.UseCase;
 import com.camelot.pmt.testmanage.casemanage.service.UseCaseService;
 import com.camelot.pmt.testmanage.casemanage.util.ActionBean;
 import com.github.pagehelper.PageInfo;
-
+import com.baomidou.mybatisplus.toolkit.StringUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -52,7 +52,7 @@ public class UseCaseController {
 				 map.put("projectId", projectId);
 				 
 			 }
-			 if(caseTitle!=null){
+			 if(!StringUtils.isEmpty(caseTitle)){
 				 map.put("caseTitle", caseTitle);
 				 
 			 }
