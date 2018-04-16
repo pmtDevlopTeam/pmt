@@ -115,7 +115,13 @@ public class UseCaseServiceImpl implements UseCaseService{
 		List<UseCaseProcedure> list = useCase.getProcedure();
 		for (UseCaseProcedure useCaseProcedure : list) {
 			//批量修改
-			useCaseProcedureMapper.updateByPrimaryKeySelective(useCaseProcedure);
+			if(useCaseProcedure==null){
+				//为空为添加
+				useCaseProcedureMapper.insertSelective(useCaseProcedure);
+			}else{
+				//为空为修改
+				useCaseProcedureMapper.updateByPrimaryKeySelective(useCaseProcedure);
+			}
 		}
 	}
 
