@@ -10,6 +10,8 @@ import java.util.Date;
 import java.util.List;
 
 public class Task implements Serializable{
+	
+	private static final long serialVersionUID = 1L;
 	/**
 	 * 任务ID（主键）
 	 */
