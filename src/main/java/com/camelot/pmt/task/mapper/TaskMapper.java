@@ -282,4 +282,18 @@ public interface TaskMapper {
      * @throws
      */
     int queryOverdueTaskUserId(String userId);
+    /**
+     * 根据任务Id修改状态
+    * @Title: updateTaskOverdueStatus
+    * @Description: TODO
+    * @param @param taskId
+    * @param @return
+    * @return int 
+    * @throws
+     */
+	int updateTaskOverdueStatus(String taskId);
+
+	
+
+	
 }

@@ -53,6 +53,16 @@ public interface TaskOverdueService {
 	* @throws
 	 */
 	ExecuteResult<Integer> queryOverdueTaskUserId(String userId);
+	/**
+	 * 根据任务id修改状态(延期-进行中)
+	* @Title: updateTaskOverdueStatus
+	* @Description: TODO
+	* @param @param taskId
+	* @param @return
+	* @return ExecuteResult<String> 
+	* @throws
+	 */
+	ExecuteResult<String> updateTaskOverdueStatus(String taskId);
     
     
    
