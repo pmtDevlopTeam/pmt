@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.camelot.pmt.task.mapper.TaskMapper">
+    <!--zlh-->
     <resultMap id="BaseResultMap" type="com.camelot.pmt.task.model.Task">
         <id column="id" property="id" jdbcType="BIGINT"/>
         <result column="task_num" property="taskNum" jdbcType="VARCHAR"/>
         <result column="task_name" property="taskName" jdbcType="VARCHAR"/>
         <result column="task_parent_id" property="taskParentId" jdbcType="BIGINT"/>
         <result column="project_id" property="projectId" jdbcType="BIGINT"/>
-        <result column="demand_id" property="demandId" jdbcType="BIGINT"/>
         <result column="priority" property="priority" jdbcType="CHAR"/>
         <result column="assign_time" property="assignTime" jdbcType="TIMESTAMP"/>
         <result column="estimate_start_time" property="estimateStartTime" jdbcType="TIMESTAMP"/>
@@ -28,6 +28,10 @@
         <result column="modify_user_id" property="modifyUserId" jdbcType="VARCHAR"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP"/>
+        <association property="project"  javaType="com.camelot.pmt.project.model.Project">
+            <result property="proId" column="pid"/>
+            <result property="proName" column="project_name"/>
+        </association>
         <association property="demand" javaType="com.camelot.pmt.project.model.Demand">
             <result property="id" column="did"/>
             <result property="demandDesc" column="demand_desc"/>
@@ -85,13 +89,28 @@
         delay_describe, estimate_hour, infact_hour, task_mileage, create_user_id, modify_user_id,
         create_time, modify_time
     </sql>
-    <sql id="Base_Column_List2">
-        id, task_num, task_name, task_parent_id, project_id, demand_id, priority, assign_user_id,
-        beassign_user_id, assign_time, estimate_start_time, estimate_end_time, actual_start_time,
-        actual_end_time, task_type, task_speed, status, node_lv, task_describe, demand_change,
-        delay_describe, estimate_hour, infact_hour, task_mileage, create_user_id, modify_user_id,
-        create_time, modify_time,
+    <!--zlh-->
+    <sql id="TaskManager_Column_List" >
+        t.id, t.task_num, t.task_name, b.id AS bid, b.user_id, b.user_name, t.estimate_start_time, t.estimate_end_time,
+        t.actual_start_time, t.actual_end_time, t.task_speed, t.status,
+        t.task_type, t.task_mileage, t.priority, c.id AS cid, c.user_id, c.user_name,
+        a.id AS aid, a.user_id, a.user_name, t.assign_time
     </sql>
+    <!--zlh-->
+    <!--查询所有任务列表-->
+    <select id="queryAllTask" resultMap="TaskManagerResultMap">
+        select
+        <include refid="TaskManager_Column_List" />
+        from task t LEFT JOIN platform_user a
+        --     指派人user表 别名 a
+        ON t.assign_user_id = a.user_id
+        LEFT JOIN platform_user b
+        --     被指派人user表 别名 b
+        ON t.beassign_user_id = b.user_id
+        LEFT JOIN platform_user c
+        --     创建人user表 别名 c
+        on t.create_user_id = c.user_id
+    </select>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
         select
         <include refid="Base_Column_List"/>
