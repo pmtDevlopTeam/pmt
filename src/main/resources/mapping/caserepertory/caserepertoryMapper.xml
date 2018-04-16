@@ -146,4 +146,19 @@
       precondition = #{precondition,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  <select id="selectCondition" resultMap="BaseResultMap">
+		select id,case_title,case_type,description,apply_phase,precondition,num
+		from case_repertory
+		<where>
+			 <if test="caseType!=null and caseType!=''">
+				AND case_type=#{caseType}
+			  </if> 
+			 <if test="caseTitle!=null and caseTitle!=''">
+				AND case_title=#{caseTitle}
+			  </if> 
+			  <if test="applyPhase!=null and applyPhase!=''">
+			  AND apply_phase=#{applyPhase}
+			  </if> 
+		</where>
+	</select>
 </mapper>

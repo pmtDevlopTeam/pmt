@@ -37,16 +37,27 @@ public class CaseRepertoryController {
 	    @RequestMapping(value = "bug/selectCondition", method = RequestMethod.GET)
 	    @ApiImplicitParams({
 	            @ApiImplicitParam(name = "currentPage", value = "页码", required = true, paramType = "query", dataType = "int"),
-	            @ApiImplicitParam(name = "pageSize", value = "每页数量", required = true, paramType = "query", dataType = "int")
+	            @ApiImplicitParam(name = "pageSize", value = "每页数量", required = true, paramType = "query", dataType = "int"),
+	            @ApiImplicitParam(name = "caseType", value = "类型", required = true, paramType = "query", dataType = "String"),
+	            @ApiImplicitParam(name = "caseTitle", value = "名称", required = true, paramType = "query", dataType = "String"),
+	            @ApiImplicitParam(name = "applyPhase", value = "试用阶段", required = true, paramType = "query", dataType = "String")
 	    })
-	    public JSONObject queryCaseRepertoryByPage(Integer currentPage,Integer pageSize) {
+	    public JSONObject queryCaseRepertoryByPage(Integer currentPage,Integer pageSize,String caseType,String caseTitle,String applyPhase) {
 			 PageBean  pageBean=	new  PageBean();
 			 pageBean.setCurrentPage(currentPage);
 			 pageBean.setPageSize(pageSize);
 			 Map<String,Object> map=new HashMap<String,Object>();
 			 map.put("pageBean", pageBean);
-			 //用户id
-			
+			 if(caseType!=null){
+				 map.put("caseType",caseType);
+			 }
+			 if(caseTitle!=null){
+				 map.put("caseTitle",caseTitle);
+			 }
+			 if(caseType!=null){
+				 map.put("applyPhase",applyPhase);
+			 }
+			 
 			 
 			 ExecuteResult<PageInfo> result = new ExecuteResult<PageInfo>();
 		        try {
