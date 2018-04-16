@@ -9,7 +9,7 @@ import com.camelot.pmt.platform.model.DictItem;
 
 /**
  * <p>
- *  Mapper 接口
+ *  字典Mapper类
  * </p>
  *
  * @author sqw
@@ -17,59 +17,66 @@ import com.camelot.pmt.platform.model.DictItem;
  */
 @Mapper
 public interface DictMapper {
+	
 	/**
-	 * 增加一个字典
-	 * @param Dict
+	 * 根据一个字典 增加一个字典
+	 * 
+	 * @param Dict dict
 	 * @return 
 	 */
 	void createDict(Dict dict);
 	/**
-	 * 根据字典id 删除一个字典
-	 * @param dictId
+	 * 根据字典dictId 删除一个字典
+	 * 
+	 * @param String dictId
 	 * @return
 	 */
 	void deleteDictByDictId(String dictId);
     /**
-	 * 根据字典类型id 删除字典项
+	 * 根据字典dictId 删除字典项
+	 * 
 	 * @param dictId
 	 * @return
 	 */
 	void deleteDictItemByDictId(String dictId);
 	/**
-	 * 根据字典id 修改一个字典
-	 * @param Dict
-	 * @return
+	 * 根据字典dictId 修改一个字典
+	 * @param Dict dict
+	 * @return 
 	 */
 	void modifyDictByDictId(Dict dict);
     /**
-     * 根据字典id 查询一个字典
-     * @param dictId
-     * @return
+     * 根据字典dictId 查询一个字典
+     * @param String dictId
+     * @return Dict
      */
     Dict queryDictByDictId(String dictId);
     /**
-     * 根据字典类型id 查询字典项
-     * @param dictItemId
-     * @return
-     */
-    List<DictItem> queryDictItemByDictId(String dictId);
-    /**
      * 查询全部字典
-     * @param dictId
-     * @return
+     * 
+     * @param 
+     * @return List<Dict>
      */
     List<Dict> queryAllDict();
     /**
-     *[检查字典编码]
-     * @return Dict
-     * @author
+     *查询字典总数量
+     *
+     * @return Long
      */
-    Dict findDictCode(String dictCode);
+    Long countDict();
     /**
-     *[检查字典名称]
+     * 检查字典编码是否存在
+     * 
+     * @param String dictCode
      * @return Dict
-     * @author
      */
-    Dict findDictName(String dictName);
+    Dict checkDictCodeIsExist(String dictCode);
+    /**
+     * 检查字典名称是否存在
+     * 
+     * @param String dictName
+     * @return Dict
+     */
+    Dict checkDictNameIsExist(String dictName);
 
 }

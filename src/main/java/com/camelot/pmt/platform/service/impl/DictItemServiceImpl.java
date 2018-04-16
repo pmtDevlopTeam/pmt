@@ -2,7 +2,6 @@ package com.camelot.pmt.platform.service.impl;
 
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,15 +10,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
-import com.alibaba.fastjson.JSONObject;
-import com.camelot.pmt.platform.common.ApiResponse;
 import com.camelot.pmt.platform.common.DataGrid;
 import com.camelot.pmt.platform.common.ExecuteResult;
 import com.camelot.pmt.platform.common.Pager;
 import com.camelot.pmt.platform.mapper.DictItemMapper;
-import com.camelot.pmt.platform.model.Dict;
 import com.camelot.pmt.platform.model.DictItem;
 import com.camelot.pmt.platform.service.DictItemService;
+import com.camelot.pmt.platform.util.UUIDUtil;
 
 @Service
 public class DictItemServiceImpl implements DictItemService {
@@ -27,7 +24,7 @@ public class DictItemServiceImpl implements DictItemService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(DictItemServiceImpl.class);
 
 	@Autowired
-	DictItemMapper dictItemMapper;
+	DictItemMapper dictItemMapper; 
 	
 	@Override
 	public ExecuteResult<DictItem> createDictItem(DictItem dictItem) {
@@ -37,13 +34,13 @@ public class DictItemServiceImpl implements DictItemService {
 				result.addErrorMessage("传入的字典项实体有误!");
 				return result;
 			}
-			String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+			String uuid = UUIDUtil.getUUID();
 			dictItem.setDictItemId(uuid);
 			dictItem.setCreateUserId("1");
             long date = new Date().getTime();
             dictItem.setCreateTime(new Date(date));
             //检查字典项编码与字典项名称是否唯一
-            result = findDictItemCodeOrDictItemName(dictItem.getDictItemCode(),dictItem.getDictItemName());
+            result = checkDictItemCodeOrDictItemNameIsExist(dictItem);
             if(result.getResultMessage()==null) {
             	return result;
             }
@@ -76,24 +73,6 @@ public class DictItemServiceImpl implements DictItemService {
 	}
 
 	@Override
-	public ExecuteResult<String> deleteDictItemByDictId(String dictId) {
-		ExecuteResult<String> result = new ExecuteResult<String>();
-    	try {
-			if(StringUtils.isEmpty(dictId)){
-				result.addErrorMessage("传入参数有误!");
-				return result;
-			}
-    		dictItemMapper.deleteDictItemByDictId(dictId);
-    		result.setResult("通过字典类型id删除字典项成功！");
-    	} catch (Exception e) {
-    		LOGGER.error(e.getMessage());
-			throw new RuntimeException(e);
-		}
-		return result;
-
-	}
-
-	@Override
 	public ExecuteResult<DictItem> modifyDictItemByDictItemId(DictItem dictItem) {
 		ExecuteResult<DictItem> result = new ExecuteResult<DictItem>();
 	       try {
@@ -105,7 +84,7 @@ public class DictItemServiceImpl implements DictItemService {
 	            dictItem.setModifyTime(new Date(date));
 	            dictItem.setModifyUserId("2");
 	            //检查字典项编码与字典项名称是否唯一
-	            result = findDictItemCodeOrDictItemNameUpdate(dictItem);
+	            result = checkDictItemCodeOrDictItemNameIsExistUpdate(dictItem);
 	            if(result.getResultMessage()==null) {
 	            	return result;
 	            }
@@ -155,11 +134,11 @@ public class DictItemServiceImpl implements DictItemService {
 	}
 
 	@Override
-	public ExecuteResult<List<DictItem>> queryDictItemByDictId(String dictId) {
+	public ExecuteResult<List<DictItem>> queryListDictItemByDictId(String dictId) {
 		ExecuteResult<List<DictItem>> result = new ExecuteResult<List<DictItem>>();
 		try {
 			if(!StringUtils.isEmpty(dictId)) {
-				List<DictItem> dictItem = dictItemMapper.queryDictItemByDictId(dictId);
+				List<DictItem> dictItem = dictItemMapper.queryListDictItemByDictId(dictId);
 				result.setResult(dictItem);
 				return result;
 			}
@@ -191,14 +170,14 @@ public class DictItemServiceImpl implements DictItemService {
 	}
 
 	@Override
-	public ExecuteResult<DataGrid<DictItem>> queryDictItemByDictIdPage(String dictId, Pager page) {
+	public ExecuteResult<DataGrid<DictItem>> queryListDictItemByDictIdPage(String dictId, Pager page) {
 		ExecuteResult<DataGrid<DictItem>> result = new ExecuteResult<DataGrid<DictItem>>();
 		try{
 			if(StringUtils.isEmpty(dictId) ) {
 				result.addErrorMessage("传入的参数有误!");
 				return result;
 			}
-            List<DictItem> list = dictItemMapper.queryDictItemByDictIdPage(dictId, page);
+            List<DictItem> list = dictItemMapper.queryListDictItemByDictIdPage(dictId, page);
             //如果没有查询到数据，不继续进行
             if (CollectionUtils.isEmpty(list)) {
             	DataGrid<DictItem> dg = new DataGrid<DictItem>();
@@ -208,7 +187,7 @@ public class DictItemServiceImpl implements DictItemService {
             DataGrid<DictItem> dg = new DataGrid<DictItem>();
             dg.setRows(list);
             //查询总条数
-            Long total = dictItemMapper.queryCountByDictId(dictId);
+            Long total = dictItemMapper.countDictItemByDictId(dictId);
             dg.setTotal(total);				
             result.setResult(dg);
 		}catch(Exception e){
@@ -236,7 +215,7 @@ public class DictItemServiceImpl implements DictItemService {
             DataGrid<DictItem> dg = new DataGrid<DictItem>();
             dg.setRows(list);
             //查询总条数
-            Long total = dictItemMapper.queryCount();
+            Long total = dictItemMapper.countDictItem();
             dg.setTotal(total);				
             result.setResult(dg);
 		}catch(Exception e){
@@ -246,13 +225,13 @@ public class DictItemServiceImpl implements DictItemService {
 		
 	}
 	
-	
-	public ExecuteResult<DictItem> findDictItemCodeOrDictItemName(String dictItemCode,String dictItemName) {
+	@Override
+	public ExecuteResult<DictItem> checkDictItemCodeOrDictItemNameIsExist(DictItem dictItem) {
 		ExecuteResult<DictItem> result = new ExecuteResult<DictItem>();
-    	if (!StringUtils.isEmpty(dictItemCode) && !StringUtils.isEmpty(dictItemName) ){
+    	if (!StringUtils.isEmpty(dictItem.getDictItemCode()) && !StringUtils.isEmpty(dictItem.getDictItemName()) ){
     		//2.检查字典项是否存在
-    		DictItem dictItemc = dictItemMapper.findDictItemCode(dictItemCode);
-    		DictItem dictItemn = dictItemMapper.findDictItemName(dictItemName);
+    		DictItem dictItemc = dictItemMapper.checkDictItemCodeIsExist(dictItem.getDictItemCode());
+    		DictItem dictItemn = dictItemMapper.checkDictItemNameIsExist(dictItem.getDictItemName());
     		if(dictItemc == null && dictItemn == null) {
     			result.setResultMessage("字典项编码,字典项名称不重复!");
 				return result;
@@ -275,13 +254,13 @@ public class DictItemServiceImpl implements DictItemService {
 	}
 
 	
-	public ExecuteResult<DictItem> findDictItemCodeOrDictItemNameUpdate(DictItem dictItem) {
+	public ExecuteResult<DictItem> checkDictItemCodeOrDictItemNameIsExistUpdate(DictItem dictItem) {
 		ExecuteResult<DictItem> result = new ExecuteResult<DictItem>();
 		//1.检查字典项编码与字典项名称是否存在
 		if (!StringUtils.isEmpty(dictItem.getDictItemCode()) && !StringUtils.isEmpty(dictItem.getDictItemName()) ){
     		//2.检查字典项是否存在
-    		DictItem dictItemc = dictItemMapper.findDictItemCode(dictItem.getDictItemCode());
-    		DictItem dictItemn = dictItemMapper.findDictItemName(dictItem.getDictItemName());
+    		DictItem dictItemc = dictItemMapper.checkDictItemCodeIsExist(dictItem.getDictItemCode());
+    		DictItem dictItemn = dictItemMapper.checkDictItemNameIsExist(dictItem.getDictItemName());
     		if(dictItemc == null && dictItemn == null) {
     			result.setResultMessage("字典项编码,字典项名称不重复!");
 				return result;

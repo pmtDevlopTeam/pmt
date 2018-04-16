@@ -2,7 +2,6 @@ package com.camelot.pmt.platform.service.impl;
 
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,14 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import com.alibaba.fastjson.JSONObject;
-import com.camelot.pmt.platform.common.APIStatus;
-import com.camelot.pmt.platform.common.ApiResponse;
 import com.camelot.pmt.platform.common.ExecuteResult;
 import com.camelot.pmt.platform.mapper.DictMapper;
 import com.camelot.pmt.platform.model.Dict;
-import com.camelot.pmt.platform.model.DictItem;
 import com.camelot.pmt.platform.service.DictService;
+import com.camelot.pmt.platform.util.UUIDUtil;
 
 @Service
 public class DictServiceImpl implements DictService {
@@ -25,7 +21,7 @@ public class DictServiceImpl implements DictService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(DictServiceImpl.class);
 
 	@Autowired
-	DictMapper dictMapper;
+	DictMapper dictMapper; 
 
 	@Override
 	public ExecuteResult<Dict> createDict(Dict dict) {
@@ -35,13 +31,13 @@ public class DictServiceImpl implements DictService {
 				result.addErrorMessage("传入的字典实体有误!");
 				return result;
 			}
-			String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+			String uuid = UUIDUtil.getUUID();
 			dict.setDictId(uuid);
 			dict.setCreateUserId("1");
             long date = new Date().getTime();
             dict.setCreateTime(new Date(date));
             //检查字典编码与字典名称是否唯一
-            result = findDictCodeOrDictName(dict.getDictCode(),dict.getDictName());
+            result = checkDictCodeOrDictNameIsExist(dict);
             if(result.getResultMessage()==null) {
             	return result;
             }
@@ -72,7 +68,7 @@ public class DictServiceImpl implements DictService {
 		}
 		return result;
 
-		}
+	}
 		
 
 	@Override
@@ -87,7 +83,7 @@ public class DictServiceImpl implements DictService {
 	            dict.setModifyTime(new Date(date));
 	            dict.setModifyUserId("2");
 	            //检查字典编码与字典名称是否唯一
-	            result = findDictCodeOrDictNameUpdate(dict);
+	            result = checkDictCodeOrDictNameIsExistUpdate(dict);
 	            if(result.getResultMessage()==null) {
 	            	return result;
 	            }
@@ -136,48 +132,50 @@ public class DictServiceImpl implements DictService {
 		
 	}
 
-	@Override
-	public ExecuteResult<Dict> findDictCode(String dictCode) {
-		ExecuteResult<Dict> result = new ExecuteResult<Dict>();
-    	if (!StringUtils.isEmpty(dictCode) ){
-    		//1.获取用户输入的字典编码
-    		String dictCodes = dictCode;
-    		//2.根据字典编码去库中获取字典信息,检查字典名称是否存在
-    		Dict dicts = dictMapper.findDictCode(dictCodes);
-    		if(dicts == null) {
-    			result.setResultMessage("该字典编码不存在！");
-				return result;
-    		}
-    		result.setResult(dicts);
-    		result.setResultMessage("该字典编码存在！");
-        }
-		return result;
-	}
+//	@Override
+//	public ExecuteResult<Dict> checkDictCodeIsExist(String dictCode) {
+//		ExecuteResult<Dict> result = new ExecuteResult<Dict>();
+//    	if (!StringUtils.isEmpty(dictCode) ){
+//    		//1.获取用户输入的字典编码
+//    		String dictCodes = dictCode;
+//    		//2.根据字典编码去库中获取字典信息,检查字典名称是否存在
+//    		Dict dicts = dictMapper.checkDictCodeIsExist(dictCodes);
+//    		if(dicts == null) {
+//    			result.setResultMessage("该字典编码不存在！");
+//				return result;
+//    		}
+//    		result.setResult(dicts);
+//    		result.setResultMessage("该字典编码存在！");
+//        }
+//		return result;
+//	}
 
+//	@Override
+//	public ExecuteResult<Dict> checkDictNameIsExist(String dictName) {
+//		ExecuteResult<Dict> result = new ExecuteResult<Dict>();
+//    	if (!StringUtils.isEmpty(dictName) ){
+//    		//1.获取用户输入的字典编码
+//    		String dictNames = dictName;
+//    		//2.根据字典编码去库中获取字典信息,检查字典名称是否存在
+//    		Dict dicts = dictMapper.checkDictNameIsExist(dictNames);
+//    		if(dicts == null) {
+//    			result.setResultMessage("该字典名称不存在！");
+//				return result;
+//    		}
+//    		result.setResult(dicts);
+//    		result.setResultMessage("该字典名称存在！");
+//        }
+//		return result;
+//	}
+	
 	@Override
-	public ExecuteResult<Dict> findDictName(String dictName) {
+	public ExecuteResult<Dict> checkDictCodeOrDictNameIsExist(Dict dict) {
 		ExecuteResult<Dict> result = new ExecuteResult<Dict>();
-    	if (!StringUtils.isEmpty(dictName) ){
-    		//1.获取用户输入的字典编码
-    		String dictNames = dictName;
-    		//2.根据字典编码去库中获取字典信息,检查字典名称是否存在
-    		Dict dicts = dictMapper.findDictName(dictNames);
-    		if(dicts == null) {
-    			result.setResultMessage("该字典名称不存在！");
-				return result;
-    		}
-    		result.setResult(dicts);
-    		result.setResultMessage("该字典名称存在！");
-        }
-		return result;
-	}
-
-	public ExecuteResult<Dict> findDictCodeOrDictName(String dictCode,String dictName) {
-		ExecuteResult<Dict> result = new ExecuteResult<Dict>();
-    	if (!StringUtils.isEmpty(dictName) && !StringUtils.isEmpty(dictCode) ){
+		//1.检查字典编码与字典名称是否为null
+    	if (!StringUtils.isEmpty(dict.getDictCode()) && !StringUtils.isEmpty(dict.getDictName()) ){
     		//2.检查字典是否存在
-    		Dict dictc = dictMapper.findDictCode(dictCode);
-    		Dict dictn = dictMapper.findDictName(dictName);
+    		Dict dictc = dictMapper.checkDictCodeIsExist(dict.getDictCode());
+    		Dict dictn = dictMapper.checkDictNameIsExist(dict.getDictName());
     		if(dictc == null && dictn == null) {
     			result.setResultMessage("字典编码,字典名称不重复!");
 				return result;
@@ -199,13 +197,14 @@ public class DictServiceImpl implements DictService {
 		return result;
 	}
 	
-	public ExecuteResult<Dict> findDictCodeOrDictNameUpdate(Dict dict) {
+	
+	public ExecuteResult<Dict> checkDictCodeOrDictNameIsExistUpdate(Dict dict) {
 		ExecuteResult<Dict> result = new ExecuteResult<Dict>();
 		//1.检查字典编码与字典名称是否存在
 		if (!StringUtils.isEmpty(dict.getDictCode()) && !StringUtils.isEmpty(dict.getDictName()) ){
     		//2.检查字典是否存在
-    		Dict dictc = dictMapper.findDictCode(dict.getDictCode());
-    		Dict dictn = dictMapper.findDictName(dict.getDictName());
+    		Dict dictc = dictMapper.checkDictCodeIsExist(dict.getDictCode());
+    		Dict dictn = dictMapper.checkDictNameIsExist(dict.getDictName());
     		if(dictc == null && dictn == null) {
     			result.setResultMessage("字典编码,字典名称不重复!");
 				return result;
