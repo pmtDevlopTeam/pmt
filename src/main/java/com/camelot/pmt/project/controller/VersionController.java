@@ -37,6 +37,8 @@ public class VersionController {
       */
     @ApiOperation(value = "添加版本", notes = "添加版本")
     @ApiImplicitParams({
+            @ApiImplicitParam(name = "projectId", value = "项目id", required = true, paramType = "form", dataType = "Long"),
+            @ApiImplicitParam(name = "userId", value = "用户id", required = true, paramType = "form", dataType = "String"),
             @ApiImplicitParam(name = "versionName", value = "版本名称", required = true, paramType = "form", dataType = "String"),
             @ApiImplicitParam(name = "versionType", value = "版本类型", required = true, paramType = "form", dataType = "String"),
             @ApiImplicitParam(name = "startTime", value = "开始时间", required = true, paramType = "form", dataType = "String"),
@@ -47,41 +49,33 @@ public class VersionController {
     public JSONObject insertVersonInfo(Long projectId,String userId,VersionVo versionVo){
         return versionService.insertVersonInfo(projectId,userId,versionVo);
     }
-
     /**
-      * @Description: 根据项目id查询versionList
-      * @param:
-      * @return:
-      * @author: xueyj
-      * @date: 2018/4/13 18:39
-      */
-    @ApiOperation(value = "查询版本列表信息", notes = "查询版本列表信息")
-    @RequestMapping(value = "/api/version/findVersionList", method = RequestMethod.GET)
-    public JSONObject queryVersonListByProId(Long projectId){
-        return versionService.getVersionListInfo(projectId);
+     * @Description: 根据id逻辑删除version信息
+     * @param:
+     * @return:
+     * @author: xueyj
+     * @date: 2018/4/13 19:22
+     */
+    @ApiOperation(value = "删除版本信息", notes = "删除版本信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userId", value = "用户id", required = true, paramType = "form", dataType = "String"),
+            @ApiImplicitParam(name = "versionId", value = "删除版本id", required = true, paramType = "form", dataType = "Long")
+    })
+    @RequestMapping(value = "/api/version/deleteVersionInfo", method = RequestMethod.POST)
+    public JSONObject deleteVersonById(String userId,Long versionId){
+        return versionService.deleteVersionInfoById(userId,versionId);
     }
     /**
-      * @Description:
-      * @param: 根据versionId查询version信息
-      * @return:
-      * @author: xueyj
-      * @date: 2018/4/13 18:55
-      */
-    @ApiOperation(value = "查询版本信息", notes = "查询版本信息")
-    @RequestMapping(value = "/api/version/findVersionList", method = RequestMethod.GET)
-    public JSONObject queryVersonById(Version version){
-        return versionService.getVersionInfoById(version.getId());
-    }
-    /**
-      * @Description: 根据id更新version
-      * @param:
-      * @return:
-      * @author: xueyj
-      * @date: 2018/4/13 18:58
-      */
+     * @Description: 根据id更新version
+     * @param:
+     * @return:
+     * @author: xueyj
+     * @date: 2018/4/13 18:58
+     */
     @ApiOperation(value = "修改版本信息", notes = "修改版本信息")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "projectId", value = "项目id", required = true, paramType = "form", dataType = "Long"),
+            @ApiImplicitParam(name = "userId", value = "用户id", required = true, paramType = "form", dataType = "String"),
             @ApiImplicitParam(name = "versionName", value = "版本名称", required = true, paramType = "form", dataType = "String"),
             @ApiImplicitParam(name = "versionType", value = "版本类型", required = true, paramType = "form", dataType = "String"),
             @ApiImplicitParam(name = "startTime", value = "开始时间", required = true, paramType = "form", dataType = "String"),
@@ -93,15 +87,27 @@ public class VersionController {
         return versionService.updateVersonInfo(projectId,userId,versionVo);
     }
     /**
-      * @Description: 根据id逻辑删除version信息
-      * @param: 
-      * @return: 
+      * @Description: 根据项目id查询versionList
+      * @param:
+      * @return:
       * @author: xueyj
-      * @date: 2018/4/13 19:22
+      * @date: 2018/4/13 18:39
       */
-    @ApiOperation(value = "删除版本信息", notes = "删除版本信息")
-    @RequestMapping(value = "/api/version/deleteVersionInfo", method = RequestMethod.POST)
-    public JSONObject deleteVersonById(String userId,Version version){
-        return versionService.deleteVersionInfoById(userId,version.getId());
+   /* @ApiOperation(value = "查询版本列表信息", notes = "查询版本列表信息")
+    @RequestMapping(value = "/api/version/findVersionList", method = RequestMethod.GET)
+    public JSONObject queryVersonListByProId(Long projectId){
+        return versionService.getVersionListInfo(projectId);
+    }*/
+    /**
+      * @Description:
+      * @param: 根据versionId查询version信息
+      * @return:
+      * @author: xueyj
+      * @date: 2018/4/13 18:55
+      */
+    @ApiOperation(value = "查询版本信息", notes = "查询版本信息")
+    @RequestMapping(value = "/api/version/findVersionList", method = RequestMethod.GET)
+    public JSONObject queryVersonById(Version version){
+        return versionService.getVersionInfoById(version.getId());
     }
 }
