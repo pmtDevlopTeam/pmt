@@ -1,10 +1,11 @@
 package com.camelot.pmt.task.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class Task {
+public class Task implements Serializable{
 	/**
 	 * 任务ID（主键）
 	 */
