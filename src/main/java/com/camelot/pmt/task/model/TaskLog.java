@@ -4,7 +4,9 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class TaskLog implements Serializable{
+
     private static final long serialVersionUID = 3340107132316964404L;
+
     private Long id;
 
     private Long taskId;
@@ -154,4 +156,40 @@ public class TaskLog implements Serializable{
     public void setColumn5(String column5) {
         this.column5 = column5 == null ? null : column5.trim();
     }
+
+	@Override
+	public String toString() {
+		return "TaskLog [id=" + id + ", taskId=" + taskId + ", userName=" + userName + ", operationTime="
+				+ operationTime + ", operationType=" + operationType + ", operationDescribe=" + operationDescribe
+				+ ", createUserId=" + createUserId + ", modifyUserId=" + modifyUserId + ", createTime=" + createTime
+				+ ", modifyTime=" + modifyTime + ", column1=" + column1 + ", column2=" + column2 + ", column3="
+				+ column3 + ", column4=" + column4 + ", column5=" + column5 + "]";
+	}
+	
+
+	public TaskLog() {
+		super();
+	}
+
+	public TaskLog(Long id, Long taskId, String userName, Date operationTime, String operationType,
+			String operationDescribe, String createUserId, String modifyUserId, Date createTime, Date modifyTime,
+			String column1, String column2, String column3, String column4, String column5) {
+		super();
+		this.id = id;
+		this.taskId = taskId;
+		this.userName = userName;
+		this.operationTime = operationTime;
+		this.operationType = operationType;
+		this.operationDescribe = operationDescribe;
+		this.createUserId = createUserId;
+		this.modifyUserId = modifyUserId;
+		this.createTime = createTime;
+		this.modifyTime = modifyTime;
+		this.column1 = column1;
+		this.column2 = column2;
+		this.column3 = column3;
+		this.column4 = column4;
+		this.column5 = column5;
+	}
+    
 }

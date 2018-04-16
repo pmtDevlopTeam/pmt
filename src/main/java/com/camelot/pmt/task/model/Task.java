@@ -1,11 +1,11 @@
 package com.camelot.pmt.task.model;
 
-import java.io.Serializable;
 import java.util.Date;
 
-public class Task implements Serializable{
-    private static final long serialVersionUID = -4807200873251253588L;
+public class Task {
     private Long id;
+
+    private String taskNum;
 
     private String taskName;
 
@@ -37,17 +37,17 @@ public class Task implements Serializable{
 
     private String status;
 
-    private String abnormalStatus;
+    private String nodeLv;
 
     private String taskDescribe;
 
-    private String abnormalDescribe;
+    private String demandChange;
 
-    private Integer estimateHour;
+    private String delayDescribe;
 
-    private Integer consumeHour;
+    private Long estimateHour;
 
-    private Integer remainHour;
+    private Long infactHour;
 
     private String taskMileage;
 
@@ -59,32 +59,20 @@ public class Task implements Serializable{
 
     private Date modifyTime;
 
-    private Integer warningHour;
-
-    private Integer warningStatus;
-
-    private String comment;
-
-    private String filepath;
-
-    private String filename;
-
-    private String column1;
-
-    private String column2;
-
-    private String column3;
-
-    private String column4;
-
-    private String column5;
-
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getTaskNum() {
+        return taskNum;
+    }
+
+    public void setTaskNum(String taskNum) {
+        this.taskNum = taskNum == null ? null : taskNum.trim();
     }
 
     public String getTaskName() {
@@ -207,12 +195,12 @@ public class Task implements Serializable{
         this.status = status == null ? null : status.trim();
     }
 
-    public String getAbnormalStatus() {
-        return abnormalStatus;
+    public String getNodeLv() {
+        return nodeLv;
     }
 
-    public void setAbnormalStatus(String abnormalStatus) {
-        this.abnormalStatus = abnormalStatus == null ? null : abnormalStatus.trim();
+    public void setNodeLv(String nodeLv) {
+        this.nodeLv = nodeLv == null ? null : nodeLv.trim();
     }
 
     public String getTaskDescribe() {
@@ -223,36 +211,36 @@ public class Task implements Serializable{
         this.taskDescribe = taskDescribe == null ? null : taskDescribe.trim();
     }
 
-    public String getAbnormalDescribe() {
-        return abnormalDescribe;
+    public String getDemandChange() {
+        return demandChange;
     }
 
-    public void setAbnormalDescribe(String abnormalDescribe) {
-        this.abnormalDescribe = abnormalDescribe == null ? null : abnormalDescribe.trim();
+    public void setDemandChange(String demandChange) {
+        this.demandChange = demandChange == null ? null : demandChange.trim();
     }
 
-    public Integer getEstimateHour() {
+    public String getDelayDescribe() {
+        return delayDescribe;
+    }
+
+    public void setDelayDescribe(String delayDescribe) {
+        this.delayDescribe = delayDescribe == null ? null : delayDescribe.trim();
+    }
+
+    public Long getEstimateHour() {
         return estimateHour;
     }
 
-    public void setEstimateHour(Integer estimateHour) {
+    public void setEstimateHour(Long estimateHour) {
         this.estimateHour = estimateHour;
     }
 
-    public Integer getConsumeHour() {
-        return consumeHour;
+    public Long getInfactHour() {
+        return infactHour;
     }
 
-    public void setConsumeHour(Integer consumeHour) {
-        this.consumeHour = consumeHour;
-    }
-
-    public Integer getRemainHour() {
-        return remainHour;
-    }
-
-    public void setRemainHour(Integer remainHour) {
-        this.remainHour = remainHour;
+    public void setInfactHour(Long infactHour) {
+        this.infactHour = infactHour;
     }
 
     public String getTaskMileage() {
@@ -293,85 +281,5 @@ public class Task implements Serializable{
 
     public void setModifyTime(Date modifyTime) {
         this.modifyTime = modifyTime;
-    }
-
-    public Integer getWarningHour() {
-        return warningHour;
-    }
-
-    public void setWarningHour(Integer warningHour) {
-        this.warningHour = warningHour;
-    }
-
-    public Integer getWarningStatus() {
-        return warningStatus;
-    }
-
-    public void setWarningStatus(Integer warningStatus) {
-        this.warningStatus = warningStatus;
-    }
-
-    public String getComment() {
-        return comment;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment == null ? null : comment.trim();
-    }
-
-    public String getFilepath() {
-        return filepath;
-    }
-
-    public void setFilepath(String filepath) {
-        this.filepath = filepath == null ? null : filepath.trim();
-    }
-
-    public String getFilename() {
-        return filename;
-    }
-
-    public void setFilename(String filename) {
-        this.filename = filename == null ? null : filename.trim();
-    }
-
-    public String getColumn1() {
-        return column1;
-    }
-
-    public void setColumn1(String column1) {
-        this.column1 = column1 == null ? null : column1.trim();
-    }
-
-    public String getColumn2() {
-        return column2;
-    }
-
-    public void setColumn2(String column2) {
-        this.column2 = column2 == null ? null : column2.trim();
-    }
-
-    public String getColumn3() {
-        return column3;
-    }
-
-    public void setColumn3(String column3) {
-        this.column3 = column3 == null ? null : column3.trim();
-    }
-
-    public String getColumn4() {
-        return column4;
-    }
-
-    public void setColumn4(String column4) {
-        this.column4 = column4 == null ? null : column4.trim();
-    }
-
-    public String getColumn5() {
-        return column5;
-    }
-
-    public void setColumn5(String column5) {
-        this.column5 = column5 == null ? null : column5.trim();
     }
 }
