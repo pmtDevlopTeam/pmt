@@ -24,7 +24,7 @@ public interface DictItemService {
 	 * @param DictItem dictItem
 	 * @return ExecuteResult<DictItem>
 	 */
-	ExecuteResult<DictItem> createDictItem(DictItem dictItem);
+	ExecuteResult<String> createDictItem(DictItem dictItem);
 	/**
 	 * 根据字典项dictItemId 删除一个字典项
 	 * 
@@ -38,7 +38,7 @@ public interface DictItemService {
 	 * @param DictItem dictItem
 	 * @return ExecuteResult<DictItem>
 	 */
-	ExecuteResult<DictItem> modifyDictItemByDictItemId(DictItem dictItem);
+	ExecuteResult<String> modifyDictItemByDictItemId(DictItem dictItem);
 	/**
 	 * 根据字典类型dictId 修改字典项
 	 * 
@@ -88,6 +88,6 @@ public interface DictItemService {
 	  * @param DictItem dictItem
 	  * @return ExecuteResult<DictItem>
 	  */
-	 ExecuteResult<DictItem> checkDictItemCodeOrDictItemNameIsExist(DictItem dictItem);
+	 ExecuteResult<String> checkDictItemCodeOrDictItemNameIsExist(DictItem dictItem);
 	
 }

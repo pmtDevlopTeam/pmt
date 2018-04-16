@@ -27,10 +27,11 @@ public class DictItemServiceImpl implements DictItemService {
 	DictItemMapper dictItemMapper; 
 	
 	@Override
-	public ExecuteResult<DictItem> createDictItem(DictItem dictItem) {
-		ExecuteResult<DictItem> result = new ExecuteResult<DictItem>();
+	public ExecuteResult<String> createDictItem(DictItem dictItem) {
+		ExecuteResult<String> result = new ExecuteResult<String>();
 		try{
 			if(dictItem == null){
+				result.setSuccess(false);
 				result.addErrorMessage("传入的字典项实体有误!");
 				return result;
 			}
@@ -45,7 +46,7 @@ public class DictItemServiceImpl implements DictItemService {
             	return result;
             }
 			dictItemMapper.createDictItem(dictItem);
-			result.setResultMessage("添加字典项成功!");
+			result.setResult("添加字典项成功!");
 		}catch(Exception e){
 			LOGGER.error(e.getMessage());
 			throw new RuntimeException(e);
@@ -59,6 +60,7 @@ public class DictItemServiceImpl implements DictItemService {
 		ExecuteResult<String> result = new ExecuteResult<String>();
     	try {
 			if(StringUtils.isEmpty(dictItemId)){
+				result.setSuccess(false);
 				result.addErrorMessage("传入参数有误!");
 				return result;
 			}
@@ -73,10 +75,11 @@ public class DictItemServiceImpl implements DictItemService {
 	}
 
 	@Override
-	public ExecuteResult<DictItem> modifyDictItemByDictItemId(DictItem dictItem) {
-		ExecuteResult<DictItem> result = new ExecuteResult<DictItem>();
+	public ExecuteResult<String> modifyDictItemByDictItemId(DictItem dictItem) {
+		ExecuteResult<String> result = new ExecuteResult<String>();
 	       try {
 				if(StringUtils.isEmpty(dictItem.getDictItemId()) ){
+					result.setSuccess(false);
 					result.addErrorMessage("传入的字典项实体有误!");
 					return result;
 				}
@@ -89,7 +92,7 @@ public class DictItemServiceImpl implements DictItemService {
 	            	return result;
 	            }
 	            dictItemMapper.modifyDictItemByDictItemId(dictItem);
-	            result.setResultMessage("修改字典项成功");
+	            result.setResult("修改字典项成功");
 	        } catch (Exception e){
 	            LOGGER.error(e.getMessage());
 	            throw new RuntimeException(e);
@@ -121,9 +124,13 @@ public class DictItemServiceImpl implements DictItemService {
 		try {
 			if(!StringUtils.isEmpty(dictItemId)) {
 				DictItem dictItem = dictItemMapper.queryDictItemByDictItemId(dictItemId);
+				if(dictItem==null) {
+					return result;
+				}
 				result.setResult(dictItem);
 				return result;
 			}
+			result.setSuccess(false);
 			result.addErrorMessage("dictItemId为null查询失败！");
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
@@ -142,6 +149,7 @@ public class DictItemServiceImpl implements DictItemService {
 				result.setResult(dictItem);
 				return result;
 			}
+			result.setSuccess(false);
 			result.addErrorMessage("dictId为null查询失败！");
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
@@ -174,6 +182,7 @@ public class DictItemServiceImpl implements DictItemService {
 		ExecuteResult<DataGrid<DictItem>> result = new ExecuteResult<DataGrid<DictItem>>();
 		try{
 			if(StringUtils.isEmpty(dictId) ) {
+				result.setSuccess(false);
 				result.addErrorMessage("传入的参数有误!");
 				return result;
 			}
@@ -202,6 +211,7 @@ public class DictItemServiceImpl implements DictItemService {
 		ExecuteResult<DataGrid<DictItem>> result = new ExecuteResult<DataGrid<DictItem>>();
 		try{
 			if(page==null) {
+				result.setSuccess(false);
 				result.addErrorMessage("传入的参数有误!");
 				return result;
 			}
@@ -226,26 +236,27 @@ public class DictItemServiceImpl implements DictItemService {
 	}
 	
 	@Override
-	public ExecuteResult<DictItem> checkDictItemCodeOrDictItemNameIsExist(DictItem dictItem) {
-		ExecuteResult<DictItem> result = new ExecuteResult<DictItem>();
+	public ExecuteResult<String> checkDictItemCodeOrDictItemNameIsExist(DictItem dictItem) {
+		ExecuteResult<String> result = new ExecuteResult<String>();
     	if (!StringUtils.isEmpty(dictItem.getDictItemCode()) && !StringUtils.isEmpty(dictItem.getDictItemName()) ){
     		//2.检查字典项是否存在
     		DictItem dictItemc = dictItemMapper.checkDictItemCodeIsExist(dictItem.getDictItemCode());
     		DictItem dictItemn = dictItemMapper.checkDictItemNameIsExist(dictItem.getDictItemName());
     		if(dictItemc == null && dictItemn == null) {
+    			result.setResult("字典项编码,字典项名称不重复!");
     			result.setResultMessage("字典项编码,字典项名称不重复!");
 				return result;
     		}
     		if(dictItemc != null && dictItemn == null) {
-    			result.addErrorMessage("字典项编码重复!");
+    			result.setResult("字典项编码重复!");
 				return result;
     		}
     		if(dictItemc == null && dictItemn != null) {
-    			result.addErrorMessage("字典项名称重复!");
+    			result.setResult("字典项名称重复!");
 				return result;
     		}
     		if(dictItemc != null && dictItemn != null) {
-    			result.addErrorMessage("字典项编码重复,字典项名称重复!");
+    			result.setResult("字典项编码重复,字典项名称重复!");
 				return result;
     		}
     		
@@ -254,8 +265,8 @@ public class DictItemServiceImpl implements DictItemService {
 	}
 
 	
-	public ExecuteResult<DictItem> checkDictItemCodeOrDictItemNameIsExistUpdate(DictItem dictItem) {
-		ExecuteResult<DictItem> result = new ExecuteResult<DictItem>();
+	public ExecuteResult<String> checkDictItemCodeOrDictItemNameIsExistUpdate(DictItem dictItem) {
+		ExecuteResult<String> result = new ExecuteResult<String>();
 		//1.检查字典项编码与字典项名称是否存在
 		if (!StringUtils.isEmpty(dictItem.getDictItemCode()) && !StringUtils.isEmpty(dictItem.getDictItemName()) ){
     		//2.检查字典项是否存在
@@ -263,39 +274,43 @@ public class DictItemServiceImpl implements DictItemService {
     		DictItem dictItemn = dictItemMapper.checkDictItemNameIsExist(dictItem.getDictItemName());
     		if(dictItemc == null && dictItemn == null) {
     			result.setResultMessage("字典项编码,字典项名称不重复!");
+    			result.setResult("字典项编码,字典项名称不重复!");
 				return result;
     		}
     		if(dictItemc != null && dictItemn == null) {
     			if(dictItemc.getDictItemId().equals(dictItem.getDictItemId())) {
     				result.setResultMessage("字典项编码不重复!");
+    				result.setResult("字典项编码不重复!");
     				return result;
     			}
-    			result.addErrorMessage("字典项编码重复!");
+    			result.setResult("字典项编码重复!");
 				return result;
     		}
     		if(dictItemc == null && dictItemn != null) {
     			if(dictItemn.getDictItemId().equals(dictItem.getDictItemId())) {
     				result.setResultMessage("字典项名称不重复!");
+    				result.setResult("字典项名称不重复!");
     				return result;
     			}
-    			result.addErrorMessage("字典项名称重复!");
+    			result.setResult("字典项名称重复!");
 				return result;
     		}
     		if(dictItemc != null && dictItemn != null) {
     			if(dictItem.getDictItemId().equals(dictItemc.getDictItemId())&&dictItem.getDictItemId().equals(dictItemn.getDictItemId())) {
         			result.setResultMessage("字典项编码,字典项名称不重复!");
+        			result.setResult("字典项编码,字典项名称不重复!");
     				return result;
     			}
     			if(!dictItem.getDictItemId().equals(dictItemc.getDictItemId())&&dictItem.getDictItemId().equals(dictItemn.getDictItemId())) {
-    				result.addErrorMessage("字典项编码重复!");
+    				result.setResult("字典项编码重复!");
     				return result;
     			}
     			if(dictItem.getDictItemId().equals(dictItemc.getDictItemId())&&!dictItem.getDictItemId().equals(dictItemn.getDictItemId())) {
-    				result.addErrorMessage("字典项名称重复!");
+    				result.setResult("字典项名称重复!");
     				return result;
     			}
     			if(!dictItem.getDictItemId().equals(dictItemc.getDictItemId())&&!dictItem.getDictItemId().equals(dictItemn.getDictItemId())) {
-    				result.addErrorMessage("字典项编码,字典项名称重复!");
+    				result.setResult("字典项编码,字典项名称重复!");
     				return result;
     			}
     			
