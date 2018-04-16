@@ -28,21 +28,21 @@
         <result column="modify_user_id" property="modifyUserId" jdbcType="VARCHAR"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP"/>
-        <association property="demand"  javaType="com.camelot.pmt.project.model.Demand">
+        <association property="demand" javaType="com.camelot.pmt.project.model.Demand">
             <result property="id" column="did"/>
             <result property="demandDesc" column="demand_desc"/>
         </association>
-        <association property="createUser"  javaType="com.camelot.pmt.platform.model.User">
+        <association property="createUser" javaType="com.camelot.pmt.platform.model.User">
             <result property="id" column="cid"/>
             <result property="userId" column="user_id"/>
             <result property="username" column="user_name"/>
         </association>
-        <association property="assignUser"  javaType="com.camelot.pmt.platform.model.User">
+        <association property="assignUser" javaType="com.camelot.pmt.platform.model.User">
             <result property="id" column="aid"/>
             <result property="userId" column="user_id"/>
             <result property="username" column="user_name"/>
         </association>
-        <association property="beassignUser"  javaType="com.camelot.pmt.platform.model.User">
+        <association property="beassignUser" javaType="com.camelot.pmt.platform.model.User">
             <result property="id" column="bid"/>
             <result property="userId" column="user_id"/>
             <result property="username" column="user_name"/>
@@ -79,12 +79,19 @@
         <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP"/>
     </resultMap>
     <sql id="Base_Column_List">
-    id, task_num, task_name, task_parent_id, project_id, demand_id, priority, assign_user_id, 
-    beassign_user_id, assign_time, estimate_start_time, estimate_end_time, actual_start_time, 
-    actual_end_time, task_type, task_speed, status, node_lv, task_describe, demand_change, 
-    delay_describe, estimate_hour, infact_hour, task_mileage, create_user_id, modify_user_id, 
-    create_time, modify_time
-  </sql>
+        id, task_num, task_name, task_parent_id, project_id, demand_id, priority, assign_user_id,
+        beassign_user_id, assign_time, estimate_start_time, estimate_end_time, actual_start_time,
+        actual_end_time, task_type, task_speed, status, node_lv, task_describe, demand_change,
+        delay_describe, estimate_hour, infact_hour, task_mileage, create_user_id, modify_user_id,
+        create_time, modify_time
+    </sql>
+    <sql id="Base_Column_List2">
+        id, task_num, task_name, task_parent_id, project_id, demand_id, priority, assign_user_id,
+        beassign_user_id, assign_time, estimate_start_time, estimate_end_time, actual_start_time,
+        actual_end_time, task_type, task_speed, status, node_lv, task_describe, demand_change,
+        delay_describe, estimate_hour, infact_hour, task_mileage, create_user_id, modify_user_id,
+        create_time, modify_time,
+    </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
         select
         <include refid="Base_Column_List"/>
