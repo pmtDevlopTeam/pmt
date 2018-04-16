@@ -307,69 +307,6 @@ public class UserController {
             return ApiResponse.error();
         }
     }
-//    /**
-//     * 修改用户
-//     * @param id :用户id,username 用户名,password 原始密码,newPassword:新密码,role 角色,phone 电话,email 邮箱
-//     * @return 返回修改用户结果:{"status": "message": "请求处理成功.","code": 200,{"data": "更新用户成功!"}}
-//     */
-//    @ApiOperation(value="修改用户", notes="修改用户")
-//    @ApiImplicitParams({
-//            @ApiImplicitParam(
-//                    name="id",value="用户id",required=true,paramType="form",dataType="Integer"),
-//            @ApiImplicitParam(
-//                    name="username",value="用户名",required=false,paramType="form",dataType="String"),
-//            @ApiImplicitParam(
-//                    name="password",value="原始密码",required=false,paramType="form",dataType="String"),
-//            @ApiImplicitParam(
-//                    name="newPassword",value="新密码",required=false,paramType="form",dataType="String"),
-//            @ApiImplicitParam(
-//                    name="role",value="角色",required=false,paramType="form",dataType="int"),
-//            @ApiImplicitParam(
-//                    name="phone",value="电话",required=false,paramType="form",dataType="String"),
-//            @ApiImplicitParam(
-//                    name="email",value="邮箱",required=false,paramType="form",dataType="String")
-//    })
-//    @RequiresPermissions(value="user:editUser")
-//    @RequestMapping(value = "user/editUser",method = RequestMethod.POST)
-//    @ResponseBody
-//    public JSONObject editUser(@ApiIgnore UserModel userModel){
-//    	ExecuteResult<String> result = new ExecuteResult<String>();
-//    	try{
-//    		if(userModel.getId() == null && "".equals(userModel.getId()) && userModel.getId() != 0) {
-//    			return ApiResponse.errorPara();
-//    		}
-//    		//调用接口进行更新
-//    		result = service.editUserById(userModel);
-//    		return ApiResponse.success(result.getResult());
-//    	}catch (Exception e) {
-//			//异常
-//    		return ApiResponse.error();
-//		}
-//    }
-//
-
-
-//    /**
-//     * 修改用户密码
-//     * @param  oldPassword 旧密码
-//     * @param  newPassword 新密码
-//     * @return 返回结果集 （success：成功，fail：失败）
-//     */
-//    @ApiOperation(value="修改用户密码", notes="修改用户密码")
-//    @RequiresPermissions(value="user:editPassword")
-//    @RequestMapping(value = "user/editPassword",method = RequestMethod.GET)
-//    @ResponseBody
-//    public JSONObject editPassword(String oldPassword, String newPassword){
-//        ExecuteResult<String> result = new ExecuteResult<String>();
-//        UserModel user = (UserModel)SecurityUtils.getSubject().getPrincipal();
-//        if (user.getPassword().equals(oldPassword)){
-//            user.setPassword(newPassword);
-//            result = service.editByPassword(user);
-//            return ApiResponse.success(result.getResult());
-//        }else {
-//            return ApiResponse.errorPara("用户密码输入错误");
-//        }
-//    }
 
 
 }

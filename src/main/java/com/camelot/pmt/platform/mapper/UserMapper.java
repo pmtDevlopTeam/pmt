@@ -186,52 +186,6 @@ public interface UserMapper {
      * 2018年4月13日下午3:39:51
      */
     User queryUserInfoById(String userId);
-//    /**
-//	 * 
-//	 *<p>Description:[根据用户id查询用户密码]</p>
-//	 * @param userModel 
-//	 * @return Integer
-//	 * @author [name]
-//	 */
-//    String findUserPasswordById(UserModel userModel);
-
-
-//    /**
-//     * 
-//     *<p>Description:[分页查询用户]</p>
-//     * @return List<UserModel>
-//     * @author [name]
-//     */
-//    List<UserModel> findUsersByPage(@Param(value = "page") Pager page);
-//    
-//    /**
-//     * 
-//     *<p>Description:[查询用户总数量]</p>
-//     * @return Long 总数量
-//     * @author [name]
-//     */
-//    Long queryCount();
-//    
-
-//    /**
-//     * 
-//     *<p>Description:[编辑用户]</p>
-//     * @param userModel void
-//     * @author [name]
-//     */
-//    void editUser(UserModel userModel);
-
-  
-	
-//    
-//    /**
-//     *
-//     *<p>Description:[修改密码]</p>
-//     * @param userModel
-//     * @return UserModel
-//     * @author [tongxiying]
-//     */
-//    Byte editByPassword(UserModel userModel);
 
    
 }

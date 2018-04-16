@@ -327,46 +327,4 @@ public class UserServiceImpl implements UserService{
 		return result;
 	}
 	
-//    @Override
-//	public ExecuteResult<String> editUserById(User User) {
-//    	ExecuteResult<String> result = new ExecuteResult<String>();
-//		try{
-//			if(User.getId() == 0 || User.getId() == null){
-//				result.setResult("该用户不存在!");
-//				return result;
-//			}
-//			//不更新密码的情况下编辑
-//			if(User.getPassword() == null || User.getPassword().equals("") || User.getNewPassword() == null || User.getNewPassword().equals("")){
-//				Integer count = userMapper.updateUserById(User);
-//				if(count == 0){
-//					result.setResult("更新用户失败!");
-//					return result;
-//				}
-//			}
-//			//更新密码的情况下编辑
-//			if(User.getPassword() != null && !User.getPassword().equals("") && User.getNewPassword() != null && !User.getNewPassword().equals("")){
-//				String password = User.getPassword();
-//				String oldPassword = userMapper.findUserPasswordById(User);
-//				if(password.equals(oldPassword)){
-//					User.setPwdStatus((byte)2);
-//					Integer count = userMapper.updateUserById(User);
-//					if(count == 0){
-//						result.setResult("更新用户失败!");
-//						return result;
-//					}
-//				}else if(!password.equals(oldPassword)){
-//					result.setResult("旧密码输入不正确!");
-//					return result;
-//				}
-//			}
-//		}catch(Exception e){
-//			LOGGER.error(e.getMessage());
-//			throw new RuntimeException(e);
-//		}
-//		result.setResult("更新用户成功!");
-//		return result;
-//	}
-    
-//
-//    
 }

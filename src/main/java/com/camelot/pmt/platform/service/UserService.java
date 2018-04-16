@@ -99,34 +99,15 @@ public interface UserService {
 	 */
 	ExecuteResult<String> modifyUserDetailsByUserId(User user);
 
-	
+	/**
+	 * 
+	 * Description:[根据用户ID查询一个用户详情信息]
+	 * @param String userId
+	 * @return ExecuteResult<User>
+	 * @author [maple]
+	 * 2018年4月16日上午10:34:21
+	 */
 	ExecuteResult<User> queryUserInfoById(String userId);
     
-	// /**
-	// *
-	// *<p>Description:[查询用户]</p>
-	// * @return List<User>
-	// * @author [name]
-	// */
-	// ExecuteResult<List<User>> findUser();
-	//
-	// /**
-	// *
-	// *<p>Description:[分页查询用户列表]</p>
-	// *调用实现类方法:queryWorkbenchTaskList
-	// * @param page
-	// * @return ExecuteResult<DataGrid<User>>
-	// * @author [name]
-	// */
-	// ExecuteResult<DataGrid<User>> queryUsers(Pager page);
-	//
-	// /**
-	// *
-	// *<p>Description:[删除用户]</p>
-	// * @param User void
-	// * @author [tongxiying]
-	// * @return
-	// */
-	// ExecuteResult<Long> delete(User User);
 
 }
