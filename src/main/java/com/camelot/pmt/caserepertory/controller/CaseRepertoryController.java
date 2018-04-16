@@ -34,7 +34,7 @@ public class CaseRepertoryController {
 	private CaseRepertoryService caseRepertoryService;
 	
 	 @ApiOperation(value = "分页获取bug列表", notes = "分页获取bug列表")
-	    @RequestMapping(value = "bug/selectCondition", method = RequestMethod.GET)
+	    @RequestMapping(value = "caseRepertory/selectCondition", method = RequestMethod.GET)
 	    @ApiImplicitParams({
 	            @ApiImplicitParam(name = "currentPage", value = "页码", required = true, paramType = "query", dataType = "int"),
 	            @ApiImplicitParam(name = "pageSize", value = "每页数量", required = true, paramType = "query", dataType = "int"),
