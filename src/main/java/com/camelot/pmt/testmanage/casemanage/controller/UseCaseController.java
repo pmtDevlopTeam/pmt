@@ -40,7 +40,7 @@ public class UseCaseController {
 	    @RequestMapping(value = "userCase/queryUserCase", method = RequestMethod.GET)
 	    @ApiImplicitParams({
 	    	 	@ApiImplicitParam(name = "projectId", value = "项目id", required = true, paramType = "query", dataType = "int"),
-	    	 	@ApiImplicitParam(name = "caseTitle", value = "用例标题", required = true, paramType = "query", dataType = "string"),
+	    	 	@ApiImplicitParam(name = "caseTitle", value = "用例标题", required = false, paramType = "query", dataType = "string"),
 	            @ApiImplicitParam(name = "currentPage", value = "页码", required = true, paramType = "query", dataType = "int"),
 	            @ApiImplicitParam(name = "pageSize", value = "每页数量", required = true, paramType = "query", dataType = "int") })
 	    public JSONObject queryUsersByPage(Long projectId,String caseTitle,Integer currentPage,Integer pageSize) {
