@@ -1,12 +1,11 @@
 package com.camelot.pmt.caserepertory.mapper;
 
-import java.util.List;
-import java.util.Map;
-
-import org.apache.ibatis.annotations.Mapper;
-
 import com.camelot.pmt.caserepertory.model.CaseRepertory;
 import com.camelot.pmt.testmanage.bugmanage.model.SelectBugManage;
+import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
+import java.util.Map;
 @Mapper
 public interface CaseRepertoryMapper {
     /**
@@ -58,4 +57,10 @@ public interface CaseRepertoryMapper {
     int updateByPrimaryKey(CaseRepertory record);
 
 	List<SelectBugManage> selectCondition(Map<String, Object> map);
+
+    int insertBatch(List<CaseRepertory> list);
+
+    List<CaseRepertory> find(Map<String, Object> param);
+
+    int remove(Map<String, Object> param);
 }

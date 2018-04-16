@@ -1,8 +1,10 @@
 package com.camelot.pmt.caserepertory.mapper;
 
+import com.camelot.pmt.caserepertory.model.CaseRepertoryStep;
 import org.apache.ibatis.annotations.Mapper;
 
-import com.camelot.pmt.caserepertory.model.CaseRepertoryStep;
+import java.util.List;
+import java.util.Map;
 @Mapper
 public interface CaseRepertoryStepMapper {
     /**
@@ -52,4 +54,10 @@ public interface CaseRepertoryStepMapper {
      * @mbg.generated
      */
     int updateByPrimaryKey(CaseRepertoryStep record);
+
+    int insertBatch(List<CaseRepertoryStep> list);
+
+    List<CaseRepertoryStep> findByUseCaseId(Long useCaseId);
+
+    int remove(Map<String, Object> param);
 }
