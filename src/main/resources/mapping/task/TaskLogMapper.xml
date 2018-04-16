@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="com.camelot.pmt.task.model.TaskLog" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="task_id" property="taskId" jdbcType="BIGINT" />
-    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
     <result column="operation_time" property="operationTime" jdbcType="TIMESTAMP" />
     <result column="operation_button" property="operationButton" jdbcType="VARCHAR" />
     <result column="operation_describe" property="operationDescribe" jdbcType="VARCHAR" />
@@ -26,7 +26,7 @@
     insert into task_log (id, task_id, user_id, 
       operation_time, operation_button, operation_describe
       )
-    values (#{id,jdbcType=BIGINT}, #{taskId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, 
+    values (#{id,jdbcType=BIGINT}, #{taskId,jdbcType=BIGINT}, #{userId,jdbcType=VARCHAR}, 
       #{operationTime,jdbcType=TIMESTAMP}, #{operationButton,jdbcType=VARCHAR}, #{operationDescribe,jdbcType=VARCHAR}
       )
   </insert>
@@ -60,7 +60,7 @@
         #{taskId,jdbcType=BIGINT},
       </if>
       <if test="userId != null" >
-        #{userId,jdbcType=BIGINT},
+        #{userId,jdbcType=VARCHAR},
       </if>
       <if test="operationTime != null" >
         #{operationTime,jdbcType=TIMESTAMP},
@@ -80,7 +80,7 @@
         task_id = #{taskId,jdbcType=BIGINT},
       </if>
       <if test="userId != null" >
-        user_id = #{userId,jdbcType=BIGINT},
+        user_id = #{userId,jdbcType=VARCHAR},
       </if>
       <if test="operationTime != null" >
         operation_time = #{operationTime,jdbcType=TIMESTAMP},
@@ -97,7 +97,7 @@
   <update id="updateByPrimaryKey" parameterType="com.camelot.pmt.task.model.TaskLog" >
     update task_log
     set task_id = #{taskId,jdbcType=BIGINT},
-      user_id = #{userId,jdbcType=BIGINT},
+      user_id = #{userId,jdbcType=VARCHAR},
       operation_time = #{operationTime,jdbcType=TIMESTAMP},
       operation_button = #{operationButton,jdbcType=VARCHAR},
       operation_describe = #{operationDescribe,jdbcType=VARCHAR}
