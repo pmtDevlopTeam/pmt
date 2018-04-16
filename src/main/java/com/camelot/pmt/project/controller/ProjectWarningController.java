@@ -5,8 +5,6 @@
  */
 package com.camelot.pmt.project.controller;
 
-import java.util.Map;
-
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -24,9 +22,6 @@ import com.camelot.pmt.platform.utils.DataGrid;
 import com.camelot.pmt.platform.utils.ExecuteResult;
 import com.camelot.pmt.project.service.ProjectWarningService;
 
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
 
 /**
  * @ClassName: ProjectWarningController

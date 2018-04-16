@@ -24,10 +24,6 @@ import com.camelot.pmt.platform.utils.ExecuteResult;
 import com.camelot.pmt.project.model.ProjectBudget;
 import com.camelot.pmt.project.service.ProjectBudgetService;
 
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import springfox.documentation.annotations.ApiIgnore;
 
 /**
