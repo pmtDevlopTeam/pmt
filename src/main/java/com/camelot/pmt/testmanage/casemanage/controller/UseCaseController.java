@@ -22,7 +22,7 @@ import com.camelot.pmt.testmanage.casemanage.model.UseCase;
 import com.camelot.pmt.testmanage.casemanage.service.UseCaseService;
 import com.camelot.pmt.testmanage.casemanage.util.ActionBean;
 import com.github.pagehelper.PageInfo;
-
+import com.baomidou.mybatisplus.toolkit.StringUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -40,7 +40,7 @@ public class UseCaseController {
 	    @RequestMapping(value = "userCase/queryUserCase", method = RequestMethod.GET)
 	    @ApiImplicitParams({
 	    	 	@ApiImplicitParam(name = "projectId", value = "项目id", required = true, paramType = "query", dataType = "int"),
-	    	 	@ApiImplicitParam(name = "caseTitle", value = "用例标题", required = true, paramType = "query", dataType = "string"),
+	    	 	@ApiImplicitParam(name = "caseTitle", value = "用例标题", required = false, paramType = "query", dataType = "string"),
 	            @ApiImplicitParam(name = "currentPage", value = "页码", required = true, paramType = "query", dataType = "int"),
 	            @ApiImplicitParam(name = "pageSize", value = "每页数量", required = true, paramType = "query", dataType = "int") })
 	    public JSONObject queryUsersByPage(Long projectId,String caseTitle,Integer currentPage,Integer pageSize) {
@@ -52,7 +52,7 @@ public class UseCaseController {
 				 map.put("projectId", projectId);
 				 
 			 }
-			 if(projectId!=null){
+			 if(!StringUtils.isEmpty(caseTitle)){
 				 map.put("caseTitle", caseTitle);
 				 
 			 }
@@ -145,13 +145,20 @@ public class UseCaseController {
 	 
 	 @ApiOperation(value = "编辑用例")
 		@PostMapping(value = "userCase/edit")
-		public void edit(HttpServletRequest request, @RequestBody @ApiParam(value = "useCase", required = true) UseCase useCase) {
+		public ActionBean edit(HttpServletRequest request, @RequestBody @ApiParam(value = "useCase", required = true) UseCase useCase) {
+		 ActionBean  actionBean  =new ActionBean();
 			try {
 				UserModel user = (UserModel) request.getSession().getAttribute("user");
+				actionBean.setCode(200);
+		 		actionBean.setErrorMessage("成功");
+		 		actionBean.setResult(true);
 				UseCaseService.edit(user, useCase);
 			} catch (Exception e) {
-				e.printStackTrace();
+				actionBean.setCode(500);
+				actionBean.setErrorMessage(e.getMessage());
+				actionBean.setResult(false);
 			}
+			return actionBean;
 		}
 	
 }
