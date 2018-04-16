@@ -1,6 +1,9 @@
 package com.camelot.pmt.platform.service.impl;
 
+import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -22,8 +25,11 @@ import com.camelot.pmt.platform.common.DataGrid;
 import com.camelot.pmt.platform.common.ExecuteResult;
 import com.camelot.pmt.platform.common.Pager;
 import com.camelot.pmt.platform.mapper.OrgMapper;
+import com.camelot.pmt.platform.mapper.UserMapper;
 import com.camelot.pmt.platform.model.Org;
+import com.camelot.pmt.platform.model.OrgAndUser;
 import com.camelot.pmt.platform.model.OrgToUser;
+import com.camelot.pmt.platform.model.RoleToMenu;
 import com.camelot.pmt.platform.model.User;
 import com.camelot.pmt.platform.service.OrgService;
 import com.camelot.pmt.platform.util.BuildTree;
@@ -36,6 +42,9 @@ public class OrgServiceImpl implements OrgService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
 	@Autowired
 	private OrgMapper orgMapper;
+	
+	@Autowired
+    private UserMapper userMapper;
 
 	/**
 	 * 查询部门列表
@@ -43,7 +52,7 @@ public class OrgServiceImpl implements OrgService {
 	 * @return
 	 */
 	@Override
-	public ExecuteResult<List<Tree<Org>>> findAllOrgs() {
+	public ExecuteResult<List<Tree<Org>>> queryAllOrgs() {
 		ExecuteResult<List<Tree<Org>>> result = new ExecuteResult<List<Tree<Org>>>();
 		List<Tree<Org>> trees = new ArrayList<Tree<Org>>();
 		List<Org> queryAllOrg = orgMapper.queryAllOrg();
@@ -82,7 +91,7 @@ public class OrgServiceImpl implements OrgService {
 	 * @return
 	 */
 	@Override
-	public ExecuteResult<String> addOrg(Org org) {
+	public ExecuteResult<String> creatOrg(Org org) {
 		ExecuteResult<String> result = new ExecuteResult<String>();
 		try {
 			if (org == null) {
@@ -114,7 +123,7 @@ public class OrgServiceImpl implements OrgService {
 	 * @return
 	 */
 	@Override
-	public ExecuteResult<String> editOrg(Org org) {
+	public ExecuteResult<String> modifyOrgByOrgId(Org org) {
 		ExecuteResult<String> result = new ExecuteResult<String>();
 		try {
 			long date = new Date().getTime();
@@ -141,7 +150,7 @@ public class OrgServiceImpl implements OrgService {
 	 * @return
 	 */
 	@Override
-	public ExecuteResult<String> deleteOrg(Org org) {
+	public ExecuteResult<String> deleteOrgByOrgId(Org org) {
 		ExecuteResult<String> result = new ExecuteResult<String>();
 		try {
 			int count = orgMapper.deleteOrgByOrgId(org.getOrgId());
@@ -164,8 +173,7 @@ public class OrgServiceImpl implements OrgService {
 	 * @return
 	 */
 	@Override
-	public ExecuteResult<Org> findOrgById(String orgId) {
-
+	public ExecuteResult<Org> queryOrgByOrgId(String orgId) {
 		ExecuteResult<Org> result = new ExecuteResult<Org>();
 		try {
 			if (!orgId.equals("") && !orgId.equals("0")) {
@@ -212,7 +220,7 @@ public class OrgServiceImpl implements OrgService {
 	 * @return
 	 */
 	@Override
-	public ExecuteResult<List<Tree<Org>>> selectOrgAndChildrenById(String OrgId) {
+	public ExecuteResult<List<Tree<Org>>> queryOrgAndChildrenById(String OrgId) {
 		ExecuteResult<List<Tree<Org>>> result = new ExecuteResult<List<Tree<Org>>>();
 		List<Tree<Org>> trees = new ArrayList<Tree<Org>>();
 		List<Org> orgListItem = new ArrayList<Org>();
@@ -330,13 +338,45 @@ public class OrgServiceImpl implements OrgService {
 		if(orgToUserList.size()<0){
 			return result;
 		}
-		result.setResult(orgToUserList);;
+		result.setResult(orgToUserList);
 		}catch (Exception e) {
 			LOGGER.error(e.getMessage());
 			throw new RuntimeException(e);
 		}
 		return result;
-		
 	}
 
+	@Override
+	public ExecuteResult<String> addOrgToUser(Org org) {
+		ExecuteResult<String> result = new ExecuteResult<String>();
+		int count = 0;
+		try{
+			List<String> userIds = Arrays.asList(org.getUserIds());
+			for (String ids : userIds) {
+				OrgAndUser orgAndUser = orgMapper.selectOrgAndUserByOrgIdAndUserId(ids,org.getOrgId());
+				if (orgAndUser != null) {
+					orgMapper.deleteOrgByUserIdAndOrgId(ids,org.getOrgId());
+				}
+				User user = userMapper.selectUserById(ids);
+				Org orgObj = orgMapper.queryOrgByOrgId(org.getOrgId());
+				if (user == null) {
+					result.setResultMessage("传入的用户参数不正确");
+					return result;
+				}else if (orgObj == null) {
+					result.setResultMessage("传入的部门参数不正确");
+					return result;
+				}else{
+					org.setUserId(ids);
+					count=orgMapper.createOrgToUser(org);
+				}
+			}
+			if (count >0) {
+				result.setResultMessage("部门和用户绑定成功");
+			}
+		}catch (Exception e) {
+            LOGGER.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+		return result;
+	}
 }

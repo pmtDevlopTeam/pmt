@@ -59,8 +59,33 @@ public class Org implements Serializable {
      * 创建人
      */
     private String creatUserId;
+    /**
+     * 用户id 数组
+     */
+    private String[] userIds;
+    /**
+     * 用户id 数组
+     */
+    private String userId;
     
-    public String getCreatUserId() {
+    public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+
+	
+    public String[] getUserIds() {
+		return userIds;
+	}
+
+	public void setUserIds(String[] userIds) {
+		this.userIds = userIds;
+	}
+
+	public String getCreatUserId() {
 		return creatUserId;
 	}
 

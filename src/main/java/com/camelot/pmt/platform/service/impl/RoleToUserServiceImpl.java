@@ -41,7 +41,6 @@ public class RoleToUserServiceImpl implements RoleToUserService {
     @Override
     public ExecuteResult addUserByRole(RoleToUser roleToUser) {
         ExecuteResult result = new ExecuteResult();
-
         try {
             boolean isContains = true;
             List<String> roleId = Arrays.asList(roleToUser.getRoleIds());

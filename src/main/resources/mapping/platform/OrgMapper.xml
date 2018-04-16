@@ -16,6 +16,15 @@
         <result column="create_user_id" property="creatUserId"/>
         <result column="modify_user_id" property="modifyUserId"/>
     </resultMap>
+    <resultMap id="OrgAndUserresultMap" type="com.camelot.pmt.platform.model.OrgAndUser" >
+        <id column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="org_id" property="orgId"/>
+        <result column="create_time" property="createTime"/>
+        <result column="modify_time" property="modifyTime"/>
+        <result column="create_user_id" property="createUserId"/>
+        <result column="modify_user_id" property="modifyUserId"/>
+    </resultMap>
     
     <resultMap id="ResultMap" type="com.camelot.pmt.platform.model.OrgToUser" >
         <id column="id" property="id"/>
@@ -141,7 +150,21 @@
             <include refid="sql_add_properties"/>
         )
     </insert>
-
+     
+     <insert id="createOrgToUser" parameterType="Org" useGeneratedKeys="true" keyProperty="id"  >
+        INSERT INTO platform_user_org(
+            id,user_id,org_id,create_time,modify_time,create_user_id,modify_user_id
+            ) VALUES (
+            #{id},#{userId},#{orgId},#{createTime},#{modifyTime},#{creatUserId},#{modifyUserId}
+        )
+    </insert>
+    <select id="selectOrgAndUserByOrgIdAndUserId"  parameterType="java.lang.String" resultMap="OrgAndUserresultMap">
+       SELECT 
+       id,user_id,org_id,create_time,modify_time,create_user_id,modify_user_id
+	   FROM platform_user_org where user_id=#{userId} and org_id=#{orgId}
+    </select>
+    
+ 
     <select id="queryAllOrg" resultMap="BaseResultMap"  >
        SELECT 
        <include refid="Base_Column_List" />
@@ -156,6 +179,9 @@
 	   WHERE org_id = #{orgId}
     </select>
     
+    <delete id="deleteOrgByUserIdAndOrgId" parameterType="String">
+        DELETE FROM platform_user_org WHERE org_id = #{orgId} and user_id=#{userId}
+    </delete>
     
     
     
