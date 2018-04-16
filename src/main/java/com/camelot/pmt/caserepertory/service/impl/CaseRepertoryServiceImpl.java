@@ -22,6 +22,8 @@ import com.camelot.pmt.testmanage.bugmanage.model.SelectBugManage;
 import com.camelot.pmt.testmanage.bugmanage.service.impl.BugManageServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.springframework.transaction.annotation.Transactional;
+
 @Service
 public class CaseRepertoryServiceImpl implements CaseRepertoryService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(CaseRepertoryServiceImpl.class);
@@ -63,6 +65,7 @@ public class CaseRepertoryServiceImpl implements CaseRepertoryService {
 	}
 
 	@Override
+	@Transactional
 	public void add(CaseRepertory caseRepertory) {
 		// 新增用例
 		caseRepertoryMapper.insertSelective(caseRepertory);
@@ -80,11 +83,13 @@ public class CaseRepertoryServiceImpl implements CaseRepertoryService {
 	}
 
 	@Override
+	@Transactional
 	public void addBatch(List<CaseRepertory> list) {
 		caseRepertoryMapper.insertBatch(list);
 	}
 
 	@Override
+	@Transactional
 	public void update(CaseRepertory caseRepertory) {
 		// 更新用例库
 		caseRepertoryMapper.updateByPrimaryKeySelective(caseRepertory);
@@ -129,6 +134,7 @@ public class CaseRepertoryServiceImpl implements CaseRepertoryService {
 	}
 
 	@Override
+	@Transactional
 	public void remove(String ids) {
 		Map<String, Object> param = new HashMap<>();
 
