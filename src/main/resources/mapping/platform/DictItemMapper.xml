@@ -72,13 +72,13 @@
 		<include refid="sql_add_dictItem_properties" />
 		);
 	</insert>
-	<!-- 根据字典项id 删除一个字典项 -->
+	<!-- 根据字典项dictItemId 删除一个字典项 -->
 	<delete id="deleteDictItemByDictItemId">
 		delete from platform_dict_item
 		where dict_item_id = #{dictItemId}
 	</delete>
 
-	<!-- 根据字典项id 修改一个字典项 -->
+	<!-- 根据字典项dictItemId 修改一个字典项 -->
 	<update id="modifyDictItemByDictItemId">
 		update platform_dict_item
 		<set>
@@ -115,10 +115,10 @@
 		</set>
 		where dict_item_id= #{dictItemId}
 	</update>
-	<!-- 根据字典类型id 修改字典项 -->
+	<!-- 根据字典类型dictId 修改字典项 -->
 	<update id="modifyDictItemByDictId">
 		update platform_dict_item
-				<set>
+		<set>
 			<if test="dictItemName != null">
 				dict_item_name = #{dictItemName},
 			</if>
@@ -149,7 +149,7 @@
 		</set>
 		where dict_id= #{dictId}
 	</update>
-	<!-- 根据字典项id 查询一个字典项 -->
+	<!-- 根据字典项dictItemId 查询一个字典项 -->
 	<select id="queryDictItemByDictItemId"
 		resultMap="BaseResultMap">
 		select
@@ -157,7 +157,7 @@
 		from platform_dict_item
 		where dict_item_id = #{dictItemId}
 	</select>
-	<!-- 根据字典类型id 查询字典项 不分页-->
+	<!-- 根据字典类型dictId 查询字典项 不分页-->
 	<select id="queryListDictItemByDictId"
 		resultMap="BaseResultMap" >
 		select
@@ -165,7 +165,7 @@
 		from platform_dict_item
 		where dict_id = #{dictId}
 	</select>
-	<!-- 根据字典类型id 查询字典项 分页 -->
+	<!-- 根据字典类型dictId 查询字典项 分页 -->
     <select id="queryListDictItemByDictIdPage"
     	    resultMap="BaseResultMap" >
         select
@@ -193,7 +193,7 @@
 			<include refid="pagination_tail" />
 		</if>
     </select>
-    <!-- 通过字典类型查询字典项总数量 -->
+    <!-- 通过字典类型dictId查询字典项总数量 -->
 	<select id="countDictItemByDictId" resultType="long">
 		<include refid="count_Tail"></include>
 		where dict_id = #{dictId}

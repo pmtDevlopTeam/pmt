@@ -66,7 +66,7 @@ public interface DictService {
 //     */
 //	ExecuteResult<Dict> checkDictNameIsExist(String dictName);
     /**
-     * 检查字典编码与字典名称是否存在
+     * 检查字典编码与字典名称是否存在 
      *
      * @param Dict dict
      * @return ExecuteResult<Dict>

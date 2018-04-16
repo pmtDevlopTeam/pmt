@@ -21,7 +21,7 @@ public class DictServiceImpl implements DictService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(DictServiceImpl.class);
 
 	@Autowired
-	DictMapper dictMapper;
+	DictMapper dictMapper; 
 
 	@Override
 	public ExecuteResult<Dict> createDict(Dict dict) {

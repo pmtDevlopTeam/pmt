@@ -40,24 +40,17 @@ public interface DictMapper {
 	 */
 	void deleteDictItemByDictId(String dictId);
 	/**
-	 * 根据字典id 修改一个字典
+	 * 根据字典dictId 修改一个字典
 	 * @param Dict dict
 	 * @return 
 	 */
 	void modifyDictByDictId(Dict dict);
     /**
-     * 根据字典id 查询一个字典
+     * 根据字典dictId 查询一个字典
      * @param String dictId
      * @return Dict
      */
     Dict queryDictByDictId(String dictId);
-//    /**
-//     * 根据字典dictId 查询字典项
-//     *
-//     * @param dictId
-//     * @return List<DictItem>
-//     */
-//    List<DictItem> queryDictItemByDictId(String dictId);
     /**
      * 查询全部字典
      * 

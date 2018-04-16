@@ -60,7 +60,7 @@ public interface DictItemMapper {
      */
     List<DictItem> queryListDictItemByDictId(String dictId);
     /**
-     * 根据字典dictId 查询字典项 分页
+     * 根据字典dictId 查询字典项 分页 
      * 
      * @param String dictId,Pager page
      * @return List<DictItem>
@@ -102,7 +102,7 @@ public interface DictItemMapper {
      */
     DictItem checkDictItemCodeIsExist(String dictItemCode);
     /**
-     * 检查字典项名称是否存在
+     * 检查字典项名称是否存在 
      * 
      * @param String dictItemName
      * @return DictItem

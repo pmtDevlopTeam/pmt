@@ -24,6 +24,14 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import springfox.documentation.annotations.ApiIgnore;
 
+/**
+ * <p>
+ *  字典Controller类
+ * </p>
+ *
+ * @author sqw
+ * @since 2018-04-08
+ */
 @RestController
 @RequestMapping(value = "/platform/dict")
 @Api(value = "字典管理接口", description = "字典管理接口")
@@ -31,7 +39,7 @@ public class DictController {
 
 	
 	@Autowired
-	DictService dictService;
+	DictService dictService; 
 	
     /**
      *  根据一个字典对象  创建一个字典

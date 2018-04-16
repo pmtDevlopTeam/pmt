@@ -24,7 +24,7 @@ public class DictItemServiceImpl implements DictItemService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(DictItemServiceImpl.class);
 
 	@Autowired
-	DictItemMapper dictItemMapper;
+	DictItemMapper dictItemMapper; 
 	
 	@Override
 	public ExecuteResult<DictItem> createDictItem(DictItem dictItem) {

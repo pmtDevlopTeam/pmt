@@ -40,7 +40,7 @@ public interface DictItemService {
 	 */
 	ExecuteResult<DictItem> modifyDictItemByDictItemId(DictItem dictItem);
 	/**
-	 * 根据字典类型id 修改字典项
+	 * 根据字典类型dictId 修改字典项
 	 * 
 	 * @param DictItem dictItem
 	 * @return ExecuteResult<String>

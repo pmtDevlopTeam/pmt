@@ -28,13 +28,21 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import springfox.documentation.annotations.ApiIgnore;
 
+/**
+ * <p>
+ *  字典项Controller类
+ * </p>
+ *
+ * @author sqw
+ * @since 2018-04-08
+ */
 @RestController
 @RequestMapping(value = "/platform/dict")
 @Api(value = "字典项管理接口", description = "字典项管理接口")
 public class DictItemController {
 
 	@Autowired
-	DictItemService dictItemService;
+	DictItemService dictItemService; 
 	
 	
     /**
