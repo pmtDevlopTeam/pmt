@@ -1,18 +1,32 @@
 package com.camelot.pmt.task.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class TaskLog {
+public class TaskLog implements Serializable{
+	/**
+	 * 任务日志标识号（主键）
+	 */
     private Long id;
-
+    /**
+     * 任务ID
+     */
     private Long taskId;
-
+    /**
+     * 操作人ID
+     */
     private String userId;
-
+    /**
+     * 操作时间
+     */
     private Date operationTime;
-
+    /**
+     * 操作功能
+     */
     private String operationButton;
-
+    /**
+     * 操作描述
+     */
     private String operationDescribe;
 
     public Long getId() {

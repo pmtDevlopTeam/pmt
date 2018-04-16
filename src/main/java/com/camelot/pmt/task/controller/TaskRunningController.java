@@ -49,7 +49,7 @@ public class TaskRunningController {
     public JSONObject queryoverdueTaskRunning(@ApiIgnore Pager page) {
         ExecuteResult<DataGrid<Map<String, Object>>> result = new ExecuteResult<DataGrid<Map<String, Object>>>();
         try {
-            Long userLoginId = Long.valueOf(1);
+            String userLoginId = String.valueOf(1);
             //检查用户是否登录，需要去session中获取用户登录信息
             if(StringUtils.isEmpty(userLoginId)){
                 return ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);

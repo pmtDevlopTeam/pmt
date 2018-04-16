@@ -40,7 +40,7 @@ public class TaskRunningServiceImpl implements TaskRunningService{
     private static final Logger LOGGER = LoggerFactory.getLogger(TaskRunningServiceImpl.class);
 
 
-    public ExecuteResult<DataGrid<Map<String, Object>>> queryoverdueTaskRunning(Pager page, Long id) {
+    public ExecuteResult<DataGrid<Map<String, Object>>> queryoverdueTaskRunning(Pager page, String id) {
         ExecuteResult<DataGrid<Map<String, Object>>> result = new ExecuteResult<DataGrid<Map<String, Object>>>();
         try {
             List<Map<String, Object>> list = taskMapper.listTaskRunning(page, id);
