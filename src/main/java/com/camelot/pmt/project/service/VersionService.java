@@ -3,6 +3,7 @@ package com.camelot.pmt.project.service;
 import com.alibaba.fastjson.JSONObject;
 import com.camelot.pmt.platform.utils.ExecuteResult;
 import com.camelot.pmt.project.model.Version;
+import com.camelot.pmt.project.model.VersionVo;
 
 /**
  * @Package: com.camelot.pmt.project.service
@@ -16,10 +17,10 @@ public interface VersionService {
      * 新增版本信息
      * @param projectId
      * @param userId
-     * @param version
+     * @param versionVo
      * @return
      */
-    JSONObject insertVersonInfo(Long projectId, String userId, Version version);
+    JSONObject insertVersonInfo(Long projectId, String userId, VersionVo versionVo);
 
     /**
       * @Description: 根据项目id查询版本信息
@@ -46,7 +47,7 @@ public interface VersionService {
       * @author: xueyj
       * @date: 2018/4/13 19:15
       */
-    JSONObject updateVersonInfo(String userId, Long versionId);
+    JSONObject updateVersonInfo(Long projectId,String userId, VersionVo versionVo);
     /**
       * @Description: 逻辑删除版本信息
       * @param:

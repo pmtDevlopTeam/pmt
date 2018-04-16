@@ -5,11 +5,13 @@ import com.camelot.pmt.platform.common.ApiResponse;
 import com.camelot.pmt.platform.utils.ExecuteResult;
 import com.camelot.pmt.project.mapper.VersionMapper;
 import com.camelot.pmt.project.model.Version;
+import com.camelot.pmt.project.model.VersionVo;
 import com.camelot.pmt.project.service.VersionService;
 import groovy.util.logging.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -31,22 +33,40 @@ public class VersionServiceImpl implements VersionService{
       * @author: xueyj
       * @date: 2018/4/13 11:05
       */
-    public JSONObject insertVersonInfo(Long projectId, String userId, Version version){
+    public JSONObject insertVersonInfo(Long projectId, String userId, VersionVo versionVo){
+        Date dateTime = new Date();
         // 获取当前版本的类型与版本编号，用于自动生成版本编号
-        String versionType = version.getVersionType();
+        String versionType = versionVo.getVersionType();
+        Version version = new Version();
+       /* // 初始化版本编号位null；
+        String versionCode =null;
+
         // 根据项目id，版本类型查询对应版本编号
         List<Version> versionList = versionMapper.queryListByProIdAndVerType(projectId, versionType);
-        // 获取最后添加版本信息的版本编号
-        String versionCode = versionList.get(0).getVersion();
+        System.out.println("查询结果的数组长度为：------"+versionList.size());
+        if (versionList.size() > 0){
+            // 获取最后添加版本信息的版本编号
+            versionCode = versionList.get(0).getVersion();
+        }*/
+        // 设置版本名称
+        version.setVersionName(versionVo.getVersionName());
+        // 设置版本起止时间
+        version.setStartTime(versionVo.getStartTime());
+        version.setEndTime(versionVo.getEndTime());
+        version.setRemarks(versionVo.getRemarks());
         // 设置版本编号
-        version.setVersion(getVersionCode(versionCode,versionType));
+        version.setVersion(getVersionCode(projectId,versionType));
         // 项目id
         version.setProjectId(projectId);
         // 添加人id
         version.setCreateUserId(userId);
         // 修改人id
         version.setModifyUserId(userId);
-        int i = versionMapper.insertSelective(version);
+        // 版本状态。0：正常使用；-1;逻辑删除
+        version.setVersionStatus(0);
+        version.setCreateTime(dateTime);
+        version.setModifyTime(dateTime);
+        int i = versionMapper.insert(version);
         if (i > 0) {
             return  ApiResponse.success("新增版本成功！");
         }else{
@@ -62,11 +82,13 @@ public class VersionServiceImpl implements VersionService{
       */
     public JSONObject deleteVersionInfoById(String userId,Long versionId){
         Version version = versionMapper.selectByPrimaryKey(versionId);
+        Date dateTime = new Date();
         // 设置版本修改人信息
         version.setModifyUserId(userId);
+        version.setModifyTime(dateTime);
         // 设置版本状态
-        //version.setVersionStstus();
-        int i = versionMapper.insertSelective(version);
+        version.setVersionStatus(-1);
+        int i = versionMapper.updateByPrimaryKey(version);
         if (i > 0) {
             return  ApiResponse.success("删除版本成功！");
         }else{
@@ -80,11 +102,26 @@ public class VersionServiceImpl implements VersionService{
       * @author: xueyj
       * @date: 2018/4/13 18:49
       */
-    public JSONObject updateVersonInfo(String userId, Long versionId){
-        Version version = versionMapper.selectByPrimaryKey(versionId);
+    public JSONObject updateVersonInfo(Long projectId,String userId, VersionVo versionVo){
+        Date dateTime = new Date();
+        String updateVersionType = versionVo.getVersionType();
+        // 1.判断版本类型是否修正，若修正则根据相应的规则重新生成版本编号
+        Version version = versionMapper.selectByPrimaryKey(versionVo.getId());
+        String oldVersionType = version.getVersionType();
+        if (!oldVersionType.equals(updateVersionType)){
+            // 获取当前版本的类型与版本编号，用于自动生成版本编号
+            String versionType = versionVo.getVersionType();
+            // 设置版本编号
+            version.setVersion(getVersionCode(projectId,versionType));
+        }
+        version.setVersionName(versionVo.getVersionName());
+        version.setStartTime(versionVo.getStartTime());
+        version.setEndTime(versionVo.getEndTime());
+        version.setRemarks(versionVo.getRemarks());
         // 设置版本修改人信息
         version.setModifyUserId(userId);
-        int i = versionMapper.insertSelective(version);
+        version.setModifyTime(dateTime);
+        int i = versionMapper.updateByPrimaryKeySelective(version);
         if (i > 0) {
             return  ApiResponse.success("修改版本成功！");
         }else{
@@ -141,7 +178,16 @@ public class VersionServiceImpl implements VersionService{
      * @param versionType
      * @return
      */
-    private String getVersionCode(String versionCode, String versionType){
+    private String getVersionCode(Long projectId, String versionType){
+        // 初始化版本编号位null；
+        String versionCode =null;
+        // 根据项目id，版本类型查询对应版本编号
+        List<Version> versionList = versionMapper.queryListByProIdAndVerType(projectId, versionType);
+        System.out.println("查询结果的数组长度为：------"+versionList.size());
+        if (versionList.size() > 0){
+            // 获取最后添加版本信息的版本编号
+            versionCode = versionList.get(0).getVersion();
+        }
         if ("开发".equals(versionType)) {
             // 若版本code为空则设置默认值，否则根据规则进行递增
             if (versionCode == null) {
@@ -180,12 +226,12 @@ public class VersionServiceImpl implements VersionService{
                 int tempMedVersion = medVersion+1;
                 if (tempMedVersion == 10){
                     int tempMaxVersion= maxVersion+1;
-                    versionCode= tempMaxVersion+"\\."+0+"\\."+0;
+                    versionCode= tempMaxVersion+"."+0+"."+0;
                 }else{
-                    versionCode= maxVersion+"\\."+tempMedVersion+"\\."+0;
+                    versionCode= maxVersion+"."+tempMedVersion+"."+0;
                 }
             }else{
-                versionCode= maxVersion+"\\."+medVersion+"\\."+tempMinVersion;
+                versionCode= maxVersion+"."+medVersion+"."+tempMinVersion;
             }
         }
         return versionCode;
