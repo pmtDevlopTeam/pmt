@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.camelot.pmt.platform.mapper.MenuMapper">
+
+    <resultMap id="BaseResultMap" type="com.camelot.pmt.platform.model.Menu" >
+        <id column="id" property="id"/>
+        <result column="menu_id" property="menuId"/>
+        <result column="parent_id" property="parentId"/>
+        <result column="menu_name" property="menuName"/>
+        <result column="menu_type" property="menuType"/>
+        <result column="menu_url" property="menuUrl"/>
+        <result column="menu_permission" property="menuPermission"/>
+        <result column="menu_icon" property="menuIcon"/>
+        <result column="state" property="state"/>
+        <result column="sort_num" property="sortNum"/>
+        <result column="create_time" property="createTime"/>
+        <result column="create_user_id" property="createUserId"/>
+        <result column="modify_time" property="modifyTime"/>
+        <result column="modify_user_id" property="modifyUserId"/>
+    </resultMap>
+    
+    <sql id="Base_Column_List" >
+        id, menu_id, parent_id, menu_name, menu_type, menu_url, menu_permission, menu_icon, state, sort_num, create_time, create_user_id, modify_time, modify_user_id
+    </sql>
+    
+    <!-- 增加一个菜单 -->
+    <insert id="createMenu">
+		insert into platform_menu(
+	        <trim suffixOverrides=",">
+	            <if test="menuId != null">menu_id,</if>
+	            <if test="parentId != null">parent_id,</if>
+	            <if test="menuName != null">menu_name,</if>
+	            <if test="menuType != null">menu_type,</if>
+	            <if test="menuUrl != null">menu_url,</if>
+	            <if test="menuPermission != null">menu_permission,</if>
+	            <if test="menuIcon != null">menu_icon,</if>
+	            <if test="state != null">state,</if>
+	            <if test="sortNum != null">sort_num,</if>
+	            <if test="createTime != null">create_time,</if>
+	            <if test="createUserId != null">create_user_id,</if>
+	            <if test="modifyTime != null">modify_time,</if>
+	            <if test="modifyUserId != null">modify_user_id,</if>
+	        </trim>       
+		)values (
+            <trim suffixOverrides=",">
+                <if test="menuId != null">#{menuId},</if>
+                <if test="parentId != null">#{parentId},</if>
+                <if test="menuName != null">#{menuName},</if>
+                <if test="menuType != null">#{menuType},</if>
+                <if test="menuUrl != null">#{menuUrl},</if>
+                <if test="menuPermission != null">#{menuPermission},</if>
+                <if test="menuIcon != null">#{menuIcon},</if>
+                <if test="state != null">#{state},</if>
+                <if test="sortNum != null">#{sortNum},</if>
+                <if test="createTime != null">#{createTime},</if>
+                <if test="createUserId != null">#{createUserId},</if>
+                <if test="modifyTime != null">#{modifyTime},</if>
+                <if test="modifyUserId != null">#{modifyUserId},</if>
+            </trim> 
+		)
+    </insert>
+    <!-- 根据菜单id 删除一个菜单 -->
+	<delete id="deleteMenuByMenuId">
+        delete from platform_menu where menu_id = #{menuId}
+	</delete>
+	<!-- 根据菜单id 修改一个菜单 -->
+	<update id="modifyMenuByMenuId">
+        update platform_menu
+		set
+            <trim suffixOverrides=",">
+                <if test="menuId != null">menu_id = #{menuId},</if>
+                <if test="parentId != null">parent_id = #{parentId},</if>
+                <if test="menuName != null">menu_name = #{menuName},</if>
+                <if test="menuType != null">menu_type = #{menuType},</if>
+                <if test="menuUrl != null">menu_url = #{menuUrl},</if>
+                <if test="menuPermission != null">menu_permission = #{menuPermission},</if>
+                <if test="menuIcon != null">menu_icon = #{menuIcon},</if>
+                <if test="state != null">state = #{state},</if>
+                <if test="sortNum != null">sort_num = #{sortNum},</if>
+                <if test="createTime != null">create_time = #{createTime},</if>
+                <if test="createUserId != null">create_user_id = #{createUserId},</if>
+                <if test="modifyTime != null">modify_time = #{modifyTime},</if>
+                <if test="modifyUserId != null">modify_user_id = #{modifyUserId},</if>
+            </trim> 
+		where menu_id = #{menuId}
+	</update>
+    <!-- 根据菜单id 查询一个菜单 -->
+    <select id="queryMenuByMenuId" resultMap="BaseResultMap">
+       select <include refid="Base_Column_List" /> from platform_menu where menu_id = #{menuId}
+    </select>
+    <!-- 查询全部菜单 -->
+    <select id="queryAllMenu" resultMap="BaseResultMap">
+       select <include refid="Base_Column_List" /> from platform_menu
+    </select>
+    
+    <select id="selectMenuList" resultMap="BaseResultMap">
+       select <include refid="Base_Column_List" /> from platform_menu
+    </select>
+
+</mapper>
