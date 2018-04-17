@@ -23,4 +23,6 @@ public interface FileManageGroupService {
 
 
     ExecuteResult<List<FileManageGroup>> selectFileGroup(FileManageGroup fileManageGroup);//通过条件查询文件夹
+
+    List<FileManageGroup> selectTree(FileManageGroup fileManageGroup);
 }

@@ -116,14 +116,15 @@ public class FileManageController {
     @ApiOperation(value = "根据条件查询文件功能", notes = "根据条件查询文件功能")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "产出物id", required = false, paramType = "query", dataType = "String"),
-            @ApiImplicitParam(name = "groupId", value = "组id", required = false, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "currentPage", value = "当前页", required = false, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "pageSize", value = "分页大小", required = false, paramType = "query", dataType = "String")
     })
     @RequestMapping(value = "/selectfile",method = RequestMethod.GET)
     @ResponseBody
-    public JSONObject selectFileByGroupID(FileManageGroup fileManageGroup,int currentPage,int pageSize){
+    public JSONObject selectFileByGroupID(FileManageGroup fileManageGroup){
         ExecuteResult<PageInfo> result = new ExecuteResult<PageInfo>();
         try {
-            result =fileManageService.selectFileByGroupID(fileManageGroup,currentPage,pageSize);//查询文件详细信息
+            result =fileManageService.selectFileByGroupID(fileManageGroup);//查询文件详细信息
             if (result.isSuccess()) {
                 return ApiResponse.success(result.getResult());
             }
@@ -132,6 +133,21 @@ public class FileManageController {
             return ApiResponse.error();
         }
 
+    }
+    @ApiOperation(value = "查询所有文件", notes = "查询所有文件")
+    @RequestMapping(value = "/selectAllFile",method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject selectAllFile(){
+        ExecuteResult<List<FileManage>> result = new ExecuteResult<List<FileManage>>();
+        try {
+            result =fileManageService.selectAllFile();//查询文件详细信息
+            if (result.isSuccess()) {
+                return ApiResponse.success(result.getResult());
+            }
+            return ApiResponse.error();
+        } catch (Exception e) {
+            return ApiResponse.error();
+        }
     }
 
 

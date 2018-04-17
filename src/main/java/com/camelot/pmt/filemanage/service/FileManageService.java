@@ -24,5 +24,7 @@ public interface FileManageService {
 
 
 
-    ExecuteResult<PageInfo> selectFileByGroupID(FileManageGroup fileManageGroup, int currentPage, int pageSize);// 文件详细信息查询（根据组idprojectID）
+    ExecuteResult<PageInfo> selectFileByGroupID(FileManageGroup fileManageGroup);// 文件详细信息查询（根据组idprojectID）
+
+    ExecuteResult<List<FileManage>> selectAllFile();
 }

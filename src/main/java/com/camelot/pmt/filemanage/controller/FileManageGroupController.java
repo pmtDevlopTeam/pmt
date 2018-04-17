@@ -154,7 +154,13 @@ public JSONObject batechDeleteFileGroupByIds(List<Long> ids){
 
 
     }*/
-
+   /* @ApiOperation(value = "根据条件查询文件夹功能", notes = "根据条件查询文件夹功能")
+    @RequestMapping(value = "/selectTree",method = RequestMethod.GET)
+    @ResponseBody
+    public JSONObject selectTree(FileManageGroup fileManageGroup){
+      List <FileManageGroup>  treeList=fileManageGroupService.selectTree(fileManageGroup);
+        return null;
+    }*/
 
             }
 

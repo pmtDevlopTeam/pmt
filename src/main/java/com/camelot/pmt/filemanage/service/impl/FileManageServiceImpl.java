@@ -1,12 +1,12 @@
 package com.camelot.pmt.filemanage.service.impl;
 
-import com.baomidou.mybatisplus.plugins.pagination.PageHelper;
 import com.camelot.pmt.filemanage.mapper.FileManageGroupMapper;
 import com.camelot.pmt.filemanage.mapper.FileManageMapper;
 import com.camelot.pmt.filemanage.model.FileManage;
 import com.camelot.pmt.filemanage.model.FileManageGroup;
 import com.camelot.pmt.filemanage.service.FileManageService;
 import com.camelot.pmt.platform.utils.ExecuteResult;
+import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.slf4j.Logger;
@@ -106,17 +106,34 @@ public class FileManageServiceImpl implements FileManageService {
     }
 
     @Override
-    public ExecuteResult<PageInfo> selectFileByGroupID(FileManageGroup fileManageGroup,int currentPage,int pageSize) {
+    public ExecuteResult<PageInfo> selectFileByGroupID(FileManageGroup fileManageGroup) {
         ExecuteResult<PageInfo> result = new ExecuteResult<PageInfo>();
         try {
             Long id = fileManageGroup.getId();//获取文件group_id
-            PageHelper.startPage(currentPage,pageSize);
-            List<FileManage> fileList= fileManageMapper.selectFileByGroupID(id);//文件查询
+            PageHelper.startPage(fileManageGroup.getCurrentPage(),fileManageGroup.getPageSize());
+            List<FileManage> fileList= fileManageMapper.selectFileByGroupID(fileManageGroup);//文件查询
             PageInfo<FileManage> fileManagePageInfo = new PageInfo<>(fileList);
             if (fileList.size() <= 0) {
                 return result;
             }
             result.setResult(fileManagePageInfo);
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+        return result;
+    }
+
+    @Override
+    public ExecuteResult<List<FileManage>> selectAllFile() {
+        ExecuteResult<List<FileManage>> result = new ExecuteResult<List<FileManage>>();
+        try {
+
+            List<FileManage> fileList= fileManageMapper.selectAllFile();//文件查询
+            if (fileList.size() <= 0) {
+                return result;
+            }
+            result.setResult(fileList);
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
             throw new RuntimeException(e);

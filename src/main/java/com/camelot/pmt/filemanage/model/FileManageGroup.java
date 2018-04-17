@@ -25,6 +25,9 @@ public class FileManageGroup {
     private String delFlag;
 
     private Integer isfile;
+    private int currentPage;
+    private int pageSize;
+    private int indexPage;
 
     public Long getId() {
         return id;
@@ -114,6 +117,30 @@ public class FileManageGroup {
         this.isfile = isfile;
     }
 
+    public int getCurrentPage() {
+        return currentPage;
+    }
+
+    public void setCurrentPage(int currentPage) {
+        this.currentPage = currentPage;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
+    }
+
+    public int getIndexPage() {
+        return indexPage;
+    }
+
+    public void setIndexPage(int indexPage) {
+        this.indexPage = indexPage;
+    }
+
     @Override
     public String toString() {
         return "FileManageGroup{" +
@@ -128,6 +155,9 @@ public class FileManageGroup {
                 ", modifyTime=" + modifyTime +
                 ", delFlag='" + delFlag + '\'' +
                 ", isfile=" + isfile +
+                ", currentPage=" + currentPage +
+                ", pageSize=" + pageSize +
+                ", indexPage=" + indexPage +
                 '}';
     }
 }

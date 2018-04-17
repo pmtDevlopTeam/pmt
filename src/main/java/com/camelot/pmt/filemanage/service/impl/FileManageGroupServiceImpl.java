@@ -11,6 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -70,6 +72,7 @@ public class FileManageGroupServiceImpl implements FileManageGroupService {
         try{
             Long id = fileManageGroup.getId();//文件夹id
             fileManageGroupMapper.deleteByPrimaryKey(id);
+            deleteFileGroupAndFileById(id);
             result.setResult("删除文件夹成功！");
         }catch (Exception e){
             LOGGER.error(e.getMessage());
@@ -127,7 +130,10 @@ public class FileManageGroupServiceImpl implements FileManageGroupService {
         }
         return result;
     }
- public void  deleteFileGroupAndFileById(Long id){
+
+
+
+    public void  deleteFileGroupAndFileById(Long id){
         List<Long> fileManageGroupIds=fileManageGroupMapper.selectFileManagerGroupByParentId(id);//获取子文件夹的id
      if(fileManageGroupIds.size()>0){
          fileManageGroupMapper.deleteBatchFileGroupById(fileManageGroupIds);//批量删除文件夹
@@ -142,4 +148,34 @@ public class FileManageGroupServiceImpl implements FileManageGroupService {
         }
 
     }
+
+
+
+   /* @Override
+    public List<FileManageGroup> selectTree(FileManageGroup fileManageGroup) {
+        List<List<FileManageGroup>> groupList1 = null;
+        FileManageGroup fileManageGroup1=new FileManageGroup();
+        Long projectId = fileManageGroup.getProjectId();
+        Integer isfile = fileManageGroup.getIsfile();
+        Long parentId1 = fileManageGroup.getParentId();
+          List<FileManageGroup> groupList=fileManageGroupMapper.selectFileGroup(fileManageGroup);
+            for (FileManageGroup group :
+            groupList) {
+                Long id = group.getId();
+                fileManageGroup1.setParentId(id);
+                List<FileManageGroup> digui = digui(fileManageGroup1);
+                groupList1.add(digui);
+            }
+        return null;
+    }
+    public List<FileManageGroup> digui(FileManageGroup fileManageGroup){
+        List<FileManageGroup> digui = null;
+        List<FileManageGroup> groupList=fileManageGroupMapper.selectFileGroup(fileManageGroup);
+        for (FileManageGroup group:
+        groupList) {
+
+        }
+        digui = digui(group);
+        return groupList;
+    }*/
 }

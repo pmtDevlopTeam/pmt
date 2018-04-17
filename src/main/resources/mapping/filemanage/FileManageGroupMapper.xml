@@ -174,7 +174,7 @@
     select * from file_manage_group where project_id=#{projectId}
   </select>-->
   <select id="selectFileGroup" parameterType="com.camelot.pmt.filemanage.model.FileManageGroup" resultType="com.camelot.pmt.filemanage.model.FileManageGroup">
-    select * from file_manage_group
+    select <include refid="Base_Column_List" /> from file_manage_group
     <where>
      <if test="projectId!=null">
         project_id=#{projectId}

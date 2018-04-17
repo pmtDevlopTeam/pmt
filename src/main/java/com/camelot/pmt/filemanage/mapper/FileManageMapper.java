@@ -1,6 +1,7 @@
 package com.camelot.pmt.filemanage.mapper;
 
 import com.camelot.pmt.filemanage.model.FileManage;
+import com.camelot.pmt.filemanage.model.FileManageGroup;
 
 import java.util.List;
 /*
@@ -23,9 +24,11 @@ public interface FileManageMapper {
 
     int updateByPrimaryKey(FileManage record);//根据id修改
 
-    List<FileManage> selectFileByGroupID(Long id);//根据组id查询
+    List<FileManage> selectFileByGroupID(FileManageGroup fileManageGroup);//根据组id查询
 
     List selectFileManagerByGroupId(Long id);//根据组id查询
 
     void deleteBatchFileById(List fileManagerIds);//根据id进行批量删除
+
+    List<FileManage> selectAllFile();
 }
