@@ -1,7 +1,7 @@
 package com.camelot.pmt.project.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
-import com.camelot.pmt.platform.common.ApiResponse;
+import com.camelot.pmt.common.ApiResponse;
 import com.camelot.pmt.project.mapper.VersionMapper;
 import com.camelot.pmt.project.model.Version;
 import com.camelot.pmt.project.model.VersionVo;
@@ -9,13 +9,12 @@ import com.camelot.pmt.project.service.VersionService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
-import groovy.util.logging.Slf4j;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * @Package: com.camelot.pmt.project.service.impl
@@ -25,7 +24,7 @@ import java.util.UUID;
  * @date: 2018-04-13 11:00
  */
 @Service
-@Slf4j
+//@Slf4j
 public class VersionServiceImpl implements VersionService{
     @Autowired
     private  VersionMapper versionMapper;

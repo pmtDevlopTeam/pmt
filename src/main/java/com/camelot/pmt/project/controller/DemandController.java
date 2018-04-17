@@ -5,6 +5,7 @@ import java.util.Date;
 
 import javax.annotation.Resource;
 
+import com.camelot.pmt.common.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -17,11 +18,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
-import com.camelot.pmt.platform.common.APIStatus;
-import com.camelot.pmt.platform.common.ApiResponse;
-import com.camelot.pmt.platform.utils.DataGrid;
-import com.camelot.pmt.platform.utils.ExecuteResult;
-import com.camelot.pmt.platform.utils.Pager;
 import com.camelot.pmt.project.model.Demand;
 import com.camelot.pmt.project.model.DemandOperate;
 import com.camelot.pmt.project.service.DemandService;
@@ -30,11 +26,6 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import springfox.documentation.annotations.ApiIgnore;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
-
-import javax.annotation.Resource;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * @Author:fjy
@@ -58,24 +49,20 @@ public class DemandController {
     @ApiOperation(value = "新增需求", notes = "新增需求")
     @PostMapping(value = "/api/demand/insertDemand")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "pid", value = "所属一级需求id", required = false, paramType = "form", dataType = "Long"),
-            @ApiImplicitParam(name = "projectId", value = "项目id", required = true, paramType = "form", dataType = "String"),
-            @ApiImplicitParam(name = "demandName", value = "需求名称", required = true, paramType = "form", dataType = "String"),
-            @ApiImplicitParam(name = "demandNum", value = "需求编号", required = true, paramType = "form", dataType = "String"),
-            @ApiImplicitParam(name = "demandSource", value = "需求来源", required = true, paramType = "form", dataType = "String"),
-            @ApiImplicitParam(name = "demandLevel", value = "优先级", required = true, paramType = "form", dataType = "String"),
-            @ApiImplicitParam(name = "sourceRemark", value = "需求来源备注", required = true, paramType = "form", dataType = "String"),
-            @ApiImplicitParam(name = "createUserId", value = "创建人", required = true, paramType = "form", dataType = "String"),
-            @ApiImplicitParam(name = "assignedTo", value = "指派给", required = true, paramType = "form", dataType = "String"),
-            @ApiImplicitParam(name = "reviewedWith", value = "由谁评审(人员user_id用逗号拼接)", required = true, paramType = "form", dataType = "String"),
-            @ApiImplicitParam(name = "demandDesc", value = "需求描述", required = false, paramType = "form", dataType = "String") })
+            @ApiImplicitParam(name = "pid", value = "所属一级需求id", required = false, paramType = "query", dataType = "Long"),
+            @ApiImplicitParam(name = "projectId", value = "项目id", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "demandName", value = "需求名称", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "demandNum", value = "需求编号", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "demandSource", value = "需求来源", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "demandLevel", value = "优先级", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "sourceRemark", value = "需求来源备注", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "createUserId", value = "创建人", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "assignedTo", value = "指派给", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "reviewedWith", value = "由谁评审(人员user_id用逗号拼接)", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "demandDesc", value = "需求描述", required = false, paramType = "query", dataType = "String") })
     public JSONObject insertDemand(@ApiIgnore Demand demandWithBLOBs) {
         ExecuteResult<String> result = new ExecuteResult<String>();
         try {
-            // 非空判断
-            if (demandWithBLOBs == null) {
-                return ApiResponse.error("入参为空");
-            }
             Date currentDate = new Date();
             demandWithBLOBs.setCreateTime(currentDate);
             demandWithBLOBs.setModifyUserId(demandWithBLOBs.getCreateUserId());
@@ -121,20 +108,20 @@ public class DemandController {
     @ApiOperation(value = "编辑", notes = "需求编辑/评审/变更/添加备注/关闭")
     @PutMapping(value = "/api/demand/updateById")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "需求id", required = true, paramType = "form", dataType = "Long"),
-            @ApiImplicitParam(name = "pid", value = "所属上级需求id", required = false, paramType = "form", dataType = "Long"),
-            @ApiImplicitParam(name = "reviewTime", value = "评审时间", required = false, paramType = "form", dataType = "Date"),
-            @ApiImplicitParam(name = "demandNeed", value = "需求层级", required = false, paramType = "form", dataType = "String"),
-            @ApiImplicitParam(name = "reviewResults", value = "评审结果", required = false, paramType = "form", dataType = "String"),
-            @ApiImplicitParam(name = "assignedTo", value = "指派给", required = false, paramType = "form", dataType = "String"),
-            @ApiImplicitParam(name = "reviewedWith", value = "由谁评审", required = false, paramType = "form", dataType = "String"),
-            @ApiImplicitParam(name = "reviewRemark", value = "评审备注", required = false, paramType = "form", dataType = "String"),
-            @ApiImplicitParam(name = "reasonsejection", value = "拒绝原因", required = false, paramType = "form", dataType = "String"),
-            @ApiImplicitParam(name = "closeReason", value = "关闭原因", required = false, paramType = "form", dataType = "String"),
-            @ApiImplicitParam(name = "demandName", value = "需求名称", required = false, paramType = "form", dataType = "String"),
+            @ApiImplicitParam(name = "id", value = "需求id", required = true, paramType = "query", dataType = "Long"),
+            @ApiImplicitParam(name = "pid", value = "所属上级需求id", required = false, paramType = "query", dataType = "Long"),
+            @ApiImplicitParam(name = "reviewTime", value = "评审时间", required = false, paramType = "query", dataType = "Date"),
+            @ApiImplicitParam(name = "demandNeed", value = "需求层级", required = false, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "reviewResults", value = "评审结果", required = false, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "assignedTo", value = "指派给", required = false, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "reviewedWith", value = "由谁评审", required = false, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "reviewRemark", value = "评审备注", required = false, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "reasonsejection", value = "拒绝原因", required = false, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "closeReason", value = "关闭原因", required = false, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "demandName", value = "需求名称", required = false, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "modifyUserId", value = "修改人id", required = true, paramType = "query", dataType = "String"),
-            @ApiImplicitParam(name = "demandDesc", value = "需求描述", required = false, paramType = "form", dataType = "String"),
-            @ApiImplicitParam(name = "closeReason", value = "关闭原因", required = false, paramType = "form", dataType = "String") })
+            @ApiImplicitParam(name = "demandDesc", value = "需求描述", required = false, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "closeReason", value = "关闭原因", required = false, paramType = "query", dataType = "String") })
     public JSONObject updateById(Demand demand) {
         ExecuteResult<String> result = new ExecuteResult<>();
         try {

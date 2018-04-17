@@ -5,7 +5,8 @@
  */
 package com.camelot.pmt.project.service;
 
-import com.camelot.pmt.platform.utils.ExecuteResult;
+
+import com.camelot.pmt.common.ExecuteResult;
 
 /**
  * @ClassName: ProjectWarningService

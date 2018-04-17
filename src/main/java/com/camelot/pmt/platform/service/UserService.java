@@ -2,9 +2,7 @@ package com.camelot.pmt.platform.service;
 
 import java.util.List;
 
-import com.camelot.pmt.common.DataGrid;
 import com.camelot.pmt.common.ExecuteResult;
-import com.camelot.pmt.common.Pager;
 import com.camelot.pmt.platform.model.User;
 import com.camelot.pmt.platform.model.vo.UserVo;
 
@@ -22,7 +20,7 @@ public interface UserService {
 	 * Description:[添加用户]
 	 * </p>
 	 * 
-	 * @param User
+	 * @param
 	 * @return ExecuteResult<String>
 	 * @author [maple]
 	 */
@@ -32,7 +30,7 @@ public interface UserService {
 	 * 
 	 * Description:[删除用户]
 	 * 
-	 * @param User
+	 * @param
 	 * @author [maple]
 	 * @return
 	 */
@@ -67,22 +65,22 @@ public interface UserService {
 	 */
 	ExecuteResult<User> queryLoginCodeAndPassword(User user);
 
-	/**
-	 * 
-	 * Description:[分页查询用户列表]
-	 * 
-	 * @param Pager
-	 *            page
-	 * @return ExecuteResult<DataGrid<User>>
-	 * @author [maple]
-	 */
-	ExecuteResult<DataGrid<User>> queryUsersByPage(Pager page);
+//	/**
+//	 * 
+//	 * Description:[分页查询用户列表]
+//	 * 
+//	 * @param Pager
+//	 *            page
+//	 * @return ExecuteResult<DataGrid<User>>
+//	 * @author [maple]
+//	 */
+//	ExecuteResult<DataGrid<User>> queryUsersByPage(Pager page);
 
 	/**
 	 * 
 	 * Description:[列表展示用户]
 	 * 
-	 * @param UserVo
+	 * @param
 	 *            userVo
 	 * @return ExecuteResult<List<UserVo>>
 	 * @author [maple] 2018年4月13日下午3:15:16
@@ -93,7 +91,7 @@ public interface UserService {
 	 * 
 	 * Description:[根据用户ID更新一个用户详情]
 	 * 
-	 * @param User
+	 * @param
 	 * @return ExecuteResult<String>
 	 * @author [maple]
 	 */
@@ -108,6 +106,16 @@ public interface UserService {
 	 * 2018年4月16日上午10:34:21
 	 */
 	ExecuteResult<User> queryUserInfoById(String userId);
+	
+	/**
+	 * 
+	 * Description:[用户重置密码]
+	 * @param User user
+	 * @return ExecuteResult<String>
+	 * @author [maple]
+	 * 2018年4月16日下午10:44:45
+	 */
+	ExecuteResult<String> resetUserPasswordByUserId(User user);
     
 
 }

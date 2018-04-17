@@ -22,7 +22,7 @@ public interface DictService {
 	 * @param Dict dict
 	 * @return ExecuteResult<Dict>
 	 */
-	ExecuteResult<Dict> createDict(Dict dict);
+	ExecuteResult<String> createDict(Dict dict);
 	/**
 	 * 根据字典dictId 删除一个字典
 	 * 
@@ -36,7 +36,7 @@ public interface DictService {
 	 * @param Dict dict
 	 * @return ExecuteResult<Dict>
 	 */
-	ExecuteResult<Dict> modifyDictByDictId(Dict dict);
+	ExecuteResult<String> modifyDictByDictId(Dict dict);
     /**
      * 根据字典dictId 查询一个字典
      * 
@@ -71,7 +71,7 @@ public interface DictService {
      * @param Dict dict
      * @return ExecuteResult<Dict>
      */
-	ExecuteResult<Dict> checkDictCodeOrDictNameIsExist(Dict dict);
+	ExecuteResult<String> checkDictCodeOrDictNameIsExist(Dict dict);
 
 	
 }

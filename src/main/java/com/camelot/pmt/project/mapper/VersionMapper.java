@@ -2,10 +2,10 @@ package com.camelot.pmt.project.mapper;
 
 import java.util.List;
 
+import com.camelot.pmt.common.Pager;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
-import com.camelot.pmt.platform.utils.Pager;
 import com.camelot.pmt.project.model.Version;
 import com.camelot.pmt.project.model.VersionVo;
 

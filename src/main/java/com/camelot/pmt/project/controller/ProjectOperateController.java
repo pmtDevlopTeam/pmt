@@ -2,6 +2,8 @@ package com.camelot.pmt.project.controller;
 
 import java.util.List;
 
+import com.camelot.pmt.common.ApiResponse;
+import com.camelot.pmt.common.ExecuteResult;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,8 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
-import com.camelot.pmt.platform.common.ApiResponse;
-import com.camelot.pmt.platform.utils.ExecuteResult;
 import com.camelot.pmt.project.model.ProjectOperate;
 import com.camelot.pmt.project.service.ProjectOperateService;
 

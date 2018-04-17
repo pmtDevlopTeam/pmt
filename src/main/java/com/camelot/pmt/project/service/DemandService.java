@@ -1,8 +1,8 @@
 package com.camelot.pmt.project.service;
 
-import com.camelot.pmt.platform.utils.DataGrid;
-import com.camelot.pmt.platform.utils.ExecuteResult;
-import com.camelot.pmt.platform.utils.Pager;
+import com.camelot.pmt.common.DataGrid;
+import com.camelot.pmt.common.ExecuteResult;
+import com.camelot.pmt.common.Pager;
 import com.camelot.pmt.project.model.Demand;
 import com.camelot.pmt.project.model.DemandOperate;
 

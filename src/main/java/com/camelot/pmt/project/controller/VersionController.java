@@ -2,12 +2,12 @@ package com.camelot.pmt.project.controller;
 
 import javax.annotation.Resource;
 
+import com.camelot.pmt.common.Pager;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
-import com.camelot.pmt.platform.utils.Pager;
 import com.camelot.pmt.project.model.VersionVo;
 import com.camelot.pmt.project.service.VersionService;
 

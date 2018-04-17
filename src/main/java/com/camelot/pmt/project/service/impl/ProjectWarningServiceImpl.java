@@ -5,10 +5,10 @@
  */
 package com.camelot.pmt.project.service.impl;
 
+import com.camelot.pmt.common.CommonsUtil;
+import com.camelot.pmt.common.ExecuteResult;
 import org.springframework.stereotype.Service;
 
-import com.camelot.pmt.platform.utils.ExecuteResult;
-import com.camelot.pmt.project.common.CommonsUtil;
 import com.camelot.pmt.project.model.Warning;
 import com.camelot.pmt.project.service.ProjectWarningService;
 

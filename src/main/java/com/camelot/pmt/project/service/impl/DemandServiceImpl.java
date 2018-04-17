@@ -6,14 +6,14 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import com.camelot.pmt.common.DataGrid;
+import com.camelot.pmt.common.ExecuteResult;
+import com.camelot.pmt.common.Pager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import com.camelot.pmt.platform.utils.DataGrid;
-import com.camelot.pmt.platform.utils.ExecuteResult;
-import com.camelot.pmt.platform.utils.Pager;
 import com.camelot.pmt.project.mapper.DemandMapper;
 import com.camelot.pmt.project.mapper.DemandOperateMapper;
 import com.camelot.pmt.project.model.Demand;

@@ -25,5 +25,5 @@ public interface MailService {
 	 * @param content	内容
 	 * @param filePath	附件
 	 */
-	void sendSimpleMail(String to, String subject, String content,  String filePath);
+	void sendSimpleMail(String to, String subject, String content, String filePath);
 }
