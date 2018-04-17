@@ -144,7 +144,7 @@ public class DemandController {
      * @param demand
      * @return
      */
-    @ApiOperation(value = "编辑", notes = "需求编辑/评审/变更/添加备注/关闭")
+    @ApiOperation(value = "需求评审、变更、关闭、编辑功能", notes = "需求编辑/评审/变更/添加备注/关闭")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "需求id", required = true, paramType = "form", dataType = "Long"),
             @ApiImplicitParam(name = "pid", value = "所属上级需求id", required = false, paramType = "form", dataType = "Long"),
@@ -155,7 +155,6 @@ public class DemandController {
             @ApiImplicitParam(name = "reviewedWith", value = "由谁评审", required = false, paramType = "form", dataType = "String"),
             @ApiImplicitParam(name = "reviewRemark", value = "评审备注", required = false, paramType = "form", dataType = "String"),
             @ApiImplicitParam(name = "reasonsejection", value = "拒绝原因", required = false, paramType = "form", dataType = "String"),
-            @ApiImplicitParam(name = "closeReason", value = "关闭原因", required = false, paramType = "form", dataType = "String"),
             @ApiImplicitParam(name = "demandName", value = "需求名称", required = false, paramType = "form", dataType = "String"),
             @ApiImplicitParam(name = "demandDesc", value = "需求描述", required = false, paramType = "form", dataType = "String"),
             @ApiImplicitParam(name = "closeReason", value = "关闭原因", required = false, paramType = "form", dataType = "String")})
