@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.camelot.pmt.project.mapper.ProjectUserMapper;
 import com.camelot.pmt.project.model.ProjectUser;
+import com.camelot.pmt.project.model.ProjectUserSearchVO;
 import com.camelot.pmt.project.model.ProjectUserShow;
 import com.camelot.pmt.project.service.ProjectUserService;
 
@@ -35,6 +36,26 @@ public class ProjectUserServiceImpl implements ProjectUserService {
     @Override
     public List<ProjectUserShow> searchUserByProjectId(Long projectId) {
         return projectUserMapper.searchUserByProjectId(projectId);
+    }
+
+    @Override
+    public List<ProjectUserShow> searchProUserByCondition(ProjectUserSearchVO vo) {
+        return projectUserMapper.searchUserByCondition(vo);
+    }
+
+    @Override
+    public int count(ProjectUserSearchVO vo) {
+        return projectUserMapper.count(vo);
+    }
+
+    @Override
+    public void clearUser(Long projectId, String userId) {
+        projectUserMapper.clearUser(projectId, userId);
+    }
+
+    @Override
+    public int clearUser(Long projectId, String userId, String userStatus) {
+        return projectUserMapper.clearUserAll(projectId, userId, userStatus);
     }
 
 }

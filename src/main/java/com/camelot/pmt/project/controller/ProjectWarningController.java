@@ -22,7 +22,6 @@ import com.camelot.pmt.platform.utils.DataGrid;
 import com.camelot.pmt.platform.utils.ExecuteResult;
 import com.camelot.pmt.project.service.ProjectWarningService;
 
-
 /**
  * @ClassName: ProjectWarningController
  * @Description: 项目预警controller

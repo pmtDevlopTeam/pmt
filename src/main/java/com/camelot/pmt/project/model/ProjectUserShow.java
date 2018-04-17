@@ -16,6 +16,7 @@ public class ProjectUserShow {
     private String userStatus;
     private Long userProRole;
     private String userProRoleName;
+    private String userJobNum;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date preJoinTime;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
@@ -128,6 +129,14 @@ public class ProjectUserShow {
 
     public void setUserRoleNames(List<String> userRoleNames) {
         this.userRoleNames = userRoleNames;
+    }
+
+    public String getUserJobNum() {
+        return userJobNum;
+    }
+
+    public void setUserJobNum(String userJobNum) {
+        this.userJobNum = userJobNum;
     }
 
 }

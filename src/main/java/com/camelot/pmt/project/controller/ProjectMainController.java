@@ -133,7 +133,8 @@ public class ProjectMainController {
      */
     @ApiOperation(value = "按状态分类查询", notes = "按状态分类查询")
     @GetMapping(value = "/api/projectMain/findByProjectStatus")
-    public JSONObject findByProjectStatus(@ApiParam(value = "项目状态", required = true) @RequestParam String projectStatus) {
+    public JSONObject findByProjectStatus(
+            @ApiParam(value = "项目状态", required = true) @RequestParam String projectStatus) {
         logger.info("入参封装的数据为：projectStatus={}", projectStatus);
         ExecuteResult<List<ProjectMain>> result = new ExecuteResult<>();
         try {
@@ -183,7 +184,8 @@ public class ProjectMainController {
      */
     @ApiOperation(value = "按创建人id查询", notes = "按创建人id查询")
     @GetMapping(value = "/api/projectMain/findByCreateUserId")
-    public JSONObject findByCreateUserId(@ApiParam(value = "创建人id", required = true) @RequestParam String createUserId) {
+    public JSONObject findByCreateUserId(
+            @ApiParam(value = "创建人id", required = true) @RequestParam String createUserId) {
         logger.info("入参封装的数据为：createUserId={}", createUserId);
         ExecuteResult<List<ProjectMain>> result = new ExecuteResult<>();
         try {
@@ -208,7 +210,8 @@ public class ProjectMainController {
      */
     @ApiOperation(value = "按修改人id查询", notes = "按修改人id查询")
     @GetMapping(value = "/api/projectMain/findByModifyUserId")
-    public JSONObject findByModifyUserId(@ApiParam(value = "修改人id", required = true) @RequestParam String modifyUserId) {
+    public JSONObject findByModifyUserId(
+            @ApiParam(value = "修改人id", required = true) @RequestParam String modifyUserId) {
         logger.info("入参封装的数据为：modifyUserId={}", modifyUserId);
         ExecuteResult<List<ProjectMain>> result = new ExecuteResult<>();
         try {
@@ -244,11 +247,12 @@ public class ProjectMainController {
     @ApiOperation(value = "按主键id更新数据", notes = "按主键id更新数据")
     @PutMapping(value = "/api/projectMain/updateByPrimaryKeySelective")
     public JSONObject updateByPrimaryKeySelective(
-    //
+            //
             @ApiParam(value = "id", required = true) @RequestParam Long id, //
             @ApiParam(value = "创建人id", required = true) @RequestParam String createUserId, //
             @ApiParam(value = "负责人Id", required = true) @RequestParam String userId, //
             @ApiParam(value = "修改人id", required = true) @RequestParam String modifyUserId, //
+            @ApiParam(value = "修改时间", required = true) @RequestParam @DateTimeFormat(iso = ISO.DATE) Date modifyTime, //
             @ApiParam(value = "项目编号", required = true) @RequestParam String projectNum, //
             @ApiParam(value = "项目名称", required = true) @RequestParam String projectName, //
             @ApiParam(value = "项目状态", required = true) @RequestParam String projectStatus, //
@@ -264,24 +268,13 @@ public class ProjectMainController {
         ExecuteResult<String> result = new ExecuteResult<>();
         try {
             if (id == null || StringUtils.isEmpty(createUserId) || StringUtils.isEmpty(userId)
-                    || StringUtils.isEmpty(modifyUserId) || StringUtils.isEmpty(projectNum)
+                    || StringUtils.isEmpty(modifyUserId) || modifyTime == null || StringUtils.isEmpty(projectNum)
                     || StringUtils.isEmpty(projectName) || StringUtils.isEmpty(projectStatus) || startTime == null
                     || endTime == null || StringUtils.isEmpty(projectDesc) || StringUtils.isEmpty(operateDesc)) {
                 return ApiResponse.errorPara();
             }
-
-            ProjectMain projectMain = new ProjectMain();
-            projectMain.setId(id);
-            projectMain.setUserId(userId);
-            projectMain.setModifyUserId(modifyUserId);
-            projectMain.setModifyTime(new Date());
-            projectMain.setProjectNum(projectNum);
-            projectMain.setProjectName(projectName);
-            projectMain.setProjectStatus(projectStatus);
-            projectMain.setProjectDesc(projectDesc);
-            projectMain.setStartTime(startTime);
-            projectMain.setEndTime(endTime);
-            result = projectMainService.updateByPrimaryKeySelective(projectMain, createUserId, operateDesc);
+            result = projectMainService.updateByPrimaryKeySelective(id, userId, modifyUserId, modifyTime, projectNum,
+                    projectName, projectStatus, projectDesc, startTime, endTime, createUserId, operateDesc);
             if (result.isSuccess()) {
                 return ApiResponse.success(result.getResult());
             }
@@ -301,8 +294,7 @@ public class ProjectMainController {
      */
     @ApiOperation(value = "根据id删除项目", notes = "根据id删除项目")
     @DeleteMapping(value = "/api/projectMain/deleteByPrimaryKey")
-    public JSONObject deleteByPrimaryKey(
-    //
+    public JSONObject deleteByPrimaryKey(//
             @ApiParam(value = "id", required = true) @RequestParam Long id, //
             @ApiParam(value = "创建人id", required = true) @RequestParam String createUserId, //
             @ApiParam(value = "operateDesc", required = true) @RequestParam String operateDesc) {
@@ -310,7 +302,7 @@ public class ProjectMainController {
         logger.info("入参封装的数据为：id={},createUserId={},operateDesc={}", id, createUserId, operateDesc);
         ExecuteResult<String> result = new ExecuteResult<>();
         try {
-            if (StringUtils.isEmpty(createUserId) || id == null) {
+            if (StringUtils.isEmpty(createUserId) || id == null || StringUtils.isEmpty(operateDesc)) {
                 return ApiResponse.errorPara();
             }
             result = projectMainService.deleteByPrimaryKey(id, createUserId, operateDesc);
@@ -330,7 +322,7 @@ public class ProjectMainController {
      * @return
      */
     @ApiOperation(value = "按项目id查询", notes = "按项目id查询")
-    @GetMapping(value = "/api/projectMain/selectByPrimaryKey")
+    @GetMapping(value = "/api/projectMain/getByPrimaryKey")
     public JSONObject selectByPrimaryKey(@ApiParam(value = "项目id", required = true) @RequestParam Long id) {
 
         logger.info("入参封装的数据为：id={}", id);
@@ -349,15 +341,56 @@ public class ProjectMainController {
         }
     }
 
-    // 根据项目id更新项目状态 项目成员表成员状态 需求状态 任务状态 bug用例状态
+    /**
+     * 关闭项目时,更新相关数据
+     * 
+     * @param id
+     * @param createUserId
+     * @param modifyUserId
+     * @param projectStatus
+     * @param userStatus
+     * @param demandStatus
+     * @param closeReason
+     * @param status
+     * @param caseStatus
+     * @param operateDesc
+     * @return
+     */
+    @ApiOperation(value = "关闭项目时,更新相关数据", notes = "关闭项目时,更新相关数据")
+    @PutMapping(value = "/api/projectMain/closeProjectById")
+    public JSONObject closeProjectById(//
+            @ApiParam(value = "id", required = true) @RequestParam Long id, //
+            @ApiParam(value = "创建人id", required = true) @RequestParam String createUserId, //
+            @ApiParam(value = "修改人id", required = true) @RequestParam String modifyUserId, //
+            @ApiParam(value = "项目状态", required = true) @RequestParam String projectStatus, //
+            @ApiParam(value = "成员在项目状态", required = true) @RequestParam String userStatus, //
+            @ApiParam(value = "需求状态", required = true) @RequestParam String demandStatus, //
+            @ApiParam(value = "关闭原因", required = true) @RequestParam String closeReason, //
+            @ApiParam(value = "任务状态", required = true) @RequestParam String status, //
+            @ApiParam(value = "用例状态", required = true) @RequestParam String caseStatus, //
+            @ApiParam(value = "操作描述", required = true) @RequestParam String operateDesc) {
 
-    // 项目id 修改人 修改时间 项目状态 projectMain
+        logger.info("入参封装的数据为：id={},createUserId={},modifyUserId={},projectStatus={},operateDesc={},"//
+                + "userStatus={},demandStatus={},closeReason={},status={},caseStatus={}", id, createUserId,
+                modifyUserId, projectStatus, operateDesc, userStatus, demandStatus, closeReason, status, caseStatus);
+        ExecuteResult<String> result = new ExecuteResult<>();
+        try {
+            if (id == null || StringUtils.isEmpty(createUserId) || StringUtils.isEmpty(modifyUserId)
+                    || StringUtils.isEmpty(projectStatus) || StringUtils.isEmpty(operateDesc)
+                    || StringUtils.isEmpty(userStatus) || StringUtils.isEmpty(demandStatus)
+                    || StringUtils.isEmpty(closeReason) || StringUtils.isEmpty(status)
+                    || StringUtils.isEmpty(caseStatus)) {
+                return ApiResponse.errorPara();
+            }
 
-    // 项目操作表存数据
-
-    // 需求表更改状态
-
-    // 任务表更改状态
-
-    // bug用例状态
+            result = projectMainService.closeProjectById(id, createUserId, modifyUserId, projectStatus, operateDesc,
+                    userStatus, demandStatus, closeReason, status, caseStatus);
+            if (result.isSuccess()) {
+                return ApiResponse.success(result.getResult());
+            }
+            return ApiResponse.error();
+        } catch (Exception e) {
+            return ApiResponse.error();
+        }
+    }
 }
