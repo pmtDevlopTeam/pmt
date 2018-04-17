@@ -1,8 +1,10 @@
 package com.camelot.pmt.task.model;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.camelot.pmt.platform.model.User;
 import com.camelot.pmt.project.model.Demand;
 import com.camelot.pmt.project.model.Project;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -51,22 +53,27 @@ public class Task implements Serializable{
     /**
      * 任务指派时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date assignTime;
     /**
      * 任务预计开始时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date estimateStartTime;
     /**
      * 任务预计结束时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date estimateEndTime;
     /**
      * 任务实际开始时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date actualStartTime;
     /**
      * 任务实际结束时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date actualEndTime;
     /**
      * 任务类型

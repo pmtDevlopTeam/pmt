@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
@@ -73,10 +74,10 @@ public class TaskManagerController {
 
     @PostMapping(value = "/insertTask")
     @ApiOperation(value = "新增任务接口", notes = "新增任务")
-    public JSONObject insertTask(TaskManager taskManager) {
+    public JSONObject insertTask(TaskManager taskManager, MultipartFile file) {
         ExecuteResult<String> result = null;
         try {
-            result = taskManagerService.insertTask(taskManager);
+            result = taskManagerService.insertTask(taskManager, file);
             if (result.isSuccess()) {
                 return ApiResponse.success(result.getResult());
             }

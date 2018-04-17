@@ -2,6 +2,7 @@ package com.camelot.pmt.task.service;
 
 import com.camelot.pmt.platform.common.ExecuteResult;
 import com.camelot.pmt.task.model.TaskManager;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -33,7 +34,7 @@ public interface TaskManagerService {
      * @description: 新增任务
      * @date: 9:10 2018/4/12
      */
-    ExecuteResult<String> insertTask(TaskManager taskManager);
+    ExecuteResult<String> insertTask(TaskManager taskManager, MultipartFile file);
 
     /**
      * @author: zlh

@@ -2,7 +2,9 @@ package com.camelot.pmt.task.service.impl;
 
 import com.camelot.pmt.platform.common.ExecuteResult;
 import com.camelot.pmt.task.mapper.TaskMapper;
+import com.camelot.pmt.task.model.TaskFile;
 import com.camelot.pmt.task.model.TaskManager;
+import com.camelot.pmt.task.service.TaskFileService;
 import com.camelot.pmt.task.service.TaskManagerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,7 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.FileSystemUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -21,6 +26,9 @@ import java.util.List;
 public class TaskManagerServiceImpl implements TaskManagerService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TaskManagerServiceImpl.class);
+
+    @Autowired
+    private TaskFileService taskFileService;
 
     @Autowired
     private TaskMapper taskMapper;
@@ -76,16 +84,35 @@ public class TaskManagerServiceImpl implements TaskManagerService {
      * @date: 9:10 2018/4/12
      */
     @Override
-    public ExecuteResult<String> insertTask(TaskManager taskManager) {
+    public ExecuteResult<String> insertTask(TaskManager taskManager, MultipartFile file) {
         ExecuteResult<String> result = new ExecuteResult<String>();
         try {
+            // check参数
             if (taskManager == null) {
                 result.addErrorMessage("传入信息有误");
                 return result;
             }
-            // 默认状态下任务状态为未开始
-            taskManager.setStatus("未开始的状态码");
+            // 如果任务类型为需求任务，上传附件
+            if ("需求".equals(taskManager.getTaskType())) {
+                String fileName = file.getOriginalFilename();
+                byte[] bytes = file.getBytes();
+                /*写出到指定位置*/
 
+                TaskFile taskFile = new TaskFile();
+                // 附件名称
+                taskFile.setAttachmentTile(fileName);
+                // 附件路径
+                taskFile.setAttachmentUrl("文件存储路径url");
+                // 附件来源
+                taskFile.setAttachmentSource("任务");
+                // 来源id
+                taskFile.setSourceId(taskManager.getId());
+
+                taskFileService.insert(taskFile);
+            }
+
+            // 默认状态下任务状态为未开始 0为未开始的状态码
+            taskManager.setStatus("0");
             int insertTask = taskMapper.insertTask(taskManager);
             result.setResult("插入成功");
         } catch (Exception e) {
