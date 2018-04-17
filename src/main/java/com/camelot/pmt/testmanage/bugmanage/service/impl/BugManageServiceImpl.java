@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.camelot.pmt.platform.mapper.UserMapper;
 import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.caserepertory.PageBean;
-import com.camelot.pmt.caserepertory.DateUtils;
 import com.camelot.pmt.testmanage.bugmanage.mapper.BugHistoryMapper;
 import com.camelot.pmt.testmanage.bugmanage.mapper.BugManageMapper;
 import com.camelot.pmt.testmanage.bugmanage.model.BugHistory;
@@ -23,6 +22,7 @@ import com.camelot.pmt.testmanage.bugmanage.model.SelectBugManage;
 import com.camelot.pmt.testmanage.bugmanage.service.BugManageService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.camelot.pmt.task.utils.DateUtils;
 
 /**
  *
