@@ -88,7 +88,7 @@ public class UseCaseServiceImpl implements UseCaseService{
 	                return result;
 	            }
 	            useCaseMapper.updateUserCaseDelFlag(id);
-	            result.setResult("指派bug成功!");
+	            result.setResult("删除成功!");
 	        } catch (Exception e) {
 	            LOGGER.error(e.getMessage());
 	            throw new RuntimeException(e);
@@ -122,31 +122,39 @@ public class UseCaseServiceImpl implements UseCaseService{
 	
 	@Override
 	@Transactional
-	public void edit(UserModel userModel, UseCase useCase) {
+	public ExecuteResult<String> edit(UserModel userModel, UseCase useCase) {
+		ExecuteResult<String> result = new ExecuteResult<String>();
+		 try {
+			 	//判断传入的bug对象是否为空
+			// 设置修改人和修改时间时间
+				if (userModel != null) {
+					useCase.setModifyUserId(userModel.getUserId());
+					useCase.setModifyTime(new Date());
+				}
 
-		// 设置修改人和修改时间时间
-		if (userModel != null) {
-			useCase.setModifyUserId(userModel.getUserId());
-			useCase.setModifyTime(new Date());
-		}
+				// 修改
+				useCaseMapper.updateByPrimaryKeySelective(useCase);
 
-		// 修改
-		useCaseMapper.updateByPrimaryKeySelective(useCase);
-
-		List<UseCaseProcedure> list = useCase.getProcedure();
-		for (UseCaseProcedure useCaseProcedure : list) {
-			if(useCase.getId()!=null){
-				useCaseProcedure.setUseCaseId(useCase.getId());
-			}
-			//批量修改
-			if(useCaseProcedure.getId()==null){
-				//为空为添加
-				useCaseProcedureMapper.insertSelective(useCaseProcedure);
-			}else{
-				//为空为修改
-				useCaseProcedureMapper.updateByPrimaryKeySelective(useCaseProcedure);
-			}
-		}
+				List<UseCaseProcedure> list = useCase.getProcedure();
+				for (UseCaseProcedure useCaseProcedure : list) {
+					if(useCase.getId()!=null){
+						useCaseProcedure.setUseCaseId(useCase.getId());
+					}
+					//批量修改
+					if(useCaseProcedure.getId()==null){
+						//为空为添加
+						useCaseProcedureMapper.insertSelective(useCaseProcedure);
+					}else{
+						//为空为修改
+						useCaseProcedureMapper.updateByPrimaryKeySelective(useCaseProcedure);
+					}
+				}
+	            result.setResult("编辑成功!");
+	        } catch (Exception e) {
+	            LOGGER.error(e.getMessage());
+	            throw new RuntimeException(e);
+	        }
+	        return result;
 	}
 
 	@Override

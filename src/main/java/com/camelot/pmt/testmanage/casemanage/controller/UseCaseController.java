@@ -150,22 +150,20 @@ public class UseCaseController {
 	    }
 	 
 	 
-	 @ApiOperation(value = "编辑用例")
+	 	@ApiOperation(value = "编辑用例")
 		@PostMapping(value = "userCase/edit")
-		public ActionBean edit(HttpServletRequest request, @RequestBody @ApiParam(value = "useCase", required = true) UseCase useCase) {
-		 ActionBean  actionBean  =new ActionBean();
-			try {
-				UserModel user = (UserModel) request.getSession().getAttribute("user");
-				actionBean.setCode(200);
-		 		actionBean.setErrorMessage("成功");
-		 		actionBean.setResult(true);
-				UseCaseService.edit(user, useCase);
-			} catch (Exception e) {
-				actionBean.setCode(500);
-				actionBean.setErrorMessage(e.getMessage());
-				actionBean.setResult(false);
-			}
-			return actionBean;
+		public JSONObject edit(HttpServletRequest request, @RequestBody @ApiParam(value = "useCase", required = true) UseCase useCase) {
+			ExecuteResult<String> result = new ExecuteResult<String>();
+		 	try {
+	            //调用添加bug接口
+		 		UserModel user = (UserModel) request.getSession().getAttribute("user");
+	        	result=UseCaseService.edit(user, useCase);
+	            // 成功返回
+	            return ApiResponse.success(result.getResult());
+	        } catch (Exception e) {
+	            // 异常
+	            return ApiResponse.error();
+	        }
 		}
 	
 }

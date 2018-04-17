@@ -46,5 +46,5 @@ public interface UseCaseService {
 	 * @param userModel
 	 * @param useCase
 	 */
-	 void edit(UserModel userModel, UseCase useCase);
+	ExecuteResult<String> edit(UserModel userModel, UseCase useCase);
 }
