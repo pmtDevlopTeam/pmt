@@ -63,15 +63,6 @@ public class UseCaseServiceImpl implements UseCaseService{
 	 */
 	public  ExecuteResult<UseCase> getUseCaseByUseCaseId (Long id){
 		
-	/*	UseCase useCase=useCaseMapper.selectByPrimaryKey(id);
-		//获取步骤
-		List<UseCaseProcedure> useCaseProcedureList=useCaseProcedureMapper.selectByUseCaseId(useCase.getId());
-		if(useCaseProcedureList!=null){
-			useCase.setProcedure(useCaseProcedureList);
-		}
-		return useCase;*/
-		
-		
 		  ExecuteResult<UseCase> result = new ExecuteResult<UseCase>();
 			 try {
 				 UseCase useCase=useCaseMapper.selectByPrimaryKey(id);

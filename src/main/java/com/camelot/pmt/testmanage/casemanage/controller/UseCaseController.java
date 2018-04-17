@@ -136,19 +136,17 @@ public class UseCaseController {
 	    @RequestMapping(value = "userCase/updateUserCaseDelFlag", method = RequestMethod.GET)
 	    @ApiImplicitParams({
 	            @ApiImplicitParam(name = "id", value = "用例id", required = true, paramType = "query", dataType = "long") })
-	    public ActionBean updateUserCaseDelFlag(Long id) {
-		 ActionBean  actionBean  =new ActionBean();
+	    public JSONObject updateUserCaseDelFlag(Long id) {
+		 ExecuteResult<String> result = new ExecuteResult<String>();
 		 	try {
-		 		UseCaseService.updateUserCaseDelFlag(id);
-		 		actionBean.setCode(200);
-		 		actionBean.setErrorMessage("成功");
-		 		actionBean.setResult(true);
-			} catch (Exception e) {
-				actionBean.setCode(500);
-				actionBean.setErrorMessage(e.getMessage());
-				actionBean.setResult(false);
-			}
-		 	return actionBean;
+	            //调用添加bug接口
+	        	result=UseCaseService.updateUserCaseDelFlag(id);
+	            // 成功返回
+	            return ApiResponse.success(result.getResult());
+	        } catch (Exception e) {
+	            // 异常
+	            return ApiResponse.error();
+	        }
 	    }
 	 
 	 
