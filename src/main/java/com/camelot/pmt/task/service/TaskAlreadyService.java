@@ -12,7 +12,7 @@ public interface TaskAlreadyService {
 
     /**
      *
-     * @Title: queryoverdueTaskAlready @Description: TODO @param @param
+     * @Title: queryoverdueTaskAlready @Description: TODO  查询我的已办任务列表
      * page @param @return @return ExecuteResult<DataGrid<Map<String, Object>>> @throws
      * myp
      */
@@ -30,6 +30,20 @@ public interface TaskAlreadyService {
      */
 
     ExecuteResult<List<Task>> queryTaskByDemandId(long demandId);
+
+    /**
+     *
+     * @Title: updateTaskPendingToDelay
+     * @Description: TODO重做(我的任务状态转为正在进行)
+     * @param @param id
+     * @param @param taskStatus 状态
+     * @param @param delayDescribe 描述
+     * @param @param estimateStartTime 预计开始时间
+     * @param @return    设定文件
+     * @return ExecuteResult<String>    返回类型
+     * @throws
+     */
+    ExecuteResult<String> updateTaskAlreadyToRunning(Long id, String taskStatus, String delayDescribe, java.util.Date estimateStartTime);
 
 
 }
