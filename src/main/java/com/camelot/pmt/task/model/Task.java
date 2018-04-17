@@ -135,6 +135,15 @@ public class Task implements Serializable{
      * 子任务集合
      */
     private List<Task> children = new ArrayList<Task>();
+    /**
+     * 已经消耗工时
+     */
+    private String elapsedTime;
+    
+    /**
+     * 剩余工时
+     */
+    private String remainingWork;
 
     public Task() {
     }
@@ -403,39 +412,37 @@ public class Task implements Serializable{
     public void setChildren(List<Task> children) {
         this.children = children;
     }
+    
 
-    @Override
-    public String toString() {
-        return "Task{" +
-                "id=" + id +
-                ", taskNum='" + taskNum + '\'' +
-                ", taskName='" + taskName + '\'' +
-                ", taskParentId=" + taskParentId +
-                ", project=" + project +
-                ", demand=" + demand +
-                ", priority='" + priority + '\'' +
-                ", assignUser=" + assignUser +
-                ", beassignUser=" + beassignUser +
-                ", assignTime=" + assignTime +
-                ", estimateStartTime=" + estimateStartTime +
-                ", estimateEndTime=" + estimateEndTime +
-                ", actualStartTime=" + actualStartTime +
-                ", actualEndTime=" + actualEndTime +
-                ", taskType='" + taskType + '\'' +
-                ", taskSpeed='" + taskSpeed + '\'' +
-                ", status='" + status + '\'' +
-                ", nodeLv='" + nodeLv + '\'' +
-                ", taskDescribe='" + taskDescribe + '\'' +
-                ", demandChange='" + demandChange + '\'' +
-                ", delayDescribe='" + delayDescribe + '\'' +
-                ", estimateHour=" + estimateHour +
-                ", infactHour=" + infactHour +
-                ", taskMileage='" + taskMileage + '\'' +
-                ", createUser=" + createUser +
-                ", modifyUserId='" + modifyUserId + '\'' +
-                ", createTime=" + createTime +
-                ", modifyTime=" + modifyTime +
-                ", children=" + children +
-                '}';
-    }
+    public String getElapsedTime() {
+		return elapsedTime;
+	}
+
+	public void setElapsedTime(String elapsedTime) {
+		this.elapsedTime = elapsedTime;
+	}
+
+	public String getRemainingWork() {
+		return remainingWork;
+	}
+
+	public void setRemainingWork(String remainingWork) {
+		this.remainingWork = remainingWork;
+	}
+
+	@Override
+	public String toString() {
+		return "Task [id=" + id + ", taskNum=" + taskNum + ", taskName=" + taskName + ", taskParentId=" + taskParentId
+				+ ", project=" + project + ", demand=" + demand + ", priority=" + priority + ", assignUser="
+				+ assignUser + ", beassignUser=" + beassignUser + ", assignTime=" + assignTime + ", estimateStartTime="
+				+ estimateStartTime + ", estimateEndTime=" + estimateEndTime + ", actualStartTime=" + actualStartTime
+				+ ", actualEndTime=" + actualEndTime + ", taskType=" + taskType + ", taskSpeed=" + taskSpeed
+				+ ", status=" + status + ", nodeLv=" + nodeLv + ", taskDescribe=" + taskDescribe + ", demandChange="
+				+ demandChange + ", delayDescribe=" + delayDescribe + ", estimateHour=" + estimateHour + ", infactHour="
+				+ infactHour + ", taskMileage=" + taskMileage + ", createUser=" + createUser + ", modifyUserId="
+				+ modifyUserId + ", createTime=" + createTime + ", modifyTime=" + modifyTime + ", children=" + children
+				+ ", elapsedTime=" + elapsedTime + ", remainingWork=" + remainingWork + "]";
+	}
+	
+	
 }

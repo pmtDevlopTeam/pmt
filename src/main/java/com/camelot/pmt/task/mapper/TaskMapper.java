@@ -89,7 +89,7 @@ public interface TaskMapper {
      * @return List<Task>
      * @throws
      */
-    List<Task> queryOverdueTask(@Param(value = "page") Pager page);
+    List<Task> queryOverdueTask();
 
     /**
     * @author: gxl
@@ -100,7 +100,7 @@ public interface TaskMapper {
     * @return int    返回类型 
     * @throws
      */
-    int insertTaskNodeId(Task task);
+    int insertTaskNodeById(Task task);
     
     /**
     * @author: gxl

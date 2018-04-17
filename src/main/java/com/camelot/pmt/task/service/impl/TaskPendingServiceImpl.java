@@ -51,7 +51,7 @@ public class TaskPendingServiceImpl implements TaskPendingService{
 				result.addErrorMessage("传入的用户实体有误!");
 				return result;
 			}
-			taskMapper.insertTaskNodeId(task);
+			taskMapper.insertTaskNodeById(task);
 			result.setResult("添加任务成功！");
 		}catch (Exception e) {
 			LOGGER.error(e.getMessage());
@@ -100,7 +100,7 @@ public class TaskPendingServiceImpl implements TaskPendingService{
 			}
 			//判断id是否为null
 			if(task.getId()==null){
-				taskMapper.insertTaskNodeId(task);
+				taskMapper.insertTaskNodeById(task);
 				result.setResult("添加任务成功！");
 			}else{
 				Task taskSel= taskMapper.queryTaskNodeById(task.getId());
@@ -109,7 +109,7 @@ public class TaskPendingServiceImpl implements TaskPendingService{
 					taskMapper.updateTaskNodeById(task);
 					result.setResult("修改任务成功！");
 				}else{
-					taskMapper.insertTaskNodeId(task);
+					taskMapper.insertTaskNodeById(task);
 					result.setResult("添加任务成功！");
 				}
 			}
