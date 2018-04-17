@@ -101,11 +101,25 @@ public interface OrgMapper {
 	 **/
 	OrgAndUser selectOrgAndUserByOrgIdAndUserId(@Param("userId") String userId, @Param("orgId") String orgId);
 	 /** 组织机构与用户的绑定 根据orgId查询所有用户(关系到用户 )
-		 * @param orgId 
-		 * @return List<User>
-		 * 
-		 **/
+	  * @param orgId 
+	  * @return List<User>
+	 **/
 	List<OrgAndUser> selectUsersByOrgId(String orgId);
+	/** 组织机构  根据orgId,orgCode,orgname 多条件模糊查询所有部门信息
+	 * @param orgId,orgCode,orgname
+	 * @return List<Org>
+	 **/
+	List<Org> queryOrgByParameters(Org org);
+	/** 修改组织机构的状态
+	 * @param orgId state
+	 * @return JSONObject
+	 * 
+	 **/
+	int modifyOrgByOrgIdAndState(Org org);
+	/** 
+	 * 删除组织机构与用户的已绑定(关系到用户 )
+	 **/
+	int deleteOrgToUserByOrgId(String orgId);
     
     
 }

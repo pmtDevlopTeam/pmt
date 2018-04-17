@@ -26,7 +26,7 @@
     </properties>
 
     <dependencies>
-
+        
         <!-- spring 基本 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -37,27 +37,27 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-
+        
         <!-- spring devtools -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
             <scope>runtime</scope>
         </dependency>
-
+        
         <!-- Apache shiro 权限框架 -->
         <dependency>
             <groupId>org.apache.shiro</groupId>
             <artifactId>shiro-spring</artifactId>
             <version>1.3.2</version>
         </dependency>
-
+        
         <!-- spring redis -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
-
+        
         <!-- mysql数据库驱动 -->
         <dependency>
             <groupId>mysql</groupId>
@@ -88,14 +88,14 @@
             <artifactId>druid-spring-boot-starter</artifactId>
             <version>1.1.0</version>
         </dependency>
-
+        
         <!-- 分页插件 -->
         <dependency>
             <groupId>com.github.pagehelper</groupId>
             <artifactId>pagehelper-spring-boot-starter</artifactId>
             <version>1.1.2</version>
         </dependency>
-
+        
         <!-- 阿里巴巴 json 解析工具 -->
         <dependency>
             <groupId>com.alibaba</groupId>
@@ -108,7 +108,7 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
-
+        
         <!-- swagger2 接口测试工具 -->
         <dependency>
             <groupId>io.springfox</groupId>
@@ -121,6 +121,11 @@
             <version>2.7.0</version>
         </dependency>
 
+        <!-- 邮件服务 -->
+	    <dependency>
+	        <groupId>org.springframework.boot</groupId>
+	        <artifactId>spring-boot-starter-mail</artifactId>
+	    </dependency>
     </dependencies>
     <distributionManagement>
     </distributionManagement>
