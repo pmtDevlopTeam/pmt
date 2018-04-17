@@ -1,5 +1,6 @@
 package com.camelot.pmt.task.service.impl;
 
+import com.baomidou.mybatisplus.toolkit.StringUtils;
 import com.camelot.pmt.platform.common.DataGrid;
 import com.camelot.pmt.platform.common.ExecuteResult;
 import com.camelot.pmt.platform.common.Pager;
@@ -121,5 +122,29 @@ public class TaskOverdueServiceImpl implements TaskOverdueService {
         }
         return result;
 	}
-
+	/**
+	 * 根据任务Id修改状态
+	 */
+	@Override
+	public ExecuteResult<String> updateTaskOverdueStatus(String taskId) {
+		 ExecuteResult<String> result = new ExecuteResult<String>();
+	     try{
+		     if(StringUtils.isEmpty(taskId)){
+		     result.setResult("该任务不存在!");
+		     return result;
+		     }
+		     //进行任务的状态更改(根据id去更改任务的状态)
+		      int count = taskMapper.updateTaskOverdueStatus(taskId);
+		      if(count == 0){
+		      result.setResult("修改任务状态失败!");
+		      return result;
+		      }
+	     }
+	     catch(Exception e){
+		     LOGGER.error(e.getMessage());
+		     throw new RuntimeException(e);
+	     }
+	     result.setResult("修改任务状态成功!");
+	     return result;
+	}
 }

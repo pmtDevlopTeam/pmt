@@ -2,6 +2,7 @@ package com.camelot.pmt.task.controller;
 
 
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.toolkit.StringUtils;
 import com.camelot.pmt.platform.common.ApiResponse;
 import com.camelot.pmt.platform.common.DataGrid;
 import com.camelot.pmt.platform.common.ExecuteResult;
@@ -135,5 +136,23 @@ public class TaskOverdueController {
 			return ApiResponse.error();
 		}
 	}
-
+	
+	@ApiOperation(value = "根据任务id修改状态(延期-进行中)", notes = "根据任务id修改状态(延期-进行中)")
+	@RequestMapping(value = "/update-taskoverdue-status", method = RequestMethod.POST)
+	public JSONObject updateTaskOverdueStatus(
+	@ApiParam(name = "taskId", value = "任务Id", required = true) @RequestParam(required = true) String taskId)
+	{
+		ExecuteResult<String> result = new ExecuteResult<String>();
+		try {
+			if (StringUtils.isEmpty(taskId)) {
+				return ApiResponse.errorPara();
+			}
+			// 调用接口进行更新
+			result = taskService.updateTaskOverdueStatus(taskId);
+			return ApiResponse.success(result.getResult());
+		} catch (Exception e) {
+			// 异常
+			return ApiResponse.error();
+		}
+	}
 }

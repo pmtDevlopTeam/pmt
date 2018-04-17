@@ -77,7 +77,7 @@ public interface TaskPendingService {
 	* @return ExecuteResult<List<Task>>    返回类型 
 	* @throws
 	 */
-	ExecuteResult<List<Task>> queryMyTaskListNodeByParentId(Long taskId,String taskType,Long beassignUserId);
+	ExecuteResult<List<Task>> queryMyTaskListNodeByParentId(Long id,String taskType,Long beassignUserId);
 	
 	/**
 	 * 
@@ -88,7 +88,7 @@ public interface TaskPendingService {
 	* @return ExecuteResult<List<Task>>    返回类型 
 	* @throws
 	 */
-	ExecuteResult<List<Task>> queryTaskListNodeByParentId(Long taskId,String taskType);
+	ExecuteResult<List<Task>> queryTaskListNodeByParentId(Long id,String taskType);
 	
 	/**
 	 * 如果taskId不为空，查询当前节点的父节点和祖宗节点
@@ -143,7 +143,7 @@ public interface TaskPendingService {
 	* @return ExecuteResult<String>    返回类型 
 	* @throws
 	 */
-	ExecuteResult<String> updateTaskPendingToRuning(Long id,String taskType);
+	ExecuteResult<String> updateTaskPendingToRunning(Long id,String taskType);
 	
 	/**
 	 * 

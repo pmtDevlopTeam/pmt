@@ -118,6 +118,7 @@ public class TaskPendingController {
 			if(StringUtils.isEmpty(userLoginId)){
 				return ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
             }
+			result = taskPendingService.queryTaskListNodeByParentId(taskId,TaskType.PENDINHG.getValue());
 			//判断是否成功
 			if(result.isSuccess()){
 				return ApiResponse.jsonData(APIStatus.OK_200,result.getResult());
@@ -204,8 +205,8 @@ public class TaskPendingController {
 	* @throws
 	 */
 	@ApiOperation(value = "我的待办任务转为正在进行", notes = "我的待办任务转为正在进行")
-	@RequestMapping(value = "/updateTaskPendingToRuning", method = RequestMethod.POST)
-	public JSONObject updateTaskPendingToRuning(
+	@RequestMapping(value = "/updateTaskPendingToRunning", method = RequestMethod.POST)
+	public JSONObject updateTaskPendingToRunning(
 			@ApiParam(name = "id", value = "任务标识号", required = true) @RequestParam(required = true) Long taskId){
 		ExecuteResult<String> result = new ExecuteResult<String>();
 		try {
@@ -215,7 +216,7 @@ public class TaskPendingController {
 				return ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
             }
 			//更新我的待办任务为正在进行中
-			result = taskPendingService.updateTaskPendingToRuning(taskId,TaskType.RUNING.getValue());
+			result = taskPendingService.updateTaskPendingToRunning(taskId,TaskType.RUNING.getValue());
 			//判断是否成功
 			if(result.isSuccess()){
 				return ApiResponse.jsonData(APIStatus.OK_200,result.getResult());
