@@ -12,7 +12,7 @@
 		<result column="real_out_time" property="realOutTime" jdbcType="TIMESTAMP" />
 		<result column="pre_man_hour" property="preManHour" jdbcType="INTEGER" />
 		<result column="user_status" property="userStatus" jdbcType="CHAR" />
-		<result column="user_pro_role" property="userProRole" jdbcType="BIGINT" />
+		<result column="user_pro_role" property="userProRole" jdbcType="VARCHAR" />
 		<result column="create_user_id" property="createUserId"
 			jdbcType="VARCHAR" />
 		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
@@ -56,7 +56,7 @@
 		#{realJoinTime,jdbcType=TIMESTAMP}, #{preOutTime,jdbcType=TIMESTAMP},
 		#{realOutTime,jdbcType=TIMESTAMP}, #{preManHour,jdbcType=INTEGER},
 		#{userStatus,jdbcType=CHAR},
-		#{userProRole,jdbcType=BIGINT},
+		#{userProRole,jdbcType=VARCHAR},
 		#{createUserId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
 		#{modifyUserId,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP})
 	</insert>
@@ -135,7 +135,7 @@
 				#{userStatus,jdbcType=CHAR},
 			</if>
 			<if test="userProRole != null">
-				#{userProRole,jdbcType=BIGINT},
+				#{userProRole,jdbcType=VARCHAR},
 			</if>
 			<if test="createUserId != null">
 				#{createUserId,jdbcType=VARCHAR},
@@ -179,7 +179,7 @@
 				user_status = #{userStatus,jdbcType=CHAR},
 			</if>
 			<if test="userProRole != null">
-				user_pro_role = #{userProRole,jdbcType=BIGINT},
+				user_pro_role = #{userProRole,jdbcType=VARCHAR},
 			</if>
 			<if test="createUserId != null">
 				create_user_id = #{createUserId,jdbcType=VARCHAR},
@@ -215,7 +215,7 @@
 		user_status =
 		#{userStatus,jdbcType=CHAR},
 		user_pro_role =
-		#{userProRole,jdbcType=BIGINT},
+		#{userProRole,jdbcType=VARCHAR},
 		create_user_id =
 		#{createUserId,jdbcType=VARCHAR},
 		create_time =
@@ -250,7 +250,8 @@
 		<result column="real_out_time" property="realOutTime" jdbcType="TIMESTAMP" />
 		<result column="pre_man_hour" property="preManHour" jdbcType="INTEGER" />
 		<result column="user_status" property="userStatus" jdbcType="CHAR" />
-		<result column="user_pro_role" property="userProRole" jdbcType="BIGINT" />
+		<result column="user_job_num" property="userJobNum" jdbcType="VARCHAR" />
+		<result column="user_pro_role" property="userProRole" jdbcType="VARCHAR" />
 		<result column="pro_role_name" property="userProRoleName" jdbcType="VARCHAR" />
 		<collection property="userRoleNames" ofType="java.lang.String">
 			<result column="user_role_names" property="userRoleName"/>
@@ -258,7 +259,7 @@
 	</resultMap>
 
 	<select id="searchUserByProjectId" parameterType="java.lang.Long" resultMap="projectUserMap">
-		SELECT project_user.id, project_user.project_id, project_user.user_id,
+		SELECT project_user.id, project_user.project_id, project_user.user_id, platform_user_info.user_job_num,
 		project_user.user_pro_role,
 		platform_user.user_name, project_user.pre_join_time,
 		project_user.real_join_time, project_user.pre_out_time,
@@ -272,7 +273,79 @@
 		LEFT JOIN platform_user_role ON platform_user_role.user_id =
 		project_user.user_id
 		LEFT JOIN platform_role pr2 ON pr2.role_id = platform_user_role.role_id
+		LEFT JOIN platform_user_info ON platform_user_info.user_id = project_user.user_id
 		WHERE project_user.project_id = #{projectId}
 	</select>
+
+	<select id="searchUserByCondition" parameterType="com.camelot.pmt.project.model.ProjectUserSearchVO" resultMap="projectUserMap">
+		SELECT project_user.id, project_user.project_id, project_user.user_id, platform_user_info.user_job_num,
+		project_user.user_pro_role,
+		platform_user.user_name, project_user.pre_join_time,
+		project_user.real_join_time, project_user.pre_out_time,
+		project_user.real_out_time,
+		project_user.pre_man_hour, project_user.user_status, pr1.role_name AS pro_role_name, pr2.role_name AS
+		user_role_names
+		FROM project_user
+		LEFT JOIN platform_user ON project_user.user_id = platform_user.user_id
+		LEFT JOIN platform_role pr1 ON project_user.user_pro_role =
+		pr1.role_id
+		LEFT JOIN platform_user_role ON platform_user_role.user_id =
+		project_user.user_id
+		LEFT JOIN platform_role pr2 ON pr2.role_id = platform_user_role.role_id
+		LEFT JOIN platform_user_info ON platform_user_info.user_id = project_user.user_id
+		WHERE project_user.project_id = #{projectId} 
+		<if test="userName != null">
+			 AND platform_user.user_name like concat(concat('%', #{userName}), '%')
+		</if>
+		<if test="userStatus != null">
+			AND project_user.user_status = #{userStatus} 
+		</if>
+		<if test="userProRoleIds != null">
+			AND project_user.user_pro_role = #{userProRoleIds} 
+		</if>
+		<if test="roleId != null">
+			AND pr2.role_id = #{roleId}
+		</if>
+		<if test="page != null">
+			limit #{page}, #{size}
+		</if>
+	</select>
+	
+	<select id="count" parameterType="com.camelot.pmt.project.model.ProjectUserSearchVO" resultType="java.lang.Integer">
+		select count(1) from (
+		SELECT project_user.user_id
+		FROM project_user
+		LEFT JOIN platform_user ON project_user.user_id = platform_user.user_id
+		LEFT JOIN platform_role pr1 ON project_user.user_pro_role =
+		pr1.role_id
+		LEFT JOIN platform_user_role ON platform_user_role.user_id =
+		project_user.user_id
+		LEFT JOIN platform_role pr2 ON pr2.role_id = platform_user_role.role_id
+		LEFT JOIN platform_user_info ON platform_user_info.user_id = project_user.user_id
+		WHERE project_user.project_id = #{projectId} 
+		<if test="userName != null">
+			 AND platform_user.user_name like concat(concat('%', #{userName}), '%')
+		</if>
+		<if test="userStatus != null">
+			AND project_user.user_status = #{userStatus} 
+		</if>
+		<if test="roleId != null">
+			AND project_user.user_pro_role = #{roleId} 
+		</if>
+		<if test="userProRoleIds != null">
+			AND pr2.role_id = #{userProRoleIds}
+		</if>
+		group by project_user.user_id) temps
+	</select>
+	
+	<update id="clearUser">
+		update project_user set user_status = 04 where project_user.projectId = #{projectId} 
+		and project_user.user_id = #{userId}
+	</update>
+	
+	<update id="clearUserAll">
+		update project_user set user_status = #{user_status}, create_user_id = #{userId}, modify_time = now(), real_out_time = now()
+		where project_user.projectId = #{projectId}
+	</update>
 
 </mapper>
