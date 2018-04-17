@@ -26,7 +26,11 @@
 	</properties>
 
 	<dependencies>
-
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.5</version>
+		</dependency>
 		<!-- mybatis生成 jar包 -->
 		<dependency>
 			<groupId>org.mybatis.generator</groupId>
