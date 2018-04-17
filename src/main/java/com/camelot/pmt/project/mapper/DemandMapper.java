@@ -61,4 +61,39 @@ public interface DemandMapper {
             @Param(value = "demand") Demand demand);
 
     Long queryCount( @Param(value = "demand")Demand demand);
+    
+    /**
+     * 根据pid查询所有需求记录
+     * @param id
+     * @return
+     */
+    List<Demand> selectByPId(Long id);
+    
+    /**
+     * 根据需求id查询所有引用用例
+     * @param demandId
+     * @return
+     */
+    Long findDemandUseCase(Long demandId);
+
+    /**
+     * 根据需求id查询所有bug引用
+     * @param demandId
+     * @return
+     */
+    Long fingDemandBug(Long demandId);
+
+    /**
+     * 根据需求id查询所有任务引用
+     * @param demandId
+     * @return
+     */
+    Long findDemandTask(Long demandId);
+
+    /**
+     * 批量删除需求
+     * @param list
+     * @return
+     */
+    int deleteByList(List<Long> list);
 }

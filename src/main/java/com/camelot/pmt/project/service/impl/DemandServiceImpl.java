@@ -1,5 +1,16 @@
 package com.camelot.pmt.project.service.impl;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+
 import com.camelot.pmt.platform.utils.DataGrid;
 import com.camelot.pmt.platform.utils.ExecuteResult;
 import com.camelot.pmt.platform.utils.Pager;
@@ -8,15 +19,6 @@ import com.camelot.pmt.project.mapper.DemandOperateMapper;
 import com.camelot.pmt.project.model.Demand;
 import com.camelot.pmt.project.model.DemandOperate;
 import com.camelot.pmt.project.service.DemandService;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
-
-import javax.annotation.Resource;
-import java.util.Date;
-import java.util.List;
 
 @Service
 public class DemandServiceImpl implements DemandService {
@@ -94,8 +96,38 @@ public class DemandServiceImpl implements DemandService {
         try{
             //暂留判断需求是否被引用  TODO
 
+          //遍历此需求下是否有引用--->查询所有需求父id为id的记录
+            List<Demand> demandList = demandMapper.selectByPId(id);
+            List<Long> list = new ArrayList<Long>();
+            if(demandList.size()>0){
+                for (Demand demand : demandList) {
+                    List<Demand> tempList = demandMapper.selectByPId(demand.getId());
+                    if(tempList.size()>0){
+                        for (Demand demand2 : tempList) {
+                            Long demandId = demand2.getId();//获取需求id
+                            //查询此需求id下是否有未完成的引用
+                            list.addAll(count(demandId));
+                        }
+                        if(list.size() == tempList.size()){
+                            list.add(demand.getId());
+                        }
+                    }else{
+                       //说明没有子需求
+                       list.addAll(count(demand.getId()));
+                    }
+                }
+                if(list.size() == demandList.size()){
+                    list.add(id);
+                }
+            }else{
+              //说明没有子需求
+               list.addAll(count(id));
+            }
+            
+            demandMapper.deleteByList(list);
+            result.setResult("删除需求成功");
             //暂留操作日志
-            demandMapper.deleteByPrimaryKey(id);
+            //demandMapper.deleteByPrimaryKey(id);
 
             DemandOperate demandOperate=new DemandOperate();
             Date currentDate =new Date();
@@ -166,5 +198,18 @@ public class DemandServiceImpl implements DemandService {
             throw new RuntimeException(e);
         }
         return result;
+    }
+    private List<Long> count(Long demandId){
+        List<Long> list = new ArrayList<>();
+        Long count = 0L;
+        count += demandMapper.findDemandUseCase(demandId);//用例
+        count += demandMapper.fingDemandBug(demandId);//bug
+        count += demandMapper.findDemandTask(demandId);//任务
+        if(count <= 0){
+            //说明没有有进行中的引用可删除需求
+            list.add(demandId);
+        }
+        return list;
+        
     }
 }
