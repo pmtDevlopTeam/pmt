@@ -7,7 +7,9 @@ import com.baomidou.mybatisplus.annotations.TableId;
 import java.io.Serializable;
 
 /**
- * 权限菜单模型
+ * <p>
+ * 权限菜单表
+ * </p>
  *
  * @author gnerv
  * @since 2018-04-11

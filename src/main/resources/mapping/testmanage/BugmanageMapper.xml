@@ -1,0 +1,892 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.camelot.pmt.testmanage.bugmanage.mapper.BugManageMapper">
+	<resultMap id="BaseResultMap"
+		type="com.camelot.pmt.testmanage.bugmanage.model.BugManage">
+		<id column="id" jdbcType="BIGINT" property="id" />
+		<result column="bug_no" jdbcType="VARCHAR" property="bugNo" />
+		<result column="bug_title" jdbcType="VARCHAR" property="bugTitle" />
+		<result column="project_id" jdbcType="BIGINT" property="projectId" />
+		<result column="demand_id" jdbcType="BIGINT" property="demandId" />
+		<result column="task_id" jdbcType="BIGINT" property="taskId" />
+		<result column="task1_id" jdbcType="BIGINT" property="task1Id" />
+		<result column="designated_id" jdbcType="VARCHAR" property="designatedId" />
+		<result column="version_id" jdbcType="BIGINT" property="versionId" />
+		<result column="bug_type" jdbcType="VARCHAR" property="bugType" />
+		<result column="case_terminal" jdbcType="VARCHAR" property="caseTerminal" />
+		<result column="case_environment" jdbcType="VARCHAR" property="caseEnvironment" />
+		<result column="bug_level" jdbcType="VARCHAR" property="bugLevel" />
+		<result column="bug_status" jdbcType="VARCHAR" property="bugStatus" />
+		<result column="create_user_id" jdbcType="VARCHAR" property="createUserId" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+		<result column="modify_user_id" jdbcType="VARCHAR" property="modifyUserId" />
+		<result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+		<result column="del_flag" jdbcType="CHAR" property="delFlag" />
+		<result column="steps_reproduce" jdbcType="VARCHAR" property="stepsReproduce" />
+		<result column="solve_time" jdbcType="TIMESTAMP" property="solveTime" />
+		<result column="solve_program" jdbcType="INTEGER" property="solveProgram" />
+		<result column="solve_id" jdbcType="VARCHAR" property="solveId" />
+		<result column="close_time" jdbcType="TIMESTAMP" property="closeTime" />
+		<result column="close_id" jdbcType="VARCHAR" property="closeId" />
+		<result column="serious_degree" jdbcType="VARCHAR" property="seriousDegree" />
+		<result column="close_reason" jdbcType="VARCHAR" property="closeReason" />
+		<result column="case_id" jdbcType="BIGINT" property="caseId" />
+		<result column="bug_describe" jdbcType="VARCHAR" property="bugDescribe" />
+		<result column="close_stauts" jdbcType="VARCHAR" property="closeStauts" />
+	</resultMap>
+	
+	
+	<resultMap id="SelectBaseResultMap"
+		type="com.camelot.pmt.testmanage.bugmanage.model.SelectBugManage">
+		<id column="id" jdbcType="BIGINT" property="id" />
+		<result column="bug_no" jdbcType="VARCHAR" property="bugNo" />
+		<result column="bug_title" jdbcType="VARCHAR" property="bugTitle" />
+		<result column="designated_id" jdbcType="VARCHAR" property="designatedId" />
+		<result column="bug_status" jdbcType="VARCHAR" property="bugStatus" />
+		<result column="create_user_id" jdbcType="VARCHAR" property="createUserId" />
+		<result column="serious_degree" jdbcType="VARCHAR" property="seriousDegree" />
+		<result column="solve_id" jdbcType="VARCHAR" property="solveId" />
+		<result column="bug_level" jdbcType="VARCHAR" property="bugLevel" />
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+		id, bug_title, bug_no,project_id, demand_id, task_id, designated_id,
+		version_id, bug_type,
+		case_terminal, case_environment, bug_level, bug_status, create_user_id,
+		DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%s') as create_time,
+		DATE_FORMAT(end_time,'%Y-%m-%d %H:%i:%s') as end_time, modify_user_id,
+		DATE_FORMAT(modify_time,'%Y-%m-%d %H:%i:%s') as modify_time, del_flag,
+		steps_reproduce, DATE_FORMAT(solve_time,'%Y-%m-%d %H:%i:%s') as
+		solve_time, solve_program,
+		solve_id, DATE_FORMAT(close_time,'%Y-%m-%d %H:%i:%s') as close_time, close_id,
+		serious_degree, close_reason, case_id, bug_describe,
+		close_stauts
+	</sql>
+	
+	<sql id="Base_Column_GET">
+		id,create_user_id,bug_title,DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%s') as create_time,version_id,
+		solve_id,solve_program,close_id,DATE_FORMAT(close_time,'%Y-%m-%d %H:%i:%s') as close_time,
+		project_id,demand_id,case_id,task_id,task1_id,bug_type,serious_degree,bug_level,bug_status,
+		designated_id,DATE_FORMAT(end_time,'%Y-%m-%d %H:%i:%s') as end_time,case_environment,case_terminal
+	</sql>
+	
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_GET" />
+		from bug_manage
+		where id = #{id}
+	</select>
+	
+	<select id="selectCondition" resultMap="SelectBaseResultMap">
+		select id,bug_no,bug_title,serious_degree,create_user_id,designated_id,solve_id,bug_status,bug_level
+		from bug_manage
+		<where>
+			<if test="projectId!=null">
+				AND project_id=#{projectId}
+			</if>
+			<if test="status==1">
+				AND designated_id=#{userId}
+			</if>
+			<if test="status==2">
+				AND create_user_id=#{userId}
+			</if>
+			<if test="status==3">
+				AND solve_id=#{userId}
+			</if>
+			<if test="status==4">
+				AND designated_id is null
+			</if>
+			<if test="status==5">
+				AND solve_id is null
+			</if>
+			<if test="qStartTime!=null"> 
+		        AND create_time >=#{qStartTime}
+			</if>
+			<if test="qEndTime!=null">
+		        AND create_time <![CDATA[ <=#{qEndTime}]]>
+			 </if>
+			 <if test="bugNo!=null and bugNo!=''">
+			 	AND bugNo=#{bugNo}
+			 </if> 
+			 <if test="bugStatus!=null and bugStatus!=''">
+				AND bug_status=#{bugStatus}
+			  </if> 
+			 <if test="bugTitle!=null and bugTitle!=''">
+				<bind name="bugTitleLike" value="'%' +bugTitle+ '%'"/>
+				AND bug_title like #{bugTitleLike}
+			  </if> 
+		</where>
+	</select>
+	
+	<select id="selectByPUS" resultMap="SelectBaseResultMap">
+		select id,bug_no,bug_title,serious_degree,create_user_id,designated_id,solve_id,bug_status,bug_level
+		from bug_manage
+		where project_id=#{projectId} and designated_id=#{userId} and bug_status in(0,1)
+	</select>
+	
+	<insert id="insertSelective" useGeneratedKeys="true" keyProperty="id">
+		insert into bug_manage
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="bugNo != null">
+				bug_no,
+			</if>
+			<if test="bugTitle != null">
+				bug_title,
+			</if>
+			<if test="projectId != null">
+				project_id,
+			</if>
+			<if test="demandId != null">
+				demand_id,
+			</if>
+			<if test="taskId != null">
+				task_id,
+			</if>
+			<if test="task1Id != null">
+				task1_id,
+			</if>
+			<if test="designatedId != null">
+				designated_id,
+			</if>
+			<if test="versionId != null">
+				version_id,
+			</if>
+			<if test="bugType != null">
+				bug_type,
+			</if>
+			<if test="caseTerminal != null">
+				case_terminal,
+			</if>
+			<if test="caseEnvironment != null">
+				case_environment,
+			</if>
+			<if test="bugLevel != null">
+				bug_level,
+			</if>
+			<if test="bugStatus != null">
+				bug_status,
+			</if>
+			<if test="createUserId != null">
+				create_user_id,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="endTime != null">
+				end_time,
+			</if>
+			<if test="modifyUserId != null">
+				modify_user_id,
+			</if>
+			<if test="modifyTime != null">
+				modify_time,
+			</if>
+			<if test="delFlag != null">
+				del_flag,
+			</if>
+			<if test="stepsReproduce != null">
+				steps_reproduce,
+			</if>
+			<if test="solveTime != null">
+				solve_time,
+			</if>
+			<if test="solveProgram != null">
+				solve_program,
+			</if>
+			<if test="solveId != null">
+				solve_id,
+			</if>
+			<if test="closeTime != null">
+				close_time,
+			</if>
+			<if test="closeId != null">
+				close_id,
+			</if>
+			<if test="seriousDegree != null">
+				serious_degree,
+			</if>
+			<if test="closeReason != null">
+				close_reason,
+			</if>
+			<if test="caseId != null">
+				case_id,
+			</if>
+			<if test="bugDescribe != null">
+				bug_describe,
+			</if>
+			<if test="closeStauts != null">
+				close_stauts,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="bugNo != null">
+				#{bugNo,jdbcType=VARCHAR},
+			</if>
+			<if test="bugTitle != null">
+				#{bugTitle,jdbcType=VARCHAR},
+			</if>
+			<if test="projectId != null">
+				#{projectId,jdbcType=BIGINT},
+			</if>
+			<if test="demandId != null">
+				#{demandId,jdbcType=BIGINT},
+			</if>
+			<if test="taskId != null">
+				#{taskId,jdbcType=BIGINT},
+			</if>
+			<if test="task1Id != null">
+				#{task1Id,jdbcType=BIGINT},
+			</if>
+			<if test="designatedId != null">
+				#{designatedId,jdbcType=VARCHAR},
+			</if>
+			<if test="versionId != null">
+				#{versionId,jdbcType=BIGINT},
+			</if>
+			<if test="bugType != null">
+				#{bugType,jdbcType=VARCHAR},
+			</if>
+			<if test="caseTerminal != null">
+				#{caseTerminal,jdbcType=VARCHAR},
+			</if>
+			<if test="caseEnvironment != null">
+				#{caseEnvironment,jdbcType=VARCHAR},
+			</if>
+			<if test="bugLevel != null">
+				#{bugLevel,jdbcType=VARCHAR},
+			</if>
+			<if test="bugStatus != null">
+				#{bugStatus,jdbcType=VARCHAR},
+			</if>
+			<if test="createUserId != null">
+				#{createUserId,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="endTime != null">
+				#{endTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="modifyUserId != null">
+				#{modifyUserId,jdbcType=VARCHAR},
+			</if>
+			<if test="modifyTime != null">
+				#{modifyTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="delFlag != null">
+				#{delFlag,jdbcType=CHAR},
+			</if>
+			<if test="stepsReproduce != null">
+				#{stepsReproduce,jdbcType=VARCHAR},
+			</if>
+			<if test="solveTime != null">
+				#{solveTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="solveProgram != null">
+				#{solveProgram,jdbcType=INTEGER},
+			</if>
+			<if test="solveId != null">
+				#{solveId,jdbcType=VARCHAR},
+			</if>
+			<if test="closeTime != null">
+				#{closeTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="closeId != null">
+				#{closeId,jdbcType=VARCHAR},
+			</if>
+			<if test="seriousDegree != null">
+				#{seriousDegree,jdbcType=VARCHAR},
+			</if>
+			<if test="closeReason != null">
+				#{closeReason,jdbcType=VARCHAR},
+			</if>
+			<if test="caseId != null">
+				#{caseId,jdbcType=BIGINT},
+			</if>
+			<if test="bugDescribe != null">
+				#{bugDescribe,jdbcType=VARCHAR},
+			</if>
+			<if test="closeStauts != null">
+				#{closeStauts,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective">
+		update bug_manage
+		<set>
+			<if test="projectId != null">
+				project_id = #{projectId,jdbcType=BIGINT},
+			</if>
+			<if test="demandId != null">
+				demand_id = #{demandId,jdbcType=BIGINT},
+			</if>
+			<if test="taskId != null">
+				task_id = #{taskId,jdbcType=BIGINT},
+			</if>
+			<if test="task1Id != null">
+				task1_id = #{taskId,jdbcType=BIGINT},
+			</if>
+			<if test="designatedId != null">
+				designated_id = #{designatedId,jdbcType=VARCHAR},
+			</if>
+			<if test="versionId != null">
+				version_id = #{versionId,jdbcType=BIGINT},
+			</if>
+			<if test="bugType != null">
+				bug_type = #{bugType,jdbcType=VARCHAR},
+			</if>
+			<if test="caseTerminal != null">
+				case_terminal = #{caseTerminal,jdbcType=VARCHAR},
+			</if>
+			<if test="caseEnvironment != null">
+				case_environment = #{caseEnvironment,jdbcType=VARCHAR},
+			</if>
+			<if test="bugLevel != null">
+				bug_level = #{bugLevel,jdbcType=VARCHAR},
+			</if>
+			<if test="bugStatus != null">
+				bug_status = #{bugStatus,jdbcType=VARCHAR},
+			</if>
+			<if test="createUserId != null">
+				create_user_id = #{createUserId,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="endTime != null">
+				end_time = #{endTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="modifyUserId != null">
+				modify_user_id = #{modifyUserId,jdbcType=VARCHAR},
+			</if>
+			<if test="modifyTime != null">
+				modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="delFlag != null">
+				del_flag = #{delFlag,jdbcType=CHAR},
+			</if>
+			<if test="stepsReproduce != null">
+				steps_reproduce = #{stepsReproduce,jdbcType=VARCHAR},
+			</if>
+			<if test="solveTime != null">
+				solve_time = #{solveTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="solveProgram != null">
+				solve_program = #{solveProgram,jdbcType=INTEGER},
+			</if>
+			<if test="solveId != null">
+				solve_id = #{solveId,jdbcType=VARCHAR},
+			</if>
+			<if test="closeTime != null">
+				close_time = #{closeTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="closeId != null">
+				close_id = #{closeId,jdbcType=VARCHAR},
+			</if>
+			<if test="seriousDegree != null">
+				serious_degree = #{seriousDegree,jdbcType=VARCHAR},
+			</if>
+			<if test="closeReason != null">
+				close_reason = #{closeReason,jdbcType=VARCHAR},
+			</if>
+			<if test="caseId != null">
+				case_id = #{caseId,jdbcType=BIGINT},
+			</if>
+			<if test="bugDescribe != null">
+				bug_describe = #{bugDescribe,jdbcType=VARCHAR},
+			</if>
+			<if test="closeStauts != null">
+				close_stauts = #{closeStauts,jdbcType=VARCHAR},
+			</if>
+			<if test="bugTitle != null">
+				bug_title = #{bugTitle,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+	<!-- 撤销操作 -->
+	<update id="updateBugStatusRevoke">
+		update bug_manage
+		<set>
+			<if test="projectId != null">
+				project_id = #{projectId,jdbcType=BIGINT},
+			</if>
+			<if test="demandId != null">
+				demand_id = #{demandId,jdbcType=BIGINT},
+			</if>
+			<if test="taskId != null">
+				task_id = #{taskId,jdbcType=BIGINT},
+			</if>
+			<if test="task1Id != null">
+				task1_id = #{taskId,jdbcType=BIGINT},
+			</if>
+			<if test="designatedId != null">
+				designated_id = #{designatedId,jdbcType=VARCHAR},
+			</if>
+			<if test="versionId != null">
+				version_id = #{versionId,jdbcType=BIGINT},
+			</if>
+			<if test="bugType != null">
+				bug_type = #{bugType,jdbcType=VARCHAR},
+			</if>
+			<if test="caseTerminal != null">
+				case_terminal = #{caseTerminal,jdbcType=VARCHAR},
+			</if>
+			<if test="caseEnvironment != null">
+				case_environment = #{caseEnvironment,jdbcType=VARCHAR},
+			</if>
+			<if test="bugLevel != null">
+				bug_level = #{bugLevel,jdbcType=VARCHAR},
+			</if>
+			<if test="bugStatus != null">
+				bug_status = #{bugStatus,jdbcType=VARCHAR},
+			</if>
+			<if test="createUserId != null">
+				create_user_id = #{createUserId,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="endTime != null">
+				end_time = #{endTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="modifyUserId != null">
+				modify_user_id = #{modifyUserId,jdbcType=VARCHAR},
+			</if>
+			<if test="modifyTime != null">
+				modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="delFlag != null">
+				del_flag = #{delFlag,jdbcType=CHAR},
+			</if>
+			<if test="stepsReproduce != null">
+				steps_reproduce = #{stepsReproduce,jdbcType=VARCHAR},
+			</if>
+			<if test="solveTime != null">
+				solve_time = #{solveTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="solveProgram != null">
+				solve_program = #{solveProgram,jdbcType=INTEGER},
+			</if>
+			<if test="solveId != null">
+				solve_id = #{solveId,jdbcType=VARCHAR},
+			</if>
+			<if test="closeTime != null">
+				close_time = #{closeTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="closeId != null">
+				close_id = #{closeId,jdbcType=VARCHAR},
+			</if>
+			<if test="seriousDegree != null">
+				serious_degree = #{seriousDegree,jdbcType=VARCHAR},
+			</if>
+			<if test="closeReason != null">
+				close_reason = #{closeReason,jdbcType=VARCHAR},
+			</if>
+			<if test="caseId != null">
+				case_id = #{caseId,jdbcType=BIGINT},
+			</if>
+			<if test="bugDescribe != null">
+				bug_describe = #{bugDescribe,jdbcType=VARCHAR},
+			</if>
+			<if test="closeStauts != null">
+				close_stauts = #{closeStauts,jdbcType=VARCHAR},
+			</if>
+			<if test="bugTitle != null">
+				bug_title = #{bugTitle,jdbcType=VARCHAR},
+			</if>
+		</set>
+		,bug_status=4
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+	<update id="updateBugStatusClose">
+		update bug_manage
+		<set>
+			<if test="projectId != null">
+				project_id = #{projectId,jdbcType=BIGINT},
+			</if>
+			<if test="demandId != null">
+				demand_id = #{demandId,jdbcType=BIGINT},
+			</if>
+			<if test="taskId != null">
+				task_id = #{taskId,jdbcType=BIGINT},
+			</if>
+			<if test="task1Id != null">
+				task1_id = #{taskId,jdbcType=BIGINT},
+			</if>
+			<if test="designatedId != null">
+				designated_id = #{designatedId,jdbcType=VARCHAR},
+			</if>
+			<if test="versionId != null">
+				version_id = #{versionId,jdbcType=BIGINT},
+			</if>
+			<if test="bugType != null">
+				bug_type = #{bugType,jdbcType=VARCHAR},
+			</if>
+			<if test="caseTerminal != null">
+				case_terminal = #{caseTerminal,jdbcType=VARCHAR},
+			</if>
+			<if test="caseEnvironment != null">
+				case_environment = #{caseEnvironment,jdbcType=VARCHAR},
+			</if>
+			<if test="bugLevel != null">
+				bug_level = #{bugLevel,jdbcType=VARCHAR},
+			</if>
+			<if test="bugStatus != null">
+				bug_status = #{bugStatus,jdbcType=VARCHAR},
+			</if>
+			<if test="createUserId != null">
+				create_user_id = #{createUserId,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="endTime != null">
+				end_time = #{endTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="modifyUserId != null">
+				modify_user_id = #{modifyUserId,jdbcType=VARCHAR},
+			</if>
+			<if test="modifyTime != null">
+				modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="delFlag != null">
+				del_flag = #{delFlag,jdbcType=CHAR},
+			</if>
+			<if test="stepsReproduce != null">
+				steps_reproduce = #{stepsReproduce,jdbcType=VARCHAR},
+			</if>
+			<if test="solveTime != null">
+				solve_time = #{solveTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="solveProgram != null">
+				solve_program = #{solveProgram,jdbcType=INTEGER},
+			</if>
+			<if test="solveId != null">
+				solve_id = #{solveId,jdbcType=VARCHAR},
+			</if>
+			<if test="closeTime != null">
+				close_time = #{closeTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="closeId != null">
+				close_id = #{closeId,jdbcType=VARCHAR},
+			</if>
+			<if test="seriousDegree != null">
+				serious_degree = #{seriousDegree,jdbcType=VARCHAR},
+			</if>
+			<if test="closeReason != null">
+				close_reason = #{closeReason,jdbcType=VARCHAR},
+			</if>
+			<if test="caseId != null">
+				case_id = #{caseId,jdbcType=BIGINT},
+			</if>
+			<if test="bugDescribe != null">
+				bug_describe = #{bugDescribe,jdbcType=VARCHAR},
+			</if>
+			<if test="closeStauts != null">
+				close_stauts = #{closeStauts,jdbcType=VARCHAR},
+			</if>
+			<if test="bugTitle != null">
+				bug_title = #{bugTitle,jdbcType=VARCHAR},
+			</if>
+		</set>
+		,bug_status=3
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	
+	<update id="updateBugStatusYes">
+		update bug_manage
+		<set>
+			<if test="projectId != null">
+				project_id = #{projectId,jdbcType=BIGINT},
+			</if>
+			<if test="demandId != null">
+				demand_id = #{demandId,jdbcType=BIGINT},
+			</if>
+			<if test="taskId != null">
+				task_id = #{taskId,jdbcType=BIGINT},
+			</if>
+			<if test="task1Id != null">
+				task1_id = #{taskId,jdbcType=BIGINT},
+			</if>
+			<if test="designatedId != null">
+				designated_id = #{designatedId,jdbcType=VARCHAR},
+			</if>
+			<if test="versionId != null">
+				version_id = #{versionId,jdbcType=BIGINT},
+			</if>
+			<if test="bugType != null">
+				bug_type = #{bugType,jdbcType=VARCHAR},
+			</if>
+			<if test="caseTerminal != null">
+				case_terminal = #{caseTerminal,jdbcType=VARCHAR},
+			</if>
+			<if test="caseEnvironment != null">
+				case_environment = #{caseEnvironment,jdbcType=VARCHAR},
+			</if>
+			<if test="bugLevel != null">
+				bug_level = #{bugLevel,jdbcType=VARCHAR},
+			</if>
+			<if test="bugStatus != null">
+				bug_status = #{bugStatus,jdbcType=VARCHAR},
+			</if>
+			<if test="createUserId != null">
+				create_user_id = #{createUserId,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="endTime != null">
+				end_time = #{endTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="modifyUserId != null">
+				modify_user_id = #{modifyUserId,jdbcType=VARCHAR},
+			</if>
+			<if test="modifyTime != null">
+				modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="delFlag != null">
+				del_flag = #{delFlag,jdbcType=CHAR},
+			</if>
+			<if test="stepsReproduce != null">
+				steps_reproduce = #{stepsReproduce,jdbcType=VARCHAR},
+			</if>
+			<if test="solveTime != null">
+				solve_time = #{solveTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="solveProgram != null">
+				solve_program = #{solveProgram,jdbcType=INTEGER},
+			</if>
+			<if test="solveId != null">
+				solve_id = #{solveId,jdbcType=VARCHAR},
+			</if>
+			<if test="closeTime != null">
+				close_time = #{closeTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="closeId != null">
+				close_id = #{closeId,jdbcType=VARCHAR},
+			</if>
+			<if test="seriousDegree != null">
+				serious_degree = #{seriousDegree,jdbcType=VARCHAR},
+			</if>
+			<if test="closeReason != null">
+				close_reason = #{closeReason,jdbcType=VARCHAR},
+			</if>
+			<if test="caseId != null">
+				case_id = #{caseId,jdbcType=BIGINT},
+			</if>
+			<if test="bugDescribe != null">
+				bug_describe = #{bugDescribe,jdbcType=VARCHAR},
+			</if>
+			<if test="closeStauts != null">
+				close_stauts = #{closeStauts,jdbcType=VARCHAR},
+			</if>
+			<if test="bugTitle != null">
+				bug_title = #{bugTitle,jdbcType=VARCHAR},
+			</if>
+		</set>
+		,bug_status=1
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	
+	
+	 <update id="updateBugAssign">
+		update bug_manage
+		<set>
+			<if test="projectId != null">
+				project_id = #{projectId,jdbcType=BIGINT},
+			</if>
+			<if test="demandId != null">
+				demand_id = #{demandId,jdbcType=BIGINT},
+			</if>
+			<if test="taskId != null">
+				task_id = #{taskId,jdbcType=BIGINT},
+			</if>
+			<if test="task1Id != null">
+				task1_id = #{taskId,jdbcType=BIGINT},
+			</if>
+			<if test="designatedId != null">
+				designated_id = #{designatedId,jdbcType=VARCHAR},
+			</if>
+			<if test="versionId != null">
+				version_id = #{versionId,jdbcType=BIGINT},
+			</if>
+			<if test="bugType != null">
+				bug_type = #{bugType,jdbcType=VARCHAR},
+			</if>
+			<if test="caseTerminal != null">
+				case_terminal = #{caseTerminal,jdbcType=VARCHAR},
+			</if>
+			<if test="caseEnvironment != null">
+				case_environment = #{caseEnvironment,jdbcType=VARCHAR},
+			</if>
+			<if test="bugLevel != null">
+				bug_level = #{bugLevel,jdbcType=VARCHAR},
+			</if>
+			<if test="bugStatus != null">
+				bug_status = #{bugStatus,jdbcType=VARCHAR},
+			</if>
+			<if test="createUserId != null">
+				create_user_id = #{createUserId,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="endTime != null">
+				end_time = #{endTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="modifyUserId != null">
+				modify_user_id = #{modifyUserId,jdbcType=VARCHAR},
+			</if>
+			<if test="modifyTime != null">
+				modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="delFlag != null">
+				del_flag = #{delFlag,jdbcType=CHAR},
+			</if>
+			<if test="stepsReproduce != null">
+				steps_reproduce = #{stepsReproduce,jdbcType=VARCHAR},
+			</if>
+			<if test="solveTime != null">
+				solve_time = #{solveTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="solveProgram != null">
+				solve_program = #{solveProgram,jdbcType=INTEGER},
+			</if>
+			<if test="solveId != null">
+				solve_id = #{solveId,jdbcType=VARCHAR},
+			</if>
+			<if test="closeTime != null">
+				close_time = #{closeTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="closeId != null">
+				close_id = #{closeId,jdbcType=VARCHAR},
+			</if>
+			<if test="seriousDegree != null">
+				serious_degree = #{seriousDegree,jdbcType=VARCHAR},
+			</if>
+			<if test="closeReason != null">
+				close_reason = #{closeReason,jdbcType=VARCHAR},
+			</if>
+			<if test="caseId != null">
+				case_id = #{caseId,jdbcType=BIGINT},
+			</if>
+			<if test="bugDescribe != null">
+				bug_describe = #{bugDescribe,jdbcType=VARCHAR},
+			</if>
+			<if test="closeStauts != null">
+				close_stauts = #{closeStauts,jdbcType=VARCHAR},
+			</if>
+			<if test="bugTitle != null">
+				bug_title = #{bugTitle,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	
+	
+	 <update id="updateBugSolve">
+		update bug_manage
+		<set>
+			<if test="projectId != null">
+				project_id = #{projectId,jdbcType=BIGINT},
+			</if>
+			<if test="demandId != null">
+				demand_id = #{demandId,jdbcType=BIGINT},
+			</if>
+			<if test="taskId != null">
+				task_id = #{taskId,jdbcType=BIGINT},
+			</if>
+			<if test="task1Id != null">
+				task1_id = #{taskId,jdbcType=BIGINT},
+			</if>
+			<if test="designatedId != null">
+				designated_id = #{designatedId,jdbcType=VARCHAR},
+			</if>
+			<if test="versionId != null">
+				version_id = #{versionId,jdbcType=BIGINT},
+			</if>
+			<if test="bugType != null">
+				bug_type = #{bugType,jdbcType=VARCHAR},
+			</if>
+			<if test="caseTerminal != null">
+				case_terminal = #{caseTerminal,jdbcType=VARCHAR},
+			</if>
+			<if test="caseEnvironment != null">
+				case_environment = #{caseEnvironment,jdbcType=VARCHAR},
+			</if>
+			<if test="bugLevel != null">
+				bug_level = #{bugLevel,jdbcType=VARCHAR},
+			</if>
+			<if test="bugStatus != null">
+				bug_status = #{bugStatus,jdbcType=VARCHAR},
+			</if>
+			<if test="createUserId != null">
+				create_user_id = #{createUserId,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="endTime != null">
+				end_time = #{endTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="modifyUserId != null">
+				modify_user_id = #{modifyUserId,jdbcType=VARCHAR},
+			</if>
+			<if test="modifyTime != null">
+				modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="delFlag != null">
+				del_flag = #{delFlag,jdbcType=CHAR},
+			</if>
+			<if test="stepsReproduce != null">
+				steps_reproduce = #{stepsReproduce,jdbcType=VARCHAR},
+			</if>
+			<if test="solveTime != null">
+				solve_time = #{solveTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="solveProgram != null">
+				solve_program = #{solveProgram,jdbcType=INTEGER},
+			</if>
+			<if test="solveId != null">
+				solve_id = #{solveId,jdbcType=VARCHAR},
+			</if>
+			<if test="closeTime != null">
+				close_time = #{closeTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="closeId != null">
+				close_id = #{closeId,jdbcType=VARCHAR},
+			</if>
+			<if test="seriousDegree != null">
+				serious_degree = #{seriousDegree,jdbcType=VARCHAR},
+			</if>
+			<if test="closeReason != null">
+				close_reason = #{closeReason,jdbcType=VARCHAR},
+			</if>
+			<if test="caseId != null">
+				case_id = #{caseId,jdbcType=BIGINT},
+			</if>
+			<if test="bugDescribe != null">
+				bug_describe = #{bugDescribe,jdbcType=VARCHAR},
+			</if>
+			<if test="closeStauts != null">
+				close_stauts = #{closeStauts,jdbcType=VARCHAR},
+			</if>
+			<if test="bugTitle != null">
+				bug_title = #{bugTitle,jdbcType=VARCHAR},
+			</if>
+		</set>
+		,bug_status=2
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+</mapper>
