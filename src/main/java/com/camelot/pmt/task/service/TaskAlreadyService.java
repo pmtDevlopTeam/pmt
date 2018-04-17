@@ -25,7 +25,7 @@ public interface TaskAlreadyService {
     int queryUnfinishedTask (long projectId , String userId);
 
     /**
-     * @Title: queryTaskByDemandId 查询未完成任务的个数
+     * @Title: queryTaskByDemandId 根据需求ID 查询任务列表
      *  @param demandId
      */
 
