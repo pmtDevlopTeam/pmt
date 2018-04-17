@@ -1,0 +1,498 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.camelot.pmt.task.mapper.TaskMapper" >
+  <resultMap id="BaseResultMap" type="com.camelot.pmt.task.model.Task" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="task_name" property="taskName" jdbcType="VARCHAR" />
+    <result column="task_parent_id" property="taskParentId" jdbcType="BIGINT" />
+    <result column="project_id" property="projectId" jdbcType="BIGINT" />
+    <result column="demand_id" property="demandId" jdbcType="BIGINT" />
+    <result column="priority" property="priority" jdbcType="VARCHAR" />
+    <result column="assign_user_id" property="assignUserId" jdbcType="VARCHAR" />
+    <result column="beassign_user_id" property="beassignUserId" jdbcType="VARCHAR" />
+    <result column="assign_time" property="assignTime" jdbcType="TIMESTAMP" />
+    <result column="estimate_start_time" property="estimateStartTime" jdbcType="TIMESTAMP" />
+    <result column="estimate_end_time" property="estimateEndTime" jdbcType="TIMESTAMP" />
+    <result column="actual_start_time" property="actualStartTime" jdbcType="TIMESTAMP" />
+    <result column="actual_end_time" property="actualEndTime" jdbcType="TIMESTAMP" />
+    <result column="task_type" property="taskType" jdbcType="VARCHAR" />
+    <result column="task_speed" property="taskSpeed" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="abnormal_status" property="abnormalStatus" jdbcType="VARCHAR" />
+    <result column="task_describe" property="taskDescribe" jdbcType="VARCHAR" />
+    <result column="abnormal_describe" property="abnormalDescribe" jdbcType="VARCHAR" />
+    <result column="estimate_hour" property="estimateHour" jdbcType="INTEGER" />
+    <result column="consume_hour" property="consumeHour" jdbcType="INTEGER" />
+    <result column="remain_hour" property="remainHour" jdbcType="INTEGER" />
+    <result column="task_mileage" property="taskMileage" jdbcType="VARCHAR" />
+    <result column="create_user_id" property="createUserId" jdbcType="VARCHAR" />
+    <result column="modify_user_id" property="modifyUserId" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="warning_hour" property="warningHour" jdbcType="INTEGER" />
+    <result column="warning_status" property="warningStatus" jdbcType="INTEGER" />
+    <result column="comment" property="comment" jdbcType="VARCHAR" />
+    <result column="filepath" property="filepath" jdbcType="VARCHAR" />
+    <result column="filename" property="filename" jdbcType="VARCHAR" />
+    <result column="Column_1" property="column1" jdbcType="VARCHAR" />
+    <result column="Column_2" property="column2" jdbcType="VARCHAR" />
+    <result column="Column_3" property="column3" jdbcType="VARCHAR" />
+    <result column="Column_4" property="column4" jdbcType="VARCHAR" />
+    <result column="Column_5" property="column5" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, task_name, task_parent_id, project_id, demand_id, priority, assign_user_id, beassign_user_id, 
+    assign_time, estimate_start_time, estimate_end_time, actual_start_time, actual_end_time, 
+    task_type, task_speed, status, abnormal_status, task_describe, abnormal_describe, 
+    estimate_hour, consume_hour, remain_hour, task_mileage, create_user_id, modify_user_id, 
+    create_time, modify_time, warning_hour, warning_status, comment, filepath, filename, 
+    Column_1, Column_2, Column_3, Column_4, Column_5
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from task
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from task
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.camelot.pmt.task.model.Task" >
+    insert into task (id, task_name, task_parent_id, 
+      project_id, demand_id, priority, 
+      assign_user_id, beassign_user_id, assign_time, 
+      estimate_start_time, estimate_end_time, 
+      actual_start_time, actual_end_time, task_type, 
+      task_speed, status, abnormal_status, 
+      task_describe, abnormal_describe, estimate_hour, 
+      consume_hour, remain_hour, task_mileage, 
+      create_user_id, modify_user_id, create_time, 
+      modify_time, warning_hour, warning_status, 
+      comment, filepath, filename, 
+      Column_1, Column_2, Column_3, 
+      Column_4, Column_5)
+    values (#{id,jdbcType=BIGINT}, #{taskName,jdbcType=VARCHAR}, #{taskParentId,jdbcType=BIGINT}, 
+      #{projectId,jdbcType=BIGINT}, #{demandId,jdbcType=BIGINT}, #{priority,jdbcType=VARCHAR}, 
+      #{assignUserId,jdbcType=VARCHAR}, #{beassignUserId,jdbcType=VARCHAR}, #{assignTime,jdbcType=TIMESTAMP}, 
+      #{estimateStartTime,jdbcType=TIMESTAMP}, #{estimateEndTime,jdbcType=TIMESTAMP}, 
+      #{actualStartTime,jdbcType=TIMESTAMP}, #{actualEndTime,jdbcType=TIMESTAMP}, #{taskType,jdbcType=VARCHAR}, 
+      #{taskSpeed,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{abnormalStatus,jdbcType=VARCHAR}, 
+      #{taskDescribe,jdbcType=VARCHAR}, #{abnormalDescribe,jdbcType=VARCHAR}, #{estimateHour,jdbcType=INTEGER}, 
+      #{consumeHour,jdbcType=INTEGER}, #{remainHour,jdbcType=INTEGER}, #{taskMileage,jdbcType=VARCHAR}, 
+      #{createUserId,jdbcType=VARCHAR}, #{modifyUserId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{modifyTime,jdbcType=TIMESTAMP}, #{warningHour,jdbcType=INTEGER}, #{warningStatus,jdbcType=INTEGER}, 
+      #{comment,jdbcType=VARCHAR}, #{filepath,jdbcType=VARCHAR}, #{filename,jdbcType=VARCHAR}, 
+      #{column1,jdbcType=VARCHAR}, #{column2,jdbcType=VARCHAR}, #{column3,jdbcType=VARCHAR}, 
+      #{column4,jdbcType=VARCHAR}, #{column5,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.camelot.pmt.task.model.Task" >
+    insert into task
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="taskName != null" >
+        task_name,
+      </if>
+      <if test="taskParentId != null" >
+        task_parent_id,
+      </if>
+      <if test="projectId != null" >
+        project_id,
+      </if>
+      <if test="demandId != null" >
+        demand_id,
+      </if>
+      <if test="priority != null" >
+        priority,
+      </if>
+      <if test="assignUserId != null" >
+        assign_user_id,
+      </if>
+      <if test="beassignUserId != null" >
+        beassign_user_id,
+      </if>
+      <if test="assignTime != null" >
+        assign_time,
+      </if>
+      <if test="estimateStartTime != null" >
+        estimate_start_time,
+      </if>
+      <if test="estimateEndTime != null" >
+        estimate_end_time,
+      </if>
+      <if test="actualStartTime != null" >
+        actual_start_time,
+      </if>
+      <if test="actualEndTime != null" >
+        actual_end_time,
+      </if>
+      <if test="taskType != null" >
+        task_type,
+      </if>
+      <if test="taskSpeed != null" >
+        task_speed,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="abnormalStatus != null" >
+        abnormal_status,
+      </if>
+      <if test="taskDescribe != null" >
+        task_describe,
+      </if>
+      <if test="abnormalDescribe != null" >
+        abnormal_describe,
+      </if>
+      <if test="estimateHour != null" >
+        estimate_hour,
+      </if>
+      <if test="consumeHour != null" >
+        consume_hour,
+      </if>
+      <if test="remainHour != null" >
+        remain_hour,
+      </if>
+      <if test="taskMileage != null" >
+        task_mileage,
+      </if>
+      <if test="createUserId != null" >
+        create_user_id,
+      </if>
+      <if test="modifyUserId != null" >
+        modify_user_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+      <if test="warningHour != null" >
+        warning_hour,
+      </if>
+      <if test="warningStatus != null" >
+        warning_status,
+      </if>
+      <if test="comment != null" >
+        comment,
+      </if>
+      <if test="filepath != null" >
+        filepath,
+      </if>
+      <if test="filename != null" >
+        filename,
+      </if>
+      <if test="column1 != null" >
+        Column_1,
+      </if>
+      <if test="column2 != null" >
+        Column_2,
+      </if>
+      <if test="column3 != null" >
+        Column_3,
+      </if>
+      <if test="column4 != null" >
+        Column_4,
+      </if>
+      <if test="column5 != null" >
+        Column_5,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="taskName != null" >
+        #{taskName,jdbcType=VARCHAR},
+      </if>
+      <if test="taskParentId != null" >
+        #{taskParentId,jdbcType=BIGINT},
+      </if>
+      <if test="projectId != null" >
+        #{projectId,jdbcType=BIGINT},
+      </if>
+      <if test="demandId != null" >
+        #{demandId,jdbcType=BIGINT},
+      </if>
+      <if test="priority != null" >
+        #{priority,jdbcType=VARCHAR},
+      </if>
+      <if test="assignUserId != null" >
+        #{assignUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="beassignUserId != null" >
+        #{beassignUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="assignTime != null" >
+        #{assignTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="estimateStartTime != null" >
+        #{estimateStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="estimateEndTime != null" >
+        #{estimateEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="actualStartTime != null" >
+        #{actualStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="actualEndTime != null" >
+        #{actualEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="taskType != null" >
+        #{taskType,jdbcType=VARCHAR},
+      </if>
+      <if test="taskSpeed != null" >
+        #{taskSpeed,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="abnormalStatus != null" >
+        #{abnormalStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="taskDescribe != null" >
+        #{taskDescribe,jdbcType=VARCHAR},
+      </if>
+      <if test="abnormalDescribe != null" >
+        #{abnormalDescribe,jdbcType=VARCHAR},
+      </if>
+      <if test="estimateHour != null" >
+        #{estimateHour,jdbcType=INTEGER},
+      </if>
+      <if test="consumeHour != null" >
+        #{consumeHour,jdbcType=INTEGER},
+      </if>
+      <if test="remainHour != null" >
+        #{remainHour,jdbcType=INTEGER},
+      </if>
+      <if test="taskMileage != null" >
+        #{taskMileage,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null" >
+        #{createUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyUserId != null" >
+        #{modifyUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="warningHour != null" >
+        #{warningHour,jdbcType=INTEGER},
+      </if>
+      <if test="warningStatus != null" >
+        #{warningStatus,jdbcType=INTEGER},
+      </if>
+      <if test="comment != null" >
+        #{comment,jdbcType=VARCHAR},
+      </if>
+      <if test="filepath != null" >
+        #{filepath,jdbcType=VARCHAR},
+      </if>
+      <if test="filename != null" >
+        #{filename,jdbcType=VARCHAR},
+      </if>
+      <if test="column1 != null" >
+        #{column1,jdbcType=VARCHAR},
+      </if>
+      <if test="column2 != null" >
+        #{column2,jdbcType=VARCHAR},
+      </if>
+      <if test="column3 != null" >
+        #{column3,jdbcType=VARCHAR},
+      </if>
+      <if test="column4 != null" >
+        #{column4,jdbcType=VARCHAR},
+      </if>
+      <if test="column5 != null" >
+        #{column5,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.camelot.pmt.task.model.Task" >
+    update task
+    <set >
+      <if test="taskName != null" >
+        task_name = #{taskName,jdbcType=VARCHAR},
+      </if>
+      <if test="taskParentId != null" >
+        task_parent_id = #{taskParentId,jdbcType=BIGINT},
+      </if>
+      <if test="projectId != null" >
+        project_id = #{projectId,jdbcType=BIGINT},
+      </if>
+      <if test="demandId != null" >
+        demand_id = #{demandId,jdbcType=BIGINT},
+      </if>
+      <if test="priority != null" >
+        priority = #{priority,jdbcType=VARCHAR},
+      </if>
+      <if test="assignUserId != null" >
+        assign_user_id = #{assignUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="beassignUserId != null" >
+        beassign_user_id = #{beassignUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="assignTime != null" >
+        assign_time = #{assignTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="estimateStartTime != null" >
+        estimate_start_time = #{estimateStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="estimateEndTime != null" >
+        estimate_end_time = #{estimateEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="actualStartTime != null" >
+        actual_start_time = #{actualStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="actualEndTime != null" >
+        actual_end_time = #{actualEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="taskType != null" >
+        task_type = #{taskType,jdbcType=VARCHAR},
+      </if>
+      <if test="taskSpeed != null" >
+        task_speed = #{taskSpeed,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="abnormalStatus != null" >
+        abnormal_status = #{abnormalStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="taskDescribe != null" >
+        task_describe = #{taskDescribe,jdbcType=VARCHAR},
+      </if>
+      <if test="abnormalDescribe != null" >
+        abnormal_describe = #{abnormalDescribe,jdbcType=VARCHAR},
+      </if>
+      <if test="estimateHour != null" >
+        estimate_hour = #{estimateHour,jdbcType=INTEGER},
+      </if>
+      <if test="consumeHour != null" >
+        consume_hour = #{consumeHour,jdbcType=INTEGER},
+      </if>
+      <if test="remainHour != null" >
+        remain_hour = #{remainHour,jdbcType=INTEGER},
+      </if>
+      <if test="taskMileage != null" >
+        task_mileage = #{taskMileage,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null" >
+        create_user_id = #{createUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyUserId != null" >
+        modify_user_id = #{modifyUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="warningHour != null" >
+        warning_hour = #{warningHour,jdbcType=INTEGER},
+      </if>
+      <if test="warningStatus != null" >
+        warning_status = #{warningStatus,jdbcType=INTEGER},
+      </if>
+      <if test="comment != null" >
+        comment = #{comment,jdbcType=VARCHAR},
+      </if>
+      <if test="filepath != null" >
+        filepath = #{filepath,jdbcType=VARCHAR},
+      </if>
+      <if test="filename != null" >
+        filename = #{filename,jdbcType=VARCHAR},
+      </if>
+      <if test="column1 != null" >
+        Column_1 = #{column1,jdbcType=VARCHAR},
+      </if>
+      <if test="column2 != null" >
+        Column_2 = #{column2,jdbcType=VARCHAR},
+      </if>
+      <if test="column3 != null" >
+        Column_3 = #{column3,jdbcType=VARCHAR},
+      </if>
+      <if test="column4 != null" >
+        Column_4 = #{column4,jdbcType=VARCHAR},
+      </if>
+      <if test="column5 != null" >
+        Column_5 = #{column5,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.camelot.pmt.task.model.Task" >
+    update task
+    set task_name = #{taskName,jdbcType=VARCHAR},
+      task_parent_id = #{taskParentId,jdbcType=BIGINT},
+      project_id = #{projectId,jdbcType=BIGINT},
+      demand_id = #{demandId,jdbcType=BIGINT},
+      priority = #{priority,jdbcType=VARCHAR},
+      assign_user_id = #{assignUserId,jdbcType=VARCHAR},
+      beassign_user_id = #{beassignUserId,jdbcType=VARCHAR},
+      assign_time = #{assignTime,jdbcType=TIMESTAMP},
+      estimate_start_time = #{estimateStartTime,jdbcType=TIMESTAMP},
+      estimate_end_time = #{estimateEndTime,jdbcType=TIMESTAMP},
+      actual_start_time = #{actualStartTime,jdbcType=TIMESTAMP},
+      actual_end_time = #{actualEndTime,jdbcType=TIMESTAMP},
+      task_type = #{taskType,jdbcType=VARCHAR},
+      task_speed = #{taskSpeed,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      abnormal_status = #{abnormalStatus,jdbcType=VARCHAR},
+      task_describe = #{taskDescribe,jdbcType=VARCHAR},
+      abnormal_describe = #{abnormalDescribe,jdbcType=VARCHAR},
+      estimate_hour = #{estimateHour,jdbcType=INTEGER},
+      consume_hour = #{consumeHour,jdbcType=INTEGER},
+      remain_hour = #{remainHour,jdbcType=INTEGER},
+      task_mileage = #{taskMileage,jdbcType=VARCHAR},
+      create_user_id = #{createUserId,jdbcType=VARCHAR},
+      modify_user_id = #{modifyUserId,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      warning_hour = #{warningHour,jdbcType=INTEGER},
+      warning_status = #{warningStatus,jdbcType=INTEGER},
+      comment = #{comment,jdbcType=VARCHAR},
+      filepath = #{filepath,jdbcType=VARCHAR},
+      filename = #{filename,jdbcType=VARCHAR},
+      Column_1 = #{column1,jdbcType=VARCHAR},
+      Column_2 = #{column2,jdbcType=VARCHAR},
+      Column_3 = #{column3,jdbcType=VARCHAR},
+      Column_4 = #{column4,jdbcType=VARCHAR},
+      Column_5 = #{column5,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <sql id="Base_Column_List2" >
+    id, task_name, priority, assign_user_name,
+    beassign_user_name, assign_time, estimate_start_time, estimate_end_time,
+    actual_start_time, actual_end_time, task_type, task_speed, status, abnormal_status,
+    task_mileage, create_user_id
+  </sql>
+
+  <!--zlh-->
+  <!--查询所有任务列表-->
+  <select id="queryAllTask" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List2" />
+    from task
+  </select>
+
+  <!--&lt;!&ndash;zlh&ndash;&gt;-->
+  <!--&lt;!&ndash;根据条件模糊查询&ndash;&gt;-->
+  <!--<select id="queryAllTask" resultMap="BaseResultMap" parameterType="com.camelot.pmt.task.model.Task">-->
+    <!--select-->
+    <!--<include refid="Base_Column_List2" />-->
+    <!--from pmt_task-->
+    <!--<where>-->
+      <!--<if test=""></if>-->
+    <!--</where>-->
+  <!--</select>-->
+</mapper>
