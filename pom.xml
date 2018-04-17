@@ -236,6 +236,11 @@
             <version>1.2.31</version>
         </dependency>
 
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.7</version>
+		</dependency>
         <!-- get set方法注解 -->
         <dependency>
             <groupId>org.projectlombok</groupId>
