@@ -282,4 +282,26 @@ public interface TaskMapper {
      * @throws
      */
     int queryOverdueTaskUserId(String userId);
+
+    /**
+     * 根据userId,project 查询出未完成任务的个数
+     * @Title: queryUnfinishedTask
+     * @Description: TODO
+     * @param @param projectId,userId
+     * @param @return
+     * @return int
+     * @throws
+     */
+    int queryUnfinishedTask (@Param("projectId") long projectId ,@Param("userId") String userId);
+
+    /**
+     * 根据demandId 查询任务
+     * @Title: queryUnfinishedTask
+     * @Description: TODO
+     * @param @param demandId
+     * @param @return
+     * @return List<Task>
+     * @throws
+     */
+    List<Task> queryTaskByDemandId(long demandId);
 }
