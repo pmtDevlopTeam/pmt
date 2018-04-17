@@ -1,337 +1,76 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.camelot.pmt.task.mapper.TaskMapper">
-    <resultMap id="TaskResultMap" type="com.camelot.pmt.task.model.Task">
-        <id column="id" property="id" jdbcType="BIGINT"/>
-        <result column="task_num" property="taskNum" jdbcType="VARCHAR"/>
-        <result column="task_name" property="taskName" jdbcType="VARCHAR"/>
-        <result column="task_parent_id" property="taskParentId" jdbcType="BIGINT"/>
-        <result column="project_id" property="projectId" jdbcType="BIGINT"/>
-        <result column="demand_id" property="demandId" jdbcType="BIGINT"/>
-        <result column="priority" property="priority" jdbcType="CHAR"/>
-        <result column="assign_user_id" property="assignUserId" jdbcType="VARCHAR"/>
-        <result column="beassign_user_id" property="beassignUserId" jdbcType="VARCHAR"/>
-        <result column="assign_time" property="assignTime" jdbcType="TIMESTAMP"/>
-        <result column="estimate_start_time" property="estimateStartTime" jdbcType="TIMESTAMP"/>
-        <result column="estimate_end_time" property="estimateEndTime" jdbcType="TIMESTAMP"/>
-        <result column="actual_start_time" property="actualStartTime" jdbcType="TIMESTAMP"/>
-        <result column="actual_end_time" property="actualEndTime" jdbcType="TIMESTAMP"/>
-        <result column="task_type" property="taskType" jdbcType="CHAR"/>
-        <result column="task_speed" property="taskSpeed" jdbcType="VARCHAR"/>
-        <result column="status" property="status" jdbcType="CHAR"/>
-        <result column="node_lv" property="nodeLv" jdbcType="CHAR"/>
-        <result column="task_describe" property="taskDescribe" jdbcType="VARCHAR"/>
-        <result column="demand_change" property="demandChange" jdbcType="CHAR"/>
-        <result column="delay_describe" property="delayDescribe" jdbcType="VARCHAR"/>
-        <result column="estimate_hour" property="estimateHour" jdbcType="BIGINT"/>
-        <result column="infact_hour" property="infactHour" jdbcType="BIGINT"/>
-        <result column="task_mileage" property="taskMileage" jdbcType="CHAR"/>
-        <result column="create_user_id" property="createUserId" jdbcType="VARCHAR"/>
-        <result column="modify_user_id" property="modifyUserId" jdbcType="VARCHAR"/>
-        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
-        <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP"/>
-    </resultMap>
-    <!--zlh-->
-    <resultMap id="BaseResultMap" type="com.camelot.pmt.task.model.Task">
-        <id column="id" property="id" jdbcType="BIGINT"/>
-        <result column="task_num" property="taskNum" jdbcType="VARCHAR"/>
-        <result column="task_name" property="taskName" jdbcType="VARCHAR"/>
-        <result column="task_parent_id" property="taskParentId" jdbcType="BIGINT"/>
-        <result column="project_id" property="projectId" jdbcType="BIGINT"/>
-        <result column="priority" property="priority" jdbcType="CHAR"/>
-        <result column="assign_time" property="assignTime" jdbcType="TIMESTAMP"/>
-        <result column="estimate_start_time" property="estimateStartTime" jdbcType="TIMESTAMP"/>
-        <result column="estimate_end_time" property="estimateEndTime" jdbcType="TIMESTAMP"/>
-        <result column="actual_start_time" property="actualStartTime" jdbcType="TIMESTAMP"/>
-        <result column="actual_end_time" property="actualEndTime" jdbcType="TIMESTAMP"/>
-        <result column="task_type" property="taskType" jdbcType="CHAR"/>
-        <result column="task_speed" property="taskSpeed" jdbcType="VARCHAR"/>
-        <result column="status" property="status" jdbcType="CHAR"/>
-        <result column="node_lv" property="nodeLv" jdbcType="CHAR"/>
-        <result column="task_describe" property="taskDescribe" jdbcType="VARCHAR"/>
-        <result column="demand_change" property="demandChange" jdbcType="CHAR"/>
-        <result column="delay_describe" property="delayDescribe" jdbcType="VARCHAR"/>
-        <result column="estimate_hour" property="estimateHour" jdbcType="BIGINT"/>
-        <result column="infact_hour" property="infactHour" jdbcType="BIGINT"/>
-        <result column="task_mileage" property="taskMileage" jdbcType="CHAR"/>
-        <result column="create_user_id" property="createUserId" jdbcType="VARCHAR"/>
-        <result column="modify_user_id" property="modifyUserId" jdbcType="VARCHAR"/>
-        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
-        <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP"/>
-        <association property="project"  javaType="com.camelot.pmt.project.model.Project">
-            <result property="proId" column="pid"/>
-            <result property="proName" column="project_name"/>
-        </association>
-        <association property="demand" javaType="com.camelot.pmt.project.model.Demand">
-            <result property="id" column="did"/>
-            <result property="demandDesc" column="demand_desc"/>
-        </association>
-        <association property="createUser" javaType="com.camelot.pmt.platform.model.User">
-            <result property="id" column="cid"/>
-            <result property="userId" column="user_id"/>
-            <result property="username" column="user_name"/>
-        </association>
-        <association property="assignUser" javaType="com.camelot.pmt.platform.model.User">
-            <result property="id" column="aid"/>
-            <result property="userId" column="user_id"/>
-            <result property="username" column="user_name"/>
-        </association>
-        <association property="beassignUser" javaType="com.camelot.pmt.platform.model.User">
-            <result property="id" column="bid"/>
-            <result property="userId" column="user_id"/>
-            <result property="username" column="user_name"/>
-        </association>
-    </resultMap>
-
-    <sql id="Base_Column_List">
-        id, task_num, task_name, task_parent_id, project_id, demand_id, priority, assign_user_id,
-        beassign_user_id, assign_time, estimate_start_time, estimate_end_time, actual_start_time,
-        actual_end_time, task_type, task_speed, status, node_lv, task_describe, demand_change,
-        delay_describe, estimate_hour, infact_hour, task_mileage, create_user_id, modify_user_id,
-        create_time, modify_time
-    </sql>
-
-    <!--通用查所有-->
-    <sql id="ShowAllTasks_Column_List">
-        t.id, t.task_num, t.task_name, t.task_parent_id, t.project_id, t.demand_id, t.priority, t.assign_user_id,
-        t.beassign_user_id, t.assign_time, t.estimate_start_time, t.estimate_end_time, t.actual_start_time,
-        t.actual_end_time, t.task_type, t.task_speed, t.status, t.node_lv, t.task_describe, t.demand_change,
-        t.delay_describe, t.estimate_hour, t.infact_hour, t.task_mileage, t.create_user_id, t.modify_user_id,
-        t.create_time, t.modify_time, a.id AS aid, a.user_id, a.user_name, b.id AS bid, b.user_id, b.user_name,
-        c.id AS cid, c.user_id, c.user_name, p.id AS pid, p.project_name, d.id AS did, d.demand_desc
-    </sql>
-
-    <!--zlh-->
-    <sql id="TaskManager_ShowTasks_Column_List" >
-        t.id, t.task_num, t.task_name, b.id AS bid, b.user_id, b.user_name, t.estimate_start_time, t.estimate_end_time,
-        t.actual_start_time, t.actual_end_time, t.task_speed, t.status,
-        t.task_type, t.task_mileage, t.priority, c.id AS cid, c.user_id, c.user_name,
-        a.id AS aid, a.user_id, a.user_name, t.assign_time
-    </sql>
-    <!--zlh-->
-    <!--查询所有任务列表-->
-    <select id="queryAllTask" resultMap="BaseResultMap">
-        select
-        <include refid="TaskManager_ShowTasks_Column_List" />
-        from task t LEFT JOIN platform_user a
-        --     指派人user表 别名 a
-        ON t.assign_user_id = a.user_id
-        LEFT JOIN platform_user b
-        --     被指派人user表 别名 b
-        ON t.beassign_user_id = b.user_id
-        LEFT JOIN platform_user c
-        --     创建人user表 别名 c
-        on t.create_user_id = c.user_id
-    </select>
-    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
-        select
-        <include refid="Base_Column_List"/>
-        from task
-        where id = #{id,jdbcType=BIGINT}
-    </select>
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from task
-    where id = #{id,jdbcType=BIGINT}
-  </delete>
-    <insert id="insert" parameterType="com.camelot.pmt.task.model.Task">
-    insert into task (id, task_num, task_name, 
-      task_parent_id, project_id, demand_id, 
-      priority, assign_user_id, beassign_user_id, 
-      assign_time, estimate_start_time, estimate_end_time, 
-      actual_start_time, actual_end_time, task_type, 
-      task_speed, status, node_lv, 
-      task_describe, demand_change, delay_describe, 
-      estimate_hour, infact_hour, task_mileage, 
-      create_user_id, modify_user_id, create_time, 
-      modify_time)
-    values (#{id,jdbcType=BIGINT}, #{taskNum,jdbcType=VARCHAR}, #{taskName,jdbcType=VARCHAR}, 
-      #{taskParentId,jdbcType=BIGINT}, #{projectId,jdbcType=BIGINT}, #{demandId,jdbcType=BIGINT}, 
-      #{priority,jdbcType=CHAR}, #{assignUserId,jdbcType=VARCHAR}, #{beassignUserId,jdbcType=VARCHAR}, 
-      #{assignTime,jdbcType=TIMESTAMP}, #{estimateStartTime,jdbcType=TIMESTAMP}, #{estimateEndTime,jdbcType=TIMESTAMP}, 
-      #{actualStartTime,jdbcType=TIMESTAMP}, #{actualEndTime,jdbcType=TIMESTAMP}, #{taskType,jdbcType=CHAR}, 
-      #{taskSpeed,jdbcType=VARCHAR}, #{status,jdbcType=CHAR}, #{nodeLv,jdbcType=CHAR}, 
-      #{taskDescribe,jdbcType=VARCHAR}, #{demandChange,jdbcType=CHAR}, #{delayDescribe,jdbcType=VARCHAR}, 
-      #{estimateHour,jdbcType=BIGINT}, #{infactHour,jdbcType=BIGINT}, #{taskMileage,jdbcType=CHAR}, 
-      #{createUserId,jdbcType=VARCHAR}, #{modifyUserId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{modifyTime,jdbcType=TIMESTAMP})
-  </insert>
-    <insert id="insertSelective" parameterType="com.camelot.pmt.task.model.Task">
-        insert into task
+    <!--通用insert动态代码columns-->
+    <sql id="sql_add_task_columns">
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="id != null">
-                id,
-            </if>
-            <if test="taskNum != null">
-                task_num,
-            </if>
-            <if test="taskName != null">
-                task_name,
-            </if>
-            <if test="taskParentId != null">
-                task_parent_id,
-            </if>
-            <if test="projectId != null">
-                project_id,
-            </if>
-            <if test="demandId != null">
-                demand_id,
-            </if>
-            <if test="priority != null">
-                priority,
-            </if>
-            <if test="assignUserId != null">
-                assign_user_id,
-            </if>
-            <if test="beassignUserId != null">
-                beassign_user_id,
-            </if>
-            <if test="assignTime != null">
-                assign_time,
-            </if>
-            <if test="estimateStartTime != null">
-                estimate_start_time,
-            </if>
-            <if test="estimateEndTime != null">
-                estimate_end_time,
-            </if>
-            <if test="actualStartTime != null">
-                actual_start_time,
-            </if>
-            <if test="actualEndTime != null">
-                actual_end_time,
-            </if>
-            <if test="taskType != null">
-                task_type,
-            </if>
-            <if test="taskSpeed != null">
-                task_speed,
-            </if>
-            <if test="status != null">
-                status,
-            </if>
-            <if test="nodeLv != null">
-                node_lv,
-            </if>
-            <if test="taskDescribe != null">
-                task_describe,
-            </if>
-            <if test="demandChange != null">
-                demand_change,
-            </if>
-            <if test="delayDescribe != null">
-                delay_describe,
-            </if>
-            <if test="estimateHour != null">
-                estimate_hour,
-            </if>
-            <if test="infactHour != null">
-                infact_hour,
-            </if>
-            <if test="taskMileage != null">
-                task_mileage,
-            </if>
-            <if test="createUserId != null">
-                create_user_id,
-            </if>
-            <if test="modifyUserId != null">
-                modify_user_id,
-            </if>
-            <if test="createTime != null">
-                create_time,
-            </if>
-            <if test="modifyTime != null">
-                modify_time,
-            </if>
+            <if test="id != null">id,</if>
+            <if test="taskNum != null">task_num,</if>
+            <if test="taskName != null">task_name,</if>
+            <if test="taskParentId != null">task_parent_id,</if>
+            <if test="project.id != null">project_id,</if>
+            <if test="demand.id != null">demand_id,</if>
+            <if test="priority != null">priority,</if>
+            <if test="assignUser.userId != null">assign_user_id,</if>
+            <if test="beassignUser.userId != null">beassign_user_id,</if>
+            <if test="assignTime != null">assign_time,</if>
+            <if test="estimateStartTime != null">estimate_start_time,</if>
+            <if test="estimateEndTime != null">estimate_end_time,</if>
+            <if test="actualStartTime != null">actual_start_time,</if>
+            <if test="actualEndTime != null">actual_end_time,</if>
+            <if test="taskType != null">task_type,</if>
+            <if test="taskSpeed != null">task_speed,</if>
+            <if test="status != null">status,</if>
+            <if test="nodeLv != null">node_lv,</if>
+            <if test="taskDescribe != null">task_describe,</if>
+            <if test="demandChange != null">demand_change,</if>
+            <if test="delayDescribe != null">delay_describe,</if>
+            <if test="estimateHour != null">estimate_hour,</if>
+            <if test="infactHour != null">infact_hour,</if>
+            <if test="taskMileage != null">task_mileage,</if>
+            <if test="createUser.userId != null">create_user_id,</if>
+            <if test="modifyUserId != null">modify_user_id,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="modifyTime != null">modify_time</if>
         </trim>
+    </sql>
+
+    <!--通用insert动态代码属性-->
+    <sql id="sql_add_task_properties">
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="id != null">
-                #{id,jdbcType=BIGINT},
-            </if>
-            <if test="taskNum != null">
-                #{taskNum,jdbcType=VARCHAR},
-            </if>
-            <if test="taskName != null">
-                #{taskName,jdbcType=VARCHAR},
-            </if>
-            <if test="taskParentId != null">
-                #{taskParentId,jdbcType=BIGINT},
-            </if>
-            <if test="projectId != null">
-                #{projectId,jdbcType=BIGINT},
-            </if>
-            <if test="demandId != null">
-                #{demandId,jdbcType=BIGINT},
-            </if>
-            <if test="priority != null">
-                #{priority,jdbcType=CHAR},
-            </if>
-            <if test="assignUserId != null">
-                #{assignUserId,jdbcType=VARCHAR},
-            </if>
-            <if test="beassignUserId != null">
-                #{beassignUserId,jdbcType=VARCHAR},
-            </if>
-            <if test="assignTime != null">
-                #{assignTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="estimateStartTime != null">
-                #{estimateStartTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="estimateEndTime != null">
-                #{estimateEndTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="actualStartTime != null">
-                #{actualStartTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="actualEndTime != null">
-                #{actualEndTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="taskType != null">
-                #{taskType,jdbcType=CHAR},
-            </if>
-            <if test="taskSpeed != null">
-                #{taskSpeed,jdbcType=VARCHAR},
-            </if>
-            <if test="status != null">
-                #{status,jdbcType=CHAR},
-            </if>
-            <if test="nodeLv != null">
-                #{nodeLv,jdbcType=CHAR},
-            </if>
-            <if test="taskDescribe != null">
-                #{taskDescribe,jdbcType=VARCHAR},
-            </if>
-            <if test="demandChange != null">
-                #{demandChange,jdbcType=CHAR},
-            </if>
-            <if test="delayDescribe != null">
-                #{delayDescribe,jdbcType=VARCHAR},
-            </if>
-            <if test="estimateHour != null">
-                #{estimateHour,jdbcType=BIGINT},
-            </if>
-            <if test="infactHour != null">
-                #{infactHour,jdbcType=BIGINT},
-            </if>
-            <if test="taskMileage != null">
-                #{taskMileage,jdbcType=CHAR},
-            </if>
-            <if test="createUserId != null">
-                #{createUserId,jdbcType=VARCHAR},
-            </if>
-            <if test="modifyUserId != null">
-                #{modifyUserId,jdbcType=VARCHAR},
-            </if>
-            <if test="createTime != null">
-                #{createTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="modifyTime != null">
-                #{modifyTime,jdbcType=TIMESTAMP},
-            </if>
+            <if test="id != null">#{id,jdbcType=BIGINT},</if>
+            <if test="taskNum != null">#{taskNum,jdbcType=VARCHAR},</if>
+            <if test="taskName != null">#{taskName,jdbcType=VARCHAR},</if>
+            <if test="taskParentId != null">#{taskParentId,jdbcType=BIGINT},</if>
+            <if test="project.id != null">#{projectId,jdbcType=BIGINT},</if>
+            <if test="demand.id != null">#{demandId,jdbcType=BIGINT},</if>
+            <if test="priority != null">#{priority,jdbcType=CHAR},</if>
+            <if test="assignUser.userId != null">#{assignUserId,jdbcType=VARCHAR},</if>
+            <if test="beassignUser.userId != null">#{beassignUserId,jdbcType=VARCHAR},</if>
+            <if test="assignTime != null">#{assignTime,jdbcType=TIMESTAMP},</if>
+            <if test="estimateStartTime != null">#{estimateStartTime,jdbcType=TIMESTAMP},</if>
+            <if test="estimateEndTime != null">#{estimateEndTime,jdbcType=TIMESTAMP},</if>
+            <if test="actualStartTime != null">#{actualStartTime,jdbcType=TIMESTAMP},</if>
+            <if test="actualEndTime != null">#{actualEndTime,jdbcType=TIMESTAMP},</if>
+            <if test="taskType != null">#{taskType,jdbcType=CHAR},</if>
+            <if test="taskSpeed != null">#{taskSpeed,jdbcType=VARCHAR},</if>
+            <if test="status != null">#{status,jdbcType=CHAR},</if>
+            <if test="nodeLv != null">#{nodeLv,jdbcType=CHAR},</if>
+            <if test="taskDescribe != null">#{taskDescribe,jdbcType=VARCHAR},</if>
+            <if test="demandChange != null">#{demandChange,jdbcType=CHAR},</if>
+            <if test="delayDescribe != null">#{delayDescribe,jdbcType=VARCHAR},</if>
+            <if test="estimateHour != null">#{estimateHour,jdbcType=BIGINT},</if>
+            <if test="infactHour != null">#{infactHour,jdbcType=BIGINT},</if>
+            <if test="taskMileage != null">#{taskMileage,jdbcType=CHAR},</if>
+            <if test="createUser.userId != null">#{createUserId,jdbcType=VARCHAR},</if>
+            <if test="modifyUserId != null">#{modifyUserId,jdbcType=VARCHAR},</if>
+            <if test="createTime != null">#{createTime,jdbcType=TIMESTAMP},</if>
+            <if test="modifyTime != null">#{modifyTime,jdbcType=TIMESTAMP}</if>
         </trim>
-    </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.camelot.pmt.task.model.Task">
-        update task
+    </sql>
+
+    <!--通用update动态代码-->
+    <sql id="sql_update_task">
         <set>
             <if test="taskNum != null">
                 task_num = #{taskNum,jdbcType=VARCHAR},
@@ -415,39 +154,141 @@
                 modify_time = #{modifyTime,jdbcType=TIMESTAMP},
             </if>
         </set>
-        where id = #{id,jdbcType=BIGINT}
-    </update>
-    <update id="updateByPrimaryKey" parameterType="com.camelot.pmt.task.model.Task">
-    update task
-    set task_num = #{taskNum,jdbcType=VARCHAR},
-      task_name = #{taskName,jdbcType=VARCHAR},
-      task_parent_id = #{taskParentId,jdbcType=BIGINT},
-      project_id = #{projectId,jdbcType=BIGINT},
-      demand_id = #{demandId,jdbcType=BIGINT},
-      priority = #{priority,jdbcType=CHAR},
-      assign_user_id = #{assignUserId,jdbcType=VARCHAR},
-      beassign_user_id = #{beassignUserId,jdbcType=VARCHAR},
-      assign_time = #{assignTime,jdbcType=TIMESTAMP},
-      estimate_start_time = #{estimateStartTime,jdbcType=TIMESTAMP},
-      estimate_end_time = #{estimateEndTime,jdbcType=TIMESTAMP},
-      actual_start_time = #{actualStartTime,jdbcType=TIMESTAMP},
-      actual_end_time = #{actualEndTime,jdbcType=TIMESTAMP},
-      task_type = #{taskType,jdbcType=CHAR},
-      task_speed = #{taskSpeed,jdbcType=VARCHAR},
-      status = #{status,jdbcType=CHAR},
-      node_lv = #{nodeLv,jdbcType=CHAR},
-      task_describe = #{taskDescribe,jdbcType=VARCHAR},
-      demand_change = #{demandChange,jdbcType=CHAR},
-      delay_describe = #{delayDescribe,jdbcType=VARCHAR},
-      estimate_hour = #{estimateHour,jdbcType=BIGINT},
-      infact_hour = #{infactHour,jdbcType=BIGINT},
-      task_mileage = #{taskMileage,jdbcType=CHAR},
-      create_user_id = #{createUserId,jdbcType=VARCHAR},
-      modify_user_id = #{modifyUserId,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
-    where id = #{id,jdbcType=BIGINT}
-  </update>
+    </sql>
+
+    <!--通用resultMap-->
+    <resultMap id="BaseResultMap" type="com.camelot.pmt.task.model.Task">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="task_num" property="taskNum" jdbcType="VARCHAR"/>
+        <result column="task_name" property="taskName" jdbcType="VARCHAR"/>
+        <result column="task_parent_id" property="taskParentId" jdbcType="BIGINT"/>
+        <result column="project_id" property="projectId" jdbcType="BIGINT"/>
+        <result column="priority" property="priority" jdbcType="CHAR"/>
+        <result column="assign_time" property="assignTime" jdbcType="TIMESTAMP"/>
+        <result column="estimate_start_time" property="estimateStartTime" jdbcType="TIMESTAMP"/>
+        <result column="estimate_end_time" property="estimateEndTime" jdbcType="TIMESTAMP"/>
+        <result column="actual_start_time" property="actualStartTime" jdbcType="TIMESTAMP"/>
+        <result column="actual_end_time" property="actualEndTime" jdbcType="TIMESTAMP"/>
+        <result column="task_type" property="taskType" jdbcType="CHAR"/>
+        <result column="task_speed" property="taskSpeed" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="CHAR"/>
+        <result column="node_lv" property="nodeLv" jdbcType="CHAR"/>
+        <result column="task_describe" property="taskDescribe" jdbcType="VARCHAR"/>
+        <result column="demand_change" property="demandChange" jdbcType="CHAR"/>
+        <result column="delay_describe" property="delayDescribe" jdbcType="VARCHAR"/>
+        <result column="estimate_hour" property="estimateHour" jdbcType="BIGINT"/>
+        <result column="infact_hour" property="infactHour" jdbcType="BIGINT"/>
+        <result column="task_mileage" property="taskMileage" jdbcType="CHAR"/>
+        <result column="create_user_id" property="createUserId" jdbcType="VARCHAR"/>
+        <result column="modify_user_id" property="modifyUserId" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP"/>
+        <association property="project"  javaType="com.camelot.pmt.project.model.Project">
+            <result property="proId" column="pid"/>
+            <result property="proName" column="project_name"/>
+        </association>
+        <association property="demand" javaType="com.camelot.pmt.project.model.Demand">
+            <result property="id" column="did"/>
+            <result property="demandDesc" column="demand_desc"/>
+        </association>
+        <association property="createUser" javaType="com.camelot.pmt.platform.model.User">
+            <result property="id" column="cid"/>
+            <result property="userId" column="user_id"/>
+            <result property="username" column="user_name"/>
+        </association>
+        <association property="assignUser" javaType="com.camelot.pmt.platform.model.User">
+            <result property="id" column="aid"/>
+            <result property="userId" column="user_id"/>
+            <result property="username" column="user_name"/>
+        </association>
+        <association property="beassignUser" javaType="com.camelot.pmt.platform.model.User">
+            <result property="id" column="bid"/>
+            <result property="userId" column="user_id"/>
+            <result property="username" column="user_name"/>
+        </association>
+    </resultMap>
+
+    <resultMap id="TaskResultMap" type="com.camelot.pmt.task.model.Task">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="task_num" property="taskNum" jdbcType="VARCHAR"/>
+        <result column="task_name" property="taskName" jdbcType="VARCHAR"/>
+        <result column="task_parent_id" property="taskParentId" jdbcType="BIGINT"/>
+        <result column="project_id" property="projectId" jdbcType="BIGINT"/>
+        <result column="demand_id" property="demandId" jdbcType="BIGINT"/>
+        <result column="priority" property="priority" jdbcType="CHAR"/>
+        <result column="assign_user_id" property="assignUserId" jdbcType="VARCHAR"/>
+        <result column="beassign_user_id" property="beassignUserId" jdbcType="VARCHAR"/>
+        <result column="assign_time" property="assignTime" jdbcType="TIMESTAMP"/>
+        <result column="estimate_start_time" property="estimateStartTime" jdbcType="TIMESTAMP"/>
+        <result column="estimate_end_time" property="estimateEndTime" jdbcType="TIMESTAMP"/>
+        <result column="actual_start_time" property="actualStartTime" jdbcType="TIMESTAMP"/>
+        <result column="actual_end_time" property="actualEndTime" jdbcType="TIMESTAMP"/>
+        <result column="task_type" property="taskType" jdbcType="CHAR"/>
+        <result column="task_speed" property="taskSpeed" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="CHAR"/>
+        <result column="node_lv" property="nodeLv" jdbcType="CHAR"/>
+        <result column="task_describe" property="taskDescribe" jdbcType="VARCHAR"/>
+        <result column="demand_change" property="demandChange" jdbcType="CHAR"/>
+        <result column="delay_describe" property="delayDescribe" jdbcType="VARCHAR"/>
+        <result column="estimate_hour" property="estimateHour" jdbcType="BIGINT"/>
+        <result column="infact_hour" property="infactHour" jdbcType="BIGINT"/>
+        <result column="task_mileage" property="taskMileage" jdbcType="CHAR"/>
+        <result column="create_user_id" property="createUserId" jdbcType="VARCHAR"/>
+        <result column="modify_user_id" property="modifyUserId" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, task_num, task_name, task_parent_id, project_id, demand_id, priority, assign_user_id,
+        beassign_user_id, assign_time, estimate_start_time, estimate_end_time, actual_start_time,
+        actual_end_time, task_type, task_speed, status, node_lv, task_describe, demand_change,
+        delay_describe, estimate_hour, infact_hour, task_mileage, create_user_id, modify_user_id,
+        create_time, modify_time
+    </sql>
+
+    <!--通用多表（项目表、指派user表、负责user表、创建user表、需求表）查所有-->
+    <sql id="ShowAllTasks_Column_List">
+        t.id, t.task_num, t.task_name, t.task_parent_id, t.project_id, t.demand_id, t.priority, t.assign_user_id,
+        t.beassign_user_id, t.assign_time, t.estimate_start_time, t.estimate_end_time, t.actual_start_time,
+        t.actual_end_time, t.task_type, t.task_speed, t.status, t.node_lv, t.task_describe, t.demand_change,
+        t.delay_describe, t.estimate_hour, t.infact_hour, t.task_mileage, t.create_user_id, t.modify_user_id,
+        t.create_time, t.modify_time, a.id AS aid, a.user_id, a.user_name, b.id AS bid, b.user_id, b.user_name,
+        c.id AS cid, c.user_id, c.user_name, p.id AS pid, p.project_name, d.id AS did, d.demand_desc
+    </sql>
+
+    <!--zlh-->
+    <!--任务管理模块列表展示所用字段-->
+    <sql id="TaskManager_ShowTasks_Column_List" >
+        t.id, t.task_num, t.task_name, b.id AS bid, b.user_id, b.user_name, t.estimate_start_time, t.estimate_end_time,
+        t.actual_start_time, t.actual_end_time, t.task_speed, t.status,
+        t.task_type, t.task_mileage, t.priority, c.id AS cid, c.user_id, c.user_name,
+        a.id AS aid, a.user_id, a.user_name, t.assign_time
+    </sql>
+
+    <!--zlh-->
+    <!--查询所有任务列表-->
+    <select id="queryAllTask" resultMap="BaseResultMap">
+        select
+        <include refid="TaskManager_ShowTasks_Column_List" />
+        from task t LEFT JOIN platform_user a
+        --     指派人user表 别名 a
+        ON t.assign_user_id = a.user_id
+        LEFT JOIN platform_user b
+        --     被指派人user表 别名 b
+        ON t.beassign_user_id = b.user_id
+        LEFT JOIN platform_user c
+        --     创建人user表 别名 c
+        on t.create_user_id = c.user_id
+    </select>
+
+    <!--zlh-->
+    <!--插入任务-->
+    <insert id="insertTask" parameterType="com.camelot.pmt.task.model.Task">
+        insert into task
+        <include refid="sql_add_task_columns"/>
+        <include refid="sql_add_task_properties"/>
+    </insert>
   <!-- gxl start -->
   	<!--查询任务-->
     <select id="queryTaskNodeById" resultMap="BaseResultMap">
@@ -459,6 +300,18 @@
 		INNER JOIN platform_user b ON b.user_id = t.beassign_user_id
 		INNER JOIN platform_user c ON c.user_id = t.create_user_id
 		where t.id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <!--zsf-->
+    <!--根据项目Id 和 userId 查询出任务个数-->
+    <select id="queryUnfinishedTask"  resultType="int">
+        select count(*) from task where status in ( 0 , 1 , 3)
+        <if test="projectId!=null">
+            and project_id = #{projectId}
+        </if>
+        <if test="userId!=null">
+            and beassign_user_id = #{userId}
+        </if>
     </select>
     <!-- 新增任务 -->
     <insert id="insertTaskNodeById" parameterType="BaseResultMap">
@@ -483,6 +336,7 @@
 	      #{createUser.userId,jdbcType=VARCHAR}, #{modifyUserId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
 	      #{modifyTime,jdbcType=TIMESTAMP})
   	</insert>
+  	
   	<!-- 删除任务 -->
   	<delete id="deleteTaskNodeById" parameterType="BaseResultMap">
 	    delete from task
