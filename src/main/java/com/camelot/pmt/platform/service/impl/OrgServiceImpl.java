@@ -23,17 +23,13 @@ import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.common.Pager;
 import com.camelot.pmt.platform.mapper.OrgMapper;
 import com.camelot.pmt.platform.mapper.UserMapper;
-import com.camelot.pmt.platform.model.Menu;
 import com.camelot.pmt.platform.model.Org;
 import com.camelot.pmt.platform.model.OrgAndUser;
 import com.camelot.pmt.platform.model.OrgToUser;
-import com.camelot.pmt.platform.model.RoleToMenu;
 import com.camelot.pmt.platform.model.User;
 import com.camelot.pmt.platform.service.OrgService;
 import com.camelot.pmt.util.BuildTree;
 import com.camelot.pmt.util.Tree;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 
 @Service
 public class OrgServiceImpl implements OrgService {
@@ -63,6 +59,7 @@ public class OrgServiceImpl implements OrgService {
 				Map<String, Object> attributes = new HashMap<>(16);
 				attributes.put("state", org.getState());
 				attributes.put("sortNum", org.getSortNum());
+				attributes.put("orgCode", org.getOrgCode());
 				tree.setAttributes(attributes);
 				trees.add(tree);
 			}
@@ -73,13 +70,6 @@ public class OrgServiceImpl implements OrgService {
 		} else {
 			return result;
 		}
-
-		/*
-		 * try { List<Org> list = orgMapper.queryAllOrg(); if(list.size() <= 0)
-		 * { return result; } result.setResult(list); } catch (Exception e) {
-		 * LOGGER.error(e.getMessage()); throw new RuntimeException(e); } return
-		 * result;
-		 */
 	}
 
 	/**
@@ -174,12 +164,10 @@ public class OrgServiceImpl implements OrgService {
 	public ExecuteResult<Org> queryOrgByOrgId(String orgId) {
 		ExecuteResult<Org> result = new ExecuteResult<Org>();
 		try {
-			if (!orgId.equals("") && !orgId.equals("0")) {
 				Org orgObject = orgMapper.queryOrgByOrgId(orgId);
-				result.setResult(orgObject);
-				return result;
-			}
-			result.addErrorMessage("查询失败！");
+				if (orgObject !=null) {
+					result.setResult(orgObject);
+				}
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
 			throw new RuntimeException(e);
@@ -358,18 +346,26 @@ public class OrgServiceImpl implements OrgService {
 				User user = userMapper.selectUserById(ids);
 				Org orgObj = orgMapper.queryOrgByOrgId(org.getOrgId());
 				if (user == null) {
-					result.setResultMessage("传入的用户参数不正确");
+					result.setResult("传入的用户参数不正确");
 					return result;
 				}else if (orgObj == null) {
-					result.setResultMessage("传入的部门参数不正确");
+					result.setResult("传入的部门参数不正确");
 					return result;
 				}else{
-					org.setUserId(ids);
-					count=orgMapper.createOrgToUser(org);
+					Org o = new Org();
+					o.setUserId(ids);
+					o.setOrgId(org.getOrgId());
+					long date = new Date().getTime();
+					o.setCreateTime(new Date(date));
+		            o.setModifyTime(new Date(date));
+					count=orgMapper.createOrgToUser(o);
 				}
 			}
 			if (count >0) {
-				result.setResultMessage("部门和用户绑定成功");
+				result.setResult("部门和用户绑定成功");
+			}else{
+				
+				result.setResult("部门和用户绑定失败");
 			}
 		}catch (Exception e) {
             LOGGER.error(e.getMessage());
@@ -379,7 +375,7 @@ public class OrgServiceImpl implements OrgService {
 	}
 
 	@Override
-	public ExecuteResult<List<User>> queryOrgToUser(String orgId) {
+	public ExecuteResult<List<User>> queryOrgToUserByOrgId(String orgId) {
 		ExecuteResult<List<User>> result = new ExecuteResult<List<User>>();
 		try {
 			List<OrgAndUser> OrgAndUserList = orgMapper.selectUsersByOrgId(orgId);
@@ -400,4 +396,73 @@ public class OrgServiceImpl implements OrgService {
 		}
 		return result;
 	}
+
+	@Override
+	public ExecuteResult<List<Org>> queryOrgByParameters(Org org) {
+		ExecuteResult<List<Org>> result = new ExecuteResult<List<Org>>();
+		try{
+		List<Org> orgsList = orgMapper.queryOrgByParameters(org);
+		if (CollectionUtils.isEmpty(orgsList)) {
+            return result;
+        }
+		result.setResult(orgsList);
+		}catch (Exception e) {
+			LOGGER.error(e.getMessage());
+			throw new RuntimeException(e);
+		}
+		return result;
+	}
+
+	@Override
+	public ExecuteResult<String> modifyOrgByOrgIdAndState(Org org) {
+		ExecuteResult<String> result = new ExecuteResult<String>();
+		int count = orgMapper.modifyOrgByOrgIdAndState(org);
+		if (count>0) {
+			result.setResult("状态修改成功");
+		}else{
+			result.setResult("状态修改失败");
+		}
+		return result;
+	}
+
+	@Override
+	public ExecuteResult<String> modifyOrgToUser(Org org) {
+		ExecuteResult<String> result = new ExecuteResult<String>();
+		int count = 0;
+		try{
+			List<String> userIds = Arrays.asList(org.getUserIds());
+			orgMapper.deleteOrgToUserByOrgId(org.getOrgId());
+			for (String ids : userIds) {
+				User user = userMapper.selectUserById(ids);
+				Org orgObj = orgMapper.queryOrgByOrgId(org.getOrgId());
+				if (user == null) {
+					result.setResult("传入的用户参数不正确");
+					return result;
+				}else if (orgObj == null) {
+					result.setResult("传入的部门参数不正确");
+					return result;
+				}else{
+					Org o = new Org();
+					o.setUserId(ids);
+					o.setOrgId(org.getOrgId());
+					long date = new Date().getTime();
+					o.setCreateTime(new Date(date));
+		            o.setModifyTime(new Date(date));
+					count=orgMapper.createOrgToUser(o);
+				}
+			}
+			if (count >0) {
+				result.setResult("部门和用户修改成功");
+			}else{
+				
+				result.setResult("部门和用户修改失败");
+			}
+		}catch (Exception e) {
+            LOGGER.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+		return result;
+	}
+
+	
 }
