@@ -183,6 +183,8 @@
         <result column="modify_user_id" property="modifyUserId" jdbcType="VARCHAR"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP"/>
+        <result column="elapsed_time" property="elapsedTime" jdbcType="VARCHAR"/>
+        <result column="remaining_work" property="remainingWork" jdbcType="VARCHAR"/>
         <association property="project"  javaType="com.camelot.pmt.project.model.Project">
             <result property="proId" column="pid"/>
             <result property="proName" column="project_name"/>
@@ -206,6 +208,7 @@
             <result property="userId" column="user_id"/>
             <result property="username" column="user_name"/>
         </association>
+        
     </resultMap>
 
     <resultMap id="TaskResultMap" type="com.camelot.pmt.task.model.Task">
