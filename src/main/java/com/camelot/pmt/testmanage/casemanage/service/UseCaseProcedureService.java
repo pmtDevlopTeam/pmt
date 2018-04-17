@@ -1,6 +1,8 @@
 package com.camelot.pmt.testmanage.casemanage.service;
 
+import com.camelot.pmt.platform.utils.ExecuteResult;
+
 public interface UseCaseProcedureService {
 	
-	 void deleteByPrimaryKey(Long id);
+	ExecuteResult<String> deleteByPrimaryKey(Long id);
 }

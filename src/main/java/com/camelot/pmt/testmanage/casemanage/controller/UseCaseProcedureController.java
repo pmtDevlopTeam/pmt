@@ -5,6 +5,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.alibaba.fastjson.JSONObject;
+import com.camelot.pmt.platform.common.ApiResponse;
+import com.camelot.pmt.platform.utils.ExecuteResult;
 import com.camelot.pmt.testmanage.casemanage.service.UseCaseProcedureService;
 import com.camelot.pmt.testmanage.casemanage.util.ActionBean;
 
@@ -22,18 +25,16 @@ public class UseCaseProcedureController {
 	    @RequestMapping(value = "userCaseProcedure/DelUserCaseProcedure", method = RequestMethod.GET)
 	    @ApiImplicitParams({
 	            @ApiImplicitParam(name = "id", value = "步骤id", required = true, paramType = "query", dataType = "long") })
-	    public ActionBean updateUserCaseDelFlag(Long id) {
-		 ActionBean  actionBean  =new ActionBean();
+	    public JSONObject updateUserCaseDelFlag(Long id) {
+		 	ExecuteResult<String> result = new ExecuteResult<String>();
 		 	try {
-		 		useCaseProcedureService.deleteByPrimaryKey(id);
-		 		actionBean.setCode(200);
-		 		actionBean.setErrorMessage("成功");
-		 		actionBean.setResult(true);
-			} catch (Exception e) {
-				actionBean.setCode(500);
-				actionBean.setErrorMessage(e.getMessage());
-				actionBean.setResult(false);
-			}
-		 	return actionBean;
+	            //调用添加bug接口
+	        	result=useCaseProcedureService.deleteByPrimaryKey(id);
+	            // 成功返回
+	            return ApiResponse.success(result.getResult());
+	        } catch (Exception e) {
+	            // 异常
+	            return ApiResponse.error();
+	        }
 	    }
 }
