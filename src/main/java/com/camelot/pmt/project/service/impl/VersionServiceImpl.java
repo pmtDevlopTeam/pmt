@@ -2,14 +2,21 @@ package com.camelot.pmt.project.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.camelot.pmt.platform.common.ApiResponse;
+import com.camelot.pmt.platform.utils.DataGrid;
 import com.camelot.pmt.platform.utils.ExecuteResult;
+import com.camelot.pmt.platform.utils.Pager;
 import com.camelot.pmt.project.mapper.VersionMapper;
+import com.camelot.pmt.project.model.ProjectMain;
 import com.camelot.pmt.project.model.Version;
 import com.camelot.pmt.project.model.VersionVo;
 import com.camelot.pmt.project.service.VersionService;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.google.common.collect.Lists;
 import groovy.util.logging.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -86,6 +93,19 @@ public class VersionServiceImpl implements VersionService{
             return  ApiResponse.error("删除版本失败！");
         }
     }
+
+    /**
+     * @Description: 根据指定id查询版本信息
+     * @param: version
+     * @return: version1
+     * @author: xueyj
+     * @date: 2018/4/13 11:19
+     */
+    public JSONObject findVersionInfoById(Long versionId){
+        Version version1 = versionMapper.selectByPrimaryKey(versionId);
+        return  ApiResponse.success(version1);
+    }
+
     /**
       * @Description: 根据指定id修改version信息
       * @param: 
@@ -119,17 +139,6 @@ public class VersionServiceImpl implements VersionService{
             return  ApiResponse.error("修改版本失败！");
         }
     }
-    /**
-      * @Description: 根据指定id查询版本信息
-      * @param: version
-      * @return: version1
-      * @author: xueyj
-      * @date: 2018/4/13 11:19
-      */
-    public JSONObject getVersionInfo(Long versionId){
-        Version version1 = versionMapper.selectByPrimaryKey(versionId);
-         return  ApiResponse.success(version1);
-    }
 
     /**
       * @Description: 根据项目id查询所有版本信息
@@ -138,21 +147,36 @@ public class VersionServiceImpl implements VersionService{
       * @author: xueyj
       * @date: 2018/4/13 18:30
       */
-    public JSONObject getVersionListInfo(Long projectId){
+    public JSONObject findVerListByProId(Long projectId){
         List<Version> versionList = versionMapper.selectVersionListByProId(projectId);
         return  ApiResponse.success(versionList);
     }
-    
     /**
-      * @Description: 根据指定id查询version信息
-      * @param: 
-      * @return: 
+      * @Description: 根据项目id,分页查询所有版本信息
+      * @param:
+      * @return:
       * @author: xueyj
-      * @date: 2018/4/13 18:44
+      * @date: 2018/4/17 10:26
       */
-    public JSONObject getVersionInfoById(Long versionId){
-        Version version = versionMapper.selectByPrimaryKey(versionId);
-        return  ApiResponse.success(version);
+    public JSONObject findVerListByPageAndProId(int pageNum,int pageSize,Long projectId) {
+        /*   pageHelper使用三部曲
+             1.启动pageHelper分页 startPage -- start
+             2.填充自己的sql（查询逻辑）
+             3.pageHelper的收尾
+         */
+        // 初始化分页信息
+        PageHelper.startPage(pageNum,pageSize);
+        // 查询产品list
+        List<Version> versionList = versionMapper.selectVersionListByProId(projectId);
+        List<VersionVo> versionVoList = Lists.newArrayList();
+        for (Version productItem:versionList) {
+            VersionVo productListVo = assembleProductListVo(productItem);
+            versionVoList.add(productListVo);
+        }
+        // pageHelper的收尾
+        PageInfo pageResult = new PageInfo(versionList);
+        pageResult.setList(versionVoList);
+        return ApiResponse.success(pageResult);
     }
     /**
      * 根据项目id，版本类型，查询版本信息
@@ -160,9 +184,36 @@ public class VersionServiceImpl implements VersionService{
      * @param versionType
      * @return
      */
-    public JSONObject getVersionListInfo(Long projectId,String versionType){
+    public JSONObject findVerListByProIdAndVerType(Long projectId,String versionType){
         List<Version> versionList = versionMapper.queryListByProIdAndVerType(projectId,versionType);
         return  ApiResponse.success(versionList);
+    }
+    /**
+      * @Description: 根据项目id，版本类型，分页查询版本信息
+      * @param: 
+      * @return: 
+      * @author: xueyj
+      * @date: 2018/4/17 10:32
+      */
+    public JSONObject findVerListByPageAndProIdAndVerType(int pageNum,int pageSize,Long projectId,String versionType) {
+        /*   pageHelper使用三部曲
+             1.启动pageHelper分页 startPage -- start
+             2.填充自己的sql（查询逻辑）
+             3.pageHelper的收尾
+         */
+        // 初始化分页信息
+        PageHelper.startPage(pageNum,pageSize);
+        // 查询产品list
+        List<Version> versionList = versionMapper.queryListByProIdAndVerType(projectId,versionType);
+        List<VersionVo> versionVoList = Lists.newArrayList();
+        for (Version productItem:versionList) {
+            VersionVo productListVo = assembleProductListVo(productItem);
+            versionVoList.add(productListVo);
+        }
+        // pageHelper的收尾
+        PageInfo pageResult = new PageInfo(versionList);
+        pageResult.setList(versionVoList);
+        return ApiResponse.success(pageResult);
     }
     /**
      * 根据不同的版本状态自动生成不同的版本编号
@@ -227,4 +278,24 @@ public class VersionServiceImpl implements VersionService{
         return versionCode;
     }
 
+    /**
+     * 构建返回版本基本信息
+     * @param version
+     * @return
+     */
+    private VersionVo assembleProductListVo(Version version){
+        VersionVo versionVo = new VersionVo();
+        // id
+        versionVo.setId(version.getId());
+        // 版本名称
+        versionVo.setVersionName(version.getVersionName());
+        // 版本类型
+        versionVo.setVersionType(version.getVersionType());
+        // 起止时间
+        versionVo.setStartTime(version.getStartTime());
+        versionVo.setEndTime(version.getEndTime());
+        // 备注
+        versionVo.setRemarks(version.getRemarks());
+        return versionVo;
+    }
 }

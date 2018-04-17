@@ -2,6 +2,7 @@ package com.camelot.pmt.project.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.camelot.pmt.platform.common.ApiResponse;
+import com.camelot.pmt.platform.utils.Pager;
 import com.camelot.pmt.project.model.Version;
 import com.camelot.pmt.project.model.VersionVo;
 import com.camelot.pmt.project.service.VersionService;
@@ -9,9 +10,11 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.annotation.Resource;
 
@@ -74,6 +77,7 @@ public class VersionController {
      */
     @ApiOperation(value = "修改版本信息", notes = "修改版本信息")
     @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "版本id", required = true, paramType = "form", dataType = "Long"),
             @ApiImplicitParam(name = "projectId", value = "项目id", required = true, paramType = "form", dataType = "Long"),
             @ApiImplicitParam(name = "userId", value = "用户id", required = true, paramType = "form", dataType = "String"),
             @ApiImplicitParam(name = "versionName", value = "版本名称", required = true, paramType = "form", dataType = "String"),
@@ -87,27 +91,86 @@ public class VersionController {
         return versionService.updateVersonInfo(projectId,userId,versionVo);
     }
     /**
-      * @Description: 根据项目id查询versionList
-      * @param:
-      * @return:
-      * @author: xueyj
-      * @date: 2018/4/13 18:39
-      */
-   /* @ApiOperation(value = "查询版本列表信息", notes = "查询版本列表信息")
-    @RequestMapping(value = "/api/version/findVersionList", method = RequestMethod.GET)
-    public JSONObject queryVersonListByProId(Long projectId){
-        return versionService.getVersionListInfo(projectId);
-    }*/
-    /**
       * @Description:
       * @param: 根据versionId查询version信息
       * @return:
       * @author: xueyj
       * @date: 2018/4/13 18:55
       */
-    @ApiOperation(value = "查询版本信息", notes = "查询版本信息")
-    @RequestMapping(value = "/api/version/findVersionList", method = RequestMethod.GET)
-    public JSONObject queryVersonById(Version version){
-        return versionService.getVersionInfoById(version.getId());
+    @ApiOperation(value = "编辑--查询版本信息", notes = "编辑--查询版本信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "versionId", value = "版本id", required = true, paramType = "query", dataType = "Long")
+    })
+   @RequestMapping(value = "/api/version/findVersionInfoById", method = RequestMethod.GET)
+    public JSONObject findVersionInfoById(Long versionId){
+        return versionService.findVersionInfoById(versionId);
+    }
+    /**
+     * @Description: 根据项目id查询versionList
+     * @param:
+     * @return:
+     * @author: xueyj
+     * @date: 2018/4/13 18:39
+     */
+   @ApiOperation(value = "查询版本列表信息", notes = "查询版本列表信息")
+   @ApiImplicitParams({
+           @ApiImplicitParam(name = "projectId", value = "项目id", required = true, paramType = "query", dataType = "Long")
+   })
+    @RequestMapping(value = "/api/version/findVerListByProId", method = RequestMethod.GET)
+    public JSONObject findVerListByProId(Long projectId){
+        return versionService.findVerListByProId(projectId);
+    }
+
+    /**
+      * @Description: 根据项目id，分页查询versionList
+      * @param: 
+      * @return: 
+      * @author: xueyj
+      * @date: 2018/4/17 10:43
+      */
+    @ApiOperation(value = "分页查询版本列表信息", notes = "分页查询版本列表信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "page", value = "页码", required = true, paramType = "query", dataType = "int"),
+            @ApiImplicitParam(name = "rows", value = "每页数量", required = true, paramType = "query", dataType = "int"),
+            @ApiImplicitParam(name = "projectId", value = "项目id", required = true, paramType = "query", dataType = "Long")
+    })
+    @RequestMapping(value = "/api/version/findVerListByPageAndProId", method = RequestMethod.GET)
+    public JSONObject findVerListByPageAndProId(@ApiIgnore Pager<?> page, Long projectId){
+        return versionService.findVerListByPageAndProId(page.getPage(),page.getRows(),projectId);
+    }
+    /**
+     * @Description: 根据项目id、版本类型，查询versionList
+     * @param:
+     * @return:
+     * @author: xueyj
+     * @date: 2018/4/13 18:39
+     */
+    @ApiOperation(value = "查询版本列表信息", notes = "查询版本列表信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "projectId", value = "项目id", required = true, paramType = "query", dataType = "Long"),
+            @ApiImplicitParam(name = "versionType", value = "版本类型", required = true, paramType = "query", dataType = "Long")
+    })
+    @RequestMapping(value = "/api/version/findVerListByProIdAndVerType", method = RequestMethod.GET)
+    public JSONObject findVerListByProIdAndVerType(Long projectId,String versionType){
+        return versionService.findVerListByProIdAndVerType(projectId,versionType);
+    }
+
+    /**
+      * @Description: 根据项目id、版本类型，分页查询versionList
+      * @param: 
+      * @return: 
+      * @author: xueyj
+      * @date: 2018/4/17 10:44
+      */
+    @ApiOperation(value = "分页查询版本列表信息", notes = "分页查询版本列表信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "page", value = "页码", required = true, paramType = "query", dataType = "int"),
+            @ApiImplicitParam(name = "rows", value = "每页数量", required = true, paramType = "query", dataType = "int"),
+            @ApiImplicitParam(name = "projectId", value = "项目id", required = true, paramType = "query", dataType = "Long"),
+            @ApiImplicitParam(name = "versionType", value = "版本类型", required = true, paramType = "query", dataType = "Long")
+    })
+    @RequestMapping(value = "/api/version/findVerListByPageAndProIdAndVerType", method = RequestMethod.GET)
+    public JSONObject findVerListByPageAndProIdAndVerType(@ApiIgnore Pager<?> page,Long projectId,String versionType){
+        return versionService.findVerListByPageAndProIdAndVerType(page.getPage(),page.getRows(),projectId,versionType);
     }
 }

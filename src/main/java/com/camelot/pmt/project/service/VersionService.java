@@ -23,37 +23,62 @@ public interface VersionService {
     JSONObject insertVersonInfo(Long projectId, String userId, VersionVo versionVo);
 
     /**
+     * @Description: 逻辑删除版本信息
+     * @param:
+     * @return:
+     * @author: xueyj
+     * @date: 2018/4/13 19:14
+     */
+    JSONObject deleteVersionInfoById(String userId,Long versionId);
+
+    /**
+     * @Description: 根据versionid查询version信息
+     * @param:
+     * @return:
+     * @author: xueyj
+     * @date: 2018/4/13 19:14
+     */
+    JSONObject findVersionInfoById(Long versionId);
+
+    /**
+     * @Description: 根据指定id修改version信息
+     * @param:
+     * @return:
+     * @author: xueyj
+     * @date: 2018/4/13 19:15
+     */
+    JSONObject updateVersonInfo(Long projectId,String userId, VersionVo versionVo);
+
+    /**
       * @Description: 根据项目id查询版本信息
       * @param:
       * @return:
       * @author: xueyj
       * @date: 2018/4/13 19:14
       */
-    JSONObject getVersionListInfo(Long projectId);
-
+    JSONObject findVerListByProId(Long projectId);
     /**
-      * @Description: 根据versionid查询version信息
-      * @param:
-      * @return:
+      * @Description: 根据项目id,分页查询版本信息
+      * @param: 
+      * @return: 
       * @author: xueyj
-      * @date: 2018/4/13 19:14
+      * @date: 2018/4/17 10:34
       */
-    JSONObject getVersionInfoById(Long versionId);
-
+    JSONObject findVerListByPageAndProId(int pageNum,int pageSize,Long projectId);
     /**
-      * @Description: 根据指定id修改version信息
-      * @param:
-      * @return:
+      * @Description: 根据项目id、版本类型，查询versionList
+      * @param: 
+      * @return: 
       * @author: xueyj
-      * @date: 2018/4/13 19:15
+      * @date: 2018/4/17 9:46
       */
-    JSONObject updateVersonInfo(Long projectId,String userId, VersionVo versionVo);
+    JSONObject findVerListByProIdAndVerType(Long projectId,String versionType);
     /**
-      * @Description: 逻辑删除版本信息
-      * @param:
-      * @return:
+      * @Description: 根据项目id、版本类型，分页查询versionList
+      * @param: 
+      * @return: 
       * @author: xueyj
-      * @date: 2018/4/13 19:14
+      * @date: 2018/4/17 10:34
       */
-    JSONObject deleteVersionInfoById(String userId,Long versionId);
+    JSONObject findVerListByPageAndProIdAndVerType(int pageNum,int pageSize,Long projectId,String versionType);
 }
