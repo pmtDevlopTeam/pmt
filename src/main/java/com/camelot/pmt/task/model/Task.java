@@ -144,6 +144,10 @@ public class Task implements Serializable{
      * 剩余工时
      */
     private String remainingWork;
+    /**
+     * 任务对应历史记录
+     */
+    private List<TaskLog> taskLogList;
 
     public Task() {
     }
@@ -428,6 +432,15 @@ public class Task implements Serializable{
 
 	public void setRemainingWork(String remainingWork) {
 		this.remainingWork = remainingWork;
+	}
+	
+
+	public List<TaskLog> getTaskLogList() {
+		return taskLogList;
+	}
+
+	public void setTaskLogList(List<TaskLog> taskLogList) {
+		this.taskLogList = taskLogList;
 	}
 
 	@Override

@@ -208,7 +208,14 @@
             <result property="userId" column="user_id"/>
             <result property="username" column="user_name"/>
         </association>
-        
+        <collection property="taskLogList" ofType="TaskLog" >  
+            <id column="lid" property="id"/><!-- 这里的column对应的是下面查询的别名，而不是表字段名 -->  
+            <result column="task_id" property="taskId"/><!-- property对应JavaBean中的属性名 -->  
+            <result column="user_id" property="userId"/>
+            <result column="operation_time" property="operationTime"/>
+            <result column="operation_button" property="operationButton"/>
+            <result column="operation_describe" property="operationDescribe"/>    
+        </collection>
     </resultMap>
 
     <resultMap id="TaskResultMap" type="com.camelot.pmt.task.model.Task">
