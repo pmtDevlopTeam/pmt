@@ -91,28 +91,71 @@ public interface TaskMapper {
      */
     List<Task> queryOverdueTask(@Param(value = "page") Pager page);
 
-
+    /**
+    * @author: gxl
+    * @Title: insertTaskNodeId 
+    * @Description: TODO(新增任务) 
+    * @param @param task
+    * @param @return    设定文件 
+    * @return int    返回类型 
+    * @throws
+     */
+    int insertTaskNodeId(Task task);
+    
+    /**
+    * @author: gxl
+    * @Title: updateTaskNodeId 
+    * @Description: TODO(修改任务) 
+    * @param @param task
+    * @param @return    设定文件 
+    * @return int    返回类型 
+    * @throws
+     */
+    int updateTaskNodeById(Task task);
+    
+    /**
+    * @author: gxl
+    * @Title: queryTaskNodeById 
+    * @Description: TODO(查询任务) 
+    * @param @param id
+    * @param @return    设定文件 
+    * @return Task    返回类型 
+    * @throws
+     */
+    Task queryTaskNodeById(Long id);
+    
+    /**
+    * @author: gxl
+    * @Title: deleteTaskNodeById 
+    * @Description: TODO(这里用一句话描述这个方法的作用) 
+    * @param @param id
+    * @param @return    设定文件 
+    * @return int    返回类型 
+    * @throws
+     */
+    int deleteTaskNodeById(Long id);
+    
     /**
      * @author: gxl
      * @Title: queryMyTaskTreeByTaskId
      * @Description: TODO(查询taskId下的一级子节点)
-     * @param @param taskId taskType beassignUserId
+     * @param @param id status beassignUserId
      * @param @return    设定文件
      * @return List<Task>    返回类型
      * @throws
      */
-    List<Task> queryMyTaskListNodeByParentId(Long taskId,String taskType,Long beassignUserId);
+    List<Task> queryMyTaskListNodeByParentId(Long id,String status,Long beassignUserId);
 
     /**
      * @author: gxl
      * @Title: queryTaskListNodeByParentId
      * @Description: TODO(查询taskId下的一级子节点)
-     * @param @param taskId taskType
+     * @param @param id status
      * @param @return    设定文件
      * @return List<Task>    返回类型
      * @throws
      */
-    List<Task> queryTaskListNodeByParentId(Long taskId,String taskType);
+    List<Task> queryTaskListNodeByParentId(Long id,String status);
 
     /**
      * @author: gxl
@@ -122,7 +165,7 @@ public interface TaskMapper {
      * @return List<Task>    返回类型
      * @throws
      */
-    List<Task> queryAllTaskList(String taskType,Long beassignUserId);
+    List<Task> queryAllTaskList(String status,Long beassignUserId);
 
     /**
      * @author: gxl
@@ -132,7 +175,7 @@ public interface TaskMapper {
      * @return List<Task>    返回类型
      * @throws
      */
-    List<Task> queryTopTaskNameList(String taskType,Long beassignUserId);
+    List<Task> queryTopTaskNameList(String status,Long beassignUserId);
 
     /**
      * @author: gxl
@@ -143,18 +186,18 @@ public interface TaskMapper {
      * @return JSONObject    返回类型
      * @throws
      */
-    void updateTaskPendingToDelay(Long id,String taskType,String delayDescribe,String estimateStartTime);
+    void updateTaskPendingToDelay(Long id,String status,String delayDescribe,String estimateStartTime);
 
     /**
      * @author: gxl
      * @Title: updateTaskPendingToRuning
      * @Description: TODO(我的待办任务转为正在进行)
-     * @param @param taskId
+     * @param @param taskId status
      * @param @return    设定文件
      * @return int    返回类型
      * @throws
      */
-    void updateTaskPendingToRuning(Long id,String taskType);
+    void updateTaskPendingToRunning(Long id,String status);
 
     /**
      * @author: gxl
@@ -173,7 +216,7 @@ public interface TaskMapper {
      * @author: gxl
      * @Title: queryParentTaskNodeById
      * @Description: TODO(查询根据任务Id查询父级任务对象)
-     * @param @param id
+     * @param @param taskParentId
      * @param @return    设定文件
      * @return Task    返回类型
      * @throws
@@ -221,18 +264,18 @@ public interface TaskMapper {
     Long saveHistoryLog(TaskLog taskLog);
 
     /**
-     * @author: gxl
+     *
      * @Title: updateTaskPendingToDelay
      * @Description: TODO(我的待办任务转为延期,会将该节点及节点下的所有子节点变为延期状态)
-     * @param @param taskId taskType
+     * @param @param taskId status
      * @param @return    设定文件
      * @return JSONObject    返回类型
      * @throws
      */
-    void updateTaskAlreadyToRunning(Long id,String taskType,String delayDescribe,String estimateStartTime);
+    void updateTaskAlreadyToRunning(Long id,String status,String delayDescribe,String estimateStartTime);
 
     /**
-     * @author: gxl
+     *
      * @Title: updateTaskPendingToRuning
      * @Description: TODO(我的待办任务转为正在进行)
      * @param @param taskId
@@ -240,7 +283,7 @@ public interface TaskMapper {
      * @return int    返回类型
      * @throws
      */
-    void updateTaskToClose(Long id,String taskType);
+    void updateTaskToClose(Long id,String status);
 
     /**
      * 查询延期任务信息详情
