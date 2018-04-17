@@ -13,7 +13,12 @@ import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.time.LocalDate;
-
+/**
+ * swagger2配置
+ * 
+ * @author gnerv
+ *
+ */
 @Configuration
 @EnableSwagger2
 public class Swagger2Config {

@@ -4,9 +4,6 @@ package com.camelot.pmt.platform.mapper;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-
-import com.camelot.pmt.common.Pager;
 import com.camelot.pmt.platform.model.User;
 import com.camelot.pmt.platform.model.vo.UserVo;
 
@@ -15,7 +12,7 @@ import com.camelot.pmt.platform.model.vo.UserVo;
 /**
  * 
  * @Title:  UserMapper.java
- * @Description: TODO(用户mapper层)
+ * @Description: 用户mapper
  * @author: jh
  * @date:  2018年2月5日 下午2:40:03
  */
@@ -113,13 +110,13 @@ public interface UserMapper {
      */
     Long countUser();
     
-    /**
-     * 
-     * Description:[分页查询用户]
-     * @return List<UserModel>
-     * @author [maple]
-     */
-    List<User> findUsersByPage(@Param(value = "page") Pager page);
+//    /**
+//     * 
+//     * Description:[分页查询用户]
+//     * @return List<UserModel>
+//     * @author [maple]
+//     */
+//    List<User> findUsersByPage(@Param(value = "page") Pager page);
     
     /**
      * 
@@ -186,6 +183,56 @@ public interface UserMapper {
      * 2018年4月13日下午3:39:51
      */
     User queryUserInfoById(String userId);
+    
+    /**
+     * 
+     * Description:[根据userId 删除用户角色中间表记录]
+     * @param 
+     * @return 
+     * @author [maple]
+     * 2018年4月16日下午4:05:53
+     */
+    void deleteUserRoleByUserId(String userId);
+    
+    /**
+     * 
+     * Description:[根据userId 查找用户角色中间表userId是否存在]
+     * @param String userId
+     * @return long
+     * @author [maple]
+     * 2018年4月16日下午4:05:53
+     */
+    long checkUserRoleIsExistByUserId(String userId);
+    
+    /**
+     * 
+     * Description:[根据用户UserId重置密码]
+     * @param User userModel
+     * @return int
+     * @author [maple]
+     * 2018年4月16日下午10:42:35
+     */
+    int resetUserPasswordByUserId(User userModel);
+    
+    /**
+     * 
+     * Description:[根据userJobNum判断用户是否存在]
+     * @param String userJobNum
+     * @return long
+     * @author [maple]
+     * 2018年4月17日下午2:43:13
+     */
+    long checkUserExistByUserJobNum(String userJobNum);
+    
+    /**
+     * 
+     * Description:[获取用户角色中间表的create_user_id]
+     * @param String userId
+     * @return String
+     * @author [maple]
+     * 2018年4月17日下午3:08:17
+     */
+    String queryUserRoleCreateUserByUserId(String userId);
 
    
 }
