@@ -130,15 +130,15 @@ public class TaskPendingServiceImpl implements TaskPendingService{
 	* @throws
 	 */
 	@Override
-	public ExecuteResult<String> delete(Long taskId){
+	public ExecuteResult<String> delete(Long id){
 		ExecuteResult<String> result = new ExecuteResult<String>();
 		try{
-			if(taskId==null){
+			if(id==null){
 				result.addErrorMessage("删除任务时，taskId不能为空!");
 				return result;
 			}
 			//查询所有的Task任务列表
-			taskMapper.deleteTaskNodeById(taskId);
+			taskMapper.deleteTaskNodeById(id);
 		}catch (Exception e) {
 			LOGGER.error(e.getMessage());
             throw new RRException(e.getMessage(),e);
@@ -155,11 +155,11 @@ public class TaskPendingServiceImpl implements TaskPendingService{
 	* @throws
 	 */
 	@Override
-	public ExecuteResult<List<Task>> queryAllTaskList(String taskStatus,Long beassignUserId){
+	public ExecuteResult<List<Task>> queryAllTaskList(Task task){
 		ExecuteResult<List<Task>> result = new ExecuteResult<List<Task>>();
 		try{
 			//查询所有的Task任务列表
-			List<Task> allTaskList = taskMapper.queryAllTaskList(taskStatus,beassignUserId);
+			List<Task> allTaskList = taskMapper.queryAllTaskList(task);
 			result.setResult(allTaskList);
 		}catch (Exception e) {
 			LOGGER.error(e.getMessage());
@@ -296,10 +296,10 @@ public class TaskPendingServiceImpl implements TaskPendingService{
 				}
 			}else{
 				//如果taskId为空，返回整张表
-				//sql需要修改
-				//<if test="taskStatus != null" > and t.task_type = #{taskStatus,jdbcType=BIGINT} </if>
-				//<if test="beassignUserId != null" > and t.beassign_user_id = #{beassignUserId,jdbcType=BIGINT} </if>
-				List<Task> allTaskList = taskMapper.queryAllTaskList(taskStatus,beassignUserId);
+				Task taskObj = new Task();
+				taskObj.getBeassignUser().setUserId(beassignUserId.toString());
+				taskObj.setStatus(taskStatus);
+				List<Task> allTaskList = taskMapper.queryAllTaskList(taskObj);
 				taskNode.setChildren(allTaskList);
 			}
 			result.setResult(taskNode);
