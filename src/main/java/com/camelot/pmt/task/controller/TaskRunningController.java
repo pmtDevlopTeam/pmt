@@ -134,7 +134,7 @@ public class TaskRunningController {
                 return ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
             }
             //更新我的任务为关闭
-            result = taskRunningService.updateTaskToClose(taskId, Constant.TaskType.CLOSE.getValue());
+            result = taskRunningService.updateTaskToClose(taskId, Constant.TaskStatus.CLOSE.getValue());
             //判断是否成功
             if(result.isSuccess()){
                 return ApiResponse.jsonData(APIStatus.OK_200,result.getResult());
@@ -170,7 +170,7 @@ public class TaskRunningController {
                 return ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
             }
             //更新我的待办任务为正在进行中
-            result = taskRunningService.updateTaskAlreadyToRunning(taskId, Constant.TaskType.RUNING.getValue(),delayDescribe,estimateStartTime);
+            result = taskRunningService.updateTaskAlreadyToRunning(taskId, Constant.TaskStatus.RUNING.getValue(),delayDescribe,estimateStartTime);
             //判断是否成功
             if(result.isSuccess()){
                 return ApiResponse.jsonData(APIStatus.OK_200,result.getResult());

@@ -7,7 +7,7 @@ public class Constant {
     /** 超级管理员ID */
     public static final int SUPER_ADMIN = 1;
     /** 任务类型  */
-    public enum TaskType {
+    public enum TaskStatus {
         /**待办*/
         PENDINHG("0"),
         /**正在进行*/
@@ -20,7 +20,7 @@ public class Constant {
     	CLOSE("4");
 
         private String value;
-        TaskType(String value) {
+        TaskStatus(String value) {
             this.value = value;
         }
 		public String getValue() {
