@@ -60,7 +60,7 @@ public interface OrgMapper {
      * @param org
      * @return
      */
-	List<Org> findOrgsByPage(Pager page);
+	List<Org> findOrgsByPage();
 	/**
      * 查询部门表总条数
      * @param org
@@ -120,6 +120,14 @@ public interface OrgMapper {
 	 * 删除组织机构与用户的已绑定(关系到用户 )
 	 **/
 	int deleteOrgToUserByOrgId(String orgId);
+	/** 
+	 * 验证部门编号是否存在
+	 **/
+	int checkOrgCodeIsExist(String orgCode);
+	/** 
+	 * 验证部门名字是否存在
+	 **/
+	int checkOrgNameIsExist(String orgname);
     
     
 }

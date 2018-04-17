@@ -3,10 +3,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 import org.apache.shiro.crypto.hash.Sha256Hash;
@@ -30,6 +28,8 @@ import com.camelot.pmt.platform.model.User;
 import com.camelot.pmt.platform.service.OrgService;
 import com.camelot.pmt.util.BuildTree;
 import com.camelot.pmt.util.Tree;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 
 @Service
 public class OrgServiceImpl implements OrgService {
@@ -49,6 +49,8 @@ public class OrgServiceImpl implements OrgService {
 	public ExecuteResult<List<Tree<Org>>> queryAllOrgs() {
 		ExecuteResult<List<Tree<Org>>> result = new ExecuteResult<List<Tree<Org>>>();
 		List<Tree<Org>> trees = new ArrayList<Tree<Org>>();
+		
+	try{
 		List<Org> queryAllOrg = orgMapper.queryAllOrg();
 		if (queryAllOrg != null) {
 			for (Org org : queryAllOrg) {
@@ -70,6 +72,10 @@ public class OrgServiceImpl implements OrgService {
 		} else {
 			return result;
 		}
+	} catch (Exception e) {
+			LOGGER.error(e.getMessage());
+			throw new RuntimeException(e);
+	  }
 	}
 
 	/**
@@ -82,15 +88,22 @@ public class OrgServiceImpl implements OrgService {
 	public ExecuteResult<String> creatOrg(Org org) {
 		ExecuteResult<String> result = new ExecuteResult<String>();
 		try {
-			if (org == null) {
-				result.addErrorMessage("传入的部门实体有误!");
+			int count = orgMapper.checkOrgCodeIsExist(org.getOrgCode());
+			if (count > 0) {
+				result.setResult("部门编号已存在请重新添加");
 				return result;
 			}
+			int num = orgMapper.checkOrgNameIsExist(org.getOrgname());
+			if (num > 0) {
+				result.setResult("部门名称已存在请重新添加");
+				return result;
+			}
+			
 			/*// 对象不为空则添加新的项目实体
 			String orgId = UUID.randomUUID().toString().replace("-", "").toLowerCase();
 			org.setOrgId(orgId);*/
-			int count = orgMapper.createOrg(org);
-			if (count > 0) {
+			int nums = orgMapper.createOrg(org);
+			if (nums > 0) {
 				result.setResult("添加用户成功!");
 			} else {
 				result.setResult("添加用户失败!");
@@ -181,20 +194,17 @@ public class OrgServiceImpl implements OrgService {
 	 * @return
 	 */
 	@Override
-	public ExecuteResult<DataGrid<Org>> queryOrgsByPage(Pager page) {
-		ExecuteResult<DataGrid<Org>> result = new ExecuteResult<DataGrid<Org>>();
+	public ExecuteResult<PageInfo> queryOrgsByPage(int pageNum,int pageSize) {
+		ExecuteResult<PageInfo> result = new ExecuteResult<PageInfo>();
 		try {
-			List<Org> list = orgMapper.findOrgsByPage(page);
+			PageHelper.startPage(pageNum,pageSize);
+			List<Org> list = orgMapper.findOrgsByPage();
 			if (CollectionUtils.isEmpty(list)) {
-				DataGrid<Org> dog = new DataGrid<Org>();
-				result.setResult(dog);
 				return result;
 			}
-			DataGrid<Org> dog = new DataGrid<Org>();
-			dog.setRows(list);
-			Long total = orgMapper.queryCount();
-			dog.setTotal(total);
-			result.setResult(dog);
+			PageInfo pageResult = new PageInfo(list);
+			pageResult.setList(list);
+			result.setResult(pageResult);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -211,7 +221,6 @@ public class OrgServiceImpl implements OrgService {
 		List<Tree<Org>> trees = new ArrayList<Tree<Org>>();
 		List<Org> orgListItem = new ArrayList<Org>();
 		try {
-			if (!"".equals(OrgId) && OrgId != null) {
 				findChildCategory(orgListItem, OrgId);
 				if (!CollectionUtils.isEmpty(orgListItem)) {
 					for (Org org : orgListItem) {
@@ -231,11 +240,7 @@ public class OrgServiceImpl implements OrgService {
 					result.setResult(list);
 				} else {
 					result.setResultMessage("查询的部门不存在");
-				}
-				return result;
-			} else {
-				result.setResultMessage("传入的参数不正确");
-			}
+			} 
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
 			throw new RuntimeException(e);
@@ -412,7 +417,6 @@ public class OrgServiceImpl implements OrgService {
 		}
 		return result;
 	}
-
 	@Override
 	public ExecuteResult<String> modifyOrgByOrgIdAndState(Org org) {
 		ExecuteResult<String> result = new ExecuteResult<String>();
@@ -446,7 +450,6 @@ public class OrgServiceImpl implements OrgService {
 					o.setUserId(ids);
 					o.setOrgId(org.getOrgId());
 					long date = new Date().getTime();
-					o.setCreateTime(new Date(date));
 		            o.setModifyTime(new Date(date));
 					count=orgMapper.createOrgToUser(o);
 				}
