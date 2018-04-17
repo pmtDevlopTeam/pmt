@@ -68,7 +68,7 @@ public class DictItemController {
     })
 	@RequestMapping(value="/createDictItem", method=RequestMethod.POST)
 	public JSONObject createDictItem(@ApiIgnore @RequestParam(required = true)String dictIds,@ApiIgnore DictItem dictItem) {
-		ExecuteResult<DictItem> result = new ExecuteResult<DictItem>();
+		ExecuteResult<String> result = new ExecuteResult<String>();
 		try {
 			//if非空
 	    	if(dictItem.equals(null)){
@@ -84,7 +84,7 @@ public class DictItemController {
 	    	 result = dictItemService.createDictItem(dictItem);
 	    	 if(result.isSuccess()){
 	    		//成功返回
-	            return ApiResponse.success(result.getResultMessage());
+	            return ApiResponse.success(result.getResult());
 	          }
 	            return ApiResponse.error(result.getErrorMessage());
 		}catch (Exception e) {
@@ -144,14 +144,14 @@ public class DictItemController {
     })
 	@RequestMapping(value="/modifyDictItemByDictItemId", method=RequestMethod.POST)
 	public JSONObject modifyDictItemByDictItemId(@ApiIgnore DictItem dictItem) {
-		ExecuteResult<DictItem> result = new ExecuteResult<DictItem>();
+		ExecuteResult<String> result = new ExecuteResult<String>();
         try {
 	    	if(StringUtils.isEmpty(dictItem.getDictItemId())){
 	    		return ApiResponse.errorPara();
 	        }
             result = dictItemService.modifyDictItemByDictItemId(dictItem);
             if(result.isSuccess()){
-                return ApiResponse.success(result.getResultMessage());
+                return ApiResponse.success(result.getResult());
             }
             return ApiResponse.error(result.getErrorMessage());
         } catch (Exception e){
@@ -306,7 +306,7 @@ public class DictItemController {
   })
   @RequestMapping(value = "/checkDictItemCodeOrDictItemNameIsExist",method = RequestMethod.POST)
   public JSONObject checkDictItemCodeOrDictItemNameIsExist(@ApiIgnore DictItem dictItem) {
-  	ExecuteResult<DictItem> result = new ExecuteResult<DictItem>();
+  	ExecuteResult<String> result = new ExecuteResult<String>();
 		try {
   		//判断非空
 	    	if(dictItem == null){
@@ -315,7 +315,7 @@ public class DictItemController {
 	    	//不为空调用接口查询
 	    	 result = dictItemService.checkDictItemCodeOrDictItemNameIsExist(dictItem);
 	    	 if(result.isSuccess()) {
-	    		 return ApiResponse.success(result.getResultMessage());
+	    		 return ApiResponse.success(result.getResult());
 	    	 }
 	    	//成功返回
 	    	return ApiResponse.error(result.getErrorMessage());
