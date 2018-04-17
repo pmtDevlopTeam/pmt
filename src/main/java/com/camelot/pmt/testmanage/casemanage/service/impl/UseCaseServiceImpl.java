@@ -4,16 +4,15 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import com.camelot.pmt.platform.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.camelot.pmt.platform.user.model.UserModel;
-import com.camelot.pmt.platform.utils.ExecuteResult;
-import com.camelot.pmt.platform.utils.PageBean;
-import com.camelot.pmt.task.utils.DateUtils;
+import com.camelot.pmt.common.ExecuteResult;
+import com.camelot.pmt.caserepertory.PageBean;
 import com.camelot.pmt.testmanage.casemanage.mapper.UseCaseMapper;
 import com.camelot.pmt.testmanage.casemanage.mapper.UseCaseProcedureMapper;
 import com.camelot.pmt.testmanage.casemanage.model.UseCase;
@@ -97,7 +96,7 @@ public class UseCaseServiceImpl implements UseCaseService{
 	}
 	@Override
 	@Transactional
-	public void add(UserModel userModel, UseCase useCase) {
+	public void add(User userModel, UseCase useCase) {
 
 		// 设置创建人和创建时间
 		if (userModel != null) {
@@ -122,7 +121,7 @@ public class UseCaseServiceImpl implements UseCaseService{
 	
 	@Override
 	@Transactional
-	public ExecuteResult<String> edit(UserModel userModel, UseCase useCase) {
+	public ExecuteResult<String> edit(User userModel, UseCase useCase) {
 		ExecuteResult<String> result = new ExecuteResult<String>();
 		 try {
 			 	//判断传入的bug对象是否为空
@@ -158,7 +157,7 @@ public class UseCaseServiceImpl implements UseCaseService{
 	}
 
 	@Override
-	public void addBatch(UserModel userModel, List<UseCase> list) {
+	public void addBatch(User userModel, List<UseCase> list) {
 
 		// 设置创建人和时间
 		String id = null;

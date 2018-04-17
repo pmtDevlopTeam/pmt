@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.camelot.pmt.platform.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,9 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
 import com.camelot.pmt.platform.common.ApiResponse;
-import com.camelot.pmt.platform.user.model.UserModel;
-import com.camelot.pmt.platform.utils.ExecuteResult;
-import com.camelot.pmt.platform.utils.PageBean;
+import com.camelot.pmt.common.ExecuteResult;
+import com.camelot.pmt.caserepertory.PageBean;
 import com.camelot.pmt.testmanage.casemanage.model.UseCase;
 import com.camelot.pmt.testmanage.casemanage.service.UseCaseService;
 import com.camelot.pmt.testmanage.casemanage.util.ActionBean;
@@ -84,7 +84,7 @@ public class UseCaseController {
 	public ActionBean add(HttpServletRequest request, @RequestBody @ApiParam(value = "useCase", required = true) UseCase useCase) {
 		ActionBean actionBean = new ActionBean();
 	 	try {
-			UserModel user = (UserModel) request.getSession().getAttribute("user");
+			User user = (User) request.getSession().getAttribute("user");
 			UseCaseService.add(user, useCase);
 			actionBean.setCode(200);
 			actionBean.setResult(true);
@@ -101,7 +101,7 @@ public class UseCaseController {
 	public ActionBean addBatch(HttpServletRequest request, @RequestBody @ApiParam(value = "list", required = true) List<UseCase> list) {
 		ActionBean actionBean = new ActionBean();
 	 	try {
-			UserModel user = (UserModel) request.getSession().getAttribute("user");
+			User user = (User) request.getSession().getAttribute("user");
 			UseCaseService.addBatch(user, list);
 			actionBean.setCode(200);
 			actionBean.setResult(true);
@@ -156,7 +156,7 @@ public class UseCaseController {
 			ExecuteResult<String> result = new ExecuteResult<String>();
 		 	try {
 	            //调用添加bug接口
-		 		UserModel user = (UserModel) request.getSession().getAttribute("user");
+		 		User user = (User) request.getSession().getAttribute("user");
 	        	result=UseCaseService.edit(user, useCase);
 	            // 成功返回
 	            return ApiResponse.success(result.getResult());

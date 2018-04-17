@@ -3,7 +3,7 @@ package com.camelot.pmt.testmanage.bugmanage.service;
 import java.util.List;
 import java.util.Map;
 
-import com.camelot.pmt.platform.utils.ExecuteResult;
+import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.testmanage.bugmanage.model.BugManage;
 import com.camelot.pmt.testmanage.bugmanage.model.SelectBugManage;
 import com.github.pagehelper.PageInfo;

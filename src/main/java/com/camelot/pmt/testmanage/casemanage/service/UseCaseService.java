@@ -3,9 +3,9 @@ package com.camelot.pmt.testmanage.casemanage.service;
 import java.util.List;
 import java.util.Map;
 
-import com.camelot.pmt.platform.user.model.UserModel;
-import com.camelot.pmt.platform.utils.ExecuteResult;
-import com.camelot.pmt.platform.utils.PageBean;
+import com.camelot.pmt.common.ExecuteResult;
+import com.camelot.pmt.caserepertory.PageBean;
+import com.camelot.pmt.platform.model.User;
 import com.camelot.pmt.testmanage.casemanage.model.UseCase;
 import com.github.pagehelper.PageInfo;
 
@@ -18,7 +18,7 @@ public interface UseCaseService {
 	 *
 	 * @param useCase 测试用例
 	 */
-	void add(UserModel userModel, UseCase useCase);
+	void add(User userModel, UseCase useCase);
 	
 	/**
 	 * 根据用例id获取用例
@@ -39,12 +39,12 @@ public interface UseCaseService {
 	 * @param userModel 用户信息
 	 * @param list      用例集合
 	 */
-	void addBatch(UserModel userModel, List<UseCase> list);
+	void addBatch(User userModel, List<UseCase> list);
 	
 	/***
 	 * 修改用例
 	 * @param userModel
 	 * @param useCase
 	 */
-	ExecuteResult<String> edit(UserModel userModel, UseCase useCase);
+	ExecuteResult<String> edit(User userModel, UseCase useCase);
 }

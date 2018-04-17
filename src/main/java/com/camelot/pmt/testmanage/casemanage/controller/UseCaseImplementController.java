@@ -1,6 +1,6 @@
 package com.camelot.pmt.testmanage.casemanage.controller;
 
-import com.camelot.pmt.platform.user.model.UserModel;
+import com.camelot.pmt.platform.model.User;
 import com.camelot.pmt.testmanage.casemanage.model.UseCaseImplement;
 import com.camelot.pmt.testmanage.casemanage.service.UseCaseImplementService;
 
@@ -31,7 +31,7 @@ public class UseCaseImplementController {
     public ActionBean add(HttpServletRequest request, @RequestBody @ApiParam(value = "useCaseImplement", required = true) UseCaseImplement useCaseImplement) {
         ActionBean actionBean = new ActionBean();
         try {
-            UserModel user = (UserModel) request.getSession().getAttribute("user");
+            User user = (User) request.getSession().getAttribute("user");
             useCaseImplementService.add(user, useCaseImplement);
             actionBean.setCode(200);
             actionBean.setResult(true);

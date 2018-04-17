@@ -1,6 +1,6 @@
 package com.camelot.pmt.testmanage.casemanage.service;
 
-import com.camelot.pmt.platform.utils.ExecuteResult;
+import com.camelot.pmt.common.ExecuteResult;
 
 public interface UseCaseProcedureService {
 	

@@ -1,6 +1,6 @@
 package com.camelot.pmt.testmanage.casemanage.service.impl;
 
-import com.camelot.pmt.platform.user.model.UserModel;
+import com.camelot.pmt.platform.model.User;
 import com.camelot.pmt.testmanage.casemanage.mapper.UseCaseImplementMapper;
 import com.camelot.pmt.testmanage.casemanage.mapper.UseCaseMapper;
 import com.camelot.pmt.testmanage.casemanage.mapper.UseCaseProcedureImplementMapper;
@@ -32,7 +32,7 @@ public class UseCaseImplementServiceImpl implements UseCaseImplementService {
 
     @Override
     @Transactional
-    public void add(UserModel userModel, UseCaseImplement useCaseImplement) {
+    public void add(User userModel, UseCaseImplement useCaseImplement) {
 
         UseCase useCase = null;
 

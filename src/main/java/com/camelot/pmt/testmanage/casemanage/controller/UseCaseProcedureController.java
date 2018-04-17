@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
 import com.camelot.pmt.platform.common.ApiResponse;
-import com.camelot.pmt.platform.utils.ExecuteResult;
+import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.testmanage.casemanage.service.UseCaseProcedureService;
 import com.camelot.pmt.testmanage.casemanage.util.ActionBean;
 

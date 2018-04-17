@@ -11,11 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.camelot.pmt.platform.user.mapper.UserMapper;
-import com.camelot.pmt.platform.user.model.UserModel;
-import com.camelot.pmt.platform.utils.ExecuteResult;
-import com.camelot.pmt.platform.utils.PageBean;
-import com.camelot.pmt.task.utils.DateUtils;
+import com.camelot.pmt.platform.mapper.UserMapper;
+import com.camelot.pmt.common.ExecuteResult;
+import com.camelot.pmt.caserepertory.PageBean;
+import com.camelot.pmt.caserepertory.DateUtils;
 import com.camelot.pmt.testmanage.bugmanage.mapper.BugHistoryMapper;
 import com.camelot.pmt.testmanage.bugmanage.mapper.BugManageMapper;
 import com.camelot.pmt.testmanage.bugmanage.model.BugHistory;

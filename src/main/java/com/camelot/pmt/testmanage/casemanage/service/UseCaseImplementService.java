@@ -1,6 +1,6 @@
 package com.camelot.pmt.testmanage.casemanage.service;
 
-import com.camelot.pmt.platform.user.model.UserModel;
+import com.camelot.pmt.platform.model.User;
 import com.camelot.pmt.testmanage.casemanage.model.UseCaseImplement;
 
 import java.util.List;
@@ -17,7 +17,7 @@ public interface UseCaseImplementService {
      *
      * @param useCaseImplement 用例执行
      */
-    void add(UserModel userModel, UseCaseImplement useCaseImplement);
+    void add(User userModel, UseCaseImplement useCaseImplement);
 
     List<UseCaseImplement> findByUseCaseId(Long useCaseId);
 
