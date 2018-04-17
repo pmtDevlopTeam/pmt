@@ -174,6 +174,6 @@
   <!-- 获取项目实际已消耗总工时 -->
   <select id="queryTotalActualHours" parameterType="long" resultType="long">
   	select sum(infact_hour) from task
-  	where project_id = #{projectId,jdbcType = VARCHAR} and status = '2'
+  	where project_id = #{projectId,jdbcType = BIGINT} and status = '2'
   </select>
 </mapper>

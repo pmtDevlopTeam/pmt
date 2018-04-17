@@ -1,5 +1,7 @@
 package com.camelot.pmt.project.service;
 
+import java.util.Map;
+
 import com.camelot.pmt.common.DataGrid;
 import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.common.Pager;
@@ -18,4 +20,6 @@ public interface DemandService {
     ExecuteResult<String> updateByDemand(Demand demandWithBLOBs);
 
     ExecuteResult<DataGrid<DemandOperate>> findAllByPage(Pager<?> pager, DemandOperate demandOperate);
+    
+    ExecuteResult<Map<String, Object>> findChildParentById(Long id);
 }

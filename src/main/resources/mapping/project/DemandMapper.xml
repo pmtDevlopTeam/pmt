@@ -274,7 +274,9 @@
     </select>
     <!-- 根据pid查询需求 -->
     <select id="selectByPId" parameterType="long" resultMap="BaseResultMap">
-    	select id,pid from demand where pid = #{pid,jdbcType=BIGINT}
+    	select 
+		<include refid="Base_Column_List" />
+ 		from demand where pid = #{pid,jdbcType=BIGINT}
     </select>
     <!-- 查询需求下用例引用 -->
     <select id="findDemandUseCase" parameterType="long" resultType="long">
