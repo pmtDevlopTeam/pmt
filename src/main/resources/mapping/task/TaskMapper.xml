@@ -545,10 +545,10 @@
     <!--查询正在进行的任务-->
     <select id="listTaskRunning" resultType="java.util.Map" parameterType="String">
         SELECT
-        ta.id, ta.task_num, ta.task_name, ta.task_parent_id, ta.project_id, ta.demand_id,ta.priority, ta.assign_user_id,
-        ta.beassign_user_id, ta.assign_time, ta.estimate_start_time, ta.estimate_end_time,ta.actual_start_time,
-        ta.actual_end_time, ta.task_type, ta.task_speed, ta.status, ta.node_lv,ta.task_describe, ta.demand_change,
-        ta.delay_describe, ta.estimate_hour, ta.infact_hour, ta.task_mileage,ta.create_user_id, ta.modify_user_id,
+        ta.id, ta.task_num, ta.task_name, ta.task_parent_id, ta.project_id, ta.demand_id, ta.priority, ta.assign_user_id,
+        ta.beassign_user_id, ta.assign_time, ta.estimate_start_time, ta.estimate_end_time, ta.actual_start_time,
+        ta.actual_end_time, ta.task_type, ta.task_speed, ta.status, ta.node_lv, ta.task_describe, ta.demand_change,
+        ta.delay_describe, ta.estimate_hour, ta.infact_hour, ta.task_mileage, ta.create_user_id, ta.modify_user_id,
         ta.create_time, ta.modify_time, de.demand_name, de.demand_desc, pro.project_name,pro.project_desc, pl.user_name,
         pl2.user_name
         FROM task ta

@@ -48,7 +48,7 @@ public class TaskRunningController {
         String userLoginId = String.valueOf(1);
         ExecuteResult<PageInfo<Map<String, Object>>> result = new ExecuteResult<PageInfo<Map<String, Object>>>();
         try {
-            result = taskRunningService.queryoverdueTaskRunning(page, rows, "1");
+            result = taskRunningService.queryoverdueTaskRunning(page, rows, "2");
             if (result.isSuccess()) {
                 return ApiResponse.success(result.getResult());
             }
