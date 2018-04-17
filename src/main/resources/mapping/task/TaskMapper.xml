@@ -275,7 +275,13 @@
         t.task_type, t.task_mileage, t.priority, c.id AS cid, c.user_id, c.user_name,
         a.id AS aid, a.user_id, a.user_name, t.assign_time
     </sql>
-
+	<!-- 查询逾期任务列表所有字段 -->
+	<sql id="TaskOverDue_ShowTasks_Column_List">
+	t.id,t.task_num,t.priority,t.task_name,p.project_name,
+	u1.user_name,t.assign_time,t.status,t.estimate_start_time,
+	t.estimate_end_time ,t.estimate_hour,DATEDIFF(CURDATE(),t.estimate_start_time)*8 elapsed_time,
+	t.estimate_hour - (DATEDIFF(CURDATE(),estimate_start_time)*8) remaining_work,t.task_speed
+	</sql>
     <!--zlh-->
     <!--查询所有任务列表-->
     <select id="queryAllTask" resultMap="BaseResultMap">
@@ -465,5 +471,14 @@
         <if test="status != null">
             and t.demand_id = #{demandId,jdbcType=BIGINT}
         </if>
+    </select>
+   <!--  查询逾期列表 -->
+    <select id="queryOverdueTask" resultMap="BaseResultMap">
+    	select
+    	<include refid="TaskManager_ShowTasks_Column_List" />
+    	from task t 
+    	LEFT JOIN project_main p on p.id =t.project_id
+		LEFT JOIN platform_user u1 on u1.user_id = t.assign_user_id
+		ORDER BY t.priority ASC,t.estimate_start_time DESC
     </select>
 </mapper>
