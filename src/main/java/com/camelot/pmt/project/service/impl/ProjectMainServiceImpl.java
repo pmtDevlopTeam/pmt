@@ -22,7 +22,6 @@ import com.camelot.pmt.project.mapper.WarningMapper;
 import com.camelot.pmt.project.model.ProjectBudget;
 import com.camelot.pmt.project.model.ProjectMain;
 import com.camelot.pmt.project.model.ProjectOperate;
-import com.camelot.pmt.project.model.ProjectUser;
 import com.camelot.pmt.project.model.Warning;
 import com.camelot.pmt.project.service.ProjectMainService;
 
@@ -207,15 +206,17 @@ public class ProjectMainServiceImpl implements ProjectMainService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public ExecuteResult<String> updateByPrimaryKeySelective(ProjectMain projectMain, String createUserId,
-            String operateDesc) {
+    public ExecuteResult<String> updateByPrimaryKeySelective(Long id, String userId, String modifyUserId,
+            String projectNum, String projectName, String projectStatus, String projectDesc, Date startTime,
+            Date endTime, String createUserId, String operateDesc) {
         ExecuteResult<String> result = new ExecuteResult<>();
         try {
-            projectMainMapper.updateByPrimaryKeySelective(projectMain);
+            projectMainMapper.updateByPrimaryKeySelective(id, createUserId, modifyUserId, projectNum, projectStatus,
+                    projectDesc, startTime, endTime);
 
             ProjectOperate projectOperate = new ProjectOperate();
             projectOperate.setCreateTime(new Date());
-            projectOperate.setProjectId(projectMain.getId());
+            projectOperate.setProjectId(id);
             projectOperate.setCreateUserId(createUserId);
             projectOperate.setOperateDesc(operateDesc);
 

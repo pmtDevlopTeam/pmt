@@ -85,10 +85,12 @@ public interface ProjectMainMapper {
     ProjectMain selectByPrimaryKey(Long id);
 
     /**
-     *
+     * 根据按主键id更新数据
+     * 
      * @mbggenerated 2018-04-13
      */
-    int updateByPrimaryKeySelective(ProjectMain record);
+    int updateByPrimaryKeySelective(Long id, String userId, String modifyUserId, String projectNum,
+            String projectStatus, String projectDesc, Date startTime, Date endTime);
 
     /**
      *

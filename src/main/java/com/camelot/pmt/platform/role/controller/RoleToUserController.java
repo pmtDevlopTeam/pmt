@@ -46,7 +46,8 @@ public class RoleToUserController {
             // 等获取登录人ID
             roleToUser.setCreateUserId("ligen12138");
             roleToUser.setModifyUserId("ligen12138");
-            if (StringUtils.isEmpty(roleToUser.getCreateUserId()) && StringUtils.isEmpty(roleToUser.getModifyUserId())) {
+            if (StringUtils.isEmpty(roleToUser.getCreateUserId())
+                    && StringUtils.isEmpty(roleToUser.getModifyUserId())) {
                 ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
             }
             //

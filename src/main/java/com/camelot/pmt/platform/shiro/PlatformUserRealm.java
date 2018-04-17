@@ -47,12 +47,11 @@ public class PlatformUserRealm extends AuthorizingRealm {
         info.setStringPermissions(permsSet);
 
         /*
-         * SysUser user = (SysUser) principals.getPrimaryPrincipal(); String
-         * userId = user.getUserId();
+         * SysUser user = (SysUser) principals.getPrimaryPrincipal(); String userId =
+         * user.getUserId();
          * 
-         * // 用户权限列表 Set<String> permsSet =
-         * sysMenuService.getUserPermissions(userId); SimpleAuthorizationInfo
-         * info = new SimpleAuthorizationInfo();
+         * // 用户权限列表 Set<String> permsSet = sysMenuService.getUserPermissions(userId);
+         * SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
          * info.setStringPermissions(permsSet); return info;
          */
         return info;

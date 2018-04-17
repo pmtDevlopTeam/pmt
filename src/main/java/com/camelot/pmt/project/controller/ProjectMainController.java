@@ -272,19 +272,8 @@ public class ProjectMainController {
                     || endTime == null || StringUtils.isEmpty(projectDesc) || StringUtils.isEmpty(operateDesc)) {
                 return ApiResponse.errorPara();
             }
-
-            ProjectMain projectMain = new ProjectMain();
-            projectMain.setId(id);
-            projectMain.setUserId(userId);
-            projectMain.setModifyUserId(modifyUserId);
-            projectMain.setModifyTime(new Date());
-            projectMain.setProjectNum(projectNum);
-            projectMain.setProjectName(projectName);
-            projectMain.setProjectStatus(projectStatus);
-            projectMain.setProjectDesc(projectDesc);
-            projectMain.setStartTime(startTime);
-            projectMain.setEndTime(endTime);
-            result = projectMainService.updateByPrimaryKeySelective(projectMain, createUserId, operateDesc);
+            result = projectMainService.updateByPrimaryKeySelective(id, userId, modifyUserId, projectNum, projectName,
+                    projectStatus, projectDesc, startTime, endTime, createUserId, operateDesc);
             if (result.isSuccess()) {
                 return ApiResponse.success(result.getResult());
             }
@@ -304,8 +293,7 @@ public class ProjectMainController {
      */
     @ApiOperation(value = "根据id删除项目", notes = "根据id删除项目")
     @DeleteMapping(value = "/api/projectMain/deleteByPrimaryKey")
-    public JSONObject deleteByPrimaryKey(
-            //
+    public JSONObject deleteByPrimaryKey(//
             @ApiParam(value = "id", required = true) @RequestParam Long id, //
             @ApiParam(value = "创建人id", required = true) @RequestParam String createUserId, //
             @ApiParam(value = "operateDesc", required = true) @RequestParam String operateDesc) {
@@ -313,7 +301,7 @@ public class ProjectMainController {
         logger.info("入参封装的数据为：id={},createUserId={},operateDesc={}", id, createUserId, operateDesc);
         ExecuteResult<String> result = new ExecuteResult<>();
         try {
-            if (StringUtils.isEmpty(createUserId) || id == null) {
+            if (StringUtils.isEmpty(createUserId) || id == null || StringUtils.isEmpty(operateDesc)) {
                 return ApiResponse.errorPara();
             }
             result = projectMainService.deleteByPrimaryKey(id, createUserId, operateDesc);

@@ -100,72 +100,70 @@ public class ProjectUserController {
     }
 
     /**
-     * 查找项目成员，条件查询
-     * 姓名，状态，角色，项目角色
+     * 查找项目成员，条件查询 姓名，状态，角色，项目角色
+     * 
      * @param projectId
      * @return
      */
     @RequestMapping(value = "/find", method = RequestMethod.POST)
     @ApiOperation("查找项目成员")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "projectId", dataType = "Long", value = "项目id", required = true), 
-            @ApiImplicitParam(paramType = "query", name = "userName", dataType = "String", value = "用户姓名", required = false), 
-            @ApiImplicitParam(paramType = "query", name = "userStatus", dataType = "String", value = "用户状态", required = false), 
-            @ApiImplicitParam(paramType = "query", name = "userProRoleIds", dataType = "String", value = "成员项目角色id", required = false), 
+            @ApiImplicitParam(paramType = "query", name = "projectId", dataType = "Long", value = "项目id", required = true),
+            @ApiImplicitParam(paramType = "query", name = "userName", dataType = "String", value = "用户姓名", required = false),
+            @ApiImplicitParam(paramType = "query", name = "userStatus", dataType = "String", value = "用户状态", required = false),
+            @ApiImplicitParam(paramType = "query", name = "userProRoleIds", dataType = "String", value = "成员项目角色id", required = false),
             @ApiImplicitParam(paramType = "query", name = "roleId", dataType = "String", value = "成员角色id", required = false),
             @ApiImplicitParam(paramType = "query", name = "page", dataType = "int", value = "当前页", required = false),
-            @ApiImplicitParam(paramType = "query", name = "size", dataType = "int", value = "每页条数", required = false)
-   })
+            @ApiImplicitParam(paramType = "query", name = "size", dataType = "int", value = "每页条数", required = false) })
     public JSONObject findUser(ProjectUserSearchVO vo) {
         try {
-        	if (vo.getPage() != null && vo.getSize() != null) {
-        		vo.setPage((vo.getPage() - 1) * vo.getSize());
-        	}
-        	Map<String, Object> map = new HashMap<>();
-        	List<ProjectUserShow> list = projectUserService.searchProUserByCondition(vo);
-        	map.put("list", list);
-        	int count;
-        	if (list != null && list.size() > 0) {
-        		count = projectUserService.count(vo);
-        	} else {
-        		count = 0;
-        	}
-        	map.put("count", count);
+            if (vo.getPage() != null && vo.getSize() != null) {
+                vo.setPage((vo.getPage() - 1) * vo.getSize());
+            }
+            Map<String, Object> map = new HashMap<>();
+            List<ProjectUserShow> list = projectUserService.searchProUserByCondition(vo);
+            map.put("list", list);
+            int count;
+            if (list != null && list.size() > 0) {
+                count = projectUserService.count(vo);
+            } else {
+                count = 0;
+            }
+            map.put("count", count);
             return ApiResponse.success(map);
         } catch (Exception e) {
             e.printStackTrace();
             return ApiResponse.error("查询异常");
         }
     }
-    
-    @RequestMapping(value = "/clean", method = {RequestMethod.POST, RequestMethod.GET})
+
+    @RequestMapping(value = "/clean", method = { RequestMethod.POST, RequestMethod.GET })
     @ApiOperation("清除项目成员")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "projectId", dataType = "Long", value = "项目id", required = true), 
-            @ApiImplicitParam(paramType = "query", name = "userId", dataType = "String", value = "用户id", required = true)
-   })
-    public JSONObject cleanUser (Long projectId, String userIds) {
-    	String returnMessage = "请先结束人员在项目中的任务";
-    	if (projectId == null || userIds == null) {
-    		return ApiResponse.errorPara();
-    	}
-    	String[] split = userIds.split(",");
-    	List<String> list = Arrays.asList(split);
-    	try {
-    		Iterator<String> iterator = list.iterator();
-    		while(iterator.hasNext()) {
-    			String next = iterator.next();
-    			
-    			list.remove(next);
-    		}
-    		//查询task任务表，根据项目id， 用户id， 状态查询
-    		//查询是否有bug需要修改
-    		projectUserService.clearUser(projectId, "");
-    		return null;
-    	} catch (Exception e) {
-    		e.printStackTrace();
-    		return ApiResponse.error("修改异常");
-    	}
+            @ApiImplicitParam(paramType = "query", name = "projectId", dataType = "Long", value = "项目id", required = true),
+            @ApiImplicitParam(paramType = "query", name = "userId", dataType = "String", value = "用户id", required = true) })
+    public JSONObject cleanUser(Long projectId, String userIds) {
+        String returnMessage = "请先结束人员在项目中的任务";
+        if (projectId == null || userIds == null) {
+            return ApiResponse.errorPara();
+        }
+        String[] split = userIds.split(",");
+        List<String> list = Arrays.asList(split);
+        try {
+            Iterator<String> iterator = list.iterator();
+            while (iterator.hasNext()) {
+                String next = iterator.next();
+
+                list.remove(next);
+            }
+            // 查询task任务表，根据项目id， 用户id， 状态查询
+            // 查询是否有bug需要修改
+            projectUserService.clearUser(projectId, "");
+            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ApiResponse.error("修改异常");
+        }
     }
 
 }
