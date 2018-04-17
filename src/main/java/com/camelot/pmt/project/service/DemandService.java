@@ -9,7 +9,7 @@ import com.camelot.pmt.project.model.DemandOperate;
 public interface DemandService {
     ExecuteResult<String> save(Demand demandWithBLOBs);
 
-    ExecuteResult<DataGrid<Demand>> findAllByPage(Pager pager, Demand demandWithBLOBs);
+    ExecuteResult<DataGrid<Demand>> findAllByPage(Pager<?> pager, Demand demandWithBLOBs);
 
     ExecuteResult<Demand> findById(Long id);
 
@@ -17,5 +17,5 @@ public interface DemandService {
 
     ExecuteResult<String> updateByDemand(Demand demandWithBLOBs);
 
-    ExecuteResult<DataGrid<DemandOperate>> findAllByPage(Pager pager, DemandOperate demandOperate);
+    ExecuteResult<DataGrid<DemandOperate>> findAllByPage(Pager<?> pager, DemandOperate demandOperate);
 }

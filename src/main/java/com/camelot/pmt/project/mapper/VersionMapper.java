@@ -1,13 +1,14 @@
 package com.camelot.pmt.project.mapper;
 
-import com.camelot.pmt.platform.utils.Pager;
-import com.camelot.pmt.project.model.ProjectMain;
-import com.camelot.pmt.project.model.Version;
-import com.camelot.pmt.project.model.VersionVo;
+import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import com.camelot.pmt.platform.utils.Pager;
+import com.camelot.pmt.project.model.Version;
+import com.camelot.pmt.project.model.VersionVo;
+
 @Repository
 public interface VersionMapper {
     /**
@@ -52,7 +53,8 @@ public interface VersionMapper {
      */
     int updateByPrimaryKey(Version record);
 
-    List<Version> queryListByProIdAndVerType(@Param("projectId") Long projectId, @Param("versionType") String versionType);
+    List<Version> queryListByProIdAndVerType(@Param("projectId") Long projectId,
+            @Param("versionType") String versionType);
 
     List<Version> selectVersionListByProId(Long projectId);
 

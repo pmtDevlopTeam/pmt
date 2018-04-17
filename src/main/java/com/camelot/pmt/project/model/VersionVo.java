@@ -43,8 +43,10 @@ public class VersionVo {
      * 备注
      */
     private String remarks;
+
     /**
      * id
+     * 
      * @return id
      */
     public Long getId() {
@@ -53,13 +55,17 @@ public class VersionVo {
 
     /**
      * id
-     * @param id id
+     * 
+     * @param id
+     *            id
      */
     public void setId(Long id) {
         this.id = id;
     }
+
     /**
      * 版本名称
+     * 
      * @return version_name 版本名称
      */
     public String getVersionName() {
@@ -68,13 +74,17 @@ public class VersionVo {
 
     /**
      * 版本名称
-     * @param versionName 版本名称
+     * 
+     * @param versionName
+     *            版本名称
      */
     public void setVersionName(String versionName) {
         this.versionName = versionName == null ? null : versionName.trim();
     }
+
     /**
      * 开始时间
+     * 
      * @return start_time 开始时间
      */
     public Date getStartTime() {
@@ -83,7 +93,9 @@ public class VersionVo {
 
     /**
      * 开始时间
-     * @param startTime 开始时间
+     * 
+     * @param startTime
+     *            开始时间
      */
     public void setStartTime(Date startTime) {
         this.startTime = startTime;
@@ -91,6 +103,7 @@ public class VersionVo {
 
     /**
      * 结束时间
+     * 
      * @return end_time 结束时间
      */
     public Date getEndTime() {
@@ -99,13 +112,17 @@ public class VersionVo {
 
     /**
      * 结束时间
-     * @param endTime 结束时间
+     * 
+     * @param endTime
+     *            结束时间
      */
     public void setEndTime(Date endTime) {
         this.endTime = endTime;
     }
+
     /**
      * 版本类型
+     * 
      * @return version_type 版本类型
      */
     public String getVersionType() {
@@ -114,13 +131,17 @@ public class VersionVo {
 
     /**
      * 版本类型
-     * @param versionType 版本类型
+     * 
+     * @param versionType
+     *            版本类型
      */
     public void setVersionType(String versionType) {
         this.versionType = versionType == null ? null : versionType.trim();
     }
+
     /**
      * 备注
+     * 
      * @return remarks 备注
      */
     public String getRemarks() {
@@ -129,7 +150,9 @@ public class VersionVo {
 
     /**
      * 备注
-     * @param remarks 备注
+     * 
+     * @param remarks
+     *            备注
      */
     public void setRemarks(String remarks) {
         this.remarks = remarks == null ? null : remarks.trim();
