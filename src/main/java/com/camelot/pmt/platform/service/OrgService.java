@@ -49,7 +49,7 @@ public interface OrgService {
      * @param org
      * @return
      */
-	ExecuteResult<PageInfo> queryOrgsByPage(int pageNum , int pageSize);
+	ExecuteResult<PageInfo> queryOrgsByPage(int pageNum, int pageSize);
 	/**
      * 查询多个子部门
      * @return ExecuteResult<List<Org>>

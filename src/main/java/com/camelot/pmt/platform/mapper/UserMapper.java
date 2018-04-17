@@ -111,7 +111,7 @@ public interface UserMapper {
     Long countUser();
     
 //    /**
-//     *
+//     * 
 //     * Description:[分页查询用户]
 //     * @return List<UserModel>
 //     * @author [maple]
@@ -183,19 +183,19 @@ public interface UserMapper {
      * 2018年4月13日下午3:39:51
      */
     User queryUserInfoById(String userId);
-
+    
     /**
-     *
+     * 
      * Description:[根据userId 删除用户角色中间表记录]
-     * @param
-     * @return
+     * @param 
+     * @return 
      * @author [maple]
      * 2018年4月16日下午4:05:53
      */
     void deleteUserRoleByUserId(String userId);
-
+    
     /**
-     *
+     * 
      * Description:[根据userId 查找用户角色中间表userId是否存在]
      * @param String userId
      * @return long
@@ -203,9 +203,9 @@ public interface UserMapper {
      * 2018年4月16日下午4:05:53
      */
     long checkUserRoleIsExistByUserId(String userId);
-
+    
     /**
-     *
+     * 
      * Description:[根据用户UserId重置密码]
      * @param User userModel
      * @return int
@@ -213,9 +213,9 @@ public interface UserMapper {
      * 2018年4月16日下午10:42:35
      */
     int resetUserPasswordByUserId(User userModel);
-
+    
     /**
-     *
+     * 
      * Description:[根据userJobNum判断用户是否存在]
      * @param String userJobNum
      * @return long
@@ -223,9 +223,9 @@ public interface UserMapper {
      * 2018年4月17日下午2:43:13
      */
     long checkUserExistByUserJobNum(String userJobNum);
-
+    
     /**
-     *
+     * 
      * Description:[获取用户角色中间表的create_user_id]
      * @param String userId
      * @return String

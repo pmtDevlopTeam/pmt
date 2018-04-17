@@ -66,9 +66,9 @@ public interface UserService {
 	ExecuteResult<User> queryLoginCodeAndPassword(User user);
 
 //	/**
-//	 *
+//	 * 
 //	 * Description:[分页查询用户列表]
-//	 *
+//	 * 
 //	 * @param Pager
 //	 *            page
 //	 * @return ExecuteResult<DataGrid<User>>
@@ -106,9 +106,9 @@ public interface UserService {
 	 * 2018年4月16日上午10:34:21
 	 */
 	ExecuteResult<User> queryUserInfoById(String userId);
-
+	
 	/**
-	 *
+	 * 
 	 * Description:[用户重置密码]
 	 * @param User user
 	 * @return ExecuteResult<String>
@@ -116,6 +116,6 @@ public interface UserService {
 	 * 2018年4月16日下午10:44:45
 	 */
 	ExecuteResult<String> resetUserPasswordByUserId(User user);
-
+    
 
 }

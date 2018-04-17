@@ -210,12 +210,12 @@ public class UserServiceImpl implements UserService{
 //            	DataGrid<User> dg = new DataGrid<User>();
 //            	result.setResult(dg);
 //                return result;
-//            }
+//            }            
 //            DataGrid<User> dg = new DataGrid<User>();
 //            dg.setRows(list);
 //            //查询总条数
 //            Long total = userMapper.countUser();
-//            dg.setTotal(total);
+//            dg.setTotal(total);				
 //            result.setResult(dg);
 //		}catch(Exception e){
 //			throw new RuntimeException(e);
@@ -273,7 +273,7 @@ public class UserServiceImpl implements UserService{
 				}
 			}
 			//2.判断用户信息表更新
-			if(user.getUserPhone() != null || user.getUserMail() != null || user.getModifyUserId() != null) {
+			if(!StringUtils.isEmpty(user.getUserPhone()) || !StringUtils.isEmpty(user.getUserMail()) ) {
 				int updateResult = userMapper.modifyUserInfoByUserId(user);
 				if(updateResult == 0) {
 					result.addErrorMessage("更新用户失败！");
@@ -281,7 +281,7 @@ public class UserServiceImpl implements UserService{
 				}
 			}
 			//3.判断用户组织表
-			if(!"".equals(user.getOrgId()) && user.getOrgId() !=null){
+			if(!StringUtils.isEmpty(user.getOrgId())){
 				int updateResult = userMapper.modifyUserOrgByUserId(user);
 				if(updateResult == 0) {
 					result.addErrorMessage("更新用户失败！");
@@ -289,11 +289,24 @@ public class UserServiceImpl implements UserService{
 				}
 			}
 			//4.用户信角色表更新
-			if(!"".equals(user.getRoleId()) && user.getRoleId() != null) {
-				int updateResult = userMapper.modifyUserRoleByUserId(user);
-				if(updateResult == 0) {
-					result.addErrorMessage("更新用户失败！");
-					return result;
+			if (user.getRoleIds() != null && user.getRoleIds().length != 0) {
+				String[] roleIds = user.getRoleIds();
+				// 检查用户角色表是否存在该用户
+				long checkCount = userMapper.checkUserRoleIsExistByUserId(user.getUserId());
+				if (checkCount < 0) {
+					for (String roleId : roleIds) {
+						user.setRoleId(roleId);
+						userMapper.insertUserRole(user);
+					}
+				} else {
+					// 如果存在该用户，先删除后，再添加一遍
+					String userRoleCreateUserId = userMapper.queryUserRoleCreateUserByUserId(user.getUserId());
+					userMapper.deleteUserRoleByUserId(user.getUserId());
+					user.setCreateUserId(userRoleCreateUserId);
+					for (String roleId : roleIds) {
+						user.setRoleId(roleId);
+						userMapper.insertUserRole(user);
+					}
 				}
 			}
 			result.setResult("更新用户成功！");
@@ -332,5 +345,47 @@ public class UserServiceImpl implements UserService{
 		}
 		return result;
 	}
-	
+
+
+	/**
+	 * 
+	 * Description:[用户重置密码]
+	 * @param User user
+	 * @return ExecuteResult<String>
+	 * @author [maple]
+	 * 2018年4月16日下午10:44:45
+	 */
+	@Override
+	public ExecuteResult<String> resetUserPasswordByUserId(User user) {
+		ExecuteResult<String> result = new ExecuteResult<String>();
+		try {
+			if (StringUtils.isEmpty(user.getPassword())) {
+				String random = UUIDUtil.getUUID();
+				String generatePassword = random.substring(0, 6);
+				String encryptPassword = new Sha256Hash(generatePassword).toHex();
+				user.setPassword(encryptPassword);
+				int updateResult = userMapper.resetUserPasswordByUserId(user);
+				if(updateResult < 0 ) {
+					result.addErrorMessage("重置密码失败！");
+					return result;
+				}
+				result.setResult(generatePassword);
+				return result;
+			}
+			String inputPassword = user.getPassword();
+			String encryptPassword = new Sha256Hash(inputPassword).toHex();
+			user.setPassword(encryptPassword);
+			int updateResult = userMapper.resetUserPasswordByUserId(user);
+			if(updateResult < 0 ) {
+				result.addErrorMessage("重置密码失败！");
+				return result;
+			}
+			result.setResult("重置密码成功！");
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage());
+			throw new RuntimeException(e);
+		}
+		return result;
+	}
+
 }
