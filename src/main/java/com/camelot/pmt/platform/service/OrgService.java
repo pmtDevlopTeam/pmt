@@ -77,7 +77,25 @@ public interface OrgService {
 	 * @return List<User>
 	 * 
 	 **/
-	ExecuteResult<List<User>> queryOrgToUser(String orgId);
+	ExecuteResult<List<User>> queryOrgToUserByOrgId(String orgId);
+	/** 组织机构  根据orgId,orgCode,orgname 多条件模糊查询所有部门信息
+	 * @param orgId,orgCode,orgname
+	 * @return List<Org>
+	 **/
+	ExecuteResult<List<Org>> queryOrgByParameters(Org org);
+	/** 修改组织机构的状态
+	 * @param orgId state
+	 * @return JSONObject
+	 * 
+	 **/
+	ExecuteResult<String> modifyOrgByOrgIdAndState(Org org);
+	/** 修改组织机构与用户的绑定(关系到用户 )
+	 * @param orgId   userIds
+	 * @return JSONObject
+	 * 
+	 **/
+	ExecuteResult<String> modifyOrgToUser(Org org);
+	
 	
 	
 	

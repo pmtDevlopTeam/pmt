@@ -53,11 +53,11 @@ public class ShiroConfig {
         filterMap.put("/swagger**", "anon");
         filterMap.put("/v2/api-docs", "anon");
         filterMap.put("/swagger-resources/configuration/ui", "anon");
-        
+
         //登陆
         filterMap.put("/login.html", "anon");
         filterMap.put("/login", "anon");
-        
+
         // 剩余全部地址 做权限拦截
         // filterMap.put("/**", "authc");
         // 剩余全部地址 不做权限拦截 （开发）
@@ -83,7 +83,7 @@ public class ShiroConfig {
         AuthorizationAttributeSourceAdvisor advisor = new AuthorizationAttributeSourceAdvisor();
         advisor.setSecurityManager(securityManager);
         return advisor;
-    }  
+    }
 
     @Bean
     public SessionManager sessionManager() {

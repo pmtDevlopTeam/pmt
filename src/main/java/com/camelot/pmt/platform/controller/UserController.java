@@ -4,27 +4,22 @@ package com.camelot.pmt.platform.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.camelot.pmt.common.APIStatus;
 import com.camelot.pmt.common.ApiResponse;
-import com.camelot.pmt.common.DataGrid;
 import com.camelot.pmt.common.ExecuteResult;
-import com.camelot.pmt.common.Pager;
 import com.camelot.pmt.platform.model.User;
 import com.camelot.pmt.platform.model.vo.UserVo;
 import com.camelot.pmt.platform.service.UserService;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import springfox.documentation.annotations.ApiIgnore;
-
 import java.util.List;
 
 /**
@@ -91,7 +86,7 @@ public class UserController {
     		@ApiImplicitParam(
     				name="orgId",value="用户所属部门ID",required=false,paramType="form",dataType="String"),
     		@ApiImplicitParam(
-    				name="roleId",value="用户角色ID",required=false,paramType="form",dataType="String"),
+    				name="roleIds",value="用户角色ID集合，格式1,2,3,4",required=false,paramType="form",dataType="String"),
         	@ApiImplicitParam(
         			name="loginCode",value="登录账号",required=true,paramType="form",dataType="String"),
             @ApiImplicitParam(
@@ -128,7 +123,7 @@ public class UserController {
      * @param  User userModel
      * @return {"status": {"message": "请求处理成功.","code": 200}, "data": {更新用户成功!}]
      */
-    @ApiOperation(value="添加用户", notes="添加用户")
+    @ApiOperation(value="更新用户", notes="更新用户")
     @ApiImplicitParams({
     		@ApiImplicitParam(
     				name="userId",value="用户ID",required=true,paramType="form",dataType="String"),
@@ -147,7 +142,7 @@ public class UserController {
     		@ApiImplicitParam(
     				name="orgId",value="用户所属部门ID",required=false,paramType="form",dataType="String"),
     		@ApiImplicitParam(
-    				name="roleId",value="用户角色ID",required=false,paramType="form",dataType="String"),
+    				name="roleIds",value="用户角色ID",required=false,paramType="form",dataType="String"),
             @ApiImplicitParam(
                     name="modifyUserId",value="用户修改人ID",required=false,paramType="form",dataType="String")
     })
@@ -234,33 +229,33 @@ public class UserController {
     		return ApiResponse.error();
 		}
 	}
-    
-    /**
-     * <p>Description:[分页查询用户列表]</p>
-     * @param  page 页码,rows 每页数量
-     * @return "data": {"total": 总数量,"rows":[查询的结果集],"status": {"code": 200,"message": "请求处理成功."}}
-     */
-    @ApiOperation(value="分页获取用户列表", notes="分页获取用户列表")
-    @RequestMapping(value = "user/queryUsersByPage",method = RequestMethod.GET)
-    @ApiImplicitParams({
-    	@ApiImplicitParam(name = "page", value = "页码", required = false, paramType = "query", dataType = "int"),
-    	@ApiImplicitParam(name = "rows", value = "每页数量", required = false, paramType = "query", dataType = "int")
-    })
-    public JSONObject queryUsersByPage(@ApiIgnore Pager page){
-    	ExecuteResult<DataGrid<User>> result = new ExecuteResult<DataGrid<User>>();
-    	try {
-    		if(page == null) {
-    			return ApiResponse.errorPara();
-    		}
-    		result = service.queryUsersByPage(page);
-    		if(result.isSuccess()) {
-    			return ApiResponse.success(result.getResult());
-    		}
-    		return ApiResponse.error();
-    	}catch (Exception e) {
-    		return ApiResponse.error();
-    	}
-    }
+//    
+//    /**
+//     * <p>Description:[分页查询用户列表]</p>
+//     * @param  page 页码,rows 每页数量
+//     * @return "data": {"total": 总数量,"rows":[查询的结果集],"status": {"code": 200,"message": "请求处理成功."}}
+//     */
+//    @ApiOperation(value="分页获取用户列表", notes="分页获取用户列表")
+//    @RequestMapping(value = "user/queryUsersByPage",method = RequestMethod.GET)
+//    @ApiImplicitParams({
+//    	@ApiImplicitParam(name = "page", value = "页码", required = false, paramType = "query", dataType = "int"),
+//    	@ApiImplicitParam(name = "rows", value = "每页数量", required = false, paramType = "query", dataType = "int")
+//    })
+//    public JSONObject queryUsersByPage(@ApiIgnore Pager page){
+//    	ExecuteResult<DataGrid<User>> result = new ExecuteResult<DataGrid<User>>();
+//    	try {
+//    		if(page == null) {
+//    			return ApiResponse.errorPara();
+//    		}
+//    		result = service.queryUsersByPage(page);
+//    		if(result.isSuccess()) {
+//    			return ApiResponse.success(result.getResult());
+//    		}
+//    		return ApiResponse.error();
+//    	}catch (Exception e) {
+//    		return ApiResponse.error();
+//    	}
+//    }
     
     /**
      * <p>Description:[查询所有用户 和 条件查询]</p>
@@ -306,6 +301,30 @@ public class UserController {
         }catch (Exception e) {
             return ApiResponse.error();
         }
+    }
+    
+    @ApiOperation(value="根据用户userId重置用户密码", notes="重置用户密码")
+    @ApiImplicitParams({
+            @ApiImplicitParam(
+                    name="userId",value="用户userId",required=true,paramType="form",dataType="String"),
+            @ApiImplicitParam(
+                    name="password",value="用户password",required=false,paramType="form",dataType="String")
+    })
+    @RequestMapping(value = "user/resetPasswordByUserId",method = RequestMethod.POST)
+    public JSONObject resetUserPasswordByUserId(@ApiIgnore User userModel){
+    	ExecuteResult<String> result = new ExecuteResult<String>();
+    	try {
+    		if(StringUtils.isEmpty(userModel.getUserId())) {
+    			return ApiResponse.jsonData(APIStatus.ERROR_400);
+    		}
+    		result = service.resetUserPasswordByUserId(userModel);
+    		if(result.isSuccess()) {
+    			return ApiResponse.success(result.getResult());
+    		}
+    		return ApiResponse.error();
+    	} catch (Exception e) {
+    		return ApiResponse.error();
+		}
     }
 
 

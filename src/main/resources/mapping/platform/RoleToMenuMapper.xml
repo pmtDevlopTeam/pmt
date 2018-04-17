@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<<<<<<< HEAD
+<<<<<<<<< Temporary merge branch 1
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.camelot.pmt.platform.role.mapper.RoleToMenuMapper">
+
+	<!-- 根据角色id 查询菜单树 -->
+	<select id="queryMenuByRoleId">
+	   select menuId from pmt_platform_role_menu where roleId = #{roleId}
+	</select>
+	
+
+</mapper>
+=========
  <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
@@ -63,15 +74,4 @@
     </select>
 
 </mapper>
-=======
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.camelot.pmt.platform.role.mapper.RoleToMenuMapper">
-
-	<!-- 根据角色id 查询菜单树 -->
-	<select id="queryMenuByRoleId">
-	   select menuId from pmt_platform_role_menu where roleId = #{roleId}
-	</select>
-	
-
-</mapper>
->>>>>>> branch 'one_team' of https://github.com/pmtDevlopTeam/pmt.git
+>>>>>>>>> Temporary merge branch 2

@@ -169,6 +169,17 @@
        id,user_id,org_id,create_time,modify_time,create_user_id,modify_user_id
 	   FROM platform_user_org where org_id=#{orgId}
     </select>
+    <select id="checkOrgCodeIsExist"  parameterType="java.lang.String" resultType="Integer">
+       SELECT 
+       count(1)
+	   FROM platform_org where org_code=#{orgCode}
+    </select>
+    <select id="checkOrgNameIsExist"  parameterType="java.lang.String" resultType="Integer">
+       SELECT 
+       count(1)
+	   FROM platform_org where org_name=#{orgname}
+    </select>
+    
     
  
     <select id="queryAllOrg" resultMap="BaseResultMap"  >
@@ -243,10 +254,9 @@
 	
     <!-- 分页查询所有部门列表 -->
     <select id="findOrgsByPage" resultMap="BaseResultMap" >
-        select
-        id,parent_id,org_id,org_name,state,create_time,modify_time,sort_num,org_code
-        from platform_org
-        limit #{page.pageOffset},#{page.rows}
+        SELECT 
+       <include refid="Base_Column_List" />
+	   FROM platform_org
     </select>
     
     <select id="queryOrgByOrgParentId" resultMap="BaseResultMap"  >

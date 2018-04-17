@@ -2,13 +2,13 @@
  <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<<<<<<< HEAD
-<mapper namespace="com.camelot.pmt.platform.mapper.RoleToUserMapper" >
-    <resultMap id="BaseResultMap" type="com.camelot.pmt.platform.model.RoleToUser" >
-=======
+<<<<<<<<< Temporary merge branch 1
 <mapper namespace="com.camelot.pmt.platform.role.mapper.RoleToUserMapper" >
     <resultMap id="BaseResultMap" type="com.camelot.pmt.platform.role.model.RoleToUser" >
->>>>>>> branch 'one_team' of https://github.com/pmtDevlopTeam/pmt.git
+=========
+<mapper namespace="com.camelot.pmt.platform.mapper.RoleToUserMapper" >
+    <resultMap id="BaseResultMap" type="com.camelot.pmt.platform.model.RoleToUser" >
+>>>>>>>>> Temporary merge branch 2
         <id column="id" property="id"/>
         <result column="role_id" property="roleId"/>
         <result column="parent_id" property="parentId"/>

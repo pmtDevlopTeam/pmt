@@ -1,6 +1,5 @@
 server:
   port: 8080
-
 spring:
     datasource:
         name: test
@@ -22,9 +21,26 @@ spring:
         testOnBorrow: false
         testOnReturn: false
         poolPreparedStatements: true
-        maxOpenPreparedStatements: 20
+        maxOpenPreparedStatements: 20 
+    redis:
+        database: 1
+        host: 59.110.173.46
+        port: 6379
+        password: uAiqwVwjJ8-i
+        timeout: 0
+        pool: 
+           max-active: 8  # 最大可用连接数（默认为8，负数表示无限）
+           max-idle: 8    # 最大空闲连接数（默认为8，负数表示无限）
+           min-idle: 0    # 最小空闲连接数（默认为0，该值只有为正数才有作用）
+           max-wait: -1   # 从连接池中获取连接最大等待时间（默认为-1，单位为毫秒，负数表示无限）
+    mail:
+        host: smtp.163.com  # 邮箱服务器地址
+        username: ligendwow@163.com     # 用户名
+        password: backspace09        # 密码
+        default-encoding: UTF-8        
+           
 mybatis:
-  mapper-locations: classpath:mapping/*/*.xml
+  mapper-locations: classpath*:mapping/*/*Mapper.xml
   type-aliases-package: com.camelot.pmt
 #pagehelper分页插件
 pagehelper:
