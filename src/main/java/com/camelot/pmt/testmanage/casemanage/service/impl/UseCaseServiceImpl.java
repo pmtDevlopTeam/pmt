@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.camelot.pmt.platform.user.model.UserModel;
 import com.camelot.pmt.platform.utils.ExecuteResult;
 import com.camelot.pmt.platform.utils.PageBean;
+import com.camelot.pmt.task.utils.DateUtils;
 import com.camelot.pmt.testmanage.casemanage.mapper.UseCaseMapper;
 import com.camelot.pmt.testmanage.casemanage.mapper.UseCaseProcedureMapper;
 import com.camelot.pmt.testmanage.casemanage.model.UseCase;
@@ -60,7 +61,7 @@ public class UseCaseServiceImpl implements UseCaseService{
 	 * 
 	 * 获取用例信息
 	 */
-	public  ExecuteResult<UseCase> getUseCaseByUseCaseId (long id){
+	public  ExecuteResult<UseCase> getUseCaseByUseCaseId (Long id){
 		
 	/*	UseCase useCase=useCaseMapper.selectByPrimaryKey(id);
 		//获取步骤
@@ -87,8 +88,21 @@ public class UseCaseServiceImpl implements UseCaseService{
 		        return result;
 	}
 	
-	public void updateUserCaseDelFlag(long id){
-		useCaseMapper.updateUserCaseDelFlag(id);
+	public ExecuteResult<String> updateUserCaseDelFlag(Long id){
+		ExecuteResult<String> result = new ExecuteResult<String>();
+		 try {
+			 	//判断传入的bug对象是否为空
+	            if (id==null) {
+	                result.addErrorMessage("传入参数错误");
+	                return result;
+	            }
+	            useCaseMapper.updateUserCaseDelFlag(id);
+	            result.setResult("指派bug成功!");
+	        } catch (Exception e) {
+	            LOGGER.error(e.getMessage());
+	            throw new RuntimeException(e);
+	        }
+	        return result;
 	}
 	@Override
 	@Transactional

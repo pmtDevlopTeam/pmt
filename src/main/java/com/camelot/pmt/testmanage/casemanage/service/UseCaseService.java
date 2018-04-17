@@ -25,13 +25,13 @@ public interface UseCaseService {
 	 * @param id
 	 * @return
 	 */
-	ExecuteResult<UseCase> getUseCaseByUseCaseId (long id);
+	ExecuteResult<UseCase> getUseCaseByUseCaseId (Long id);
 	
 	/**
 	 * 修改用例状态
 	 * @param id
 	 */
-	void updateUserCaseDelFlag(long id);
+	ExecuteResult<String> updateUserCaseDelFlag(Long id);
 
 	/**
 	 * 批量新增
