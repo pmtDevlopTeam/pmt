@@ -58,18 +58,22 @@
     delete from demand
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.camelot.pmt.project.model.Demand" >
-    insert into demand (id, pid, project_id, 
+  <insert id="add" parameterType="com.camelot.pmt.project.model.Demand" useGeneratedKeys="true" keyProperty="id">
+    insert into demand (id, pid, project_id,
       demand_name, demand_num, demand_status, 
       demand_level, demand_source, source_remark, 
       create_user_id, create_time, modify_user_id, 
-      modify_time, demand_desc, close_reason
+      modify_time,demand_desc,close_reason,demand_need,
+      review_time,review_results,assigned_to,reviewed_with,
+      review_remark,reasons_rejection
       )
     values (#{id,jdbcType=BIGINT}, #{pid,jdbcType=BIGINT}, #{projectId,jdbcType=BIGINT}, 
       #{demandName,jdbcType=VARCHAR}, #{demandNum,jdbcType=VARCHAR}, #{demandStatus,jdbcType=CHAR}, 
       #{demandLevel,jdbcType=CHAR}, #{demandSource,jdbcType=VARCHAR}, #{sourceRemark,jdbcType=VARCHAR}, 
       #{createUserId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=VARCHAR}, 
-      #{modifyTime,jdbcType=TIMESTAMP}, #{demandDesc,jdbcType=LONGVARCHAR}, #{closeReason,jdbcType=LONGVARCHAR}
+      #{modifyTime,jdbcType=TIMESTAMP}, #{demandDesc,jdbcType=LONGVARCHAR}, #{closeReason,jdbcType=LONGVARCHAR},
+      #{demandNeed,jdbcType=CHAR},#{reviewTime,jdbcType=TIMESTAMP},#{reviewResults,jdbcType=VARCHAR},#{assignedTo,jdbcType=VARCHAR},
+      #{reviewedWith,jdbcType=VARCHAR},#{reviewRemark,jdbcType=VARCHAR},#{reasonsRejection,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.camelot.pmt.project.model.Demand" >

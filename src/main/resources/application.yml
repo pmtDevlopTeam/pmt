@@ -4,9 +4,9 @@ server:
 spring:
     datasource:
         name: test
-        url: jdbc:mysql://172.21.127.81:3306/pmt?useUnicode=true&characterEncoding=utf8
+        url: jdbc:mysql://120.78.165.147:3306/pmt?useUnicode=true&characterEncoding=utf8
         username: root
-        password: camelot!123
+        password: 1234
         # 使用druid数据源
         type: com.alibaba.druid.pool.DruidDataSource
         driver-class-name: com.mysql.jdbc.Driver
@@ -43,6 +43,8 @@ spring:
 mybatis:
   mapper-locations: classpath*:mapping/*/*Mapper.xml
   type-aliases-package: com.camelot.pmt
+  configuration:
+      log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 #pagehelper分页插件
 pagehelper:

@@ -18,7 +18,7 @@ public interface DemandMapper {
      *
      * @mbggenerated 2018-04-13
      */
-    int insert(Demand record);
+    long add(Demand record);
 
     /**
      *
