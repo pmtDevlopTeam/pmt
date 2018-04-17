@@ -16,4 +16,12 @@ public interface TaskFileService {
      * @date: 10:21 2018/4/17
      */
     ExecuteResult<String> insert(TaskFile taskFile);
+
+    /**
+     * @author: zlh
+     * @param: taskFile
+     * @description: 根据附件来源和来源id查询附件元信息
+     * @date: 17:03 2018/4/17
+     */
+    ExecuteResult<TaskFile> queryByTaskFile(TaskFile taskFile);
 }

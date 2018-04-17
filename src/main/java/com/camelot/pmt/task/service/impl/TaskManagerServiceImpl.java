@@ -15,7 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author zlh
@@ -218,19 +220,37 @@ public class TaskManagerServiceImpl implements TaskManagerService {
      * @author: zlh
      * @param: id 任务id
      * @description: 根据任务id查询任务详情
+     * @return ExecuteResult<Map<String, Object>> String:数据的类型 Task（任务信息）和TaskFile（附件信息）
+     *  Object：对应的数据
      * @date: 17:08 2018/4/12
      */
     @Override
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public ExecuteResult<Task> queryTaskById(Long id) {
-        ExecuteResult<Task> result = new ExecuteResult<Task>();
+    public ExecuteResult<Map<String, Object>> queryTaskById(Long id) {
+        ExecuteResult<Map<String, Object>> result = new ExecuteResult<Map<String, Object>>();
+        Map<String, Object> map = new HashMap<String, Object>();
         try {
             // check参数
             if (id == null) {
                 result.addErrorMessage("参数传入有误");
                 return result;
             }
-            result.setResult(taskMapper.queryTaskById(id));
+            Task task = taskMapper.queryTaskById(id);
+            // 如果类型是需求的会有附件
+            if ("需求".equals(task.getTaskType())) {
+                TaskFile taskFile = new TaskFile();
+                // 来源id
+                taskFile.setSourceId(id);
+                // 任务来源
+                taskFile.setAttachmentSource("任务");
+                ExecuteResult<TaskFile> taskFileExecuteResult = taskFileService.queryByTaskFile(taskFile);
+                TaskFile taskFileResult = taskFileExecuteResult.getResult();
+                // 添加附件信息到map
+                map.put("TaskFile", taskFileResult);
+            }
+            // 添加任务信息到map
+            map.put("Task", task);
+            result.setResult(map);
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
             throw new RuntimeException(e);

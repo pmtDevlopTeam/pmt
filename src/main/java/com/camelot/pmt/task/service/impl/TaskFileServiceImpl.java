@@ -45,4 +45,28 @@ public class TaskFileServiceImpl implements TaskFileService {
         }
         return result;
     }
+
+    /**
+     * @author: zlh
+     * @param: taskFile
+     * @description: 根据附件来源和来源id查询附件元信息
+     * @date: 17:03 2018/4/17
+     */
+    @Override
+    public ExecuteResult<TaskFile> queryByTaskFile(TaskFile taskFile) {
+        ExecuteResult<TaskFile> result = new ExecuteResult<TaskFile>();
+        try {
+            // check参数
+            if (taskFile == null) {
+                result.addErrorMessage("传入信息有误");
+                return result;
+            }
+
+            result.setResult(taskFileMapper.queryByTaskFile(taskFile));
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+        return result;
+    }
 }

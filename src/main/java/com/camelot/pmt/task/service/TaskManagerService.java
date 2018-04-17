@@ -6,6 +6,7 @@ import com.camelot.pmt.task.model.TaskManager;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author zlh
@@ -57,9 +58,11 @@ public interface TaskManagerService {
      * @author: zlh
      * @param: id 任务id
      * @description: 根据任务id查询任务详情
+     * @return ExecuteResult<Map<String, Object>> String:数据的类型 Task（任务信息）和TaskFile（附件信息）
+     *  Object：对应的数据
      * @date: 17:08 2018/4/12
      */
-    ExecuteResult<Task> queryTaskById(Long id);
+    ExecuteResult<Map<String, Object>> queryTaskById(Long id);
 
     /**
      * @author: zlh

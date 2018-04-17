@@ -290,7 +290,7 @@
         from task t LEFT JOIN platform_user a ON t.assign_user_id = a.user_id  --指派人user表 别名 a
         LEFT JOIN platform_user b ON t.beassign_user_id = b.user_id  --被指派人user表 别名 b
         LEFT JOIN platform_user c on t.create_user_id = c.user_id  --创建人user表 别名 c
-        INNER JOIN project_main p ON t.project_id = p.id
+        LEFT JOIN project_main p ON t.project_id = p.id
     </select>
 
     <!--zlh-->
@@ -309,7 +309,7 @@
         from task t LEFT JOIN platform_user a ON t.assign_user_id = a.user_id  --指派人user表 别名 a
         LEFT JOIN platform_user b ON t.beassign_user_id = b.user_id  --被指派人user表 别名 b
         LEFT JOIN platform_user c on t.create_user_id = c.user_id  --创建人user表 别名 c
-        INNER JOIN project_main p ON t.project_id = p.id
+        LEFT JOIN project_main p ON t.project_id = p.id
         <where>
             <if test="task.taskType != null">and t.task_type = #{task.taskType}</if>
             <if test="task.actualEndTime != null">and t.actual_end_time = #{task.actualEndTime}</if>
@@ -322,6 +322,27 @@
                 </foreach>
             </if>
         </where>
+    </select>
+
+    <!--zlh-->
+    <!--根据id修改数据-->
+    <update id="updateTaskById" parameterType="com.camelot.pmt.task.model.Task">
+        UPDATE task
+        <include refid="sql_update_task"/>
+        WHERE id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <!--zlh-->
+    <!--根据id查询任务详情-->
+    <select id="queryTaskById" parameterType="java.lang.Long" resultMap="ShowAllTasks_Column_List">
+        SELECT
+        <include refid="ShowAllTasks_Column_List" />
+        from task t LEFT JOIN platform_user a ON t.assign_user_id = a.user_id  --指派人user表 别名 a
+        LEFT JOIN platform_user b ON t.beassign_user_id = b.user_id  --被指派人user表 别名 b
+        LEFT JOIN platform_user c on t.create_user_id = c.user_id  --创建人user表 别名 c
+        LEFT JOIN project_main p ON t.project_id = p.id
+        LEFT JOIN demand d ON t.demand_id = d.id
+        WHERE t.id = #{id,jdbcType=BIGINT}
     </select>
 
   <!-- gxl start -->

@@ -20,4 +20,12 @@ public interface TaskFileMapper {
     int updateByPrimaryKeySelective(TaskFile record);
 
     int updateByPrimaryKey(TaskFile record);
+
+    /**
+     * @author: zlh
+     * @param: taskFile
+     * @description: 根据附件来源和来源id查询附件元信息
+     * @date: 17:03 2018/4/17
+     */
+    TaskFile queryByTaskFile(TaskFile taskFile);
 }
