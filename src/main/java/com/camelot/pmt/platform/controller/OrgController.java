@@ -41,7 +41,7 @@ public class OrgController {
 	private OrgService orgService;
 	/**
 	 * 查询单个部门
-	 * @param String orgId 
+	 * @param String orgId
 	 * @return Org 对象
 	 */
 	@ApiOperation(value = "根据orgId查询单个部门机构", notes = "查询单个部门机构")
@@ -64,7 +64,7 @@ public class OrgController {
 	}
 	/**
 	 * 查询多个子部门  递归查询部门
-	 * @param orgId 
+	 * @param orgId
 	 * @return List<Org>
 	 */
 	@ApiOperation(value = "根据parentId查询子部门机构", notes = "查询子部门机构")
@@ -118,7 +118,7 @@ public class OrgController {
 			@ApiImplicitParam(name = "state", value = "部门状态", required = true, paramType = "form", dataType = "String"),
 			@ApiImplicitParam(name = "sortNum", value = "部门排序号", required = true, paramType = "form", dataType = "String"),
 			@ApiImplicitParam(name = "orgCode", value = "部门编号", required = true, paramType = "form", dataType = "String")
-			
+
 			})
 	@RequestMapping(value = "/creatOrg", method = RequestMethod.POST)
 	public JSONObject creatOrg(@ApiIgnore Org org) {
@@ -159,7 +159,7 @@ public class OrgController {
 			}
 			return ApiResponse.error();
 		} catch (Exception e) {
-			return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());	
+			return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
 		}
 	}
 	/**

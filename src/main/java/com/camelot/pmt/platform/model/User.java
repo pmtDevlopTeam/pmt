@@ -84,7 +84,7 @@ public class User implements Serializable{
 	 * 角色唯一32位UUID,多个角色ID绑定
 	 */
 	private String[] roleIds;
-	
+
 	public User() {
 		super();
 	}
@@ -230,15 +230,6 @@ public class User implements Serializable{
 		this.roleId = roleId;
 	}
 
-	public String[] getRoleIds() {
-		return roleIds;
-	}
-
-	public void setRoleIds(String[] roleIds) {
-		this.roleIds = roleIds;
-	}
-
-	
 	
 	
 

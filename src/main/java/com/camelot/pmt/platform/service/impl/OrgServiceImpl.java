@@ -49,7 +49,7 @@ public class OrgServiceImpl implements OrgService {
 	public ExecuteResult<List<Tree<Org>>> queryAllOrgs() {
 		ExecuteResult<List<Tree<Org>>> result = new ExecuteResult<List<Tree<Org>>>();
 		List<Tree<Org>> trees = new ArrayList<Tree<Org>>();
-		
+
 	try{
 		List<Org> queryAllOrg = orgMapper.queryAllOrg();
 		if (queryAllOrg != null) {
@@ -98,7 +98,7 @@ public class OrgServiceImpl implements OrgService {
 				result.setResult("部门名称已存在请重新添加");
 				return result;
 			}
-			
+
 			/*// 对象不为空则添加新的项目实体
 			String orgId = UUID.randomUUID().toString().replace("-", "").toLowerCase();
 			org.setOrgId(orgId);*/
@@ -240,7 +240,7 @@ public class OrgServiceImpl implements OrgService {
 					result.setResult(list);
 				} else {
 					result.setResultMessage("查询的部门不存在");
-			} 
+			}
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
 			throw new RuntimeException(e);

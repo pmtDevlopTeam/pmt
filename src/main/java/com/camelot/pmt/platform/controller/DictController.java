@@ -143,7 +143,7 @@ public class DictController {
                 return ApiResponse.success(result.getResult());
             }
             return ApiResponse.error(result.getErrorMessage());
-            
+
         } catch (Exception e){
             return ApiResponse.error();
         }
@@ -212,7 +212,7 @@ public class DictController {
   })
   @RequestMapping(value = "/checkDictCodeOrDictNameIsExist",method = RequestMethod.POST)
   public JSONObject checkDictCodeOrDictNameIsExist(@ApiIgnore Dict dict) {
-  	ExecuteResult<String> result = new ExecuteResult<String>();
+  	ExecuteResult<Dict> result = new ExecuteResult<Dict>();
 		try {
   		//判断非空
 	    	if(dict == null){
@@ -220,11 +220,11 @@ public class DictController {
 	    	}
 	    	//不为空调用接口查询
 	    	 result = dictService.checkDictCodeOrDictNameIsExist(dict);
-	    	//成功返回
 	    	 if(result.isSuccess()) {
-	    		 return ApiResponse.success(result.getResult());
+	    		 return ApiResponse.success(result.getResultMessage());
 	    	 }
-	    	return ApiResponse.error();
+	    	//成功返回
+	    	return ApiResponse.error(result.getErrorMessage());
   	} catch (Exception e) {
   		//异常
   		return ApiResponse.error();

@@ -9,7 +9,7 @@ import com.camelot.pmt.platform.model.DictItem;
 
 /**
  * <p>
- *  字典Mapper类 
+ *  字典Mapper类
  * </p>
  *
  * @author sqw

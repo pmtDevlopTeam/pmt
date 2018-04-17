@@ -229,7 +229,7 @@ public class UserController {
     		return ApiResponse.error();
 		}
 	}
-//    
+//
 //    /**
 //     * <p>Description:[分页查询用户列表]</p>
 //     * @param  page 页码,rows 每页数量
@@ -301,30 +301,6 @@ public class UserController {
         }catch (Exception e) {
             return ApiResponse.error();
         }
-    }
-    
-    @ApiOperation(value="根据用户userId重置用户密码", notes="重置用户密码")
-    @ApiImplicitParams({
-            @ApiImplicitParam(
-                    name="userId",value="用户userId",required=true,paramType="form",dataType="String"),
-            @ApiImplicitParam(
-                    name="password",value="用户password",required=false,paramType="form",dataType="String")
-    })
-    @RequestMapping(value = "user/resetPasswordByUserId",method = RequestMethod.POST)
-    public JSONObject resetUserPasswordByUserId(@ApiIgnore User userModel){
-    	ExecuteResult<String> result = new ExecuteResult<String>();
-    	try {
-    		if(StringUtils.isEmpty(userModel.getUserId())) {
-    			return ApiResponse.jsonData(APIStatus.ERROR_400);
-    		}
-    		result = service.resetUserPasswordByUserId(userModel);
-    		if(result.isSuccess()) {
-    			return ApiResponse.success(result.getResult());
-    		}
-    		return ApiResponse.error();
-    	} catch (Exception e) {
-    		return ApiResponse.error();
-		}
     }
 
 
