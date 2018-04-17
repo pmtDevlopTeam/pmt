@@ -452,7 +452,7 @@
         INNER JOIN platform_user b ON b.user_id = t.beassign_user_id
         INNER JOIN platform_user c ON c.user_id = t.create_user_id
         where t.beassign_user_id = #{beassignUserId,jdbcType=VARCHAR}
-        <if test="status != null">
+        <if test="demandId != null">
             and t.demand_id = #{demandId,jdbcType=BIGINT}
         </if>
     </select>
