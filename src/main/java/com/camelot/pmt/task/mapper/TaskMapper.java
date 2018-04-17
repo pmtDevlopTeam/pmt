@@ -14,6 +14,48 @@ public interface TaskMapper {
 
     Task selectByPrimaryKey(Long id);
 
+
+    /**
+     * 查询正在进行的任务，根据时间和优先级进行排序
+     * myp
+     * */
+    List<Map<String,Object>> listTaskRunning(String id);
+
+
+    /**
+     *将任务进行关闭操作
+     * myp
+     * */
+    void runningtoclose(List<Long> alist);
+
+
+    /**
+     *将正在进行的任务进行完成操作
+     * myp
+     * */
+    List<Task> runningtoalready(List<Long> alist);
+
+    /**
+     * 根据任务id查询所有的次id的子任务
+     * myp
+     * */
+    List<Task> selectByPId(Long pid);
+
+    /**
+     * 根据id查询任务明细
+     * myp
+     * */
+    Task selectTaskById(Long id);
+
+
+    /**
+     * 添加历史记录 @Title: queryCount @Description: TODO @param @return @return
+     * Long @throws
+     * myp
+     */
+    Long saveHistoryLog(TaskLog taskLog);
+
+
     /**
      * @author: zlh
      * @param:
@@ -29,6 +71,20 @@ public interface TaskMapper {
      * @return
      */
     List<Task> queryTaskByTask(@Param("task") Task task, @Param("ids") String[] ids);
+
+    /**
+     * 查询已完成的任务，根据时间和优先级进行排序
+     * myp
+     * */
+    List<Map<String,Object>> listTaskAlready(@Param(value = "page") Pager page, @Param(value = "id") Long id);
+
+    /**
+     * 查询已完成任务总个数 @Title: queryCount @Description: TODO @param @return @return
+     * Long @throws
+     * myp
+     */
+    Long queryAlreadyCount();
+
 
     /**
      * @author: zlh
@@ -221,46 +277,6 @@ public interface TaskMapper {
      * @throws
      */
     Task queryParentTaskNodeById(Long id);
-
-    /**
-     * 查询正在进行的任务，根据时间和优先级进行排序
-     * myp
-     * */
-    List<Map<String,Object>> listTaskRunning(@Param(value = "page") Pager page, String id);
-
-    /**
-     * 查询正在进行任务个数 @Title: queryCount @Description: TODO @param @return @return
-     * Long @throws
-     * myp
-     */
-    Long queryRunningCount();
-
-
-    /**
-     * 根据id查询任务明细
-     * myp
-     * */
-    Task selectTaskById(Long id);
-
-    /**
-     * 查询已完成的任务，根据时间和优先级进行排序
-     * myp
-     * */
-    List<Map<String,Object>> listTaskAlready(@Param(value = "page") Pager page, @Param(value = "id") Long id);
-
-    /**
-     * 查询已完成任务总个数 @Title: queryCount @Description: TODO @param @return @return
-     * Long @throws
-     * myp
-     */
-    Long queryAlreadyCount();
-
-    /**
-     * 添加历史记录 @Title: queryCount @Description: TODO @param @return @return
-     * Long @throws
-     * myp
-     */
-    Long saveHistoryLog(TaskLog taskLog);
 
     /**
      *

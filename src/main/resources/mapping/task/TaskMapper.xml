@@ -539,4 +539,42 @@
 		LEFT JOIN platform_user u1 on u1.user_id = t.assign_user_id
 		ORDER BY t.priority ASC,t.estimate_start_time DESC
     </select>
+
+
+    <!--myp开始-->
+    <!--查询正在进行的任务-->
+    <select id="listTaskRunning" resultType="java.util.Map" parameterType="String">
+        SELECT
+        ta.id, ta.task_num, ta.task_name, ta.task_parent_id, ta.project_id, ta.demand_id,ta.priority, ta.assign_user_id,
+        ta.beassign_user_id, ta.assign_time, ta.estimate_start_time, ta.estimate_end_time,ta.actual_start_time,
+        ta.actual_end_time, ta.task_type, ta.task_speed, ta.status, ta.node_lv,ta.task_describe, ta.demand_change,
+        ta.delay_describe, ta.estimate_hour, ta.infact_hour, ta.task_mileage,ta.create_user_id, ta.modify_user_id,
+        ta.create_time, ta.modify_time, de.demand_name, de.demand_desc, pro.project_name,pro.project_desc, pl.user_name,
+        pl2.user_name
+        FROM task ta
+        LEFT JOIN demand de ON ta.demand_id = de.id
+        LEFT JOIN project_main pro ON ta.project_id = pro.id
+        LEFT JOIN platform_user pl ON ta.assign_user_id = pl.user_id
+        LEFT JOIN platform_user pl2 ON ta.beassign_user_id = pl2.user_id
+        WHERE ta.status = 1 AND ta.beassign_user_id = #{id}
+        ORDER BY ta.create_time DESC, ta.priority DESC
+    </select>
+
+    <!--关闭任务-->
+    <update id="runningtoclose" parameterType="java.util.List">
+        UPDATE task SET status = 4 WHERE
+        <foreach collection="alist" item="aid" open="(" close=")" separator="or">
+            <!-- 每个遍历需要生成的串 -->
+            id = #{aid}
+        </foreach>
+    </update>
+    <!--完成任务-->
+    <update id="runningtoalready" parameterType="java.util.List">
+        UPDATE task SET status = 3 WHERE
+        <foreach collection="ids" item="p_id" open="(" close=")" separator="or">
+            <!-- 每个遍历需要生成的串 -->
+            task_parent_id = #{p_id}
+        </foreach>
+    </update>
+    <!--myp结束-->
 </mapper>
