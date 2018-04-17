@@ -23,7 +23,6 @@ import com.camelot.pmt.project.model.ProjectBudget;
 import com.camelot.pmt.project.model.ProjectMain;
 import com.camelot.pmt.project.model.ProjectOperate;
 import com.camelot.pmt.project.model.ProjectUser;
-import com.camelot.pmt.project.model.ProjectUserShow;
 import com.camelot.pmt.project.model.Warning;
 import com.camelot.pmt.project.service.ProjectMainService;
 
@@ -286,32 +285,35 @@ public class ProjectMainServiceImpl implements ProjectMainService {
      * @return
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public ExecuteResult<String> closeProjectById(Long id, String createUserId, String modifyUserId,
             String projectStatus, String operateDesc, String userStatus, String demandStatus, String closeReason,
             String status, String caseStatus) {
+        ExecuteResult<String> result = new ExecuteResult<>();
+        try {
+            // projectMain中项目id 修改人 修改时间 项目状态修改
+            projectMainMapper.updateById(id, projectStatus, modifyUserId, new Date());
+            // ProjectUser项目成员表成员状态修改
+            projectUserMapper.updateUserStatusByProjectId(id, new Date(), userStatus, modifyUserId, new Date());
+            // 项目操作表存数据
+            ProjectOperate projectOperate = new ProjectOperate();
+            projectOperate.setCreateTime(new Date());
+            projectOperate.setProjectId(id);
+            projectOperate.setCreateUserId(createUserId);
+            projectOperate.setOperateDesc(operateDesc);
+            projectOperateMapper.insert(projectOperate);
+            // demand需求表更改状态
+            // Demand
+            // demandMapper.
+            // task任务表更改状态
 
-        // 项目id 修改人 修改时间 项目状态
-        ProjectMain projectMain = projectMainMapper.selectByPrimaryKey(id);
-        projectMain.setModifyUserId(modifyUserId);
-        projectMain.setModifyTime(new Date());
-        projectMain.setProjectStatus(projectStatus);
-        projectMainMapper.updateById(projectMain);
-        // 项目成员表成员状态
-        ProjectUser projectUser = new ProjectUser();
-        // 项目操作表存数据
-        ProjectOperate projectOperate = new ProjectOperate();
-        projectOperate.setCreateTime(new Date());
-        projectOperate.setProjectId(id);
-        projectOperate.setCreateUserId(createUserId);
-        projectOperate.setOperateDesc(operateDesc);
-        projectOperateMapper.insert(projectOperate);
-        // 需求表更改状态
-        // Demand
-        // demandMapper.
-        // 任务表更改状态
+            // userCase用例状态修改
 
-        // bug用例状态
-        return null;
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+        return result;
     }
 
 }

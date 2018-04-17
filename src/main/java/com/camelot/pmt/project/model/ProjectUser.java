@@ -3,7 +3,6 @@ package com.camelot.pmt.project.model;
 import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.format.annotation.DateTimeFormat.ISO;
 
 public class ProjectUser {
 
@@ -34,25 +33,25 @@ public class ProjectUser {
     /**
      * 预计进项目日期
      */
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-ddHH:mm:ss")
     private Date preJoinTime;
 
     /**
      * 实际进项目日期
      */
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-ddHH:mm:ss")
     private Date realJoinTime;
 
     /**
      * 预计出项目日期
      */
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-ddHH:mm:ss")
     private Date preOutTime;
 
     /**
      * 实际出项目日期
      */
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-ddHH:mm:ss")
     private Date realOutTime;
 
     /**
@@ -68,7 +67,7 @@ public class ProjectUser {
     /**
      * 成员在项目角色id
      */
-    private Long userProRole;
+    private String userProRole;
 
     /**
      * 创建人id
@@ -78,7 +77,7 @@ public class ProjectUser {
     /**
      * 创建时间
      */
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-ddHH:mm:ss")
     private Date createTime;
 
     /**
@@ -89,7 +88,7 @@ public class ProjectUser {
     /**
      * 修改时间
      */
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-ddHH:mm:ss")
     private Date modifyTime;
 
     /**
@@ -268,7 +267,7 @@ public class ProjectUser {
      * 
      * @return user_pro_role 成员在项目角色id
      */
-    public Long getUserProRole() {
+    public String getUserProRole() {
         return userProRole;
     }
 
@@ -278,7 +277,7 @@ public class ProjectUser {
      * @param userProRole
      *            成员在项目角色id
      */
-    public void setUserProRole(Long userProRole) {
+    public void setUserProRole(String userProRole) {
         this.userProRole = userProRole;
     }
 

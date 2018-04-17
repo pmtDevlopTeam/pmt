@@ -1,5 +1,6 @@
 package com.camelot.pmt.project.mapper;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
@@ -15,7 +16,8 @@ public interface ProjectMainMapper {
      * @param userId
      * @return
      */
-    int updateById(ProjectMain projectMain);
+    int updateById(@Param("id") Long id, @Param("projectStatus") String projectStatus,
+            @Param("modifyUserId") String modifyUserId, @Param("modifyTime") Date modifyTime);
 
     /**
      * 按修改人Id查询
