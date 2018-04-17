@@ -294,7 +294,7 @@
     </insert>
   <!-- gxl start -->
   	<!--查询任务-->
-    <select id="queryTaskNodeById" resultMap="BaseResultMap">
+    <select id="queryTaskNodeById" resultMap="BaseResultMap" parameterType="long">
 	    select
 		<include refid="ShowAllTasks_Column_List" />
 		from
