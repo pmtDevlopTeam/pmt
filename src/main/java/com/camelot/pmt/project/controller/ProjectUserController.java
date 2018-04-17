@@ -3,7 +3,6 @@ package com.camelot.pmt.project.controller;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -16,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
 import com.camelot.pmt.platform.common.ApiResponse;
+import com.camelot.pmt.project.mapper.ProjectUserMapper;
 import com.camelot.pmt.project.model.ProjectUser;
 import com.camelot.pmt.project.model.ProjectUserSearchVO;
 import com.camelot.pmt.project.model.ProjectUserShow;
@@ -34,7 +34,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  *
  */
 @RequestMapping("/api/project/user")
-@Api("项目成员管理接口")
+@Api(description = "项目成员管理接口")
 @RestController
 @EnableSwagger2
 public class ProjectUserController {
@@ -43,6 +43,8 @@ public class ProjectUserController {
 
     @Autowired
     private ProjectUserService projectUserService;
+    @Autowired
+    private ProjectUserMapper mapper;
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     @ApiOperation("项目添加成员")
@@ -138,34 +140,41 @@ public class ProjectUserController {
         }
     }
     
-    @RequestMapping(value = "/clean", method = {RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(value = "/clean", method = RequestMethod.POST)
     @ApiOperation("清除项目成员")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "projectId", dataType = "Long", value = "项目id", required = true), 
-            @ApiImplicitParam(paramType = "query", name = "userId", dataType = "String", value = "用户id", required = true)
+            @ApiImplicitParam(paramType = "query", name = "userIds", dataType = "String", value = "用户id，用逗号隔开", required = true),
+            @ApiImplicitParam(paramType = "query", name = "operator", dataType = "String", value = "操作人id", required = true)
    })
-    public JSONObject cleanUser (Long projectId, String userIds) {
+    public JSONObject cleanUser (Long projectId, String userIds, String operator) {
     	String returnMessage = "请先结束人员在项目中的任务";
-    	if (projectId == null || userIds == null) {
+    	Map<String, Object> map = new HashMap<>();
+    	if (projectId == null || userIds == null || operator == null) {
     		return ApiResponse.errorPara();
     	}
     	String[] split = userIds.split(",");
     	List<String> list = Arrays.asList(split);
     	try {
-    		Iterator<String> iterator = list.iterator();
-    		while(iterator.hasNext()) {
-    			String next = iterator.next();
-    			
-    			list.remove(next);
+    		Date currentDate = new Date();
+    		map.put("userStatus", ProjectUser.STATUS_AFK);
+    		map.put("list", list);
+    		map.put("operator", operator);
+    		map.put("projectId", projectId);
+    		map.put("realOutTime", currentDate);
+    		map.put("modifyTime", currentDate);
+    		//查询task表，是否有还未完成任务的人员
+    		int checkTask = mapper.checkTask(map);
+    		int checkBug = mapper.checkBug(map);
+    		if (checkBug + checkTask > 0) {
+    			return ApiResponse.success(returnMessage);
     		}
-    		//查询task任务表，根据项目id， 用户id， 状态查询
-    		//查询是否有bug需要修改
-    		projectUserService.clearUser(projectId, "");
-    		return null;
+    		projectUserService.clearUser(map);
+    		return ApiResponse.success("修改成功");
     	} catch (Exception e) {
     		e.printStackTrace();
     		return ApiResponse.error("修改异常");
     	}
     }
-
+    
 }

@@ -1,6 +1,7 @@
 package com.camelot.pmt.project.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.camelot.pmt.project.model.ProjectUser;
 import com.camelot.pmt.project.model.ProjectUserSearchVO;
@@ -45,8 +46,12 @@ public interface ProjectUserService {
      */
 	int count(ProjectUserSearchVO vo);
 
-	void clearUser(Long projectId, String userId);
-	
 	int clearUser(Long projectId, String userId, String userStatus);
+
+	/**
+	 * 将人员移出项目，状态改为暂离
+	 * @param map
+	 */
+	void clearUser(Map<String, Object> map);
 
 }

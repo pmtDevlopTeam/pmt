@@ -338,14 +338,38 @@
 		group by project_user.user_id) temps
 	</select>
 	
-	<update id="clearUser">
-		update project_user set user_status = 04 where project_user.projectId = #{projectId} 
-		and project_user.user_id = #{userId}
+	<update id="clearUser" parameterType="java.util.Map">
+		update project_user set user_status = #{userStatus}, real_out_time = #{realOutTime},
+		modify_user_id = #{operator}, modify_time = #{modifyTime}
+		where project_user.project_id = #{projectId}
+		and project_user.user_id in
+		<foreach collection="list" item="item" index="index" separator="," open="(" close=")">
+			#{item}
+		</foreach>
 	</update>
 	
 	<update id="clearUserAll">
 		update project_user set user_status = #{user_status}, create_user_id = #{userId}, modify_time = now(), real_out_time = now()
-		where project_user.projectId = #{projectId}
+		where project_user.project_id = #{projectId}
 	</update>
+	
+	<select id="checkTask" parameterType="java.util.Map" resultType="java.lang.Integer">
+		select count(1) from 
+		task where task.project_id = #{projectId}
+		and task.status in (0, 1, 3) and task.beassign_user_id in
+		<foreach collection="list" item="item" index="index" separator="," open="(" close=")">
+			#{item}
+		</foreach>
+	</select>
+	
+	<select id="checkBug" parameterType="java.util.Map" resultType="java.lang.Integer">
+		select count(1)
+    	from bug_manage
+    	where project_id=#{projectId} and designated_id in
+    	<foreach collection="list" item="item" index="index" separator="," open="(" close=")">
+			#{item}
+		</foreach>
+    	and bug_status in(0,1)
+	</select>
 
 </mapper>

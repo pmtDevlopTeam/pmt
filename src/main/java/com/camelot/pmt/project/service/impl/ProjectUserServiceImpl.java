@@ -1,6 +1,7 @@
 package com.camelot.pmt.project.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,13 +50,14 @@ public class ProjectUserServiceImpl implements ProjectUserService {
 	}
 
 	@Override
-	public void clearUser(Long projectId, String userId) {
-		projectUserMapper.clearUser(projectId, userId);
+	public int clearUser(Long projectId, String userId, String userStatus) {
+		return projectUserMapper.clearUserAll(projectId, userId, userStatus);
 	}
 
 	@Override
-	public int clearUser(Long projectId, String userId, String userStatus) {
-		return projectUserMapper.clearUserAll(projectId, userId, userStatus);
+	public void clearUser(Map<String, Object> map) {
+		projectUserMapper.clearUser(map);
+		
 	}
 
 }

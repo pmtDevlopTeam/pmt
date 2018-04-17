@@ -1,6 +1,7 @@
 package com.camelot.pmt.project.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -71,7 +72,37 @@ public interface ProjectUserMapper {
 
 	int count(ProjectUserSearchVO vo);
 
-	void clearUser(@Param("projectId") Long projectId, @Param("userId") String userId);
-
 	int clearUserAll(@Param("projectId") Long projectId, @Param("userId") String userId, @Param("userStatus")String userStatus);
+
+	/**
+	 * 将人员状态修改为暂离
+	 * @param map
+	 */
+	void clearUser(Map<String, Object> map);
+	
+	//----------------------附加------------------- 
+	//关于将成员移出项目
+	/**
+	 * 查询task表，根据所有的id进行批量操作，如果成功则返回查询的条数
+	 * @param map
+	 * @return
+	 */
+	int checkTask(Map<String, Object> map);
+	/**
+	 * 查询task表，根据所有的id进行批量操作，如果成功则返回查询的条数
+	 * @param map
+	 * @return
+	 */
+	int checkBug(Map<String, Object> map);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }
