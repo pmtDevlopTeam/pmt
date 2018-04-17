@@ -7,7 +7,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
   * @Description: 程序的总入口
-  * @author Gnerv
+  * @author pmt
   * @date 2018/3/26 16:28
   */
 @SpringBootApplication
