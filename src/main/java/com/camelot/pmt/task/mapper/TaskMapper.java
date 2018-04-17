@@ -100,7 +100,7 @@ public interface TaskMapper {
     * @return int    返回类型 
     * @throws
      */
-    int insertTaskNodeId(Task task);
+    int insertTaskNodeById(Task task);
     
     /**
     * @author: gxl
