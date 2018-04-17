@@ -31,6 +31,7 @@ public class DemandOperate {
      * 操作描述
      */
     private String runType;
+
     /**
      * 主键
      * 

@@ -89,8 +89,11 @@ public interface ProjectMainMapper {
      * 
      * @mbggenerated 2018-04-13
      */
-    int updateByPrimaryKeySelective(Long id, String userId, String modifyUserId, String projectNum,
-            String projectStatus, String projectDesc, Date startTime, Date endTime);
+    int updateByPrimaryKeySelective(@Param("id") Long id, @Param("userId") String userId,
+            @Param("modifyUserId") String modifyUserId, @Param("modifyTime") Date modifyTime,
+            @Param("projectNum") String projectNum, @Param("projectName") String projectName,
+            @Param("projectStatus") String projectStatus, @Param("projectDesc") String projectDesc,
+            @Param("startTime") Date startTime, @Param("endTime") Date endTime);
 
     /**
      *
@@ -99,7 +102,7 @@ public interface ProjectMainMapper {
     int updateByPrimaryKeyWithBLOBs(ProjectMain record);
 
     /**
-     * 根据主键进行更新
+     * 
      * 
      * @mbggenerated 2018-04-13
      */

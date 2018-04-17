@@ -51,11 +51,12 @@ public interface DemandOperateMapper {
 
     /**
      * 根据条件查询关联的记录
+     * 
      * @param demandOperate
      * @return
      */
     List<DemandOperate> findAllByPage(@Param(value = "pager") Pager pager,
-                                        @Param(value = "demandOperate") DemandOperate demandOperate);
+            @Param(value = "demandOperate") DemandOperate demandOperate);
 
-    Long queryCount( @Param(value = "demandOperate") DemandOperate demandOperate);
+    Long queryCount(@Param(value = "demandOperate") DemandOperate demandOperate);
 }

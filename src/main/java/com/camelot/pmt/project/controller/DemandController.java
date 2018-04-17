@@ -1,7 +1,5 @@
 package com.camelot.pmt.project.controller;
 
-
-
 import com.alibaba.fastjson.JSONObject;
 import com.camelot.pmt.platform.common.APIStatus;
 import com.camelot.pmt.platform.common.ApiResponse;
@@ -31,16 +29,16 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- *@Author:fjy
- *@Description: 需求控制器类
- *@Date:2018/4/12_16:11
+ * @Author:fjy
+ * @Description: 需求控制器类
+ * @Date:2018/4/12_16:11
  */
 @RestController
 @Api(value = "项目管理-需求模块", description = "项目管理-需求模块的控制器类")
 @EnableSwagger2
 public class DemandController {
 
-    private static final Logger logger=LoggerFactory.getLogger(DemandController.class);
+    private static final Logger logger = LoggerFactory.getLogger(DemandController.class);
     @Resource
     DemandService demandService;
 
@@ -55,19 +53,19 @@ public class DemandController {
             @ApiImplicitParam(name = "rows", value = "显示行数", required = true, paramType = "query", dataType = "int"),
             @ApiImplicitParam(name = "demandName", value = "需求名称", required = false, paramType = "query", dataType = "String") })
     @RequestMapping(value = "demand/queryDemandAll", method = RequestMethod.POST)
-    public JSONObject queryDemandAll(@ApiIgnore Demand demand,@ApiIgnore Pager pager){
+    public JSONObject queryDemandAll(@ApiIgnore Demand demand, @ApiIgnore Pager pager) {
         ExecuteResult<DataGrid<Demand>> result = new ExecuteResult<DataGrid<Demand>>();
-        try{
-            if(pager==null){
+        try {
+            if (pager == null) {
                 pager.setPage(1);
                 pager.setRows(10);
             }
             result = demandService.findAllByPage(pager, demand);
-            if(result.isSuccess()){
+            if (result.isSuccess()) {
                 return ApiResponse.success(result.getResult());
             }
             return ApiResponse.error();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return ApiResponse.error();
         }
@@ -76,6 +74,7 @@ public class DemandController {
 
     /**
      * 需求状态（未激活/已激活/已关闭/已变更）
+     * 
      * @param demandWithBLOBs
      * @return
      */
@@ -105,7 +104,7 @@ public class DemandController {
     public JSONObject insertDemand(@ApiIgnore Demand demandWithBLOBs) {
         ExecuteResult<String> result = new ExecuteResult<String>();
         try {
-            //非空判断
+            // 非空判断
             if (demandWithBLOBs == null) {
                 return ApiResponse.error("入参为空");
             }
@@ -116,7 +115,7 @@ public class DemandController {
             result = demandService.save(demandWithBLOBs);
             return ApiResponse.success(result.getResult());
         } catch (Exception e) {
-            logger.error("------需求新增------"+e.getMessage());
+            logger.error("------需求新增------" + e.getMessage());
             return ApiResponse.error();
         }
     }
@@ -126,21 +125,21 @@ public class DemandController {
             @ApiImplicitParam(name = "pid", value = "所属一级需求id", required = false, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "id", value = "需求id", required = true, paramType = "query", dataType = "Long") })
     @RequestMapping(value = "demand/findById", method = RequestMethod.GET)
-    public JSONObject findById(Long id){
-        ExecuteResult<Demand> result=new ExecuteResult<>();
-            try{
-                result=demandService.findById(id);
-                return ApiResponse.success(result.getResult());
-            }catch(Exception e){
-                logger.error("-------指定id查询需求-------"+e.getMessage());
-                return ApiResponse.error();
-            }
+    public JSONObject findById(Long id) {
+        ExecuteResult<Demand> result = new ExecuteResult<>();
+        try {
+            result = demandService.findById(id);
+            return ApiResponse.success(result.getResult());
+        } catch (Exception e) {
+            logger.error("-------指定id查询需求-------" + e.getMessage());
+            return ApiResponse.error();
+        }
     }
 
     /**
-     * 需求评审、变更、关闭、编辑功能
-     * demandNeed  需求层级，传递本级需求层级前台根据父级的该字段进行传参
-     * reviewedWith 由谁评审字段用“,”拼接
+     * 需求评审、变更、关闭、编辑功能 demandNeed 需求层级，传递本级需求层级前台根据父级的该字段进行传参 reviewedWith
+     * 由谁评审字段用“,”拼接
+     * 
      * @param demand
      * @return
      */
@@ -158,22 +157,22 @@ public class DemandController {
             @ApiImplicitParam(name = "closeReason", value = "关闭原因", required = false, paramType = "form", dataType = "String"),
             @ApiImplicitParam(name = "demandName", value = "需求名称", required = false, paramType = "form", dataType = "String"),
             @ApiImplicitParam(name = "demandDesc", value = "需求描述", required = false, paramType = "form", dataType = "String"),
-            @ApiImplicitParam(name = "closeReason", value = "关闭原因", required = false, paramType = "form", dataType = "String")})
+            @ApiImplicitParam(name = "closeReason", value = "关闭原因", required = false, paramType = "form", dataType = "String") })
     @RequestMapping(value = "demand/updateById", method = RequestMethod.POST)
-    public JSONObject updateById(Demand demand){
-        ExecuteResult<String> result=new ExecuteResult<>();
-        try{
-            if(null==demand){
+    public JSONObject updateById(Demand demand) {
+        ExecuteResult<String> result = new ExecuteResult<>();
+        try {
+            if (null == demand) {
                 return ApiResponse.error("");
             }
             Date currentDate = new Date();
             demand.setModifyTime(currentDate);
-            //暂留人员获取 TODO
+            // 暂留人员获取 TODO
 
             result = demandService.updateByDemand(demand);
             return ApiResponse.jsonData(APIStatus.OK_200, result);
-        }catch(Exception e){
-            logger.error("-------更新需求-------"+e.getMessage());
+        } catch (Exception e) {
+            logger.error("-------更新需求-------" + e.getMessage());
             return ApiResponse.error();
         }
     }
@@ -182,13 +181,13 @@ public class DemandController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "需求id", required = true, paramType = "query", dataType = "Long") })
     @RequestMapping(value = "demand/deleteById", method = RequestMethod.GET)
-    public JSONObject deleteById(Long id){
-        ExecuteResult<String> result=new ExecuteResult<>();
-        try{
-            result=demandService.deleteById(id);
+    public JSONObject deleteById(Long id) {
+        ExecuteResult<String> result = new ExecuteResult<>();
+        try {
+            result = demandService.deleteById(id);
             return ApiResponse.jsonData(APIStatus.OK_200);
-        }catch(Exception e){
-            logger.error("------删除指定需求------"+e.getMessage());
+        } catch (Exception e) {
+            logger.error("------删除指定需求------" + e.getMessage());
             return ApiResponse.error();
         }
     }
@@ -199,28 +198,25 @@ public class DemandController {
             @ApiImplicitParam(name = "rows", value = "显示行数", required = true, paramType = "query", dataType = "int"),
             @ApiImplicitParam(name = "id", value = "需求id", required = true, paramType = "query", dataType = "Long") })
     @RequestMapping(value = "demand/findWithOperate", method = RequestMethod.GET)
-    public JSONObject findWithOperate(@ApiIgnore Pager pager,@ApiIgnore DemandOperate demandOperate){
-        ExecuteResult<DataGrid<DemandOperate>> result=new ExecuteResult<>();
-        try{
-            if(null==pager){
+    public JSONObject findWithOperate(@ApiIgnore Pager pager, @ApiIgnore DemandOperate demandOperate) {
+        ExecuteResult<DataGrid<DemandOperate>> result = new ExecuteResult<>();
+        try {
+            if (null == pager) {
                 pager.setRows(10);
                 pager.setPage(1);
             }
-            result=demandService.findAllByPage(pager,demandOperate);
+            result = demandService.findAllByPage(pager, demandOperate);
             return ApiResponse.success(result.getResult());
-        }catch(Exception e){
-            logger.error("------删除指定需求------"+e.getMessage());
+        } catch (Exception e) {
+            logger.error("------删除指定需求------" + e.getMessage());
             return ApiResponse.error();
         }
     }
-
 
     @InitBinder
     public void initBinder(ServletRequestDataBinder binder) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         binder.registerCustomEditor(Date.class, new CustomDateEditor(sdf, true));
     }
-
-
 
 }

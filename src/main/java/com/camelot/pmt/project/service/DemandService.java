@@ -13,9 +13,9 @@ public interface DemandService {
 
     ExecuteResult<Demand> findById(Long id);
 
-    ExecuteResult<String>  deleteById(Long id);
+    ExecuteResult<String> deleteById(Long id);
 
     ExecuteResult<String> updateByDemand(Demand demandWithBLOBs);
 
-    ExecuteResult<DataGrid<DemandOperate>> findAllByPage(Pager pager,DemandOperate demandOperate);
+    ExecuteResult<DataGrid<DemandOperate>> findAllByPage(Pager pager, DemandOperate demandOperate);
 }

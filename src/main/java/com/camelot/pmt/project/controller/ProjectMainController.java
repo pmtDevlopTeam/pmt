@@ -252,6 +252,7 @@ public class ProjectMainController {
             @ApiParam(value = "创建人id", required = true) @RequestParam String createUserId, //
             @ApiParam(value = "负责人Id", required = true) @RequestParam String userId, //
             @ApiParam(value = "修改人id", required = true) @RequestParam String modifyUserId, //
+            @ApiParam(value = "修改时间", required = true) @RequestParam @DateTimeFormat(iso = ISO.DATE) Date modifyTime, //
             @ApiParam(value = "项目编号", required = true) @RequestParam String projectNum, //
             @ApiParam(value = "项目名称", required = true) @RequestParam String projectName, //
             @ApiParam(value = "项目状态", required = true) @RequestParam String projectStatus, //
@@ -267,13 +268,13 @@ public class ProjectMainController {
         ExecuteResult<String> result = new ExecuteResult<>();
         try {
             if (id == null || StringUtils.isEmpty(createUserId) || StringUtils.isEmpty(userId)
-                    || StringUtils.isEmpty(modifyUserId) || StringUtils.isEmpty(projectNum)
+                    || StringUtils.isEmpty(modifyUserId) || modifyTime == null || StringUtils.isEmpty(projectNum)
                     || StringUtils.isEmpty(projectName) || StringUtils.isEmpty(projectStatus) || startTime == null
                     || endTime == null || StringUtils.isEmpty(projectDesc) || StringUtils.isEmpty(operateDesc)) {
                 return ApiResponse.errorPara();
             }
-            result = projectMainService.updateByPrimaryKeySelective(id, userId, modifyUserId, projectNum, projectName,
-                    projectStatus, projectDesc, startTime, endTime, createUserId, operateDesc);
+            result = projectMainService.updateByPrimaryKeySelective(id, userId, modifyUserId, modifyTime, projectNum,
+                    projectName, projectStatus, projectDesc, startTime, endTime, createUserId, operateDesc);
             if (result.isSuccess()) {
                 return ApiResponse.success(result.getResult());
             }
@@ -321,7 +322,7 @@ public class ProjectMainController {
      * @return
      */
     @ApiOperation(value = "按项目id查询", notes = "按项目id查询")
-    @GetMapping(value = "/api/projectMain/selectByPrimaryKey")
+    @GetMapping(value = "/api/projectMain/getByPrimaryKey")
     public JSONObject selectByPrimaryKey(@ApiParam(value = "项目id", required = true) @RequestParam Long id) {
 
         logger.info("入参封装的数据为：id={}", id);
@@ -355,7 +356,7 @@ public class ProjectMainController {
      * @param operateDesc
      * @return
      */
-    @ApiOperation(value = "按主键id更新数据", notes = "按主键id更新数据")
+    @ApiOperation(value = "关闭项目时,更新相关数据", notes = "关闭项目时,更新相关数据")
     @PutMapping(value = "/api/projectMain/closeProjectById")
     public JSONObject closeProjectById(//
             @ApiParam(value = "id", required = true) @RequestParam Long id, //

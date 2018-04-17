@@ -83,9 +83,9 @@ public interface ProjectMainService {
      * @param projectMain
      * @return
      */
-    ExecuteResult<String> updateByPrimaryKeySelective(Long id, String userId, String modifyUserId, String projectNum,
-            String projectName, String projectStatus, String projectDesc, Date startTime, Date endTime,
-            String createUserId, String operateDesc);
+    ExecuteResult<String> updateByPrimaryKeySelective(Long id, String userId, String modifyUserId, Date modifyTime,
+            String projectNum, String projectName, String projectStatus, String projectDesc, Date startTime,
+            Date endTime, String createUserId, String operateDesc);
 
     /**
      * 删除项目

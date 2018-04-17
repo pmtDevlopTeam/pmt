@@ -59,7 +59,7 @@ public class Demand {
     private Date createTime;
     /**
      * 修改人id
-
+     * 
      */
     private String modifyUserId;
 
@@ -96,7 +96,6 @@ public class Demand {
      * 需求层级
      */
     private String demandNeed;
-
 
     /**
      * 需求id

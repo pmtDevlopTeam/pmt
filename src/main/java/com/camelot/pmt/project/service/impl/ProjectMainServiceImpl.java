@@ -207,12 +207,12 @@ public class ProjectMainServiceImpl implements ProjectMainService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ExecuteResult<String> updateByPrimaryKeySelective(Long id, String userId, String modifyUserId,
-            String projectNum, String projectName, String projectStatus, String projectDesc, Date startTime,
-            Date endTime, String createUserId, String operateDesc) {
+            Date modifyTime, String projectNum, String projectName, String projectStatus, String projectDesc,
+            Date startTime, Date endTime, String createUserId, String operateDesc) {
         ExecuteResult<String> result = new ExecuteResult<>();
         try {
-            projectMainMapper.updateByPrimaryKeySelective(id, createUserId, modifyUserId, projectNum, projectStatus,
-                    projectDesc, startTime, endTime);
+            projectMainMapper.updateByPrimaryKeySelective(id, userId, modifyUserId, modifyTime, projectNum, projectName,
+                    projectStatus, projectDesc, startTime, endTime);
 
             ProjectOperate projectOperate = new ProjectOperate();
             projectOperate.setCreateTime(new Date());
