@@ -45,7 +45,7 @@ public interface TaskPendingService {
 	* @return ExecuteResult<String>    返回类型 
 	* @throws
 	 */
-	ExecuteResult<String> delete(Long taskId);
+	ExecuteResult<String> delete(Long id);
 	
 	/**
 	 * 
@@ -66,7 +66,7 @@ public interface TaskPendingService {
 	* @return ExecuteResult<List<Task>>    返回类型 
 	* @throws
 	 */
-	ExecuteResult<List<Task>> queryAllTaskList(String taskStatus,Long beassignUserId);
+	ExecuteResult<List<Task>> queryAllTaskList(Task task);
 	
 	/**
 	 * 

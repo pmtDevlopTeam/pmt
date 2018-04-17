@@ -165,7 +165,7 @@ public interface TaskMapper {
      * @return List<Task>    返回类型
      * @throws
      */
-    List<Task> queryAllTaskList(@Param("status") String status,@Param("beassignUserId") Long beassignUserId);
+    List<Task> queryAllTaskList(Task task);
 
     /**
      * @author: gxl

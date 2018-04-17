@@ -44,9 +44,16 @@ public class TaskPendingController {
 	* @return JSONObject    返回类型 
 	* @throws
 	 */
-	@ApiOperation(value = "查询我的待办全部的任务列表", notes = "查询我的待办全部的任务列表")
-	@RequestMapping(value = "/queryAllTaskList", method = RequestMethod.GET)
-	public JSONObject queryAllTaskList(){
+	@ApiOperation(value = "查询我的全部的任务列表", notes = "查询我的全部的任务列表")
+	@ApiImplicitParams({
+        @ApiImplicitParam(name = "taskNum", value = "任务编号", required = true, paramType = "form", dataType = "String"),
+        @ApiImplicitParam(name = "taskName", value = "父级任务标识号", required = true, paramType = "form", dataType = "String"),
+        @ApiImplicitParam(name = "project.proId", value = "项目标识号", required = true, paramType = "form", dataType = "String"),
+        @ApiImplicitParam(name = "priority", value = "优先级", required = true, paramType = "form", dataType = "String"),
+        @ApiImplicitParam(name = "assignUser.userId", value = "指派人标识号", required = true, paramType = "form", dataType = "String"),
+        @ApiImplicitParam(name = "status", value = "任务状态", required = true, paramType = "form", dataType = "String") })
+	@RequestMapping(value = "/queryAllTaskList", method = RequestMethod.POST)
+	public JSONObject queryAllTaskList(@ApiIgnore Task task){
 		ExecuteResult<List<Task>> result = new ExecuteResult<List<Task>>();
 		try {
 			Long userLoginId = Long.valueOf(1);
@@ -54,7 +61,49 @@ public class TaskPendingController {
 			if(StringUtils.isEmpty(userLoginId)){
 				return ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
             }
-			result = taskPendingService.queryAllTaskList(TaskStatus.PENDINHG.getValue(),userLoginId);
+			//设置被指派人+待办限制
+			task.getAssignUser().setUserId(userLoginId.toString());
+			result = taskPendingService.queryAllTaskList(task);
+			//判断是否成功
+			if(result.isSuccess()){
+				return ApiResponse.jsonData(APIStatus.OK_200,result.getResult());
+			}
+			return ApiResponse.jsonData(APIStatus.ERROR_500, result.getResult());
+		}catch (Exception e) {
+			//异常
+			return ApiResponse.jsonData(APIStatus.ERROR_500,e.getMessage());
+		}
+	}
+	
+	/**
+	 * 
+	* @Title: queryMyPendingTaskList 
+	* @Description: TODO(查询整个任务列表) 
+	* @param @return    设定文件 
+	* @return JSONObject    返回类型 
+	* @throws
+	 */
+	@ApiOperation(value = "查询我的待办全部的任务列表", notes = "查询我的待办全部的任务列表")
+	@ApiImplicitParams({
+        @ApiImplicitParam(name = "taskNum", value = "任务编号", required = true, paramType = "form", dataType = "String"),
+        @ApiImplicitParam(name = "taskName", value = "父级任务标识号", required = true, paramType = "form", dataType = "String"),
+        @ApiImplicitParam(name = "project.proId", value = "项目标识号", required = true, paramType = "form", dataType = "String"),
+        @ApiImplicitParam(name = "priority", value = "优先级", required = true, paramType = "form", dataType = "String"),
+        @ApiImplicitParam(name = "assignUser.userId", value = "指派人标识号", required = true, paramType = "form", dataType = "String"),
+        @ApiImplicitParam(name = "status", value = "任务状态", required = true, paramType = "form", dataType = "String") })
+	@RequestMapping(value = "/queryMyPendingTaskList", method = RequestMethod.POST)
+	public JSONObject queryMyPendingTaskList(@ApiIgnore Task task){
+		ExecuteResult<List<Task>> result = new ExecuteResult<List<Task>>();
+		try {
+			Long userLoginId = Long.valueOf(1);
+			//检查用户是否登录，需要去session中获取用户登录信息
+			if(StringUtils.isEmpty(userLoginId)){
+				return ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
+            }
+			//设置被指派人+待办限制
+			task.getAssignUser().setUserId(userLoginId.toString());
+			task.setStatus(TaskStatus.PENDINHG.getValue());
+			result = taskPendingService.queryAllTaskList(task);
 			//判断是否成功
 			if(result.isSuccess()){
 				return ApiResponse.jsonData(APIStatus.OK_200,result.getResult());
@@ -78,7 +127,7 @@ public class TaskPendingController {
 	@ApiOperation(value = "查询我的待办任务taskId下的所有一级子节点", notes = "查询我的待办任务taskId下的所有一级子节点")
 	@RequestMapping(value = "/queryMyTaskListNodeByParentId", method = RequestMethod.POST)
 	public JSONObject queryMyTaskListNodeByParentId(
-			@ApiParam(name = "taskId", value = "任务标识号", required = true) @RequestParam(required = true) Long taskId){
+			@ApiParam(name = "id", value = "任务标识号", required = true) @RequestParam(required = true) Long id){
 		ExecuteResult<List<Task>> result = new ExecuteResult<List<Task>>();
 		try {
 			Long userLoginId = Long.valueOf(1);
@@ -86,7 +135,7 @@ public class TaskPendingController {
 			if(StringUtils.isEmpty(userLoginId)){
 				return ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
             }
-			result = taskPendingService.queryMyTaskListNodeByParentId(taskId,TaskStatus.PENDINHG.getValue(),userLoginId);
+			result = taskPendingService.queryMyTaskListNodeByParentId(id,TaskStatus.PENDINHG.getValue(),userLoginId);
 			//判断是否成功
 			if(result.isSuccess()){
 				return ApiResponse.jsonData(APIStatus.OK_200,result.getResult());
@@ -110,7 +159,7 @@ public class TaskPendingController {
 	@ApiOperation(value = "查询taskId下的所有一级子节点", notes = "查询taskId下的所有一级子节点")
 	@RequestMapping(value = "/queryTaskListNodeByParentId", method = RequestMethod.POST)
 	public JSONObject queryTaskListNodeByParentId(
-			@ApiParam(name = "taskId", value = "任务标识号", required = true) @RequestParam(required = true) Long taskId){
+			@ApiParam(name = "id", value = "任务标识号", required = true) @RequestParam(required = true) Long id){
 		ExecuteResult<List<Task>> result = new ExecuteResult<List<Task>>();
 		try {
 			Long userLoginId = Long.valueOf(1);
@@ -118,7 +167,7 @@ public class TaskPendingController {
 			if(StringUtils.isEmpty(userLoginId)){
 				return ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
             }
-			result = taskPendingService.queryTaskListNodeByParentId(taskId,TaskStatus.PENDINHG.getValue());
+			result = taskPendingService.queryTaskListNodeByParentId(id,TaskStatus.PENDINHG.getValue());
 			//判断是否成功
 			if(result.isSuccess()){
 				return ApiResponse.jsonData(APIStatus.OK_200,result.getResult());
@@ -173,7 +222,7 @@ public class TaskPendingController {
 	@ApiOperation(value = "查询该任务的父级节点以及祖宗节点", notes = "查询该任务的父级节点以及祖宗节点，list中不包含本身")
 	@RequestMapping(value = "/queryTopAllTaskTreeByTaskId", method = RequestMethod.POST)
 	public JSONObject queryTopAllTaskTreeByTaskId(
-			@ApiParam(name = "id", value = "任务标识号", required = true) @RequestParam(required = true) Long taskId){
+			@ApiParam(name = "id", value = "任务标识号", required = true) @RequestParam(required = true) Long id){
 		ExecuteResult<List<Task>> result = new ExecuteResult<List<Task>>();
 		try {
 		    Long userLoginId = Long.valueOf(1);
@@ -182,7 +231,7 @@ public class TaskPendingController {
 				return ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
             }
 			//查询父级任务树
-			result = taskPendingService.queryTopAllTaskTreeByTaskId(taskId);
+			result = taskPendingService.queryTopAllTaskTreeByTaskId(id);
 			//判断是否成功
 			if(result.isSuccess()){
 				//判断是否达到四层结构
@@ -207,7 +256,7 @@ public class TaskPendingController {
 	@ApiOperation(value = "我的待办任务转为正在进行", notes = "我的待办任务转为正在进行")
 	@RequestMapping(value = "/updateTaskPendingToRunning", method = RequestMethod.POST)
 	public JSONObject updateTaskPendingToRunning(
-			@ApiParam(name = "id", value = "任务标识号", required = true) @RequestParam(required = true) Long taskId){
+			@ApiParam(name = "id", value = "任务标识号", required = true) @RequestParam(required = true) Long id){
 		ExecuteResult<String> result = new ExecuteResult<String>();
 		try {
 		    Long userLoginId = Long.valueOf(1);
@@ -216,7 +265,7 @@ public class TaskPendingController {
 				return ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
             }
 			//更新我的待办任务为正在进行中
-			result = taskPendingService.updateTaskPendingToRunning(taskId,TaskStatus.RUNING.getValue());
+			result = taskPendingService.updateTaskPendingToRunning(id,TaskStatus.RUNING.getValue());
 			//判断是否成功
 			if(result.isSuccess()){
 				return ApiResponse.jsonData(APIStatus.OK_200,result.getResult());
@@ -238,7 +287,7 @@ public class TaskPendingController {
 	@ApiOperation(value = "我的待办任务转为延期", notes = "我的待办任务转为延期")
 	@RequestMapping(value = "/updateTaskPendingToDelay", method = RequestMethod.POST)
 	public JSONObject updateTaskPendingToDelay(
-			@ApiParam(name = "id", value = "任务标识号", required = true) @RequestParam(required = true) Long taskId,
+			@ApiParam(name = "id", value = "任务标识号", required = true) @RequestParam(required = true) Long id,
 			@ApiParam(name = "delayDescribe", value = "任务描述", required = true) @RequestParam(required = true) String delayDescribe,
 			@ApiParam(name = "estimateStartTime", value = "任务预计开始时间", required = true) @RequestParam(required = true) Date estimateStartTime){
 		ExecuteResult<String> result = new ExecuteResult<String>();
@@ -249,7 +298,7 @@ public class TaskPendingController {
 				return ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
             }
 			//更新我的待办任务为正在进行中
-			result = taskPendingService.updateTaskPendingToDelay(taskId,TaskStatus.OVERDUE.getValue(),delayDescribe,estimateStartTime);
+			result = taskPendingService.updateTaskPendingToDelay(id,TaskStatus.OVERDUE.getValue(),delayDescribe,estimateStartTime);
 			//判断是否成功
 			if(result.isSuccess()){
 				return ApiResponse.jsonData(APIStatus.OK_200,result.getResult());
@@ -272,32 +321,21 @@ public class TaskPendingController {
 	 */
 	@ApiOperation(value = "添加子任务", notes = "添加子任务")
 	@ApiImplicitParams({
-        @ApiImplicitParam(name = "id", value = "任务标识号", required = true, paramType = "form", dataType = "String"),
+        @ApiImplicitParam(name = "taskNum", value = "任务编号", required = true, paramType = "form", dataType = "String"),
         @ApiImplicitParam(name = "taskName", value = "任务名称", required = true, paramType = "form", dataType = "String"),
         @ApiImplicitParam(name = "taskParentId", value = "父级任务标识号", required = true, paramType = "form", dataType = "String"),
-        @ApiImplicitParam(name = "projectId", value = "项目标识号", required = true, paramType = "form", dataType = "String"),
-        @ApiImplicitParam(name = "demandId", value = "需求标识号", required = true, paramType = "form", dataType = "String"),
+        @ApiImplicitParam(name = "project.proId", value = "项目标识号", required = true, paramType = "form", dataType = "String"),
+        @ApiImplicitParam(name = "demand.id", value = "需求标识号", required = true, paramType = "form", dataType = "String"),
         @ApiImplicitParam(name = "priority", value = "优先级", required = true, paramType = "form", dataType = "String"),
-        @ApiImplicitParam(name = "assignUserId", value = "指派人标识号", required = true, paramType = "form", dataType = "String"),
-        @ApiImplicitParam(name = "beassignUserId", value = "负责人", required = true, paramType = "form", dataType = "String"),
-        @ApiImplicitParam(name = "assignTime", value = "任务指派时间", required = true, paramType = "form", dataType = "String"),
+        @ApiImplicitParam(name = "assignUser.userId", value = "指派人标识号", required = true, paramType = "form", dataType = "String"),
+        @ApiImplicitParam(name = "beassignUser.userId", value = "负责人标识号", required = true, paramType = "form", dataType = "String"),
         @ApiImplicitParam(name = "estimateStartTime", value = "任务预期开始时间", required = true, paramType = "form", dataType = "String"),
         @ApiImplicitParam(name = "estimateEndTime", value = "任务预期结束时间", required = true, paramType = "form", dataType = "String"),
-        @ApiImplicitParam(name = "actualStartTime", value = "任务实际开始时间", required = true, paramType = "form", dataType = "String"),
-        @ApiImplicitParam(name = "actualEndTime", value = "任务实际结束时间", required = true, paramType = "form", dataType = "String"),
         @ApiImplicitParam(name = "taskType", value = "任务类型", required = true, paramType = "form", dataType = "String"),
-        @ApiImplicitParam(name = "taskSpeed", value = "任务进度", required = true, paramType = "form", dataType = "String"),
+        @ApiImplicitParam(name = "taskDescribe", value = "任务描述", required = true, paramType = "form", dataType = "String"),
         @ApiImplicitParam(name = "status", value = "任务状态", required = true, paramType = "form", dataType = "String"),
-        @ApiImplicitParam(name = "abnormalStatus", value = "异常状态", required = true, paramType = "form", dataType = "String"),
         @ApiImplicitParam(name = "estimateHour", value = "任务预计工时", required = true, paramType = "form", dataType = "String"),
-        @ApiImplicitParam(name = "consumeHour", value = "任务已消耗工时", required = true, paramType = "form", dataType = "String"),
-        @ApiImplicitParam(name = "remainHour", value = "任务剩余工时", required = true, paramType = "form", dataType = "String"),
-        @ApiImplicitParam(name = "taskMileage", value = "任务里程", required = true, paramType = "form", dataType = "String"),
-        @ApiImplicitParam(name = "warningHour", value = "预警工时", required = true, paramType = "form", dataType = "String"),
-        @ApiImplicitParam(name = "warningStatus", value = "预警状态", required = true, paramType = "form", dataType = "String"),
-        @ApiImplicitParam(name = "comment", value = "备注", required = true, paramType = "form", dataType = "String"),
-        @ApiImplicitParam(name = "filepath", value = "附件路径", required = true, paramType = "form", dataType = "String"),
-        @ApiImplicitParam(name = "filename", value = "附件名称", required = true, paramType = "form", dataType = "String") })
+        @ApiImplicitParam(name = "comment", value = "备注", required = true, paramType = "form", dataType = "String") })
 	@RequestMapping(value = "/addTask", method = RequestMethod.POST)
 	public JSONObject addTask(@ApiIgnore Task task) {
 		ExecuteResult<String> result = new ExecuteResult<String>();
@@ -330,32 +368,22 @@ public class TaskPendingController {
 	 */
 	@ApiOperation(value = "修改任务单元", notes = "修改任务单元")
 	@ApiImplicitParams({
-        @ApiImplicitParam(name = "id", value = "任务标识号", required = true, paramType = "form", dataType = "String"),
+		@ApiImplicitParam(name = "id", value = "任务标识号", required = true, paramType = "form", dataType = "String"),
+        @ApiImplicitParam(name = "taskNum", value = "任务编号", required = true, paramType = "form", dataType = "String"),
         @ApiImplicitParam(name = "taskName", value = "任务名称", required = true, paramType = "form", dataType = "String"),
         @ApiImplicitParam(name = "taskParentId", value = "父级任务标识号", required = true, paramType = "form", dataType = "String"),
-        @ApiImplicitParam(name = "projectId", value = "项目标识号", required = true, paramType = "form", dataType = "String"),
-        @ApiImplicitParam(name = "demandId", value = "需求标识号", required = true, paramType = "form", dataType = "String"),
+        @ApiImplicitParam(name = "project.proId", value = "项目标识号", required = true, paramType = "form", dataType = "String"),
+        @ApiImplicitParam(name = "demand.id", value = "需求标识号", required = true, paramType = "form", dataType = "String"),
         @ApiImplicitParam(name = "priority", value = "优先级", required = true, paramType = "form", dataType = "String"),
-        @ApiImplicitParam(name = "assignUserId", value = "指派人标识号", required = true, paramType = "form", dataType = "String"),
-        @ApiImplicitParam(name = "beassignUserId", value = "负责人", required = true, paramType = "form", dataType = "String"),
-        @ApiImplicitParam(name = "assignTime", value = "任务指派时间", required = true, paramType = "form", dataType = "String"),
+        @ApiImplicitParam(name = "assignUser.userId", value = "指派人标识号", required = true, paramType = "form", dataType = "String"),
+        @ApiImplicitParam(name = "beassignUser.userId", value = "负责人标识号", required = true, paramType = "form", dataType = "String"),
         @ApiImplicitParam(name = "estimateStartTime", value = "任务预期开始时间", required = true, paramType = "form", dataType = "String"),
         @ApiImplicitParam(name = "estimateEndTime", value = "任务预期结束时间", required = true, paramType = "form", dataType = "String"),
-        @ApiImplicitParam(name = "actualStartTime", value = "任务实际开始时间", required = true, paramType = "form", dataType = "String"),
-        @ApiImplicitParam(name = "actualEndTime", value = "任务实际结束时间", required = true, paramType = "form", dataType = "String"),
         @ApiImplicitParam(name = "taskType", value = "任务类型", required = true, paramType = "form", dataType = "String"),
-        @ApiImplicitParam(name = "taskSpeed", value = "任务进度", required = true, paramType = "form", dataType = "String"),
+        @ApiImplicitParam(name = "taskDescribe", value = "任务描述", required = true, paramType = "form", dataType = "String"),
         @ApiImplicitParam(name = "status", value = "任务状态", required = true, paramType = "form", dataType = "String"),
-        @ApiImplicitParam(name = "abnormalStatus", value = "异常状态", required = true, paramType = "form", dataType = "String"),
         @ApiImplicitParam(name = "estimateHour", value = "任务预计工时", required = true, paramType = "form", dataType = "String"),
-        @ApiImplicitParam(name = "consumeHour", value = "任务已消耗工时", required = true, paramType = "form", dataType = "String"),
-        @ApiImplicitParam(name = "remainHour", value = "任务剩余工时", required = true, paramType = "form", dataType = "String"),
-        @ApiImplicitParam(name = "taskMileage", value = "任务里程", required = true, paramType = "form", dataType = "String"),
-        @ApiImplicitParam(name = "warningHour", value = "预警工时", required = true, paramType = "form", dataType = "String"),
-        @ApiImplicitParam(name = "warningStatus", value = "预警状态", required = true, paramType = "form", dataType = "String"),
-        @ApiImplicitParam(name = "comment", value = "备注", required = true, paramType = "form", dataType = "String"),
-        @ApiImplicitParam(name = "filepath", value = "附件路径", required = true, paramType = "form", dataType = "String"),
-        @ApiImplicitParam(name = "filename", value = "附件名称", required = true, paramType = "form", dataType = "String") })
+        @ApiImplicitParam(name = "comment", value = "备注", required = true, paramType = "form", dataType = "String") })
 	@RequestMapping(value = "/editTask", method = RequestMethod.POST)
 	public JSONObject editTask(@ApiIgnore Task task) {
 		ExecuteResult<String> result = new ExecuteResult<String>();
@@ -390,7 +418,7 @@ public class TaskPendingController {
 	@ApiOperation(value = "指派任务-更新指派人和被指派人标识号", notes = "指派任务-更新指派人和被指派人标识号")
 	@RequestMapping(value = "/updateTaskToAssign", method = RequestMethod.POST)
 	public JSONObject updateTaskToAssign(
-			@ApiParam(name = "id", value = "任务标识号", required = true) @RequestParam(required = true) Long taskId,
+			@ApiParam(name = "id", value = "任务标识号", required = true) @RequestParam(required = true) Long id,
 			@ApiParam(name = "assignUserId", value = "指派人标识号", required = true) @RequestParam(required = true) Long assignUserId,
 			@ApiParam(name = "beassignUserId", value = "被指派人标识号", required = true) @RequestParam(required = true) Long beassignUserId) {
 		ExecuteResult<String> result = new ExecuteResult<String>();
@@ -400,7 +428,7 @@ public class TaskPendingController {
 			if(StringUtils.isEmpty(userLoginId)){
 				return ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
             }
-			result = taskPendingService.updateTaskToAssign(taskId,assignUserId,beassignUserId);
+			result = taskPendingService.updateTaskToAssign(id,assignUserId,beassignUserId);
 			//判断是否成功
 			if (result.isSuccess()) {
 				return ApiResponse.jsonData(APIStatus.OK_200, result.getResult());
@@ -424,7 +452,7 @@ public class TaskPendingController {
 	@ApiOperation(value = "删除单个任务单元", notes = "删除单个任务单元")
     @RequestMapping(value = "/deleteTask", method = RequestMethod.POST)
 	public JSONObject deleteTask(
-			@ApiParam(name = "taskId", value = "任务标识号", required = true) @RequestParam(required = true) Long taskId){
+			@ApiParam(name = "id", value = "任务标识号", required = true) @RequestParam(required = true) Long id){
 		ExecuteResult<String> result = new ExecuteResult<String>();
 		try {
 			Long userLoginId = Long.valueOf(1);
@@ -432,7 +460,7 @@ public class TaskPendingController {
 			if(StringUtils.isEmpty(userLoginId)){
 				return ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
             }
-            result = taskPendingService.delete(taskId);
+            result = taskPendingService.delete(id);
             //判断是否成功
             if(result.isSuccess()){
             	return ApiResponse.jsonData(APIStatus.OK_200, result.getResult());
@@ -456,7 +484,7 @@ public class TaskPendingController {
 	@ApiOperation(value = "删除待办任务", notes = "删除待办任务")
 	@RequestMapping(value = "/deletePendingTaskTreeById", method = RequestMethod.POST)
 	public JSONObject deletePendingTaskTreeById(
-			@ApiParam(name = "taskId", value = "任务标识号", required = true) @RequestParam(required = true) String taskId){
+			@ApiParam(name = "id", value = "任务标识号", required = true) @RequestParam(required = true) String id){
 		ExecuteResult<String> result = new ExecuteResult<String>();
 		try {
 			Long userLoginId = Long.valueOf(1);
@@ -464,7 +492,7 @@ public class TaskPendingController {
 			if(StringUtils.isEmpty(userLoginId)){
 				return ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
             }
-			result = taskPendingService.deletePendingTaskTreeById(Long.valueOf(taskId),TaskStatus.PENDINHG.getValue());
+			result = taskPendingService.deletePendingTaskTreeById(Long.valueOf(id),TaskStatus.PENDINHG.getValue());
 			//判断是否成功
 			if(result.isSuccess()){
 				return ApiResponse.jsonData(APIStatus.OK_200,result.getResult());

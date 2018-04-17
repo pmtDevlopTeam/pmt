@@ -348,7 +348,7 @@
 	    where id = #{id,jdbcType=BIGINT}
 	  </delete>
     <!--修改任务-->
-    <update id="updateTaskNodeById" parameterType="com.camelot.pmt.task.mo">
+    <update id="updateTaskNodeById" parameterType="com.camelot.pmt.task.model.Task">
     	update task
 		    set task_num = #{taskNum,jdbcType=VARCHAR},
 		      task_name = #{taskName,jdbcType=VARCHAR},
@@ -380,7 +380,7 @@
 		    where id = #{id,jdbcType=BIGINT}
     </update>
   	<!--查询所有任务列表-->
-    <select id="queryAllTaskList" resultMap="BaseResultMap">
+    <select id="queryAllTaskList" resultMap="BaseResultMap" parameterType="com.camelot.pmt.task.model.Task">
 	    select
 		<include refid="ShowAllTasks_Column_List" />
 		from
@@ -392,6 +392,22 @@
 		<if test="status != null">
 			and t.status = #{status,jdbcType=CHAR}
 		</if>
+		<if test="taskNum != null">
+			and t.task_num = #{taskNum,jdbcType=CHAR}
+		</if>
+		<if test="taskName != null">
+			and t.task_name = #{taskName,jdbcType=CHAR}
+		</if>
+		<if test="project.proId != null">
+			and t.project_id = #{project.proId,jdbcType=CHAR}
+		</if>
+		<if test="priority != null">
+			and t.priority = #{priority,jdbcType=CHAR}
+		</if>
+		<if test="assignUserId != null">
+			and t.assign_user_id = #{assignUser.userId,jdbcType=CHAR}
+		</if>
+		 order by t.estimate_start_time,t.priority asc
     </select>
     <!-- 查询taskId下的一级子节点 -->
   	<select id="queryTaskListNodeByParentId" resultMap="BaseResultMap">
@@ -406,6 +422,7 @@
 		<if test="status != null">
 			and t.status = #{status,jdbcType=CHAR}
 		</if>
+		 order by t.estimate_start_time,t.priority asc
   	</select>
   	<!-- 查询taskId下的我的一级子节点 -->
   	<select id="queryMyTaskListNodeByParentId" resultMap="BaseResultMap">
@@ -420,6 +437,7 @@
 		<if test="status != null">
 			and t.status = #{status,jdbcType=CHAR}
 		</if>
+		 order by t.estimate_start_time,t.priority asc
 	</select>
 	<!-- 查询根据任务Id查询父级任务对象 -->
   	<select id="queryParentTaskNodeById" resultMap="BaseResultMap">
