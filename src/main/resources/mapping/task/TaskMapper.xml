@@ -287,9 +287,9 @@
     <select id="queryAllTask" resultMap="BaseResultMap">
         select
         <include refid="TaskManager_ShowTasks_Column_List" />
-        from task t LEFT JOIN platform_user a ON t.assign_user_id = a.user_id  --指派人user表 别名 a
-        LEFT JOIN platform_user b ON t.beassign_user_id = b.user_id  --被指派人user表 别名 b
-        LEFT JOIN platform_user c on t.create_user_id = c.user_id  --创建人user表 别名 c
+        from task t LEFT JOIN platform_user a ON t.assign_user_id = a.user_id
+        LEFT JOIN platform_user b ON t.beassign_user_id = b.user_id
+        LEFT JOIN platform_user c on t.create_user_id = c.user_id
         LEFT JOIN project_main p ON t.project_id = p.id
     </select>
 
@@ -306,9 +306,9 @@
     <select id="queryTaskByTask" resultMap="BaseResultMap">
         SELECT
         <include refid="TaskManager_ShowTasks_Column_List" />
-        from task t LEFT JOIN platform_user a ON t.assign_user_id = a.user_id  --指派人user表 别名 a
-        LEFT JOIN platform_user b ON t.beassign_user_id = b.user_id  --被指派人user表 别名 b
-        LEFT JOIN platform_user c on t.create_user_id = c.user_id  --创建人user表 别名 c
+        from task t LEFT JOIN platform_user a ON t.assign_user_id = a.user_id
+        LEFT JOIN platform_user b ON t.beassign_user_id = b.user_id
+        LEFT JOIN platform_user c on t.create_user_id = c.user_id
         LEFT JOIN project_main p ON t.project_id = p.id
         <where>
             <if test="task.taskType != null">and t.task_type = #{task.taskType}</if>
@@ -334,17 +334,21 @@
 
     <!--zlh-->
     <!--根据id查询任务详情-->
-    <select id="queryTaskById" parameterType="java.lang.Long" resultMap="ShowAllTasks_Column_List">
+    <select id="queryTaskById" parameterType="java.lang.Long" resultMap="BaseResultMap">
         SELECT
         <include refid="ShowAllTasks_Column_List" />
-        from task t LEFT JOIN platform_user a ON t.assign_user_id = a.user_id  --指派人user表 别名 a
-        LEFT JOIN platform_user b ON t.beassign_user_id = b.user_id  --被指派人user表 别名 b
-        LEFT JOIN platform_user c on t.create_user_id = c.user_id  --创建人user表 别名 c
+        from task t LEFT JOIN platform_user a ON t.assign_user_id = a.user_id
+        LEFT JOIN platform_user b ON t.beassign_user_id = b.user_id
+        LEFT JOIN platform_user c on t.create_user_id = c.user_id
         LEFT JOIN project_main p ON t.project_id = p.id
         LEFT JOIN demand d ON t.demand_id = d.id
         WHERE t.id = #{id,jdbcType=BIGINT}
     </select>
 
+    <delete id="deleteTaskById" parameterType="java.lang.Long">
+        DELETE FROM task
+        WHERE id = #{id,jdbcType=BIGINT}
+    </delete>
   <!-- gxl start -->
   	<!--查询任务-->
     <select id="queryTaskNodeById" resultMap="BaseResultMap" parameterType="long">
