@@ -1,11 +1,16 @@
 package com.camelot.pmt.project.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
-import com.camelot.pmt.common.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -17,15 +22,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import springfox.documentation.annotations.ApiIgnore;
+
 import com.alibaba.fastjson.JSONObject;
+import com.camelot.pmt.common.APIStatus;
+import com.camelot.pmt.common.ApiResponse;
+import com.camelot.pmt.common.DataGrid;
+import com.camelot.pmt.common.ExecuteResult;
+import com.camelot.pmt.common.Pager;
 import com.camelot.pmt.project.model.Demand;
 import com.camelot.pmt.project.model.DemandOperate;
 import com.camelot.pmt.project.service.DemandService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
-import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * @Author:fjy
@@ -79,7 +86,6 @@ public class DemandController {
 
     /**
      * 根据id删除
-     *
      * @param id
      * @return
      */
@@ -87,13 +93,16 @@ public class DemandController {
     @DeleteMapping(value = "/api/demand/deleteById")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "需求id", required = true, paramType = "query", dataType = "Long") })
-    public JSONObject deleteById(Long id) {
-        ExecuteResult<String> result = new ExecuteResult<>();
-        try {
-            result = demandService.deleteById(id);
-            return ApiResponse.jsonData(APIStatus.OK_200);
-        } catch (Exception e) {
-            logger.error("------删除指定需求------" + e.getMessage());
+    public JSONObject deleteById(Long id){
+        ExecuteResult<String> result=new ExecuteResult<>();
+        try{
+            result=demandService.deleteById(id);
+            if(result.isSuccess()){
+                return ApiResponse.jsonData(APIStatus.OK_200);
+            }
+            return ApiResponse.jsonData(APIStatus.ERROR_503);
+        }catch(Exception e){
+            logger.error("------删除指定需求------"+e.getMessage());
             return ApiResponse.error();
         }
     }
@@ -225,6 +234,27 @@ public class DemandController {
         }
     }
 
+    /**
+     * 根据需求id查询子父级需求
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "需求查看", notes = "根据需求id查询子父级需求")
+    @GetMapping(value = "/api/demand/findChildParentById")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "pid", value = "所属一级需求id", required = false, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "id", value = "需求id", required = true, paramType = "query", dataType = "Long") })
+    public JSONObject findChildParentById(Long id){
+        ExecuteResult<Map<String,Object>> result=new ExecuteResult<>();
+        try{
+            result=demandService.findChildParentById(id);
+            return ApiResponse.success(result.getResult());
+        }catch(Exception e){
+            logger.error("-------指定id查询子父级需求信息-------"+e.getMessage());
+            return ApiResponse.error();
+        }
+    }
+    
     @InitBinder
     public void initBinder(ServletRequestDataBinder binder) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
