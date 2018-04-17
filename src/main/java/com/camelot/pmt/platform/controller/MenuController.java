@@ -16,7 +16,11 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
+/**
+ * 权限菜单
+ * @author gnerv
+ *
+ */
 @RestController
 @ControllerAdvice
 @RequestMapping(value = "/platform/menu")

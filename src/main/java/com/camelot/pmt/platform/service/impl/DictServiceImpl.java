@@ -24,10 +24,11 @@ public class DictServiceImpl implements DictService {
 	DictMapper dictMapper; 
 
 	@Override
-	public ExecuteResult<Dict> createDict(Dict dict) {
-		ExecuteResult<Dict> result = new ExecuteResult<Dict>();
+	public ExecuteResult<String> createDict(Dict dict) {
+		ExecuteResult<String> result = new ExecuteResult<String>();
 		try{
 			if(dict == null){
+				result.setSuccess(false);
 				result.addErrorMessage("传入的字典实体有误!");
 				return result;
 			}
@@ -42,7 +43,7 @@ public class DictServiceImpl implements DictService {
             	return result;
             }
 			dictMapper.createDict(dict);
-			result.setResultMessage("添加字典成功!");
+			result.setResult("添加字典成功!");
 		}catch(Exception e){
 			LOGGER.error(e.getMessage());
 			throw new RuntimeException(e);
@@ -56,6 +57,7 @@ public class DictServiceImpl implements DictService {
 		ExecuteResult<String> result = new ExecuteResult<String>();
     	try {
 			if(StringUtils.isEmpty(dictId)){
+				result.setSuccess(false);
 				result.addErrorMessage("传入参数有误!");
 				return result;
 			}
@@ -72,10 +74,11 @@ public class DictServiceImpl implements DictService {
 		
 
 	@Override
-	public ExecuteResult<Dict> modifyDictByDictId(Dict dict) {
-		ExecuteResult<Dict> result = new ExecuteResult<Dict>();
+	public ExecuteResult<String> modifyDictByDictId(Dict dict) {
+		ExecuteResult<String> result = new ExecuteResult<String>();
 	       try {
 				if(StringUtils.isEmpty(dict.getDictId()) ){
+					result.setSuccess(false);
 					result.addErrorMessage("传入的字典实体有误!");
 					return result;
 				}
@@ -88,7 +91,7 @@ public class DictServiceImpl implements DictService {
 	            	return result;
 	            }
 	            dictMapper.modifyDictByDictId(dict);
-	            result.setResultMessage("修改字典成功");
+	            result.setResult("修改字典成功");
 	        } catch (Exception e){
 	            LOGGER.error(e.getMessage());
 	            throw new RuntimeException(e);
@@ -106,6 +109,7 @@ public class DictServiceImpl implements DictService {
 				result.setResult(dict);
 				return result;
 			}
+			result.setSuccess(false);
 			result.addErrorMessage("dictId为null查询失败！");
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
@@ -169,27 +173,28 @@ public class DictServiceImpl implements DictService {
 //	}
 	
 	@Override
-	public ExecuteResult<Dict> checkDictCodeOrDictNameIsExist(Dict dict) {
-		ExecuteResult<Dict> result = new ExecuteResult<Dict>();
+	public ExecuteResult<String> checkDictCodeOrDictNameIsExist(Dict dict) {
+		ExecuteResult<String> result = new ExecuteResult<String>();
 		//1.检查字典编码与字典名称是否为null
     	if (!StringUtils.isEmpty(dict.getDictCode()) && !StringUtils.isEmpty(dict.getDictName()) ){
     		//2.检查字典是否存在
     		Dict dictc = dictMapper.checkDictCodeIsExist(dict.getDictCode());
     		Dict dictn = dictMapper.checkDictNameIsExist(dict.getDictName());
     		if(dictc == null && dictn == null) {
+    			result.setResult("字典编码,字典名称不重复!");
     			result.setResultMessage("字典编码,字典名称不重复!");
 				return result;
     		}
     		if(dictc != null && dictn == null) {
-    			result.addErrorMessage("字典编码重复!");
+    			result.setResult("字典编码重复!");
 				return result;
     		}
     		if(dictc == null && dictn != null) {
-    			result.addErrorMessage("字典名称重复!");
+    			result.setResult("字典名称重复!");
 				return result;
     		}
     		if(dictc != null && dictn != null) {
-    			result.addErrorMessage("字典编码重复,字典名称重复!");
+    			result.setResult("字典编码重复,字典名称重复!");
 				return result;
     		}
     		
@@ -198,8 +203,8 @@ public class DictServiceImpl implements DictService {
 	}
 	
 	
-	public ExecuteResult<Dict> checkDictCodeOrDictNameIsExistUpdate(Dict dict) {
-		ExecuteResult<Dict> result = new ExecuteResult<Dict>();
+	public ExecuteResult<String> checkDictCodeOrDictNameIsExistUpdate(Dict dict) {
+		ExecuteResult<String> result = new ExecuteResult<String>();
 		//1.检查字典编码与字典名称是否存在
 		if (!StringUtils.isEmpty(dict.getDictCode()) && !StringUtils.isEmpty(dict.getDictName()) ){
     		//2.检查字典是否存在
@@ -207,39 +212,43 @@ public class DictServiceImpl implements DictService {
     		Dict dictn = dictMapper.checkDictNameIsExist(dict.getDictName());
     		if(dictc == null && dictn == null) {
     			result.setResultMessage("字典编码,字典名称不重复!");
+    			result.setResult("字典编码,字典名称不重复!");
 				return result;
     		}
     		if(dictc != null && dictn == null) {
     			if(dictc.getDictId().equals(dict.getDictId())) {
     				result.setResultMessage("字典编码不重复!");
+    				result.setResult("字典编码不重复!");
     				return result;
     			}
-    			result.addErrorMessage("字典编码重复!");
+    			result.setResult("字典编码重复!");
 				return result;
     		}
     		if(dictc == null && dictn != null) {
     			if(dict.getDictId().equals(dictn.getDictId())) {
     				result.setResultMessage("字典名称不重复!");
+    				result.setResult("字典名称不重复!");
     				return result;
     			}
-    			result.addErrorMessage("字典名称重复!");
+    			result.setResult("字典名称重复!");
 				return result;
     		}
     		if(dictc != null && dictn != null) {
     			if(dict.getDictId().equals(dictc.getDictId())&&dict.getDictId().equals(dictn.getDictId())) {
         			result.setResultMessage("字典编码,字典名称不重复!");
+        			result.setResult("字典编码,字典名称不重复!");
     				return result;
     			}
     			if(!dict.getDictId().equals(dictc.getDictId())&&dict.getDictId().equals(dictn.getDictId())) {
-    				result.addErrorMessage("字典编码重复!");
+    				result.setResult("字典编码重复!");
     				return result;
     			}
     			if(dict.getDictId().equals(dictc.getDictId())&&!dict.getDictId().equals(dictn.getDictId())) {
-    				result.addErrorMessage("字典名称重复!");
+    				result.setResult("字典名称重复!");
     				return result;
     			}
     			if(!dict.getDictId().equals(dictc.getDictId())&&!dict.getDictId().equals(dictn.getDictId())) {
-    				result.addErrorMessage("字典编码,字典名称重复!");
+    				result.setResult("字典编码,字典名称重复!");
     				return result;
     			}
     			
