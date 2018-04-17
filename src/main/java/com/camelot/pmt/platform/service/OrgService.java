@@ -10,6 +10,7 @@ import com.camelot.pmt.platform.model.Org;
 import com.camelot.pmt.platform.model.OrgToUser;
 import com.camelot.pmt.platform.model.User;
 import com.camelot.pmt.util.Tree;
+import com.github.pagehelper.PageInfo;
 
 public interface OrgService {
 	/**
@@ -48,7 +49,7 @@ public interface OrgService {
      * @param org
      * @return
      */
-	ExecuteResult<DataGrid<Org>> queryOrgsByPage(Pager page);
+	ExecuteResult<PageInfo> queryOrgsByPage(int pageNum, int pageSize);
 	/**
      * 查询多个子部门
      * @return ExecuteResult<List<Org>>

@@ -2,13 +2,10 @@
  <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<<<<<<<<< Temporary merge branch 1
-<mapper namespace="com.camelot.pmt.platform.role.mapper.RoleMapper" >
-    <resultMap id="BaseResultMap" type="com.camelot.pmt.platform.role.model.Role" >
-=========
+
 <mapper namespace="com.camelot.pmt.platform.mapper.RoleMapper" >
     <resultMap id="BaseResultMap" type="com.camelot.pmt.platform.model.Role" >
->>>>>>>>> Temporary merge branch 2
+
         <id column="id" property="id"/>
         <result column="role_id" property="roleId"/>
         <result column="parent_id" property="parentId"/>
@@ -49,9 +46,6 @@
         </trim>
     </sql>
 
-<<<<<<<<< Temporary merge branch 1
-    <select id="queryRoleArray" resultMap="BaseResultMap"  >
-=========
     <!--验证角色名称-->
     <select id="getRoleNameVerification" resultMap="BaseResultMap">
         SELECT
@@ -62,7 +56,6 @@
 
     <!--查询所有角色列表-->
     <select id="queryAllRole" resultMap="BaseResultMap"  >
->>>>>>>>> Temporary merge branch 2
        SELECT 
        <include refid="Base_Column_List" />
 	   FROM platform_role
@@ -75,12 +68,8 @@
         FROM platform_role WHERE role_id = #{role}
     </select>
 
-<<<<<<<<< Temporary merge branch 1
-    <insert id="addRole" parameterType="Role">
-=========
     <!--添加角色-->
     <insert id="createRole" parameterType="Role">
->>>>>>>>> Temporary merge branch 2
         INSERT INTO platform_role(
             <include refid="add_Column_List"/>
             ) VALUES (
@@ -88,12 +77,8 @@
         )
     </insert>
 
-<<<<<<<<< Temporary merge branch 1
-    <update id="editRole" parameterType="Role">
-=========
     <!--修改角色-->
     <update id="modifyRoleById" parameterType="Role">
->>>>>>>>> Temporary merge branch 2
         UPDATE platform_role
         <set>
             <if test="roleName != null">
@@ -108,23 +93,13 @@
             <if test="modifyUserId != null">
                 modify_user_id = #{modifyUserId},
             </if>
-<<<<<<<<< Temporary merge branch 1
-=========
             <if test="state != null">
                 state = #{state},
             </if>
->>>>>>>>> Temporary merge branch 2
         </set>
         WHERE role_id = #{roleId}
     </update>
 
-<<<<<<<<< Temporary merge branch 1
-    <delete id="deleteRole" parameterType="Role">
-        DELETE FROM platform_role WHERE role_id = #{roleId}
-    </delete>
-
-    <delete id="deleteRoleMenu" parameterType="Role">
-=========
     <!--删除角色-->
     <delete id="deleteRoleById" parameterType="Role">
         DELETE FROM platform_role WHERE role_id = #{roleId}
@@ -132,7 +107,6 @@
 
     <!--清除角色权限-->
     <delete id="deleteRoleMenuById" parameterType="Role">
->>>>>>>>> Temporary merge branch 2
         DELETE FROM platform_role_menu WHERE role_id = #{roleId}
     </delete>
 

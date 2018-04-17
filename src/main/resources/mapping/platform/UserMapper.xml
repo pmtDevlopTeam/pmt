@@ -1,150 +1,3 @@
-<<<<<<<<< Temporary merge branch 1
-<?xml version= "1.0" encoding ="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
-<mapper namespace="com.camelot.pmt.platform.user.mapper.UserMapper">
-
-    <!-- 映射UserModel实体 -->
-    <resultMap id="userModel" type="com.camelot.pmt.platform.user.model.UserModel">
-        <result property="id" column="id"/>
-        <result property="userId" column="userId"/>
-        <result property="loginCode" column="logincode"/>
-        <result property="password" column="password"/>
-        <result property="username" column="username"/>
-        <result property="state" column="state"/>
-        <result property="createTime" column="createtime"/>
-        <result property="modifyTime" column="modifytime"/>
-    </resultMap>
-    <!-- 用户查询字段 -->
-    <sql id="userColumns">
-      id,userId,logincode,password,username,state,createtime,modifytime
-    </sql>
-    
-    
-    <!-- 新增用户  新开始 -->
-    <!-- 新增列处理 -->
-	<sql id="sql_add_columns">
-		<trim suffixOverrides=",">
-			<if test="userId != null">userId,</if>
-			<if test="loginCode != null">logincode,</if>
-			<if test="password != null">password,</if>
-			<if test="username != null">username,</if>
-			<if test="state != null">state</if>
-		</trim>
-	</sql>
-	<!-- 新增列属性 -->
-	<sql id="sql_add_properties">
-		<trim suffixOverrides=",">
-				<if test="userId != null">#{userId},</if>
-				<if test="loginCode != null">#{loginCode},</if>
-				<if test="password != null">#{password},</if>
-				<if test="username != null">#{username},</if>
-				<if test="state != null">#{state}</if>
-		</trim>		
-	</sql>
-	<!-- 新增用户 -->
-	<insert id="insertUser" useGeneratedKeys="true" keyProperty="id" parameterType="UserModel">
-		insert into pmt_platform_user(
-			<include refid="sql_add_columns"/>
-		)values(
-			<include refid="sql_add_properties"/>
-		)
-	</insert> 
-    
-    
-    
-    <!-- 用户更新 -->
-	<update id="updateUserById" parameterType="UserModel">
-		update user u
-		    <set>
-				<if test = "username != null ">
-					u.username = #{username},
-				</if>
-				<if test = "newPassword != null">
-					u.password = #{newPassword},
-				</if>
-				<if test = "role != null  ">
-					u.role = #{role},
-				</if>
-				<if test = "phone != null ">
-					u.phone = #{phone},
-				</if>
-				<if test = "email != null ">
-					u.email = #{email},
-				</if>
-				<if test = "projectId != null ">
-					u.project_id = #{projectId},
-				</if>
-				<if test = "pwdStatus != null ">
-					u.pwd_status = #{pwdStatus}
-				</if>
-			</set>
-		where id = #{id} 
-	</update>
-	
-	
-	<!-- 检查用户登录账号是否存在 -->
-	 <select id="findUserByLoginCode" resultMap="userModel" parameterType="java.lang.String" >
-        select <include refid="userColumns"/> from pmt_platform_user where logincode = #{loginCode}
-    </select>
-    
-	<!-- 根据用户名查找用户密码-->
-    <select id="findUserPasswordByLoginCode" resultType="java.lang.String" parameterType="java.lang.String" >
-        select password from pmt_platform_user where logincode = #{loginCode}
-    </select>
-    
-    <!-- 根据用登录账号 -->
-    <select id="checkUserLoginCodeAndPassword" resultMap="userModel" >
-        select <include refid="userColumns"/> from pmt_platform_user where logincode = #{loginCode} and password = #{password}
-    </select>
-    
-    <!-- 根据用登录账号 -->
-    <select id="selectUserById" resultMap="userModel" parameterType="java.lang.String" >
-        select <include refid="userColumns"/> from pmt_platform_user where userId = #{userId}
-    </select>
-
-    
-   <!-- 查询数量公共sql -->
-	<sql id="count_Tail">
-		select count(1) from pmt_platform_user
-	</sql>
-	
-	<!-- 查询总数量 -->
-	<select id="queryCount" resultType="long">
-		<include refid="count_Tail"></include>
-	</select>
-	
-	<!-- 分页公共sql -->
-	<sql id="pagination_tail">
-	  limit #{page.pageOffset} , #{page.rows}
-	</sql>
-	
-    <!-- 分页查询所有用户列表 -->
-    <select id="findUsersByPage" resultMap="userModel">
-        select
-        <include refid="userColumns"/>
-        from pmt_platform_user
-        <if test="page!=null">
-			<include refid="pagination_tail" />
-		</if>
-    </select>
-
-	<!--查询所有用户,不分页-->
-	<select id="selectUsersAll" resultMap="userModel">
-		select <include refid="userColumns"/> from pmt_platform_user
-	</select>
-	
-
-    <!-- 根据Id删除用户 -->
-    <delete id="deleteUserById" parameterType="com.camelot.pmt.platform.user.model.UserModel">
-        delete FROM pmt_platform_user WHERE userId = #{userId}
-    </delete>
-
-    
-  
-
-=========
 <?xml version= "1.0" encoding ="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
@@ -420,12 +273,12 @@
 	 <select id="findUserByLoginCode" resultMap="userModel" parameterType="java.lang.String" >
         select <include refid="userColumns"/> from platform_user where login_code = #{loginCode}
     </select>
-    
+
     <!-- 检查用户信息表userJobNum是否存在 -->
 	 <select id="checkUserExistByUserJobNum" parameterType="java.lang.String" resultType="long">
         SELECT count(1) FROM platform_user_info where user_job_num = #{userJobNum}
     </select>
-    
+
 	<!-- 根据用户名查找用户密码-->
     <select id="findUserPasswordByLoginCode" resultType="java.lang.String" parameterType="java.lang.String" >
         select password from platform_user where login_code = #{loginCode}
@@ -440,7 +293,7 @@
     <select id="selectUserById" resultMap="userModel" parameterType="java.lang.String" >
         select <include refid="userColumnsNoPassword"/> from platform_user where user_id = #{userId}
     </select>
-    
+
     <!-- 根据userId获取用户角色表的create_user_id-->
     <select id="queryUserRoleCreateUserByUserId" resultType="java.lang.String" parameterType="java.lang.String" >
         SELECT DISTINCT create_user_id FROM platform_user_role where user_id = #{userId}
@@ -486,7 +339,7 @@
     <select id="queryUserInfoById" resultMap="userInfoResultMap" parameterType="java.lang.String" >
         select <include refid="userInfoColumns"/> from platform_user_info where user_id = #{userId}
     </select>
-    
+
     <!-- 根据userId获取用户角色中间表记录是否存在 -->
     <select id="checkUserRoleIsExistByUserId" parameterType="java.lang.String" resultType="long">
         select count(1) from platform_user_role where user_id = #{userId}
@@ -496,7 +349,7 @@
     <delete id="deleteUserByUserId" parameterType="com.camelot.pmt.platform.model.User" >
         delete FROM platform_user WHERE user_id = #{userId}
     </delete>
-    
+
     <!-- 根据Id删除用户角色表中所有的角色 -->
     <delete id="deleteUserRoleByUserId" parameterType="java.lang.String">
         delete FROM platform_user_role WHERE user_id = #{userId}
@@ -562,5 +415,4 @@
     
   
 
->>>>>>>>> Temporary merge branch 2
 </mapper>

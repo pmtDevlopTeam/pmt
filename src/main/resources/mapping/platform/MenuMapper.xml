@@ -1,59 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<<<<<<<<< Temporary merge branch 1
-<mapper namespace="com.camelot.pmt.platform.menu.mapper.MenuMapper">
-
-    <!-- 增加一个菜单 -->
-    <insert id="createMenu">
-		insert into pmt_platform_menu(
-		  menuId,
-		  parentId,
-		  menuName,
-		  menuType,
-		  menuURL,
-		  menuPermission,
-		  menuIcon,
-		  state,
-		  sortNum
-		)values (
-          #{menuId},
-          #{parentId},
-          #{menuName},
-          #{menuType},
-          #{menuURL},
-          #{menuPermission},
-          #{menuIcon},
-          #{state},
-          #{sortNum}
-		);
-    </insert>
-    <!-- 根据菜单id 删除一个菜单 -->
-	<delete id="deleteMenuByMenuId">
-        delete from pmt_platform_menu where menuId = #{menuId}
-	</delete>
-	<!-- 根据菜单id 修改一个菜单 -->
-	<update id="modifyMenuByMenuId">
-        update pmt_platform_menu
-		set
-		    parentId = #{parentId},
-		    menuName = #{menuName},
-            menuType = #{menuType},
-            menuURL = #{menuURL},
-            menuPermission = #{menuPermission},
-            menuIcon = #{menuIcon},
-            state = #{state},
-            sortNum = #{sortNum}
-		where menuId = #{menuId}
-	</update>
-	<!-- 根据菜单id 查询一个菜单 -->
-	<select id="queryMenuByMenuId" resultType="com.camelot.pmt.platform.menu.model.Menu">
-	   select * from pmt_platform_menu where menuId = #{menuId}
-	</select>
-	
-	<select id="queryAllMenu" resultType="com.camelot.pmt.platform.menu.model.Menu">
-	   select * from pmt_platform_menu
-	</select>
-=========
 <mapper namespace="com.camelot.pmt.platform.mapper.MenuMapper">
 
     <resultMap id="BaseResultMap" type="com.camelot.pmt.platform.model.Menu" >
@@ -72,11 +18,11 @@
         <result column="modify_time" property="modifyTime"/>
         <result column="modify_user_id" property="modifyUserId"/>
     </resultMap>
-    
+
     <sql id="Base_Column_List" >
         id, menu_id, parent_id, menu_name, menu_type, menu_url, menu_permission, menu_icon, state, sort_num, create_time, create_user_id, modify_time, modify_user_id
     </sql>
-    
+
     <!-- 增加一个菜单 -->
     <insert id="createMenu">
 		insert into platform_menu(
@@ -94,7 +40,7 @@
 	            <if test="createUserId != null">create_user_id,</if>
 	            <if test="modifyTime != null">modify_time,</if>
 	            <if test="modifyUserId != null">modify_user_id,</if>
-	        </trim>       
+	        </trim>
 		)values (
             <trim suffixOverrides=",">
                 <if test="menuId != null">#{menuId},</if>
@@ -110,7 +56,7 @@
                 <if test="createUserId != null">#{createUserId},</if>
                 <if test="modifyTime != null">#{modifyTime},</if>
                 <if test="modifyUserId != null">#{modifyUserId},</if>
-            </trim> 
+            </trim>
 		)
     </insert>
     <!-- 根据菜单id 删除一个菜单 -->
@@ -135,7 +81,7 @@
                 <if test="createUserId != null">create_user_id = #{createUserId},</if>
                 <if test="modifyTime != null">modify_time = #{modifyTime},</if>
                 <if test="modifyUserId != null">modify_user_id = #{modifyUserId},</if>
-            </trim> 
+            </trim>
 		where menu_id = #{menuId}
 	</update>
     <!-- 根据菜单id 查询一个菜单 -->
@@ -146,10 +92,9 @@
     <select id="queryAllMenu" resultMap="BaseResultMap">
        select <include refid="Base_Column_List" /> from platform_menu
     </select>
-    
+
     <select id="selectMenuList" resultMap="BaseResultMap">
        select <include refid="Base_Column_List" /> from platform_menu
     </select>
->>>>>>>>> Temporary merge branch 2
 
 </mapper>

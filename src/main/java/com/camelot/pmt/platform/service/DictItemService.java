@@ -66,7 +66,7 @@ public interface DictItemService {
 	  * @param String dictId,Pager page
 	  * @return ExecuteResult<DataGrid<DictItem>>
 	  */
-	 ExecuteResult<DataGrid<DictItem>> queryListDictItemByDictIdPage(String dictId,Pager page);
+	 ExecuteResult<DataGrid<DictItem>> queryListDictItemByDictIdPage(String dictId, Pager page);
     /**
      * 查询全部字典项 不分页
      * 
