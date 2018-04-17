@@ -68,6 +68,12 @@ public class TaskAlreadyServiceImpl implements TaskAlreadyService {
         return taskMapper.queryUnfinishedTask(projectId, userId);
     }
 
+    /**
+     * @author: zsf
+     * @param:
+     * @description: 根据需求ID 查任务列表
+     * @date: 10:17 2018/4/17
+     */
     @Override
     public ExecuteResult<List<Task>> queryTaskByDemandId(long demandId) {
         ExecuteResult<List<Task>> result = new ExecuteResult<List<Task>>();
