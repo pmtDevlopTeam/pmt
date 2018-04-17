@@ -2,6 +2,7 @@ package com.camelot.pmt.task.service.impl;
 
 import com.camelot.pmt.platform.common.ExecuteResult;
 import com.camelot.pmt.task.mapper.TaskMapper;
+import com.camelot.pmt.task.model.Task;
 import com.camelot.pmt.task.model.TaskFile;
 import com.camelot.pmt.task.model.TaskManager;
 import com.camelot.pmt.task.service.TaskFileService;
@@ -41,11 +42,11 @@ public class TaskManagerServiceImpl implements TaskManagerService {
      */
     @Override
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public ExecuteResult<List<TaskManager>> queryAllTask() {
-        ExecuteResult<List<TaskManager>> result = new ExecuteResult<List<TaskManager>>();
+    public ExecuteResult<List<Task>> queryAllTask() {
+        ExecuteResult<List<Task>> result = new ExecuteResult<List<Task>>();
         try {
-            List<TaskManager> taskManagers = taskMapper.queryAllTask();
-            result.setResult(taskManagers);
+            List<Task> tasks = taskMapper.queryAllTask();
+            result.setResult(tasks);
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
             throw new RuntimeException(e);
@@ -54,22 +55,22 @@ public class TaskManagerServiceImpl implements TaskManagerService {
     }
 
     /**
-     * @param taskManager 模糊查询的条件
+     * @param task 模糊查询的条件
      * @author: zlh
      * @description: 根据条件查询任务
      */
     @Override
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public ExecuteResult<List<TaskManager>> queryTaskByTask(TaskManager taskManager) {
-        ExecuteResult<List<TaskManager>> result = new ExecuteResult<List<TaskManager>>();
+    public ExecuteResult<List<Task>> queryTaskByTask(Task task) {
+        ExecuteResult<List<Task>> result = new ExecuteResult<List<Task>>();
         try {
             // 检查参数
-            if (taskManager == null) {
+            if (task == null) {
                 result.addErrorMessage("参数有误");
                 return result;
             }
-            List<TaskManager> taskManagers = taskMapper.queryTaskByTask(taskManager);
-            result.setResult(taskManagers);
+            List<Task> tasks = taskMapper.queryTaskByTask(task);
+            result.setResult(tasks);
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
             throw new RuntimeException(e);

@@ -1,6 +1,7 @@
 package com.camelot.pmt.task.service;
 
 import com.camelot.pmt.platform.common.ExecuteResult;
+import com.camelot.pmt.task.model.Task;
 import com.camelot.pmt.task.model.TaskManager;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,15 +19,15 @@ public interface TaskManagerService {
      * @description: 查询所有任务列表
      * @date: 16:54 2018/4/9
      */
-    ExecuteResult<List<TaskManager>> queryAllTask();
+    ExecuteResult<List<Task>> queryAllTask();
 
     /**
      * @author: zlh
-     * @param taskManager 模糊查询的条件
+     * @param task 模糊查询的条件
      * @description: 根据条件查询任务222
      * @return
      */
-    ExecuteResult<List<TaskManager>> queryTaskByTask(TaskManager taskManager);
+    ExecuteResult<List<Task>> queryTaskByTask(Task task);
 
     /**
      * @author: zlh

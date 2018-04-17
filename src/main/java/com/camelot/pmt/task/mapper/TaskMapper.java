@@ -21,15 +21,15 @@ public interface TaskMapper {
      * @description: 查询所有任务列表
      * @date: 16:54 2018/4/9
      */
-    List<TaskManager> queryAllTask();
+    List<Task> queryAllTask();
 
     /**
      * @author: zlh
-     * @param taskManager 模糊查询的条件
+     * @param task 模糊查询的条件
      * @description: 根据条件查询任务
      * @return
      */
-    List<TaskManager> queryTaskByTask(TaskManager taskManager);
+    List<Task> queryTaskByTask(Task task);
 
     /**
      * @author: zlh
