@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.camelot.pmt.project.model.ProjectUser;
+import com.camelot.pmt.project.model.ProjectUserSearchVO;
 import com.camelot.pmt.project.model.ProjectUserShow;
 
 public interface ProjectUserMapper {
@@ -75,4 +76,17 @@ public interface ProjectUserMapper {
      * @return
      */
     List<ProjectUserShow> searchUserByProjectId(Long projectId);
+
+    /**
+     * 成员条件查询
+     * @param vo
+     * @return
+     */
+	List<ProjectUserShow> searchUserByCondition(ProjectUserSearchVO vo);
+
+	int count(ProjectUserSearchVO vo);
+
+	void clearUser(@Param("projectId") Long projectId, @Param("userId") String userId);
+
+	int clearUserAll(@Param("projectId") Long projectId, @Param("userId") String userId, @Param("userStatus")String userStatus);
 }
