@@ -89,7 +89,7 @@ public interface TaskMapper {
      * @return List<Task>
      * @throws
      */
-    List<Task> queryOverdueTask(@Param(value = "page") Pager page);
+    List<Task> queryOverdueTask();
 
     /**
     * @author: gxl
