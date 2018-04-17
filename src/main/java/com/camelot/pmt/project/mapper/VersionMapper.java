@@ -1,6 +1,9 @@
 package com.camelot.pmt.project.mapper;
 
+import com.camelot.pmt.platform.utils.Pager;
+import com.camelot.pmt.project.model.ProjectMain;
 import com.camelot.pmt.project.model.Version;
+import com.camelot.pmt.project.model.VersionVo;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -52,4 +55,8 @@ public interface VersionMapper {
     List<Version> queryListByProIdAndVerType(@Param("projectId") Long projectId, @Param("versionType") String versionType);
 
     List<Version> selectVersionListByProId(Long projectId);
+
+    List<VersionVo> findAllByPage(@Param(value = "page") Pager<?> page);
+
+    List<Version> selectList();
 }

@@ -220,4 +220,27 @@
     WHERE project_id = #{projectId}
     AND version_type=#{versionType} and version_status=0 ORDER BY create_time DESC
   </select>
+  <!-- 分页查询所有 -->
+  <select id="findAllByPage" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from
+    version
+    <if test="page!=null">
+      <include refid="pagination_tail" />
+    </if>
+  </select>
+  <!-- 分页公共sql -->
+  <sql id="pagination_tail">
+    limit #{page.pageOffset} , #{page.rows}
+  </sql>
+
+  <select id="selectList" resultMap="BaseResultMap" >
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM version
+    ORDER BY id ASC
+  </select>
 </mapper>
