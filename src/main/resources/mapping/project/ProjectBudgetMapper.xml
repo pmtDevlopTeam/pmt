@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.camelot.pmt.project.mapper.ProjectBudgetMapper" >
+  <resultMap id="BaseResultMap" type="com.camelot.pmt.project.model.ProjectBudget" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="project_id" property="projectId" jdbcType="BIGINT" />
+    <result column="actual_hours" property="actualHours" jdbcType="INTEGER" />
+    <result column="budgetary_hours" property="budgetaryHours" jdbcType="INTEGER" />
+    <result column="other" property="other" jdbcType="VARCHAR" />
+    <result column="create_user_id" property="createUserId" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_user_id" property="modifyUserId" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, project_id, actual_hours, budgetary_hours, other, create_user_id, create_time, 
+    modify_user_id, modify_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from project_budget
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from project_budget
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.camelot.pmt.project.model.ProjectBudget" >
+    insert into project_budget (id, project_id, actual_hours, 
+      budgetary_hours, other, create_user_id, 
+      create_time, modify_user_id, modify_time
+      )
+    values (#{id,jdbcType=BIGINT}, #{projectId,jdbcType=BIGINT}, #{actualHours,jdbcType=INTEGER}, 
+      #{budgetaryHours,jdbcType=INTEGER}, #{other,jdbcType=VARCHAR}, #{createUserId,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.camelot.pmt.project.model.ProjectBudget" >
+    insert into project_budget
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="projectId != null" >
+        project_id,
+      </if>
+      <if test="actualHours != null" >
+        actual_hours,
+      </if>
+      <if test="budgetaryHours != null" >
+        budgetary_hours,
+      </if>
+      <if test="other != null" >
+        other,
+      </if>
+      <if test="createUserId != null" >
+        create_user_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="modifyUserId != null" >
+        modify_user_id,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="projectId != null" >
+        #{projectId,jdbcType=BIGINT},
+      </if>
+      <if test="actualHours != null" >
+        #{actualHours,jdbcType=INTEGER},
+      </if>
+      <if test="budgetaryHours != null" >
+        #{budgetaryHours,jdbcType=INTEGER},
+      </if>
+      <if test="other != null" >
+        #{other,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null" >
+        #{createUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyUserId != null" >
+        #{modifyUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.camelot.pmt.project.model.ProjectBudget" >
+    update project_budget
+    <set >
+      <if test="projectId != null" >
+        project_id = #{projectId,jdbcType=BIGINT},
+      </if>
+      <if test="actualHours != null" >
+        actual_hours = #{actualHours,jdbcType=INTEGER},
+      </if>
+      <if test="budgetaryHours != null" >
+        budgetary_hours = #{budgetaryHours,jdbcType=INTEGER},
+      </if>
+      <if test="other != null" >
+        other = #{other,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null" >
+        create_user_id = #{createUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyUserId != null" >
+        modify_user_id = #{modifyUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.camelot.pmt.project.model.ProjectBudget" >
+    update project_budget
+    set project_id = #{projectId,jdbcType=BIGINT},
+      actual_hours = #{actualHours,jdbcType=INTEGER},
+      budgetary_hours = #{budgetaryHours,jdbcType=INTEGER},
+      other = #{other,jdbcType=VARCHAR},
+      create_user_id = #{createUserId,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modify_user_id = #{modifyUserId,jdbcType=VARCHAR},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <!-- 根据项目ID查询项目预计工时 -->
+  <select id="selectProjectBudgetByProId" parameterType="long" resultMap="BaseResultMap">
+  	select  <include refid="Base_Column_List" />
+  	from project_budget
+  	where project_id = #{projectId,jdbcType=BIGINT}
+  </select>
+  <!-- 根据需求id查询影响变更需求的任务信息 -->
+  <select id="findDemandTaskByDeamdId" parameterType="long" resultType="map">
+  	select t.task_num,t.priority,t.task_name,t.estimate_start_time,t.estimate_end_time,u.user_name,t.status
+  	from task t
+  	left join platform_user u on t.beassign_user_id = u.user_id
+  	where t.demand_id = #{demandId,jdbcType=BIGINT}
+  	order by t.priority desc
+  </select>
+  <!-- 根据需求id查询影响变更需求的用例信息 -->
+  <select id="findDemandUseCaseByDeamdId" parameterType="long" resultType="map">
+  	select uc.case_title,uc.case_level,uc.description,uc.case_status,uc.apply_phase,uc.precondition,uc.execute_time
+  	,pu.user_name
+  	from use_case uc
+  	left join platform_user pu on uc.execute_user_id = pu.user_id
+  	where uc.demand_id = #{demandId,jdbcType=BIGINT} and del_flag = '0'
+  	order by uc.case_level desc
+  </select>
+  <!-- 根据需求id查询影响变更需求的bug信息 -->
+  <select id="findDemandBugByDeamdId" parameterType="long" resultType="map">
+  	select bm.bug_no,bm.bug_title,bm.bug_type,bm.bug_level,bm.bug_status,bm.create_time
+  	,bm.end_time,bm.solve_time,bm.solve_program,bm.serious_degree,pu.user_name
+  	from bug_manage bm
+  	left join platform_user pu on bm.designated_id = pu.user_id
+  	where bm.demand_id = #{demandId,jdbcType=BIGINT}
+  	order by bm.bug_level desc
+  </select>
+  <!-- 获取项目实际已消耗总工时 -->
+  <select id="queryTotalActualHours" parameterType="long" resultType="long">
+  	select sum(infact_hour) from task
+  	where project_id = #{projectId,jdbcType = VARCHAR} and status = '2'
+  </select>
+</mapper>

@@ -12,7 +12,7 @@ public class DictItem implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L; 
     /**
-     * 默认索引 不可作用于业务
+     * 默认索引 不可作用于业务 
      */
     @TableId(value = "id", type = IdType.AUTO)
 	private Long id;

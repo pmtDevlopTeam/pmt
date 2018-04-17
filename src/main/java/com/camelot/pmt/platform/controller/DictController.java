@@ -143,7 +143,6 @@ public class DictController {
                 return ApiResponse.success(result.getResult());
             }
             return ApiResponse.error(result.getErrorMessage());
-
         } catch (Exception e){
             return ApiResponse.error();
         }

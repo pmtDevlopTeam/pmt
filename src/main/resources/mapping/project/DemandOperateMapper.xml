@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.camelot.pmt.project.mapper.DemandOperateMapper" >
+  <resultMap id="BaseResultMap" type="com.camelot.pmt.project.model.DemandOperate" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="demand_id" property="demandId" jdbcType="BIGINT" />
+    <result column="create_user_id" property="createUserId" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.camelot.pmt.project.model.DemandOperate" extends="BaseResultMap" >
+    <result column="operate_desc" property="operateDesc" jdbcType="LONGVARCHAR" />
+    <result column="run_type" property="runType" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, demand_id, create_user_id, create_time,run_type
+  </sql>
+  <sql id="Blob_Column_List" >
+    operate_desc
+  </sql>
+  <sql id="dynamicWhere">
+    <where>
+      <if test="demand.id!=null"> AND id=#{demand.id} </if>
+      <if test="demand.pid!= null"> AND pid=#{demand.pid} </if>
+      <if test="demand.projectId!= null"> AND project_id=#{demand.projectId} </if>
+      <if test="demand.demandName!= null"> AND demand_name=#{demand.demandName} </if>
+      <if test="demand.demandNum!= null"> AND demand_num=#{demand.demandNum} </if>
+      <if test="demand.demandStatus!= null"> AND demand_status=#{demand.demandStatus} </if>
+      <if test="demand.demandLevel!= null"> AND demand_level=#{demand.demandLevel} </if>
+      <if test="demand.demandSource!= null"> AND demand_source=#{demand.demandSource} </if>
+      <if test="demand.sourceRemark!= null"> AND source_remark=#{demand.sourceRemark} </if>
+      <if test="demand.createUserId!= null"> AND create_user_id=#{demand.createUserId} </if>
+      <if test="demand.createTime!= null"> AND create_time=#{demand.createTime} </if>
+      <if test="demand.modifyUserId!= null"> AND modify_user_id=#{demand.modifyUserId} </if>
+      <if test="demand.modifyTime!= null"> AND modify_time=#{demand.modifyTime} </if>
+      <if test="demand.reviewedWith!= null"> AND find_in_set(${demand.reviewedWith},reviewed_with)>0 </if>
+    </where>
+  </sql>
+
+
+
+
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from demand_operate
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from demand_operate
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.camelot.pmt.project.model.DemandOperate" >
+    insert into demand_operate (id, demand_id, create_user_id, 
+      create_time, operate_desc)
+    values (#{id,jdbcType=BIGINT}, #{demandId,jdbcType=BIGINT}, #{createUserId,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{operateDesc,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.camelot.pmt.project.model.DemandOperate" >
+    insert into demand_operate
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="demandId != null" >
+        demand_id,
+      </if>
+      <if test="createUserId != null" >
+        create_user_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="operateDesc != null" >
+        operate_desc,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="demandId != null" >
+        #{demandId,jdbcType=BIGINT},
+      </if>
+      <if test="createUserId != null" >
+        #{createUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="operateDesc != null" >
+        #{operateDesc,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.camelot.pmt.project.model.DemandOperate" >
+    update demand_operate
+    <set >
+      <if test="demandId != null" >
+        demand_id = #{demandId,jdbcType=BIGINT},
+      </if>
+      <if test="createUserId != null" >
+        create_user_id = #{createUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="operateDesc != null" >
+        operate_desc = #{operateDesc,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.camelot.pmt.project.model.DemandOperate" >
+    update demand_operate
+    set demand_id = #{demandId,jdbcType=BIGINT},
+      create_user_id = #{createUserId,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      operate_desc = #{operateDesc,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.camelot.pmt.project.model.DemandOperate" >
+    update demand_operate
+    set demand_id = #{demandId,jdbcType=BIGINT},
+      create_user_id = #{createUserId,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="findWithOperate">
+
+
+
+  </select>
+
+</mapper>

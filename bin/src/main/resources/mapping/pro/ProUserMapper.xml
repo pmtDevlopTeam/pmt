@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.camelot.pmt.project.mapper.ProUserMapper" >
+  <resultMap id="BaseResultMap" type="com.camelot.pmt.project.model.ProUser" >
+    <id column="pro_user_id" property="proUserId" jdbcType="INTEGER" />
+    <result column="pro_id" property="proId" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="inviter_id" property="inviterId" jdbcType="INTEGER" />
+    <result column="remove_id" property="removeId" jdbcType="INTEGER" />
+    <result column="pre_join_time" property="preJoinTime" jdbcType="TIMESTAMP" />
+    <result column="real_join_time" property="realJoinTime" jdbcType="TIMESTAMP" />
+    <result column="pre_out_time" property="preOutTime" jdbcType="TIMESTAMP" />
+    <result column="real_out_time" property="realOutTime" jdbcType="TIMESTAMP" />
+    <result column="user_status" property="userStatus" jdbcType="CHAR" />
+    <result column="user_pro_role" property="userProRole" jdbcType="VARCHAR" />
+    <result column="create_user" property="createUser" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_user_id" property="modifyUserId" jdbcType="INTEGER" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="Column_1" property="column1" jdbcType="VARCHAR" />
+    <result column="Column_2" property="column2" jdbcType="VARCHAR" />
+    <result column="Column_3" property="column3" jdbcType="VARCHAR" />
+    <result column="Column_4" property="column4" jdbcType="VARCHAR" />
+    <result column="Column_5" property="column5" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    pro_user_id, pro_id, user_id, inviter_id, remove_id, pre_join_time, real_join_time, 
+    pre_out_time, real_out_time, user_status, user_pro_role, create_user, create_time, 
+    modify_user_id, modify_time, Column_1, Column_2, Column_3, Column_4, Column_5
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from pro_user
+    where pro_user_id = #{proUserId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from pro_user
+    where pro_user_id = #{proUserId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.camelot.pmt.project.model.ProUser" >
+    insert into pro_user (pro_user_id, pro_id, user_id, 
+      inviter_id, remove_id, pre_join_time, 
+      real_join_time, pre_out_time, real_out_time, 
+      user_status, user_pro_role, create_user, 
+      create_time, modify_user_id, modify_time, 
+      Column_1, Column_2, Column_3, 
+      Column_4, Column_5)
+    values (#{proUserId,jdbcType=INTEGER}, #{proId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, 
+      #{inviterId,jdbcType=INTEGER}, #{removeId,jdbcType=INTEGER}, #{preJoinTime,jdbcType=TIMESTAMP}, 
+      #{realJoinTime,jdbcType=TIMESTAMP}, #{preOutTime,jdbcType=TIMESTAMP}, #{realOutTime,jdbcType=TIMESTAMP}, 
+      #{userStatus,jdbcType=CHAR}, #{userProRole,jdbcType=VARCHAR}, #{createUser,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=INTEGER}, #{modifyTime,jdbcType=TIMESTAMP}, 
+      #{column1,jdbcType=VARCHAR}, #{column2,jdbcType=VARCHAR}, #{column3,jdbcType=VARCHAR}, 
+      #{column4,jdbcType=VARCHAR}, #{column5,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.camelot.pmt.project.model.ProUser" >
+    insert into pro_user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="proUserId != null" >
+        pro_user_id,
+      </if>
+      <if test="proId != null" >
+        pro_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="inviterId != null" >
+        inviter_id,
+      </if>
+      <if test="removeId != null" >
+        remove_id,
+      </if>
+      <if test="preJoinTime != null" >
+        pre_join_time,
+      </if>
+      <if test="realJoinTime != null" >
+        real_join_time,
+      </if>
+      <if test="preOutTime != null" >
+        pre_out_time,
+      </if>
+      <if test="realOutTime != null" >
+        real_out_time,
+      </if>
+      <if test="userStatus != null" >
+        user_status,
+      </if>
+      <if test="userProRole != null" >
+        user_pro_role,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="modifyUserId != null" >
+        modify_user_id,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+      <if test="column1 != null" >
+        Column_1,
+      </if>
+      <if test="column2 != null" >
+        Column_2,
+      </if>
+      <if test="column3 != null" >
+        Column_3,
+      </if>
+      <if test="column4 != null" >
+        Column_4,
+      </if>
+      <if test="column5 != null" >
+        Column_5,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="proUserId != null" >
+        #{proUserId,jdbcType=INTEGER},
+      </if>
+      <if test="proId != null" >
+        #{proId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="inviterId != null" >
+        #{inviterId,jdbcType=INTEGER},
+      </if>
+      <if test="removeId != null" >
+        #{removeId,jdbcType=INTEGER},
+      </if>
+      <if test="preJoinTime != null" >
+        #{preJoinTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="realJoinTime != null" >
+        #{realJoinTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="preOutTime != null" >
+        #{preOutTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="realOutTime != null" >
+        #{realOutTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userStatus != null" >
+        #{userStatus,jdbcType=CHAR},
+      </if>
+      <if test="userProRole != null" >
+        #{userProRole,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyUserId != null" >
+        #{modifyUserId,jdbcType=INTEGER},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="column1 != null" >
+        #{column1,jdbcType=VARCHAR},
+      </if>
+      <if test="column2 != null" >
+        #{column2,jdbcType=VARCHAR},
+      </if>
+      <if test="column3 != null" >
+        #{column3,jdbcType=VARCHAR},
+      </if>
+      <if test="column4 != null" >
+        #{column4,jdbcType=VARCHAR},
+      </if>
+      <if test="column5 != null" >
+        #{column5,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.camelot.pmt.project.model.ProUser" >
+    update pro_user
+    <set >
+      <if test="proId != null" >
+        pro_id = #{proId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="inviterId != null" >
+        inviter_id = #{inviterId,jdbcType=INTEGER},
+      </if>
+      <if test="removeId != null" >
+        remove_id = #{removeId,jdbcType=INTEGER},
+      </if>
+      <if test="preJoinTime != null" >
+        pre_join_time = #{preJoinTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="realJoinTime != null" >
+        real_join_time = #{realJoinTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="preOutTime != null" >
+        pre_out_time = #{preOutTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="realOutTime != null" >
+        real_out_time = #{realOutTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userStatus != null" >
+        user_status = #{userStatus,jdbcType=CHAR},
+      </if>
+      <if test="userProRole != null" >
+        user_pro_role = #{userProRole,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyUserId != null" >
+        modify_user_id = #{modifyUserId,jdbcType=INTEGER},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="column1 != null" >
+        Column_1 = #{column1,jdbcType=VARCHAR},
+      </if>
+      <if test="column2 != null" >
+        Column_2 = #{column2,jdbcType=VARCHAR},
+      </if>
+      <if test="column3 != null" >
+        Column_3 = #{column3,jdbcType=VARCHAR},
+      </if>
+      <if test="column4 != null" >
+        Column_4 = #{column4,jdbcType=VARCHAR},
+      </if>
+      <if test="column5 != null" >
+        Column_5 = #{column5,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where pro_user_id = #{proUserId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.camelot.pmt.project.model.ProUser" >
+    update pro_user
+    set pro_id = #{proId,jdbcType=INTEGER},
+      user_id = #{userId,jdbcType=INTEGER},
+      inviter_id = #{inviterId,jdbcType=INTEGER},
+      remove_id = #{removeId,jdbcType=INTEGER},
+      pre_join_time = #{preJoinTime,jdbcType=TIMESTAMP},
+      real_join_time = #{realJoinTime,jdbcType=TIMESTAMP},
+      pre_out_time = #{preOutTime,jdbcType=TIMESTAMP},
+      real_out_time = #{realOutTime,jdbcType=TIMESTAMP},
+      user_status = #{userStatus,jdbcType=CHAR},
+      user_pro_role = #{userProRole,jdbcType=VARCHAR},
+      create_user = #{createUser,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modify_user_id = #{modifyUserId,jdbcType=INTEGER},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      Column_1 = #{column1,jdbcType=VARCHAR},
+      Column_2 = #{column2,jdbcType=VARCHAR},
+      Column_3 = #{column3,jdbcType=VARCHAR},
+      Column_4 = #{column4,jdbcType=VARCHAR},
+      Column_5 = #{column5,jdbcType=VARCHAR}
+    where pro_user_id = #{proUserId,jdbcType=INTEGER}
+  </update>
+</mapper>

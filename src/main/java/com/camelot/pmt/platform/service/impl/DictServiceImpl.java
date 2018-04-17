@@ -173,8 +173,8 @@ public class DictServiceImpl implements DictService {
 //	}
 	
 	@Override
-	public ExecuteResult<Dict> checkDictCodeOrDictNameIsExist(Dict dict) {
-		ExecuteResult<Dict> result = new ExecuteResult<Dict>();
+	public ExecuteResult<String> checkDictCodeOrDictNameIsExist(Dict dict) {
+		ExecuteResult<String> result = new ExecuteResult<String>();
 		//1.检查字典编码与字典名称是否为null
     	if (!StringUtils.isEmpty(dict.getDictCode()) && !StringUtils.isEmpty(dict.getDictName()) ){
     		//2.检查字典是否存在

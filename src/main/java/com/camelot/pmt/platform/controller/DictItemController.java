@@ -17,7 +17,6 @@ import com.camelot.pmt.common.ApiResponse;
 import com.camelot.pmt.common.DataGrid;
 import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.common.Pager;
-import com.camelot.pmt.platform.model.Dict;
 import com.camelot.pmt.platform.model.DictItem;
 import com.camelot.pmt.platform.service.DictItemService;
 
@@ -144,14 +143,14 @@ public class DictItemController {
     })
 	@RequestMapping(value="/modifyDictItemByDictItemId", method=RequestMethod.POST)
 	public JSONObject modifyDictItemByDictItemId(@ApiIgnore DictItem dictItem) {
-		ExecuteResult<DictItem> result = new ExecuteResult<DictItem>();
+		ExecuteResult<String> result = new ExecuteResult<String>();
         try {
 	    	if(StringUtils.isEmpty(dictItem.getDictItemId())){
 	    		return ApiResponse.errorPara();
 	        }
             result = dictItemService.modifyDictItemByDictItemId(dictItem);
             if(result.isSuccess()){
-                return ApiResponse.success(result.getResultMessage());
+                return ApiResponse.success(result.getResult());
             }
             return ApiResponse.error(result.getErrorMessage());
         } catch (Exception e){

@@ -18,11 +18,11 @@
         <result column="modify_time" property="modifyTime"/>
         <result column="modify_user_id" property="modifyUserId"/>
     </resultMap>
-    
+
     <sql id="Base_Column_List" >
         id, menu_id, parent_id, menu_name, menu_type, menu_url, menu_permission, menu_icon, state, sort_num, create_time, create_user_id, modify_time, modify_user_id
     </sql>
-    
+
     <!-- 增加一个菜单 -->
     <insert id="createMenu">
 		insert into platform_menu(
@@ -40,7 +40,7 @@
 	            <if test="createUserId != null">create_user_id,</if>
 	            <if test="modifyTime != null">modify_time,</if>
 	            <if test="modifyUserId != null">modify_user_id,</if>
-	        </trim>       
+	        </trim>
 		)values (
             <trim suffixOverrides=",">
                 <if test="menuId != null">#{menuId},</if>
@@ -56,7 +56,7 @@
                 <if test="createUserId != null">#{createUserId},</if>
                 <if test="modifyTime != null">#{modifyTime},</if>
                 <if test="modifyUserId != null">#{modifyUserId},</if>
-            </trim> 
+            </trim>
 		)
     </insert>
     <!-- 根据菜单id 删除一个菜单 -->
@@ -81,7 +81,7 @@
                 <if test="createUserId != null">create_user_id = #{createUserId},</if>
                 <if test="modifyTime != null">modify_time = #{modifyTime},</if>
                 <if test="modifyUserId != null">modify_user_id = #{modifyUserId},</if>
-            </trim> 
+            </trim>
 		where menu_id = #{menuId}
 	</update>
     <!-- 根据菜单id 查询一个菜单 -->
@@ -92,7 +92,7 @@
     <select id="queryAllMenu" resultMap="BaseResultMap">
        select <include refid="Base_Column_List" /> from platform_menu
     </select>
-    
+
     <select id="selectMenuList" resultMap="BaseResultMap">
        select <include refid="Base_Column_List" /> from platform_menu
     </select>

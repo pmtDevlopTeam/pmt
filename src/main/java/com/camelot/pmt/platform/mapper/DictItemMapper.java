@@ -9,7 +9,7 @@ import com.camelot.pmt.common.Pager;
 import com.camelot.pmt.platform.model.DictItem;
 /**
  * <p>
- *  字典项Mapper类
+ *  字典项Mapper类 
  * </p>
  *
  * @author sqw
@@ -65,7 +65,7 @@ public interface DictItemMapper {
      * @param String dictId,Pager page
      * @return List<DictItem>
      */
-    List<DictItem> queryListDictItemByDictIdPage(@Param(value = "dictId")String dictId,@Param(value = "page")Pager page);
+    List<DictItem> queryListDictItemByDictIdPage(@Param(value = "dictId") String dictId, @Param(value = "page") Pager page);
     /**
      * 查询全部字典项  不分页
      * 
