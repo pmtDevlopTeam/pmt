@@ -1,5 +1,21 @@
 package com.camelot.pmt.project.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import javax.annotation.Resource;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.web.bind.ServletRequestDataBinder;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.alibaba.fastjson.JSONObject;
 import com.camelot.pmt.platform.common.APIStatus;
 import com.camelot.pmt.platform.common.ApiResponse;
@@ -9,21 +25,12 @@ import com.camelot.pmt.platform.utils.Pager;
 import com.camelot.pmt.project.model.Demand;
 import com.camelot.pmt.project.model.DemandOperate;
 import com.camelot.pmt.project.service.DemandService;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.propertyeditors.CustomDateEditor;
-import org.springframework.web.bind.ServletRequestDataBinder;
-import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
-
-import javax.annotation.Resource;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * @Author:fjy
@@ -57,7 +64,7 @@ public class DemandController {
             @ApiImplicitParam(name = "createUserId", value = "创建人", required = true, paramType = "form", dataType = "String"),
             @ApiImplicitParam(name = "assignedTo", value = "指派给", required = true, paramType = "form", dataType = "String"),
             @ApiImplicitParam(name = "reviewedWith", value = "由谁评审(人员user_id用逗号拼接)", required = true, paramType = "form", dataType = "String"),
-            @ApiImplicitParam(name = "demandDesc", value = "需求描述", required = false, paramType = "form", dataType = "String")})
+            @ApiImplicitParam(name = "demandDesc", value = "需求描述", required = false, paramType = "form", dataType = "String") })
     public JSONObject insertDemand(@ApiIgnore Demand demandWithBLOBs) {
         ExecuteResult<String> result = new ExecuteResult<String>();
         try {
@@ -88,7 +95,7 @@ public class DemandController {
     @ApiOperation(value = "删除需求", notes = "根据id删除需求")
     @DeleteMapping(value = "/api/demand/deleteById")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "需求id", required = true, paramType = "query", dataType = "Long")})
+            @ApiImplicitParam(name = "id", value = "需求id", required = true, paramType = "query", dataType = "Long") })
     public JSONObject deleteById(Long id) {
         ExecuteResult<String> result = new ExecuteResult<>();
         try {
@@ -123,7 +130,7 @@ public class DemandController {
             @ApiImplicitParam(name = "demandName", value = "需求名称", required = false, paramType = "form", dataType = "String"),
             @ApiImplicitParam(name = "modifyUserId", value = "修改人id", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "demandDesc", value = "需求描述", required = false, paramType = "form", dataType = "String"),
-            @ApiImplicitParam(name = "closeReason", value = "关闭原因", required = false, paramType = "form", dataType = "String")})
+            @ApiImplicitParam(name = "closeReason", value = "关闭原因", required = false, paramType = "form", dataType = "String") })
     public JSONObject updateById(Demand demand) {
         ExecuteResult<String> result = new ExecuteResult<>();
         try {
@@ -157,8 +164,8 @@ public class DemandController {
             @ApiImplicitParam(name = "reviewedWith", value = "由谁评审", required = false, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "page", value = "页码", required = true, paramType = "query", dataType = "int"),
             @ApiImplicitParam(name = "rows", value = "显示行数", required = true, paramType = "query", dataType = "int"),
-            @ApiImplicitParam(name = "demandName", value = "需求名称", required = false, paramType = "query", dataType = "String")})
-    public JSONObject queryDemandAll(@ApiIgnore Demand demand, @ApiIgnore Pager pager) {
+            @ApiImplicitParam(name = "demandName", value = "需求名称", required = false, paramType = "query", dataType = "String") })
+    public JSONObject queryDemandAll(@ApiIgnore Demand demand, @ApiIgnore Pager<?> pager) {
         ExecuteResult<DataGrid<Demand>> result = new ExecuteResult<DataGrid<Demand>>();
         try {
             if (pager == null) {
@@ -187,7 +194,7 @@ public class DemandController {
     @GetMapping(value = "/api/demand/findById")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "pid", value = "所属一级需求id", required = false, paramType = "query", dataType = "String"),
-            @ApiImplicitParam(name = "id", value = "需求id", required = true, paramType = "query", dataType = "Long")})
+            @ApiImplicitParam(name = "id", value = "需求id", required = true, paramType = "query", dataType = "Long") })
     public JSONObject findById(Long id) {
         ExecuteResult<Demand> result = new ExecuteResult<>();
         try {
@@ -211,8 +218,8 @@ public class DemandController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "page", value = "页码", required = true, paramType = "query", dataType = "int"),
             @ApiImplicitParam(name = "rows", value = "显示行数", required = true, paramType = "query", dataType = "int"),
-            @ApiImplicitParam(name = "id", value = "需求id", required = true, paramType = "query", dataType = "Long")})
-    public JSONObject findWithOperate(@ApiIgnore Pager pager, @ApiIgnore DemandOperate demandOperate) {
+            @ApiImplicitParam(name = "id", value = "需求id", required = true, paramType = "query", dataType = "Long") })
+    public JSONObject findWithOperate(@ApiIgnore Pager<?> pager, @ApiIgnore DemandOperate demandOperate) {
         ExecuteResult<DataGrid<DemandOperate>> result = new ExecuteResult<>();
         try {
             if (null == pager) {

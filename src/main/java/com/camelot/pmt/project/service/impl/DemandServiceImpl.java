@@ -59,7 +59,7 @@ public class DemandServiceImpl implements DemandService {
      * @return
      */
     @Override
-    public ExecuteResult<DataGrid<Demand>> findAllByPage(Pager pager, Demand demand) {
+    public ExecuteResult<DataGrid<Demand>> findAllByPage(Pager<?> pager, Demand demand) {
         ExecuteResult<DataGrid<Demand>> result = new ExecuteResult<>();
         try {
             List<Demand> demandWithBLOBsList = demandMapper.findAllByPage(pager, demand);
@@ -181,7 +181,7 @@ public class DemandServiceImpl implements DemandService {
     }
 
     @Override
-    public ExecuteResult<DataGrid<DemandOperate>> findAllByPage(Pager pager, DemandOperate demandOperate) {
+    public ExecuteResult<DataGrid<DemandOperate>> findAllByPage(Pager<?> pager, DemandOperate demandOperate) {
         ExecuteResult<DataGrid<DemandOperate>> result = new ExecuteResult<>();
         try {
             List<DemandOperate> demandWithBLOBsList = demandOperateMapper.findAllByPage(pager, demandOperate);

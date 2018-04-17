@@ -1,10 +1,11 @@
 package com.camelot.pmt.project.mapper;
 
-import com.camelot.pmt.platform.utils.Pager;
-import com.camelot.pmt.project.model.DemandOperate;
+import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
-import java.util.List;
+import com.camelot.pmt.platform.utils.Pager;
+import com.camelot.pmt.project.model.DemandOperate;
 
 public interface DemandOperateMapper {
     /**
@@ -55,7 +56,7 @@ public interface DemandOperateMapper {
      * @param demandOperate
      * @return
      */
-    List<DemandOperate> findAllByPage(@Param(value = "pager") Pager pager,
+    List<DemandOperate> findAllByPage(@Param(value = "pager") Pager<?> pager,
             @Param(value = "demandOperate") DemandOperate demandOperate);
 
     Long queryCount(@Param(value = "demandOperate") DemandOperate demandOperate);

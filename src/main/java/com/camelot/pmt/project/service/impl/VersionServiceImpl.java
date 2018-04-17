@@ -2,11 +2,7 @@ package com.camelot.pmt.project.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.camelot.pmt.platform.common.ApiResponse;
-import com.camelot.pmt.platform.utils.DataGrid;
-import com.camelot.pmt.platform.utils.ExecuteResult;
-import com.camelot.pmt.platform.utils.Pager;
 import com.camelot.pmt.project.mapper.VersionMapper;
-import com.camelot.pmt.project.model.ProjectMain;
 import com.camelot.pmt.project.model.Version;
 import com.camelot.pmt.project.model.VersionVo;
 import com.camelot.pmt.project.service.VersionService;
@@ -16,7 +12,6 @@ import com.google.common.collect.Lists;
 import groovy.util.logging.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -169,9 +164,9 @@ public class VersionServiceImpl implements VersionService{
         // 查询产品list
         List<Version> versionList = versionMapper.selectVersionListByProId(projectId);
         List<VersionVo> versionVoList = Lists.newArrayList();
-        for (Version versionItem:versionList) {
-            VersionVo versionVo = assembleProductListVo(versionItem);
-            versionVoList.add(versionVo);
+        for (Version productItem:versionList) {
+            VersionVo productListVo = assembleProductListVo(productItem);
+            versionVoList.add(productListVo);
         }
         // pageHelper的收尾
         PageInfo pageResult = new PageInfo(versionList);
@@ -206,9 +201,9 @@ public class VersionServiceImpl implements VersionService{
         // 查询产品list
         List<Version> versionList = versionMapper.queryListByProIdAndVerType(projectId,versionType);
         List<VersionVo> versionVoList = Lists.newArrayList();
-        for (Version versionItem:versionList) {
-            VersionVo versionVo = assembleProductListVo(versionItem);
-            versionVoList.add(versionVo);
+        for (Version productItem:versionList) {
+            VersionVo productListVo = assembleProductListVo(productItem);
+            versionVoList.add(productListVo);
         }
         // pageHelper的收尾
         PageInfo pageResult = new PageInfo(versionList);

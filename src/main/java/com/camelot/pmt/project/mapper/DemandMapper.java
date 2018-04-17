@@ -56,7 +56,7 @@ public interface DemandMapper {
      * @param demand
      * @return
      */
-    List<Demand> findAllByPage(@Param(value = "pager") Pager pager, @Param(value = "demand") Demand demand);
+    List<Demand> findAllByPage(@Param(value = "pager") Pager<?> pager, @Param(value = "demand") Demand demand);
 
     Long queryCount(@Param(value = "demand") Demand demand);
 
