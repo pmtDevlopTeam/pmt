@@ -35,15 +35,15 @@ public interface TaskManagerService {
      * @description: 新增任务
      * @date: 9:10 2018/4/12
      */
-    ExecuteResult<String> insertTask(TaskManager taskManager, MultipartFile file);
+    ExecuteResult<String> insertTask(Task task, MultipartFile file);
 
     /**
      * @author: zlh
-     * @param: taskManager 需要修改的任务数据
+     * @param: task 需要修改的任务数据
      * @description: 任务延期
      * @date: 10:18 2018/4/12
      */
-    ExecuteResult<String> updateEstimateStartTimeById(TaskManager taskManager);
+    ExecuteResult<String> updateEstimateStartTimeById(Task task);
 
     /**
      * @author: zlh
@@ -59,7 +59,7 @@ public interface TaskManagerService {
      * @description: 根据任务id查询任务详情
      * @date: 17:08 2018/4/12
      */
-    ExecuteResult<TaskManager> queryTaskById(Long id);
+    ExecuteResult<Task> queryTaskById(Long id);
 
     /**
      * @author: zlh
@@ -75,7 +75,7 @@ public interface TaskManagerService {
      * @description: 编辑任务
      * @date: 17:05 2018/4/13
      */
-    ExecuteResult<String> updateTaskByTask(TaskManager taskManager);
+    ExecuteResult<String> updateTaskByTask(Task task);
 
     /**
      * @author: zlh
@@ -83,5 +83,5 @@ public interface TaskManagerService {
      * @description: 需求是否变更
      * @date: 17:37 2018/4/13
      */
-    ExecuteResult<String> updateDemandChangeByTask(TaskManager taskManager);
+    ExecuteResult<String> updateDemandChangeByTask(Task task);
 }

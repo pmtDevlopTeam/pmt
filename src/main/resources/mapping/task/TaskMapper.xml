@@ -45,8 +45,8 @@
             <if test="project.id != null">#{projectId,jdbcType=BIGINT},</if>
             <if test="demand.id != null">#{demandId,jdbcType=BIGINT},</if>
             <if test="priority != null">#{priority,jdbcType=CHAR},</if>
-            <if test="assignUser.userId != null">#{assignUserId,jdbcType=VARCHAR},</if>
-            <if test="beassignUser.userId != null">#{beassignUserId,jdbcType=VARCHAR},</if>
+            <if test="assignUser.userId != null">#{assignUser.userId,jdbcType=VARCHAR},</if>
+            <if test="beassignUser.userId != null">#{beassignUser.userId,jdbcType=VARCHAR},</if>
             <if test="assignTime != null">#{assignTime,jdbcType=TIMESTAMP},</if>
             <if test="estimateStartTime != null">#{estimateStartTime,jdbcType=TIMESTAMP},</if>
             <if test="estimateEndTime != null">#{estimateEndTime,jdbcType=TIMESTAMP},</if>
@@ -62,7 +62,7 @@
             <if test="estimateHour != null">#{estimateHour,jdbcType=BIGINT},</if>
             <if test="infactHour != null">#{infactHour,jdbcType=BIGINT},</if>
             <if test="taskMileage != null">#{taskMileage,jdbcType=CHAR},</if>
-            <if test="createUser.userId != null">#{createUserId,jdbcType=VARCHAR},</if>
+            <if test="createUser.userId != null">#{createUser.userId,jdbcType=VARCHAR},</if>
             <if test="modifyUserId != null">#{modifyUserId,jdbcType=VARCHAR},</if>
             <if test="createTime != null">#{createTime,jdbcType=TIMESTAMP},</if>
             <if test="modifyTime != null">#{modifyTime,jdbcType=TIMESTAMP}</if>
@@ -263,7 +263,7 @@
         t.id, t.task_num, t.task_name, b.id AS bid, b.user_id, b.user_name, t.estimate_start_time, t.estimate_end_time,
         t.actual_start_time, t.actual_end_time, t.task_speed, t.status,
         t.task_type, t.task_mileage, t.priority, c.id AS cid, c.user_id, c.user_name,
-        a.id AS aid, a.user_id, a.user_name, t.assign_time
+        a.id AS aid, a.user_id, a.user_name, t.assign_time, p.id pid, p.project_name
     </sql>
 
     <!--zlh-->
@@ -271,15 +271,10 @@
     <select id="queryAllTask" resultMap="BaseResultMap">
         select
         <include refid="TaskManager_ShowTasks_Column_List" />
-        from task t LEFT JOIN platform_user a
-        --     指派人user表 别名 a
-        ON t.assign_user_id = a.user_id
-        LEFT JOIN platform_user b
-        --     被指派人user表 别名 b
-        ON t.beassign_user_id = b.user_id
-        LEFT JOIN platform_user c
-        --     创建人user表 别名 c
-        on t.create_user_id = c.user_id
+        from task t LEFT JOIN platform_user a ON t.assign_user_id = a.user_id  --指派人user表 别名 a
+        LEFT JOIN platform_user b ON t.beassign_user_id = b.user_id  --被指派人user表 别名 b
+        LEFT JOIN platform_user c on t.create_user_id = c.user_id  --创建人user表 别名 c
+        INNER JOIN project_main p ON t.project_id = p.id
     </select>
 
     <!--zlh-->
@@ -289,6 +284,30 @@
         <include refid="sql_add_task_columns"/>
         <include refid="sql_add_task_properties"/>
     </insert>
+
+    <!--zlh-->
+    <!--条件组合查询-->
+    <select id="queryTaskByTask" resultMap="BaseResultMap">
+        SELECT
+        <include refid="TaskManager_ShowTasks_Column_List" />
+        from task t LEFT JOIN platform_user a ON t.assign_user_id = a.user_id  --指派人user表 别名 a
+        LEFT JOIN platform_user b ON t.beassign_user_id = b.user_id  --被指派人user表 别名 b
+        LEFT JOIN platform_user c on t.create_user_id = c.user_id  --创建人user表 别名 c
+        INNER JOIN project_main p ON t.project_id = p.id
+        <where>
+            <if test="task.taskType != null">and t.task_type = #{task.taskType}</if>
+            <if test="task.actualEndTime != null">and t.actual_end_time = #{task.actualEndTime}</if>
+            <if test="task.taskName != null">and t.task_name = #{task.taskName}</if>
+            <if test="task.status != null">and t.status = #{task.status}</if>
+            <if test="ids != null">
+                and beassign_user_id in
+                <foreach collection="ids" item="id" open="(" close=")" separator=",">
+                   id
+                </foreach>
+            </if>
+        </where>
+    </select>
+
   <!-- gxl start -->
   	<!--查询任务-->
     <select id="queryTaskNodeById" resultMap="BaseResultMap">

@@ -29,7 +29,7 @@ public interface TaskMapper {
      * @description: 根据条件查询任务
      * @return
      */
-    List<Task> queryTaskByTask(Task task);
+    List<Task> queryTaskByTask(@Param("task") Task task, @Param("ids") String[] ids);
 
     /**
      * @author: zlh
@@ -37,7 +37,7 @@ public interface TaskMapper {
      * @description: 新增任务
      * @date: 9:07 2018/4/12
      */
-    int insertTask(TaskManager taskManager);
+    int insertTask(Task task);
 
     /**
      * @author: zlh
@@ -45,7 +45,7 @@ public interface TaskMapper {
      * @description: 根据任务id修改任务
      * @date: 10:18 2018/4/12
      */
-    int updateTaskById(TaskManager taskManager);
+    int updateTaskById(Task task);
 
     /**
      * @author: zlh
@@ -53,7 +53,7 @@ public interface TaskMapper {
      * @description: 根据任务id查询任务详情
      * @date: 17:08 2018/4/12
      */
-    TaskManager queryTaskById(Long id);
+    Task queryTaskById(Long id);
 
     /**
      * @author: zlh

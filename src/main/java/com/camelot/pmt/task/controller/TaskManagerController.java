@@ -55,7 +55,7 @@ public class TaskManagerController {
             @ApiImplicitParam(dataType = "Date", name = "actualEndTime", value = "截止日期格式yyyy-MM-dd", required = false),
             @ApiImplicitParam(dataType = "String", name = "taskName", value = "任务名称", required = false),
             @ApiImplicitParam(dataType = "String", name = "status", value = "任务状态", required = false),
-            @ApiImplicitParam(dataType = "UserModel", name = "beassignUser.username", value = "负责人", required = false),
+            @ApiImplicitParam(dataType = "User", name = "beassignUser.username", value = "负责人", required = false),
     })
     public JSONObject queryTaskByTask(@ApiIgnore Task task) {
         ExecuteResult<List<Task>> result = null;
@@ -72,10 +72,10 @@ public class TaskManagerController {
 
     @PostMapping(value = "/insertTask")
     @ApiOperation(value = "新增任务接口", notes = "新增任务")
-    public JSONObject insertTask(TaskManager taskManager, MultipartFile file) {
+    public JSONObject insertTask(Task task, MultipartFile file) {
         ExecuteResult<String> result = null;
         try {
-            result = taskManagerService.insertTask(taskManager, file);
+            result = taskManagerService.insertTask(task, file);
             if (result.isSuccess()) {
                 return ApiResponse.success(result.getResult());
             }
@@ -89,12 +89,13 @@ public class TaskManagerController {
     @ApiOperation(value = "修改任务接口-延期", notes = "根据id修改任务预计开始时间")
     @ApiImplicitParams({
             @ApiImplicitParam(dataType = "Long", name = "id", value = "任务id", required = true),
-            @ApiImplicitParam(dataType = "Date", name = "estimateEndTime", value = "预计开始时间格式yyyy-MM-dd", required = true)
+            @ApiImplicitParam(dataType = "Date", name = "estimateEndTime", value = "预计开始时间格式yyyy-MM-dd", required = true),
+            @ApiImplicitParam(dataType = "String", name = "delayDescribe", value = "延期原因", required = false)
     })
-    public JSONObject updateEstimateStartTime(@ApiIgnore TaskManager taskManager) {
-        ExecuteResult<String> result = new ExecuteResult<String>();
+    public JSONObject updateEstimateStartTime(@ApiIgnore Task task) {
+        ExecuteResult<String> result = null;
         try {
-            result = taskManagerService.updateEstimateStartTimeById(taskManager);
+            result = taskManagerService.updateEstimateStartTimeById(task);
             if (result.isSuccess()) {
                 return ApiResponse.success();
             }
@@ -130,7 +131,7 @@ public class TaskManagerController {
             @ApiImplicitParam(dataType = "Long", name = "id", value = "任务id", required = true),
     })
     public JSONObject queryTaskById(Long id) {
-        ExecuteResult<TaskManager> result = new ExecuteResult<TaskManager>();
+        ExecuteResult<Task> result = null;
         try {
             result = taskManagerService.queryTaskById(id);
             if (result.isSuccess()) {
@@ -162,10 +163,10 @@ public class TaskManagerController {
 
     @PostMapping(value = "/editTask")
     @ApiOperation(value = "编辑任务接口", notes = "编辑任务接口")
-    public JSONObject editTask(TaskManager taskManager) {
-        ExecuteResult<String> result = new ExecuteResult<String>();
+    public JSONObject editTask(Task task) {
+        ExecuteResult<String> result = null;
         try {
-            result = taskManagerService.updateTaskByTask(taskManager);
+            result = taskManagerService.updateTaskByTask(task);
             if (result.isSuccess()) {
                 return ApiResponse.success();
             }
@@ -177,10 +178,10 @@ public class TaskManagerController {
 
     @PostMapping(value = "/updateDemandChangeByTask")
     @ApiOperation(value = "确认变更接口", notes = "确认变更接口")
-    public JSONObject updateDemandChangeByTask(TaskManager taskManager) {
-        ExecuteResult<String> result = new ExecuteResult<String>();
+    public JSONObject updateDemandChangeByTask(Task task) {
+        ExecuteResult<String> result = null;
         try {
-            result = taskManagerService.updateDemandChangeByTask(taskManager);
+            result = taskManagerService.updateDemandChangeByTask(task);
             if (result.isSuccess()) {
                 return ApiResponse.success();
             }
