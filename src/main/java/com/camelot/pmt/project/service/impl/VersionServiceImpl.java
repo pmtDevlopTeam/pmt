@@ -164,9 +164,9 @@ public class VersionServiceImpl implements VersionService{
         // 查询产品list
         List<Version> versionList = versionMapper.selectVersionListByProId(projectId);
         List<VersionVo> versionVoList = Lists.newArrayList();
-        for (Version productItem:versionList) {
-            VersionVo productListVo = assembleProductListVo(productItem);
-            versionVoList.add(productListVo);
+        for (Version versionItem:versionList) {
+            VersionVo versionVo = assembleProductListVo(versionItem);
+            versionVoList.add(versionVo);
         }
         // pageHelper的收尾
         PageInfo pageResult = new PageInfo(versionList);
@@ -201,9 +201,9 @@ public class VersionServiceImpl implements VersionService{
         // 查询产品list
         List<Version> versionList = versionMapper.queryListByProIdAndVerType(projectId,versionType);
         List<VersionVo> versionVoList = Lists.newArrayList();
-        for (Version productItem:versionList) {
-            VersionVo productListVo = assembleProductListVo(productItem);
-            versionVoList.add(productListVo);
+        for (Version versionItem:versionList) {
+            VersionVo versionVo = assembleProductListVo(versionItem);
+            versionVoList.add(versionVo);
         }
         // pageHelper的收尾
         PageInfo pageResult = new PageInfo(versionList);
