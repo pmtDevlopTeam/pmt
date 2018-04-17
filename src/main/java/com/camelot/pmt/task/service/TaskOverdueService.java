@@ -5,6 +5,7 @@ import com.camelot.pmt.platform.common.ExecuteResult;
 import com.camelot.pmt.platform.common.Pager;
 import com.camelot.pmt.task.model.Task;
 import com.camelot.pmt.task.model.TaskDetail;
+import com.github.pagehelper.PageInfo;
 
 /**
  * 延期任务接口
@@ -15,12 +16,7 @@ import com.camelot.pmt.task.model.TaskDetail;
 	*
  */
 public interface TaskOverdueService {
-    /**
-     * 查询延期任务列表
-     * @Title: queryoverdueTask @Description: TODO @param @param
-     * page @param @return @return ExecuteResult<DataGrid<UserModel>> @throws
-     */
-    ExecuteResult<DataGrid<Task>> queryOverdueTask(Pager page);
+   
     
     /**
      * 根据taskid查询延期任务详情
@@ -43,16 +39,7 @@ public interface TaskOverdueService {
 	* @throws
 	 */
 	ExecuteResult<String> insertOverduMessage(Task task);
-	/**
-	 * 根据userId查询是否有延期任务(弹框提示)
-	* @Title: queryOverdueTaskUserId
-	* @Description: TODO
-	* @param @param userId
-	* @param @return
-	* @return ExecuteResult<Integer> 
-	* @throws
-	 */
-	ExecuteResult<Integer> queryOverdueTaskUserId(String userId);
+
 	/**
 	 * 根据任务id修改状态(延期-进行中)
 	* @Title: updateTaskOverdueStatus
@@ -63,6 +50,13 @@ public interface TaskOverdueService {
 	* @throws
 	 */
 	ExecuteResult<String> updateTaskOverdueStatus(String taskId);
+	
+	 /**
+     * 查询延期任务列表
+     * @Title: queryoverdueTask @Description: TODO @param @param
+     * page @param @return @return ExecuteResult<DataGrid<UserModel>> @throws
+     */
+	ExecuteResult<PageInfo<Task>> queryOverdueTask(Integer page, Integer rows);
     
     
    
