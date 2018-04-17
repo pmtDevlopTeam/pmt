@@ -30,9 +30,10 @@ public interface ProjectUserService {
      * @return
      */
     List<ProjectUserShow> searchUserByProjectId(Long projectId);
-    
+
     /**
      * 条件查询
+     * 
      * @param vo
      * @return
      */
@@ -40,13 +41,14 @@ public interface ProjectUserService {
 
     /**
      * 查询总数
+     * 
      * @param vo
      * @return
      */
-	int count(ProjectUserSearchVO vo);
+    int count(ProjectUserSearchVO vo);
 
-	void clearUser(Long projectId, String userId);
-	
-	int clearUser(Long projectId, String userId, String userStatus);
+    void clearUser(Long projectId, String userId);
+
+    int clearUser(Long projectId, String userId, String userStatus);
 
 }

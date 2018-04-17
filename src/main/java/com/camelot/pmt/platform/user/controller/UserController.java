@@ -49,8 +49,7 @@ public class UserController {
      * 
      * @param userId
      *            用户UUID
-     * @return {"status": {"message": "请求处理成功.","code": 200}, "data":
-     *         {userModel}]
+     * @return {"status": {"message": "请求处理成功.","code": 200}, "data": {userModel}]
      */
     @ApiOperation(value = "根据userId查询单个用户", notes = "查询单个用户")
     @RequestMapping(value = "user/queryUserById", method = RequestMethod.POST)
@@ -75,8 +74,7 @@ public class UserController {
      * 
      * @param username
      *            用户名,password 密码,role 角色,phone 电话,email 邮箱
-     * @return {"status": {"message": "请求处理成功.","code": 200}, "data":
-     *         {userModel列表}]
+     * @return {"status": {"message": "请求处理成功.","code": 200}, "data": {userModel列表}]
      */
     @ApiOperation(value = "查询所有用户", notes = "查询所有用户")
     @RequestMapping(value = "user/queryUserAll", method = RequestMethod.GET)
@@ -136,12 +134,14 @@ public class UserController {
      * @author [maple]
      */
     @ApiOperation(value = "删除用户", notes = "删除用户")
-    @ApiImplicitParams({ @ApiImplicitParam(name = "userId", value = "用户userId", required = true, paramType = "query", dataType = "String") })
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userId", value = "用户userId", required = true, paramType = "query", dataType = "String") })
     @RequestMapping(value = "user/deleteUserByUserId", method = RequestMethod.POST)
     public JSONObject deleteUserByUserId(@ApiIgnore UserModel userModel) {
         ExecuteResult<String> result = new ExecuteResult<String>();
         try {
-            if (userModel.getUserId().equals("") || userModel.getUserId().equals("0") || userModel.getUserId() == null) {
+            if (userModel.getUserId().equals("") || userModel.getUserId().equals("0")
+                    || userModel.getUserId() == null) {
                 return ApiResponse.jsonData(APIStatus.ERROR_400);
             }
             result = service.delete(userModel);
@@ -161,8 +161,7 @@ public class UserController {
      * 
      * @param loginCode
      *            登录账号,password 密码
-     * @return {"status": {"message": "请求处理成功.","code": 200}, "data":
-     *         {userModel}]
+     * @return {"status": {"message": "请求处理成功.","code": 200}, "data": {userModel}]
      */
     @ApiOperation(value = "检查用户账号密码", notes = "检查用户账号密码")
     @ApiImplicitParams({

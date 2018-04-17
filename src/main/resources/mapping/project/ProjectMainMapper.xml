@@ -235,7 +235,7 @@
 		</trim>
 	</insert>
 	<!--按主键id更新所有数据 -->
-	<update id="updateByPrimaryKeySelective" parameterType="com.camelot.pmt.project.model.ProjectMain">
+	<update id="updateByPrimaryKeySelective">
 		update project_main
 		<trim prefix="set" suffixOverrides=",">
 			<if test="userId != null">

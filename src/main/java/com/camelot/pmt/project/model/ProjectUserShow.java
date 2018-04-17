@@ -131,14 +131,12 @@ public class ProjectUserShow {
         this.userRoleNames = userRoleNames;
     }
 
-	public String getUserJobNum() {
-		return userJobNum;
-	}
+    public String getUserJobNum() {
+        return userJobNum;
+    }
 
-	public void setUserJobNum(String userJobNum) {
-		this.userJobNum = userJobNum;
-	}
-    
-    
+    public void setUserJobNum(String userJobNum) {
+        this.userJobNum = userJobNum;
+    }
 
 }

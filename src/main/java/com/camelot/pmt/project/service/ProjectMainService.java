@@ -1,5 +1,6 @@
 package com.camelot.pmt.project.service;
 
+import java.util.Date;
 import java.util.List;
 
 import com.camelot.pmt.platform.utils.DataGrid;
@@ -82,7 +83,9 @@ public interface ProjectMainService {
      * @param projectMain
      * @return
      */
-    ExecuteResult<String> updateByPrimaryKeySelective(ProjectMain projectMain, String createUserId, String operateDesc);
+    ExecuteResult<String> updateByPrimaryKeySelective(Long id, String userId, String modifyUserId, String projectNum,
+            String projectName, String projectStatus, String projectDesc, Date startTime, Date endTime,
+            String createUserId, String operateDesc);
 
     /**
      * 删除项目
