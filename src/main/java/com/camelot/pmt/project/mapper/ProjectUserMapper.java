@@ -1,11 +1,28 @@
 package com.camelot.pmt.project.mapper;
 
+import java.util.Date;
 import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
 
 import com.camelot.pmt.project.model.ProjectUser;
 import com.camelot.pmt.project.model.ProjectUserShow;
 
 public interface ProjectUserMapper {
+    /**
+     * 根据项目id更新项目成员状态
+     * 
+     * @param projectId
+     * @param realOutTime
+     * @param userStatus
+     * @param modifyUserId
+     * @param modifyTime
+     * @return
+     */
+    int updateUserStatusByProjectId(@Param("projectId") Long projectId, @Param("realOutTime") Date realOutTime,
+            @Param("userStatus") String userStatus, @Param("modifyUserId") String modifyUserId,
+            @Param("modifyTime") Date modifyTime);
+
     /**
      *
      * @mbggenerated 2018-04-13

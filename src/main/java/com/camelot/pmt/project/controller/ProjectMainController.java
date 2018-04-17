@@ -404,11 +404,4 @@ public class ProjectMainController {
             return ApiResponse.error();
         }
     }
-    // 项目操作表存数据
-
-    // 需求表更改状态
-
-    // 任务表更改状态
-
-    // bug用例状态
 }

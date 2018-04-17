@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.camelot.pmt.project.mapper.ProjectUserMapper">
+	<!--根据项目id更新项目成员状态 -->
+	<update id="updateUserStatusByProjectId">
+		update project_user set
+		real_out_time =
+		#{realOutTime}, user_status =
+		#{userStatus},
+		modify_user_id =
+		#{modifyUserId}, modify_time =
+		#{modifyTime}
+		where project_id =
+		#{projectId}
+	</update>
 	<resultMap id="BaseResultMap" type="com.camelot.pmt.project.model.ProjectUser">
 		<id column="id" property="id" jdbcType="BIGINT" />
 		<result column="project_id" property="projectId" jdbcType="BIGINT" />
@@ -237,7 +249,7 @@
 		where id =
 		#{id}
 	</update>
-	
+
 	<resultMap id="projectUserMap" type="com.camelot.pmt.project.model.ProjectUserShow">
 		<id column="id" property="id" jdbcType="BIGINT" />
 		<result column="project_id" property="projectId" jdbcType="BIGINT" />
@@ -251,27 +263,36 @@
 		<result column="pre_man_hour" property="preManHour" jdbcType="INTEGER" />
 		<result column="user_status" property="userStatus" jdbcType="CHAR" />
 		<result column="user_pro_role" property="userProRole" jdbcType="BIGINT" />
-		<result column="pro_role_name" property="userProRoleName" jdbcType="VARCHAR" />
+		<result column="pro_role_name" property="userProRoleName"
+			jdbcType="VARCHAR" />
 		<collection property="userRoleNames" ofType="java.lang.String">
-			<result column="user_role_names" property="userRoleName"/>
+			<result column="user_role_names" property="userRoleName" />
 		</collection>
 	</resultMap>
 
-	<select id="searchUserByProjectId" parameterType="java.lang.Long" resultMap="projectUserMap">
-		SELECT project_user.id, project_user.project_id, project_user.user_id,
+	<select id="searchUserByProjectId" parameterType="java.lang.Long"
+		resultMap="projectUserMap">
+		SELECT project_user.id, project_user.project_id,
+		project_user.user_id,
 		project_user.user_pro_role,
 		platform_user.user_name, project_user.pre_join_time,
 		project_user.real_join_time, project_user.pre_out_time,
 		project_user.real_out_time,
-		project_user.pre_man_hour, project_user.user_status, pr1.role_name AS pro_role_name, pr2.role_name AS
+		project_user.pre_man_hour,
+		project_user.user_status, pr1.role_name AS pro_role_name,
+		pr2.role_name AS
 		user_role_names
 		FROM project_user
-		LEFT JOIN platform_user ON project_user.user_id = platform_user.user_id
-		LEFT JOIN platform_role pr1 ON project_user.user_pro_role =
+		LEFT JOIN
+		platform_user ON project_user.user_id = platform_user.user_id
+		LEFT JOIN
+		platform_role pr1 ON project_user.user_pro_role =
 		pr1.role_id
-		LEFT JOIN platform_user_role ON platform_user_role.user_id =
+		LEFT JOIN
+		platform_user_role ON platform_user_role.user_id =
 		project_user.user_id
-		LEFT JOIN platform_role pr2 ON pr2.role_id = platform_user_role.role_id
+		LEFT JOIN platform_role pr2 ON pr2.role_id =
+		platform_user_role.role_id
 		WHERE project_user.project_id = #{projectId}
 	</select>
 
