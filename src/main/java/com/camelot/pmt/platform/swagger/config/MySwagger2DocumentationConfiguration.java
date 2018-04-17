@@ -21,10 +21,14 @@ public class MySwagger2DocumentationConfiguration {
 
     @Bean
     public Docket petApi() {
-        return new Docket(DocumentationType.SWAGGER_2).select()//
-                .apis(RequestHandlerSelectors.any())//
-                .build().pathMapping("/")//
-                .directModelSubstitute(LocalDate.class, String.class)//
+        return new Docket(DocumentationType.SWAGGER_2).select()
+                //
+                .apis(RequestHandlerSelectors.any())
+                //
+                .build().pathMapping("/")
+                //
+                .directModelSubstitute(LocalDate.class, String.class)
+                //
                 .genericModelSubstitutes(ResponseEntity.class).useDefaultResponseMessages(false)
                 .tags(new Tag("pmt-Service", "PMT服务"))//
                 .apiInfo(apiInfo());

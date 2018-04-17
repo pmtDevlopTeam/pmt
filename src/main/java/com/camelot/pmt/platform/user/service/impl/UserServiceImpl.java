@@ -223,8 +223,10 @@ public class UserServiceImpl implements UserService {
     // return result;
     // }
     // //不更新密码的情况下编辑
-    // if(userModel.getPassword() == null || userModel.getPassword().equals("") ||
-    // userModel.getNewPassword() == null || userModel.getNewPassword().equals("")){
+    // if(userModel.getPassword() == null || userModel.getPassword().equals("")
+    // ||
+    // userModel.getNewPassword() == null ||
+    // userModel.getNewPassword().equals("")){
     // Integer count = userMapper.updateUserById(userModel);
     // if(count == 0){
     // result.setResult("更新用户失败!");
@@ -232,7 +234,8 @@ public class UserServiceImpl implements UserService {
     // }
     // }
     // //更新密码的情况下编辑
-    // if(userModel.getPassword() != null && !userModel.getPassword().equals("") &&
+    // if(userModel.getPassword() != null && !userModel.getPassword().equals("")
+    // &&
     // userModel.getNewPassword() != null &&
     // !userModel.getNewPassword().equals("")){
     // String password = userModel.getPassword();

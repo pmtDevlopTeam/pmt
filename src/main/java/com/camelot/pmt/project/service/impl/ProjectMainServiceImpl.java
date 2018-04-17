@@ -13,13 +13,17 @@ import org.springframework.util.CollectionUtils;
 import com.camelot.pmt.platform.utils.DataGrid;
 import com.camelot.pmt.platform.utils.ExecuteResult;
 import com.camelot.pmt.platform.utils.Pager;
+import com.camelot.pmt.project.mapper.DemandMapper;
 import com.camelot.pmt.project.mapper.ProjectBudgetMapper;
 import com.camelot.pmt.project.mapper.ProjectMainMapper;
 import com.camelot.pmt.project.mapper.ProjectOperateMapper;
+import com.camelot.pmt.project.mapper.ProjectUserMapper;
 import com.camelot.pmt.project.mapper.WarningMapper;
 import com.camelot.pmt.project.model.ProjectBudget;
 import com.camelot.pmt.project.model.ProjectMain;
 import com.camelot.pmt.project.model.ProjectOperate;
+import com.camelot.pmt.project.model.ProjectUser;
+import com.camelot.pmt.project.model.ProjectUserShow;
 import com.camelot.pmt.project.model.Warning;
 import com.camelot.pmt.project.service.ProjectMainService;
 
@@ -40,6 +44,10 @@ public class ProjectMainServiceImpl implements ProjectMainService {
     private ProjectOperateMapper projectOperateMapper;
     @Autowired
     private WarningMapper warningMapper;
+    @Autowired
+    private DemandMapper demandMapper;
+    @Autowired
+    private ProjectUserMapper projectUserMapper;
 
     /**
      * 保存立项表的方法
@@ -270,4 +278,40 @@ public class ProjectMainServiceImpl implements ProjectMainService {
         }
         return result;
     }
+
+    /**
+     * 关闭时，更新数据
+     * 
+     * @param id
+     * @return
+     */
+    @Override
+    public ExecuteResult<String> closeProjectById(Long id, String createUserId, String modifyUserId,
+            String projectStatus, String operateDesc, String userStatus, String demandStatus, String closeReason,
+            String status, String caseStatus) {
+
+        // 项目id 修改人 修改时间 项目状态
+        ProjectMain projectMain = projectMainMapper.selectByPrimaryKey(id);
+        projectMain.setModifyUserId(modifyUserId);
+        projectMain.setModifyTime(new Date());
+        projectMain.setProjectStatus(projectStatus);
+        projectMainMapper.updateById(projectMain);
+        // 项目成员表成员状态
+        ProjectUser projectUser = new ProjectUser();
+        // 项目操作表存数据
+        ProjectOperate projectOperate = new ProjectOperate();
+        projectOperate.setCreateTime(new Date());
+        projectOperate.setProjectId(id);
+        projectOperate.setCreateUserId(createUserId);
+        projectOperate.setOperateDesc(operateDesc);
+        projectOperateMapper.insert(projectOperate);
+        // 需求表更改状态
+        // Demand
+        // demandMapper.
+        // 任务表更改状态
+
+        // bug用例状态
+        return null;
+    }
+
 }

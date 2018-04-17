@@ -91,4 +91,15 @@ public interface ProjectMainService {
      * @return
      */
     ExecuteResult<String> deleteByPrimaryKey(Long id, String createUserId, String operateDesc);
+
+    /**
+     * 关闭时，更新数据
+     * 
+     * @param id
+     * @return
+     */
+    ExecuteResult<String> closeProjectById(Long id, String createUserId, String modifyUserId, String projectStatus,
+            String operateDesc, String userStatus, String demandStatus, String closeReason, String status,
+            String caseStatus);
+
 }

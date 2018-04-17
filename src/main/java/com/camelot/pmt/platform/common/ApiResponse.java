@@ -7,6 +7,7 @@ import com.alibaba.fastjson.JSONObject;
  * <p>
  * Description: [API调用结果json]
  * </p>
+ * 
  * @author[tongxiying]
  */
 public class ApiResponse {
@@ -20,7 +21,8 @@ public class ApiResponse {
      *            required APIStatus
      * @param data
      *            结果集
-     * @return {"status":{"code":xxx,"message":"xxx"},"data":{xxx}} @author[tongxiying]
+     * @return {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
+     * @author[tongxiying]
      */
     public static String data(APIStatus status, Object data) {
         JSONObject result = new JSONObject();
@@ -42,7 +44,8 @@ public class ApiResponse {
      *            required APIStatus
      * @param data
      *            结果集
-     * @return {"status":{"code":xxx,"message":"xxx"},"data":{xxx}} @author[tongxiying]
+     * @return {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
+     * @author[tongxiying]
      */
     public static JSONObject jsonData(APIStatus status, Object data) {
         JSONObject result = new JSONObject();
@@ -152,7 +155,8 @@ public class ApiResponse {
      * 
      * @param data
      *            返回数据
-     * @return {"status":{"code":200,"message":"ok"},"data":xxx} @author[tongxiying]
+     * @return {"status":{"code":200,"message":"ok"},"data":xxx}
+     * @author[tongxiying]
      */
     public static JSONObject success(Object data) {
         return jsonData(APIStatus.OK_200, data);
@@ -164,7 +168,8 @@ public class ApiResponse {
      * Discription:[获取请求参数错误返回结果]
      * </p>
      * 
-     * @return {"status":{"code":400,"message":"Bad Request."}} @author[tongxiying]
+     * @return {"status":{"code":400,"message":"Bad Request."}}
+     * @author[tongxiying]
      */
     public static JSONObject errorPara() {
         return jsonData(APIStatus.ERROR_400);
@@ -209,8 +214,8 @@ public class ApiResponse {
      * 
      * @param data
      *            返回数据
-     * @return {"status":{"code":400,"message":"Bad
-     *         Request."},"data":xxx} @author[tongxiying]
+     * @return {"status":{"code":400,"message":"Bad Request."},"data":xxx}
+     * @author[tongxiying]
      */
     public static JSONObject errorPara(Object data) {
         return jsonData(APIStatus.ERROR_400, data);

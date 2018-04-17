@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.camelot.pmt.project.mapper.ProjectMainMapper">
+	<!--关闭时，按主键id更新数据 -->
+	<update id="updateById" parameterType="com.camelot.pmt.project.model.ProjectMain">
+		update project_main
+		<trim prefix="set" suffixOverrides=",">
+			<if test="projectStatus != null">
+				project_status = #{projectStatus,jdbcType=CHAR},
+			</if>
+			<if test="modifyUserId != null">
+				modify_user_id = #{modifyUserId,jdbcType=VARCHAR},
+			</if>
+			<if test="modifyTime != null">
+				modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
 	<!-- 按修改人Id查询 -->
 	<select id="findByModifyUserId" resultMap="ResultMapWithBLOBs"
 		parameterType="String">
@@ -117,6 +133,7 @@
 		project_main
 		where id = #{id,jdbcType=BIGINT}
 	</delete>
+	<!--插入数据 -->
 	<insert id="insert" parameterType="com.camelot.pmt.project.model.ProjectMain"
 		useGeneratedKeys="true" keyProperty="id">
 		insert into project_main (id,
@@ -217,6 +234,7 @@
 			</if>
 		</trim>
 	</insert>
+	<!--按主键id更新所有数据 -->
 	<update id="updateByPrimaryKeySelective" parameterType="com.camelot.pmt.project.model.ProjectMain">
 		update project_main
 		<trim prefix="set" suffixOverrides=",">
