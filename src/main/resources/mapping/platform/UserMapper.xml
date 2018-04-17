@@ -269,9 +269,14 @@
 		where user_id = #{userId} 
 	</update>
 	
-	<!-- 检查用户登录账号是否存在 -->
+	<!-- 检查用户表登录账号是否存在 -->
 	 <select id="findUserByLoginCode" resultMap="userModel" parameterType="java.lang.String" >
         select <include refid="userColumns"/> from platform_user where login_code = #{loginCode}
+    </select>
+    
+    <!-- 检查用户信息表userJobNum是否存在 -->
+	 <select id="checkUserExistByUserJobNum" parameterType="java.lang.String" resultType="long">
+        SELECT count(1) FROM platform_user_info where user_job_num = #{userJobNum}
     </select>
     
 	<!-- 根据用户名查找用户密码-->
@@ -287,6 +292,11 @@
     <!-- 根据userId获取单个信息 -->
     <select id="selectUserById" resultMap="userModel" parameterType="java.lang.String" >
         select <include refid="userColumnsNoPassword"/> from platform_user where user_id = #{userId}
+    </select>
+    
+    <!-- 根据userId获取用户角色表的create_user_id-->
+    <select id="queryUserRoleCreateUserByUserId" resultType="java.lang.String" parameterType="java.lang.String" >
+        SELECT DISTINCT create_user_id FROM platform_user_role where user_id = #{userId}
     </select>
 
     
@@ -329,10 +339,20 @@
     <select id="queryUserInfoById" resultMap="userInfoResultMap" parameterType="java.lang.String" >
         select <include refid="userInfoColumns"/> from platform_user_info where user_id = #{userId}
     </select>
+    
+    <!-- 根据userId获取用户角色中间表记录是否存在 -->
+    <select id="checkUserRoleIsExistByUserId" parameterType="java.lang.String" resultType="long">
+        select count(1) from platform_user_role where user_id = #{userId}
+    </select>
 
     <!-- 根据Id删除用户 -->
-    <delete id="deleteUserByUserId" parameterType="com.camelot.pmt.platform.model.User">
+    <delete id="deleteUserByUserId" parameterType="com.camelot.pmt.platform.model.User" >
         delete FROM platform_user WHERE user_id = #{userId}
+    </delete>
+    
+    <!-- 根据Id删除用户角色表中所有的角色 -->
+    <delete id="deleteUserRoleByUserId" parameterType="java.lang.String">
+        delete FROM platform_user_role WHERE user_id = #{userId}
     </delete>
 
 	<!-- 用户列表展示，多表关联结果集 -->
