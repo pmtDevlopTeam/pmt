@@ -9,7 +9,7 @@ import com.camelot.pmt.common.Pager;
 import com.camelot.pmt.platform.model.DictItem;
 /**
  * <p>
- *  字典项Mapper类
+ *  字典项Mapper类 
  * </p>
  *
  * @author sqw
