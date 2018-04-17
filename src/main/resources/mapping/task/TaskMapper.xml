@@ -303,7 +303,7 @@
     </select>
 
     <!-- 新增任务 -->
-    <insert id="insertTaskNodeById" parameterType="com.camelot.pmt.task.model.Task">
+    <insert id="insertTaskNodeById" parameterType="BaseResultMap">
 	    insert into task (id, task_num, task_name,
 	      task_parent_id, project_id, demand_id, 
 	      priority, assign_user_id, beassign_user_id, 
@@ -332,7 +332,7 @@
 	    where id = #{id,jdbcType=BIGINT}
 	  </delete>
     <!--修改任务-->
-    <update id="updateTaskNodeById" parameterType="com.camelot.pmt.task.model.Task">
+    <update id="updateTaskNodeById" parameterType="com.camelot.pmt.task.mo">
     	update task
 		    set task_num = #{taskNum,jdbcType=VARCHAR},
 		      task_name = #{taskName,jdbcType=VARCHAR},
@@ -452,7 +452,7 @@
         INNER JOIN platform_user b ON b.user_id = t.beassign_user_id
         INNER JOIN platform_user c ON c.user_id = t.create_user_id
         where t.beassign_user_id = #{beassignUserId,jdbcType=VARCHAR}
-        <if test="demandId != null">
+        <if test="status != null">
             and t.demand_id = #{demandId,jdbcType=BIGINT}
         </if>
     </select>
