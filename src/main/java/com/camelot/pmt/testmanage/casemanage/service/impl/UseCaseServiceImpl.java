@@ -60,15 +60,31 @@ public class UseCaseServiceImpl implements UseCaseService{
 	 * 
 	 * 获取用例信息
 	 */
-	public UseCase getUseCaseByUseCaseId (long id){
+	public  ExecuteResult<UseCase> getUseCaseByUseCaseId (long id){
 		
-		UseCase useCase=useCaseMapper.selectByPrimaryKey(id);
+	/*	UseCase useCase=useCaseMapper.selectByPrimaryKey(id);
 		//获取步骤
 		List<UseCaseProcedure> useCaseProcedureList=useCaseProcedureMapper.selectByUseCaseId(useCase.getId());
 		if(useCaseProcedureList!=null){
 			useCase.setProcedure(useCaseProcedureList);
 		}
-		return useCase;
+		return useCase;*/
+		
+		
+		  ExecuteResult<UseCase> result = new ExecuteResult<UseCase>();
+			 try {
+				 UseCase useCase=useCaseMapper.selectByPrimaryKey(id);
+					//获取步骤
+					List<UseCaseProcedure> useCaseProcedureList=useCaseProcedureMapper.selectByUseCaseId(useCase.getId());
+					if(useCaseProcedureList!=null){
+						useCase.setProcedure(useCaseProcedureList);
+					}
+					result.setResult(useCase);
+		        } catch (Exception e) {
+		            LOGGER.error(e.getMessage());
+		            throw new RuntimeException(e);
+		        }
+		        return result;
 	}
 	
 	public void updateUserCaseDelFlag(long id){

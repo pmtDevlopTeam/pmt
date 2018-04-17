@@ -25,7 +25,7 @@ public interface UseCaseService {
 	 * @param id
 	 * @return
 	 */
-	UseCase getUseCaseByUseCaseId (long id);
+	ExecuteResult<UseCase> getUseCaseByUseCaseId (long id);
 	
 	/**
 	 * 修改用例状态

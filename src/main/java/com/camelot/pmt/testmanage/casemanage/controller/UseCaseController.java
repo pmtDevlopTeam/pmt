@@ -118,19 +118,17 @@ public class UseCaseController {
 	    @RequestMapping(value = "userCase/getUseCaseByUseCaseId", method = RequestMethod.GET)
 	    @ApiImplicitParams({
 	            @ApiImplicitParam(name = "id", value = "用例id", required = true, paramType = "query", dataType = "long") })
-	    public ActionBean getUseCaseByUseCaseId(Long id) {
-		 ActionBean  actionBean  =new ActionBean();
-		 	try {
-		 		actionBean.setCode(200);
-		 		actionBean.setErrorMessage("成功");
-		 		actionBean.setResult(true);
-		 		actionBean.setResponse(UseCaseService.getUseCaseByUseCaseId(id));
-			} catch (Exception e) {
-				actionBean.setCode(500);
-				actionBean.setErrorMessage(e.getMessage());
-				actionBean.setResult(false);
-			}
-		 	return actionBean;
+	    public JSONObject getUseCaseByUseCaseId(Long id) {
+		 	 ExecuteResult<UseCase> result = new ExecuteResult<UseCase>();
+		        try {
+		            //调用添加bug接口
+		        	result=UseCaseService.getUseCaseByUseCaseId(id);
+		            // 成功返回
+		            return ApiResponse.success(result.getResult());
+		        } catch (Exception e) {
+		            // 异常
+		            return ApiResponse.error();
+		        }
 	    }
 	 
 	 
