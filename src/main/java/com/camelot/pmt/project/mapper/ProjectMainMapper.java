@@ -13,7 +13,10 @@ public interface ProjectMainMapper {
     /**
      * 关闭时，按主键id更新数据
      * 
-     * @param userId
+     * @param id
+     * @param projectStatus
+     * @param modifyUserId
+     * @param modifyTime
      * @return
      */
     int updateById(@Param("id") Long id, @Param("projectStatus") String projectStatus,
@@ -60,53 +63,49 @@ public interface ProjectMainMapper {
     List<ProjectMain> findAllByPage(@Param(value = "page") Pager<?> page);
 
     /**
-     *
-     * @mbggenerated 2018-04-13
+     * 根据id 删除项目
+     * 
+     * @param id
+     * @return
      */
     int deleteByPrimaryKey(Long id);
 
     /**
-     *
-     * @mbggenerated 2018-04-13
+     * 插入数据
+     * 
+     * @param projectMain
+     * @return
      */
-    int insert(ProjectMain record);
-
-    /**
-     *
-     * @mbggenerated 2018-04-13
-     */
-    int insertSelective(ProjectMain record);
+    int insert(ProjectMain projectMain);
 
     /**
      * 根据项目id查询详情
      * 
-     * @mbggenerated 2018-04-13
+     * @param id
+     * @return
      */
     ProjectMain selectByPrimaryKey(Long id);
 
     /**
      * 根据按主键id更新数据
      * 
-     * @mbggenerated 2018-04-13
+     * @param id
+     * @param userId
+     * @param modifyUserId
+     * @param modifyTime
+     * @param projectNum
+     * @param projectName
+     * @param projectStatus
+     * @param projectDesc
+     * @param startTime
+     * @param endTime
+     * @return
      */
     int updateByPrimaryKeySelective(@Param("id") Long id, @Param("userId") String userId,
             @Param("modifyUserId") String modifyUserId, @Param("modifyTime") Date modifyTime,
             @Param("projectNum") String projectNum, @Param("projectName") String projectName,
             @Param("projectStatus") String projectStatus, @Param("projectDesc") String projectDesc,
             @Param("startTime") Date startTime, @Param("endTime") Date endTime);
-
-    /**
-     *
-     * @mbggenerated 2018-04-13
-     */
-    int updateByPrimaryKeyWithBLOBs(ProjectMain record);
-
-    /**
-     * 
-     * 
-     * @mbggenerated 2018-04-13
-     */
-    int updateByPrimaryKey(ProjectMain record);
 
     /**
      * 查询所有数量

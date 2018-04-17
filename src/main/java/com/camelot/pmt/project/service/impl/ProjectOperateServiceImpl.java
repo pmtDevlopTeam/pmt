@@ -24,10 +24,7 @@ public class ProjectOperateServiceImpl implements ProjectOperateService {
     private ProjectOperateMapper projectOperateMapper;
 
     /**
-     * 按创建人id查询
-     * 
-     * @param createUserId
-     * @return
+     * 按创建人id查询查询对应的操作表数据
      */
     @Override
     public ExecuteResult<List<ProjectOperate>> findByCreateUserId(String createUserId) {
@@ -47,10 +44,7 @@ public class ProjectOperateServiceImpl implements ProjectOperateService {
     }
 
     /**
-     * 按项目id查询
-     * 
-     * @param createUserId
-     * @return
+     * 按项目id查询对应的操作表数据
      */
     @Override
     public ExecuteResult<List<ProjectOperate>> findByProjectId(Long projectId) {

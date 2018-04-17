@@ -3,9 +3,6 @@ package com.camelot.pmt.project.service.impl;
 import java.util.Date;
 import java.util.List;
 
-import com.camelot.pmt.common.DataGrid;
-import com.camelot.pmt.common.ExecuteResult;
-import com.camelot.pmt.common.Pager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +10,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import com.camelot.pmt.common.DataGrid;
+import com.camelot.pmt.common.ExecuteResult;
+import com.camelot.pmt.common.Pager;
 import com.camelot.pmt.project.mapper.DemandMapper;
 import com.camelot.pmt.project.mapper.ProjectBudgetMapper;
 import com.camelot.pmt.project.mapper.ProjectMainMapper;
@@ -53,7 +53,7 @@ public class ProjectMainServiceImpl implements ProjectMainService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ExecuteResult<String> save(ProjectMain projectMain, ProjectOperate projectOperate,
-                                      ProjectBudget projectBudget, Warning warning) {
+            ProjectBudget projectBudget, Warning warning) {
 
         ExecuteResult<String> result = new ExecuteResult<String>();
         try {
@@ -111,10 +111,7 @@ public class ProjectMainServiceImpl implements ProjectMainService {
     }
 
     /**
-     * 按状态分类查询
-     * 
-     * @param projectStatus
-     * @return
+     * 按项目状态分类查询
      */
     @Override
     public ExecuteResult<List<ProjectMain>> findByProjectStatus(String projectStatus) {
@@ -134,9 +131,6 @@ public class ProjectMainServiceImpl implements ProjectMainService {
 
     /**
      * 按负责人id查询
-     * 
-     * @param userId
-     * @return
      */
     @Override
     public ExecuteResult<List<ProjectMain>> findByUserId(String userId) {
@@ -156,9 +150,6 @@ public class ProjectMainServiceImpl implements ProjectMainService {
 
     /**
      * 按创建人id查询
-     * 
-     * @param createUserId
-     * @return
      */
     @Override
     public ExecuteResult<List<ProjectMain>> findByCreateUserId(String createUserId) {
@@ -177,10 +168,11 @@ public class ProjectMainServiceImpl implements ProjectMainService {
     }
 
     /**
-     * 按修改人id查询
+     * 按修改人id查询 <<<<<<< HEAD =======
      * 
      * @param
-     * @return
+     * @return >>>>>>> branch 'four_team' of
+     *         https://github.com/pmtDevlopTeam/pmt.git
      */
     @Override
     public ExecuteResult<List<ProjectMain>> findByModifyUserId(String modifyUserId) {
@@ -200,18 +192,15 @@ public class ProjectMainServiceImpl implements ProjectMainService {
 
     /**
      * 按照主键id进行修改
-     * 
-     * @param id
-     * @return
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ExecuteResult<String> updateByPrimaryKeySelective(Long id, String userId, String modifyUserId,
-            Date modifyTime, String projectNum, String projectName, String projectStatus, String projectDesc,
-            Date startTime, Date endTime, String createUserId, String operateDesc) {
+            String projectNum, String projectName, String projectStatus, String projectDesc, Date startTime,
+            Date endTime, String createUserId, String operateDesc) {
         ExecuteResult<String> result = new ExecuteResult<>();
         try {
-            projectMainMapper.updateByPrimaryKeySelective(id, userId, modifyUserId, modifyTime, projectNum, projectName,
+            projectMainMapper.updateByPrimaryKeySelective(id, userId, modifyUserId, new Date(), projectNum, projectName,
                     projectStatus, projectDesc, startTime, endTime);
 
             ProjectOperate projectOperate = new ProjectOperate();
@@ -280,10 +269,7 @@ public class ProjectMainServiceImpl implements ProjectMainService {
     }
 
     /**
-     * 关闭时，更新数据
-     * 
-     * @param id
-     * @return
+     * 关闭时，更新相关数据
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -304,8 +290,7 @@ public class ProjectMainServiceImpl implements ProjectMainService {
             projectOperate.setOperateDesc(operateDesc);
             projectOperateMapper.insert(projectOperate);
             // demand需求表更改状态
-            // Demand
-            // demandMapper.
+            demandMapper.updateByProjectId(id, demandStatus, closeReason, modifyUserId, new Date());
             // task任务表更改状态
 
             // userCase用例状态修改

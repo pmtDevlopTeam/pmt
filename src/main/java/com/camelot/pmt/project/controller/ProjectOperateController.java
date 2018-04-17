@@ -20,6 +20,11 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 
+/**
+ * 
+ * @author qiaodj
+ * @date 2018年4月17日
+ */
 @RestController
 @Api(value = "项目操作接口", description = "项目操作接口")
 public class ProjectOperateController {

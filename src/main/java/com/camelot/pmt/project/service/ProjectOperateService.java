@@ -22,7 +22,7 @@ public interface ProjectOperateService {
     /**
      * 根据项目id进行查询
      * 
-     * @param
+     * @param createUserId
      * @return
      */
     ExecuteResult<List<ProjectOperate>> findByProjectId(Long projectId);
