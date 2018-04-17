@@ -17,7 +17,7 @@ public interface BugManageService {
 	
 	/**
      * bug列表
-     * @param userModel
+     * @param
      * @return
      */
    ExecuteResult<PageInfo> selectCondition(Map<String,Object> map);
@@ -45,42 +45,42 @@ public interface BugManageService {
    
    /**
     * 修改bug
-    * @param userModel
+    * @param
     * @return
     */
    ExecuteResult<String> edit(BugManage bugManage);
    
    /**
     * 撤销bug
-    * @param userModel
+    * @param
     * @return
     */
    ExecuteResult<String> updateBugStatusRevoke(BugManage bugManage);
   
    /**
     * 关闭bug
-    * @param userModel
+    * @param
     * @return
     */
    ExecuteResult<String> updateBugStatusClose(BugManage bugManage);
    
    /**
     * 确认bug
-    * @param userModel
+    * @param
     * @return
     */
    ExecuteResult<String> updateBugStatusYes(BugManage bugManage);
    
    /**
     * 指派bug
-    * @param userModel
+    * @param
     * @return
     */
    ExecuteResult<String> updateBugAssign(BugManage bugManage);
   
    /**
     * 解决bug
-    * @param userModel
+    * @param
     * @return
     */
    ExecuteResult<String> updateBugSolve(BugManage bugManage);

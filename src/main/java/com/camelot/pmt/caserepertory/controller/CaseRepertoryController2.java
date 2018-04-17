@@ -3,7 +3,7 @@ package com.camelot.pmt.caserepertory.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.camelot.pmt.caserepertory.model.CaseRepertory;
 import com.camelot.pmt.caserepertory.service.CaseRepertoryService;
-import com.camelot.pmt.platform.common.ApiResponse;
+import com.camelot.pmt.common.ApiResponse;
 import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.caserepertory.PageBean;
 import com.camelot.pmt.testmanage.casemanage.util.ActionBean;

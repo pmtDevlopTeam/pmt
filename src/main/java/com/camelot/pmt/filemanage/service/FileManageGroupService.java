@@ -1,7 +1,7 @@
 package com.camelot.pmt.filemanage.service;
 
 import com.camelot.pmt.filemanage.model.FileManageGroup;
-import com.camelot.pmt.platform.utils.ExecuteResult;
+import com.camelot.pmt.common.ExecuteResult;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 
 import java.util.List;

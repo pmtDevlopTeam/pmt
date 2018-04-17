@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
-import com.camelot.pmt.platform.common.ApiResponse;
+import com.camelot.pmt.common.ApiResponse;
 import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.caserepertory.PageBean;
 import com.camelot.pmt.testmanage.bugmanage.model.BugHistory;

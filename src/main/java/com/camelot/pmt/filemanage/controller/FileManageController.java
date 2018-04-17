@@ -4,10 +4,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.camelot.pmt.filemanage.model.FileManage;
 import com.camelot.pmt.filemanage.model.FileManageGroup;
 import com.camelot.pmt.filemanage.service.FileManageService;
-import com.camelot.pmt.platform.common.APIStatus;
-import com.camelot.pmt.platform.common.ApiResponse;
-import com.camelot.pmt.platform.utils.ExecuteResult;
-import com.camelot.pmt.platform.utils.Pager;
+import com.camelot.pmt.common.APIStatus;
+import com.camelot.pmt.common.ApiResponse;
+import com.camelot.pmt.common.ExecuteResult;
+import com.camelot.pmt.caserepertory.PageBean;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 
