@@ -1,5 +1,6 @@
 package com.camelot.pmt.task.service.impl;
 
+import com.baomidou.mybatisplus.plugins.pagination.PageHelper;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
 import com.camelot.pmt.platform.common.DataGrid;
 import com.camelot.pmt.platform.common.ExecuteResult;
@@ -8,6 +9,8 @@ import com.camelot.pmt.task.mapper.TaskMapper;
 import com.camelot.pmt.task.model.Task;
 import com.camelot.pmt.task.model.TaskDetail;
 import com.camelot.pmt.task.service.TaskOverdueService;
+import com.github.pagehelper.PageInfo;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,22 +39,20 @@ public class TaskOverdueServiceImpl implements TaskOverdueService {
      * 查询所有逾期任务+分页   
      */
     @Override
-    public ExecuteResult<DataGrid<Task>> queryOverdueTask(Pager page) {
-        ExecuteResult<DataGrid<Task>> result = new ExecuteResult<DataGrid<Task>>();
+    public ExecuteResult<PageInfo<Task>> queryOverdueTask(Integer page, Integer rows) {
+        ExecuteResult<PageInfo<Task>> result = new ExecuteResult<PageInfo<Task>>();
         try {
-            List<Task> list = taskMapper.queryOverdueTask(page);
+        	//分页初始化
+        	PageHelper.startPage(page,rows);
+            List<Task> list = taskMapper.queryOverdueTask();
             // 如果没有查询到数据，不继续进行
-            if (CollectionUtils.isEmpty(list)) {
-                DataGrid<Task> dg = new DataGrid<Task>();
-                result.setResult(dg);
+            if (CollectionUtils.isEmpty(list)) {                    
+               PageInfo<Task> pageInfo = new PageInfo<>();
+                result.setResult(pageInfo);
                 return result;
             }
-            DataGrid<Task> dg = new DataGrid<Task>();
-            dg.setRows(list);
-            // 查询总条数
-            Long total = taskMapper.queryCount();
-            dg.setTotal(total);
-            result.setResult(dg);
+            PageInfo<Task> pageInfo = new PageInfo<>(list);
+            result.setResult(pageInfo);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -102,26 +103,7 @@ public class TaskOverdueServiceImpl implements TaskOverdueService {
 		     result.setResult("更新任务成功!");
 		     return result;
 	}
-	/**
-	 * 根据userId查询个人是否有延期任务(弹框显示)
-	 */
-	@Override
-	public ExecuteResult<Integer> queryOverdueTaskUserId(String userId) {
-		ExecuteResult<Integer> result = new ExecuteResult<Integer>();
-        try {
-            if (!userId.equals("") && !userId.equals("0")) {
-            	//查看个人是否有延期任务
-            	int count = taskMapper.queryOverdueTaskUserId(userId);
-                result.setResult(count);
-                return result;
-            }
-            result.addErrorMessage("查询失败！");
-        } catch (Exception e) {
-            LOGGER.error(e.getMessage());
-            throw new RuntimeException(e);
-        }
-        return result;
-	}
+	
 	/**
 	 * 根据任务Id修改状态
 	 */
@@ -147,4 +129,5 @@ public class TaskOverdueServiceImpl implements TaskOverdueService {
 	     result.setResult("修改任务状态成功!");
 	     return result;
 	}
+
 }

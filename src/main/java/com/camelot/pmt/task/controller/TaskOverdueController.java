@@ -10,6 +10,8 @@ import com.camelot.pmt.platform.common.Pager;
 import com.camelot.pmt.task.model.Task;
 import com.camelot.pmt.task.model.TaskDetail;
 import com.camelot.pmt.task.service.TaskOverdueService;
+import com.github.pagehelper.PageInfo;
+
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,17 +43,17 @@ public class TaskOverdueController {
 	 */
 	@ApiOperation(value = "查询逾期所有任务", notes = "查询逾期所有任务")
 	@RequestMapping(value = "/queryOverdueTask", method = RequestMethod.GET)
-	@ApiImplicitParams({
-			@ApiImplicitParam(name = "page", value = "页码", required = true, paramType = "query", dataType = "int"),
-			@ApiImplicitParam(name = "rows", value = "每页数量", required = true, paramType = "query", dataType = "int") })
-	public JSONObject queryOverdueTask(@ApiIgnore Pager page) {
-		ExecuteResult<DataGrid<Task>> result = new ExecuteResult<DataGrid<Task>>();
+	public JSONObject queryOverdueTask(
+			@ApiParam(name = "page", value = "页码", required = true) @RequestParam(required = true) Integer page,
+			@ApiParam(name = "rows", value = "每页数量", required = true) @RequestParam(required = true) Integer rows) {
+		ExecuteResult<PageInfo<Task>> result = new ExecuteResult<PageInfo<Task>>();
 		try {
-			if (page == null) {
+			if (page == null && "".equals(page) || rows == null && "".equals(rows)) {
 
 				return ApiResponse.errorPara();
 			}
-			result = taskService.queryOverdueTask(page);
+			//查询所有逾期列表+pagerhelper分页
+			result = taskService.queryOverdueTask(page,rows);
 			if (result.isSuccess()) {
 				return ApiResponse.success(result.getResult());
 			}
@@ -112,30 +114,6 @@ public class TaskOverdueController {
 		}
 	}
 	
-	/**
-	 * 根据UserId查询用户是否有延期任务(弹框提示)
-	* @Title: queryOverdueTaskDetailByUserId
-	* @Description: TODO
-	* @param @param userId 
-	* @param @return
-	* @return JSONObject 
-	* @throws
-	 */
-	@ApiOperation(value = "根据UserId查询用户是否有延期任务", notes = "根据UserId查询用户是否有延期任务")
-	@RequestMapping(value = "/queryOverdueTaskUserId", method = RequestMethod.GET)
-	public JSONObject queryOverdueTaskByUserId(
-			@ApiParam(name = "userId", value = "用户Id", required = true) @RequestParam(required = true) String userId) {
-		ExecuteResult<Integer> result = new ExecuteResult<Integer>();
-		try {
-			result = taskService.queryOverdueTaskUserId(userId);
-			if (result.isSuccess()) {
-				return ApiResponse.success(result.getResult());
-			}
-			return ApiResponse.error();
-		} catch (Exception e) {
-			return ApiResponse.error();
-		}
-	}
 	
 	@ApiOperation(value = "根据任务id修改状态(延期-进行中)", notes = "根据任务id修改状态(延期-进行中)")
 	@RequestMapping(value = "/update-taskoverdue-status", method = RequestMethod.POST)

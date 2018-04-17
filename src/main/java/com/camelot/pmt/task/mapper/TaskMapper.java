@@ -89,7 +89,7 @@ public interface TaskMapper {
      * @return List<Task>
      * @throws
      */
-    List<Task> queryOverdueTask(@Param(value = "page") Pager page);
+    List<Task> queryOverdueTask();
 
     /**
     * @author: gxl
@@ -100,7 +100,7 @@ public interface TaskMapper {
     * @return int    返回类型 
     * @throws
      */
-    int insertTaskNodeId(Task task);
+    int insertTaskNodeById(Task task);
     
     /**
     * @author: gxl
@@ -144,7 +144,7 @@ public interface TaskMapper {
      * @return List<Task>    返回类型
      * @throws
      */
-    List<Task> queryMyTaskListNodeByParentId(Long id,String status,Long beassignUserId);
+    List<Task> queryMyTaskListNodeByParentId(@Param("id") Long id,@Param("status") String status,@Param("beassignUserId") Long beassignUserId);
 
     /**
      * @author: gxl
@@ -155,7 +155,7 @@ public interface TaskMapper {
      * @return List<Task>    返回类型
      * @throws
      */
-    List<Task> queryTaskListNodeByParentId(Long id,String status);
+    List<Task> queryTaskListNodeByParentId(@Param("id") Long id,@Param("status") String status);
 
     /**
      * @author: gxl
@@ -165,7 +165,7 @@ public interface TaskMapper {
      * @return List<Task>    返回类型
      * @throws
      */
-    List<Task> queryAllTaskList(String status,Long beassignUserId);
+    List<Task> queryAllTaskList(@Param("status") String status,@Param("beassignUserId") Long beassignUserId);
 
     /**
      * @author: gxl
@@ -175,7 +175,7 @@ public interface TaskMapper {
      * @return List<Task>    返回类型
      * @throws
      */
-    List<Task> queryTopTaskNameList(String status,Long beassignUserId);
+    List<Task> queryTopTaskNameList(@Param("status") String status,@Param("beassignUserId") Long beassignUserId);
 
     /**
      * @author: gxl
@@ -186,7 +186,7 @@ public interface TaskMapper {
      * @return JSONObject    返回类型
      * @throws
      */
-    void updateTaskPendingToDelay(Long id,String status,String delayDescribe,String estimateStartTime);
+    void updateTaskPendingToDelay(@Param("id") Long id,@Param("status") String status,@Param("delayDescribe") String delayDescribe,@Param("estimateStartTime") String estimateStartTime);
 
     /**
      * @author: gxl
@@ -197,7 +197,7 @@ public interface TaskMapper {
      * @return int    返回类型
      * @throws
      */
-    void updateTaskPendingToRunning(Long id,String status);
+    void updateTaskPendingToRunning(@Param("id") Long id,@Param("status") String status);
 
     /**
      * @author: gxl
@@ -210,7 +210,7 @@ public interface TaskMapper {
      * @return int    返回类型
      * @throws
      */
-    void updateTaskToAssign(Long id,Long assignUserId,Long beassignUserId);
+    void updateTaskToAssign(@Param("id") Long id,@Param("assignUserId") Long assignUserId,@Param("beassignUserId") Long beassignUserId);
 
     /**
      * @author: gxl

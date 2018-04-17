@@ -183,6 +183,8 @@
         <result column="modify_user_id" property="modifyUserId" jdbcType="VARCHAR"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP"/>
+        <result column="elapsed_time" property="elapsedTime" jdbcType="VARCHAR"/>
+        <result column="remaining_work" property="remainingWork" jdbcType="VARCHAR"/>
         <association property="project"  javaType="com.camelot.pmt.project.model.Project">
             <result property="proId" column="pid"/>
             <result property="proName" column="project_name"/>
@@ -206,6 +208,14 @@
             <result property="userId" column="user_id"/>
             <result property="username" column="user_name"/>
         </association>
+        <collection property="taskLogList" ofType="TaskLog" >
+            <id column="lid" property="id"/><!-- 这里的column对应的是下面查询的别名，而不是表字段名 -->
+            <result column="task_id" property="taskId"/><!-- property对应JavaBean中的属性名 -->
+            <result column="user_id" property="userId"/>
+            <result column="operation_time" property="operationTime"/>
+            <result column="operation_button" property="operationButton"/>
+            <result column="operation_describe" property="operationDescribe"/>
+        </collection>
     </resultMap>
 
     <resultMap id="TaskResultMap" type="com.camelot.pmt.task.model.Task">
@@ -265,7 +275,13 @@
         t.task_type, t.task_mileage, t.priority, c.id AS cid, c.user_id, c.user_name,
         a.id AS aid, a.user_id, a.user_name, t.assign_time, p.id pid, p.project_name
     </sql>
-
+	<!-- 查询逾期任务列表所有字段 -->
+	<sql id="TaskOverDue_ShowTasks_Column_List">
+	t.id,t.task_num,t.priority,t.task_name,p.project_name,
+	u1.user_name,t.assign_time,t.status,t.estimate_start_time,
+	t.estimate_end_time ,t.estimate_hour,DATEDIFF(CURDATE(),t.estimate_start_time)*8 elapsed_time,
+	t.estimate_hour - (DATEDIFF(CURDATE(),estimate_start_time)*8) remaining_work,t.task_speed
+	</sql>
     <!--zlh-->
     <!--查询所有任务列表-->
     <select id="queryAllTask" resultMap="BaseResultMap">
@@ -310,7 +326,7 @@
 
   <!-- gxl start -->
   	<!--查询任务-->
-    <select id="queryTaskNodeById" resultMap="BaseResultMap">
+    <select id="queryTaskNodeById" resultMap="BaseResultMap" parameterType="long">
 	    select
 		<include refid="ShowAllTasks_Column_List" />
 		from
@@ -323,7 +339,7 @@
 
     <!-- 新增任务 -->
     <insert id="insertTaskNodeById" parameterType="BaseResultMap">
-	    insert into task (id, task_num, task_name, 
+	    insert into task (id, task_num, task_name,
 	      task_parent_id, project_id, demand_id, 
 	      priority, assign_user_id, beassign_user_id, 
 	      assign_time, estimate_start_time, estimate_end_time, 
@@ -346,12 +362,12 @@
   	</insert>
   	
   	<!-- 删除任务 -->
-  	<delete id="deleteTaskNodeById" parameterType="BaseResultMap">
+  	<delete id="deleteTaskNodeById" parameterType="long">
 	    delete from task
 	    where id = #{id,jdbcType=BIGINT}
 	  </delete>
     <!--修改任务-->
-    <update id="updateTaskNodeById" parameterType="BaseResultMap">
+    <update id="updateTaskNodeById" parameterType="com.camelot.pmt.task.mo">
     	update task
 		    set task_num = #{taskNum,jdbcType=VARCHAR},
 		      task_name = #{taskName,jdbcType=VARCHAR},
@@ -448,6 +464,7 @@
 		where t.id = #{id,jdbcType=BIGINT}
 	</update>
   <!-- gxl end -->
+
   <!--zsf-->
   <!--根据项目Id 和 userId 查询出任务个数-->
   <select id="queryUnfinishedTask"  resultType="int">
@@ -459,4 +476,28 @@
           and beassign_user_id = #{userId}
       </if>
   </select>
+    <!--zsf-->
+    <!--根据需求Id 查询出任务列表-->
+    <select id="queryTaskByDemandId" resultMap="BaseResultMap" parameterType="long">
+        select
+        <include refid="ShowAllTasks_Column_List" />
+        from
+        task t
+        INNER JOIN platform_user a ON a.user_id = t.assign_user_id
+        INNER JOIN platform_user b ON b.user_id = t.beassign_user_id
+        INNER JOIN platform_user c ON c.user_id = t.create_user_id
+        where t.beassign_user_id = #{beassignUserId,jdbcType=VARCHAR}
+        <if test="status != null">
+            and t.demand_id = #{demandId,jdbcType=BIGINT}
+        </if>
+    </select>
+   <!--  查询逾期列表 -->
+    <select id="queryOverdueTask" resultMap="BaseResultMap">
+    	select
+    	<include refid="TaskManager_ShowTasks_Column_List" />
+    	from task t
+    	LEFT JOIN project_main p on p.id =t.project_id
+		LEFT JOIN platform_user u1 on u1.user_id = t.assign_user_id
+		ORDER BY t.priority ASC,t.estimate_start_time DESC
+    </select>
 </mapper>
