@@ -272,4 +272,33 @@
         from demand
         <include refid="dynamicWhere"/>
     </select>
+    <!-- 根据pid查询需求 -->
+    <select id="selectByPId" parameterType="long" resultMap="BaseResultMap">
+    	select id,pid from demand where pid = #{pid,jdbcType=BIGINT}
+    </select>
+    <!-- 查询需求下用例引用 -->
+    <select id="findDemandUseCase" parameterType="long" resultType="long">
+    	select count(1)
+    	from use_case
+    	where demand_id = #{demandId,jdbcType=BIGINT} and case_status = '2' and del_flag = '0'
+    </select>
+    <!-- 查询需求下bug引用，已撤销状态 -->
+    <select id="fingDemandBug" parameterType="long" resultType="long">
+    	select count(1)
+    	from bug_manage
+    	where demand_id = #{demandId,jdbcType=BIGINT} and bug_status = '4' and del_flag != '0'
+    </select>
+    <!-- 查询需求下任务引用 -->
+    <select id="findDemandTask" parameterType="long" resultType="long">
+    	select count(1)
+    	from task
+    	where demand_id = #{demandId,jdbcType=BIGINT} and status = '4'
+    </select>
+    <!-- 批量删除需求 -->
+    <delete id="deleteByList" parameterType="long" >
+    	delete from demand where 
+    	<foreach collection="list" open="(" close=")" separator="or" item="demandId">
+    		id = #{demandId,jdbcType=BIGINT}
+    	</foreach>
+    </delete>
 </mapper>
