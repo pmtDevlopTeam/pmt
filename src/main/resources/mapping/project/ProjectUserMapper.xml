@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.camelot.pmt.project.mapper.ProjectUserMapper">
+	<!--根据项目id更新项目成员状态 -->
+	<update id="updateUserStatusByProjectId">
+		update project_user set
+		real_out_time =
+		#{realOutTime}, user_status =
+		#{userStatus},
+		modify_user_id =
+		#{modifyUserId}, modify_time =
+		#{modifyTime}
+		where project_id =
+		#{projectId}
+	</update>
 	<resultMap id="BaseResultMap" type="com.camelot.pmt.project.model.ProjectUser">
 		<id column="id" property="id" jdbcType="BIGINT" />
 		<result column="project_id" property="projectId" jdbcType="BIGINT" />
@@ -237,7 +249,7 @@
 		where id =
 		#{id}
 	</update>
-	
+
 	<resultMap id="projectUserMap" type="com.camelot.pmt.project.model.ProjectUserShow">
 		<id column="id" property="id" jdbcType="BIGINT" />
 		<result column="project_id" property="projectId" jdbcType="BIGINT" />
@@ -252,56 +264,78 @@
 		<result column="user_status" property="userStatus" jdbcType="CHAR" />
 		<result column="user_job_num" property="userJobNum" jdbcType="VARCHAR" />
 		<result column="user_pro_role" property="userProRole" jdbcType="VARCHAR" />
-		<result column="pro_role_name" property="userProRoleName" jdbcType="VARCHAR" />
+		<result column="pro_role_name" property="userProRoleName"
+			jdbcType="VARCHAR" />
 		<collection property="userRoleNames" ofType="java.lang.String">
-			<result column="user_role_names" property="userRoleName"/>
+			<result column="user_role_names" property="userRoleName" />
 		</collection>
 	</resultMap>
 
-	<select id="searchUserByProjectId" parameterType="java.lang.Long" resultMap="projectUserMap">
-		SELECT project_user.id, project_user.project_id, project_user.user_id, platform_user_info.user_job_num,
+	<select id="searchUserByProjectId" parameterType="java.lang.Long"
+		resultMap="projectUserMap">
+		SELECT project_user.id, project_user.project_id,
+		project_user.user_id, platform_user_info.user_job_num,
 		project_user.user_pro_role,
-		platform_user.user_name, project_user.pre_join_time,
-		project_user.real_join_time, project_user.pre_out_time,
+		platform_user.user_name,
+		project_user.pre_join_time,
+		project_user.real_join_time,
+		project_user.pre_out_time,
 		project_user.real_out_time,
-		project_user.pre_man_hour, project_user.user_status, pr1.role_name AS pro_role_name, pr2.role_name AS
+		project_user.pre_man_hour, project_user.user_status, pr1.role_name AS
+		pro_role_name, pr2.role_name AS
 		user_role_names
 		FROM project_user
-		LEFT JOIN platform_user ON project_user.user_id = platform_user.user_id
+		LEFT
+		JOIN platform_user ON project_user.user_id = platform_user.user_id
 		LEFT JOIN platform_role pr1 ON project_user.user_pro_role =
 		pr1.role_id
-		LEFT JOIN platform_user_role ON platform_user_role.user_id =
+		LEFT JOIN platform_user_role ON platform_user_role.user_id
+		=
 		project_user.user_id
-		LEFT JOIN platform_role pr2 ON pr2.role_id = platform_user_role.role_id
-		LEFT JOIN platform_user_info ON platform_user_info.user_id = project_user.user_id
-		WHERE project_user.project_id = #{projectId}
+		LEFT JOIN platform_role pr2 ON pr2.role_id =
+		platform_user_role.role_id
+		LEFT JOIN platform_user_info ON
+		platform_user_info.user_id = project_user.user_id
+		WHERE
+		project_user.project_id = #{projectId}
 	</select>
 
-	<select id="searchUserByCondition" parameterType="com.camelot.pmt.project.model.ProjectUserSearchVO" resultMap="projectUserMap">
-		SELECT project_user.id, project_user.project_id, project_user.user_id, platform_user_info.user_job_num,
+	<select id="searchUserByCondition" parameterType="com.camelot.pmt.project.model.ProjectUserSearchVO"
+		resultMap="projectUserMap">
+		SELECT project_user.id, project_user.project_id, project_user.user_id,
+		platform_user_info.user_job_num,
 		project_user.user_pro_role,
 		platform_user.user_name, project_user.pre_join_time,
 		project_user.real_join_time, project_user.pre_out_time,
 		project_user.real_out_time,
-		project_user.pre_man_hour, project_user.user_status, pr1.role_name AS pro_role_name, pr2.role_name AS
+		project_user.pre_man_hour,
+		project_user.user_status, pr1.role_name AS pro_role_name,
+		pr2.role_name AS
 		user_role_names
 		FROM project_user
-		LEFT JOIN platform_user ON project_user.user_id = platform_user.user_id
-		LEFT JOIN platform_role pr1 ON project_user.user_pro_role =
+		LEFT JOIN
+		platform_user ON project_user.user_id = platform_user.user_id
+		LEFT JOIN
+		platform_role pr1 ON project_user.user_pro_role =
 		pr1.role_id
-		LEFT JOIN platform_user_role ON platform_user_role.user_id =
+		LEFT JOIN
+		platform_user_role ON platform_user_role.user_id =
 		project_user.user_id
-		LEFT JOIN platform_role pr2 ON pr2.role_id = platform_user_role.role_id
-		LEFT JOIN platform_user_info ON platform_user_info.user_id = project_user.user_id
-		WHERE project_user.project_id = #{projectId} 
+		LEFT JOIN platform_role pr2 ON pr2.role_id =
+		platform_user_role.role_id
+		LEFT JOIN platform_user_info ON
+		platform_user_info.user_id = project_user.user_id
+		WHERE
+		project_user.project_id = #{projectId}
 		<if test="userName != null">
-			 AND platform_user.user_name like concat(concat('%', #{userName}), '%')
+			AND platform_user.user_name like concat(concat('%',
+			#{userName}), '%')
 		</if>
 		<if test="userStatus != null">
-			AND project_user.user_status = #{userStatus} 
+			AND project_user.user_status = #{userStatus}
 		</if>
 		<if test="userProRoleIds != null">
-			AND project_user.user_pro_role = #{userProRoleIds} 
+			AND project_user.user_pro_role = #{userProRoleIds}
 		</if>
 		<if test="roleId != null">
 			AND pr2.role_id = #{roleId}
@@ -310,27 +344,35 @@
 			limit #{page}, #{size}
 		</if>
 	</select>
-	
-	<select id="count" parameterType="com.camelot.pmt.project.model.ProjectUserSearchVO" resultType="java.lang.Integer">
+
+	<select id="count" parameterType="com.camelot.pmt.project.model.ProjectUserSearchVO"
+		resultType="java.lang.Integer">
 		select count(1) from (
 		SELECT project_user.user_id
 		FROM project_user
-		LEFT JOIN platform_user ON project_user.user_id = platform_user.user_id
-		LEFT JOIN platform_role pr1 ON project_user.user_pro_role =
+		LEFT JOIN platform_user ON project_user.user_id =
+		platform_user.user_id
+		LEFT JOIN platform_role pr1 ON
+		project_user.user_pro_role =
 		pr1.role_id
-		LEFT JOIN platform_user_role ON platform_user_role.user_id =
+		LEFT JOIN platform_user_role ON
+		platform_user_role.user_id =
 		project_user.user_id
-		LEFT JOIN platform_role pr2 ON pr2.role_id = platform_user_role.role_id
-		LEFT JOIN platform_user_info ON platform_user_info.user_id = project_user.user_id
-		WHERE project_user.project_id = #{projectId} 
+		LEFT JOIN
+		platform_role pr2 ON pr2.role_id = platform_user_role.role_id
+		LEFT JOIN
+		platform_user_info ON platform_user_info.user_id =
+		project_user.user_id
+		WHERE project_user.project_id = #{projectId}
 		<if test="userName != null">
-			 AND platform_user.user_name like concat(concat('%', #{userName}), '%')
+			AND platform_user.user_name like concat(concat('%',
+			#{userName}), '%')
 		</if>
 		<if test="userStatus != null">
-			AND project_user.user_status = #{userStatus} 
+			AND project_user.user_status = #{userStatus}
 		</if>
 		<if test="roleId != null">
-			AND project_user.user_pro_role = #{roleId} 
+			AND project_user.user_pro_role = #{roleId}
 		</if>
 		<if test="userProRoleIds != null">
 			AND pr2.role_id = #{userProRoleIds}
@@ -347,7 +389,7 @@
 			#{item}
 		</foreach>
 	</update>
-	
+
 	<update id="clearUserAll">
 		update project_user set user_status = #{user_status}, create_user_id = #{userId}, modify_time = now(), real_out_time = now()
 		where project_user.project_id = #{projectId}

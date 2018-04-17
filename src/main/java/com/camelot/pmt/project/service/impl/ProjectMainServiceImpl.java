@@ -3,6 +3,9 @@ package com.camelot.pmt.project.service.impl;
 import java.util.Date;
 import java.util.List;
 
+import com.camelot.pmt.common.DataGrid;
+import com.camelot.pmt.common.ExecuteResult;
+import com.camelot.pmt.common.Pager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,9 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import com.camelot.pmt.platform.utils.DataGrid;
-import com.camelot.pmt.platform.utils.ExecuteResult;
-import com.camelot.pmt.platform.utils.Pager;
 import com.camelot.pmt.project.mapper.DemandMapper;
 import com.camelot.pmt.project.mapper.ProjectBudgetMapper;
 import com.camelot.pmt.project.mapper.ProjectMainMapper;
@@ -22,8 +22,6 @@ import com.camelot.pmt.project.mapper.WarningMapper;
 import com.camelot.pmt.project.model.ProjectBudget;
 import com.camelot.pmt.project.model.ProjectMain;
 import com.camelot.pmt.project.model.ProjectOperate;
-import com.camelot.pmt.project.model.ProjectUser;
-import com.camelot.pmt.project.model.ProjectUserShow;
 import com.camelot.pmt.project.model.Warning;
 import com.camelot.pmt.project.service.ProjectMainService;
 
@@ -55,7 +53,7 @@ public class ProjectMainServiceImpl implements ProjectMainService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ExecuteResult<String> save(ProjectMain projectMain, ProjectOperate projectOperate,
-            ProjectBudget projectBudget, Warning warning) {
+                                      ProjectBudget projectBudget, Warning warning) {
 
         ExecuteResult<String> result = new ExecuteResult<String>();
         try {
@@ -181,7 +179,7 @@ public class ProjectMainServiceImpl implements ProjectMainService {
     /**
      * 按修改人id查询
      * 
-     * @param createUserId
+     * @param
      * @return
      */
     @Override
@@ -208,15 +206,17 @@ public class ProjectMainServiceImpl implements ProjectMainService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public ExecuteResult<String> updateByPrimaryKeySelective(ProjectMain projectMain, String createUserId,
-            String operateDesc) {
+    public ExecuteResult<String> updateByPrimaryKeySelective(Long id, String userId, String modifyUserId,
+            Date modifyTime, String projectNum, String projectName, String projectStatus, String projectDesc,
+            Date startTime, Date endTime, String createUserId, String operateDesc) {
         ExecuteResult<String> result = new ExecuteResult<>();
         try {
-            projectMainMapper.updateByPrimaryKeySelective(projectMain);
+            projectMainMapper.updateByPrimaryKeySelective(id, userId, modifyUserId, modifyTime, projectNum, projectName,
+                    projectStatus, projectDesc, startTime, endTime);
 
             ProjectOperate projectOperate = new ProjectOperate();
             projectOperate.setCreateTime(new Date());
-            projectOperate.setProjectId(projectMain.getId());
+            projectOperate.setProjectId(id);
             projectOperate.setCreateUserId(createUserId);
             projectOperate.setOperateDesc(operateDesc);
 
@@ -286,32 +286,35 @@ public class ProjectMainServiceImpl implements ProjectMainService {
      * @return
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public ExecuteResult<String> closeProjectById(Long id, String createUserId, String modifyUserId,
             String projectStatus, String operateDesc, String userStatus, String demandStatus, String closeReason,
             String status, String caseStatus) {
+        ExecuteResult<String> result = new ExecuteResult<>();
+        try {
+            // projectMain中项目id 修改人 修改时间 项目状态修改
+            projectMainMapper.updateById(id, projectStatus, modifyUserId, new Date());
+            // ProjectUser项目成员表成员状态修改
+            projectUserMapper.updateUserStatusByProjectId(id, new Date(), userStatus, modifyUserId, new Date());
+            // 项目操作表存数据
+            ProjectOperate projectOperate = new ProjectOperate();
+            projectOperate.setCreateTime(new Date());
+            projectOperate.setProjectId(id);
+            projectOperate.setCreateUserId(createUserId);
+            projectOperate.setOperateDesc(operateDesc);
+            projectOperateMapper.insert(projectOperate);
+            // demand需求表更改状态
+            // Demand
+            // demandMapper.
+            // task任务表更改状态
 
-        // 项目id 修改人 修改时间 项目状态
-        ProjectMain projectMain = projectMainMapper.selectByPrimaryKey(id);
-        projectMain.setModifyUserId(modifyUserId);
-        projectMain.setModifyTime(new Date());
-        projectMain.setProjectStatus(projectStatus);
-        projectMainMapper.updateById(projectMain);
-        // 项目成员表成员状态
-        ProjectUser projectUser = new ProjectUser();
-        // 项目操作表存数据
-        ProjectOperate projectOperate = new ProjectOperate();
-        projectOperate.setCreateTime(new Date());
-        projectOperate.setProjectId(id);
-        projectOperate.setCreateUserId(createUserId);
-        projectOperate.setOperateDesc(operateDesc);
-        projectOperateMapper.insert(projectOperate);
-        // 需求表更改状态
-        // Demand
-        // demandMapper.
-        // 任务表更改状态
+            // userCase用例状态修改
 
-        // bug用例状态
-        return null;
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+        return result;
     }
 
 }

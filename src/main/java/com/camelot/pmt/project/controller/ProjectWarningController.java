@@ -5,6 +5,10 @@
  */
 package com.camelot.pmt.project.controller;
 
+import com.camelot.pmt.common.ApiResponse;
+import com.camelot.pmt.common.DataGrid;
+import com.camelot.pmt.common.ExecuteResult;
+import com.camelot.pmt.platform.model.User;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -16,12 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
-import com.camelot.pmt.platform.common.ApiResponse;
-import com.camelot.pmt.platform.user.model.UserModel;
-import com.camelot.pmt.platform.utils.DataGrid;
-import com.camelot.pmt.platform.utils.ExecuteResult;
 import com.camelot.pmt.project.service.ProjectWarningService;
-
 
 /**
  * @ClassName: ProjectWarningController
@@ -49,7 +48,7 @@ public class ProjectWarningController {
             @ApiImplicitParam(name = "modifyUserId", value = "修改人id", required = true, paramType = "form", dataType = "int") })
     @PostMapping("start")
     public JSONObject start(@RequestBody String param) {
-        ExecuteResult<DataGrid<UserModel>> result = new ExecuteResult<DataGrid<UserModel>>();
+        ExecuteResult<DataGrid<User>> result = new ExecuteResult<DataGrid<User>>();
         if ("".equals(param)) {
             return ApiResponse.error();
         }

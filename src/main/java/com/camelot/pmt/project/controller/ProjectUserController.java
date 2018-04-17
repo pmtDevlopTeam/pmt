@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.camelot.pmt.common.ApiResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
-import com.camelot.pmt.platform.common.ApiResponse;
 import com.camelot.pmt.project.mapper.ProjectUserMapper;
 import com.camelot.pmt.project.model.ProjectUser;
 import com.camelot.pmt.project.model.ProjectUserSearchVO;
@@ -102,37 +102,36 @@ public class ProjectUserController {
     }
 
     /**
-     * 查找项目成员，条件查询
-     * 姓名，状态，角色，项目角色
+     * 查找项目成员，条件查询 姓名，状态，角色，项目角色
+     * 
      * @param projectId
      * @return
      */
     @RequestMapping(value = "/find", method = RequestMethod.POST)
     @ApiOperation("查找项目成员")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "projectId", dataType = "Long", value = "项目id", required = true), 
-            @ApiImplicitParam(paramType = "query", name = "userName", dataType = "String", value = "用户姓名", required = false), 
-            @ApiImplicitParam(paramType = "query", name = "userStatus", dataType = "String", value = "用户状态", required = false), 
-            @ApiImplicitParam(paramType = "query", name = "userProRoleIds", dataType = "String", value = "成员项目角色id", required = false), 
+            @ApiImplicitParam(paramType = "query", name = "projectId", dataType = "Long", value = "项目id", required = true),
+            @ApiImplicitParam(paramType = "query", name = "userName", dataType = "String", value = "用户姓名", required = false),
+            @ApiImplicitParam(paramType = "query", name = "userStatus", dataType = "String", value = "用户状态", required = false),
+            @ApiImplicitParam(paramType = "query", name = "userProRoleIds", dataType = "String", value = "成员项目角色id", required = false),
             @ApiImplicitParam(paramType = "query", name = "roleId", dataType = "String", value = "成员角色id", required = false),
             @ApiImplicitParam(paramType = "query", name = "page", dataType = "int", value = "当前页", required = false),
-            @ApiImplicitParam(paramType = "query", name = "size", dataType = "int", value = "每页条数", required = false)
-   })
+            @ApiImplicitParam(paramType = "query", name = "size", dataType = "int", value = "每页条数", required = false) })
     public JSONObject findUser(ProjectUserSearchVO vo) {
         try {
-        	if (vo.getPage() != null && vo.getSize() != null) {
-        		vo.setPage((vo.getPage() - 1) * vo.getSize());
-        	}
-        	Map<String, Object> map = new HashMap<>();
-        	List<ProjectUserShow> list = projectUserService.searchProUserByCondition(vo);
-        	map.put("list", list);
-        	int count;
-        	if (list != null && list.size() > 0) {
-        		count = projectUserService.count(vo);
-        	} else {
-        		count = 0;
-        	}
-        	map.put("count", count);
+            if (vo.getPage() != null && vo.getSize() != null) {
+                vo.setPage((vo.getPage() - 1) * vo.getSize());
+            }
+            Map<String, Object> map = new HashMap<>();
+            List<ProjectUserShow> list = projectUserService.searchProUserByCondition(vo);
+            map.put("list", list);
+            int count;
+            if (list != null && list.size() > 0) {
+                count = projectUserService.count(vo);
+            } else {
+                count = 0;
+            }
+            map.put("count", count);
             return ApiResponse.success(map);
         } catch (Exception e) {
             e.printStackTrace();

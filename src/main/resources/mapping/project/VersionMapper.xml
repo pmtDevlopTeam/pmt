@@ -13,14 +13,23 @@
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="modify_user_id" property="modifyUserId" jdbcType="VARCHAR" />
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="version_status" property="versionStatus" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.camelot.pmt.project.model.Version" extends="BaseResultMap" >
+    <result column="remarks" property="remarks" jdbcType="LONGVARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, project_id, version, start_time, end_time, version_name, version_type, create_user_id, 
-    create_time, modify_user_id, modify_time
+    create_time, modify_user_id, modify_time, version_status
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+  <sql id="Blob_Column_List" >
+    remarks
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
     select 
     <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
     from version
     where id = #{id,jdbcType=BIGINT}
   </select>
@@ -32,11 +41,13 @@
     insert into version (id, project_id, version, 
       start_time, end_time, version_name, 
       version_type, create_user_id, create_time, 
-      modify_user_id, modify_time)
+      modify_user_id, modify_time, version_status, 
+      remarks)
     values (#{id,jdbcType=BIGINT}, #{projectId,jdbcType=BIGINT}, #{version,jdbcType=VARCHAR}, 
       #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, #{versionName,jdbcType=VARCHAR}, 
-      #{versionType,jdbcType=CHAR}, #{createUserId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{modifyUserId,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP})
+      #{versionType,jdbcType=CHAR}, #{createUserId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+      #{modifyUserId,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP}, #{versionStatus,jdbcType=INTEGER},
+      #{remarks,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.camelot.pmt.project.model.Version" >
     insert into version
@@ -74,6 +85,12 @@
       <if test="modifyTime != null" >
         modify_time,
       </if>
+      <if test="versionStatus != null" >
+        version_status,
+      </if>
+      <if test="remarks != null" >
+        remarks,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -108,6 +125,12 @@
       </if>
       <if test="modifyTime != null" >
         #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="versionStatus != null" >
+        #{versionStatus,jdbcType=INTEGER},
+      </if>
+      <if test="remarks != null" >
+        #{remarks,jdbcType=LONGVARCHAR},
       </if>
     </trim>
   </insert>
@@ -144,7 +167,29 @@
       <if test="modifyTime != null" >
         modify_time = #{modifyTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="versionStatus != null" >
+        version_status = #{versionStatus,jdbcType=INTEGER},
+      </if>
+      <if test="remarks != null" >
+        remarks = #{remarks,jdbcType=LONGVARCHAR},
+      </if>
     </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.camelot.pmt.project.model.Version" >
+    update version
+    set project_id = #{projectId,jdbcType=BIGINT},
+      version = #{version,jdbcType=VARCHAR},
+      start_time = #{startTime,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+      version_name = #{versionName,jdbcType=VARCHAR},
+      version_type = #{versionType,jdbcType=CHAR},
+      create_user_id = #{createUserId,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modify_user_id = #{modifyUserId,jdbcType=VARCHAR},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      version_status = #{versionStatus,jdbcType=INTEGER},
+      remarks = #{remarks,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.camelot.pmt.project.model.Version" >
@@ -158,7 +203,44 @@
       create_user_id = #{createUserId,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       modify_user_id = #{modifyUserId,jdbcType=VARCHAR},
-      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      version_status = #{versionStatus,jdbcType=INTEGER}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  <select id="selectVersionListByProId" resultMap="BaseResultMap" parameterType="long">
+    SELECT
+    <include refid="Base_Column_List"/>
+    FROM version
+    WHERE project_id = #{projectId} and version_status=0 ORDER BY create_time DESC
+  </select>
+  <select id="queryListByProIdAndVerType" resultMap="BaseResultMap" parameterType="map">
+    SELECT
+    <include refid="Base_Column_List"/>
+    FROM version
+    WHERE project_id = #{projectId}
+    AND version_type=#{versionType} and version_status=0 ORDER BY create_time DESC
+  </select>
+  <!-- 分页查询所有 -->
+  <select id="findAllByPage" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from
+    version
+    <if test="page!=null">
+      <include refid="pagination_tail" />
+    </if>
+  </select>
+  <!-- 分页公共sql -->
+  <sql id="pagination_tail">
+    limit #{page.pageOffset} , #{page.rows}
+  </sql>
+
+  <select id="selectList" resultMap="BaseResultMap" >
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM version
+    ORDER BY id ASC
+  </select>
 </mapper>

@@ -39,15 +39,15 @@ public class ProjectUserServiceImpl implements ProjectUserService {
         return projectUserMapper.searchUserByProjectId(projectId);
     }
 
-	@Override
-	public List<ProjectUserShow> searchProUserByCondition(ProjectUserSearchVO vo) {
-		return projectUserMapper.searchUserByCondition(vo);
-	}
+    @Override
+    public List<ProjectUserShow> searchProUserByCondition(ProjectUserSearchVO vo) {
+        return projectUserMapper.searchUserByCondition(vo);
+    }
 
-	@Override
-	public int count(ProjectUserSearchVO vo) {
-		return projectUserMapper.count(vo);
-	}
+    @Override
+    public int count(ProjectUserSearchVO vo) {
+        return projectUserMapper.count(vo);
+    }
 
 	@Override
 	public int clearUser(Long projectId, String userId, String userStatus) {

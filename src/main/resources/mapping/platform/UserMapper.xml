@@ -2,115 +2,301 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.camelot.pmt.platform.user.mapper.UserMapper">
+<mapper namespace="com.camelot.pmt.platform.mapper.UserMapper">
 
     <!-- 映射UserModel实体 -->
-    <resultMap id="userModel" type="com.camelot.pmt.platform.user.model.UserModel">
+    <resultMap id="userModel" type="com.camelot.pmt.platform.model.User">
         <result property="id" column="id"/>
-        <result property="userId" column="userId"/>
-        <result property="loginCode" column="logincode"/>
+        <result property="userId" column="user_id"/>
+        <result property="loginCode" column="login_code"/>
         <result property="password" column="password"/>
-        <result property="username" column="username"/>
+        <result property="username" column="user_name"/>
         <result property="state" column="state"/>
-        <result property="createTime" column="createtime"/>
-        <result property="modifyTime" column="modifytime"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result property="createUserId" column="create_user_id"/>
+        <result property="modifyUserId" column="modify_user_id"/>
     </resultMap>
-    <!-- 用户查询字段 -->
+
+    <!-- 映射UserVo实体 -->
+    <resultMap id="userVoResultMap" type="com.camelot.pmt.platform.model.vo.UserVo">
+        <result property="userId" column="userId"/>
+        <result property="userJobNum" column="userJobNum"/>
+        <result property="userName" column="username"/>
+        <result property="loginCode" column="loginCode"/>
+        <result property="orgName" column="orgName"/>
+        <result property="roleName" column="roleName"/>
+        <result property="userPhone" column="userPhone"/>
+        <result property="state" column="state"/>
+        <result property="roleId" column="roleId"/>
+    </resultMap>
+
+    <!-- 映射UserModel实体 用户用户信息表展示 -->
+    <resultMap id="userInfoResultMap" type="com.camelot.pmt.platform.model.User">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="userJobNum" column="user_job_num"/>
+        <result property="userPhone" column="user_phone"/>
+        <result property="userMail" column="user_mail"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result property="createUserId" column="create_user_id"/>
+        <result property="modifyUserId" column="modify_user_id"/>
+    </resultMap>
+    <!-- 用户查询全字段 -->
     <sql id="userColumns">
-      id,userId,logincode,password,username,state,createtime,modifytime
+      id,user_id,login_code,password,user_name,state,create_time,modify_time,create_user_id,modify_user_id
     </sql>
-    
-    
-    <!-- 新增用户  新开始 -->
+    <!-- 用户查询全字段  不返回密码-->
+    <sql id="userColumnsNoPassword">
+      id,user_id,login_code,user_name,state,create_time,modify_time,create_user_id,modify_user_id
+    </sql>
+    <!-- 用户信息表查询字段 -->
+    <sql id="userInfoColumns">
+      id,user_id,user_job_num,user_phone,user_mail,create_time,create_user_id,modify_time,modify_user_id
+    </sql>
+
+
+    <!-- 新增用户                                              新开始 -->
+    <!-- 插入用户表开始 -->
     <!-- 新增列处理 -->
-	<sql id="sql_add_columns">
+	<sql id="sql_add_user_columns">
 		<trim suffixOverrides=",">
-			<if test="userId != null">userId,</if>
-			<if test="loginCode != null">logincode,</if>
+			<if test="userId != null">user_id,</if>
+			<if test="loginCode != null">login_code,</if>
 			<if test="password != null">password,</if>
-			<if test="username != null">username,</if>
-			<if test="state != null">state</if>
+			<if test="username != null">user_name,</if>
+			<if test="state != null">state,</if>
+			<if test="createUserId != null">create_user_id,</if>
+			<if test="modifyUserId != null">modify_user_id</if>
 		</trim>
 	</sql>
 	<!-- 新增列属性 -->
-	<sql id="sql_add_properties">
+	<sql id="sql_add_user_properties">
 		<trim suffixOverrides=",">
 				<if test="userId != null">#{userId},</if>
 				<if test="loginCode != null">#{loginCode},</if>
 				<if test="password != null">#{password},</if>
 				<if test="username != null">#{username},</if>
-				<if test="state != null">#{state}</if>
-		</trim>		
+				<if test="state != null">#{state},</if>
+				<if test="createUserId != null">#{createUserId},</if>
+				<if test="modifyUserId != null">#{modifyUserId}</if>
+		</trim>
 	</sql>
 	<!-- 新增用户 -->
-	<insert id="insertUser" useGeneratedKeys="true" keyProperty="id" parameterType="UserModel">
-		insert into pmt_platform_user(
-			<include refid="sql_add_columns"/>
+	<insert id="insertUser" useGeneratedKeys="true" keyProperty="id" parameterType="com.camelot.pmt.platform.model.User">
+		insert into platform_user(
+			<include refid="sql_add_user_columns"/>
 		)values(
-			<include refid="sql_add_properties"/>
+			<include refid="sql_add_user_properties"/>
 		)
-	</insert> 
-    
-    
-    
-    <!-- 用户更新 -->
-	<update id="updateUserById" parameterType="UserModel">
-		update user u
+	</insert>
+	<!-- 插入用户表开始 -->
+
+	<!-- 用户信息表插入 开始-->
+
+	<sql id="sql_add_user_info_columns">
+		<trim suffixOverrides=",">
+			<if test="userId != null">user_id,</if>
+			<if test="userJobNum != null">user_job_num,</if>
+			<if test="userPhone != null">user_phone,</if>
+			<if test="userMail != null">user_mail,</if>
+			<if test="createUserId != null">create_user_id,</if>
+			<if test="modifyUserId != null">modify_user_id</if>
+		</trim>
+	</sql>
+	<!-- 新增列属性 -->
+	<sql id="sql_add_user_info_properties">
+		<trim suffixOverrides=",">
+				<if test="userId != null">#{userId},</if>
+				<if test="userJobNum != null">#{userJobNum},</if>
+				<if test="userPhone != null">#{userPhone},</if>
+				<if test="userMail != null">#{userMail},</if>
+				<if test="createUserId != null">#{createUserId},</if>
+				<if test="modifyUserId != null">#{modifyUserId}</if>
+		</trim>
+	</sql>
+	<!-- 新增用户信息 -->
+	<insert id="insertUserInfo" useGeneratedKeys="true" keyProperty="id" parameterType="com.camelot.pmt.platform.model.User">
+		insert into platform_user_info(
+			<include refid="sql_add_user_info_columns"/>
+		)values(
+			<include refid="sql_add_user_info_properties"/>
+		)
+	</insert>
+	<!-- 用户信息表插入结束-->
+
+	<!-- 用户部门表插入开始 -->
+	<sql id="sql_add_user_org_columns">
+		<trim suffixOverrides=",">
+			<if test="userId != null">user_id,</if>
+			<if test="orgId != null">org_id,</if>
+			<if test="createUserId != null">create_user_id,</if>
+			<if test="modifyUserId != null">modify_user_id</if>
+		</trim>
+	</sql>
+	<!-- 新增列属性 -->
+	<sql id="sql_add_user_org_properties">
+		<trim suffixOverrides=",">
+				<if test="userId != null">#{userId},</if>
+				<if test="orgId != null">#{orgId},</if>
+				<if test="createUserId != null">#{createUserId},</if>
+				<if test="modifyUserId != null">#{modifyUserId}</if>
+		</trim>
+	</sql>
+	<!-- 新增用户组织 -->
+	<insert id="insertUserOrg" useGeneratedKeys="true" keyProperty="id" parameterType="com.camelot.pmt.platform.model.User">
+		insert into platform_user_org(
+			<include refid="sql_add_user_org_columns"/>
+		)values(
+			<include refid="sql_add_user_org_properties"/>
+		)
+	</insert>
+	<!-- 用户部门表插入结束 -->
+
+	<!-- 用户角色表插入开始 -->
+	<sql id="sql_add_user_role_columns">
+		<trim suffixOverrides=",">
+			<if test="userId != null">user_id,</if>
+			<if test="roleId != null">role_id,</if>
+			<if test="createUserId != null">create_user_id,</if>
+			<if test="modifyUserId != null">modify_user_id</if>
+		</trim>
+	</sql>
+	<!-- 新增列属性 -->
+	<sql id="sql_add_user_role_properties">
+		<trim suffixOverrides=",">
+				<if test="userId != null">#{userId},</if>
+				<if test="roleId != null">#{roleId},</if>
+				<if test="createUserId != null">#{createUserId},</if>
+				<if test="modifyUserId != null">#{modifyUserId}</if>
+		</trim>
+	</sql>
+	<!-- 新增用户信息 -->
+	<insert id="insertUserRole" useGeneratedKeys="true" keyProperty="id" parameterType="com.camelot.pmt.platform.model.User">
+		insert into platform_user_role(
+			<include refid="sql_add_user_role_columns"/>
+		)values(
+			<include refid="sql_add_user_role_properties"/>
+		)
+	</insert>
+	<!-- 用户角色表插入开始 -->
+
+
+
+    <!-- 新增用户                                       结束 -->
+
+
+    <!-- 用户更新				开始 -->
+    <!-- 用户表更新 -->
+	<update id="modifyUserByUserId" parameterType="com.camelot.pmt.platform.model.User">
+		update platform_user
 		    <set>
 				<if test = "username != null ">
-					u.username = #{username},
+					user_name = #{username},
 				</if>
-				<if test = "newPassword != null">
-					u.password = #{newPassword},
+				<if test = "loginCode != null">
+					login_code = #{loginCode},
 				</if>
-				<if test = "role != null  ">
-					u.role = #{role},
+				<if test = "password != null  ">
+					password = #{password},
 				</if>
-				<if test = "phone != null ">
-					u.phone = #{phone},
+				<if test = "state != null ">
+					state = #{state},
 				</if>
-				<if test = "email != null ">
-					u.email = #{email},
-				</if>
-				<if test = "projectId != null ">
-					u.project_id = #{projectId},
-				</if>
-				<if test = "pwdStatus != null ">
-					u.pwd_status = #{pwdStatus}
+				<if test = "modifyUserId != null ">
+					modify_user_id = #{modifyUserId}
 				</if>
 			</set>
-		where id = #{id} 
+		where user_id = #{userId}
 	</update>
-	
-	
+
+	<!-- 用户信息表更新 -->
+	<update id="modifyUserInfoByUserId" parameterType="com.camelot.pmt.platform.model.User">
+		update platform_user_info
+		    <set>
+				<if test = "userPhone != null ">
+					user_phone = #{userPhone},
+				</if>
+				<if test = "userMail != null">
+					user_mail = #{userMail},
+				</if>
+				<if test = "modifyUserId != null ">
+					modify_user_id = #{modifyUserId}
+				</if>
+			</set>
+		where user_id = #{userId}
+	</update>
+
+	<!-- 用户部门表更新 -->
+	<update id="modifyUserOrgByUserId" parameterType="com.camelot.pmt.platform.model.User">
+		update platform_user_org
+		    <set>
+				<if test = "orgId != null ">
+					org_id = #{orgId},
+				</if>
+				<if test = "modifyUserId != null ">
+					modify_user_id = #{modifyUserId}
+				</if>
+			</set>
+		where user_id = #{userId}
+	</update>
+
+	<!-- 用户角色表更新 -->
+	<update id="modifyUserRoleByUserId" parameterType="com.camelot.pmt.platform.model.User">
+		update platform_user_role
+		    <set>
+				<if test = "roleId != null ">
+					role_id = #{roleId},
+				</if>
+				<if test = "modifyUserId != null ">
+					modify_user_id = #{modifyUserId}
+				</if>
+			</set>
+		where user_id = #{userId}
+	</update>
+
+	<!-- 用户更新				结束 -->
+
+	<!-- 重置密码 -->
+	<update id="resetUserPasswordByUserId" parameterType="com.camelot.pmt.platform.model.User" >
+		update platform_user
+		    <set>
+				<if test = "password != null ">
+					password = #{password}
+				</if>
+			</set>
+		where user_id = #{userId}
+	</update>
+
 	<!-- 检查用户登录账号是否存在 -->
 	 <select id="findUserByLoginCode" resultMap="userModel" parameterType="java.lang.String" >
-        select <include refid="userColumns"/> from pmt_platform_user where logincode = #{loginCode}
+        select <include refid="userColumns"/> from platform_user where login_code = #{loginCode}
     </select>
     
 	<!-- 根据用户名查找用户密码-->
     <select id="findUserPasswordByLoginCode" resultType="java.lang.String" parameterType="java.lang.String" >
-        select password from pmt_platform_user where logincode = #{loginCode}
+        select password from platform_user where login_code = #{loginCode}
     </select>
-    
-    <!-- 根据用登录账号 -->
+
+    <!-- 验证用户登录账号密码-->
     <select id="checkUserLoginCodeAndPassword" resultMap="userModel" >
-        select <include refid="userColumns"/> from pmt_platform_user where logincode = #{loginCode} and password = #{password}
+        select <include refid="userColumns"/> from platform_user where login_code = #{loginCode} and password = #{password}
     </select>
-    
-    <!-- 根据用登录账号 -->
+
+    <!-- 根据userId获取单个信息 -->
     <select id="selectUserById" resultMap="userModel" parameterType="java.lang.String" >
-        select <include refid="userColumns"/> from pmt_platform_user where userId = #{userId}
+        select <include refid="userColumnsNoPassword"/> from platform_user where user_id = #{userId}
     </select>
 
     
    <!-- 查询数量公共sql -->
 	<sql id="count_Tail">
-		select count(1) from pmt_platform_user
+		select count(1) from platform_user
 	</sql>
-	
+
 	<!-- 查询总数量 -->
-	<select id="queryCount" resultType="long">
+	<select id="countUser" resultType="long">
 		<include refid="count_Tail"></include>
 	</select>
 	
@@ -122,23 +308,89 @@
     <!-- 分页查询所有用户列表 -->
     <select id="findUsersByPage" resultMap="userModel">
         select
-        <include refid="userColumns"/>
-        from pmt_platform_user
+        <include refid="userColumnsNoPassword"/>
+        from platform_user
         <if test="page!=null">
 			<include refid="pagination_tail" />
 		</if>
     </select>
 
 	<!--查询所有用户,不分页-->
-	<select id="selectUsersAll" resultMap="userModel">
-		select <include refid="userColumns"/> from pmt_platform_user
+	<select id="queryAllUsers" resultMap="userModel">
+		select <include refid="userColumnsNoPassword"/> from platform_user
 	</select>
-	
+
+	<!--查询所有用户详情表,不分页-->
+	<select id="queryAllUserInfo" resultMap="userInfoResultMap">
+		select <include refid="userInfoColumns"/> platform_user_info
+	</select>
+
+	<!-- 根据userId获取单个用户信息 -->
+    <select id="queryUserInfoById" resultMap="userInfoResultMap" parameterType="java.lang.String" >
+        select <include refid="userInfoColumns"/> from platform_user_info where user_id = #{userId}
+    </select>
 
     <!-- 根据Id删除用户 -->
-    <delete id="deleteUserById" parameterType="com.camelot.pmt.platform.user.model.UserModel">
-        delete FROM pmt_platform_user WHERE userId = #{userId}
+    <delete id="deleteUserByUserId" parameterType="com.camelot.pmt.platform.model.User">
+        delete FROM platform_user WHERE user_id = #{userId}
     </delete>
+
+	<!-- 用户列表展示，多表关联结果集 -->
+	<select id="selectUsersList" resultMap="userVoResultMap" parameterType="com.camelot.pmt.platform.model.vo.UserVo">
+	SELECT
+	m.userIds userId,
+	m.userJobNums userJobNum,
+	m.userNames username,
+	m.loginCodes loginCode,
+	m.orgName orgName,
+	pr.role_name roleName,
+	m.userPhones userPhone,
+	m.stateses state,
+	pr.role_id roleId
+	FROM
+	(
+	SELECT
+	t.userName userNames,
+	t.loginCode loginCodes,
+	t.userJobNum userJobNums,
+	t.states stateses,
+	t.userPhone userPhones,
+	t.userId userIds,
+	po.org_name orgName
+	FROM
+	(
+	SELECT
+	u.user_name userName,
+	u.login_code loginCode,
+	ui.user_job_num userJobNum,
+	u.state states,
+	ui.user_phone userPhone,
+	u.user_id userId
+	FROM
+	platform_user u
+	JOIN platform_user_info ui ON u.user_id = ui.user_id
+	) t
+	JOIN platform_user_org puo ON t.userId = puo.user_id
+	JOIN platform_org po ON puo.org_id = po.org_id
+	) m
+	JOIN platform_user_role pur ON m.userIds = pur.user_id
+	JOIN platform_role pr ON pur.role_id = pr.role_id
+	<where>
+		<if test="userJobNum != null">
+			m.userJobNums = #{userJobNum}
+		</if>
+		<if test="userName != null">
+			AND m.userNames = #{userName}
+		</if>
+		<if test="roleId != null">
+			AND pr.role_id = #{roleId}
+		</if>
+		<if test="state != null">
+			AND m.stateses = #{state}
+		</if>
+    </where>
+    </select>
+
 
     
   

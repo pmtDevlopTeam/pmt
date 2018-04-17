@@ -2,7 +2,7 @@ package com.camelot.pmt.project.service;
 
 import java.util.List;
 
-import com.camelot.pmt.platform.utils.ExecuteResult;
+import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.project.model.ProjectOperate;
 
 /**
@@ -22,7 +22,7 @@ public interface ProjectOperateService {
     /**
      * 根据项目id进行查询
      * 
-     * @param createUserId
+     * @param
      * @return
      */
     ExecuteResult<List<ProjectOperate>> findByProjectId(Long projectId);

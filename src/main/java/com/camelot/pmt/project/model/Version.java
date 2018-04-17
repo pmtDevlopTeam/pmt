@@ -1,5 +1,8 @@
 package com.camelot.pmt.project.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 
 public class Version {
@@ -21,11 +24,15 @@ public class Version {
     /**
      * 开始时间
      */
+    @DateTimeFormat(pattern = "yyyy-MM-ddHH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date startTime;
 
     /**
      * 结束时间
      */
+    @DateTimeFormat(pattern = "yyyy-MM-ddHH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date endTime;
 
     /**
@@ -57,6 +64,16 @@ public class Version {
      * 修改时间
      */
     private Date modifyTime;
+
+    /**
+     * 版本状态（0：在使用；-1：已删除）
+     */
+    private Integer versionStatus;
+
+    /**
+     * 备注
+     */
+    private String remarks;
 
     /**
      * 版本号_id
@@ -265,5 +282,43 @@ public class Version {
      */
     public void setModifyTime(Date modifyTime) {
         this.modifyTime = modifyTime;
+    }
+
+    /**
+     * 版本状态（0：在使用；-1：已删除）
+     * 
+     * @return version_status 版本状态（0：在使用；-1：已删除）
+     */
+    public Integer getVersionStatus() {
+        return versionStatus;
+    }
+
+    /**
+     * 版本状态（0：在使用；-1：已删除）
+     * 
+     * @param versionStatus
+     *            版本状态（0：在使用；-1：已删除）
+     */
+    public void setVersionStatus(Integer versionStatus) {
+        this.versionStatus = versionStatus;
+    }
+
+    /**
+     * 备注
+     * 
+     * @return remarks 备注
+     */
+    public String getRemarks() {
+        return remarks;
+    }
+
+    /**
+     * 备注
+     * 
+     * @param remarks
+     *            备注
+     */
+    public void setRemarks(String remarks) {
+        this.remarks = remarks == null ? null : remarks.trim();
     }
 }

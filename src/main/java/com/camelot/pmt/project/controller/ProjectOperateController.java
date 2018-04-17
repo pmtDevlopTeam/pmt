@@ -2,6 +2,8 @@ package com.camelot.pmt.project.controller;
 
 import java.util.List;
 
+import com.camelot.pmt.common.ApiResponse;
+import com.camelot.pmt.common.ExecuteResult;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,8 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
-import com.camelot.pmt.platform.common.ApiResponse;
-import com.camelot.pmt.platform.utils.ExecuteResult;
 import com.camelot.pmt.project.model.ProjectOperate;
 import com.camelot.pmt.project.service.ProjectOperateService;
 
@@ -36,7 +36,8 @@ public class ProjectOperateController {
      */
     @ApiOperation(value = "按创建人id查询", notes = "按创建人id查询")
     @GetMapping(value = "/api/projectOperate/findByCreateUserId")
-    public JSONObject findByCreateUserId(@ApiParam(value = "创建人id", required = true) @RequestParam String createUserId) {
+    public JSONObject findByCreateUserId(
+            @ApiParam(value = "创建人id", required = true) @RequestParam String createUserId) {
         logger.info("入参封装的数据为：createUserId={}", createUserId);
         ExecuteResult<List<ProjectOperate>> result = new ExecuteResult<>();
         try {

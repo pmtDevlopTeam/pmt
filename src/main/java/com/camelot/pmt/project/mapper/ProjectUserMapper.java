@@ -1,5 +1,6 @@
 package com.camelot.pmt.project.mapper;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -10,6 +11,20 @@ import com.camelot.pmt.project.model.ProjectUserSearchVO;
 import com.camelot.pmt.project.model.ProjectUserShow;
 
 public interface ProjectUserMapper {
+    /**
+     * 根据项目id更新项目成员状态
+     * 
+     * @param projectId
+     * @param realOutTime
+     * @param userStatus
+     * @param modifyUserId
+     * @param modifyTime
+     * @return
+     */
+    int updateUserStatusByProjectId(@Param("projectId") Long projectId, @Param("realOutTime") Date realOutTime,
+            @Param("userStatus") String userStatus, @Param("modifyUserId") String modifyUserId,
+            @Param("modifyTime") Date modifyTime);
+
     /**
      *
      * @mbggenerated 2018-04-13
@@ -65,12 +80,13 @@ public interface ProjectUserMapper {
 
     /**
      * 成员条件查询
+     * 
      * @param vo
      * @return
      */
-	List<ProjectUserShow> searchUserByCondition(ProjectUserSearchVO vo);
+    List<ProjectUserShow> searchUserByCondition(ProjectUserSearchVO vo);
 
-	int count(ProjectUserSearchVO vo);
+    int count(ProjectUserSearchVO vo);
 
 	int clearUserAll(@Param("projectId") Long projectId, @Param("userId") String userId, @Param("userStatus")String userStatus);
 
@@ -94,15 +110,6 @@ public interface ProjectUserMapper {
 	 * @return
 	 */
 	int checkBug(Map<String, Object> map);
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 }

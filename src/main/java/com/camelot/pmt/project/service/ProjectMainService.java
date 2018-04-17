@@ -1,10 +1,11 @@
 package com.camelot.pmt.project.service;
 
+import java.util.Date;
 import java.util.List;
 
-import com.camelot.pmt.platform.utils.DataGrid;
-import com.camelot.pmt.platform.utils.ExecuteResult;
-import com.camelot.pmt.platform.utils.Pager;
+import com.camelot.pmt.common.DataGrid;
+import com.camelot.pmt.common.ExecuteResult;
+import com.camelot.pmt.common.Pager;
 import com.camelot.pmt.project.model.ProjectBudget;
 import com.camelot.pmt.project.model.ProjectMain;
 import com.camelot.pmt.project.model.ProjectOperate;
@@ -34,7 +35,7 @@ public interface ProjectMainService {
      * @return
      */
     ExecuteResult<String> save(ProjectMain projectMain, ProjectOperate projectOperate, ProjectBudget projectBudget,
-            Warning warning);
+                               Warning warning);
 
     /**
      * 分页查询
@@ -82,7 +83,9 @@ public interface ProjectMainService {
      * @param projectMain
      * @return
      */
-    ExecuteResult<String> updateByPrimaryKeySelective(ProjectMain projectMain, String createUserId, String operateDesc);
+    ExecuteResult<String> updateByPrimaryKeySelective(Long id, String userId, String modifyUserId, Date modifyTime,
+            String projectNum, String projectName, String projectStatus, String projectDesc, Date startTime,
+            Date endTime, String createUserId, String operateDesc);
 
     /**
      * 删除项目

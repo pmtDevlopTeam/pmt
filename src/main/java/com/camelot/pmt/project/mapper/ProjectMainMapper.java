@@ -1,10 +1,11 @@
 package com.camelot.pmt.project.mapper;
 
+import java.util.Date;
 import java.util.List;
 
+import com.camelot.pmt.common.Pager;
 import org.apache.ibatis.annotations.Param;
 
-import com.camelot.pmt.platform.utils.Pager;
 import com.camelot.pmt.project.model.ProjectMain;
 
 public interface ProjectMainMapper {
@@ -15,7 +16,8 @@ public interface ProjectMainMapper {
      * @param userId
      * @return
      */
-    int updateById(ProjectMain projectMain);
+    int updateById(@Param("id") Long id, @Param("projectStatus") String projectStatus,
+            @Param("modifyUserId") String modifyUserId, @Param("modifyTime") Date modifyTime);
 
     /**
      * 按修改人Id查询
@@ -83,10 +85,15 @@ public interface ProjectMainMapper {
     ProjectMain selectByPrimaryKey(Long id);
 
     /**
-     *
+     * 根据按主键id更新数据
+     * 
      * @mbggenerated 2018-04-13
      */
-    int updateByPrimaryKeySelective(ProjectMain record);
+    int updateByPrimaryKeySelective(@Param("id") Long id, @Param("userId") String userId,
+            @Param("modifyUserId") String modifyUserId, @Param("modifyTime") Date modifyTime,
+            @Param("projectNum") String projectNum, @Param("projectName") String projectName,
+            @Param("projectStatus") String projectStatus, @Param("projectDesc") String projectDesc,
+            @Param("startTime") Date startTime, @Param("endTime") Date endTime);
 
     /**
      *
@@ -95,7 +102,7 @@ public interface ProjectMainMapper {
     int updateByPrimaryKeyWithBLOBs(ProjectMain record);
 
     /**
-     * 根据主键进行更新
+     * 
      * 
      * @mbggenerated 2018-04-13
      */

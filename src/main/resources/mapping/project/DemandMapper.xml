@@ -15,40 +15,42 @@
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="modify_user_id" property="modifyUserId" jdbcType="VARCHAR" />
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
-  </resultMap>
-  <resultMap id="ResultMapWithBLOBs" type="com.camelot.pmt.project.model.DemandWithBLOBs" extends="BaseResultMap" >
+    <result column="demandNeed" property="demand_need" jdbcType="CHAR" />
+    <result column="reviewTime" property="review_time" jdbcType="TIMESTAMP" />
+    <result column="reviewResults" property="review_results" jdbcType="CHAR" />
+    <result column="assignedTo" property="assigned_to" jdbcType="VARCHAR" />
+    <result column="reviewedWith" property="reviewed_with" jdbcType="TIMESTAMP" />
+    <result column="reviewRemark" property="review_remark" jdbcType="VARCHAR" />
+    <result column="reasonsejection" property="reasons_rejection" jdbcType="VARCHAR" />
+
     <result column="demand_desc" property="demandDesc" jdbcType="LONGVARCHAR" />
     <result column="close_reason" property="closeReason" jdbcType="LONGVARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, pid, project_id, demand_name, demand_num, demand_status, demand_level, demand_source, 
-    source_remark, create_user_id, create_time, modify_user_id, modify_time
+    source_remark, create_user_id, create_time, modify_user_id, modify_time,demand_need,review_time,review_results,assigned_to,reviewed_with,review_remark,reasons_rejection, demand_desc, close_reason
   </sql>
   <sql id="dynamicWhere">
     <where>
-      <if test="@Ognl@isNotEmpty(demandWithBLOBs.id)"> AND id=#{demandWithBLOBs.id} </if>
-      <if test="demandWithBLOBs.pid!= null"> AND pid=#{demandWithBLOBs.pid} </if>
-      <if test="demandWithBLOBs.projectId!= null"> AND project_id=#{demandWithBLOBs.projectId} </if>
-      <if test="demandWithBLOBs.demandName!= null"> AND demand_name=#{demandWithBLOBs.demandName} </if>
-      <if test="demandWithBLOBs.demandNum!= null"> AND demand_num=#{demandWithBLOBs.demandNum} </if>
-      <if test="demandWithBLOBs.demandStatus!= null"> AND demand_status=#{demandWithBLOBs.demandStatus} </if>
-      <if test="demandWithBLOBs.demandLevel!= null"> AND demand_level=#{demandWithBLOBs.demandLevel} </if>
-      <if test="demandWithBLOBs.demandSource!= null"> AND demand_source=#{demandWithBLOBs.demandSource} </if>
-      <if test="demandWithBLOBs.sourceRemark!= null"> AND source_remark=#{demandWithBLOBs.sourceRemark} </if>
-      <if test="demandWithBLOBs.createUserId!= null"> AND create_user_id=#{demandWithBLOBs.createUserId} </if>
-      <if test="demandWithBLOBs.createTime!= null"> AND create_time=#{demandWithBLOBs.createTime} </if>
-      <if test="demandWithBLOBs.modifyUserId!= null"> AND modify_user_id=#{demandWithBLOBs.modifyUserId} </if>
-      <if test="demandWithBLOBs.modifyTime!= null"> AND modify_time=#{demandWithBLOBs.modifyTime} </if>
+      <if test="demand.id!=null"> AND id=#{demand.id} </if>
+      <if test="demand.pid!= null"> AND pid=#{demand.pid} </if>
+      <if test="demand.projectId!= null"> AND project_id=#{demand.projectId} </if>
+      <if test="demand.demandName!= null"> AND demand_name=#{demand.demandName} </if>
+      <if test="demand.demandNum!= null"> AND demand_num=#{demand.demandNum} </if>
+      <if test="demand.demandStatus!= null"> AND demand_status=#{demand.demandStatus} </if>
+      <if test="demand.demandLevel!= null"> AND demand_level=#{demand.demandLevel} </if>
+      <if test="demand.demandSource!= null"> AND demand_source=#{demand.demandSource} </if>
+      <if test="demand.sourceRemark!= null"> AND source_remark=#{demand.sourceRemark} </if>
+      <if test="demand.createUserId!= null"> AND create_user_id=#{demand.createUserId} </if>
+      <if test="demand.createTime!= null"> AND create_time=#{demand.createTime} </if>
+      <if test="demand.modifyUserId!= null"> AND modify_user_id=#{demand.modifyUserId} </if>
+      <if test="demand.modifyTime!= null"> AND modify_time=#{demand.modifyTime} </if>
+      <if test="demand.reviewedWith!= null"> AND find_in_set(${demand.reviewedWith},reviewed_with)>0 </if>
     </where>
   </sql>
-  <sql id="Blob_Column_List" >
-    demand_desc, close_reason
-  </sql>
-  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
     <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
     from demand
     where id = #{id,jdbcType=BIGINT}
   </select>
@@ -56,7 +58,7 @@
     delete from demand
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.camelot.pmt.project.model.DemandWithBLOBs" >
+  <insert id="insert" parameterType="com.camelot.pmt.project.model.Demand" >
     insert into demand (id, pid, project_id, 
       demand_name, demand_num, demand_status, 
       demand_level, demand_source, source_remark, 
@@ -70,7 +72,7 @@
       #{modifyTime,jdbcType=TIMESTAMP}, #{demandDesc,jdbcType=LONGVARCHAR}, #{closeReason,jdbcType=LONGVARCHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.camelot.pmt.project.model.DemandWithBLOBs" >
+  <insert id="insertSelective" parameterType="com.camelot.pmt.project.model.Demand" >
     insert into demand
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -167,7 +169,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.camelot.pmt.project.model.DemandWithBLOBs" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.camelot.pmt.project.model.Demand" >
     update demand
     <set >
       <if test="pid != null" >
@@ -215,7 +217,7 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.camelot.pmt.project.model.DemandWithBLOBs" >
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.camelot.pmt.project.model.Demand" >
     update demand
     set pid = #{pid,jdbcType=BIGINT},
       project_id = #{projectId,jdbcType=BIGINT},
@@ -254,11 +256,9 @@
   <sql id="pagination_tail">
   limit #{pager.pageOffset} , #{pager.rows}
   </sql>
-      <select id="findAllByPage" resultMap="ResultMapWithBLOBs">
+      <select id="findAllByPage" resultMap="BaseResultMap" parameterType="com.camelot.pmt.project.model.Demand">
         select
         <include refid="Base_Column_List" />
-        ,
-        <include refid="Blob_Column_List" />
         from demand
         <include refid="dynamicWhere"/>
         <if test="pager!=null">
@@ -266,10 +266,41 @@
         </if>
       </select>
 
-    <select id="queryCount">
+    <select id="queryCount"  parameterType="com.camelot.pmt.project.model.Demand" resultType="java.lang.Long">
         select
         COUNT(1)
         from demand
         <include refid="dynamicWhere"/>
     </select>
+    <!-- 根据pid查询需求 -->
+    <select id="selectByPId" parameterType="long" resultMap="BaseResultMap">
+    	select 
+		<include refid="Base_Column_List" />
+ 		from demand where pid = #{pid,jdbcType=BIGINT}
+    </select>
+    <!-- 查询需求下用例引用 -->
+    <select id="findDemandUseCase" parameterType="long" resultType="long">
+    	select count(1)
+    	from use_case
+    	where demand_id = #{demandId,jdbcType=BIGINT} and case_status = '2' and del_flag = '0'
+    </select>
+    <!-- 查询需求下bug引用，已撤销状态 -->
+    <select id="fingDemandBug" parameterType="long" resultType="long">
+    	select count(1)
+    	from bug_manage
+    	where demand_id = #{demandId,jdbcType=BIGINT} and bug_status = '4' and del_flag != '0'
+    </select>
+    <!-- 查询需求下任务引用 -->
+    <select id="findDemandTask" parameterType="long" resultType="long">
+    	select count(1)
+    	from task
+    	where demand_id = #{demandId,jdbcType=BIGINT} and status = '4'
+    </select>
+    <!-- 批量删除需求 -->
+    <delete id="deleteByList" parameterType="long" >
+    	delete from demand where 
+    	<foreach collection="list" open="(" close=")" separator="or" item="demandId">
+    		id = #{demandId,jdbcType=BIGINT}
+    	</foreach>
+    </delete>
 </mapper>
