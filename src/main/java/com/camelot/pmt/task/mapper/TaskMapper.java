@@ -229,7 +229,7 @@ public interface TaskMapper {
      * @return Task    返回类型
      * @throws
      */
-    Task queryParentTaskNodeById(Long taskParentId);
+    Task queryParentTaskNodeById(Long id);
 
     /**
      * 查询正在进行的任务，根据时间和优先级进行排序
@@ -325,18 +325,40 @@ public interface TaskMapper {
      * @throws
      */
     int queryOverdueTaskUserId(String userId);
+
+    /**
+     * 根据userId,project 查询出未完成任务的个数
+     * @Title: queryUnfinishedTask
+     * @Description: TODO
+     * @param @param projectId,userId
+     * @param @return
+     * @return int
+     * @throws
+     */
+    int queryUnfinishedTask (@Param("projectId") long projectId ,@Param("userId") String userId);
+
+    /**
+     * 根据demandId 查询任务
+     * @Title: queryUnfinishedTask
+     * @Description: TODO
+     * @param @param demandId
+     * @param @return
+     * @return List<Task>
+     * @throws
+     */
+    List<Task> queryTaskByDemandId(long demandId);
     /**
      * 根据任务Id修改状态
     * @Title: updateTaskOverdueStatus
     * @Description: TODO
     * @param @param taskId
     * @param @return
-    * @return int 
+    * @return int
     * @throws
      */
 	int updateTaskOverdueStatus(String taskId);
 
-	
 
-	
+
+
 }
