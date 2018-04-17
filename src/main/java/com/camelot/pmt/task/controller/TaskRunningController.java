@@ -44,7 +44,7 @@ public class TaskRunningController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "page", value = "页码", required = true, paramType = "query", dataType = "int"),
             @ApiImplicitParam(name = "rows", value = "每页数量", required = true, paramType = "query", dataType = "int")})
-    public JSONObject queryoverdueTaskRunning(@ApiIgnore int page , @ApiIgnore int rows) {
+    public JSONObject queryoverdueTaskRunning(int page , int rows) {
         String userLoginId = String.valueOf(1);
         ExecuteResult<PageInfo<Map<String, Object>>> result = new ExecuteResult<PageInfo<Map<String, Object>>>();
         try {
