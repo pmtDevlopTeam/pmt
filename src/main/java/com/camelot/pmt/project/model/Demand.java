@@ -29,7 +29,7 @@ public class Demand {
     private String demandNum;
 
     /**
-     * 新建默认01：待评审,02：通过,03：不通过，04：冻结
+     * 需求状态:01未激活/02已激活/03已关闭/04已变更
      */
     private String demandStatus;
 
@@ -57,9 +57,9 @@ public class Demand {
      * 创建时间
      */
     private Date createTime;
-
     /**
      * 修改人id
+
      */
     private String modifyUserId;
 
@@ -67,6 +67,36 @@ public class Demand {
      * 修改时间
      */
     private Date modifyTime;
+    /**
+     * 评审时间
+     */
+    private Date reviewTime;
+
+    /**
+     * 评审结果
+     */
+    private String reviewResults;
+    /**
+     * 指派给
+     */
+    private String assignedTo;
+    /**
+     * 由谁评审
+     */
+    private String reviewedWith;
+    /**
+     * 评审备注
+     */
+    private String reviewRemark;
+    /**
+     * 拒绝原因
+     */
+    private String reasonsejection;
+    /**
+     * 需求层级
+     */
+    private String demandNeed;
+
 
     /**
      * 需求id
@@ -313,5 +343,109 @@ public class Demand {
      */
     public void setModifyTime(Date modifyTime) {
         this.modifyTime = modifyTime;
+    }
+
+    public Date getReviewTime() {
+        return reviewTime;
+    }
+
+    public void setReviewTime(Date reviewTime) {
+        this.reviewTime = reviewTime;
+    }
+
+    public String getReviewResults() {
+        return reviewResults;
+    }
+
+    public void setReviewResults(String reviewResults) {
+        this.reviewResults = reviewResults;
+    }
+
+    public String getAssignedTo() {
+        return assignedTo;
+    }
+
+    public void setAssignedTo(String assignedTo) {
+        this.assignedTo = assignedTo;
+    }
+
+    public String getReviewedWith() {
+        return reviewedWith;
+    }
+
+    public void setReviewedWith(String reviewedWith) {
+        this.reviewedWith = reviewedWith;
+    }
+
+    public String getReviewRemark() {
+        return reviewRemark;
+    }
+
+    public void setReviewRemark(String reviewRemark) {
+        this.reviewRemark = reviewRemark;
+    }
+
+    public String getReasonsejection() {
+        return reasonsejection;
+    }
+
+    public void setReasonsejection(String reasonsejection) {
+        this.reasonsejection = reasonsejection;
+    }
+
+    public String getDemandNeed() {
+        return demandNeed;
+    }
+
+    public void setDemandNeed(String demandNeed) {
+        this.demandNeed = demandNeed;
+    }
+
+    /**
+     * 需求描述
+     */
+    private String demandDesc;
+
+    /**
+     * 关闭原因
+     */
+    private String closeReason;
+
+    /**
+     * 需求描述
+     *
+     * @return demand_desc 需求描述
+     */
+    public String getDemandDesc() {
+        return demandDesc;
+    }
+
+    /**
+     * 需求描述
+     *
+     * @param demandDesc
+     *            需求描述
+     */
+    public void setDemandDesc(String demandDesc) {
+        this.demandDesc = demandDesc == null ? null : demandDesc.trim();
+    }
+
+    /**
+     * 关闭原因
+     *
+     * @return close_reason 关闭原因
+     */
+    public String getCloseReason() {
+        return closeReason;
+    }
+
+    /**
+     * 关闭原因
+     *
+     * @param closeReason
+     *            关闭原因
+     */
+    public void setCloseReason(String closeReason) {
+        this.closeReason = closeReason == null ? null : closeReason.trim();
     }
 }
