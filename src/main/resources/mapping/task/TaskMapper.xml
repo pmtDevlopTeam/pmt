@@ -303,8 +303,8 @@
     </select>
 
     <!-- 新增任务 -->
-    <insert id="insertTaskNodeById" parameterType="BaseResultMap">
-	    insert into task (id, task_num, task_name, 
+    <insert id="insertTaskNodeById" parameterType="com.camelot.pmt.task.model.Task">
+	    insert into task (id, task_num, task_name,
 	      task_parent_id, project_id, demand_id, 
 	      priority, assign_user_id, beassign_user_id, 
 	      assign_time, estimate_start_time, estimate_end_time, 
@@ -327,12 +327,12 @@
   	</insert>
   	
   	<!-- 删除任务 -->
-  	<delete id="deleteTaskNodeById" parameterType="BaseResultMap">
+  	<delete id="deleteTaskNodeById" parameterType="long">
 	    delete from task
 	    where id = #{id,jdbcType=BIGINT}
 	  </delete>
     <!--修改任务-->
-    <update id="updateTaskNodeById" parameterType="BaseResultMap">
+    <update id="updateTaskNodeById" parameterType="com.camelot.pmt.task.model.Task">
     	update task
 		    set task_num = #{taskNum,jdbcType=VARCHAR},
 		      task_name = #{taskName,jdbcType=VARCHAR},
@@ -429,6 +429,7 @@
 		where t.id = #{id,jdbcType=BIGINT}
 	</update>
   <!-- gxl end -->
+
   <!--zsf-->
   <!--根据项目Id 和 userId 查询出任务个数-->
   <select id="queryUnfinishedTask"  resultType="int">
@@ -440,4 +441,19 @@
           and beassign_user_id = #{userId}
       </if>
   </select>
+    <!--zsf-->
+    <!--根据需求Id 查询出任务列表-->
+    <select id="queryTaskByDemandId" resultMap="BaseResultMap" parameterType="long">
+        select
+        <include refid="ShowAllTasks_Column_List" />
+        from
+        task t
+        INNER JOIN platform_user a ON a.user_id = t.assign_user_id
+        INNER JOIN platform_user b ON b.user_id = t.beassign_user_id
+        INNER JOIN platform_user c ON c.user_id = t.create_user_id
+        where t.beassign_user_id = #{beassignUserId,jdbcType=VARCHAR}
+        <if test="status != null">
+            and t.demand_id = #{demandId,jdbcType=BIGINT}
+        </if>
+    </select>
 </mapper>
