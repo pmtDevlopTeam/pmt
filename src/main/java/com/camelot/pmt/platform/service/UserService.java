@@ -20,7 +20,7 @@ public interface UserService {
 	 * Description:[添加用户]
 	 * </p>
 	 * 
-	 * @param
+	 * @param User
 	 * @return ExecuteResult<String>
 	 * @author [maple]
 	 */
@@ -30,7 +30,7 @@ public interface UserService {
 	 * 
 	 * Description:[删除用户]
 	 * 
-	 * @param
+	 * @param User
 	 * @author [maple]
 	 * @return
 	 */
@@ -80,7 +80,7 @@ public interface UserService {
 	 * 
 	 * Description:[列表展示用户]
 	 * 
-	 * @param
+	 * @param UserVo
 	 *            userVo
 	 * @return ExecuteResult<List<UserVo>>
 	 * @author [maple] 2018年4月13日下午3:15:16
@@ -91,7 +91,7 @@ public interface UserService {
 	 * 
 	 * Description:[根据用户ID更新一个用户详情]
 	 * 
-	 * @param
+	 * @param User
 	 * @return ExecuteResult<String>
 	 * @author [maple]
 	 */

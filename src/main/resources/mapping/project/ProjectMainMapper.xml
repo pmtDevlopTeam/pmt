@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.camelot.pmt.project.mapper.ProjectMainMapper">
-	<!--关闭时，按主键id更新数据 -->
+	<!--关闭项目时，按主键id更新数据 -->
 	<update id="updateById">
 		update project_main
 		<trim prefix="set" suffixOverrides=",">
@@ -88,7 +88,7 @@
 	<sql id="pagination_tail">
 		limit #{page.pageOffset} , #{page.rows}
 	</sql>
-	<resultMap id="BaseResultMap" type="com.camelot.pmt.project.model.ProjectMain">
+	<resultMap id="BaseResultMap" type="ProjectMain">
 		<id column="id" property="id" jdbcType="BIGINT" />
 		<result column="user_id" property="userId" jdbcType="VARCHAR" />
 		<result column="project_num" property="projectNum" jdbcType="CHAR" />
@@ -104,7 +104,7 @@
 			jdbcType="VARCHAR" />
 		<result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
 	</resultMap>
-	<resultMap id="ResultMapWithBLOBs" type="com.camelot.pmt.project.model.ProjectMain"
+	<resultMap id="ResultMapWithBLOBs" type="ProjectMain"
 		extends="BaseResultMap">
 		<result column="project_desc" property="projectDesc" jdbcType="LONGVARCHAR" />
 	</resultMap>
@@ -134,28 +134,8 @@
 		where id = #{id,jdbcType=BIGINT}
 	</delete>
 	<!--插入数据 -->
-	<insert id="insert" parameterType="com.camelot.pmt.project.model.ProjectMain"
+	<insert id="insert" parameterType="ProjectMain"
 		useGeneratedKeys="true" keyProperty="id">
-		insert into project_main (id,
-		user_id, project_num,
-		project_name, project_status, start_time,
-		end_time, create_user_id, create_time,
-		modify_user_id, modify_time,
-		project_desc
-		)
-		values (#{id,jdbcType=BIGINT},
-		#{userId,jdbcType=VARCHAR},
-		#{projectNum,jdbcType=CHAR},
-		#{projectName,jdbcType=VARCHAR}, #{projectStatus,jdbcType=CHAR},
-		#{startTime,jdbcType=TIMESTAMP},
-		#{endTime,jdbcType=TIMESTAMP},
-		#{createUserId,jdbcType=VARCHAR},
-		#{createTime,jdbcType=TIMESTAMP},
-		#{modifyUserId,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP},
-		#{projectDesc,jdbcType=LONGVARCHAR}
-		)
-	</insert>
-	<insert id="insertSelective" parameterType="com.camelot.pmt.project.model.ProjectMain">
 		insert into project_main
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="id != null">
@@ -266,32 +246,6 @@
 				project_desc = #{projectDesc,jdbcType=LONGVARCHAR},
 			</if>
 		</trim>
-		where id = #{id,jdbcType=BIGINT}
-	</update>
-	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.camelot.pmt.project.model.ProjectMain">
-		update
-		project_main
-		set user_id = #{userId,jdbcType=VARCHAR},
-		project_num =
-		#{projectNum,jdbcType=CHAR},
-		project_name =
-		#{projectName,jdbcType=VARCHAR},
-		project_status =
-		#{projectStatus,jdbcType=CHAR},
-		start_time =
-		#{startTime,jdbcType=TIMESTAMP},
-		end_time =
-		#{endTime,jdbcType=TIMESTAMP},
-		create_user_id =
-		#{createUserId,jdbcType=VARCHAR},
-		create_time =
-		#{createTime,jdbcType=TIMESTAMP},
-		modify_user_id =
-		#{modifyUserId,jdbcType=VARCHAR},
-		modify_time =
-		#{modifyTime,jdbcType=TIMESTAMP},
-		project_desc =
-		#{projectDesc,jdbcType=LONGVARCHAR}
 		where id = #{id,jdbcType=BIGINT}
 	</update>
 </mapper>

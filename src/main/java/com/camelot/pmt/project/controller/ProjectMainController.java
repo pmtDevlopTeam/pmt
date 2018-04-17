@@ -3,10 +3,6 @@ package com.camelot.pmt.project.controller;
 import java.util.Date;
 import java.util.List;
 
-import com.camelot.pmt.common.ApiResponse;
-import com.camelot.pmt.common.DataGrid;
-import com.camelot.pmt.common.ExecuteResult;
-import com.camelot.pmt.common.Pager;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +17,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
+import com.camelot.pmt.common.ApiResponse;
+import com.camelot.pmt.common.DataGrid;
+import com.camelot.pmt.common.ExecuteResult;
+import com.camelot.pmt.common.Pager;
 import com.camelot.pmt.project.model.ProjectBudget;
 import com.camelot.pmt.project.model.ProjectMain;
 import com.camelot.pmt.project.model.ProjectOperate;
@@ -34,6 +34,11 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import springfox.documentation.annotations.ApiIgnore;
 
+/**
+ * 
+ * @author qiaodj
+ * @date 2018年4月17日
+ */
 @RestController
 @Api(value = "立项管理接口", description = "立项管理接口")
 public class ProjectMainController {
@@ -68,23 +73,6 @@ public class ProjectMainController {
         logger.info("入参封装的数据为：projectMain={},projectOperate={},projectBudget={},projectBudget={}", projectMain,
                 projectOperate, projectBudget, projectBudget);
         try {
-            // 判断非空
-            if (projectMain == null) {
-                logger.debug("实体projectMain为空");
-                return ApiResponse.errorPara();
-            }
-            if (projectOperate == null) {
-                logger.debug("实体projectOperate为空");
-                return ApiResponse.errorPara();
-            }
-            if (projectBudget == null) {
-                logger.debug("实体projectBudget为空");
-                return ApiResponse.errorPara();
-            }
-            if (warning == null) {
-                logger.debug("实体warning为空");
-                return ApiResponse.errorPara();
-            }
             // 调用save方法保存数据
             ExecuteResult<String> projectMainResult = projectMainService.save(projectMain, projectOperate,
                     projectBudget, warning);
@@ -105,17 +93,17 @@ public class ProjectMainController {
      */
     @ApiOperation(value = "分页查询", notes = "分页查询")
     @GetMapping(value = "/api/projectMain/findAllByPage")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "page", value = "页码", required = true, paramType = "query", dataType = "int"),
-            @ApiImplicitParam(name = "rows", value = "每页数量", required = true, paramType = "query", dataType = "int") })
-    public JSONObject findAllByPage(@ApiIgnore Pager<?> page) {
-        logger.info("入参封装的数据为：page={}", page);
+    public JSONObject findAllByPage(@ApiParam(//
+            value = "页码", required = true) @RequestParam int page, //
+            @ApiParam(value = "每页数量", required = true) @RequestParam int rows) {
+        logger.info("入参封装的数据为：page={},rows={}", page, rows);
         ExecuteResult<DataGrid<ProjectMain>> result = new ExecuteResult<DataGrid<ProjectMain>>();
+        Pager<?> pager = new Pager<>();
         try {
-            if (page == null) {
+            if (page == 0 && rows == 0) {
                 return ApiResponse.errorPara();
             }
-            result = projectMainService.findAllByPage(page);
+            result = projectMainService.findAllByPage(pager);
             if (result.isSuccess()) {
                 return ApiResponse.success(result.getResult());
             }
@@ -252,7 +240,6 @@ public class ProjectMainController {
             @ApiParam(value = "创建人id", required = true) @RequestParam String createUserId, //
             @ApiParam(value = "负责人Id", required = true) @RequestParam String userId, //
             @ApiParam(value = "修改人id", required = true) @RequestParam String modifyUserId, //
-            @ApiParam(value = "修改时间", required = true) @RequestParam @DateTimeFormat(iso = ISO.DATE) Date modifyTime, //
             @ApiParam(value = "项目编号", required = true) @RequestParam String projectNum, //
             @ApiParam(value = "项目名称", required = true) @RequestParam String projectName, //
             @ApiParam(value = "项目状态", required = true) @RequestParam String projectStatus, //
@@ -268,13 +255,13 @@ public class ProjectMainController {
         ExecuteResult<String> result = new ExecuteResult<>();
         try {
             if (id == null || StringUtils.isEmpty(createUserId) || StringUtils.isEmpty(userId)
-                    || StringUtils.isEmpty(modifyUserId) || modifyTime == null || StringUtils.isEmpty(projectNum)
+                    || StringUtils.isEmpty(modifyUserId) || StringUtils.isEmpty(projectNum)
                     || StringUtils.isEmpty(projectName) || StringUtils.isEmpty(projectStatus) || startTime == null
                     || endTime == null || StringUtils.isEmpty(projectDesc) || StringUtils.isEmpty(operateDesc)) {
                 return ApiResponse.errorPara();
             }
-            result = projectMainService.updateByPrimaryKeySelective(id, userId, modifyUserId, modifyTime, projectNum,
-                    projectName, projectStatus, projectDesc, startTime, endTime, createUserId, operateDesc);
+            result = projectMainService.updateByPrimaryKeySelective(id, userId, modifyUserId, projectNum, projectName,
+                    projectStatus, projectDesc, startTime, endTime, createUserId, operateDesc);
             if (result.isSuccess()) {
                 return ApiResponse.success(result.getResult());
             }

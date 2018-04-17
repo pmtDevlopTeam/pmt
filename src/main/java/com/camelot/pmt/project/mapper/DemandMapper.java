@@ -1,10 +1,11 @@
 package com.camelot.pmt.project.mapper;
 
+import java.util.Date;
 import java.util.List;
 
-import com.camelot.pmt.common.Pager;
 import org.apache.ibatis.annotations.Param;
 
+import com.camelot.pmt.common.Pager;
 import com.camelot.pmt.project.model.Demand;
 
 public interface DemandMapper {
@@ -99,4 +100,18 @@ public interface DemandMapper {
      * @return
      */
     int deleteByList(List<Long> list);
+
+    /**
+     * 关闭项目时，根据项目id修改需求状态
+     * 
+     * @param projectId
+     * @param demandStatus
+     * @param closeReason
+     * @param modifyUserId
+     * @param modifyTime
+     * @return
+     */
+    int updateByProjectId(@Param("projectId") Long projectId, @Param("demandStatus") String demandStatus,
+            @Param("closeReason") String closeReason, @Param("modifyUserId") String modifyUserId,
+            @Param("modifyTime") Date modifyTime);
 }

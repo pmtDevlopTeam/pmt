@@ -86,7 +86,7 @@ public class UserController {
     		@ApiImplicitParam(
     				name="orgId",value="用户所属部门ID",required=false,paramType="form",dataType="String"),
     		@ApiImplicitParam(
-    				name="roleIds",value="用户角色ID集合，格式1,2,3,4",required=false,paramType="form",dataType="String"),
+    				name="roleId",value="用户角色ID",required=false,paramType="form",dataType="String"),
         	@ApiImplicitParam(
         			name="loginCode",value="登录账号",required=true,paramType="form",dataType="String"),
             @ApiImplicitParam(
@@ -123,7 +123,7 @@ public class UserController {
      * @param  User userModel
      * @return {"status": {"message": "请求处理成功.","code": 200}, "data": {更新用户成功!}]
      */
-    @ApiOperation(value="更新用户", notes="更新用户")
+    @ApiOperation(value="添加用户", notes="添加用户")
     @ApiImplicitParams({
     		@ApiImplicitParam(
     				name="userId",value="用户ID",required=true,paramType="form",dataType="String"),
@@ -142,7 +142,7 @@ public class UserController {
     		@ApiImplicitParam(
     				name="orgId",value="用户所属部门ID",required=false,paramType="form",dataType="String"),
     		@ApiImplicitParam(
-    				name="roleIds",value="用户角色ID",required=false,paramType="form",dataType="String"),
+    				name="roleId",value="用户角色ID",required=false,paramType="form",dataType="String"),
             @ApiImplicitParam(
                     name="modifyUserId",value="用户修改人ID",required=false,paramType="form",dataType="String")
     })

@@ -234,5 +234,5 @@ public interface UserMapper {
      */
     String queryUserRoleCreateUserByUserId(String userId);
 
-   
+
 }

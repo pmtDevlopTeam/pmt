@@ -22,44 +22,11 @@ public interface ProjectOperateMapper {
     List<ProjectOperate> findByCreateUserId(String createUserId);
 
     /**
-     *
-     * @mbggenerated 2018-04-13
+     * 插入数据
+     * 
+     * @param projectOperate
+     * @return
      */
-    int deleteByPrimaryKey(Integer id);
+    int insert(ProjectOperate projectOperate);
 
-    /**
-     *
-     * @mbggenerated 2018-04-13
-     */
-    int insert(ProjectOperate record);
-
-    /**
-     *
-     * @mbggenerated 2018-04-13
-     */
-    int insertSelective(ProjectOperate record);
-
-    /**
-     *
-     * @mbggenerated 2018-04-13
-     */
-    ProjectOperate selectByPrimaryKey(Integer id);
-
-    /**
-     *
-     * @mbggenerated 2018-04-13
-     */
-    int updateByPrimaryKeySelective(ProjectOperate record);
-
-    /**
-     *
-     * @mbggenerated 2018-04-13
-     */
-    int updateByPrimaryKeyWithBLOBs(ProjectOperate record);
-
-    /**
-     *
-     * @mbggenerated 2018-04-13
-     */
-    int updateByPrimaryKey(ProjectOperate record);
 }
