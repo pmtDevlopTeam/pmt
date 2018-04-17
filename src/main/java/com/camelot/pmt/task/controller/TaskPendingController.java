@@ -6,7 +6,7 @@ import com.camelot.pmt.platform.common.ApiResponse;
 import com.camelot.pmt.platform.common.ExecuteResult;
 import com.camelot.pmt.task.model.Task;
 import com.camelot.pmt.task.service.TaskPendingService;
-import com.camelot.pmt.task.utils.Constant.TaskType;
+import com.camelot.pmt.task.utils.Constant.TaskStatus;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -54,7 +54,7 @@ public class TaskPendingController {
 			if(StringUtils.isEmpty(userLoginId)){
 				return ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
             }
-			result = taskPendingService.queryAllTaskList(TaskType.PENDINHG.getValue(),userLoginId);
+			result = taskPendingService.queryAllTaskList(TaskStatus.PENDINHG.getValue(),userLoginId);
 			//判断是否成功
 			if(result.isSuccess()){
 				return ApiResponse.jsonData(APIStatus.OK_200,result.getResult());
@@ -86,7 +86,7 @@ public class TaskPendingController {
 			if(StringUtils.isEmpty(userLoginId)){
 				return ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
             }
-			result = taskPendingService.queryMyTaskListNodeByParentId(taskId,TaskType.PENDINHG.getValue(),userLoginId);
+			result = taskPendingService.queryMyTaskListNodeByParentId(taskId,TaskStatus.PENDINHG.getValue(),userLoginId);
 			//判断是否成功
 			if(result.isSuccess()){
 				return ApiResponse.jsonData(APIStatus.OK_200,result.getResult());
@@ -118,7 +118,7 @@ public class TaskPendingController {
 			if(StringUtils.isEmpty(userLoginId)){
 				return ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
             }
-			result = taskPendingService.queryTaskListNodeByParentId(taskId,TaskType.PENDINHG.getValue());
+			result = taskPendingService.queryTaskListNodeByParentId(taskId,TaskStatus.PENDINHG.getValue());
 			//判断是否成功
 			if(result.isSuccess()){
 				return ApiResponse.jsonData(APIStatus.OK_200,result.getResult());
@@ -149,7 +149,7 @@ public class TaskPendingController {
 				return ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
             }
 			//查询顶级待办任务
-			result = taskPendingService.queryTopTaskNameList(TaskType.PENDINHG.getValue(),userLoginId);
+			result = taskPendingService.queryTopTaskNameList(TaskStatus.PENDINHG.getValue(),userLoginId);
 			//判断是否成功
 			if(result.isSuccess()){
 				return ApiResponse.jsonData(APIStatus.OK_200,result.getResult());
@@ -216,7 +216,7 @@ public class TaskPendingController {
 				return ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
             }
 			//更新我的待办任务为正在进行中
-			result = taskPendingService.updateTaskPendingToRunning(taskId,TaskType.RUNING.getValue());
+			result = taskPendingService.updateTaskPendingToRunning(taskId,TaskStatus.RUNING.getValue());
 			//判断是否成功
 			if(result.isSuccess()){
 				return ApiResponse.jsonData(APIStatus.OK_200,result.getResult());
@@ -249,7 +249,7 @@ public class TaskPendingController {
 				return ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
             }
 			//更新我的待办任务为正在进行中
-			result = taskPendingService.updateTaskPendingToDelay(taskId,TaskType.OVERDUE.getValue(),delayDescribe,estimateStartTime);
+			result = taskPendingService.updateTaskPendingToDelay(taskId,TaskStatus.OVERDUE.getValue(),delayDescribe,estimateStartTime);
 			//判断是否成功
 			if(result.isSuccess()){
 				return ApiResponse.jsonData(APIStatus.OK_200,result.getResult());
@@ -464,7 +464,7 @@ public class TaskPendingController {
 			if(StringUtils.isEmpty(userLoginId)){
 				return ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
             }
-			result = taskPendingService.deletePendingTaskTreeById(Long.valueOf(taskId),TaskType.PENDINHG.getValue());
+			result = taskPendingService.deletePendingTaskTreeById(Long.valueOf(taskId),TaskStatus.PENDINHG.getValue());
 			//判断是否成功
 			if(result.isSuccess()){
 				return ApiResponse.jsonData(APIStatus.OK_200,result.getResult());

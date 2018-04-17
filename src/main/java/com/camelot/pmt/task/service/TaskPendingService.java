@@ -66,7 +66,7 @@ public interface TaskPendingService {
 	* @return ExecuteResult<List<Task>>    返回类型 
 	* @throws
 	 */
-	ExecuteResult<List<Task>> queryAllTaskList(String taskType,Long beassignUserId);
+	ExecuteResult<List<Task>> queryAllTaskList(String taskStatus,Long beassignUserId);
 	
 	/**
 	 * 
@@ -77,7 +77,7 @@ public interface TaskPendingService {
 	* @return ExecuteResult<List<Task>>    返回类型 
 	* @throws
 	 */
-	ExecuteResult<List<Task>> queryMyTaskListNodeByParentId(Long id,String taskType,Long beassignUserId);
+	ExecuteResult<List<Task>> queryMyTaskListNodeByParentId(Long id,String taskStatus,Long beassignUserId);
 	
 	/**
 	 * 
@@ -88,7 +88,7 @@ public interface TaskPendingService {
 	* @return ExecuteResult<List<Task>>    返回类型 
 	* @throws
 	 */
-	ExecuteResult<List<Task>> queryTaskListNodeByParentId(Long id,String taskType);
+	ExecuteResult<List<Task>> queryTaskListNodeByParentId(Long id,String taskStatus);
 	
 	/**
 	 * 如果taskId不为空，查询当前节点的父节点和祖宗节点
@@ -110,7 +110,7 @@ public interface TaskPendingService {
 	* @return ExecuteResult<String>    返回类型 
 	* @throws
 	 */
-	ExecuteResult<String> deletePendingTaskTreeById(Long id,String taskType);
+	ExecuteResult<String> deletePendingTaskTreeById(Long id,String taskStatus);
 	
 	/**
 	 * 
@@ -121,7 +121,7 @@ public interface TaskPendingService {
 	* @return ExecuteResult<Task>    返回类型 
 	* @throws
 	 */
-	ExecuteResult<Task> queryTaskTreeByTaskId(Long id, String taskType, Long beassignUserId);
+	ExecuteResult<Task> queryTaskTreeByTaskId(Long id, String taskStatus, Long beassignUserId);
 	
 	/**
 	 * 
@@ -131,7 +131,7 @@ public interface TaskPendingService {
 	* @return ExecuteResult<List<Task>>    返回类型 
 	* @throws
 	 */
-	ExecuteResult<List<Task>> queryTopTaskNameList(String taskType,Long beassignUserId);
+	ExecuteResult<List<Task>> queryTopTaskNameList(String taskStatus,Long beassignUserId);
 	
 	/**
 	 * 
@@ -143,7 +143,7 @@ public interface TaskPendingService {
 	* @return ExecuteResult<String>    返回类型 
 	* @throws
 	 */
-	ExecuteResult<String> updateTaskPendingToRunning(Long id,String taskType);
+	ExecuteResult<String> updateTaskPendingToRunning(Long id,String taskStatus);
 	
 	/**
 	 * 
@@ -157,7 +157,7 @@ public interface TaskPendingService {
 	* @return ExecuteResult<String>    返回类型 
 	* @throws
 	 */
-	ExecuteResult<String> updateTaskPendingToDelay(Long id,String taskType,String delayDescribe,Date estimateStartTime);
+	ExecuteResult<String> updateTaskPendingToDelay(Long id,String taskStatus,String delayDescribe,Date estimateStartTime);
 	
 	/**
 	 * 

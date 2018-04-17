@@ -289,18 +289,18 @@
         <include refid="sql_add_task_columns"/>
         <include refid="sql_add_task_properties"/>
     </insert>
-
-    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
-        select
-        <include refid="Base_Column_List"/>
-        from task
-        where id = #{id,jdbcType=BIGINT}
+  <!-- gxl start -->
+  	<!--查询任务-->
+    <select id="queryTaskNodeById" resultMap="BaseResultMap">
+	    select
+		<include refid="ShowAllTasks_Column_List" />
+		from
+			task t
+		INNER JOIN platform_user a ON a.user_id = t.assign_user_id
+		INNER JOIN platform_user b ON b.user_id = t.beassign_user_id
+		INNER JOIN platform_user c ON c.user_id = t.create_user_id
+		where t.id = #{id,jdbcType=BIGINT}
     </select>
-
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-        delete from task
-        where id = #{id,jdbcType=BIGINT}
-    </delete>
 
     <!--zsf-->
     <!--根据项目Id 和 userId 查询出任务个数-->
@@ -313,4 +313,142 @@
             and beassign_user_id = #{userId}
         </if>
     </select>
+    <!-- 新增任务 -->
+    <insert id="insertTaskNodeById" parameterType="BaseResultMap">
+	    insert into task (id, task_num, task_name, 
+	      task_parent_id, project_id, demand_id, 
+	      priority, assign_user_id, beassign_user_id, 
+	      assign_time, estimate_start_time, estimate_end_time, 
+	      actual_start_time, actual_end_time, task_type, 
+	      task_speed, status, node_lv, 
+	      task_describe, demand_change, delay_describe, 
+	      estimate_hour, infact_hour, task_mileage, 
+	      create_user_id, modify_user_id, create_time, 
+	      modify_time)
+	    values (#{id,jdbcType=BIGINT}, #{taskNum,jdbcType=VARCHAR}, #{taskName,jdbcType=VARCHAR}, 
+	      #{taskParentId,jdbcType=BIGINT}, #{project.proId,jdbcType=BIGINT}, #{demand.id,jdbcType=BIGINT}, 
+	      #{priority,jdbcType=CHAR}, #{assignUser.userId,jdbcType=VARCHAR}, #{beassignUser.userId,jdbcType=VARCHAR}, 
+	      #{assignTime,jdbcType=TIMESTAMP}, #{estimateStartTime,jdbcType=TIMESTAMP}, #{estimateEndTime,jdbcType=TIMESTAMP}, 
+	      #{actualStartTime,jdbcType=TIMESTAMP}, #{actualEndTime,jdbcType=TIMESTAMP}, #{taskType,jdbcType=CHAR}, 
+	      #{taskSpeed,jdbcType=VARCHAR}, #{status,jdbcType=CHAR}, #{nodeLv,jdbcType=CHAR}, 
+	      #{taskDescribe,jdbcType=VARCHAR}, #{demandChange,jdbcType=CHAR}, #{delayDescribe,jdbcType=VARCHAR}, 
+	      #{estimateHour,jdbcType=BIGINT}, #{infactHour,jdbcType=BIGINT}, #{taskMileage,jdbcType=CHAR}, 
+	      #{createUser.userId,jdbcType=VARCHAR}, #{modifyUserId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+	      #{modifyTime,jdbcType=TIMESTAMP})
+  	</insert>
+  	
+  	<!-- 删除任务 -->
+  	<delete id="deleteTaskNodeById" parameterType="BaseResultMap">
+	    delete from task
+	    where id = #{id,jdbcType=BIGINT}
+	  </delete>
+    <!--修改任务-->
+    <update id="updateTaskNodeById" parameterType="BaseResultMap">
+    	update task
+		    set task_num = #{taskNum,jdbcType=VARCHAR},
+		      task_name = #{taskName,jdbcType=VARCHAR},
+		      task_parent_id = #{taskParentId,jdbcType=BIGINT},
+		      project_id = #{project.proId,jdbcType=BIGINT},
+		      demand_id = #{demand.id,jdbcType=BIGINT},
+		      priority = #{priority,jdbcType=CHAR},
+		      assign_user_id = #{assignUser.userId,jdbcType=VARCHAR},
+		      beassign_user_id = #{beassignUser.userId,jdbcType=VARCHAR},
+		      assign_time = #{assignTime,jdbcType=TIMESTAMP},
+		      estimate_start_time = #{estimateStartTime,jdbcType=TIMESTAMP},
+		      estimate_end_time = #{estimateEndTime,jdbcType=TIMESTAMP},
+		      actual_start_time = #{actualStartTime,jdbcType=TIMESTAMP},
+		      actual_end_time = #{actualEndTime,jdbcType=TIMESTAMP},
+		      task_type = #{taskType,jdbcType=CHAR},
+		      task_speed = #{taskSpeed,jdbcType=VARCHAR},
+		      status = #{status,jdbcType=CHAR},
+		      node_lv = #{nodeLv,jdbcType=CHAR},
+		      task_describe = #{taskDescribe,jdbcType=VARCHAR},
+		      demand_change = #{demandChange,jdbcType=CHAR},
+		      delay_describe = #{delayDescribe,jdbcType=VARCHAR},
+		      estimate_hour = #{estimateHour,jdbcType=BIGINT},
+		      infact_hour = #{infactHour,jdbcType=BIGINT},
+		      task_mileage = #{taskMileage,jdbcType=CHAR},
+		      create_user_id = #{createUser.userId,jdbcType=VARCHAR},
+		      modify_user_id = #{modifyUserId,jdbcType=VARCHAR},
+		      create_time = #{createTime,jdbcType=TIMESTAMP},
+		      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+		    where id = #{id,jdbcType=BIGINT}
+    </update>
+  	<!--查询所有任务列表-->
+    <select id="queryAllTaskList" resultMap="BaseResultMap">
+	    select
+		<include refid="ShowAllTasks_Column_List" />
+		from
+			task t
+		INNER JOIN platform_user a ON a.user_id = t.assign_user_id
+		INNER JOIN platform_user b ON b.user_id = t.beassign_user_id
+		INNER JOIN platform_user c ON c.user_id = t.create_user_id
+		where t.beassign_user_id = #{beassignUserId,jdbcType=VARCHAR}
+		<if test="status != null">
+			and t.status = #{status,jdbcType=CHAR}
+		</if>
+    </select>
+    <!-- 查询taskId下的一级子节点 -->
+  	<select id="queryTaskListNodeByParentId" resultMap="BaseResultMap">
+  		select
+		<include refid="ShowAllTasks_Column_List" />
+		from
+			task t
+		INNER JOIN platform_user a ON a.user_id = t.assign_user_id
+		INNER JOIN platform_user b ON b.user_id = t.beassign_user_id
+		INNER JOIN platform_user c ON c.user_id = t.create_user_id
+		where t.task_parent_id = #{id}
+		<if test="status != null">
+			and t.status = #{status,jdbcType=CHAR}
+		</if>
+  	</select>
+  	<!-- 查询taskId下的我的一级子节点 -->
+  	<select id="queryMyTaskListNodeByParentId" resultMap="BaseResultMap">
+  		select
+		<include refid="ShowAllTasks_Column_List" />
+		from
+			task t
+		INNER JOIN platform_user a ON a.user_id = t.assign_user_id
+		INNER JOIN platform_user b ON b.user_id = t.beassign_user_id
+		INNER JOIN platform_user c ON c.user_id = t.create_user_id
+		where t.task_parent_id = #{id} and t.beassign_user_id = #{beassignUserId,jdbcType=VARCHAR}
+		<if test="status != null">
+			and t.status = #{status,jdbcType=CHAR}
+		</if>
+	</select>
+	<!-- 查询根据任务Id查询父级任务对象 -->
+  	<select id="queryParentTaskNodeById" resultMap="BaseResultMap">
+  		select
+		<include refid="ShowAllTasks_Column_List" />
+		from
+			task t
+		INNER JOIN platform_user a ON a.user_id = t.assign_user_id
+		INNER JOIN platform_user b ON b.user_id = t.beassign_user_id
+		INNER JOIN platform_user c ON c.user_id = t.create_user_id
+		where t.id = #{taskParentId,jdbcType=BIGINT}
+	</select>
+	<!-- 我的待办任务转为延期,会将该节点及节点下的所有子节点变为延期状态 -->
+	<update id="updateTaskPendingToDelay" parameterType="com.camelot.pmt.task.model.Task">
+		update task t set 
+		t.status = #{status,jdbcType=CHAR},t.delay_describe = #{delayDescribe,jdbcType=VARCHAR},t.estimate_start_time = #{estimateStartTime,jdbcType=TIMESTAMP} 
+		where t.id = #{id,jdbcType=BIGINT}
+	</update>
+	<!-- 我的待办任务转为正在进行 -->
+	<update id="updateTaskPendingToRunning" parameterType="com.camelot.pmt.task.model.Task">
+		update task t set 
+		t.status = #{status,jdbcType=CHAR} 
+		where t.id = #{id,jdbcType=BIGINT}
+	</update>
+  <!-- gxl end -->
+  <!--zsf-->
+  <!--根据项目Id 和 userId 查询出任务个数-->
+  <select id="queryUnfinishedTask"  resultType="int">
+      select count(*) from task where status in ( 0 , 1 , 3)
+      <if test="projectId!=null">
+          and project_id = #{projectId}
+      </if>
+      <if test="userId!=null">
+          and beassign_user_id = #{userId}
+      </if>
+  </select>
 </mapper>
