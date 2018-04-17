@@ -13,7 +13,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
-
+/**
+ * 登陆注销配置
+ * 
+ * @author gnerv
+ *
+ */
 @ResponseBody
 @RestController
 @Api(value = "用户登陆接口", description = "用户登陆接口")

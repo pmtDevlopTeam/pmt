@@ -5,7 +5,12 @@ import java.util.Date;
 
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-
+/**
+ * 基础定时任务类
+ * 
+ * @author gnerv
+ *
+ */
 @Component
 public class BaseSchedulerTask {
 	
