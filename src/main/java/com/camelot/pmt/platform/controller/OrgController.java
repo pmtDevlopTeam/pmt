@@ -33,6 +33,12 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import springfox.documentation.annotations.ApiIgnore;
 
+/**
+ * @author pmt
+ * @Description: 基础平台-组织管理管理接口
+ * 注意：所有方法按照增删改查顺序添加
+ * @date 2018-04-11
+ */
 @RestController
 @RequestMapping(value = "/platform/org")
 @Api(value = "组织机构管理接口", description = "组织机构管理接口")
@@ -114,8 +120,8 @@ public class OrgController {
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "orgname", value = "部门名称", required = true, paramType = "form", dataType = "String"),
 			@ApiImplicitParam(name = "orgId", value = "部门id", required = true, paramType = "form", dataType = "String"),
-			@ApiImplicitParam(name = "parentId", value = "上级部门", required = true, paramType = "form", dataType = "String"),
-			@ApiImplicitParam(name = "state", value = "部门状态", required = true, paramType = "form", dataType = "String"),
+			@ApiImplicitParam(name = "parentId", value = "上级部门", required = true,defaultValue = "0", paramType = "form", dataType = "String"),
+			@ApiImplicitParam(name = "state", value = "部门状态", required = true, defaultValue = "0",paramType = "form", dataType = "String"),
 			@ApiImplicitParam(name = "sortNum", value = "部门排序号", required = true, paramType = "form", dataType = "String"),
 			@ApiImplicitParam(name = "orgCode", value = "部门编号", required = true, paramType = "form", dataType = "String")
 			
