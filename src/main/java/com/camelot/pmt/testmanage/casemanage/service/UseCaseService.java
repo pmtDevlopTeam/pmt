@@ -30,7 +30,7 @@ public interface UseCaseService {
 	 * @param id
 	 * @return
 	 */
-	ExecuteResult<UseCase> getUseCaseByUseCaseId (Long id);
+	UseCase queryUseCaseByUseCaseId (Long id);
 	
 	/**
 	 * 修改用例状态
