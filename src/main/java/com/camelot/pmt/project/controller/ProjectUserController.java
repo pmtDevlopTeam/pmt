@@ -59,12 +59,12 @@ public class ProjectUserController {
             @ApiImplicitParam(paramType = "query", name = "userProRole", dataType = "String", value = "角色id（在项目角色）", required = true),
             @ApiImplicitParam(paramType = "query", name = "preManHour", dataType = "int", value = "预计工时", required = true) })
     public JSONObject addUser(ProjectUser pu) {
-    	String loginUser = this.getLoginUser();
-    	if (loginUser == null || "".equals(loginUser)) {
-    		return ApiResponse.jsonData(APIStatus.INVALIDSESSION_LOGINOUTTIME);
-    	} else {
-    		pu.setCreateUserId(loginUser);
-    	}
+        String loginUser = this.getLoginUser();
+        if (loginUser == null || "".equals(loginUser)) {
+            return ApiResponse.jsonData(APIStatus.INVALIDSESSION_LOGINOUTTIME);
+        } else {
+            pu.setCreateUserId(loginUser);
+        }
         Date currentDate = new Date();
         pu.setCreateTime(currentDate);
         pu.setUserStatus(ProjectUser.STATUS_NOT_IN);
@@ -92,11 +92,11 @@ public class ProjectUserController {
     public JSONObject confirmUserIn(Long id) {
         ProjectUser pu = new ProjectUser();
         String loginUser = this.getLoginUser();
-    	if (loginUser == null || "".equals(loginUser)) {
-    		return ApiResponse.jsonData(APIStatus.INVALIDSESSION_LOGINOUTTIME);
-    	}
-    	logger.info("confirm user in project , modifyUserId = [{}]", loginUser);
-    	pu.setModifyUserId(loginUser);
+        if (loginUser == null || "".equals(loginUser)) {
+            return ApiResponse.jsonData(APIStatus.INVALIDSESSION_LOGINOUTTIME);
+        }
+        logger.info("confirm user in project , modifyUserId = [{}]", loginUser);
+        pu.setModifyUserId(loginUser);
         Date currentDate = new Date();
         pu.setModifyTime(currentDate);
         pu.setId(id);
@@ -154,48 +154,47 @@ public class ProjectUserController {
     @ApiOperation("清除项目成员")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "projectId", dataType = "Long", value = "项目id", required = true),
-            @ApiImplicitParam(paramType = "query", name = "userIds", dataType = "String", value = "用户id，用逗号隔开", required = true),
-   })
-    public JSONObject cleanUser (Long projectId, String userIds) {
-    	String returnMessage = "请先结束人员在项目中的任务";
-    	String loginUser = this.getLoginUser();
-    	if (loginUser == null || "".equals(loginUser)) {
-    		return ApiResponse.jsonData(APIStatus.INVALIDSESSION_LOGINOUTTIME);
-    	}
-    	Map<String, Object> map = new HashMap<>();
-    	if (projectId == null || userIds == null) {
-    		return ApiResponse.errorPara();
-    	}
-    	String[] split = userIds.split(",");
-    	List<String> list = Arrays.asList(split);
-    	try {
-    		Date currentDate = new Date();
-    		map.put("userStatus", ProjectUser.STATUS_AFK);
-    		map.put("list", list);
-    		map.put("operator", loginUser);
-    		map.put("projectId", projectId);
-    		map.put("realOutTime", currentDate);
-    		map.put("modifyTime", currentDate);
-    		//查询task表，是否有还未完成任务的人员
-    		int checkTask = mapper.checkTask(map);
-    		int checkBug = mapper.checkBug(map);
-    		if (checkBug + checkTask > 0) {
-    			return ApiResponse.success(returnMessage);
-    		}
-    		projectUserService.clearUser(map);
-    		return ApiResponse.success("修改成功");
-    	} catch (Exception e) {
-    		e.printStackTrace();
-    		return ApiResponse.error("修改异常");
-    	}
+            @ApiImplicitParam(paramType = "query", name = "userIds", dataType = "String", value = "用户id，用逗号隔开", required = true), })
+    public JSONObject cleanUser(Long projectId, String userIds) {
+        String returnMessage = "请先结束人员在项目中的任务";
+        String loginUser = this.getLoginUser();
+        if (loginUser == null || "".equals(loginUser)) {
+            return ApiResponse.jsonData(APIStatus.INVALIDSESSION_LOGINOUTTIME);
+        }
+        Map<String, Object> map = new HashMap<>();
+        if (projectId == null || userIds == null) {
+            return ApiResponse.errorPara();
+        }
+        String[] split = userIds.split(",");
+        List<String> list = Arrays.asList(split);
+        try {
+            Date currentDate = new Date();
+            map.put("userStatus", ProjectUser.STATUS_AFK);
+            map.put("list", list);
+            map.put("operator", loginUser);
+            map.put("projectId", projectId);
+            map.put("realOutTime", currentDate);
+            map.put("modifyTime", currentDate);
+            // 查询task表，是否有还未完成任务的人员
+            int checkTask = mapper.checkTask(map);
+            int checkBug = mapper.checkBug(map);
+            if (checkBug + checkTask > 0) {
+                return ApiResponse.success(returnMessage);
+            }
+            projectUserService.clearUser(map);
+            return ApiResponse.success("修改成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ApiResponse.error("修改异常");
+        }
     }
-    
-    private String getLoginUser () {
-    	User user = (User)ShiroUtils.getSessionAttribute("user");
-    	if (user != null) {
-    		return user.getUserId();
-    	}
-    	return "";
+
+    private String getLoginUser() {
+        User user = (User) ShiroUtils.getSessionAttribute("user");
+        if (user != null) {
+            return user.getUserId();
+        }
+        return "";
     }
-    
+
 }

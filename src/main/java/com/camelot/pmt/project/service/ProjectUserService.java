@@ -50,12 +50,13 @@ public interface ProjectUserService {
 
     /**
      * 项目关闭，将成员清除出项目（暂时不用）
+     * 
      * @param projectId
      * @param userId
      * @param userStatus
      * @return
      */
-	int clearUser(Long projectId, String userId, String userStatus);
+    int clearUser(Long projectId, String userId, String userStatus);
 
     /**
      * 将人员移出项目，状态改为暂离
