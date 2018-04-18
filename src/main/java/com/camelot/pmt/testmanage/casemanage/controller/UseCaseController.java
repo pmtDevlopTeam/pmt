@@ -25,6 +25,7 @@ import com.camelot.pmt.common.APIStatus;
 import com.camelot.pmt.common.ApiResponse;
 import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.platform.model.User;
+import com.camelot.pmt.platform.shiro.ShiroUtils;
 import com.camelot.pmt.testmanage.casemanage.model.UseCase;
 import com.camelot.pmt.testmanage.casemanage.service.UseCaseService;
 import com.camelot.pmt.testmanage.casemanage.util.ActionBean;
@@ -45,6 +46,8 @@ import springfox.documentation.annotations.ApiIgnore;
 @Api(value = "用例管理", description = "用例管理接口")
 @RequestMapping(value = "/casemanage")
 public class UseCaseController {
+	@Autowired
+	private ShiroUtils shiroUtils;
 	
 	 //日志
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -72,7 +75,7 @@ public class UseCaseController {
 	@PostMapping(value = "userCase/addBatch")
 	public JSONObject addBatchUseCase(HttpServletRequest request, @RequestBody @ApiParam(value = "list", required = true) List<UseCase> list) {
 		try {
- 		 	User user = (User) request.getSession().getAttribute("user");
+			User user = (User) shiroUtils.getSessionAttribute("user");
            boolean flag = UseCaseService.addBatchUseCase(user, list);
             if(flag){
                 return ApiResponse.success();
@@ -106,7 +109,7 @@ public class UseCaseController {
 		@PostMapping(value = "userCase/updateUserCase")
 		public JSONObject updateUserCase(HttpServletRequest request,@ApiIgnore @ApiParam(value = "useCase", required = true) UseCase useCase) {
 		 	try {
-		 		User user = (User) request.getSession().getAttribute("user");
+		 		User user = (User) shiroUtils.getSessionAttribute("user");
 	            //调用修改接口
 		 		boolean	result=UseCaseService.updateUserCase(user, useCase);
 	            // 成功返回
@@ -169,9 +172,8 @@ public class UseCaseController {
 			 	 ExecuteResult<UseCase> result = new ExecuteResult<UseCase>();
 			        try {
 			            //调用添加bug接口
-			        	result=UseCaseService.getUseCaseByUseCaseId(id);
 			            // 成功返回
-			            return ApiResponse.success(result.getResult());
+			            return ApiResponse.success(UseCaseService.queryUseCaseByUseCaseId(id));
 			        } catch (Exception e) {
 			            // 异常
 			            return ApiResponse.error();

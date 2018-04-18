@@ -43,8 +43,6 @@ public class FileManageGroupController {
     private FileManageGroupService fileManageGroupService;
     @ApiOperation(value = "添加文件夹功能", notes = "添加文件夹功能")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "currentPage", value = "页码", required = true, paramType = "query", dataType = "int"),
-            @ApiImplicitParam(name = "pageSize", value = "每页数量", required = true, paramType = "query", dataType = "int"),
             @ApiImplicitParam(name = "parentId", value = "父级id", required = false, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "projectId", value = "项目id", required = false, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "name", value = "文件夹名称", required = true, paramType = "query", dataType = "String"),
@@ -113,8 +111,8 @@ public class FileManageGroupController {
     @ApiOperation(value = "根据条件查询文件夹功能", notes = "根据条件查询文件夹功能")
     @ApiImplicitParams({//根据条件查询文件夹
             @ApiImplicitParam(name = "parentId", value = "父级id", required = false, paramType = "query", dataType = "String"),
-            @ApiImplicitParam(name = "projectId", value = "项目id", required = false, paramType = "query", dataType = "String"),
-            @ApiImplicitParam(name = "id", value = "文件夹id", required = false, paramType = "query", dataType = "String")
+            @ApiImplicitParam(name = "projectId", value = "项目id", required = false, paramType = "query", dataType = "String")
+
     })
    @RequestMapping(value="/querytFileGroup",method = RequestMethod.GET)
     @ResponseBody

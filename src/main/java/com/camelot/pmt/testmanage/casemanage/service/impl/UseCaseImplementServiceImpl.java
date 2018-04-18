@@ -3,10 +3,10 @@ package com.camelot.pmt.testmanage.casemanage.service.impl;
 import com.camelot.pmt.platform.model.User;
 import com.camelot.pmt.testmanage.casemanage.mapper.UseCaseImplementMapper;
 import com.camelot.pmt.testmanage.casemanage.mapper.UseCaseMapper;
-import com.camelot.pmt.testmanage.casemanage.mapper.UseCaseProcedureImplementMapper;
+import com.camelot.pmt.testmanage.casemanage.mapper.UseCaseDetailMapper;
 import com.camelot.pmt.testmanage.casemanage.model.UseCase;
+import com.camelot.pmt.testmanage.casemanage.model.UseCaseDetail;
 import com.camelot.pmt.testmanage.casemanage.model.UseCaseImplement;
-import com.camelot.pmt.testmanage.casemanage.model.UseCaseProcedureImplement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +25,7 @@ public class UseCaseImplementServiceImpl implements UseCaseImplementService {
     private UseCaseImplementMapper useCaseImplementMapper;
 
     @Autowired
-    private UseCaseProcedureImplementMapper useCaseProcedureImplementMapper;
+    private UseCaseDetailMapper useCaseProcedureImplementMapper;
 
     @Autowired
     private UseCaseMapper useCaseMapper;
@@ -56,8 +56,8 @@ public class UseCaseImplementServiceImpl implements UseCaseImplementService {
         }
 
         // 若执行过程有1步失败或者阻塞,则当前执行信息为失败或阻塞
-        List<UseCaseProcedureImplement> list = useCaseImplement.getDetail();
-        for (UseCaseProcedureImplement useCaseProcedureImplement : list) {
+        List<UseCaseDetail> list = useCaseImplement.getDetail();
+        for (UseCaseDetail useCaseProcedureImplement : list) {
             String testResult = useCaseProcedureImplement.getTestResult();
             if ("阻塞".equals(testResult) || "失败".equals(testResult)) {
                 useCaseImplement.setImplementResult(testResult);
@@ -71,7 +71,7 @@ public class UseCaseImplementServiceImpl implements UseCaseImplementService {
         Long id = useCaseImplement.getId();
 
         // 设置外键
-        for (UseCaseProcedureImplement useCaseProcedureImplement : list) {
+        for (UseCaseDetail useCaseProcedureImplement : list) {
             useCaseProcedureImplement.setImplementId(id);
         }
 
