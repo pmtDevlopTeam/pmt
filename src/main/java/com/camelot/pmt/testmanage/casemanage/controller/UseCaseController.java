@@ -56,7 +56,7 @@ public class UseCaseController {
 	UseCaseService UseCaseService;
 	
 	@ApiOperation(value = "新增用例")
-	@PostMapping(value = "userCase/add")
+	@PostMapping(value = "userCase/addUseCase")
 	public JSONObject addUseCase(HttpServletRequest request,  @ApiParam(value = "useCase", required = true) UseCase useCase) {
 	 	 try {
 	 		 	User user = (User) request.getSession().getAttribute("user");
@@ -72,7 +72,7 @@ public class UseCaseController {
 	}
 
 	@ApiOperation(value = "批量新增用例")
-	@PostMapping(value = "userCase/addBatch")
+	@PostMapping(value = "userCase/addBatchUseCase")
 	public JSONObject addBatchUseCase(HttpServletRequest request, @RequestBody @ApiParam(value = "list", required = true) List<UseCase> list) {
 		try {
 			User user = (User) shiroUtils.getSessionAttribute("user");
