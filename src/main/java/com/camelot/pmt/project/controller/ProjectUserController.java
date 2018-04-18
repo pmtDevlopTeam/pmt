@@ -36,7 +36,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  * @author guodx
  *
  */
-@RequestMapping("/api/project/user")
+@RequestMapping("/project/user")
 @Api(description = "项目成员管理接口")
 @RestController
 @EnableSwagger2
