@@ -1,29 +1,27 @@
 package com.camelot.pmt.project.controller;
 
-import javax.annotation.Resource;
-
+import com.alibaba.fastjson.JSONObject;
 import com.camelot.pmt.common.APIStatus;
 import com.camelot.pmt.common.ApiResponse;
 import com.camelot.pmt.common.Pager;
 import com.camelot.pmt.platform.model.User;
 import com.camelot.pmt.platform.shiro.ShiroUtils;
 import com.camelot.pmt.project.model.Version;
-import com.github.pagehelper.PageInfo;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.alibaba.fastjson.JSONObject;
 import com.camelot.pmt.project.model.VersionVo;
 import com.camelot.pmt.project.service.VersionService;
-
+import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -33,14 +31,13 @@ import java.util.List;
  * @author: xueyj
  * @date: 2018-04-13 10:58
  */
-@Slf4j
 @RestController
 @RequestMapping(value = "/platform/version")
 @Api(value = "基础平台-版本控制接口", description = "基础平台-版本控制接口")
 public class VersionController {
     @Resource
     VersionService versionService;
-
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
     /**
      * @Description: 添加版本信息
      * @param: projectId

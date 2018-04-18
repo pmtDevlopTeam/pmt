@@ -7,10 +7,10 @@ import com.camelot.pmt.project.service.VersionService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.Date;
 import java.util.List;
 
@@ -22,7 +22,6 @@ import java.util.List;
  * @date: 2018-04-13 11:00
  */
 @Service
-@Slf4j
 public class VersionServiceImpl implements VersionService {
     @Autowired
     private VersionMapper versionMapper;
