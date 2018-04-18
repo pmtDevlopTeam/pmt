@@ -33,29 +33,6 @@ public class UseCaseServiceImpl implements UseCaseService{
 	@Autowired
 	UseCaseMapper useCaseMapper;
 	
-	@Transactional
-	public  ExecuteResult<PageInfo> selectUseCase(PageBean pageBean,Map<String,Object> map){
-        
-        
-        ExecuteResult<PageInfo> result = new ExecuteResult<PageInfo>();
-		 try {
-			 	//判断传入的bug对象是否为空
-	            if (pageBean == null) {
-	                result.setResultMessage("传入实体有误!");
-	                return result;
-	            }
-	            PageHelper.startPage(pageBean.getCurrentPage(), pageBean.getPageSize());
-	            List<UseCase> docs = useCaseMapper.selectUseCase(map);
-	            PageInfo<UseCase> pageInfo = new PageInfo<UseCase>(docs);
-	            //result.setResult("用例查询成功!");
-	            result.setResult(pageInfo);
-	        } catch (Exception e) {
-	            LOGGER.error(e.getMessage());
-	            throw new RuntimeException(e);
-	        }
-	        return result;
-	}
-	
 	/**
 	 * 
 	 * 获取用例信息
@@ -171,4 +148,16 @@ public class UseCaseServiceImpl implements UseCaseService{
 		// 批量插入
 		useCaseMapper.insertBatch(list);
 	}
+	
+	/**
+	 * 用例分页查询
+	 */
+	@Transactional
+	public  List<UseCase> queryAllUserCaseList(Integer pageSize,Integer currentPage,Map<String,Object> map){
+        
+            PageHelper.startPage(currentPage, pageSize);
+            List<UseCase> docs = useCaseMapper.queryAllUserCaseList(map);
+	      return docs;
+	}
+	
 }

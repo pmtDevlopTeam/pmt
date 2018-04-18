@@ -3,16 +3,13 @@ package com.camelot.pmt.testmanage.casemanage.service;
 import java.util.List;
 import java.util.Map;
 
-import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.caserepertory.PageBean;
+import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.platform.model.User;
 import com.camelot.pmt.testmanage.casemanage.model.UseCase;
-import com.github.pagehelper.PageInfo;
 
 public interface UseCaseService {
 	
-	ExecuteResult<PageInfo> selectUseCase(PageBean pageBean,Map<String,Object> map);
-
 	/**
 	 * 新增测试用例
 	 *
@@ -47,4 +44,13 @@ public interface UseCaseService {
 	 * @param useCase
 	 */
 	ExecuteResult<String> edit(User userModel, UseCase useCase);
+	
+	/**
+	 * 用例分页查询
+	 * @param pageSize
+	 * @param currentPage
+	 * @param map
+	 * @return
+	 */
+	List<UseCase> queryAllUserCaseList(Integer pageSize,Integer currentPage,Map<String,Object> map);
 }
