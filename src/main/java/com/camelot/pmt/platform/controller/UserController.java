@@ -43,6 +43,9 @@ public class UserController {
     public JSONObject queryUserByUserId(@ApiParam(name="userId",value = "用户useId", required = true) @RequestParam(required = true) String userId){
         ExecuteResult<User> result = new ExecuteResult<User>();
         try {
+        	if(StringUtils.isEmpty(userId)) {
+        		return ApiResponse.jsonData(APIStatus.ERROR_400);
+        	}
             result = service.findUserByUserId(userId);
             if(result.isSuccess()) {
                 return ApiResponse.success(result.getResult());
@@ -86,7 +89,7 @@ public class UserController {
     		@ApiImplicitParam(
     				name="orgId",value="用户所属部门ID",required=false,paramType="form",dataType="String"),
     		@ApiImplicitParam(
-    				name="roleId",value="用户角色ID",required=false,paramType="form",dataType="String"),
+    				name="roleIds",value="用户角色IDS",required=false,paramType="form",dataType="String"),
         	@ApiImplicitParam(
         			name="loginCode",value="登录账号",required=true,paramType="form",dataType="String"),
             @ApiImplicitParam(
@@ -101,20 +104,16 @@ public class UserController {
                     name="modifyUserId",value="用户修改人ID",required=false,paramType="form",dataType="String")
     })
     @RequestMapping(value = "user/addUser",method = RequestMethod.POST)
-    public JSONObject createUser(@ApiIgnore User userModel) {
-    	ExecuteResult<String> result = new ExecuteResult<String>();
+	public JSONObject createUser(@ApiIgnore User userModel) {
+		ExecuteResult<String> result = new ExecuteResult<String>();
 		try {
-    		//判断非空
-	    	if(userModel == null){
-	    		return ApiResponse.errorPara();
-	    	}
-	    	//不为空调用接口查询
-	    	 result = service.createUser(userModel);
-	    	//成功返回
-	    	return ApiResponse.success(result.getResult());
-    	} catch (Exception e) {
-    		//异常
-    		return ApiResponse.error();
+			if (StringUtils.isEmpty(userModel.getUserJobNum())) {
+				return ApiResponse.jsonData(APIStatus.ERROR_400);
+			}
+			result = service.createUser(userModel);
+			return ApiResponse.success(result.getResult());
+		} catch (Exception e) {
+			return ApiResponse.error();
 		}
 	}
     
@@ -123,7 +122,7 @@ public class UserController {
      * @param  User userModel
      * @return {"status": {"message": "请求处理成功.","code": 200}, "data": {更新用户成功!}]
      */
-    @ApiOperation(value="添加用户", notes="添加用户")
+    @ApiOperation(value="更新用户详情", notes="更新用户详情")
     @ApiImplicitParams({
     		@ApiImplicitParam(
     				name="userId",value="用户ID",required=true,paramType="form",dataType="String"),
@@ -142,7 +141,7 @@ public class UserController {
     		@ApiImplicitParam(
     				name="orgId",value="用户所属部门ID",required=false,paramType="form",dataType="String"),
     		@ApiImplicitParam(
-    				name="roleId",value="用户角色ID",required=false,paramType="form",dataType="String"),
+    				name="roleIds",value="用户角色ID",required=false,paramType="form",dataType="String"),
             @ApiImplicitParam(
                     name="modifyUserId",value="用户修改人ID",required=false,paramType="form",dataType="String")
     })
@@ -150,19 +149,15 @@ public class UserController {
     public JSONObject modifyUserDetailsByUserId(@ApiIgnore User userModel) {
     	ExecuteResult<String> result = new ExecuteResult<String>();
 		try {
-    		//判断非空
-	    	if(userModel == null){
-	    		return ApiResponse.errorPara();
+			if(StringUtils.isEmpty(userModel.getUserId())){
+	    		return ApiResponse.jsonData(APIStatus.ERROR_400);
 	    	}
-	    	//不为空调用接口查询
 	    	result = service.modifyUserDetailsByUserId(userModel);
-	    	if(result.isSuccess()) {
+	    	if(!StringUtils.isEmpty(result.getResult())) {
 	    		return ApiResponse.success(result.getResult());
 	        }
-	    	//更新失败返回
-	    	return ApiResponse.error(result.getErrorMessage());
+	    	return ApiResponse.error(result.getResultMessage());
     	} catch (Exception e) {
-    		//异常
     		return ApiResponse.error();
 		}
 	}
@@ -175,18 +170,14 @@ public class UserController {
      * @author [maple]
      */
     @ApiOperation(value="删除用户", notes="删除用户")
-    @ApiImplicitParams({
-            @ApiImplicitParam(
-                    name="userId",value="用户userId",required=true,paramType="query",dataType="String")
-    })
     @RequestMapping(value = "user/deleteUserByUserId",method = RequestMethod.POST)
-    public JSONObject deleteUserByUserId(@ApiIgnore User userModel){
+    public JSONObject deleteUserByUserId(@ApiParam(name="userId",value = "用户useId", required = true) @RequestParam(required = true) String userId){
     	ExecuteResult<String> result = new ExecuteResult<String>();
     	try {
-    		if("".equals(userModel.getUserId()) || "0".equals(userModel.getUserId()) || userModel.getUserId() == null) {
+    		if(StringUtils.isEmpty(userId)) {
     			return ApiResponse.jsonData(APIStatus.ERROR_400);
     		}
-    		result = service.deleteUserByUserId(userModel);
+    		result = service.deleteUserByUserId(userId);
     		if(result.isSuccess()) {
     			return ApiResponse.success(result.getResult());
     		}
@@ -210,23 +201,19 @@ public class UserController {
                     name="password",value="密码",required=true,paramType="form",dataType="String")
     })
     @RequestMapping(value = "user/checkUser",method = RequestMethod.POST)
-    public JSONObject checkUser(@ApiIgnore User userModel) {
-    	ExecuteResult<User> result = new ExecuteResult<User>();
+	public JSONObject checkUser(@ApiIgnore User userModel) {
+		ExecuteResult<User> result = new ExecuteResult<User>();
 		try {
-    		//判断非空
-	    	if(userModel == null){
-	    		return ApiResponse.errorPara();
-	    	}
-	    	//不为空调用接口查询
-	    	 result = service.queryLoginCodeAndPassword(userModel);
-	    	 if(result.getResult() == null) {
-	    		 return ApiResponse.success(result.getResultMessage());
-	    	 }
-	    	//成功返回
-	    	return ApiResponse.success(result.getResult());
-    	} catch (Exception e) {
-    		//异常
-    		return ApiResponse.error();
+			if (StringUtils.isEmpty(userModel.getLoginCode()) || StringUtils.isEmpty(userModel.getPassword())) {
+				return ApiResponse.jsonData(APIStatus.ERROR_400);
+			}
+			result = service.queryLoginCodeAndPassword(userModel);
+			if (result.getResult() == null) {
+				return ApiResponse.success(result.getResultMessage());
+			}
+			return ApiResponse.success(result.getResult());
+		} catch (Exception e) {
+			return ApiResponse.error();
 		}
 	}
 //    
@@ -293,6 +280,9 @@ public class UserController {
     public JSONObject queryUserInfoById(@ApiParam(name="userId",value = "用户useId", required = true) @RequestParam(required = true) String userId){
         ExecuteResult<User> result = new ExecuteResult<User>();
         try {
+        	if(StringUtils.isEmpty(userId)) {
+        		return ApiResponse.jsonData(APIStatus.ERROR_400);
+        	}
             result = service.queryUserInfoById(userId);
             if(result.getResult() == null) {
                 return ApiResponse.success(result.getResultMessage());

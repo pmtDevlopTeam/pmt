@@ -99,10 +99,10 @@ public class UserServiceImpl implements UserService{
      * @return ExecuteResult<String>
      */
 	@Override
-	public ExecuteResult<String> deleteUserByUserId(User user) {
+	public ExecuteResult<String> deleteUserByUserId(String userId) {
 		ExecuteResult<String> result = new ExecuteResult<String>();
     	try {
-    		userMapper.deleteUserByUserId(user);
+    		userMapper.deleteUserByUserId(userId);
     		result.setResult("删除用户成功！");
     	} catch (Exception e) {
     		LOGGER.error(e.getMessage());
@@ -268,7 +268,7 @@ public class UserServiceImpl implements UserService{
 				}
 				int updateResult = userMapper.modifyUserByUserId(user);
 				if(updateResult == 0) {
-					result.addErrorMessage("更新用户失败！");
+					result.setResultMessage("更新用户失败！");
 					return result;
 				}
 			}
@@ -276,26 +276,34 @@ public class UserServiceImpl implements UserService{
 			if(!StringUtils.isEmpty(user.getUserPhone()) || !StringUtils.isEmpty(user.getUserMail()) ) {
 				int updateResult = userMapper.modifyUserInfoByUserId(user);
 				if(updateResult == 0) {
-					result.addErrorMessage("更新用户失败！");
+					result.setResultMessage("更新用户失败！");
 					return result;
 				}
 			}
 			//3.判断用户组织表
-			if(!StringUtils.isEmpty(user.getOrgId())){
-				int updateResult = userMapper.modifyUserOrgByUserId(user);
-				if(updateResult == 0) {
-					result.addErrorMessage("更新用户失败！");
-					return result;
+			if (!StringUtils.isEmpty(user.getOrgId())) {
+				long checkResult = userMapper.checkUserOrgExistByUserId(user.getUserId());
+				if (checkResult == 0) {
+					user.setCreateUserId(user.getModifyUserId());
+					userMapper.insertUserOrg(user);
+				}else {
+					int updateResult = userMapper.modifyUserOrgByUserId(user);
+					if (updateResult == 0) {
+						result.setResultMessage("更新用户失败！");
+						return result;
+					}
 				}
+
 			}
 			//4.用户信角色表更新
 			if (user.getRoleIds() != null && user.getRoleIds().length != 0) {
 				String[] roleIds = user.getRoleIds();
 				// 检查用户角色表是否存在该用户
 				long checkCount = userMapper.checkUserRoleIsExistByUserId(user.getUserId());
-				if (checkCount < 0) {
+				if (checkCount <= 0) {
 					for (String roleId : roleIds) {
 						user.setRoleId(roleId);
+						user.setCreateUserId(user.getModifyUserId());
 						userMapper.insertUserRole(user);
 					}
 				} else {

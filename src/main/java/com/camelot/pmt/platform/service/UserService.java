@@ -34,7 +34,7 @@ public interface UserService {
 	 * @author [maple]
 	 * @return
 	 */
-	ExecuteResult<String> deleteUserByUserId(User user);
+	ExecuteResult<String> deleteUserByUserId(String userId);
 
 	/**
 	 * 
