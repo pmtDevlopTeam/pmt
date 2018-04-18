@@ -1,62 +1,33 @@
 package com.camelot.pmt.filemanage.model;
 
-import java.io.Serializable;
 import java.util.Date;
-
-import com.baomidou.mybatisplus.annotations.TableField;
-import com.baomidou.mybatisplus.annotations.TableId;
-import com.baomidou.mybatisplus.annotations.TableName;
-import com.baomidou.mybatisplus.enums.IdType;
-
-/**
- *
- * 文档表
- *
+/*
+张战
  */
-@TableName("file_manage")
-public class FileManage implements Serializable {
-
-    @TableField(exist = false)
-    private static final long serialVersionUID = 1L;
-
-    /** 主键ID */
-    @TableId(type = IdType.AUTO)
+public class FileManage {
     private Long id;
 
-    /** 文件类型id */
-    @TableField(value = "group_id")
     private Long groupId;
 
-    /** 文件标题 */
-    @TableField(value = "file_title")
     private String fileTitle;
 
-    /** svn/git等地址 */
-    @TableField(value = "file_address")
     private String fileAddress;
 
-    /** 创建者 */
-    @TableField(value = "create_id")
-    private Long createId;
+    private Long  createUserId;
 
-    /** 创建时间 */
-    @TableField(value = "create_time")
     private Date createTime;
 
-    /** 更新者 */
-    @TableField(value = "update_id")
-    private Long updateId;
+    private Long   modifyUserId;
 
-    /** 更新时间 */
-    @TableField(value = "update_time")
-    private Date updateTime;
+    private Date modifyTime;
 
-    /** 删除标记 */
-    @TableField(value = "del_flag")
     private String delFlag;
+    private int currentPage;
+    private int pageSize;
+    private int indexPage;
 
     public Long getId() {
-        return this.id;
+        return id;
     }
 
     public void setId(Long id) {
@@ -64,7 +35,7 @@ public class FileManage implements Serializable {
     }
 
     public Long getGroupId() {
-        return this.groupId;
+        return groupId;
     }
 
     public void setGroupId(Long groupId) {
@@ -72,7 +43,7 @@ public class FileManage implements Serializable {
     }
 
     public String getFileTitle() {
-        return this.fileTitle;
+        return fileTitle;
     }
 
     public void setFileTitle(String fileTitle) {
@@ -80,51 +51,92 @@ public class FileManage implements Serializable {
     }
 
     public String getFileAddress() {
-        return this.fileAddress;
+        return fileAddress;
     }
 
     public void setFileAddress(String fileAddress) {
         this.fileAddress = fileAddress;
     }
 
-    public Long getCreateId() {
-        return this.createId;
+    public Long getCreateUserId() {
+        return createUserId;
     }
 
-    public void setCreateId(Long createId) {
-        this.createId = createId;
+    public void setCreateUserId(Long createUserId) {
+        this.createUserId = createUserId;
     }
 
     public Date getCreateTime() {
-        return this.createTime;
+        return createTime;
     }
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 
-    public Long getUpdateId() {
-        return this.updateId;
+    public Long getModifyUserId() {
+        return modifyUserId;
     }
 
-    public void setUpdateId(Long updateId) {
-        this.updateId = updateId;
+    public void setModifyUserId(Long modifyUserId) {
+        this.modifyUserId = modifyUserId;
     }
 
-    public Date getUpdateTime() {
-        return this.updateTime;
+    public Date getModifyTime() {
+        return modifyTime;
     }
 
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
+    public void setModifyTime(Date modifyTime) {
+        this.modifyTime = modifyTime;
     }
 
     public String getDelFlag() {
-        return this.delFlag;
+        return delFlag;
     }
 
     public void setDelFlag(String delFlag) {
         this.delFlag = delFlag;
     }
 
+    public int getCurrentPage() {
+        return currentPage;
+    }
+
+    public void setCurrentPage(int currentPage) {
+        this.currentPage = currentPage;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
+    }
+
+    public int getIndexPage() {
+        return indexPage;
+    }
+
+    public void setIndexPage(int indexPage) {
+        this.indexPage = indexPage;
+    }
+
+    @Override
+    public String toString() {
+        return "FileManage{" +
+                "id=" + id +
+                ", groupId=" + groupId +
+                ", fileTitle='" + fileTitle + '\'' +
+                ", fileAddress='" + fileAddress + '\'' +
+                ", createUserId=" + createUserId +
+                ", createTime=" + createTime +
+                ", modifyUserId=" + modifyUserId +
+                ", modifyTime=" + modifyTime +
+                ", delFlag='" + delFlag + '\'' +
+                ", currentPage=" + currentPage +
+                ", pageSize=" + pageSize +
+                ", indexPage=" + indexPage +
+                '}';
+    }
 }

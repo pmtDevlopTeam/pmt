@@ -7,6 +7,7 @@ import com.camelot.pmt.task.model.Task;
 import com.camelot.pmt.task.model.TaskLog;
 import com.camelot.pmt.task.service.TaskRunningService;
 import com.camelot.pmt.task.utils.Constant;
+import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -43,18 +44,11 @@ public class TaskRunningController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "page", value = "页码", required = true, paramType = "query", dataType = "int"),
             @ApiImplicitParam(name = "rows", value = "每页数量", required = true, paramType = "query", dataType = "int")})
-    public JSONObject queryoverdueTaskRunning(@ApiIgnore Pager page) {
-        ExecuteResult<DataGrid<Map<String, Object>>> result = new ExecuteResult<DataGrid<Map<String, Object>>>();
+    public JSONObject queryoverdueTaskRunning(int page , int rows) {
+        String userLoginId = String.valueOf(1);
+        ExecuteResult<PageInfo<Map<String, Object>>> result = new ExecuteResult<PageInfo<Map<String, Object>>>();
         try {
-            String userLoginId = String.valueOf(1);
-            //检查用户是否登录，需要去session中获取用户登录信息
-            if(StringUtils.isEmpty(userLoginId)){
-                return ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
-            }
-            if (page == null) {
-                return ApiResponse.errorPara();
-            }
-            result = taskRunningService.queryoverdueTaskRunning(page,userLoginId);
+            result = taskRunningService.queryoverdueTaskRunning(page, rows, "2");
             if (result.isSuccess()) {
                 return ApiResponse.success(result.getResult());
             }
@@ -123,9 +117,9 @@ public class TaskRunningController {
      * @throws
      */
     @ApiOperation(value = "我的任务转为关闭", notes = "我的任务转为关闭")
-    @RequestMapping(value = "/updateTaskToClose", method = RequestMethod.POST)
+    @RequestMapping(value = "/updateTaskToClose", method = RequestMethod.GET)
     public JSONObject updateTaskToClose(
-            @ApiParam(name = "id", value = "任务标识号", required = true) @RequestParam(required = true) Long taskId){
+            @ApiParam(name = "id", value = "任务标识号", required = true) @RequestParam(required = true) Long id){
         ExecuteResult<String> result = new ExecuteResult<String>();
         try {
             Long userLoginId = Long.valueOf(1);
@@ -134,7 +128,7 @@ public class TaskRunningController {
                 return ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
             }
             //更新我的任务为关闭
-            result = taskRunningService.updateTaskToClose(taskId, Constant.TaskStatus.CLOSE.getValue());
+            result = taskRunningService.runningtoclose(id);
             //判断是否成功
             if(result.isSuccess()){
                 return ApiResponse.jsonData(APIStatus.OK_200,result.getResult());
@@ -150,27 +144,20 @@ public class TaskRunningController {
     /**
      *
      * @Title: updateTaskPendingToRuning
-     * @Description: TODO(我的已完成任务转为正在进行)   重做功能
+     * @Description: TODO(我的正在进行任务转为已完成)   实现完成功能
      * @param @param taskId
      * @param @return    设定文件
      * @return JSONObject    返回类型
      * @throws
      */
-    @ApiOperation(value = "我的已完成任务转为正在进行、重做功能", notes = "我的已完成任务转为正在进行、重做功能")
-    @RequestMapping(value = "/updateTaskAlreadyToRunning", method = RequestMethod.POST)
-    public JSONObject updateTaskAlreadyToRunning(
-            @ApiParam(name = "id", value = "任务标识号", required = true) @RequestParam(required = true) Long taskId,
-            @ApiParam(name = "delayDescribe", value = "任务描述", required = true) @RequestParam(required = true) String delayDescribe,
-            @ApiParam(name = "estimateStartTime", value = "任务预计开始时间", required = true) @RequestParam(required = true) Date estimateStartTime){
+    @ApiOperation(value = "我的正在进行任务转为已完成、实现完成功能", notes = "我的正在进行任务转为已完成、实现完成功能")
+    @RequestMapping(value = "/updateTaskRunningToAlready", method = RequestMethod.POST)
+    public JSONObject updateTaskRunningToAlready(
+            @ApiParam(name = "id", value = "任务标识号", required = true) @RequestParam(required = true) Long id){
         ExecuteResult<String> result = new ExecuteResult<String>();
         try {
-            Long userLoginId = Long.valueOf(1);
-            //检查用户是否登录，需要去session中获取用户登录信息
-            if(StringUtils.isEmpty(userLoginId)){
-                return ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
-            }
-            //更新我的待办任务为正在进行中
-            result = taskRunningService.updateTaskAlreadyToRunning(taskId, Constant.TaskStatus.RUNING.getValue(),delayDescribe,estimateStartTime);
+            //更新我的正在进行任务为完成
+            result = taskRunningService.runningtoalready(id);
             //判断是否成功
             if(result.isSuccess()){
                 return ApiResponse.jsonData(APIStatus.OK_200,result.getResult());

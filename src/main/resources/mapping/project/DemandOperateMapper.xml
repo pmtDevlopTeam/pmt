@@ -53,9 +53,9 @@
   </delete>
   <insert id="insert" parameterType="com.camelot.pmt.project.model.DemandOperate" >
     insert into demand_operate (id, demand_id, create_user_id, 
-      create_time, operate_desc)
+      create_time, operate_desc,demandOperate)
     values (#{id,jdbcType=BIGINT}, #{demandId,jdbcType=BIGINT}, #{createUserId,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{operateDesc,jdbcType=LONGVARCHAR})
+      #{createTime,jdbcType=TIMESTAMP}, #{operateDesc,jdbcType=LONGVARCHAR},#{runType,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.camelot.pmt.project.model.DemandOperate" >
     insert into demand_operate
