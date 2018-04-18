@@ -8,6 +8,8 @@ import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.platform.model.User;
 import com.camelot.pmt.platform.model.vo.UserVo;
 import com.camelot.pmt.platform.service.UserService;
+import com.github.pagehelper.PageInfo;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -47,10 +49,10 @@ public class UserController {
         		return ApiResponse.jsonData(APIStatus.ERROR_400);
         	}
             result = service.findUserByUserId(userId);
-            if(result.isSuccess()) {
-                return ApiResponse.success(result.getResult());
+            if(result.getResult() == null) {
+                return ApiResponse.success(result.getResultMessage());
             }
-            return ApiResponse.error();
+            return ApiResponse.success(result.getResult());
         }catch (Exception e) {
             return ApiResponse.error();
         }
@@ -61,7 +63,7 @@ public class UserController {
      * @return {"status": {"message": "请求处理成功.","code": 200}, "data": {userModel列表}]
      */
     @ApiOperation(value="查询所有用户", notes="查询所有用户")
-    @RequestMapping(value = "user/queryAllUsers",method = RequestMethod.GET)
+    @RequestMapping(value = "user/queryAllUsers",method = RequestMethod.POST)
     public JSONObject queryUserAll(){
         ExecuteResult<List<User>> result = new ExecuteResult<List<User>>();
         try {
@@ -216,51 +218,27 @@ public class UserController {
 			return ApiResponse.error();
 		}
 	}
-//    
-//    /**
-//     * <p>Description:[分页查询用户列表]</p>
-//     * @param  page 页码,rows 每页数量
-//     * @return "data": {"total": 总数量,"rows":[查询的结果集],"status": {"code": 200,"message": "请求处理成功."}}
-//     */
-//    @ApiOperation(value="分页获取用户列表", notes="分页获取用户列表")
-//    @RequestMapping(value = "user/queryUsersByPage",method = RequestMethod.GET)
-//    @ApiImplicitParams({
-//    	@ApiImplicitParam(name = "page", value = "页码", required = false, paramType = "query", dataType = "int"),
-//    	@ApiImplicitParam(name = "rows", value = "每页数量", required = false, paramType = "query", dataType = "int")
-//    })
-//    public JSONObject queryUsersByPage(@ApiIgnore Pager page){
-//    	ExecuteResult<DataGrid<User>> result = new ExecuteResult<DataGrid<User>>();
-//    	try {
-//    		if(page == null) {
-//    			return ApiResponse.errorPara();
-//    		}
-//    		result = service.queryUsersByPage(page);
-//    		if(result.isSuccess()) {
-//    			return ApiResponse.success(result.getResult());
-//    		}
-//    		return ApiResponse.error();
-//    	}catch (Exception e) {
-//    		return ApiResponse.error();
-//    	}
-//    }
+
     
     /**
      * <p>Description:[查询所有用户 和 条件查询]</p>
      * @param  
      * @return {"status": {"message": "请求处理成功.","code": 200}, "data": {userVo列表}]
      */
-    @ApiOperation(value="用户列表展示", notes="用户列表展示")
+    @ApiOperation(value="用户详情列表展示", notes="用户详情列表展示")
     @ApiImplicitParams({
     	@ApiImplicitParam(name = "userJobNum", value = "员工号", required = false, paramType = "query", dataType = "String"),
     	@ApiImplicitParam(name = "userName", value = "用户名", required = false, paramType = "query", dataType = "String"),
     	@ApiImplicitParam(name = "roleId", value = "用户角色ID", required = false, paramType = "query", dataType = "String"),
-    	@ApiImplicitParam(name = "state", value = "用户状态", required = false, paramType = "query", dataType = "String")
+    	@ApiImplicitParam(name = "state", value = "用户状态", required = false, paramType = "query", dataType = "String"),
+    	@ApiImplicitParam(name = "pageNum", value = "页码", defaultValue = "1" ,required = true, paramType = "query", dataType = "int"),
+    	@ApiImplicitParam(name = "pageSize", value = "每页数量", defaultValue = "10" ,required = true, paramType = "query", dataType = "int")
     })
-    @RequestMapping(value = "user/queryUsersList",method = RequestMethod.GET)
-    public JSONObject queryUsersList(@ApiIgnore UserVo userVo){
-    	ExecuteResult<List<UserVo>> result = new ExecuteResult<List<UserVo>>();
+    @RequestMapping(value = "user/queryUsersList",method = RequestMethod.POST)
+    public JSONObject queryUsersList(@ApiIgnore UserVo userVo,@RequestParam int pageNum,@RequestParam int pageSize){
+    	ExecuteResult<PageInfo> result = new ExecuteResult<PageInfo>();
         try {
-            result = service.queryUsersList(userVo);
+            result = service.queryUsersList(userVo, pageNum, pageSize);
             return ApiResponse.success(result.getResult());
         }catch (Exception e) {
             return ApiResponse.error();
@@ -315,6 +293,21 @@ public class UserController {
     	} catch (Exception e) {
     		return ApiResponse.error();
 		}
+    }
+    
+    @ApiOperation(value="根据用户名称模糊查询用户列表", notes="根据用户名模糊查询获取用户列表")
+    @RequestMapping(value = "user/queryUsersByUserName",method = RequestMethod.POST)
+    public JSONObject queryUsersByUserName(@ApiParam(name="username",value = "用户名称", required = true) @RequestParam(required = true) String username){
+    	 ExecuteResult<List<User>> result = new ExecuteResult<List<User>>();
+         try {
+        	 if(StringUtils.isEmpty(username)) {
+     			return ApiResponse.jsonData(APIStatus.ERROR_400);
+     		}
+             result = service.queryUsersByUserName(username);
+             return ApiResponse.success(result.getResult());
+         }catch (Exception e) {
+             return ApiResponse.error();
+         }
     }
 
 
