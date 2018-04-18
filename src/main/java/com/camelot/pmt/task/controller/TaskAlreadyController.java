@@ -4,9 +4,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.camelot.pmt.common.APIStatus;
 import com.camelot.pmt.common.ApiResponse;
 import com.camelot.pmt.common.ExecuteResult;
-import com.camelot.pmt.task.model.Task;
+import com.camelot.pmt.task.model.TaskLog;
 import com.camelot.pmt.task.service.TaskAlreadyService;
-import com.camelot.pmt.task.service.TaskRunningService;
+import com.camelot.pmt.task.service.TaskLogService;
+import com.camelot.pmt.task.service.TaskManagerService;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Map;
 
 
@@ -28,7 +30,10 @@ public class TaskAlreadyController {
     private TaskAlreadyService taskAlreadyService;
 
     @Autowired
-    private TaskRunningService taskRunningService;
+    private TaskManagerService taskManagerService;
+
+    @Autowired
+    private TaskLogService taskLogService;
 
 
 
@@ -67,18 +72,18 @@ public class TaskAlreadyController {
      * @return {"status": {"message": "请求处理成功.","code": 200}, "data": {Task}]
      */
     @ApiOperation(value = "根据id查询单个任务明细", notes = "根据id查询单个任务明细")
-    @RequestMapping(value = "user/queryTaskById", method = RequestMethod.GET)
+    @RequestMapping(value = "queryTaskById", method = RequestMethod.GET)
     public JSONObject queryTaskById(
             @ApiParam(name = "id", value = "任务id", required = true) @RequestParam(required = true) Long id) {
-        ExecuteResult<Task> result = new ExecuteResult<Task>();
+        ExecuteResult<Map<String, Object>> result = null;
         try {
-            result = taskRunningService.queryTaskById(id);
+            result = taskManagerService.queryTaskById(id);
             if (result.isSuccess()) {
                 return ApiResponse.success(result.getResult());
             }
             return ApiResponse.error();
         } catch (Exception e) {
-            return ApiResponse.error();
+            return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
         }
     }
 
@@ -115,6 +120,30 @@ public class TaskAlreadyController {
             return ApiResponse.jsonData(APIStatus.ERROR_500,e.getMessage());
         }
     }
+
+    /**
+     *
+     * @Title: queryUserAll @Description: TODO查询任务历史记录  重做页面 @param @return @return
+     *         JSONObject @throws
+     *         myp
+     */
+    @ApiOperation(value = "查询任务历史记录-重做页面", notes = "查询任务历史记录-重做页面")
+    @RequestMapping(value = "/queryTaskLogList", method = RequestMethod.GET)
+    public JSONObject queryTaskLogList(
+            @ApiParam(name = "id", value = "任务id", required = true) @RequestParam(required = true) Long id) {
+        ExecuteResult<List<TaskLog>> result = null;
+        try {
+            result = taskLogService.queryTaskLogList(id);
+            if (result.isSuccess()) {
+                return ApiResponse.success(result.getResult());
+            }
+            return ApiResponse.error();
+        } catch (Exception e) {
+            return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
+        }
+    }
+
+
 
 
 
