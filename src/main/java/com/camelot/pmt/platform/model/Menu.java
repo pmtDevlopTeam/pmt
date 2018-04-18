@@ -22,11 +22,11 @@ public class Menu implements Serializable {
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
     /**
-     * 菜单唯一32位UUID 
+     * 菜单唯一32位UUID
      */
     private String menuId;
     /**
-     * 上级菜单ID 默认 ‘0’  0级为顶级角色
+     * 上级菜单ID 默认 ‘0’ 0级为顶级角色
      */
     private String parentId;
     /**
@@ -42,7 +42,7 @@ public class Menu implements Serializable {
      */
     private String menuUrl;
     /**
-     * 菜单授权 模块:功能:方法  platform:menu:createMenu
+     * 菜单授权 模块:功能:方法 platform:menu:createMenu
      */
     private String menuPermission;
     /**
@@ -50,7 +50,7 @@ public class Menu implements Serializable {
      */
     private String menuIcon;
     /**
-     * 菜单状态  0（默认）启用 1 停用 2 锁定
+     * 菜单状态 0（默认）启用 1 停用 2 锁定
      */
     private String state;
     /**
@@ -74,33 +74,32 @@ public class Menu implements Serializable {
      */
     private String modifyUserId;
 
-
     public Menu() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+        super();
+        // TODO Auto-generated constructor stub
+    }
 
-	public Menu(Long id, String menuId, String parentId, String menuName, String menuType, String menuUrl,
-			String menuPermission, String menuIcon, String state, Integer sortNum, Date createTime, String createUserId,
-			Date modifyTime, String modifyUserId) {
-		super();
-		this.id = id;
-		this.menuId = menuId;
-		this.parentId = parentId;
-		this.menuName = menuName;
-		this.menuType = menuType;
-		this.menuUrl = menuUrl;
-		this.menuPermission = menuPermission;
-		this.menuIcon = menuIcon;
-		this.state = state;
-		this.sortNum = sortNum;
-		this.createTime = createTime;
-		this.createUserId = createUserId;
-		this.modifyTime = modifyTime;
-		this.modifyUserId = modifyUserId;
-	}
+    public Menu(Long id, String menuId, String parentId, String menuName, String menuType, String menuUrl,
+            String menuPermission, String menuIcon, String state, Integer sortNum, Date createTime, String createUserId,
+            Date modifyTime, String modifyUserId) {
+        super();
+        this.id = id;
+        this.menuId = menuId;
+        this.parentId = parentId;
+        this.menuName = menuName;
+        this.menuType = menuType;
+        this.menuUrl = menuUrl;
+        this.menuPermission = menuPermission;
+        this.menuIcon = menuIcon;
+        this.state = state;
+        this.sortNum = sortNum;
+        this.createTime = createTime;
+        this.createUserId = createUserId;
+        this.modifyTime = modifyTime;
+        this.modifyUserId = modifyUserId;
+    }
 
-	public Long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -214,21 +213,10 @@ public class Menu implements Serializable {
 
     @Override
     public String toString() {
-        return "PlatformMenu{" +
-        ", id=" + id +
-        ", menuId=" + menuId +
-        ", parentId=" + parentId +
-        ", menuName=" + menuName +
-        ", menuType=" + menuType +
-        ", menuUrl=" + menuUrl +
-        ", menuPermission=" + menuPermission +
-        ", menuIcon=" + menuIcon +
-        ", state=" + state +
-        ", sortNum=" + sortNum +
-        ", createTime=" + createTime +
-        ", createUserId=" + createUserId +
-        ", modifyTime=" + modifyTime +
-        ", modifyUserId=" + modifyUserId +
-        "}";
+        return "PlatformMenu{" + ", id=" + id + ", menuId=" + menuId + ", parentId=" + parentId + ", menuName="
+                + menuName + ", menuType=" + menuType + ", menuUrl=" + menuUrl + ", menuPermission=" + menuPermission
+                + ", menuIcon=" + menuIcon + ", state=" + state + ", sortNum=" + sortNum + ", createTime=" + createTime
+                + ", createUserId=" + createUserId + ", modifyTime=" + modifyTime + ", modifyUserId=" + modifyUserId
+                + "}";
     }
 }

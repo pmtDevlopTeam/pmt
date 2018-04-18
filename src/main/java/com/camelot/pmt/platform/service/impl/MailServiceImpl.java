@@ -12,7 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Service
-public class MailServiceImpl implements MailService{
+public class MailServiceImpl implements MailService {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -35,9 +35,9 @@ public class MailServiceImpl implements MailService{
 
     }
 
-	@Override
-	public void sendSimpleMail(String to, String subject, String content, String filePath) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void sendSimpleMail(String to, String subject, String content, String filePath) {
+        // TODO Auto-generated method stub
+
+    }
 }

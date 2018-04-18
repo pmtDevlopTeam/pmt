@@ -37,7 +37,7 @@
     delete from version
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.camelot.pmt.project.model.Version" >
+  <insert id="insert" parameterType="com.camelot.pmt.project.model.Version" useGeneratedKeys="true" keyProperty="id">
     insert into version (id, project_id, version, 
       start_time, end_time, version_name, 
       version_type, create_user_id, create_time, 

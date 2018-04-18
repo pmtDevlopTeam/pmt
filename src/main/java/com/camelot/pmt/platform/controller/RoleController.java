@@ -35,11 +35,11 @@ public class RoleController {
     @Autowired
     private RoleService roleService;
 
-
     /**
      * 添加角色
      *
-     * @param String parentId, String state, String roleName
+     * @param String
+     *            parentId, String state, String roleName
      * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
     // @RequiresPermissions(value = "/platform/role/addRole")
@@ -48,7 +48,7 @@ public class RoleController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "parentId", value = "角色父id", required = false, paramType = "form", dataType = "string"),
             @ApiImplicitParam(name = "state", value = "角色状态", required = false, paramType = "form", dataType = "string"),
-            @ApiImplicitParam(name = "roleName", value = "角色名称", required = true, paramType = "form", dataType = "string"),})
+            @ApiImplicitParam(name = "roleName", value = "角色名称", required = true, paramType = "form", dataType = "string"), })
     public JSONObject createRole(@ApiIgnore Role role) {
         ExecuteResult<Role> result;
         try {
@@ -71,17 +71,17 @@ public class RoleController {
         }
     }
 
-
     /**
      * 删除角色
      *
-     * @param String roleId
+     * @param String
+     *            roleId
      * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
     @ApiOperation(value = "删除角色", notes = "删除角色")
     @PostMapping(value = "/deleteRoleById")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "roleId", value = "角色32位id", required = true, paramType = "form", dataType = "string"),})
+            @ApiImplicitParam(name = "roleId", value = "角色32位id", required = true, paramType = "form", dataType = "string"), })
     public JSONObject deleteRoleById(@ApiIgnore Role role) {
         ExecuteResult<Role> result;
         try {
@@ -89,7 +89,7 @@ public class RoleController {
                 ApiResponse.jsonData(APIStatus.ERROR_400);
             }
             result = roleService.deleteRoleById(role);
-            if (result.getResult() == null){
+            if (result.getResult() == null) {
                 return ApiResponse.jsonData(APIStatus.ERROR_501);
             }
             return ApiResponse.success(result.getResult());
@@ -98,11 +98,11 @@ public class RoleController {
         }
     }
 
-
     /**
      * 编辑角色
      *
-     * @param String roleId, String state, String roleName
+     * @param String
+     *            roleId, String state, String roleName
      * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
     @ApiOperation(value = "编辑角色", notes = "编辑角色")
@@ -110,7 +110,7 @@ public class RoleController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "roleId", value = "角色id", required = true, paramType = "form", dataType = "string"),
             @ApiImplicitParam(name = "state", value = "角色状态", required = false, paramType = "form", dataType = "string"),
-            @ApiImplicitParam(name = "roleName", value = "角色名称", required = true, paramType = "form", dataType = "string"),})
+            @ApiImplicitParam(name = "roleName", value = "角色名称", required = true, paramType = "form", dataType = "string"), })
     public JSONObject modifyRoleById(@ApiIgnore Role role) {
         ExecuteResult<Role> result;
         try {
@@ -157,13 +157,14 @@ public class RoleController {
     /**
      * 验证角色名称是否存在
      *
-     * @param String roleName
+     * @param String
+     *            roleName
      * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
     @ApiOperation(value = "验证角色名称是否存在", notes = "验证角色名称是否存在")
     @GetMapping(value = "/checkRoleName")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "roleName", value = "角色名称", required = true, paramType = "query", dataType = "string"),})
+            @ApiImplicitParam(name = "roleName", value = "角色名称", required = true, paramType = "query", dataType = "string"), })
 
     public JSONObject checkRoleName(@ApiIgnore Role role) {
         ExecuteResult result;
@@ -180,10 +181,5 @@ public class RoleController {
             return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
         }
     }
-
-
-
-
-
 
 }

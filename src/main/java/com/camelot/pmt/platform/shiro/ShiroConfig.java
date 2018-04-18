@@ -46,7 +46,7 @@ public class ShiroConfig {
         shiroFilter.setUnauthorizedUrl("/");
 
         Map<String, String> filterMap = new LinkedHashMap<>();
-        //公开静态文件 配置
+        // 公开静态文件 配置
         filterMap.put("/public/**", "anon");
 
         // swagger配置
@@ -54,7 +54,7 @@ public class ShiroConfig {
         filterMap.put("/v2/api-docs", "anon");
         filterMap.put("/swagger-resources/configuration/ui", "anon");
 
-        //登陆
+        // 登陆
         filterMap.put("/login.html", "anon");
         filterMap.put("/login", "anon");
 

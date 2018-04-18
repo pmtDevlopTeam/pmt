@@ -65,7 +65,7 @@ public class ProjectBudgetController {
             // 成功返回
             return ApiResponse.success(result.getResult());
         } catch (Exception e) {
-            logger.error("------添加项目预算------"+e.getMessage());
+            logger.error("------添加项目预算------" + e.getMessage());
             return ApiResponse.error();
         }
     }
@@ -89,7 +89,7 @@ public class ProjectBudgetController {
             }
             return ApiResponse.error();
         } catch (Exception e) {
-            logger.error("------查询单个项目预算------"+e.getMessage());
+            logger.error("------查询单个项目预算------" + e.getMessage());
             return ApiResponse.error();
         }
     }
@@ -118,7 +118,7 @@ public class ProjectBudgetController {
             // 成功返回
             return ApiResponse.success(result.getResult());
         } catch (Exception e) {
-            logger.error("------编辑项目预算------"+e.getMessage());
+            logger.error("------编辑项目预算------" + e.getMessage());
             return ApiResponse.error();
         }
     }
@@ -141,7 +141,7 @@ public class ProjectBudgetController {
             }
             return ApiResponse.error();
         } catch (Exception e) {
-            logger.error("------根据项目id查询项目预算------"+e.getMessage());
+            logger.error("------根据项目id查询项目预算------" + e.getMessage());
             return ApiResponse.error();
         }
     }
@@ -171,7 +171,7 @@ public class ProjectBudgetController {
             }
             return ApiResponse.error();
         } catch (Exception e) {
-            logger.error("------根据项目id查询项目结项------"+e.getMessage());
+            logger.error("------根据项目id查询项目结项------" + e.getMessage());
             return ApiResponse.error();
         }
     }
@@ -195,7 +195,7 @@ public class ProjectBudgetController {
             }
             return ApiResponse.error();
         } catch (Exception e) {
-            logger.error("------统计需求变更影响的任务信息------"+e.getMessage());
+            logger.error("------统计需求变更影响的任务信息------" + e.getMessage());
             return ApiResponse.error();
         }
     }
@@ -219,7 +219,7 @@ public class ProjectBudgetController {
             }
             return ApiResponse.error();
         } catch (Exception e) {
-            logger.error("------统计需求变更影响的任务信息------"+e.getMessage());
+            logger.error("------统计需求变更影响的任务信息------" + e.getMessage());
             return ApiResponse.error();
         }
     }
@@ -243,7 +243,7 @@ public class ProjectBudgetController {
             }
             return ApiResponse.error();
         } catch (Exception e) {
-            logger.error("------统计需求变更影响的bug信息------"+e.getMessage());
+            logger.error("------统计需求变更影响的bug信息------" + e.getMessage());
             return ApiResponse.error();
         }
     }

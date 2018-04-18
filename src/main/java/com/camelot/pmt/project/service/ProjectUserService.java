@@ -57,10 +57,11 @@ public interface ProjectUserService {
      */
 	int clearUser(Long projectId, String userId, String userStatus);
 
-	/**
-	 * 将人员移出项目，状态改为暂离
-	 * @param map
-	 */
-	void clearUser(Map<String, Object> map);
+    /**
+     * 将人员移出项目，状态改为暂离
+     * 
+     * @param map
+     */
+    void clearUser(Map<String, Object> map);
 
 }

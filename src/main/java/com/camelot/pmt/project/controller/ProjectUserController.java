@@ -149,11 +149,11 @@ public class ProjectUserController {
             return ApiResponse.error("查询异常");
         }
     }
-    
+
     @RequestMapping(value = "/clean", method = RequestMethod.POST)
     @ApiOperation("清除项目成员")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "projectId", dataType = "Long", value = "项目id", required = true), 
+            @ApiImplicitParam(paramType = "query", name = "projectId", dataType = "Long", value = "项目id", required = true),
             @ApiImplicitParam(paramType = "query", name = "userIds", dataType = "String", value = "用户id，用逗号隔开", required = true),
    })
     public JSONObject cleanUser (Long projectId, String userIds) {

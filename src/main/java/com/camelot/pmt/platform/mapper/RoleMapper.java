@@ -1,6 +1,5 @@
 package com.camelot.pmt.platform.mapper;
 
-
 import com.camelot.pmt.platform.model.Role;
 
 import java.util.List;
@@ -52,6 +51,7 @@ public interface RoleMapper {
 
     /**
      * 验证角色名称是否存在
+     * 
      * @param role
      * @return
      */

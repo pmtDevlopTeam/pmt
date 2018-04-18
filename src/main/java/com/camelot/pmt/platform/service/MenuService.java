@@ -19,53 +19,59 @@ public interface MenuService {
     /**
      * 根据一个菜单对象 增加一个菜单
      * 
-     * @param Menu menu
+     * @param Menu
+     *            menu
      * @return ExecuteResult<Menu>
      */
-	ExecuteResult<Menu> createMenu(Menu menu);
+    ExecuteResult<Menu> createMenu(Menu menu);
 
     /**
      * 根据菜单id 删除一个菜单
      * 
-     * @param String menuId
+     * @param String
+     *            menuId
      * @return ExecuteResult<Menu>
      */
-	ExecuteResult<Menu> deleteMenuByMenuId(String menuId);
+    ExecuteResult<Menu> deleteMenuByMenuId(String menuId);
 
     /**
      * 根据菜单id 修改一个菜单
      * 
-     * @param Menu menu
+     * @param Menu
+     *            menu
      * @return ExecuteResult<Menu>
      */
-	ExecuteResult<Menu> modifyMenuByMenuId(Menu menu);
+    ExecuteResult<Menu> modifyMenuByMenuId(Menu menu);
 
     /**
      * 根据菜单id 查询一个菜单
      * 
-     * @param String menuId
+     * @param String
+     *            menuId
      * @return ExecuteResult<Menu>
      */
-	ExecuteResult<Menu> queryMenuByMenuId(String menuId);
+    ExecuteResult<Menu> queryMenuByMenuId(String menuId);
 
     /**
      * 查询全部菜单树
      * 
-     * @param 
+     * @param
      * @return ExecuteResult<List<Menu>>
      */
-	ExecuteResult<List<Menu>> queryAllMenu();
-    
+    ExecuteResult<List<Menu>> queryAllMenu();
+
     /**
      * 根据菜单id 查询指定菜单的子菜单树
      * 
-     * @param String menuId
+     * @param String
+     *            menuId
      * @return ExecuteResult<List<Menu>>
      */
-	ExecuteResult<List<Menu>> querySubMenuByMenuId(String menuId);
-    
+    ExecuteResult<List<Menu>> querySubMenuByMenuId(String menuId);
+
     /**
      * 菜单分页测试
+     * 
      * @param page
      * @param state
      * @return
