@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -40,7 +41,8 @@ import springfox.documentation.annotations.ApiIgnore;
  * @date 2018年4月17日
  */
 @RestController
-@Api(value = "立项管理接口", description = "立项管理接口")
+@RequestMapping(path = "/api/project", produces = "application/json;charset=utf-8")
+@Api(value = "项目管理接口", description = "项目管理接口")
 public class ProjectMainController {
 
     private static final Logger logger = LoggerFactory.getLogger(ProjectMainController.class);
@@ -57,7 +59,7 @@ public class ProjectMainController {
      * @return
      */
     @ApiOperation(notes = "新建项目", value = "根据具有立项权限的用户新建项目")
-    @PostMapping("/api/projectMain/addProject")
+    @PostMapping("/addProject")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userId", value = "负责人id", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "createUserId", value = "创建人id", required = true, paramType = "query", dataType = "String"),
@@ -101,8 +103,8 @@ public class ProjectMainController {
      * @param rows
      * @return
      */
-    @ApiOperation(value = "分页查询", notes = "分页查询")
-    @GetMapping(value = "/api/projectMain/queryAllByPage")
+    @ApiOperation(value = "分页查询所有", notes = "分页查询所有")
+    @GetMapping(value = "/queryAllByPage")
     public JSONObject queryAllByPage(@ApiParam(//
             value = "页码", required = true) @RequestParam int page, //
             @ApiParam(value = "每页数量", required = true) @RequestParam int rows) {
@@ -130,7 +132,7 @@ public class ProjectMainController {
      * @return
      */
     @ApiOperation(value = "按状态分类查询", notes = "按状态分类查询")
-    @GetMapping(value = "/api/projectMain/queryByProjectStatus")
+    @GetMapping(value = "/queryByProjectStatus")
     public JSONObject queryByProjectStatus(
             @ApiParam(value = "项目状态", required = true) @RequestParam String projectStatus) {
         logger.info("入参封装的数据为：projectStatus={}", projectStatus);
@@ -156,7 +158,7 @@ public class ProjectMainController {
      * @return
      */
     @ApiOperation(value = "按负责人id查询", notes = "按负责人id查询")
-    @GetMapping(value = "/api/projectMain/queryByUserId")
+    @GetMapping(value = "/queryByUserId")
     public JSONObject queryByUserId(@ApiParam(value = "负责人Id", required = true) @RequestParam String userId) {
         logger.info("入参封装的数据为：userId={}", userId);
         ExecuteResult<List<ProjectMain>> result = new ExecuteResult<>();
@@ -181,7 +183,7 @@ public class ProjectMainController {
      * @return
      */
     @ApiOperation(value = "按创建人id查询", notes = "按创建人id查询")
-    @GetMapping(value = "/api/projectMain/queryByCreateUserId")
+    @GetMapping(value = "/queryByCreateUserId")
     public JSONObject queryByCreateUserId(
             @ApiParam(value = "创建人id", required = true) @RequestParam String createUserId) {
         logger.info("入参封装的数据为：createUserId={}", createUserId);
@@ -207,7 +209,7 @@ public class ProjectMainController {
      * @return
      */
     @ApiOperation(value = "按修改人id查询", notes = "按修改人id查询")
-    @GetMapping(value = "/api/projectMain/queryByModifyUserId")
+    @GetMapping(value = "/queryByModifyUserId")
     public JSONObject queryByModifyUserId(
             @ApiParam(value = "修改人id", required = true) @RequestParam String modifyUserId) {
         logger.info("入参封装的数据为：modifyUserId={}", modifyUserId);
@@ -243,7 +245,7 @@ public class ProjectMainController {
      * @return
      */
     @ApiOperation(value = "按主键id更新数据", notes = "按主键id更新数据")
-    @PutMapping(value = "/api/projectMain/updateByPrimaryKeySelective")
+    @PutMapping(value = "/updateByPrimaryKeySelective")
     public JSONObject updateByPrimaryKeySelective(
             //
             @ApiParam(value = "id", required = true) @RequestParam Long id, //
@@ -290,7 +292,7 @@ public class ProjectMainController {
      * @return
      */
     @ApiOperation(value = "根据id删除项目", notes = "根据id删除项目")
-    @DeleteMapping(value = "/api/projectMain/deleteByPrimaryKey")
+    @DeleteMapping(value = "/deleteByPrimaryKey")
     public JSONObject deleteByPrimaryKey(//
             @ApiParam(value = "id", required = true) @RequestParam Long id, //
             @ApiParam(value = "创建人id", required = true) @RequestParam String createUserId, //
@@ -319,7 +321,7 @@ public class ProjectMainController {
      * @return
      */
     @ApiOperation(value = "按项目id查询", notes = "按项目id查询")
-    @GetMapping(value = "/api/projectMain/queryByPrimaryKey")
+    @GetMapping(value = "/queryByPrimaryKey")
     public JSONObject selectByPrimaryKey(@ApiParam(value = "项目id", required = true) @RequestParam Long id) {
 
         logger.info("入参封装的数据为：id={}", id);
@@ -354,7 +356,7 @@ public class ProjectMainController {
      * @return
      */
     @ApiOperation(value = "关闭项目时,更新相关数据", notes = "关闭项目时,更新相关数据")
-    @PutMapping(value = "/api/projectMain/close/updateByProjectById")
+    @PutMapping(value = "/close/updateByProjectById")
     public JSONObject closeProjectById(//
             @ApiParam(value = "id", required = true) @RequestParam Long id, //
             @ApiParam(value = "创建人id", required = true) @RequestParam String createUserId, //

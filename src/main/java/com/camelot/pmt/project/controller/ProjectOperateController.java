@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,6 +27,7 @@ import io.swagger.annotations.ApiParam;
  * @date 2018年4月17日
  */
 @RestController
+@RequestMapping(path = "/api/project/operate", produces = "application/json;charset=utf-8")
 @Api(value = "项目操作接口", description = "项目操作接口")
 public class ProjectOperateController {
 
@@ -40,7 +42,7 @@ public class ProjectOperateController {
      * @return
      */
     @ApiOperation(value = "按创建人id查询", notes = "按创建人id查询")
-    @GetMapping(value = "/api/projectOperate/queryByCreateUserId")
+    @GetMapping(value = "/queryByCreateUserId")
     public JSONObject queryByCreateUserId(
             @ApiParam(value = "创建人id", required = true) @RequestParam String createUserId) {
         logger.info("入参封装的数据为：createUserId={}", createUserId);
@@ -66,7 +68,7 @@ public class ProjectOperateController {
      * @return
      */
     @ApiOperation(value = "按项目id查询", notes = "按项目id查询")
-    @GetMapping(value = "/api/projectOperate/queryByProjectId")
+    @GetMapping(value = "/queryByProjectId")
     public JSONObject queryByProjectId(@ApiParam(value = "项目id", required = true) @RequestParam Long projectId) {
 
         logger.info("入参封装的数据为：projectId={}", projectId);
