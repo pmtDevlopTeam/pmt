@@ -51,7 +51,7 @@ public class DemandController {
      * @return
      */
     @ApiOperation(value = "新增需求", notes = "新增需求")
-    @PostMapping(value = "/api/demand/insertDemand")
+    @PostMapping(value = "/demand/addDemand")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "pid", value = "所属一级需求id", required = false, paramType = "query", dataType = "Long"),
             @ApiImplicitParam(name = "projectId", value = "项目id", required = true, paramType = "query", dataType = "String"),

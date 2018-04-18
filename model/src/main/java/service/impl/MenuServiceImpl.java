@@ -37,9 +37,6 @@ public class MenuServiceImpl implements MenuService {
     @Autowired
     MenuMapper menuMapper;
 
-    @Autowired
-    ExecuteResult result;
-
     /**
      * 增加一个菜单
      *
@@ -47,16 +44,8 @@ public class MenuServiceImpl implements MenuService {
      * @return ExecuteResult<Menu>
      */
     @Override
-    public ExecuteResult<Menu> addMenu(Menu menu) {
-        menu = createMenuModel(menu);
-        int createMenu = menuMapper.addMenu(menu);
-        if (createMenu == 1) {
-            result.setResult(menu);
-        } else {
-            result.setSuccess(false);
-            return result;
-        }
-        return result;
+    public boolean addMenu(Menu menu) {
+        return menuMapper.addMenu(menu)==1?true:false;
     }
 
     /**
@@ -66,16 +55,8 @@ public class MenuServiceImpl implements MenuService {
      * @return ExecuteResult<Menu>
      */
     @Override
-    public ExecuteResult<Menu> deleteMenuByMenuId(String menuId) {
-
-        int deleteMenuByMenuId = menuMapper.deleteMenuByMenuId(menuId);
-        if (deleteMenuByMenuId == 1) {
-        } else {
-            result.setSuccess(false);
-            return result;
-        }
-
-        return result;
+    public boolean deleteMenuByMenuId(String menuId) {
+        return menuMapper.deleteMenuByMenuId(menuId)==1?true:false;
     }
 
     /**
@@ -85,16 +66,8 @@ public class MenuServiceImpl implements MenuService {
      * @return ExecuteResult<Menu>
      */
     @Override
-    public ExecuteResult<Menu> updateMenuByMenuId(Menu menu) {
-        menu = updateMenuByMenuId(menu);
-        int updateMenuByMenuId = menuMapper.updateMenuByMenuId(menu);
-        if (updateMenuByMenuId == 1) {
-        } else {
-            result.setSuccess(false);
-            return result;
-        }
-
-        return result;
+    public boolean updateMenuByMenuId(Menu menu) {
+        return menuMapper.updateMenuByMenuId(menu)==1?true:false;
     }
 
     /**
@@ -104,20 +77,8 @@ public class MenuServiceImpl implements MenuService {
      * @return ExecuteResult<Menu>
      */
     @Override
-    public ExecuteResult<Menu> queryMenuByMenuId(String menuId) {
-        try {
-            Menu queryMenuByMenuId = menuMapper.queryMenuByMenuId(menuId);
-            if (queryMenuByMenuId != null) {
-                result.setResult(queryMenuByMenuId);
-            } else {
-                result.setSuccess(false);
-                return result;
-            }
-        } catch (Exception e) {
-            LOGGER.error(e.getMessage());
-            throw new RuntimeException(e);
-        }
-        return result;
+    public Menu queryMenuByMenuId(String menuId) {
+        return menuMapper.queryMenuByMenuId(menuId);
     }
 
     /**
@@ -127,15 +88,8 @@ public class MenuServiceImpl implements MenuService {
      * @return ExecuteResult<Menu>
      */
     @Override
-    public ExecuteResult<Menu> queryMenuById(String id) {
-        Menu queryMenuByMenuId = menuMapper.queryMenuById(id);
-        if (queryMenuByMenuId != null) {
-            result.setResult(queryMenuByMenuId);
-        } else {
-            result.setSuccess(false);
-            return result;
-        }
-        return result;
+    public Menu queryMenuById(String id) {
+        return menuMapper.queryMenuById(id);
     }
 
     /**
@@ -146,7 +100,7 @@ public class MenuServiceImpl implements MenuService {
      * @return
      */
     @Override
-    public List<Menu> selectMenuList(Menu menu，Integer pageSize,Integer currentPage) {
+    public List<Menu> selectMenuList(Menu menu,Integer pageSize,Integer currentPage) {
         PageHelper.startPage(currentPage,pageSize);
         List<Menu> menuList = menuMapper.selectMenuList(menu);
         return menuList;
