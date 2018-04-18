@@ -158,7 +158,7 @@ public class TaskRunningServiceImpl implements TaskRunningService{
                 List<String> booleans = new ArrayList<String>();
                 for (Task taskalready : list1) {
                     //判断该节点下的所有子任务的状态是否都已完成或者关闭
-                    if(taskalready.getStatus().equals("3") || taskalready.getStatus().equals("4")){
+                    if(taskalready.getStatus().equals("2") || taskalready.getStatus().equals("3")){
                         booleans.add("1");
                     }
                 }
