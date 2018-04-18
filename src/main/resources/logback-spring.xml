@@ -30,7 +30,7 @@
    <!-- <logger name="com.ybf" level="DEBUG">
         <appender-ref ref="baselog"/>
     </logger>  -->
-    <logger name="com.camelot.pmt.caserepertory.mapper" level="DEBUG">
+    <logger name="com.camelot.pmt.bugmanage.mapper" level="DEBUG">
         <appender-ref ref="STDOUT" />
     </logger>
 </configuration>

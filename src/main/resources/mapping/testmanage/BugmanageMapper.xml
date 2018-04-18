@@ -71,61 +71,8 @@
 		designated_id,DATE_FORMAT(end_time,'%Y-%m-%d %H:%i:%s') as end_time,case_environment,case_terminal
 	</sql>
 	
-	<select id="selectByPrimaryKey" resultMap="BaseResultMap">
-		select
-		<include refid="Base_Column_GET" />
-		from bug_manage
-		where id = #{id}
-	</select>
-	
-	<select id="selectCondition" resultMap="SelectBaseResultMap">
-		select id,bug_no,bug_title,serious_degree,create_user_id,designated_id,solve_id,bug_status,bug_level
-		from bug_manage
-		<where>
-			<if test="projectId!=null">
-				AND project_id=#{projectId}
-			</if>
-			<if test="status==1">
-				AND designated_id=#{userId}
-			</if>
-			<if test="status==2">
-				AND create_user_id=#{userId}
-			</if>
-			<if test="status==3">
-				AND solve_id=#{userId}
-			</if>
-			<if test="status==4">
-				AND designated_id is null
-			</if>
-			<if test="status==5">
-				AND solve_id is null
-			</if>
-			<if test="qStartTime!=null"> 
-		        AND create_time >=#{qStartTime}
-			</if>
-			<if test="qEndTime!=null">
-		        AND create_time <![CDATA[ <=#{qEndTime}]]>
-			 </if>
-			 <if test="bugNo!=null and bugNo!=''">
-			 	AND bugNo=#{bugNo}
-			 </if> 
-			 <if test="bugStatus!=null and bugStatus!=''">
-				AND bug_status=#{bugStatus}
-			  </if> 
-			 <if test="bugTitle!=null and bugTitle!=''">
-				<bind name="bugTitleLike" value="'%' +bugTitle+ '%'"/>
-				AND bug_title like #{bugTitleLike}
-			  </if> 
-		</where>
-	</select>
-	
-	<select id="selectByPUS" resultMap="SelectBaseResultMap">
-		select id,bug_no,bug_title,serious_degree,create_user_id,designated_id,solve_id,bug_status,bug_level
-		from bug_manage
-		where project_id=#{projectId} and designated_id=#{userId} and bug_status in(0,1)
-	</select>
-	
-	<insert id="insertSelective" useGeneratedKeys="true" keyProperty="id">
+	<!-- 添加bug -->
+	<insert id="addBugManage" useGeneratedKeys="true" keyProperty="id">
 		insert into bug_manage
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="id != null">
@@ -317,8 +264,10 @@
 				#{closeStauts,jdbcType=VARCHAR},
 			</if>
 		</trim>
-	</insert>
-	<update id="updateByPrimaryKeySelective">
+	</insert> 
+	
+	<!-- 更新bug -->
+	<update id="updateBugManage">
 		update bug_manage
 		<set>
 			<if test="projectId != null">
@@ -411,7 +360,6 @@
 		</set>
 		where id = #{id,jdbcType=BIGINT}
 	</update>
-
 	<!-- 撤销操作 -->
 	<update id="updateBugStatusRevoke">
 		update bug_manage
@@ -888,5 +836,63 @@
 		,bug_status=2
 		where id = #{id,jdbcType=BIGINT}
 	</update>
+	<select id="queryBugById" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_GET" />
+		from bug_manage
+		where id = #{id}
+	</select>
+	
+	<select id="queryBugManageCondition" resultMap="SelectBaseResultMap">
+		select id,bug_no,bug_title,serious_degree,create_user_id,designated_id,solve_id,bug_status,bug_level
+		from bug_manage
+		<where>
+			<if test="projectId!=null">
+				AND project_id=#{projectId}
+			</if>
+			<if test="status==1">
+				AND designated_id=#{userId}
+			</if>
+			<if test="status==2">
+				AND create_user_id=#{userId}
+			</if>
+			<if test="status==3">
+				AND solve_id=#{userId}
+			</if>
+			<if test="status==4">
+				AND designated_id is null
+			</if>
+			<if test="status==5">
+				AND solve_id is null
+			</if>
+			<if test="qStartTime!=null"> 
+		        AND create_time >=#{qStartTime}
+			</if>
+			<if test="qEndTime!=null">
+		        AND create_time <![CDATA[ <=#{qEndTime}]]>
+			 </if>
+			 <if test="bugNo!=null and bugNo!=''">
+			 	AND bugNo=#{bugNo}
+			 </if> 
+			 <if test="bugStatus!=null and bugStatus!=''">
+				AND bug_status=#{bugStatus}
+			  </if> 
+			 <if test="bugTitle!=null and bugTitle!=''">
+				<bind name="bugTitleLike" value="'%' +bugTitle+ '%'"/>
+				AND bug_title like #{bugTitleLike}
+			  </if> 
+		</where>
+	</select>
+	
+	<select id="queryByPUS" resultMap="SelectBaseResultMap">
+		select id,bug_no,bug_title,serious_degree,create_user_id,designated_id,solve_id,bug_status,bug_level
+		from bug_manage
+		where project_id=#{projectId} and designated_id=#{userId} and bug_status in(0,1)
+	</select>
+	
+	
+	
+
+	
 
 </mapper>
