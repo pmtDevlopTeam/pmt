@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.platform.mapper.UserMapper;
@@ -15,8 +16,12 @@ import com.camelot.pmt.platform.model.User;
 import com.camelot.pmt.platform.model.vo.UserVo;
 import com.camelot.pmt.platform.service.UserService;
 import com.camelot.pmt.util.UUIDUtil;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 
 import java.util.List;
+
+import javax.servlet.http.Cookie;
 
 /**
  * 
@@ -144,12 +149,12 @@ public class UserServiceImpl implements UserService{
 	public ExecuteResult<User> findUserByUserId(String userId) {
 		ExecuteResult<User> result = new ExecuteResult<User>();
 		try {
-			if(!"".equals(userId) && userId != null) {
-				User queryResult = userMapper.selectUserById(userId);
-				result.setResult(queryResult);
+			User queryResult = userMapper.selectUserById(userId);
+			if(queryResult == null) {
+				result.setResultMessage("用户不存在！");
 				return result;
 			}
-			result.addErrorMessage("查询失败！");
+			result.setResult(queryResult);
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
 			throw new RuntimeException(e);
@@ -195,34 +200,6 @@ public class UserServiceImpl implements UserService{
 	}
 
 
-//	/**
-//     * Description:[分页查询用户列表]
-//     * @param page
-//     * @return ExecuteResult<DataGrid<User>>
-//     */
-//	@Override
-//	public ExecuteResult<DataGrid<User>> queryUsersByPage(Pager page) {
-//		ExecuteResult<DataGrid<User>> result = new ExecuteResult<DataGrid<User>>();
-//		try{
-//            List<User> list = userMapper.findUsersByPage(page);
-//            //如果没有查询到数据，不继续进行
-//            if (CollectionUtils.isEmpty(list)) {
-//            	DataGrid<User> dg = new DataGrid<User>();
-//            	result.setResult(dg);
-//                return result;
-//            }            
-//            DataGrid<User> dg = new DataGrid<User>();
-//            dg.setRows(list);
-//            //查询总条数
-//            Long total = userMapper.countUser();
-//            dg.setTotal(total);				
-//            result.setResult(dg);
-//		}catch(Exception e){
-//			throw new RuntimeException(e);
-//		}
-//		return result;
-//	}
-
 
 	/**
 	  * 
@@ -233,15 +210,18 @@ public class UserServiceImpl implements UserService{
 	  * 2018年4月13日下午3:15:16
 	  */
 	@Override
-	public ExecuteResult<List<UserVo>> queryUsersList(UserVo userVo) {
-		ExecuteResult<List<UserVo>> result = new ExecuteResult<List<UserVo>>();
+	public ExecuteResult<PageInfo> queryUsersList(UserVo userVo,int pageNum,int pageSize) {
+		ExecuteResult<PageInfo> result = new ExecuteResult<PageInfo>();
     	try {
+    		PageHelper.startPage(pageNum,pageSize);
     		//利用userVo做 条件查询，默认查询所有的
     		List<UserVo> usersList = userMapper.selectUsersList(userVo);
-    		if(usersList.size() <= 0) {
+    		if(CollectionUtils.isEmpty(usersList)) {
 				return result;
 			}
-    		result.setResult(usersList);
+    		PageInfo pageResult = new PageInfo(usersList);
+    		pageResult.setList(usersList);
+    		result.setResult(pageResult);
     	} catch (Exception e) {
     		LOGGER.error(e.getMessage());
 			throw new RuntimeException(e);
@@ -394,6 +374,20 @@ public class UserServiceImpl implements UserService{
 			throw new RuntimeException(e);
 		}
 		return result;
+	}
+
+
+	@Override
+	public ExecuteResult<List<User>> queryUsersByUserName(String username) {
+		ExecuteResult<List<User>> result = new ExecuteResult<List<User>>();
+    	try {
+    		List<User> userList = userMapper.queryUsersByUserName(username);
+    		result.setResult(userList);
+    	} catch (Exception e) {
+    		LOGGER.error(e.getMessage());
+			throw new RuntimeException(e);
+		}
+       return result;
 	}
 
 }

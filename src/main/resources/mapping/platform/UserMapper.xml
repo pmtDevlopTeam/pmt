@@ -315,21 +315,11 @@
 		<include refid="count_Tail"></include>
 	</select>
 	
-	<!-- 分页公共sql -->
-	<sql id="pagination_tail">
-	  limit #{page.pageOffset} , #{page.rows}
-	</sql>
+	<!--根据用户名模糊查询，获取用户对象-->
+	<select id="queryUsersByUserName" resultMap="userModel" parameterType="java.lang.String">
+		select <include refid="userColumnsNoPassword"/> from platform_user where user_name LIKE  CONCAT('%',#{username},'%')
+	</select>
 	
-    <!-- 分页查询所有用户列表 -->
-    <select id="findUsersByPage" resultMap="userModel">
-        select
-        <include refid="userColumnsNoPassword"/>
-        from platform_user
-        <if test="page!=null">
-			<include refid="pagination_tail" />
-		</if>
-    </select>
-
 	<!--查询所有用户,不分页-->
 	<select id="queryAllUsers" resultMap="userModel">
 		select <include refid="userColumnsNoPassword"/> from platform_user
