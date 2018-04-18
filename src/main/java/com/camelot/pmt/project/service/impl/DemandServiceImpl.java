@@ -84,7 +84,7 @@ public class DemandServiceImpl implements DemandService {
         Demand parantDemand = demandMapper.selectByPrimaryKey(id);
         if (null != parantDemand) {
             Long pid = parantDemand.getPid();
-            if (0 != pid) {
+            if ((null != pid)&&(0 != pid)) {
                 // 说明不是最顶级需求，有父需求
                 Demand parantDemandList = demandMapper.selectByPrimaryKey(pid);// 有待与前端沟通，是否前端传来pid？
                 map.put("parantDemand", parantDemandList);
