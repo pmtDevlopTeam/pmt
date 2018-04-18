@@ -38,7 +38,7 @@ public class VersionServiceImpl implements VersionService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public JSONObject addVersion(Long projectId, String userId, VersionVo versionVo){
+    public JSONObject addVersion(Long projectId, String userId, VersionVo versionVo) {
         Date dateTime = new Date();
         // 获取当前版本的类型与版本编号，用于自动生成版本编号
         String versionType = versionVo.getVersionType();
@@ -51,7 +51,7 @@ public class VersionServiceImpl implements VersionService {
         version.setEndTime(versionVo.getEndTime());
         version.setRemarks(versionVo.getRemarks());
         // 设置版本编号
-        version.setVersion(getVersionCode(projectId,versionType));
+        version.setVersion(getVersionCode(projectId, versionType));
         // 项目id
         version.setProjectId(projectId);
         // 添加人id
@@ -65,11 +65,11 @@ public class VersionServiceImpl implements VersionService {
         int i = versionMapper.insert(version);
         if (i > 0) {
             Long versionId = version.getId();
-            System.out.println("新增版本id为：===================="+versionId);
-            //logger.info();
-            return  ApiResponse.success("新增版本成功！");
-        }else{
-            return  ApiResponse.error("新增版本失败！");
+            System.out.println("新增版本id为：====================" + versionId);
+            // logger.info();
+            return ApiResponse.success("新增版本成功！");
+        } else {
+            return ApiResponse.error("新增版本失败！");
         }
     }
 
@@ -82,7 +82,7 @@ public class VersionServiceImpl implements VersionService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public JSONObject deleteVersionById(String userId,Long versionId){
+    public JSONObject deleteVersionById(String userId, Long versionId) {
         Version version = versionMapper.selectByPrimaryKey(versionId);
         Date dateTime = new Date();
         // 设置版本修改人信息
@@ -92,9 +92,9 @@ public class VersionServiceImpl implements VersionService {
         version.setVersionStatus(-1);
         int i = versionMapper.updateByPrimaryKey(version);
         if (i > 0) {
-            return  ApiResponse.success("删除版本成功！");
-        }else{
-            return  ApiResponse.error("删除版本失败！");
+            return ApiResponse.success("删除版本成功！");
+        } else {
+            return ApiResponse.error("删除版本失败！");
         }
     }
 
@@ -106,9 +106,9 @@ public class VersionServiceImpl implements VersionService {
      * @date: 2018/4/13 11:19
      */
     @Override
-    public JSONObject queryVersionInfoById(Long versionId){
+    public JSONObject queryVersionInfoById(Long versionId) {
         Version version = versionMapper.selectByPrimaryKey(versionId);
-        return  ApiResponse.success(version);
+        return ApiResponse.success(version);
     }
 
     /**
@@ -120,17 +120,17 @@ public class VersionServiceImpl implements VersionService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public JSONObject updateVersonInfo(Long projectId,String userId, VersionVo versionVo){
+    public JSONObject updateVersonInfo(Long projectId, String userId, VersionVo versionVo) {
         Date dateTime = new Date();
         String updateVersionType = versionVo.getVersionType();
         // 1.判断版本类型是否修正，若修正则根据相应的规则重新生成版本编号
         Version version = versionMapper.selectByPrimaryKey(versionVo.getId());
         String oldVersionType = version.getVersionType();
-        if (!oldVersionType.equals(updateVersionType)){
+        if (!oldVersionType.equals(updateVersionType)) {
             // 获取当前版本的类型与版本编号，用于自动生成版本编号
             String versionType = versionVo.getVersionType();
             // 设置版本编号
-            version.setVersion(getVersionCode(projectId,versionType));
+            version.setVersion(getVersionCode(projectId, versionType));
         }
         version.setVersionName(versionVo.getVersionName());
         version.setStartTime(versionVo.getStartTime());
@@ -141,9 +141,9 @@ public class VersionServiceImpl implements VersionService {
         version.setModifyTime(dateTime);
         int i = versionMapper.updateByPrimaryKeySelective(version);
         if (i > 0) {
-            return  ApiResponse.success("修改版本成功！");
-        }else{
-            return  ApiResponse.error("修改版本失败！");
+            return ApiResponse.success("修改版本成功！");
+        } else {
+            return ApiResponse.error("修改版本失败！");
         }
     }
 
@@ -155,9 +155,9 @@ public class VersionServiceImpl implements VersionService {
      * @date: 2018/4/13 18:30
      */
     @Override
-    public JSONObject queryVerListByProId(Long projectId){
+    public JSONObject queryVerListByProId(Long projectId) {
         List<Version> versionList = versionMapper.selectVersionListByProId(projectId);
-        return  ApiResponse.success(versionList);
+        return ApiResponse.success(versionList);
     }
 
     /**
@@ -168,18 +168,17 @@ public class VersionServiceImpl implements VersionService {
      * @date: 2018/4/17 10:26
      */
     @Override
-    public JSONObject queryVerListByPageAndProId(int pageNum,int pageSize,Long projectId) {
-        /*   pageHelper使用三部曲
-             1.启动pageHelper分页 startPage -- start
-             2.填充自己的sql（查询逻辑）
-             3.pageHelper的收尾
+    public JSONObject queryVerListByPageAndProId(int pageNum, int pageSize, Long projectId) {
+        /*
+         * pageHelper使用三部曲 1.启动pageHelper分页 startPage -- start 2.填充自己的sql（查询逻辑）
+         * 3.pageHelper的收尾
          */
         // 初始化分页信息
-        PageHelper.startPage(pageNum,pageSize);
+        PageHelper.startPage(pageNum, pageSize);
         // 查询产品list
         List<Version> versionList = versionMapper.selectVersionListByProId(projectId);
         List<VersionVo> versionVoList = Lists.newArrayList();
-        for (Version versionItem:versionList) {
+        for (Version versionItem : versionList) {
             VersionVo versionVo = assembleProductListVo(versionItem);
             versionVoList.add(versionVo);
         }
@@ -197,9 +196,9 @@ public class VersionServiceImpl implements VersionService {
      * @return
      */
     @Override
-    public JSONObject queryVerListByProIdAndVerType(Long projectId,String versionType){
-        List<Version> versionList = versionMapper.queryListByProIdAndVerType(projectId,versionType);
-        return  ApiResponse.success(versionList);
+    public JSONObject queryVerListByProIdAndVerType(Long projectId, String versionType) {
+        List<Version> versionList = versionMapper.queryListByProIdAndVerType(projectId, versionType);
+        return ApiResponse.success(versionList);
     }
 
     /**
@@ -210,18 +209,18 @@ public class VersionServiceImpl implements VersionService {
      * @date: 2018/4/17 10:32
      */
     @Override
-    public JSONObject queryVerListByPageAndProIdAndVerType(int pageNum,int pageSize,Long projectId,String versionType) {
-        /*   pageHelper使用三部曲
-             1.启动pageHelper分页 startPage -- start
-             2.填充自己的sql（查询逻辑）
-             3.pageHelper的收尾
+    public JSONObject queryVerListByPageAndProIdAndVerType(int pageNum, int pageSize, Long projectId,
+            String versionType) {
+        /*
+         * pageHelper使用三部曲 1.启动pageHelper分页 startPage -- start 2.填充自己的sql（查询逻辑）
+         * 3.pageHelper的收尾
          */
         // 初始化分页信息
-        PageHelper.startPage(pageNum,pageSize);
+        PageHelper.startPage(pageNum, pageSize);
         // 查询产品list
-        List<Version> versionList = versionMapper.queryListByProIdAndVerType(projectId,versionType);
+        List<Version> versionList = versionMapper.queryListByProIdAndVerType(projectId, versionType);
         List<VersionVo> versionVoList = Lists.newArrayList();
-        for (Version versionItem:versionList) {
+        for (Version versionItem : versionList) {
             VersionVo versionVo = assembleProductListVo(versionItem);
             versionVoList.add(versionVo);
         }
