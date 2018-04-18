@@ -505,6 +505,8 @@
 	</update>
   <!-- gxl end -->
 
+
+
   <!--zsf-->
   <!--根据项目Id 和 userId 查询出任务个数-->
   <select id="queryUnfinishedTask"  resultType="int">
@@ -527,10 +529,32 @@
         INNER JOIN platform_user b ON b.user_id = t.beassign_user_id
         INNER JOIN platform_user c ON c.user_id = t.create_user_id
         where t.beassign_user_id = #{beassignUserId,jdbcType=VARCHAR}
-        <if test="status != null">
+        <if test="demandId != null">
             and t.demand_id = #{demandId,jdbcType=BIGINT}
         </if>
     </select>
+    <!--zsf-->
+    <!--查询已完成的任务-->
+    <select id="listTaskAlready" resultType="java.util.Map" parameterType="String">
+        SELECT
+        ta.id, ta.task_num, ta.task_name, ta.task_parent_id, ta.project_id, ta.demand_id, ta.priority, ta.assign_user_id,
+        ta.beassign_user_id, ta.assign_time, ta.estimate_start_time, ta.estimate_end_time, ta.actual_start_time,
+        ta.actual_end_time, ta.task_type, ta.task_speed, ta.status, ta.node_lv, ta.task_describe, ta.demand_change,
+        ta.delay_describe, ta.estimate_hour, ta.infact_hour, ta.task_mileage, ta.create_user_id, ta.modify_user_id,
+        ta.create_time, ta.modify_time, de.demand_name, de.demand_desc, pro.project_name,pro.project_desc, pl.user_name,
+        pl2.user_name
+        FROM task ta
+        LEFT JOIN demand de ON ta.demand_id = de.id
+        LEFT JOIN project_main pro ON ta.project_id = pro.id
+        LEFT JOIN platform_user pl ON ta.assign_user_id = pl.user_id
+        LEFT JOIN platform_user pl2 ON ta.beassign_user_id = pl2.user_id
+        WHERE ta.status in ( 2 ,4 ) AND ta.beassign_user_id = #{id}
+        ORDER BY ta.create_time DESC, ta.priority DESC
+    </select>
+
+
+
+
    <!--  查询逾期列表 -->
     <select id="queryOverdueTask" resultMap="BaseResultMap">
     	select

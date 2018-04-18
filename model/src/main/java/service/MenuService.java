@@ -20,7 +20,7 @@ public interface MenuService {
      * @param Menu menu
      * @return ExecuteResult<Menu>
      */
-    ExecuteResult<Menu> addMenu(Menu menu);
+    boolean addMenu(Menu menu);
 
     /**
      * 删除一个菜单
@@ -28,7 +28,7 @@ public interface MenuService {
      * @param String menuId
      * @return ExecuteResult<Menu>
      */
-    ExecuteResult<Menu> deleteMenuByMenuId(String menuId);
+    boolean deleteMenuByMenuId(String menuId);
 
     /**
      * 修改一个菜单
@@ -36,7 +36,7 @@ public interface MenuService {
      * @param Menu menu
      * @return ExecuteResult<Menu>
      */
-    ExecuteResult<Menu> updateMenuByMenuId(Menu menu);
+    boolean updateMenuByMenuId(Menu menu);
 
     /**
      * 查询一个菜单
@@ -44,7 +44,7 @@ public interface MenuService {
      * @param String menuId
      * @return ExecuteResult<Menu>
      */
-    ExecuteResult<Menu> queryMenuByMenuId(String menuId);
+    Menu queryMenuByMenuId(String menuId);
 
     /**
      * 查询一个菜单
@@ -52,7 +52,7 @@ public interface MenuService {
      * @param String id
      * @return ExecuteResult<Menu>
      */
-    ExecuteResult<Menu> queryMenuById(String id);
+    Menu queryMenuById(String id);
 
     /**
      * 菜单分页查询
