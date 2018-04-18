@@ -285,7 +285,7 @@ public class VersionServiceImpl implements VersionService {
             // 获取最后添加版本信息的版本编号
             versionCode = versionList.get(0).getVersion();
         }
-        if ((Const.VersionStatusEnum.DEVELOPMENT.getCode()).equals(versionType)) {
+        if (("type01".equals(versionType))) {
             // 若版本code为空则设置默认值，否则根据规则进行递增
             if (versionCode == null) {
                 versionCode = "1.0.0";
@@ -294,7 +294,7 @@ public class VersionServiceImpl implements VersionService {
                 versionCode = generateVersionCode(versionCode);
             }
         }
-        if ((Const.VersionStatusEnum.TEST.getCode()).equals(versionType)) {
+        if ("type02".equals(versionType)) {
             // 若版本code为空则设置默认值，否则根据规则进行递增
             if (versionCode == null) {
                 versionCode = "0.0.1";
