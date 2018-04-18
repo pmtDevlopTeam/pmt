@@ -104,7 +104,7 @@ public class CaseRepertoryController {
     /**
      * 批量新增用例库
      * @param list 用例库集合
-     */
+
     @ApiOperation(value = "批量新增",notes = "新增多条用例到用例库中")
     @PostMapping(value = "/add_batch")
     public JSONObject addBatchCaseRepertory(@RequestBody @ApiParam(value = "list", required = true) List<CaseRepertory> list) {
@@ -120,6 +120,7 @@ public class CaseRepertoryController {
             return ApiResponse.jsonData(APIStatus.ERROR_500);
         }
     }
+     */
 
     /**
      * 根据用例库ID,批量删除用例库
