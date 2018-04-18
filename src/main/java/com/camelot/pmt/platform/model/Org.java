@@ -4,16 +4,14 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-
 public class Org implements Serializable {
-	
-	private static final long serialVersionUID = 1L;
-	
 
-	/**
- * 组织机构实体
- */
-	/**
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * 组织机构实体
+     */
+    /**
      * id
      */
     private Integer id;
@@ -22,7 +20,7 @@ public class Org implements Serializable {
      */
     private String orgId;
     /**
-     * 顶级部门  0为顶级部门
+     * 顶级部门 0为顶级部门
      */
     private String parentId;
     /**
@@ -41,16 +39,16 @@ public class Org implements Serializable {
      * 修改时间
      */
     private Date modifyTime;
-    
+
     /**
-     * 排序号  默认值1000
+     * 排序号 默认值1000
      */
     private Integer sortNum;
     /**
      * 部门编号
      */
     private String orgCode;
-    
+
     /**
      * 修改人
      */
@@ -67,122 +65,119 @@ public class Org implements Serializable {
      * 用户id 数组
      */
     private String userId;
-    
+
     public String getUserId() {
-		return userId;
-	}
+        return userId;
+    }
 
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
-	
     public String[] getUserIds() {
-		return userIds;
-	}
+        return userIds;
+    }
 
-	public void setUserIds(String[] userIds) {
-		this.userIds = userIds;
-	}
+    public void setUserIds(String[] userIds) {
+        this.userIds = userIds;
+    }
 
-	public String getCreatUserId() {
-		return creatUserId;
-	}
+    public String getCreatUserId() {
+        return creatUserId;
+    }
 
-	public void setCreatUserId(String creatUserId) {
-		this.creatUserId = creatUserId;
-	}
+    public void setCreatUserId(String creatUserId) {
+        this.creatUserId = creatUserId;
+    }
 
-	public String getModifyUserId() {
-		return modifyUserId;
-	}
+    public String getModifyUserId() {
+        return modifyUserId;
+    }
 
-	public void setModifyUserId(String modifyUserId) {
-		this.modifyUserId = modifyUserId;
-	}
+    public void setModifyUserId(String modifyUserId) {
+        this.modifyUserId = modifyUserId;
+    }
 
     public String getOrgCode() {
-		return orgCode;
-	}
+        return orgCode;
+    }
 
-	public void setOrgCode(String orgCode) {
-		this.orgCode = orgCode;
-	}
+    public void setOrgCode(String orgCode) {
+        this.orgCode = orgCode;
+    }
 
-	public Integer getSortNum() {
-		return sortNum;
-	}
+    public Integer getSortNum() {
+        return sortNum;
+    }
 
-	public void setSortNum(Integer sortNum) {
-		this.sortNum = sortNum;
-	}
+    public void setSortNum(Integer sortNum) {
+        this.sortNum = sortNum;
+    }
 
-private List<Org> orgList;
-    
+    private List<Org> orgList;
+
     public Integer getId() {
-		return id;
-	}
+        return id;
+    }
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-	public String getOrgId() {
-		return orgId;
-	}
+    public String getOrgId() {
+        return orgId;
+    }
 
-	public void setOrgId(String orgId) {
-		this.orgId = orgId;
-	}
+    public void setOrgId(String orgId) {
+        this.orgId = orgId;
+    }
 
-	public String getParentId() {
-		return parentId;
-	}
+    public String getParentId() {
+        return parentId;
+    }
 
-	public void setParentId(String parentId) {
-		this.parentId = parentId;
-	}
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
+    }
 
-	public String getOrgname() {
-		return orgname;
-	}
+    public String getOrgname() {
+        return orgname;
+    }
 
-	public void setOrgname(String orgname) {
-		this.orgname = orgname;
-	}
+    public void setOrgname(String orgname) {
+        this.orgname = orgname;
+    }
 
-	public String getState() {
-		return state;
-	}
+    public String getState() {
+        return state;
+    }
 
-	public void setState(String state) {
-		this.state = state;
-	}
+    public void setState(String state) {
+        this.state = state;
+    }
 
-	public Date getCreateTime() {
-		return createTime;
-	}
+    public Date getCreateTime() {
+        return createTime;
+    }
 
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
-	}
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
 
-	public Date getModifyTime() {
-		return modifyTime;
-	}
+    public Date getModifyTime() {
+        return modifyTime;
+    }
 
-	public void setModifyTime(Date modifyTime) {
-		this.modifyTime = modifyTime;
-	}
+    public void setModifyTime(Date modifyTime) {
+        this.modifyTime = modifyTime;
+    }
 
-	public List<Org> getOrgList() {
-		return orgList;
-	}
+    public List<Org> getOrgList() {
+        return orgList;
+    }
 
-	public void setOrgList(List<Org> orgList) {
-		this.orgList = orgList;
-	}
+    public void setOrgList(List<Org> orgList) {
+        this.orgList = orgList;
+    }
 
-	
-	
 }

@@ -27,7 +27,7 @@ import java.util.Map;
 
 /**
  * @author muyuanpei
- * @date 2018/4/10    15:20
+ * @date 2018/4/10
  */
 
 @Service
@@ -43,11 +43,11 @@ public class TaskRunningServiceImpl implements TaskRunningService{
     private static final Logger LOGGER = LoggerFactory.getLogger(TaskRunningServiceImpl.class);
 
     /**
-     * <p>
-     * Description:[根据用户id获取正在进行的任务列表]
-     * <p>
-     *
-     * @return ExecuteResult<PageInfo<Map<String, Object>>>
+     * @Title: updateRunningToClose
+     * @Description: TODO(根据用户id获取正在进行的任务列表)
+     * @param int page , int rows, String id
+     * @return JSONObject    返回类型
+     * @auth myp
      */
     @Override
     public ExecuteResult<PageInfo<Task>> queryTaskRunning(int page , int rows, String id) {
@@ -64,13 +64,11 @@ public class TaskRunningServiceImpl implements TaskRunningService{
     }
 
     /**
-     *
-     * @Title: runningtoclose
+     * @Title: updateRunningToClose
      * @Description: TODO(我的任务转为关闭)
-     * @param @param taskId
-     * @param @return    设定文件
+     * @param taskId
      * @return JSONObject    返回类型
-     * @throws
+     * @auth myp
      */
     @Override
     public ExecuteResult<String> updateRunningToClose(Long id) {
@@ -117,13 +115,11 @@ public class TaskRunningServiceImpl implements TaskRunningService{
     }
 
     /**
-     *
      * @Title: runningtoclose
      * @Description: TODO(我的正在进行的任务转为已完成)
-     * @param @param taskId
-     * @param @return    设定文件
+     * @param taskId
      * @return JSONObject    返回类型
-     * @throws
+     * @auth myp
      */
     @Override
     public ExecuteResult<String> updateRunningToAlready(Long id) {
@@ -143,11 +139,13 @@ public class TaskRunningServiceImpl implements TaskRunningService{
                                 for (Task task3 : tempList2) {
                                     list.add(task3.getId());
                                 }
+                                list.add(task2.getId());
                             }else{
                                 //说明没有子任务
                                 list.add(task2.getId());
                             }
                         }
+                        list.add(task.getId());
                     }else{
                         //说明没有子任务,直接修改此任务的状态即可
                         list.add(task.getId());
@@ -155,6 +153,7 @@ public class TaskRunningServiceImpl implements TaskRunningService{
                 }
                 //查询出该节点下的所有任务
                 List<Task> list1 = taskMapper.queryRunningToAlready(list);
+
                 List<String> booleans = new ArrayList<String>();
                 for (Task taskalready : list1) {
                     //判断该节点下的所有子任务的状态是否都已完成或者关闭
@@ -162,8 +161,6 @@ public class TaskRunningServiceImpl implements TaskRunningService{
                         booleans.add("1");
                     }
                 }
-                System.out.println("========================================"+list1.size()+"====================================");
-                System.out.println("========================================"+booleans.size()+"====================================");
                 if(list1.size() == booleans.size()){
                     taskMapper.updateRunningToAlready(id);
                     result.setResult("任务完成");
@@ -183,11 +180,11 @@ public class TaskRunningServiceImpl implements TaskRunningService{
 
 
     /**
-     * <p>
-     * Description:[根据id获取单个任务明细]
-     * <p>
-     *
-     * @return ExecuteResult<Task>
+     * @Title: runningtoclose
+     * @Description: TODO(根据id获取单个任务明细)
+     * @param id
+     * @return JSONObject    返回类型
+     * @auth myp
      */
     @Override
     public ExecuteResult<Task> queryTaskById(Long id) {
@@ -207,11 +204,11 @@ public class TaskRunningServiceImpl implements TaskRunningService{
     }
 
     /**
-     * <p>
-     * Description:[添加历史记录]
-     * <p>
-     *
-     * @return ExecuteResult<long>
+     * @Title: runningtoclose
+     * @Description: TODO(添加历史记录)
+     * @param id
+     * @return JSONObject    返回类型
+     * @auth myp
      */
     @Override
     public ExecuteResult<Long> saveHistoryLog(TaskLog taskLog) {

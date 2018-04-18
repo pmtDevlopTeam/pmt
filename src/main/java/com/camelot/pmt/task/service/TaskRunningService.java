@@ -16,47 +16,44 @@ import java.util.Map;
 public interface TaskRunningService {
 
     /**
+     * 查询正在进行的任务列表接口
      *
-     * @Title: queryoverdueTaskRunning @Description: TODO @param @param
-     * page @param @return @return ExecuteResult<DataGrid<Map<String, Object>>> @throws
+     * @author myp
+     * @since 2018-04-08
      */
     ExecuteResult<PageInfo<Task>> queryTaskRunning(int page , int rows, String id);
 
 
     /**
+     * 根据id查询任务
      *
-     * @Title: updateStatusFinish @Description: TODO @param @param
-     * page @param @return @return ExecuteResult<DataGrid<Long>> @throws
+     * @author myp
+     * @since 2018-04-08
      */
     ExecuteResult<Task> queryTaskById(Long id);
 
     /**
+     * 保存历史记录接口
      *
-     * @Title: updateStatusFinish @Description: TODO @param @param
-     * page @param @return @return ExecuteResult<DataGrid<Long>> @throws
-     * 添加历史记录
-     * myp
+     * @author myp
+     * @since 2018-04-08
      */
     ExecuteResult<Long> saveHistoryLog(TaskLog taskLog);
 
     /**
+     * 修改任务关闭接口
      *
-     * @Title: updateTaskPendingToDelay
-     * @Description: TODO(我的任务状态转为关闭)
-     * @param @param id
-     * @return ExecuteResult<String>    返回类型
-     * @throws
+     * @author myp
+     * @since 2018-04-08
      */
     ExecuteResult<String> updateRunningToClose(Long id);
 
 
     /**
+     * 修改任务完成接口
      *
-     * @Title: runningtoalready
-     * @Description: TODO(我的正在进行的任务状态转为已完成)
-     * @param @param id
-     * @return ExecuteResult<String>    返回类型
-     * @throws
+     * @author myp
+     * @since 2018-04-08
      */
     ExecuteResult<String> updateRunningToAlready(Long id);
 }

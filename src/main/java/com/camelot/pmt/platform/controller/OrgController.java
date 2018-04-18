@@ -45,7 +45,7 @@ import springfox.documentation.annotations.ApiIgnore;
 @RequestMapping(value = "/platform/org")
 @Api(value = "组织机构管理接口", description = "组织机构管理接口")
 public class OrgController {
-	
+
 	//日志
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	@Autowired
@@ -256,7 +256,7 @@ public class OrgController {
 	 /** 组织机构列表详情(关系到用户 )
 	 * @param OrgToUser
 	 * @return JSONObject
-	 * 
+	 *
 	 **/
     @ApiOperation(value="获取组织机构列表详情(关系到用户 )", notes="获取组织机构列表详情(关系到用户 )")
     @RequestMapping(value = "/queryOrgsDetail",method = RequestMethod.POST)

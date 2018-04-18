@@ -34,9 +34,7 @@ public class RoleToMenuServiceImpl implements RoleToMenuService {
      * @return
      */
     @Override
-    public ExecuteResult<RoleToMenu> createRoleToMenu(RoleToMenu roleToMenu) {
-        ExecuteResult<RoleToMenu> result = new ExecuteResult<RoleToMenu>();
-        try {
+    public boolean createRoleToMenu(RoleToMenu roleToMenu) {
             boolean isContains = true;
             List<String> roleId = Arrays.asList(roleToMenu.getMenuIds());
             for (int i = 0; i < roleId.size(); i++) {
@@ -55,19 +53,13 @@ public class RoleToMenuServiceImpl implements RoleToMenuService {
                 }
             }
             if (isContains == false) {
-                return result;
+                return true;
             }
-
             for (String ids : roleToMenu.getMenuIds()) {
                 roleToMenu.setMenuId(ids);
                 roleToMenuMapper.createRoleToMenu(roleToMenu);
             }
-            result.setResult(roleToMenu);
-        } catch (Exception e) {
-            LOGGER.error(e.getMessage());
-            throw new RuntimeException(e);
-        }
-        return result;
+        return false;
     }
 
     /**
@@ -77,9 +69,7 @@ public class RoleToMenuServiceImpl implements RoleToMenuService {
      * @return
      */
     @Override
-    public ExecuteResult updateRoleToMenu(RoleToMenu roleToMenu) {
-        ExecuteResult result = new ExecuteResult();
-        try {
+    public boolean updateRoleToMenu(RoleToMenu roleToMenu) {
             boolean isContains = true;
             List<String> roleId = Arrays.asList(roleToMenu.getMenuIds());
             for (int i = 0; i < roleId.size(); i++) {
@@ -98,19 +88,14 @@ public class RoleToMenuServiceImpl implements RoleToMenuService {
                 }
             }
             if (isContains == false) {
-                return result;
+                return true;
             }
             roleToMenuMapper.deleteRoleToMenu(roleToMenu);
             for (String ids : roleToMenu.getMenuIds()) {
                 roleToMenu.setMenuId(ids);
                 roleToMenuMapper.createRoleToMenu(roleToMenu);
             }
-            result.setResult(roleToMenu);
-        } catch (Exception e) {
-            LOGGER.error(e.getMessage());
-            throw new RuntimeException(e);
-        }
-        return result;
+        return false;
     }
 
     /**
@@ -120,12 +105,10 @@ public class RoleToMenuServiceImpl implements RoleToMenuService {
      * @return
      */
     @Override
-    public ExecuteResult<List<Menu>> selectMenuByRoleId(RoleToMenu roleToMenu) {
-        ExecuteResult<List<Menu>> result = new ExecuteResult<List<Menu>>();
-        try {
+    public List<Menu> selectMenuByRoleId(RoleToMenu roleToMenu) {
             List<RoleToMenu> list = roleToMenuMapper.selectMenuByRoleId(roleToMenu);
             if (CollectionUtils.isEmpty(list)) {
-                return result;
+                return null;
             }
             List<Menu> menuList = new ArrayList<Menu>();
             for (RoleToMenu role : list) {
@@ -134,11 +117,6 @@ public class RoleToMenuServiceImpl implements RoleToMenuService {
                     menuList.add(menu);
                 }
             }
-            result.setResult(menuList);
-        } catch (Exception e) {
-            LOGGER.error(e.getMessage());
-            throw new RuntimeException(e);
-        }
-        return result;
+        return menuList;
     }
 }

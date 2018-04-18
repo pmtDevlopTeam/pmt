@@ -1,23 +1,50 @@
 package com.camelot.pmt.project.service;
 
-import com.camelot.pmt.common.DataGrid;
-import com.camelot.pmt.common.ExecuteResult;
-import com.camelot.pmt.common.Pager;
-import com.camelot.pmt.project.model.Demand;
-import com.camelot.pmt.project.model.DemandOperate;
-
+import java.util.List;
 import java.util.Map;
 
+import com.camelot.pmt.common.ExecuteResult;
+import com.camelot.pmt.platform.model.User;
+import com.camelot.pmt.project.model.Demand;
+import com.camelot.pmt.project.model.DemandOperate;
+import com.camelot.pmt.project.model.DemandVO;
+
 public interface DemandService {
-    ExecuteResult<String> save(Demand demand);
+    boolean save(Demand demand,User user);
 
-    ExecuteResult<DataGrid<Demand>> queryByPage(Pager<?> pager, Demand demand);
+    List<Demand> queryByPage(Demand demand,Integer pageSize,Integer currentPage);
 
-    ExecuteResult<Demand> queryById(Long id);
+    DemandVO queryDemandById(Long id);
 
-    ExecuteResult<String> deleteById(Long id);
+    ExecuteResult<String> deleteDemandById(Long id);
 
-    ExecuteResult<String> updateByDemand(Demand demand);
+    boolean updateByDemand(Demand demand,User user);
 
-    ExecuteResult<DataGrid<DemandOperate>> findAllByPage(Pager<?> pager, DemandOperate demandOperate);
+    List<DemandOperate> queryOperateByPage(DemandOperate demandOperate,Integer pageSize,Integer currentPage);
+
+    /**
+     * 查询影响需求的任务信息
+     *
+     *@param   demandId
+     *@return ExecuteResult<List<Map<String, Object>>>
+     */
+    ExecuteResult<List<Map<String, Object>>> queryDemandTaskQuoteById(Long demandId);
+
+    /**
+     * 查询影响需求的用例信息
+     *
+     *@param   demandId
+     *@return ExecuteResult<List<Map<String, Object>>>
+     */
+    ExecuteResult<List<Map<String, Object>>> queryDemandUseCaseQuoteById(Long demandId);
+
+    /**
+     * 查询影响需求的BUG信息
+     *
+     *@param   demandId
+     *@return ExecuteResult<List<Map<String, Object>>>
+     */
+    ExecuteResult<List<Map<String, Object>>> queryDemandBugQuoteById(Long demandId);
+
+    boolean updateByReview(Demand demand,User user);
 }
