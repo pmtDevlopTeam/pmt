@@ -3,9 +3,9 @@ package com.camelot.pmt.project.mapper;
 import java.util.Date;
 import java.util.List;
 
-import com.camelot.pmt.common.Pager;
 import org.apache.ibatis.annotations.Param;
 
+import com.camelot.pmt.common.Pager;
 import com.camelot.pmt.project.model.ProjectMain;
 
 public interface ProjectMainMapper {
@@ -28,7 +28,7 @@ public interface ProjectMainMapper {
      * @param userId
      * @return
      */
-    List<ProjectMain> findByModifyUserId(String modifyUserId);
+    List<ProjectMain> queryByModifyUserId(String modifyUserId);
 
     /**
      * 按创建人Id查询
@@ -36,7 +36,7 @@ public interface ProjectMainMapper {
      * @param userId
      * @return
      */
-    List<ProjectMain> findByCreateUserId(String createUserId);
+    List<ProjectMain> queryByCreateUserId(String createUserId);
 
     /**
      * 按负责人Id查询
@@ -44,7 +44,7 @@ public interface ProjectMainMapper {
      * @param userId
      * @return
      */
-    List<ProjectMain> findByUserId(String userId);
+    List<ProjectMain> queryByUserId(String userId);
 
     /**
      * 按状态分类查询展示
@@ -52,7 +52,7 @@ public interface ProjectMainMapper {
      * @param projectStatus
      * @return
      */
-    List<ProjectMain> findByProjectStatus(String projectStatus);
+    List<ProjectMain> queryByProjectStatus(String projectStatus);
 
     /**
      * 分页查询
@@ -60,7 +60,7 @@ public interface ProjectMainMapper {
      * @param projectStatus
      * @return
      */
-    List<ProjectMain> findAllByPage(@Param(value = "page") Pager<?> page);
+    List<ProjectMain> queryAllByPage(@Param(value = "page") Pager<?> page);
 
     /**
      * 根据id 删除项目
@@ -76,7 +76,7 @@ public interface ProjectMainMapper {
      * @param projectMain
      * @return
      */
-    int insert(ProjectMain projectMain);
+    int addProject(ProjectMain projectMain);
 
     /**
      * 根据项目id查询详情
@@ -84,7 +84,7 @@ public interface ProjectMainMapper {
      * @param id
      * @return
      */
-    ProjectMain selectByPrimaryKey(Long id);
+    ProjectMain queryByPrimaryKey(Long id);
 
     /**
      * 根据按主键id更新数据
@@ -112,5 +112,5 @@ public interface ProjectMainMapper {
      * 
      * @return
      */
-    Long findAll();
+    Long queryAll();
 }

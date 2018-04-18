@@ -18,7 +18,7 @@
 		where id = #{id,jdbcType=BIGINT}
 	</update>
 	<!-- 按修改人Id查询 -->
-	<select id="findByModifyUserId" resultMap="ResultMapWithBLOBs"
+	<select id="queryByModifyUserId" resultMap="ResultMapWithBLOBs"
 		parameterType="String">
 		select
 		user_id,
@@ -31,7 +31,7 @@
 		modify_user_id=#{modify_user_id}
 	</select>
 	<!-- 按创建人Id查询 -->
-	<select id="findByCreateUserId" resultMap="ResultMapWithBLOBs"
+	<select id="queryByCreateUserId" resultMap="ResultMapWithBLOBs"
 		parameterType="String">
 		select
 		user_id,
@@ -44,7 +44,7 @@
 		create_user_id=#{create_user_id}
 	</select>
 	<!-- 按负责人Id查询 -->
-	<select id="findByUserId" resultMap="ResultMapWithBLOBs"
+	<select id="queryByUserId" resultMap="ResultMapWithBLOBs"
 		parameterType="String">
 		select
 		user_id,
@@ -57,7 +57,7 @@
 		user_id=#{user_id}
 	</select>
 	<!-- 按状态分类查询 -->
-	<select id="findByProjectStatus" resultMap="ResultMapWithBLOBs"
+	<select id="queryByProjectStatus" resultMap="ResultMapWithBLOBs"
 		parameterType="String">
 		select
 		user_id,
@@ -68,12 +68,12 @@
 		project_status=#{project_status}
 	</select>
 	<!-- 查询所有数量 -->
-	<select id="findAll" resultType="long">
+	<select id="queryAll" resultType="long">
 		select count(1) from
 		project_main
 	</select>
 	<!-- 分页查询所有 -->
-	<select id="findAllByPage" resultMap="ResultMapWithBLOBs">
+	<select id="queryAllByPage" resultMap="ResultMapWithBLOBs">
 		select
 		<include refid="Base_Column_List" />
 		,
@@ -119,7 +119,7 @@
 		project_desc
 	</sql>
 	<!--根据项目id查询详情 -->
-	<select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs"
+	<select id="queryByPrimaryKey" resultMap="ResultMapWithBLOBs"
 		parameterType="java.lang.Long">
 		select
 		<include refid="Base_Column_List" />
@@ -134,7 +134,7 @@
 		where id = #{id,jdbcType=BIGINT}
 	</delete>
 	<!--插入数据 -->
-	<insert id="insert" parameterType="ProjectMain"
+	<insert id="addProject" parameterType="ProjectMain"
 		useGeneratedKeys="true" keyProperty="id">
 		insert into project_main
 		<trim prefix="(" suffix=")" suffixOverrides=",">

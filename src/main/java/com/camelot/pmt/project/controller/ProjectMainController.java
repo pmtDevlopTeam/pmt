@@ -47,8 +47,17 @@ public class ProjectMainController {
     @Autowired
     private ProjectMainService projectMainService;
 
+    /**
+     * 新建项目
+     * 
+     * @param projectMain
+     * @param projectOperate
+     * @param projectBudget
+     * @param warning
+     * @return
+     */
     @ApiOperation(notes = "新建项目", value = "根据具有立项权限的用户新建项目")
-    @PostMapping("/api/projectMain/createProject")
+    @PostMapping("/api/projectMain/addProject")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userId", value = "负责人id", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "createUserId", value = "创建人id", required = true, paramType = "query", dataType = "String"),
@@ -64,7 +73,7 @@ public class ProjectMainController {
             @ApiImplicitParam(name = "warnType", value = "预警类型", required = false, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "warnTime", value = "预警时间", required = false, paramType = "query", dataType = "Date"),
             @ApiImplicitParam(name = "warnStatus", value = "预警状态", required = false, paramType = "query", dataType = "String") })
-    public JSONObject postCreateProject(//
+    public JSONObject addProject(//
             @ApiIgnore ProjectMain projectMain, //
             @ApiIgnore ProjectOperate projectOperate, //
             @ApiIgnore ProjectBudget projectBudget, //
@@ -74,7 +83,7 @@ public class ProjectMainController {
                 projectOperate, projectBudget, projectBudget);
         try {
             // 调用save方法保存数据
-            ExecuteResult<String> projectMainResult = projectMainService.save(projectMain, projectOperate,
+            ExecuteResult<String> projectMainResult = projectMainService.addProject(projectMain, projectOperate,
                     projectBudget, warning);
             logger.debug("调用projectMainService的save接口返回的数据为：", projectMainResult);
             return ApiResponse.success(projectMainResult.getResult());
@@ -89,11 +98,12 @@ public class ProjectMainController {
      * 分页查询
      * 
      * @param page
+     * @param rows
      * @return
      */
     @ApiOperation(value = "分页查询", notes = "分页查询")
-    @GetMapping(value = "/api/projectMain/findAllByPage")
-    public JSONObject findAllByPage(@ApiParam(//
+    @GetMapping(value = "/api/projectMain/queryAllByPage")
+    public JSONObject queryAllByPage(@ApiParam(//
             value = "页码", required = true) @RequestParam int page, //
             @ApiParam(value = "每页数量", required = true) @RequestParam int rows) {
         logger.info("入参封装的数据为：page={},rows={}", page, rows);
@@ -103,7 +113,7 @@ public class ProjectMainController {
             if (page == 0 && rows == 0) {
                 return ApiResponse.errorPara();
             }
-            result = projectMainService.findAllByPage(pager);
+            result = projectMainService.queryAllByPage(pager);
             if (result.isSuccess()) {
                 return ApiResponse.success(result.getResult());
             }
@@ -116,12 +126,12 @@ public class ProjectMainController {
     /**
      * 按状态分类查询
      * 
-     * @param projectMain
+     * @param projectStatus
      * @return
      */
     @ApiOperation(value = "按状态分类查询", notes = "按状态分类查询")
-    @GetMapping(value = "/api/projectMain/findByProjectStatus")
-    public JSONObject findByProjectStatus(
+    @GetMapping(value = "/api/projectMain/queryByProjectStatus")
+    public JSONObject queryByProjectStatus(
             @ApiParam(value = "项目状态", required = true) @RequestParam String projectStatus) {
         logger.info("入参封装的数据为：projectStatus={}", projectStatus);
         ExecuteResult<List<ProjectMain>> result = new ExecuteResult<>();
@@ -129,7 +139,7 @@ public class ProjectMainController {
             if (StringUtils.isEmpty(projectStatus)) {
                 return ApiResponse.errorPara();
             }
-            result = projectMainService.findByProjectStatus(projectStatus);
+            result = projectMainService.queryByProjectStatus(projectStatus);
             if (result.isSuccess()) {
                 return ApiResponse.success(result.getResult());
             }
@@ -146,15 +156,15 @@ public class ProjectMainController {
      * @return
      */
     @ApiOperation(value = "按负责人id查询", notes = "按负责人id查询")
-    @GetMapping(value = "/api/projectMain/findByUserId")
-    public JSONObject findByUserId(@ApiParam(value = "负责人Id", required = true) @RequestParam String userId) {
+    @GetMapping(value = "/api/projectMain/queryByUserId")
+    public JSONObject queryByUserId(@ApiParam(value = "负责人Id", required = true) @RequestParam String userId) {
         logger.info("入参封装的数据为：userId={}", userId);
         ExecuteResult<List<ProjectMain>> result = new ExecuteResult<>();
         try {
             if (StringUtils.isEmpty(userId)) {
                 return ApiResponse.errorPara();
             }
-            result = projectMainService.findByUserId(userId);
+            result = projectMainService.queryByUserId(userId);
             if (result.isSuccess()) {
                 return ApiResponse.success(result.getResult());
             }
@@ -171,8 +181,8 @@ public class ProjectMainController {
      * @return
      */
     @ApiOperation(value = "按创建人id查询", notes = "按创建人id查询")
-    @GetMapping(value = "/api/projectMain/findByCreateUserId")
-    public JSONObject findByCreateUserId(
+    @GetMapping(value = "/api/projectMain/queryByCreateUserId")
+    public JSONObject queryByCreateUserId(
             @ApiParam(value = "创建人id", required = true) @RequestParam String createUserId) {
         logger.info("入参封装的数据为：createUserId={}", createUserId);
         ExecuteResult<List<ProjectMain>> result = new ExecuteResult<>();
@@ -180,7 +190,7 @@ public class ProjectMainController {
             if (StringUtils.isEmpty(createUserId)) {
                 return ApiResponse.errorPara();
             }
-            result = projectMainService.findByCreateUserId(createUserId);
+            result = projectMainService.queryByCreateUserId(createUserId);
             if (result.isSuccess()) {
                 return ApiResponse.success(result.getResult());
             }
@@ -197,8 +207,8 @@ public class ProjectMainController {
      * @return
      */
     @ApiOperation(value = "按修改人id查询", notes = "按修改人id查询")
-    @GetMapping(value = "/api/projectMain/findByModifyUserId")
-    public JSONObject findByModifyUserId(
+    @GetMapping(value = "/api/projectMain/queryByModifyUserId")
+    public JSONObject queryByModifyUserId(
             @ApiParam(value = "修改人id", required = true) @RequestParam String modifyUserId) {
         logger.info("入参封装的数据为：modifyUserId={}", modifyUserId);
         ExecuteResult<List<ProjectMain>> result = new ExecuteResult<>();
@@ -206,7 +216,7 @@ public class ProjectMainController {
             if (StringUtils.isEmpty(modifyUserId)) {
                 return ApiResponse.errorPara();
             }
-            result = projectMainService.findByModifyUserId(modifyUserId);
+            result = projectMainService.queryByModifyUserId(modifyUserId);
             if (result.isSuccess()) {
                 return ApiResponse.success(result.getResult());
             }
@@ -309,7 +319,7 @@ public class ProjectMainController {
      * @return
      */
     @ApiOperation(value = "按项目id查询", notes = "按项目id查询")
-    @GetMapping(value = "/api/projectMain/getByPrimaryKey")
+    @GetMapping(value = "/api/projectMain/queryByPrimaryKey")
     public JSONObject selectByPrimaryKey(@ApiParam(value = "项目id", required = true) @RequestParam Long id) {
 
         logger.info("入参封装的数据为：id={}", id);
@@ -318,7 +328,7 @@ public class ProjectMainController {
             if (id == null) {
                 return ApiResponse.errorPara();
             }
-            result = projectMainService.selectByPrimaryKey(id);
+            result = projectMainService.queryByPrimaryKey(id);
             if (result.isSuccess()) {
                 return ApiResponse.success(result.getResult());
             }
@@ -344,7 +354,7 @@ public class ProjectMainController {
      * @return
      */
     @ApiOperation(value = "关闭项目时,更新相关数据", notes = "关闭项目时,更新相关数据")
-    @PutMapping(value = "/api/projectMain/closeProjectById")
+    @PutMapping(value = "/api/projectMain/close/updateByProjectById")
     public JSONObject closeProjectById(//
             @ApiParam(value = "id", required = true) @RequestParam Long id, //
             @ApiParam(value = "创建人id", required = true) @RequestParam String createUserId, //
@@ -370,7 +380,7 @@ public class ProjectMainController {
                 return ApiResponse.errorPara();
             }
 
-            result = projectMainService.closeProjectById(id, createUserId, modifyUserId, projectStatus, operateDesc,
+            result = projectMainService.updateByProjectById(id, createUserId, modifyUserId, projectStatus, operateDesc,
                     userStatus, demandStatus, closeReason, status, caseStatus);
             if (result.isSuccess()) {
                 return ApiResponse.success(result.getResult());
