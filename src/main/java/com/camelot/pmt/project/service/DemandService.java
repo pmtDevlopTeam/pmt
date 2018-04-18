@@ -20,6 +20,6 @@ public interface DemandService {
     ExecuteResult<String> updateByDemand(Demand demandWithBLOBs);
 
     ExecuteResult<DataGrid<DemandOperate>> findAllByPage(Pager<?> pager, DemandOperate demandOperate);
-    
+
     ExecuteResult<Map<String, Object>> findChildParentById(Long id);
 }

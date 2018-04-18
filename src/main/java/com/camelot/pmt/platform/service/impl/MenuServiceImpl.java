@@ -22,8 +22,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 /**
  * 权限菜单服务接口实现类
+ * 
  * @author gnerv
  *
  */
@@ -34,20 +36,20 @@ public class MenuServiceImpl implements MenuService {
 
     @Autowired
     MenuMapper menuMapper;
-    
+
     @Autowired
     ExecuteResult result;
 
     @Override
     public ExecuteResult<Menu> createMenu(Menu menu) {
         try {
-        	menu = createMenuModel(menu);
+            menu = createMenuModel(menu);
             int createMenu = menuMapper.createMenu(menu);
             if (createMenu == 1) {
-            	result.setResult(menu);
-            }else {
-            	result.setSuccess(false);
-            	return result;
+                result.setResult(menu);
+            } else {
+                result.setSuccess(false);
+                return result;
             }
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
@@ -61,9 +63,9 @@ public class MenuServiceImpl implements MenuService {
         try {
             int deleteMenuByMenuId = menuMapper.deleteMenuByMenuId(menuId);
             if (deleteMenuByMenuId == 1) {
-            }else {
-            	result.setSuccess(false);
-            	return result;
+            } else {
+                result.setSuccess(false);
+                return result;
             }
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
@@ -75,12 +77,12 @@ public class MenuServiceImpl implements MenuService {
     @Override
     public ExecuteResult<Menu> modifyMenuByMenuId(Menu menu) {
         try {
-        	menu = modifyMenuModel(menu);
+            menu = modifyMenuModel(menu);
             int modifyMenuByMenuId = menuMapper.modifyMenuByMenuId(menu);
             if (modifyMenuByMenuId == 1) {
-            }else {
-            	result.setSuccess(false);
-            	return result;
+            } else {
+                result.setSuccess(false);
+                return result;
             }
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
@@ -94,10 +96,10 @@ public class MenuServiceImpl implements MenuService {
         try {
             Menu queryMenuByMenuId = menuMapper.queryMenuByMenuId(menuId);
             if (queryMenuByMenuId != null) {
-            	result.setResult(queryMenuByMenuId);
-            }else {
-            	result.setSuccess(false);
-            	return result;
+                result.setResult(queryMenuByMenuId);
+            } else {
+                result.setSuccess(false);
+                return result;
             }
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
@@ -131,10 +133,10 @@ public class MenuServiceImpl implements MenuService {
                 list = BuildTree.buildList(trees, "0");
             }
             if (list != null) {
-            	result.setResult(list);
-            }else {
-            	result.setSuccess(false);
-            	return result;
+                result.setResult(list);
+            } else {
+                result.setSuccess(false);
+                return result;
             }
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
@@ -143,8 +145,8 @@ public class MenuServiceImpl implements MenuService {
         return result;
     }
 
-	@Override
-	public ExecuteResult<List<Menu>> querySubMenuByMenuId(String menuId) {
+    @Override
+    public ExecuteResult<List<Menu>> querySubMenuByMenuId(String menuId) {
         try {
             List<Tree<Menu>> trees = new ArrayList<Tree<Menu>>();
             List<Tree<Menu>> list = null;
@@ -168,54 +170,53 @@ public class MenuServiceImpl implements MenuService {
                 list = BuildTree.buildList(trees, "0");
             }
             if (list != null) {
-            	result.setResult(list);
-            }else {
-            	result.setSuccess(false);
-            	return result;
+                result.setResult(list);
+            } else {
+                result.setSuccess(false);
+                return result;
             }
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
             throw new RuntimeException(e);
         }
         return result;
-	}
+    }
 
-	@Override
-	public Page<Menu> selectMenuPage(Page<Menu> page) {
-		return page.setRecords(menuMapper.selectMenuList(page));
-	}
-	
-	public Menu createMenuModel(Menu menu) {
-		menu.setMenuId(UUIDUtil.getUUID());
+    @Override
+    public Page<Menu> selectMenuPage(Page<Menu> page) {
+        return page.setRecords(menuMapper.selectMenuList(page));
+    }
+
+    public Menu createMenuModel(Menu menu) {
+        menu.setMenuId(UUIDUtil.getUUID());
         if (menu.getState() != null) {
         } else {
-        	menu.setState(BaseState.ZERO);
+            menu.setState(BaseState.ZERO);
         }
-		long date = new Date().getTime();
-		menu.setCreateTime(new Date(date));
-		menu.setModifyTime(new Date(date));
-		User user = (User) ShiroUtils.getSessionAttribute("user");
-		if(user != null) {
-			menu.setCreateUserId(user.getUserId());
-			menu.setModifyUserId(user.getUserId());
-		}
-		return menu;
-	}
-	
-	public Menu modifyMenuModel(Menu menu) {
-		menu.setMenuId(UUIDUtil.getUUID());
+        long date = new Date().getTime();
+        menu.setCreateTime(new Date(date));
+        menu.setModifyTime(new Date(date));
+        User user = (User) ShiroUtils.getSessionAttribute("user");
+        if (user != null) {
+            menu.setCreateUserId(user.getUserId());
+            menu.setModifyUserId(user.getUserId());
+        }
+        return menu;
+    }
+
+    public Menu modifyMenuModel(Menu menu) {
+        menu.setMenuId(UUIDUtil.getUUID());
         if (menu.getState() != null) {
         } else {
-        	menu.setState(BaseState.ZERO);
+            menu.setState(BaseState.ZERO);
         }
-		long date = new Date().getTime();
-		menu.setModifyTime(new Date(date));
-		User user = (User) ShiroUtils.getSessionAttribute("user");
-		if(user != null) {
-			menu.setModifyUserId(user.getUserId());
-		}
-		return menu;
-	}
-
+        long date = new Date().getTime();
+        menu.setModifyTime(new Date(date));
+        User user = (User) ShiroUtils.getSessionAttribute("user");
+        if (user != null) {
+            menu.setModifyUserId(user.getUserId());
+        }
+        return menu;
+    }
 
 }

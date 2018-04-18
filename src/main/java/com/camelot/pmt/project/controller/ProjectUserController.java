@@ -138,42 +138,41 @@ public class ProjectUserController {
             return ApiResponse.error("查询异常");
         }
     }
-    
+
     @RequestMapping(value = "/clean", method = RequestMethod.POST)
     @ApiOperation("清除项目成员")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "projectId", dataType = "Long", value = "项目id", required = true), 
+            @ApiImplicitParam(paramType = "query", name = "projectId", dataType = "Long", value = "项目id", required = true),
             @ApiImplicitParam(paramType = "query", name = "userIds", dataType = "String", value = "用户id，用逗号隔开", required = true),
-            @ApiImplicitParam(paramType = "query", name = "operator", dataType = "String", value = "操作人id", required = true)
-   })
-    public JSONObject cleanUser (Long projectId, String userIds, String operator) {
-    	String returnMessage = "请先结束人员在项目中的任务";
-    	Map<String, Object> map = new HashMap<>();
-    	if (projectId == null || userIds == null || operator == null) {
-    		return ApiResponse.errorPara();
-    	}
-    	String[] split = userIds.split(",");
-    	List<String> list = Arrays.asList(split);
-    	try {
-    		Date currentDate = new Date();
-    		map.put("userStatus", ProjectUser.STATUS_AFK);
-    		map.put("list", list);
-    		map.put("operator", operator);
-    		map.put("projectId", projectId);
-    		map.put("realOutTime", currentDate);
-    		map.put("modifyTime", currentDate);
-    		//查询task表，是否有还未完成任务的人员
-    		int checkTask = mapper.checkTask(map);
-    		int checkBug = mapper.checkBug(map);
-    		if (checkBug + checkTask > 0) {
-    			return ApiResponse.success(returnMessage);
-    		}
-    		projectUserService.clearUser(map);
-    		return ApiResponse.success("修改成功");
-    	} catch (Exception e) {
-    		e.printStackTrace();
-    		return ApiResponse.error("修改异常");
-    	}
+            @ApiImplicitParam(paramType = "query", name = "operator", dataType = "String", value = "操作人id", required = true) })
+    public JSONObject cleanUser(Long projectId, String userIds, String operator) {
+        String returnMessage = "请先结束人员在项目中的任务";
+        Map<String, Object> map = new HashMap<>();
+        if (projectId == null || userIds == null || operator == null) {
+            return ApiResponse.errorPara();
+        }
+        String[] split = userIds.split(",");
+        List<String> list = Arrays.asList(split);
+        try {
+            Date currentDate = new Date();
+            map.put("userStatus", ProjectUser.STATUS_AFK);
+            map.put("list", list);
+            map.put("operator", operator);
+            map.put("projectId", projectId);
+            map.put("realOutTime", currentDate);
+            map.put("modifyTime", currentDate);
+            // 查询task表，是否有还未完成任务的人员
+            int checkTask = mapper.checkTask(map);
+            int checkBug = mapper.checkBug(map);
+            if (checkBug + checkTask > 0) {
+                return ApiResponse.success(returnMessage);
+            }
+            projectUserService.clearUser(map);
+            return ApiResponse.success("修改成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ApiResponse.error("修改异常");
+        }
     }
-    
+
 }

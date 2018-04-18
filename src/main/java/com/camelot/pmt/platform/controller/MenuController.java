@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
 /**
  * 权限菜单
+ * 
  * @author gnerv
  *
  */
@@ -29,14 +31,15 @@ public class MenuController {
 
     @Autowired
     MenuService menuService;
-    
+
     @Autowired
     ExecuteResult result;
-    
+
     /**
      * 根据一个菜单对象 创建一个菜单
      * 
-     * @param Menu menu
+     * @param Menu
+     *            menu
      * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
     @ApiOperation(value = "创建菜单接口", notes = "创建单个菜单")
@@ -126,9 +129,9 @@ public class MenuController {
     @ApiOperation(value = "查询全部菜单树接口", notes = "查询全部菜单树")
     @RequestMapping(value = "/queryAllMenuList", method = RequestMethod.POST)
     public JSONObject queryAllMenuList(Integer j, Integer k) {
-		Page<Menu> page = new Page<Menu>(j, k);
-		Page<Menu> selectMenuPage = menuService.selectMenuPage(page);
-		JSONObject success = ApiResponse.success(selectMenuPage);
+        Page<Menu> page = new Page<Menu>(j, k);
+        Page<Menu> selectMenuPage = menuService.selectMenuPage(page);
+        JSONObject success = ApiResponse.success(selectMenuPage);
         return success;
     }
 

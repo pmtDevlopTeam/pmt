@@ -45,7 +45,7 @@ public class RoleToMenu {
     /**
      * 菜单id集合
      */
-    private String [] menuIds;
+    private String[] menuIds;
 
     public String[] getMenuIds() {
         return menuIds;

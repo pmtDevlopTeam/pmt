@@ -88,28 +88,32 @@ public interface ProjectUserMapper {
 
     int count(ProjectUserSearchVO vo);
 
-	int clearUserAll(@Param("projectId") Long projectId, @Param("userId") String userId, @Param("userStatus")String userStatus);
+    int clearUserAll(@Param("projectId") Long projectId, @Param("userId") String userId,
+            @Param("userStatus") String userStatus);
 
-	/**
-	 * 将人员状态修改为暂离
-	 * @param map
-	 */
-	void clearUser(Map<String, Object> map);
-	
-	//----------------------附加------------------- 
-	//关于将成员移出项目
-	/**
-	 * 查询task表，根据所有的id进行批量操作，如果成功则返回查询的条数
-	 * @param map
-	 * @return
-	 */
-	int checkTask(Map<String, Object> map);
-	/**
-	 * 查询task表，根据所有的id进行批量操作，如果成功则返回查询的条数
-	 * @param map
-	 * @return
-	 */
-	int checkBug(Map<String, Object> map);
-	
-	
+    /**
+     * 将人员状态修改为暂离
+     * 
+     * @param map
+     */
+    void clearUser(Map<String, Object> map);
+
+    // ----------------------附加-------------------
+    // 关于将成员移出项目
+    /**
+     * 查询task表，根据所有的id进行批量操作，如果成功则返回查询的条数
+     * 
+     * @param map
+     * @return
+     */
+    int checkTask(Map<String, Object> map);
+
+    /**
+     * 查询task表，根据所有的id进行批量操作，如果成功则返回查询的条数
+     * 
+     * @param map
+     * @return
+     */
+    int checkBug(Map<String, Object> map);
+
 }

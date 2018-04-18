@@ -26,19 +26,20 @@ import java.util.List;
  * @date: 2018-04-13 11:00
  */
 @Service
-public class VersionServiceImpl implements VersionService{
+public class VersionServiceImpl implements VersionService {
     @Autowired
-    private  VersionMapper versionMapper;
+    private VersionMapper versionMapper;
     private static final Logger logger = LoggerFactory.getLogger(VersionServiceImpl.class);
+
     /**
-      * @Description: 添加版本信息
-      * @param:  version
-      * @author: xueyj
-      * @date: 2018/4/13 11:05
-      */
+     * @Description: 添加版本信息
+     * @param: version
+     * @author: xueyj
+     * @date: 2018/4/13 11:05
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public JSONObject insertVersonInfo(Long projectId, String userId, VersionVo versionVo){
+    public JSONObject insertVersonInfo(Long projectId, String userId, VersionVo versionVo) {
         try {
             Date dateTime = new Date();
             // 获取当前版本的类型与版本编号，用于自动生成版本编号
@@ -52,7 +53,7 @@ public class VersionServiceImpl implements VersionService{
             version.setEndTime(versionVo.getEndTime());
             version.setRemarks(versionVo.getRemarks());
             // 设置版本编号
-            version.setVersion(getVersionCode(projectId,versionType));
+            version.setVersion(getVersionCode(projectId, versionType));
             // 项目id
             version.setProjectId(projectId);
             // 添加人id
@@ -65,26 +66,27 @@ public class VersionServiceImpl implements VersionService{
             version.setModifyTime(dateTime);
             int i = versionMapper.insert(version);
             if (i > 0) {
-                //logger.info();
-                return  ApiResponse.success("新增版本成功！");
-            }else{
-                return  ApiResponse.error("新增版本失败！");
+                // logger.info();
+                return ApiResponse.success("新增版本成功！");
+            } else {
+                return ApiResponse.error("新增版本失败！");
             }
         } catch (Exception e) {
             logger.error(e.getMessage());
-            return  ApiResponse.error("新增版本失败！");
+            return ApiResponse.error("新增版本失败！");
         }
     }
+
     /**
-      * @Description: 逻辑删除版本信息
-      * @param: 
-      * @return: 
-      * @author: xueyj
-      * @date: 2018/4/13 19:16
-      */
+     * @Description: 逻辑删除版本信息
+     * @param:
+     * @return:
+     * @author: xueyj
+     * @date: 2018/4/13 19:16
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public JSONObject deleteVersionInfoById(String userId,Long versionId){
+    public JSONObject deleteVersionInfoById(String userId, Long versionId) {
         try {
             Version version = versionMapper.selectByPrimaryKey(versionId);
             Date dateTime = new Date();
@@ -95,13 +97,13 @@ public class VersionServiceImpl implements VersionService{
             version.setVersionStatus(-1);
             int i = versionMapper.updateByPrimaryKey(version);
             if (i > 0) {
-                return  ApiResponse.success("删除版本成功！");
-            }else{
-                return  ApiResponse.error("删除版本失败！");
+                return ApiResponse.success("删除版本成功！");
+            } else {
+                return ApiResponse.error("删除版本失败！");
             }
         } catch (Exception e) {
             logger.error(e.getMessage());
-            return  ApiResponse.error("删除版本失败！");
+            return ApiResponse.error("删除版本失败！");
         }
     }
 
@@ -113,37 +115,37 @@ public class VersionServiceImpl implements VersionService{
      * @date: 2018/4/13 11:19
      */
     @Override
-    public JSONObject findVersionInfoById(Long versionId){
+    public JSONObject findVersionInfoById(Long versionId) {
         try {
             Version version1 = versionMapper.selectByPrimaryKey(versionId);
-            return  ApiResponse.success(version1);
+            return ApiResponse.success(version1);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            return  ApiResponse.error("根据指定id查询版本信息失败！");
+            return ApiResponse.error("根据指定id查询版本信息失败！");
         }
     }
 
     /**
-      * @Description: 根据指定id修改version信息
-      * @param: 
-      * @return: 
-      * @author: xueyj
-      * @date: 2018/4/13 18:49
-      */
+     * @Description: 根据指定id修改version信息
+     * @param:
+     * @return:
+     * @author: xueyj
+     * @date: 2018/4/13 18:49
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public JSONObject updateVersonInfo(Long projectId,String userId, VersionVo versionVo){
+    public JSONObject updateVersonInfo(Long projectId, String userId, VersionVo versionVo) {
         try {
             Date dateTime = new Date();
             String updateVersionType = versionVo.getVersionType();
             // 1.判断版本类型是否修正，若修正则根据相应的规则重新生成版本编号
             Version version = versionMapper.selectByPrimaryKey(versionVo.getId());
             String oldVersionType = version.getVersionType();
-            if (!oldVersionType.equals(updateVersionType)){
+            if (!oldVersionType.equals(updateVersionType)) {
                 // 获取当前版本的类型与版本编号，用于自动生成版本编号
                 String versionType = versionVo.getVersionType();
                 // 设置版本编号
-                version.setVersion(getVersionCode(projectId,versionType));
+                version.setVersion(getVersionCode(projectId, versionType));
             }
             version.setVersionName(versionVo.getVersionName());
             version.setStartTime(versionVo.getStartTime());
@@ -154,54 +156,54 @@ public class VersionServiceImpl implements VersionService{
             version.setModifyTime(dateTime);
             int i = versionMapper.updateByPrimaryKeySelective(version);
             if (i > 0) {
-                return  ApiResponse.success("修改版本成功！");
-            }else{
-                return  ApiResponse.error("修改版本失败！");
+                return ApiResponse.success("修改版本成功！");
+            } else {
+                return ApiResponse.error("修改版本失败！");
             }
         } catch (Exception e) {
             logger.error(e.getMessage());
-            return  ApiResponse.error("修改版本失败！");
+            return ApiResponse.error("修改版本失败！");
         }
     }
 
     /**
-      * @Description: 根据项目id查询所有版本信息
-      * @param:
-      * @return:
-      * @author: xueyj
-      * @date: 2018/4/13 18:30
-      */
+     * @Description: 根据项目id查询所有版本信息
+     * @param:
+     * @return:
+     * @author: xueyj
+     * @date: 2018/4/13 18:30
+     */
     @Override
-    public JSONObject findVerListByProId(Long projectId){
+    public JSONObject findVerListByProId(Long projectId) {
         try {
             List<Version> versionList = versionMapper.selectVersionListByProId(projectId);
-            return  ApiResponse.success(versionList);
+            return ApiResponse.success(versionList);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            return  ApiResponse.error("根据项目id查询所有版本信息失败！");
+            return ApiResponse.error("根据项目id查询所有版本信息失败！");
         }
     }
+
     /**
-      * @Description: 根据项目id,分页查询所有版本信息
-      * @param:
-      * @return:
-      * @author: xueyj
-      * @date: 2018/4/17 10:26
-      */
+     * @Description: 根据项目id,分页查询所有版本信息
+     * @param:
+     * @return:
+     * @author: xueyj
+     * @date: 2018/4/17 10:26
+     */
     @Override
-    public JSONObject findVerListByPageAndProId(int pageNum,int pageSize,Long projectId) {
+    public JSONObject findVerListByPageAndProId(int pageNum, int pageSize, Long projectId) {
         try {
-        /*   pageHelper使用三部曲
-             1.启动pageHelper分页 startPage -- start
-             2.填充自己的sql（查询逻辑）
-             3.pageHelper的收尾
-         */
+            /*
+             * pageHelper使用三部曲 1.启动pageHelper分页 startPage -- start 2.填充自己的sql（查询逻辑）
+             * 3.pageHelper的收尾
+             */
             // 初始化分页信息
-            PageHelper.startPage(pageNum,pageSize);
+            PageHelper.startPage(pageNum, pageSize);
             // 查询产品list
             List<Version> versionList = versionMapper.selectVersionListByProId(projectId);
             List<VersionVo> versionVoList = Lists.newArrayList();
-            for (Version versionItem:versionList) {
+            for (Version versionItem : versionList) {
                 VersionVo versionVo = assembleProductListVo(versionItem);
                 versionVoList.add(versionVo);
             }
@@ -211,46 +213,49 @@ public class VersionServiceImpl implements VersionService{
             return ApiResponse.success(pageResult);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            return  ApiResponse.error("根据项目id,分页查询所有版本信息失败！");
+            return ApiResponse.error("根据项目id,分页查询所有版本信息失败！");
         }
     }
+
     /**
      * 根据项目id，版本类型，查询版本信息
+     * 
      * @param projectId
      * @param versionType
      * @return
      */
     @Override
-    public JSONObject findVerListByProIdAndVerType(Long projectId,String versionType){
+    public JSONObject findVerListByProIdAndVerType(Long projectId, String versionType) {
         try {
-            List<Version> versionList = versionMapper.queryListByProIdAndVerType(projectId,versionType);
-            return  ApiResponse.success(versionList);
+            List<Version> versionList = versionMapper.queryListByProIdAndVerType(projectId, versionType);
+            return ApiResponse.success(versionList);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            return  ApiResponse.error("根据项目id，版本类型，查询版本信息失败！");
+            return ApiResponse.error("根据项目id，版本类型，查询版本信息失败！");
         }
     }
+
     /**
-      * @Description: 根据项目id，版本类型，分页查询版本信息
-      * @param: 
-      * @return: 
-      * @author: xueyj
-      * @date: 2018/4/17 10:32
-      */
+     * @Description: 根据项目id，版本类型，分页查询版本信息
+     * @param:
+     * @return:
+     * @author: xueyj
+     * @date: 2018/4/17 10:32
+     */
     @Override
-    public JSONObject findVerListByPageAndProIdAndVerType(int pageNum,int pageSize,Long projectId,String versionType) {
+    public JSONObject findVerListByPageAndProIdAndVerType(int pageNum, int pageSize, Long projectId,
+            String versionType) {
         try {
-        /*   pageHelper使用三部曲
-             1.启动pageHelper分页 startPage -- start
-             2.填充自己的sql（查询逻辑）
-             3.pageHelper的收尾
-         */
+            /*
+             * pageHelper使用三部曲 1.启动pageHelper分页 startPage -- start 2.填充自己的sql（查询逻辑）
+             * 3.pageHelper的收尾
+             */
             // 初始化分页信息
-            PageHelper.startPage(pageNum,pageSize);
+            PageHelper.startPage(pageNum, pageSize);
             // 查询产品list
-            List<Version> versionList = versionMapper.queryListByProIdAndVerType(projectId,versionType);
+            List<Version> versionList = versionMapper.queryListByProIdAndVerType(projectId, versionType);
             List<VersionVo> versionVoList = Lists.newArrayList();
-            for (Version versionItem:versionList) {
+            for (Version versionItem : versionList) {
                 VersionVo versionVo = assembleProductListVo(versionItem);
                 versionVoList.add(versionVo);
             }
@@ -260,38 +265,40 @@ public class VersionServiceImpl implements VersionService{
             return ApiResponse.success(pageResult);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            return  ApiResponse.error("根据项目id，版本类型，分页查询版本信息失败！");
+            return ApiResponse.error("根据项目id，版本类型，分页查询版本信息失败！");
         }
     }
+
     /**
      * 根据不同的版本状态自动生成不同的版本编号
+     * 
      * @param versionType
      * @return
      */
-    private String getVersionCode(Long projectId, String versionType){
+    private String getVersionCode(Long projectId, String versionType) {
         // 初始化版本编号位null；
-        String versionCode =null;
+        String versionCode = null;
         // 根据项目id，版本类型查询对应版本编号
         List<Version> versionList = versionMapper.queryListByProIdAndVerType(projectId, versionType);
-        if (versionList.size() > 0){
+        if (versionList.size() > 0) {
             // 获取最后添加版本信息的版本编号
             versionCode = versionList.get(0).getVersion();
         }
         if (("type01".equals(versionType))) {
             // 若版本code为空则设置默认值，否则根据规则进行递增
             if (versionCode == null) {
-                versionCode="1.0.0";
+                versionCode = "1.0.0";
                 return versionCode;
-            }else{
+            } else {
                 versionCode = generateVersionCode(versionCode);
             }
         }
         if ("type02".equals(versionType)) {
             // 若版本code为空则设置默认值，否则根据规则进行递增
             if (versionCode == null) {
-                versionCode="0.0.1";
+                versionCode = "0.0.1";
                 return versionCode;
-            }else{
+            } else {
                 versionCode = generateVersionCode(versionCode);
             }
         }
@@ -300,27 +307,28 @@ public class VersionServiceImpl implements VersionService{
 
     /**
      * 根据已有versionCode生成递增后的code
+     * 
      * @param versionCode
      * @return
      */
-    private String generateVersionCode(String versionCode){
+    private String generateVersionCode(String versionCode) {
         if (versionCode != null) {
             String[] split = versionCode.split("\\.");
             int maxVersion = Integer.parseInt(split[0]);
             int medVersion = Integer.parseInt(split[1]);
             int minVersion = Integer.parseInt(split[2]);
-            int tempMinVersion = minVersion+1;
+            int tempMinVersion = minVersion + 1;
             // 若小版本号超过一位数，则往前递增，一次类推
-            if (tempMinVersion ==10){
-                int tempMedVersion = medVersion+1;
-                if (tempMedVersion == 10){
-                    int tempMaxVersion= maxVersion+1;
-                    versionCode= tempMaxVersion+"."+0+"."+0;
-                }else{
-                    versionCode= maxVersion+"."+tempMedVersion+"."+0;
+            if (tempMinVersion == 10) {
+                int tempMedVersion = medVersion + 1;
+                if (tempMedVersion == 10) {
+                    int tempMaxVersion = maxVersion + 1;
+                    versionCode = tempMaxVersion + "." + 0 + "." + 0;
+                } else {
+                    versionCode = maxVersion + "." + tempMedVersion + "." + 0;
                 }
-            }else{
-                versionCode= maxVersion+"."+medVersion+"."+tempMinVersion;
+            } else {
+                versionCode = maxVersion + "." + medVersion + "." + tempMinVersion;
             }
         }
         return versionCode;
@@ -328,10 +336,11 @@ public class VersionServiceImpl implements VersionService{
 
     /**
      * 构建返回版本基本信息
+     * 
      * @param version
      * @return
      */
-    private VersionVo assembleProductListVo(Version version){
+    private VersionVo assembleProductListVo(Version version) {
         VersionVo versionVo = new VersionVo();
         // id
         versionVo.setId(version.getId());

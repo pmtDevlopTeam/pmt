@@ -49,15 +49,15 @@ public class ProjectUserServiceImpl implements ProjectUserService {
         return projectUserMapper.count(vo);
     }
 
-	@Override
-	public int clearUser(Long projectId, String userId, String userStatus) {
-		return projectUserMapper.clearUserAll(projectId, userId, userStatus);
-	}
+    @Override
+    public int clearUser(Long projectId, String userId, String userStatus) {
+        return projectUserMapper.clearUserAll(projectId, userId, userStatus);
+    }
 
-	@Override
-	public void clearUser(Map<String, Object> map) {
-		projectUserMapper.clearUser(map);
-		
-	}
+    @Override
+    public void clearUser(Map<String, Object> map) {
+        projectUserMapper.clearUser(map);
+
+    }
 
 }

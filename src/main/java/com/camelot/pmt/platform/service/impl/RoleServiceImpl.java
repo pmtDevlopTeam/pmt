@@ -112,9 +112,9 @@ public class RoleServiceImpl implements RoleService {
         ExecuteResult<Role> result = new ExecuteResult<Role>();
         try {
             int status = roleMapper.deleteRoleById(role);
-            if(status == 1) {
+            if (status == 1) {
                 roleMapper.deleteRoleMenuById(role);
-            }else {
+            } else {
                 return result;
             }
             result.setResult(role);
