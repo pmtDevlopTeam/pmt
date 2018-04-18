@@ -1,29 +1,30 @@
 package com.camelot.pmt.caserepertory.service.impl;
 
+import com.camelot.pmt.caserepertory.PageBean;
+import com.camelot.pmt.caserepertory.mapper.CaseRepertoryMapper;
+import com.camelot.pmt.caserepertory.mapper.CaseRepertoryStepMapper;
+import com.camelot.pmt.caserepertory.model.CaseRepertory;
+import com.camelot.pmt.caserepertory.model.CaseRepertoryStep;
+import com.camelot.pmt.caserepertory.service.CaseRepertoryService;
+import com.camelot.pmt.common.ExecuteResult;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.camelot.pmt.caserepertory.mapper.CaseRepertoryStepMapper;
-import com.camelot.pmt.caserepertory.model.CaseRepertory;
-import com.camelot.pmt.caserepertory.model.CaseRepertoryStep;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import com.camelot.pmt.caserepertory.mapper.CaseRepertoryMapper;
-import com.camelot.pmt.caserepertory.service.CaseRepertoryService;
-import com.camelot.pmt.common.ExecuteResult;
-import com.camelot.pmt.caserepertory.PageBean;
-import com.camelot.pmt.testmanage.bugmanage.mapper.BugHistoryMapper;
-import com.camelot.pmt.testmanage.bugmanage.model.SelectBugManage;
-import com.camelot.pmt.testmanage.bugmanage.service.impl.BugManageServiceImpl;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
-import org.springframework.transaction.annotation.Transactional;
-
+/**
+ * 用例库ServiceImpl
+ *
+ * @author Yurnero
+ */
 @Service
 public class CaseRepertoryServiceImpl implements CaseRepertoryService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(CaseRepertoryServiceImpl.class);
@@ -33,25 +34,6 @@ public class CaseRepertoryServiceImpl implements CaseRepertoryService {
 	@Autowired
 	private CaseRepertoryStepMapper caseRepertoryStepMapper;
 
-	@Override
-	public ExecuteResult<PageInfo> selectCondition(Map<String, Object> map) {
-		ExecuteResult<PageInfo> result = new ExecuteResult<PageInfo>();
-		try {
-			PageBean pageBean = (PageBean) map.get("pageBean");
-			if (pageBean == null) {
-				result.setResultMessage("传入实体有误!");
-				return result;
-			}
-			PageHelper.startPage(pageBean.getCurrentPage(), pageBean.getPageSize());
-			List<CaseRepertory> docs = caseRepertoryMapper.selectCondition(map);
-			PageInfo<CaseRepertory> pageInfo = new PageInfo<CaseRepertory>(docs);
-			result.setResult(pageInfo);
-		} catch (Exception e) {
-			LOGGER.error(e.getMessage());
-			throw new RuntimeException(e);
-		}
-		return result;
-	}
 
 	@Override
 	@Transactional
@@ -109,20 +91,14 @@ public class CaseRepertoryServiceImpl implements CaseRepertoryService {
 		return result;
 	}
 
-	@Override
-	public CaseRepertory getById(Long id) {
-		Map<String, Object> param = new HashMap<>();
-		param.put("id", id);
-		List<CaseRepertory> list = caseRepertoryMapper.find(param);
-		if (list != null && list.size() != 0) {
-			return list.get(0);
-		}
-		return null;
-	}
-
+	/**
+	 * 新增测试用例库
+	 *
+	 * @param caseRepertory 用例库
+	 */
 	@Override
 	@Transactional
-	public void add(CaseRepertory caseRepertory) {
+	public void addCaseRepertory(CaseRepertory caseRepertory) {
 		// 新增用例
 		caseRepertoryMapper.insertSelective(caseRepertory);
 
@@ -138,15 +114,51 @@ public class CaseRepertoryServiceImpl implements CaseRepertoryService {
 
 	}
 
+	/**
+	 * 批量新增测试用例库
+	 *
+	 * @param list 用例库集合
+	 */
 	@Override
 	@Transactional
-	public void addBatch(List<CaseRepertory> list) {
+	public void addBatchCaseRepertory(List<CaseRepertory> list) {
 		caseRepertoryMapper.insertBatch(list);
 	}
 
+	/**
+	 * 删除用例库
+	 *
+	 * @param ids 用例库id 逗号隔开
+	 */
 	@Override
 	@Transactional
-	public void update(CaseRepertory caseRepertory) {
+	public void deleteCaseRepertory(String ids) {
+		Map<String, Object> param = new HashMap<>();
+
+		String[] arr = ids.split(",");
+		int[] intArr = new int[arr.length];
+		for (int i = 0; i < arr.length; i++) {
+			intArr[i] = Integer.parseInt(arr[i]);
+		}
+
+		// 删除用例
+		param.put("ids", intArr);
+		caseRepertoryMapper.remove(param);
+
+		// 删除用例步骤
+		param.clear();
+		param.put("useCaseIds", intArr);
+		caseRepertoryStepMapper.remove(param);
+	}
+
+	/**
+	 * 更新测试用例库
+	 *
+	 * @param caseRepertory 用例库
+	 */
+	@Override
+	@Transactional
+	public void updateCaseRepertory(CaseRepertory caseRepertory) {
 		// 更新用例库
 		caseRepertoryMapper.updateByPrimaryKeySelective(caseRepertory);
 
@@ -190,23 +202,39 @@ public class CaseRepertoryServiceImpl implements CaseRepertoryService {
 	}
 
 	@Override
-	@Transactional
-	public void remove(String ids) {
-		Map<String, Object> param = new HashMap<>();
-
-		String[] arr = ids.split(",");
-		int[] intArr = new int[arr.length];
-		for (int i = 0; i < arr.length; i++) {
-			intArr[i] = Integer.parseInt(arr[i]);
+	public ExecuteResult<PageInfo> selectCondition(Map<String, Object> map) {
+		ExecuteResult<PageInfo> result = new ExecuteResult<PageInfo>();
+		try {
+			PageBean pageBean = (PageBean) map.get("pageBean");
+			if (pageBean == null) {
+				result.setResultMessage("传入实体有误!");
+				return result;
+			}
+			PageHelper.startPage(pageBean.getCurrentPage(), pageBean.getPageSize());
+			List<CaseRepertory> docs = caseRepertoryMapper.selectCondition(map);
+			PageInfo<CaseRepertory> pageInfo = new PageInfo<CaseRepertory>(docs);
+			result.setResult(pageInfo);
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage());
+			throw new RuntimeException(e);
 		}
+		return result;
+	}
 
-		// 删除用例
-		param.put("ids", intArr);
-		caseRepertoryMapper.remove(param);
-
-		// 删除用例步骤
-		param.clear();
-		param.put("useCaseIds", intArr);
-		caseRepertoryStepMapper.remove(param);
+	/**
+	 * 根据ID查询用例和用例步骤
+	 *
+	 * @param id 用例库ID
+	 * @return 返回用例库
+	 */
+	@Override
+	public CaseRepertory queryCaseRepertoryById(Long id) {
+		Map<String, Object> param = new HashMap<>();
+		param.put("id", id);
+		List<CaseRepertory> list = caseRepertoryMapper.find(param);
+		if (list != null && list.size() != 0) {
+			return list.get(0);
+		}
+		return null;
 	}
 }

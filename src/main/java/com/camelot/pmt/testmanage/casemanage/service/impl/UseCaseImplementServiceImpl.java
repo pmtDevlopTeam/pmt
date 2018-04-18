@@ -30,9 +30,14 @@ public class UseCaseImplementServiceImpl implements UseCaseImplementService {
     @Autowired
     private UseCaseMapper useCaseMapper;
 
+    /**
+     * 增加用例执行和用例执行详细信息
+     *
+     * @param useCaseImplement 用例执行
+     */
     @Override
     @Transactional
-    public void add(User userModel, UseCaseImplement useCaseImplement) {
+    public void addUseCaseImplement(User userModel, UseCaseImplement useCaseImplement) {
 
         UseCase useCase = null;
 
@@ -77,8 +82,13 @@ public class UseCaseImplementServiceImpl implements UseCaseImplementService {
         if (useCase != null) useCaseMapper.updateByPrimaryKeySelective(useCase);
     }
 
+    /**
+     * 根据测试用例ID查询测试用例执行信息
+     *
+     * @param useCaseId 测试用例ID
+     */
     @Override
-    public List<UseCaseImplement> findByUseCaseId(Long useCaseId) {
+    public List<UseCaseImplement> queryUseCaseImplementByUseCaseId(Long useCaseId) {
         Map<String, Object> param = new HashMap<>();
         param.put("useCaseId", useCaseId);
         return useCaseImplementMapper.find(param);
