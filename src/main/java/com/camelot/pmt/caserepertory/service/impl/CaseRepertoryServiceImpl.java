@@ -15,10 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 用例库ServiceImpl
@@ -45,6 +42,10 @@ public class CaseRepertoryServiceImpl implements CaseRepertoryService {
 			long param1 = Long.parseLong(param);
 			CaseRepertory caseRepertory = new CaseRepertory();
 			caseRepertory.setId(param1);
+			caseRepertory.setCreateUserId("12");
+			caseRepertory.setCreateTime(new Date());
+			caseRepertory.setModifyUserId("12");
+			caseRepertory.setModifyTime(new Date());
 			//复制数据到用例库主表并返回主键id
 			 result1 =caseRepertoryMapper.addCaseRepertoryByCaseid(caseRepertory);
 			//复制步骤数到用例库步骤表中并且更新父id为 result1
@@ -67,6 +68,10 @@ public class CaseRepertoryServiceImpl implements CaseRepertoryService {
 				long param1 =Long.parseLong(param);
 				CaseRepertory caseRepertory=new CaseRepertory();
 				caseRepertory.setId(param1);
+				caseRepertory.setCreateUserId("12");
+				caseRepertory.setCreateTime(new Date());
+				caseRepertory.setModifyUserId("12");
+				caseRepertory.setModifyTime(new Date());
 				//复制数据到用例主表并返回主键id
 				result1=caseRepertoryMapper.addUserCaseByCaseRepertoryid(caseRepertory);
 				//复制步骤数到用例步骤表中并且更新父id为 result1
@@ -87,6 +92,10 @@ public class CaseRepertoryServiceImpl implements CaseRepertoryService {
 	@Transactional
 	public boolean addCaseRepertory(CaseRepertory caseRepertory) {
 		// 新增用例
+		caseRepertory.setCreateUserId("12");
+		caseRepertory.setCreateTime(new Date());
+		caseRepertory.setModifyUserId("12");
+		caseRepertory.setModifyTime(new Date());
 		int result=caseRepertoryMapper.insertSelective(caseRepertory);
 		// mybatis返回主键,并设置外键
 		Long id = caseRepertory.getId();
@@ -145,6 +154,8 @@ public class CaseRepertoryServiceImpl implements CaseRepertoryService {
 	@Transactional
 	public boolean updateCaseRepertory(CaseRepertory caseRepertory) {
 		// 更新用例库
+		caseRepertory.setModifyUserId("12");
+		caseRepertory.setModifyTime(new Date());
 		int result=caseRepertoryMapper.updateByPrimaryKeySelective(caseRepertory);
 		// 过滤出删除的步骤
 		List<Long> ids = new ArrayList<>();
