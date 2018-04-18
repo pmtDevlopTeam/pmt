@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.camelot.pmt.common.ApiResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +14,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
+import com.camelot.pmt.common.APIStatus;
+import com.camelot.pmt.common.ApiResponse;
+import com.camelot.pmt.platform.model.User;
+import com.camelot.pmt.platform.shiro.ShiroUtils;
 import com.camelot.pmt.project.mapper.ProjectUserMapper;
 import com.camelot.pmt.project.model.ProjectUser;
 import com.camelot.pmt.project.model.ProjectUserSearchVO;
@@ -54,16 +57,21 @@ public class ProjectUserController {
             @ApiImplicitParam(paramType = "query", name = "preJoinTime", dataType = "Date", value = "预计进项目时间", required = true),
             @ApiImplicitParam(paramType = "query", name = "preOutTime", dataType = "Date", value = "预计出项目时间", required = true),
             @ApiImplicitParam(paramType = "query", name = "userProRole", dataType = "String", value = "角色id（在项目角色）", required = true),
-            @ApiImplicitParam(paramType = "query", name = "createUserId", dataType = "String", value = "创建人id", required = true),
             @ApiImplicitParam(paramType = "query", name = "preManHour", dataType = "int", value = "预计工时", required = true) })
     public JSONObject addUser(ProjectUser pu) {
+    	String loginUser = this.getLoginUser();
+    	if (loginUser == null || "".equals(loginUser)) {
+    		return ApiResponse.jsonData(APIStatus.INVALIDSESSION_LOGINOUTTIME);
+    	} else {
+    		pu.setCreateUserId(loginUser);
+    	}
         Date currentDate = new Date();
         pu.setCreateTime(currentDate);
         pu.setUserStatus(ProjectUser.STATUS_NOT_IN);
-        pu.setModifyUserId(pu.getCreateUserId());
+        pu.setModifyUserId(loginUser);
         pu.setModifyTime(currentDate);
         try {
-            projectUserService.insertSelective(pu);
+            projectUserService.addUserSelective(pu);
             return ApiResponse.success();
         } catch (Exception e) {
             e.printStackTrace();
@@ -80,13 +88,16 @@ public class ProjectUserController {
     @RequestMapping(value = "/confirm", method = RequestMethod.POST)
     @ApiOperation("确认成员进入项目")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "modifyUserId", dataType = "String", value = "确认人id", required = true),
             @ApiImplicitParam(paramType = "query", name = "id", dataType = "Long", value = "当前一条数据的id", required = true), })
-    public JSONObject confirmUserIn(String modifyUserId, Long id) {
-        logger.info("confirm user in project , modifyUserId = [{}]", modifyUserId);
+    public JSONObject confirmUserIn(Long id) {
         ProjectUser pu = new ProjectUser();
+        String loginUser = this.getLoginUser();
+    	if (loginUser == null || "".equals(loginUser)) {
+    		return ApiResponse.jsonData(APIStatus.INVALIDSESSION_LOGINOUTTIME);
+    	}
+    	logger.info("confirm user in project , modifyUserId = [{}]", loginUser);
+    	pu.setModifyUserId(loginUser);
         Date currentDate = new Date();
-        pu.setModifyUserId(modifyUserId);
         pu.setModifyTime(currentDate);
         pu.setId(id);
         pu.setRealJoinTime(currentDate);
@@ -117,7 +128,7 @@ public class ProjectUserController {
             @ApiImplicitParam(paramType = "query", name = "roleId", dataType = "String", value = "成员角色id", required = false),
             @ApiImplicitParam(paramType = "query", name = "page", dataType = "int", value = "当前页", required = false),
             @ApiImplicitParam(paramType = "query", name = "size", dataType = "int", value = "每页条数", required = false) })
-    public JSONObject findUser(ProjectUserSearchVO vo) {
+    public JSONObject queryUser(ProjectUserSearchVO vo) {
         try {
             if (vo.getPage() != null && vo.getSize() != null) {
                 vo.setPage((vo.getPage() - 1) * vo.getSize());
@@ -144,12 +155,15 @@ public class ProjectUserController {
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "projectId", dataType = "Long", value = "项目id", required = true), 
             @ApiImplicitParam(paramType = "query", name = "userIds", dataType = "String", value = "用户id，用逗号隔开", required = true),
-            @ApiImplicitParam(paramType = "query", name = "operator", dataType = "String", value = "操作人id", required = true)
    })
-    public JSONObject cleanUser (Long projectId, String userIds, String operator) {
+    public JSONObject cleanUser (Long projectId, String userIds) {
     	String returnMessage = "请先结束人员在项目中的任务";
+    	String loginUser = this.getLoginUser();
+    	if (loginUser == null || "".equals(loginUser)) {
+    		return ApiResponse.jsonData(APIStatus.INVALIDSESSION_LOGINOUTTIME);
+    	}
     	Map<String, Object> map = new HashMap<>();
-    	if (projectId == null || userIds == null || operator == null) {
+    	if (projectId == null || userIds == null) {
     		return ApiResponse.errorPara();
     	}
     	String[] split = userIds.split(",");
@@ -158,7 +172,7 @@ public class ProjectUserController {
     		Date currentDate = new Date();
     		map.put("userStatus", ProjectUser.STATUS_AFK);
     		map.put("list", list);
-    		map.put("operator", operator);
+    		map.put("operator", loginUser);
     		map.put("projectId", projectId);
     		map.put("realOutTime", currentDate);
     		map.put("modifyTime", currentDate);
@@ -174,6 +188,14 @@ public class ProjectUserController {
     		e.printStackTrace();
     		return ApiResponse.error("修改异常");
     	}
+    }
+    
+    private String getLoginUser () {
+    	User user = (User)ShiroUtils.getSessionAttribute("user");
+    	if (user != null) {
+    		return user.getUserId();
+    	}
+    	return "";
     }
     
 }

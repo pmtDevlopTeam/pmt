@@ -72,7 +72,7 @@
 		#{createUserId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
 		#{modifyUserId,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP})
 	</insert>
-	<insert id="insertSelective" parameterType="com.camelot.pmt.project.model.ProjectUser">
+	<insert id="addUserSelective" parameterType="com.camelot.pmt.project.model.ProjectUser">
 		insert into project_user
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="id != null">

@@ -42,7 +42,7 @@ public interface ProjectUserMapper {
      * 
      * @mbggenerated 2018-04-13
      */
-    int insertSelective(ProjectUser record);
+    int addUserSelective(ProjectUser record);
 
     /**
      *
