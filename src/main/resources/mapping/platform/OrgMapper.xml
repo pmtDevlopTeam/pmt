@@ -30,6 +30,7 @@
         <id column="id" property="id"/>
         <result column="orgId" property="orgId"/>
         <result column="orgName" property="orgname"/>
+        <result column="parentId" property="parentId"/>
         <result column="orgCode" property="orgCode"/>
         <result column="states" property="state"/>
         <result column="orgParentName" property="orgParentName"/>
@@ -64,7 +65,8 @@
 				t.orgParentName,
 				pu.user_name AS username,
 			    t.states,
-			    t.createTime
+			    t.createTime,
+			    t.parentId
 			FROM
 				(
 					SELECT
@@ -73,13 +75,15 @@
 						o.org_name AS orgParentName,
 						p.org_id AS orgId,
 			            p.state AS states,
-			            p.create_time AS createTime
+			            p.create_time AS createTime,
+			            p.parent_id AS parentId
 					FROM
 						platform_org p
-					LEFT JOIN platform_org o ON p.parent_id = o.org_id
+					 LEFT JOIN platform_org o ON p.parent_id = o.org_id
 				) t
-			LEFT JOIN platform_user_org puo ON t.orgId = puo.org_id
-			JOIN platform_user pu ON pu.user_id = puo.user_id
+			 LEFT JOIN platform_user_org puo ON t.orgId = puo.org_id
+			LEFT JOIN platform_user pu ON pu.user_id = puo.user_id
+			
     </select>
     <select id="selectOrgsDetailByOrgId" resultMap="ResultMap"  >
 		SELECT			       
@@ -90,7 +94,8 @@
 				t.orgParentName,
 				pu.user_name AS username,
 			    t.states,
-			    t.createTime
+			    t.createTime,
+			    t.parentId
 			FROM
 				(
 					SELECT
@@ -99,13 +104,14 @@
 						o.org_name AS orgParentName,
 						p.org_id AS orgId,
 			            p.state AS states,
-			            p.create_time AS createTime
+			            p.create_time AS createTime,
+			            p.parent_id AS parentId
 					FROM
 						platform_org p
-					LEFT JOIN platform_org o ON p.parent_id = o.org_id
+					 LEFT JOIN platform_org o ON p.parent_id = o.org_id
 				) t
-			LEFT JOIN platform_user_org puo ON t.orgId = puo.org_id
-			JOIN platform_user pu ON pu.user_id = puo.user_id
+			 LEFT JOIN platform_user_org puo ON t.orgId = puo.org_id
+			LEFT JOIN platform_user pu ON pu.user_id = puo.user_id
 			where t.orgId=#{orgId}
     </select>
     
@@ -188,6 +194,23 @@
 	   FROM platform_org
     </select>
     
+    <select id="queryOrgByParameters" parameterType="Org" resultMap="BaseResultMap"  >
+       SELECT 
+       <include refid="Base_Column_List" />
+	   FROM platform_org 
+	   <where>
+	   	<if test="orgId != '' and orgId != null">
+	   	 and org_id = #{orgId} 
+	   	</if>
+	   	<if test="orgCode != '' and orgCode != null">
+	   	  and org_code = #{orgCode} 
+	   	</if>
+	   	<if test="orgname != '' and orgname != null">
+	   	  and org_name = #{orgname} 
+	   	</if>
+	   </where> 
+    </select>
+    
     
     <select id="queryOrgByOrgId" resultMap="BaseResultMap"  >
        SELECT 
@@ -200,7 +223,9 @@
         DELETE FROM platform_user_org WHERE org_id = #{orgId} and user_id=#{userId}
     </delete>
     
-    
+    <delete id="deleteOrgToUserByOrgId" parameterType="String">
+        DELETE FROM platform_user_org WHERE org_id = #{orgId} 
+    </delete>
     
 
     <select id="selectOrgChildrenByParentId" resultMap="BaseResultMap"  >
@@ -238,6 +263,20 @@
         </set>
         WHERE org_id = #{orgId}
     </update>
+    
+    
+    <update id="modifyOrgByOrgIdAndState" parameterType="Org">
+        UPDATE platform_org
+        <set>
+            <if test="state != null">
+                state = #{state},
+            </if>
+        </set>
+        WHERE org_id = #{orgId}
+    </update>
+    
+    
+    
 
     <delete id="deleteOrgByOrgId" parameterType="String">
         DELETE FROM platform_org WHERE org_id = #{orgId}

@@ -551,7 +551,7 @@
         LEFT JOIN project_main pro ON ta.project_id = pro.id
         LEFT JOIN platform_user pl ON ta.assign_user_id = pl.user_id
         LEFT JOIN platform_user pl2 ON ta.beassign_user_id = pl2.user_id
-        WHERE ta.status in ( 2 ,4 ) AND ta.beassign_user_id = #{id}
+        WHERE ta.status in ( 2 ,4 ,5 ) AND ta.beassign_user_id = #{id}
         ORDER BY ta.create_time DESC, ta.priority DESC
     </select>
     <!-- zsf-->
@@ -561,6 +561,11 @@
         <foreach collection="list" item="aid" open="(" close=")" separator="or">
             id = #{aid}
         </foreach> AND status = 2
+    </update>
+    <!-- zsf-->
+    <!--提测-->
+    <update id="updateTaskToTest" parameterType="long">
+        UPDATE task SET status = 5 WHERE id = #{id}
     </update>
 
 
@@ -634,11 +639,11 @@
 
     <!--根据父级id查询所有的子任务-->
     <select id="queryByPId" parameterType="Long" resultType="com.camelot.pmt.task.model.Task">
-        SELECT * FROM task WHERE task_parent_id = #{id}
+        SELECT * FROM task WHERE task_parent_id = #{pid}
     </select>
     <!--根据任务id关闭任务-->
     <update id="updateRunningToClose" parameterType="java.util.List">
-        UPDATE task SET status = 4 WHERE
+        UPDATE task SET status = 3 WHERE
         <foreach collection="list" item="aid" open="(" close=")" separator="or">
             id = #{aid}
         </foreach>

@@ -17,7 +17,13 @@ public class OrgToUser implements Serializable{
      * 部门名称
      */
     private String orgname;
+
     /**
+     * 上级部门id
+     */
+    private String parentId;
+
+	/**
      * 上级部门名称
      */
     private String orgParentName;
@@ -37,7 +43,14 @@ public class OrgToUser implements Serializable{
      * 用户对象信息
      */
     private User user;
-    
+
+    public String getParentId() {
+		return parentId;
+	}
+	public void setParentId(String parentId) {
+		this.parentId = parentId;
+	}
+
     public User getUser() {
 		return user;
 	}

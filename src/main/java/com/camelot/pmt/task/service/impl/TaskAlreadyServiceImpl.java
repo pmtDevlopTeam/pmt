@@ -134,4 +134,28 @@ public class TaskAlreadyServiceImpl implements TaskAlreadyService {
         return result;
     }
 
+    @Override
+    public ExecuteResult<String> updateTaskToTest(Long id) {
+        ExecuteResult<String> result = new ExecuteResult<String>();
+        try{
+            if(id==null){
+                result.setResult("该任务不存在!");
+                return result;
+            }
+            //进行任务的状态更改(根据id去更改任务的状态)
+            int count = taskMapper.updateTaskToTest(id);
+            if(count == 0){
+                result.setResult("修改任务状态失败!");
+                return result;
+            }
+        }
+        catch(Exception e){
+            LOGGER.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+        result.setResult("修改任务状态成功!");
+        return result;
+    }
+
+
 }

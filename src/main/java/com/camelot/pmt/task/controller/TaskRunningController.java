@@ -5,6 +5,7 @@ import com.camelot.pmt.common.*;
 import com.camelot.pmt.common.ApiResponse;
 import com.camelot.pmt.task.model.Task;
 import com.camelot.pmt.task.model.TaskLog;
+import com.camelot.pmt.task.service.TaskManagerService;
 import com.camelot.pmt.task.service.TaskRunningService;
 import com.camelot.pmt.task.utils.Constant;
 import com.github.pagehelper.PageInfo;
@@ -21,8 +22,9 @@ import java.util.Date;
 import java.util.Map;
 
 /**
- * @author muyuanpei
- * @date 2018/4/10    15:18
+ * @author myp
+ * @Description: 我的控制台-正在进行任务管理
+ * @date 2018-04-11
  */
 
 @RestController
@@ -33,11 +35,15 @@ public class TaskRunningController {
     @Autowired
     private TaskRunningService taskRunningService;
 
+    @Autowired
+    private TaskManagerService taskManagerService;
+
     /**
+     * 查询所有正在进行的任务
      *
-     * @Title: queryUserAll @Description: TODO查询所有正在进行的任务 @param @return @return
-     *         JSONObject @throws
-     *         myp
+     * @param
+     *      int page， int rows
+     * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
     @ApiOperation(value = "查询所有正在进行的任务", notes = "查询所有正在进行的任务")
     @RequestMapping(value = "/queryTaskRunning", method = RequestMethod.GET)
@@ -60,21 +66,18 @@ public class TaskRunningController {
 
 
     /**
-     * <p>
-     * Description:[查询单个任务明细]
-     * </p>
+     * 根据id查询单个任务明细
      *
-     * @param id
-     *            任务id
-     * @return {"status": {"message": "请求处理成功.","code": 200}, "data": {Task}]
+     * @param Long id
+     * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
     @ApiOperation(value = "根据id查询单个任务明细", notes = "根据id查询单个任务明细")
     @RequestMapping(value = "user/queryTaskById", method = RequestMethod.POST)
     public JSONObject queryTaskById(
             @ApiParam(name = "id", value = "任务id", required = true) @RequestParam(required = true) Long id) {
-        ExecuteResult<Task> result = new ExecuteResult<Task>();
+        ExecuteResult<Map<String, Object>> result = new ExecuteResult<Map<String, Object>>();
         try {
-            result = taskRunningService.queryTaskById(id);
+            result = taskManagerService.queryTaskById(id);
             if (result.isSuccess()) {
                 return ApiResponse.success(result.getResult());
             }
@@ -85,36 +88,10 @@ public class TaskRunningController {
     }
 
     /**
-     * <p>
-     * Description:[添加历史记录]
-     * </p>
-     * @return {"status": {"message": "请求处理成功.","code": 200}]
-     */
-    @ApiOperation(value = "添加历史记录功能", notes = "添加历史记录功能")
-    @RequestMapping(value = "/saveHistoryLog", method = RequestMethod.POST)
-    public JSONObject saveHistoryLog(
-            @ApiParam(name = "id", value = "任务id", required = true) @RequestParam(required = true) Long id) {
-        ExecuteResult<Long> result = new ExecuteResult<Long>();
-        TaskLog taskLog = new TaskLog();
-        try {
-            result = taskRunningService.saveHistoryLog(taskLog);
-            if (result.isSuccess()) {
-                return ApiResponse.success(result.getResult());
-            }
-            return ApiResponse.error();
-        } catch (Exception e) {
-            return ApiResponse.error();
-        }
-    }
-
-    /**
+     * 我的任务转为关闭
      *
-     * @Title: updateTaskPendingToRuning
-     * @Description: TODO(我的任务转为关闭)
-     * @param @param taskId
-     * @param @return    设定文件
-     * @return JSONObject    返回类型
-     * @throws
+     * @param Long id
+     * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
     @ApiOperation(value = "我的任务转为关闭", notes = "我的任务转为关闭")
     @RequestMapping(value = "/updateTaskToClose", method = RequestMethod.GET)
@@ -142,13 +119,10 @@ public class TaskRunningController {
 
 
     /**
+     * 我的正在进行任务转为已完成、实现完成功能
      *
-     * @Title: updateTaskPendingToRuning
-     * @Description: TODO(我的正在进行任务转为已完成)   实现完成功能
-     * @param @param taskId
-     * @param @return    设定文件
-     * @return JSONObject    返回类型
-     * @throws
+     * @param Long id
+     * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
     @ApiOperation(value = "我的正在进行任务转为已完成、实现完成功能", notes = "我的正在进行任务转为已完成、实现完成功能")
     @RequestMapping(value = "/updateTaskRunningToAlready", method = RequestMethod.POST)

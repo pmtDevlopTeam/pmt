@@ -31,13 +31,11 @@ public class RoleServiceImpl implements RoleService {
      * @return ExecuteResult<List<Role>>
      */
     @Override
-    public ExecuteResult<List<Tree<Role>>> queryAllRole() {
-        ExecuteResult<List<Tree<Role>>> result = new ExecuteResult<List<Tree<Role>>>();
+    public List<Tree<Role>> queryAllRole() {
         List<Tree<Role>> trees = new ArrayList<Tree<Role>>();
-        try {
             List<Role> list = roleMapper.queryAllRole();
             if (CollectionUtils.isEmpty(list)) {
-                return result;
+                return null;
             }
             for (Role role : list) {
                 Tree<Role> tree = new Tree<Role>();
@@ -52,32 +50,19 @@ public class RoleServiceImpl implements RoleService {
                 trees.add(tree);
             }
             List<Tree<Role>> treeList = BuildTree.buildList(trees, "0");
-            result.setResult(treeList);
-        } catch (Exception e) {
-            LOGGER.error(e.getMessage());
-            throw new RuntimeException(e);
-        }
-        return result;
+        return treeList;
     }
 
     /**
      * 添加角色
      *
      * @param role
-     * @return ExecuteResult<Role>
+     * @return boolean
      */
     @Override
-    public ExecuteResult<Role> createRole(Role role) {
-        ExecuteResult result = new ExecuteResult();
-        try {
+    public boolean addRole(Role role) throws Exception {
             role = setRoleModel(role);
-            roleMapper.createRole(role);
-            result.setResult(role);
-        } catch (Exception e) {
-            LOGGER.error(e.getMessage());
-            throw new RuntimeException(e);
-        }
-        return result;
+        return roleMapper.addRole(role) == 1 ? true:false;
     }
 
     /**
@@ -87,42 +72,21 @@ public class RoleServiceImpl implements RoleService {
      * @return
      */
     @Override
-    public ExecuteResult<Role> modifyRoleById(Role role) {
-        ExecuteResult<Role> result = new ExecuteResult<Role>();
-        try {
+    public boolean updateRoleById(Role role) {
             long date = new Date().getTime();
             role.setModifyTime(new Date(date));
-            roleMapper.modifyRoleById(role);
-            result.setResult(role);
-        } catch (Exception e) {
-            LOGGER.error(e.getMessage());
-            throw new RuntimeException(e);
-        }
-        return result;
+        return roleMapper.updateRoleById(role) == 1 ? true:false;
     }
 
     /**
      * 删除角色
      *
-     * @param id
+     * @param
      * @return
      */
     @Override
-    public ExecuteResult<Role> deleteRoleById(Role role) {
-        ExecuteResult<Role> result = new ExecuteResult<Role>();
-        try {
-            int status = roleMapper.deleteRoleById(role);
-            if(status == 1) {
-                roleMapper.deleteRoleMenuById(role);
-            }else {
-                return result;
-            }
-            result.setResult(role);
-        } catch (Exception e) {
-            LOGGER.error(e.getMessage());
-            throw new RuntimeException(e);
-        }
-        return result;
+    public boolean deleteRoleById(Role role) {
+        return roleMapper.deleteRoleById(role) == 1 ? true:false;
     }
 
     /**
@@ -132,19 +96,12 @@ public class RoleServiceImpl implements RoleService {
      * @return
      */
     @Override
-    public ExecuteResult getRoleNameVerification(Role role) {
-        ExecuteResult result = new ExecuteResult();
-        try {
+    public boolean getRoleNameVerification(Role role) {
             List<Role> list = roleMapper.getRoleNameVerification(role);
             if (CollectionUtils.isEmpty(list)) {
-                return result;
+                return true;
             }
-            result.setResult(list);
-        } catch (Exception e) {
-            LOGGER.error(e.getMessage());
-            throw new RuntimeException(e);
-        }
-        return result;
+        return false;
     }
 
     /**

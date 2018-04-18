@@ -5,21 +5,44 @@ import java.util.Map;
 
 import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.project.model.ProjectBudget;
-
+/**
+ * 
+ * @author lixk
+ * @Description: 项目预算接口类
+ * @date 2018年4月18日 上午9:38:32
+ */
 public interface ProjectBudgetService {
 
-    ExecuteResult<Map<String, Object>> findBudgetByProId(Long proId);
+    /**
+     * 查询项目预算
+     * 
+     *@param  Long proId
+     *@return ExecuteResult<Map<String, Object>>
+     */
+    ExecuteResult<Map<String, Object>> queryBudget(Long proId);
 
-    ExecuteResult<String> saveProjectBudget(ProjectBudget projectBudget);
+    /**
+     * 添加项目预算
+     * 
+     *@param  ProjectBudget projectBudget
+     *@return ExecuteResult<String>
+     */
+    boolean addBudget(ProjectBudget projectBudget);
 
-    ExecuteResult<String> modifyProjectBudget(ProjectBudget projectBudget);
+    /**
+     * 修改项目预算
+     * 
+     *@param  ProjectBudget projectBudget
+     *@return ExecuteResult<String>
+     */
+    boolean updateBudget(ProjectBudget projectBudget);
 
-    ExecuteResult<ProjectBudget> findProjectBudgeByProjectId(Long projectId);
-
-    ExecuteResult<List<Map<String, Object>>> findDemandTaskByDeamdId(Long demandId);
-
-    ExecuteResult<List<Map<String, Object>>> findDemandUseCaseByDeamdId(Long demandId);
-
-    ExecuteResult<List<Map<String, Object>>> findDemandBugByDeamdId(Long demandId);
+    /**
+     * 根据项目id查询项目预算
+     * 
+     *@param  Long projectId
+     *@return ExecuteResult<ProjectBudget>
+     */
+    ProjectBudget queryBudgeByProjectId(Long projectId);
 
 }

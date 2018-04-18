@@ -5,9 +5,13 @@ import com.baomidou.mybatisplus.toolkit.StringUtils;
 import com.camelot.pmt.common.DataGrid;
 import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.common.Pager;
+import com.camelot.pmt.task.mapper.TaskFileMapper;
+import com.camelot.pmt.task.mapper.TaskLogMapper;
 import com.camelot.pmt.task.mapper.TaskMapper;
 import com.camelot.pmt.task.model.Task;
 import com.camelot.pmt.task.model.TaskDetail;
+import com.camelot.pmt.task.model.TaskFile;
+import com.camelot.pmt.task.model.TaskLog;
 import com.camelot.pmt.task.service.TaskOverdueService;
 import com.github.pagehelper.PageInfo;
 
@@ -17,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,6 +38,12 @@ public class TaskOverdueServiceImpl implements TaskOverdueService {
 
     @Autowired
     private TaskMapper taskMapper;
+    
+    @Autowired
+    private TaskLogMapper logMapper;
+    
+    @Autowired
+    private TaskFileMapper fileMapper;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TaskOverdueServiceImpl.class);
 
@@ -46,6 +57,7 @@ public class TaskOverdueServiceImpl implements TaskOverdueService {
         	//分页初始化
         	PageHelper.startPage(page,rows);
             List<Map<String,Object>> list = taskMapper.queryOverdueTask();
+             
             // 如果没有查询到数据，不继续进行
             if (CollectionUtils.isEmpty(list)) {                    
                PageInfo<Map<String,Object>> pageInfo = new PageInfo<>();
@@ -67,8 +79,16 @@ public class TaskOverdueServiceImpl implements TaskOverdueService {
 		 ExecuteResult<Map<String,Object>> result = new ExecuteResult<Map<String,Object>>();
 	        try {
 	            if (!taskId.equals("") && !taskId.equals("0")) {
-	            	Map<String,Object> queryResult = taskMapper.queryOverdueTaskDetailByTaskId(taskId);
-	                result.setResult(queryResult);
+	            	HashMap<String, Object> map = new HashMap<String,Object>();
+	            	//查询详细
+	            	Map<String,Object> queryOverdueTaskDetailByTaskId = taskMapper.queryOverdueTaskDetailByTaskId(taskId);
+	            	//根据taskId查询历史记录
+	            	List<TaskLog> logList = logMapper.queryTaskLogList(Long.valueOf(taskId));
+	            
+	            	map.put("queryOverdueTaskDetailByTaskId", queryOverdueTaskDetailByTaskId);
+	            	map.put("logList", logList);
+	            	
+	                result.setResult(map);
 	                return result;
 	            }
 	            result.addErrorMessage("查询失败！");

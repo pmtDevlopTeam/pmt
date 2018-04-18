@@ -21,6 +21,4 @@ public class PmtApplicationTests {
     @Autowired
     MenuService menuService;
 
-
-
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.platform.model.User;
 import com.camelot.pmt.platform.model.vo.UserVo;
+import com.github.pagehelper.PageInfo;
 
 /**
  * 
@@ -34,7 +35,7 @@ public interface UserService {
 	 * @author [maple]
 	 * @return
 	 */
-	ExecuteResult<String> deleteUserByUserId(User user);
+	ExecuteResult<String> deleteUserByUserId(String userId);
 
 	/**
 	 * 
@@ -65,16 +66,6 @@ public interface UserService {
 	 */
 	ExecuteResult<User> queryLoginCodeAndPassword(User user);
 
-//	/**
-//	 * 
-//	 * Description:[分页查询用户列表]
-//	 * 
-//	 * @param Pager
-//	 *            page
-//	 * @return ExecuteResult<DataGrid<User>>
-//	 * @author [maple]
-//	 */
-//	ExecuteResult<DataGrid<User>> queryUsersByPage(Pager page);
 
 	/**
 	 * 
@@ -85,7 +76,7 @@ public interface UserService {
 	 * @return ExecuteResult<List<UserVo>>
 	 * @author [maple] 2018年4月13日下午3:15:16
 	 */
-	ExecuteResult<List<UserVo>> queryUsersList(UserVo userVo);
+	ExecuteResult<PageInfo> queryUsersList(UserVo userVo,int pageNum,int pageSize);
 
 	/**
 	 * 
@@ -116,6 +107,16 @@ public interface UserService {
 	 * 2018年4月16日下午10:44:45
 	 */
 	ExecuteResult<String> resetUserPasswordByUserId(User user);
+	
+	/**
+	 * 
+	 * Description:[根据用户名模糊查询获取user对象]
+	 * @param 
+	 * @return 
+	 * @author [maple]
+	 * 2018年4月18日下午3:49:33
+	 */
+	ExecuteResult<List<User>> queryUsersByUserName(String username);
     
 
 }

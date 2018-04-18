@@ -99,7 +99,7 @@ public class OrgServiceImpl implements OrgService {
 				result.setResult("部门名称已存在请重新添加");
 				return result;
 			}
-//			org.setOrgId(UUIDUtil.getUUID());
+			org.setOrgId(UUIDUtil.getUUID());
 			int nums = orgMapper.createOrg(org);
 			if (nums > 0) {
 				result.setResult("添加用户成功!");
@@ -127,8 +127,9 @@ public class OrgServiceImpl implements OrgService {
 		try {
 			long date = new Date().getTime();
 			org.setModifyTime(new Date(date));
-			int count = orgMapper.modifyOrgByOrgId(org);
-			if (count > 0) {
+
+			int nums = orgMapper.modifyOrgByOrgId(org);
+			if (nums > 0) {
 				result.setResult("部门修改成功");
 			} else {
 				result.setResult("部门修改失败");
@@ -279,10 +280,10 @@ public class OrgServiceImpl implements OrgService {
 		return result;
 		
 	}
-	/** 组织机构列表详情(关系到用户  即部门负责人)
+	/** 组织机构列表详情(关系到用户  )
 	 * @param OrgToUser
 	 * @return JSONObject
-	 * 
+	 *
 	 **/
 	@Override
 	public ExecuteResult<List<OrgToUser>> queryOrgsDetail() {
@@ -290,26 +291,27 @@ public class OrgServiceImpl implements OrgService {
 		try {
 			List<OrgToUser> orgList = orgMapper.selectOrgsDetail();
 			List<OrgToUser> orgToUserList = new ArrayList<OrgToUser>();
-			List<User> userList = new ArrayList<User>();
-			OrgToUser otu = new OrgToUser();
-			User userObj = new User();
 			for (OrgToUser orgToUser : orgList) {
+				OrgToUser otu = new OrgToUser();
+				otu.setOrgId(orgToUser.getOrgId());
 				otu.setOrgCode(orgToUser.getOrgCode());
 				otu.setOrgname(orgToUser.getOrgname());
-				otu.setOrgParentName(orgToUser.getOrgParentName());
-				otu.setState(orgToUser.getState());
-				List<User> users = orgToUser.getUserList();
-				for (User user : users) {
-					userObj.setUsername(user.getUsername());
-					userList.add(userObj);
+				if ("0".equals(orgToUser.getParentId())) {
+					otu.setOrgParentName("总部门（根节点）");
+				}else{
+					otu.setOrgParentName(orgToUser.getOrgParentName());
 				}
+				otu.setParentId(orgToUser.getParentId());
+				otu.setState(orgToUser.getState());
+				otu.setCreateTime(orgToUser.getCreateTime());
+				otu.setUserList(orgToUser.getUserList());
 				orgToUserList.add(otu);
 			}
-			result.setResult(orgList);
-		if (CollectionUtils.isEmpty(orgList)) {
+			result.setResult(orgToUserList);
+		if (CollectionUtils.isEmpty(orgToUserList)) {
 			result.addErrorMessage("组织机构部门不存在");
 		}
-		result.setResult(orgList);
+		result.setResult(orgToUserList);
 		}catch (Exception e) {
 			LOGGER.error(e.getMessage());
 			throw new RuntimeException(e);
@@ -318,14 +320,34 @@ public class OrgServiceImpl implements OrgService {
 	}
 	/**
 	 * 组织机构   根据orgId查看详情(关系到用户  即部门负责人)
+	 * List<OrgToUser> orgToUserList = orgMapper.selectOrgsDetailByOrgId(orgId);
 	 */
 	@Override
 	public ExecuteResult<List<OrgToUser>> queryOrgsDetailByOrgId(String orgId) {
 		ExecuteResult<List<OrgToUser>> result = new ExecuteResult<List<OrgToUser>>();
 		try {
-			List<OrgToUser> orgToUserList = orgMapper.selectOrgsDetailByOrgId(orgId);
-		if(orgToUserList.size()<0){
-			return result;
+
+			List<OrgToUser> orgList = orgMapper.selectOrgsDetailByOrgId(orgId);
+			List<OrgToUser> orgToUserList = new ArrayList<OrgToUser>();
+			OrgToUser otu = new OrgToUser();
+			for (OrgToUser orgToUser : orgList) {
+				otu.setOrgId(orgToUser.getOrgId());
+				otu.setOrgCode(orgToUser.getOrgCode());
+				otu.setOrgname(orgToUser.getOrgname());
+				if ("0".equals(orgToUser.getParentId())) {
+					otu.setOrgParentName("总部门（根节点）");
+				}else{
+					otu.setOrgParentName(orgToUser.getOrgParentName());
+				}
+				otu.setParentId(orgToUser.getParentId());
+				otu.setState(orgToUser.getState());
+				otu.setCreateTime(orgToUser.getCreateTime());
+				otu.setUserList(orgToUser.getUserList());
+				orgToUserList.add(otu);
+			}
+			result.setResult(orgToUserList);
+		if (CollectionUtils.isEmpty(orgToUserList)) {
+			result.addErrorMessage("组织机构部门不存在");
 		}
 		result.setResult(orgToUserList);
 		}catch (Exception e) {
