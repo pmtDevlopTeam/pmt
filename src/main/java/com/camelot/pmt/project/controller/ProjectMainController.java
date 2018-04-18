@@ -41,7 +41,7 @@ import springfox.documentation.annotations.ApiIgnore;
  * @date 2018年4月17日
  */
 @RestController
-@RequestMapping(path = "/api/project", produces = "application/json;charset=utf-8")
+@RequestMapping(path = "/project", produces = "application/json;charset=utf-8")
 @Api(value = "项目管理接口", description = "项目管理接口")
 public class ProjectMainController {
 

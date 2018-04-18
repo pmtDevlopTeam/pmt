@@ -27,7 +27,7 @@ import io.swagger.annotations.ApiParam;
  * @date 2018年4月17日
  */
 @RestController
-@RequestMapping(path = "/api/project/operate", produces = "application/json;charset=utf-8")
+@RequestMapping(path = "/project/operate", produces = "application/json;charset=utf-8")
 @Api(value = "项目操作接口", description = "项目操作接口")
 public class ProjectOperateController {
 
