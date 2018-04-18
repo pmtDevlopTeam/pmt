@@ -3,15 +3,18 @@ package com.camelot.pmt.project.service.impl;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
 import com.camelot.pmt.common.DataGrid;
 import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.common.Pager;
+import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import com.camelot.pmt.project.mapper.DemandMapper;
@@ -29,27 +32,31 @@ public class DemandServiceImpl implements DemandService {
     DemandOperateMapper demandOperateMapper;
 
     @Override
-    public ExecuteResult<String> save(Demand demandWithBLOBs) {
+    @Transactional(rollbackFor = Exception.class)
+    public ExecuteResult<String> save(Demand demand) {
         ExecuteResult<String> result = new ExecuteResult<>();
         try {
-            if (demandWithBLOBs == null) {
-                result.setResultMessage("传入参数不能为空");
-                return result;
-            }
-            demandMapper.insert(demandWithBLOBs);
-            DemandOperate demandOperate = new DemandOperate();
-            // TODO
             Date currentDate = new Date();
-            demandOperate.setId(0l);
-            demandOperate.setCreateTime(currentDate);
-            demandOperate.setDemandId(demandWithBLOBs.getId());
-            demandOperate.setOperateDesc("新增需求");
+            demand.setCreateTime(currentDate);
+            demand.setModifyUserId(demand.getCreateUserId());
+            demand.setModifyTime(currentDate);
+            // 设置新增需求状态01:未开始     TODO
+            demand.setDemandStatus("01");
+            demandMapper.add(demand);
+            DemandOperate demandOperate = new DemandOperate();
+            demandOperate.setCreateTime(new Date());
+            demandOperate.setDemandId(demand.getId());
+            demandOperate.setOperateDesc("创建需求");
+            //设置操作类型 01："评审" 02："常规增删改"
+            demandOperate.setRunType("01");
+            demandOperate.setCreateUserId(demand.getCreateUserId());
             demandOperateMapper.insert(demandOperate);
             result.setResult("新增需求成功");
-        } catch (Exception e) {
-            logger.error("--------新增需求-------" + e.getMessage());
+        }catch (Exception e){
+            logger.error(e.getMessage());
+            throw  new RuntimeException();
         }
-        return result;
+            return result;
     }
 
     /**
@@ -59,7 +66,7 @@ public class DemandServiceImpl implements DemandService {
      * @return
      */
     @Override
-    public ExecuteResult<DataGrid<Demand>> findAllByPage(Pager<?> pager, Demand demand) {
+    public ExecuteResult<DataGrid<Demand>> queryByPage(Pager<?> pager, Demand demand) {
         ExecuteResult<DataGrid<Demand>> result = new ExecuteResult<>();
         try {
             List<Demand> demandWithBLOBsList = demandMapper.findAllByPage(pager, demand);
@@ -82,12 +89,9 @@ public class DemandServiceImpl implements DemandService {
     }
 
     @Override
-    public ExecuteResult<Demand> findById(Long id) {
+    public ExecuteResult<Demand> queryById(Long id) {
         ExecuteResult<Demand> result = new ExecuteResult<>();
         Demand demandWithBLOBs = demandMapper.selectByPrimaryKey(id);
-        if (null == demandWithBLOBs) {
-            return result;
-        }
         result.setResult(demandWithBLOBs);
         return result;
     }
@@ -96,8 +100,6 @@ public class DemandServiceImpl implements DemandService {
     public ExecuteResult<String> deleteById(Long id) {
         ExecuteResult<String> result = new ExecuteResult<>();
         try {
-            // 暂留判断需求是否被引用 TODO
-
             // 遍历此需求下是否有引用--->查询所有需求父id为id的记录
             List<Demand> demandList = demandMapper.selectByPId(id);
             List<Long> list = new ArrayList<Long>();
@@ -128,12 +130,8 @@ public class DemandServiceImpl implements DemandService {
 
             demandMapper.deleteByList(list);
             result.setResult("删除需求成功");
-            // 暂留操作日志
-            // demandMapper.deleteByPrimaryKey(id);
-
             DemandOperate demandOperate = new DemandOperate();
             Date currentDate = new Date();
-            demandOperate.setId(0l);
             demandOperate.setCreateTime(currentDate);
             demandOperate.setCreateUserId("1");
             demandOperate.setDemandId(id);

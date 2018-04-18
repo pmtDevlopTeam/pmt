@@ -22,11 +22,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-/**
- * 权限菜单服务接口实现类
- * @author gnerv
- *
- */
+
 @Service
 public class MenuServiceImpl implements MenuService {
 

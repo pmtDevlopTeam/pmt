@@ -43,6 +43,8 @@ spring:
 mybatis:
   mapper-locations: classpath*:mapping/*/*Mapper.xml
   type-aliases-package: com.camelot.pmt
+  configuration:
+      log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 #pagehelper分页插件
 pagehelper:

@@ -91,7 +91,7 @@ public class Demand {
     /**
      * 拒绝原因
      */
-    private String reasonsejection;
+    private String reasonsRejection;
     /**
      * 需求层级
      */
@@ -384,12 +384,12 @@ public class Demand {
         this.reviewRemark = reviewRemark;
     }
 
-    public String getReasonsejection() {
-        return reasonsejection;
+    public String getReasonsRejection() {
+        return reasonsRejection;
     }
 
-    public void setReasonsejection(String reasonsejection) {
-        this.reasonsejection = reasonsejection;
+    public void setReasonsejection(String reasonsRejection) {
+        this.reasonsRejection = reasonsRejection;
     }
 
     public String getDemandNeed() {

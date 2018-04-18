@@ -28,6 +28,7 @@ import com.camelot.pmt.platform.model.User;
 import com.camelot.pmt.platform.service.OrgService;
 import com.camelot.pmt.util.BuildTree;
 import com.camelot.pmt.util.Tree;
+import com.camelot.pmt.util.UUIDUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
@@ -98,10 +99,7 @@ public class OrgServiceImpl implements OrgService {
 				result.setResult("部门名称已存在请重新添加");
 				return result;
 			}
-			
-			/*// 对象不为空则添加新的项目实体
-			String orgId = UUID.randomUUID().toString().replace("-", "").toLowerCase();
-			org.setOrgId(orgId);*/
+//			org.setOrgId(UUIDUtil.getUUID());
 			int nums = orgMapper.createOrg(org);
 			if (nums > 0) {
 				result.setResult("添加用户成功!");

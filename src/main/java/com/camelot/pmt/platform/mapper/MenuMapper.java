@@ -6,7 +6,9 @@ import com.camelot.pmt.platform.model.Menu;
 import java.util.List;
 
 /**
+ * <p>
  * 菜单管理Mapper数据层接口
+ * </p>
  *
  * @author gnerv
  * @since 2018-04-08

@@ -10,12 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.web.bind.ServletRequestDataBinder;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.alibaba.fastjson.JSONObject;
 import com.camelot.pmt.project.model.Demand;
@@ -34,6 +29,7 @@ import springfox.documentation.annotations.ApiIgnore;
  */
 @RestController
 @Api(value = "项目管理-需求模块", description = "项目管理-需求模块的控制器类")
+@RequestMapping("/project/demond")
 public class DemandController {
 
     private static final Logger logger = LoggerFactory.getLogger(DemandController.class);
@@ -43,11 +39,11 @@ public class DemandController {
     /**
      * 需求状态（未激活/已激活/已关闭/已变更）
      *
-     * @param demandWithBLOBs
+     * @param demand
      * @return
      */
     @ApiOperation(value = "新增需求", notes = "新增需求")
-    @PostMapping(value = "/api/demand/insertDemand")
+    @PostMapping(value = "/addDemand")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "pid", value = "所属一级需求id", required = false, paramType = "query", dataType = "Long"),
             @ApiImplicitParam(name = "projectId", value = "项目id", required = true, paramType = "query", dataType = "String"),
@@ -58,22 +54,17 @@ public class DemandController {
             @ApiImplicitParam(name = "sourceRemark", value = "需求来源备注", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "createUserId", value = "创建人", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "assignedTo", value = "指派给", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "demandNeed", value = "需求层级(默认一级)", required = true, paramType = "query", dataType = "String",defaultValue="1"),
             @ApiImplicitParam(name = "reviewedWith", value = "由谁评审(人员user_id用逗号拼接)", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "demandDesc", value = "需求描述", required = false, paramType = "query", dataType = "String") })
-    public JSONObject insertDemand(@ApiIgnore Demand demandWithBLOBs) {
+    public JSONObject insertDemand(@ApiIgnore Demand demand) {
         ExecuteResult<String> result = new ExecuteResult<String>();
         try {
-            Date currentDate = new Date();
-            demandWithBLOBs.setCreateTime(currentDate);
-            demandWithBLOBs.setModifyUserId(demandWithBLOBs.getCreateUserId());
-            demandWithBLOBs.setModifyTime(currentDate);
-            // 设置新增需求状态01:未开始
-            demandWithBLOBs.setDemandStatus("01");
-            result = demandService.save(demandWithBLOBs);
+            result = demandService.save(demand);
             return ApiResponse.success(result.getResult());
         } catch (Exception e) {
             logger.error("------需求新增------" + e.getMessage());
-            return ApiResponse.error();
+            return ApiResponse.error("需求新增异常");
         }
     }
 
@@ -84,9 +75,9 @@ public class DemandController {
      * @return
      */
     @ApiOperation(value = "删除需求", notes = "根据id删除需求")
-    @DeleteMapping(value = "/api/demand/deleteById")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "需求id", required = true, paramType = "query", dataType = "Long") })
+    @DeleteMapping(value = "/deleteById")
     public JSONObject deleteById(Long id) {
         ExecuteResult<String> result = new ExecuteResult<>();
         try {
@@ -106,7 +97,7 @@ public class DemandController {
      * @return
      */
     @ApiOperation(value = "编辑", notes = "需求编辑/评审/变更/添加备注/关闭")
-    @PutMapping(value = "/api/demand/updateById")
+    @PutMapping(value = "/updateById")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "需求id", required = true, paramType = "query", dataType = "Long"),
             @ApiImplicitParam(name = "pid", value = "所属上级需求id", required = false, paramType = "query", dataType = "Long"),
@@ -146,7 +137,7 @@ public class DemandController {
      * @return
      */
     @ApiOperation(value = "查询需求列表", notes = "查询需求列表")
-    @PutMapping(value = "/api/demand/queryDemandAll")
+    @PutMapping(value = "/queryDemandAll")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "demandNum", value = "需求编号", required = false, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "demandLevel", value = "需求优先级", required = false, paramType = "query", dataType = "String"),
@@ -163,7 +154,7 @@ public class DemandController {
                 pager.setPage(1);
                 pager.setRows(10);
             }
-            result = demandService.findAllByPage(pager, demand);
+            result = demandService.queryByPage(pager, demand);
             if (result.isSuccess()) {
                 return ApiResponse.success(result.getResult());
             }
@@ -182,14 +173,14 @@ public class DemandController {
      * @return
      */
     @ApiOperation(value = "需求查看", notes = "根据需求Id查看指定需求")
-    @GetMapping(value = "/api/demand/findById")
+    @GetMapping(value = "/queryById")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "pid", value = "所属一级需求id", required = false, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "id", value = "需求id", required = true, paramType = "query", dataType = "Long") })
     public JSONObject findById(Long id) {
         ExecuteResult<Demand> result = new ExecuteResult<>();
         try {
-            result = demandService.findById(id);
+            result = demandService.queryById(id);
             return ApiResponse.success(result.getResult());
         } catch (Exception e) {
             logger.error("-------指定id查询需求-------" + e.getMessage());
@@ -205,18 +196,14 @@ public class DemandController {
      * @return
      */
     @ApiOperation(value = "查询需求操作历史记录", notes = "查询需求操作历史记录")
-    @GetMapping(value = "/api/demand/findWithOperate")
+    @GetMapping(value = "/queryOperateByPage")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "page", value = "页码", required = true, paramType = "query", dataType = "int"),
-            @ApiImplicitParam(name = "rows", value = "显示行数", required = true, paramType = "query", dataType = "int"),
+            @ApiImplicitParam(name = "currentPage", value = "当前页", required = true, paramType = "query", dataType = "int"),
+            @ApiImplicitParam(name = "pageSize", value = "显示页数", required = true, paramType = "query", dataType = "int"),
             @ApiImplicitParam(name = "id", value = "需求id", required = true, paramType = "query", dataType = "Long") })
-    public JSONObject findWithOperate(@ApiIgnore Pager<?> pager, @ApiIgnore DemandOperate demandOperate) {
+    public JSONObject findWithOperate(@ApiIgnore Pager<?> pager, @ApiIgnore DemandOperate demandOperate,@RequestParam(defaultValue = "1") Integer pageSize,@RequestParam(defaultValue = "10")Integer currentPage) {
         ExecuteResult<DataGrid<DemandOperate>> result = new ExecuteResult<>();
         try {
-            if (null == pager) {
-                pager.setRows(10);
-                pager.setPage(1);
-            }
             result = demandService.findAllByPage(pager, demandOperate);
             return ApiResponse.success(result.getResult());
         } catch (Exception e) {
