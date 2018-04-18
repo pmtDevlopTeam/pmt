@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.camelot.pmt.common.ExecuteResult;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,24 +15,24 @@ import com.camelot.pmt.project.service.ProjectBudgetService;
 
 /**
  * 
- * @ClassName: ProjectBudgetServiceImpl
- * @Description: 项目预算service层
- * @author lixiaokang
- * @date 2018年4月13日 上午10:41:18
+ * @author lixk
+ * @Description: 项目预算服务接口类
+ * @date 2018年4月18日 上午9:44:05
  */
 @Service
 public class ProjectBudgetServiceImpl implements ProjectBudgetService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ProjectBudgetServiceImpl.class);
-
     @Autowired
-    private ProjectBudgetMapper proBuggetMapper;
+    ProjectBudgetMapper proBuggetMapper;
 
     /**
-     * 添加项目预算
+     * 添加项目预算信息
+     *
+     * @param  ProjectBudget projectBudget
+     * @return ExecuteResult<String>
      */
     @Override
-    public ExecuteResult<String> saveProjectBudget(ProjectBudget projectBudget) {
+    public ExecuteResult<String> addBudget(ProjectBudget projectBudget) {
         ExecuteResult<String> result = new ExecuteResult<String>();
         Date currentDate = new Date();
         try {
@@ -52,17 +50,19 @@ public class ProjectBudgetServiceImpl implements ProjectBudgetService {
                 result.addErrorMessage("添加项目预算失败!");
             }
         } catch (Exception e) {
-            LOGGER.error(e.getMessage());
             throw new RuntimeException(e);
         }
         return result;
     }
 
     /**
-     * 查询单个项目预算：projectId
+     * 查询单个项目预算信息
+     *
+     * @param  Long projectId
+     * @return ExecuteResult<ProjectBudget>
      */
     @Override
-    public ExecuteResult<ProjectBudget> findProjectBudgeByProjectId(Long projectId) {
+    public ExecuteResult<ProjectBudget> queryBudgeByProjectId(Long projectId) {
         ExecuteResult<ProjectBudget> result = new ExecuteResult<ProjectBudget>();
         try {
             if (("".equals(projectId)) || (0 == projectId)) {
@@ -73,16 +73,18 @@ public class ProjectBudgetServiceImpl implements ProjectBudgetService {
             result.setResult(projectBudget);
             return result;
         } catch (Exception e) {
-            LOGGER.error(e.getMessage());
             throw new RuntimeException(e);
         }
     }
 
     /**
      * 修改项目预算信息
+     *
+     * @param  ProjectBudget projectBudget
+     * @return ExecuteResult<String>
      */
     @Override
-    public ExecuteResult<String> modifyProjectBudget(ProjectBudget projectBudget) {
+    public ExecuteResult<String> updateBudget(ProjectBudget projectBudget) {
         ExecuteResult<String> result = new ExecuteResult<String>();
         Date currentDate = new Date();
         try {
@@ -99,17 +101,19 @@ public class ProjectBudgetServiceImpl implements ProjectBudgetService {
                 result.addErrorMessage("修改项目预算信息失败!");
             }
         } catch (Exception e) {
-            LOGGER.error(e.getMessage());
             throw new RuntimeException(e);
         }
         return result;
     }
 
     /**
-     * 查询项目预算
+     * 查询项目统计预算信息
+     *
+     * @param  Long proId
+     * @return ExecuteResult<Map<String, Object>>
      */
     @Override
-    public ExecuteResult<Map<String, Object>> findBudgetByProId(Long proId) {
+    public ExecuteResult<Map<String, Object>> queryBudget(Long proId) {
         ExecuteResult<Map<String, Object>> result = new ExecuteResult<>();
         Map<String, Object> map = new HashMap<>();
         try {
@@ -133,21 +137,23 @@ public class ProjectBudgetServiceImpl implements ProjectBudgetService {
             }
             result.addErrorMessage("统计查询失败！");
         } catch (Exception e) {
-            LOGGER.error(e.getMessage());
             throw new RuntimeException(e);
         }
         return result;
     }
 
     /**
-     * 统计影响需求的任务
+     * 查询影响需求的任务信息
+     *
+     * @param  Long demandId
+     * @return ExecuteResult<List<Map<String, Object>>>
      */
     @Override
-    public ExecuteResult<List<Map<String, Object>>> findDemandTaskByDeamdId(Long demandId) {
+    public ExecuteResult<List<Map<String, Object>>> queryDemandTaskByDeamdId(Long demandId) {
         ExecuteResult<List<Map<String, Object>>> result = new ExecuteResult<>();
         if ((null == demandId) || (0 == demandId)) {
             result.addErrorMessage("传入的需求id有误");
-            return result;// ---------待调整
+            return result;
         }
         List<Map<String, Object>> taskList = proBuggetMapper.findDemandTaskByDeamdId(demandId);
         result.setResult(taskList);
@@ -155,14 +161,17 @@ public class ProjectBudgetServiceImpl implements ProjectBudgetService {
     }
 
     /**
-     * 根据需求id查询影响变更需求影响的用例信息
+     * 查询影响变更需求影响的用例信息
+     *
+     * @param  Long demandId
+     * @return ExecuteResult<List<Map<String, Object>>>
      */
     @Override
-    public ExecuteResult<List<Map<String, Object>>> findDemandUseCaseByDeamdId(Long demandId) {
+    public ExecuteResult<List<Map<String, Object>>> queryDemandUseCaseByDeamdId(Long demandId) {
         ExecuteResult<List<Map<String, Object>>> result = new ExecuteResult<>();
         if ((null == demandId) || (0 == demandId)) {
             result.addErrorMessage("传入的需求id有误");
-            return result;// ---------待调整
+            return result;
         }
         List<Map<String, Object>> taskList = proBuggetMapper.findDemandUseCaseByDeamdId(demandId);
         result.setResult(taskList);
@@ -171,13 +180,16 @@ public class ProjectBudgetServiceImpl implements ProjectBudgetService {
 
     /**
      * 查询影响需求变更的bug信息
+     *
+     * @param  Long demandId
+     * @return ExecuteResult<List<Map<String, Object>>>
      */
     @Override
     public ExecuteResult<List<Map<String, Object>>> findDemandBugByDeamdId(Long demandId) {
         ExecuteResult<List<Map<String, Object>>> result = new ExecuteResult<>();
         if ((null == demandId) || (0 == demandId)) {
             result.addErrorMessage("传入的需求id有误");
-            return result;// ---------待调整
+            return result;
         }
         List<Map<String, Object>> taskList = proBuggetMapper.findDemandBugByDeamdId(demandId);
         result.setResult(taskList);

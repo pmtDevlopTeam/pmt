@@ -6,7 +6,7 @@ import com.camelot.pmt.platform.model.Menu;
 import java.util.List;
 
 /**
- * 
+ *
  * @author gnerv
  * @Description 菜单管理Mapper数据层接口
  * @date 2018年4月18日

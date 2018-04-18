@@ -6,7 +6,7 @@ import com.camelot.pmt.platform.model.Menu;
 import com.camelot.pmt.util.Tree;
 
 /**
- * 
+ *
  * @author gnerv
  * @Description 权限菜单服务接口类
  * @date 2018年4月18日
@@ -43,7 +43,7 @@ public interface MenuService {
 
     /**
      * 查询全部菜单树
-     * @param 
+     * @param
      * @return List
      */
 	List<Tree<Menu>> queryAllMenuList();
@@ -55,5 +55,5 @@ public interface MenuService {
      * @return ExecuteResult<List<Menu>>
      */
 	List<Tree<Menu>> querySubMenuListByMenuId(String menuId);
-    
+
 }

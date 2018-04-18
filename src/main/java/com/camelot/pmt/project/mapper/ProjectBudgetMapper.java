@@ -5,40 +5,58 @@ import java.util.Map;
 
 import com.camelot.pmt.project.model.ProjectBudget;
 
+/**
+ * 
+ * @author lixk
+ * @Description: 项目预算Mapper数据层接口
+ * @date 2018年4月18日 上午9:50:52
+ */
 public interface ProjectBudgetMapper {
     /**
-     *
-     * @mbggenerated 2018-04-13
+     * 根据预算id   删除一个预算
+     * 
+     * @param  Long id
+     * @return int  1：成功；非1：失败
      */
     int deleteByPrimaryKey(Long id);
 
     /**
-     *
-     * @mbggenerated 2018-04-13
+     * 根据一个预算 增加一个预算
+     * 
+     * @param  ProjectBudget record
+     * @return int  1：成功；非1：失败
      */
     int insert(ProjectBudget record);
 
     /**
-     *
-     * @mbggenerated 2018-04-13
+     * 根据一个预算 增加一个预算
+     * 
+     * @param  ProjectBudget record
+     * @return int  1：成功；非1：失败
      */
     int insertSelective(ProjectBudget record);
 
     /**
+     * 根据预算id 查询一个预算
      *
-     * @mbggenerated 2018-04-13
+     * @param Long id
+     * @return ProjectBudget
      */
     ProjectBudget selectByPrimaryKey(Long id);
 
     /**
-     *
-     * @mbggenerated 2018-04-13
+     * 根据预算id 修改一个预算
+     * 
+     * @param  ProjectBudget record
+     * @return int  1：成功；非1：失败
      */
     int updateByPrimaryKeySelective(ProjectBudget record);
 
     /**
-     *
-     * @mbggenerated 2018-04-13
+     * 根据预算id 修改一个预算
+     * 
+     * @param  ProjectBudget record
+     * @return int  1：成功；非1：失败
      */
     int updateByPrimaryKey(ProjectBudget record);
 

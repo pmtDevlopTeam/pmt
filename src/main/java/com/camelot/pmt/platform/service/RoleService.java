@@ -11,11 +11,11 @@ import java.util.List;
  */
 public interface RoleService {
 
-
     /**
      * 新增角色
      *
-     * @param String parentId, String roleName, String state
+     * @param String
+     *            parentId, String roleName, String state
      * @return ExecuteResult<Role>
      */
     boolean addRole(Role role) throws Exception;
@@ -23,7 +23,8 @@ public interface RoleService {
     /**
      * 删除角色
      *
-     * @param String roleId
+     * @param String
+     *            roleId
      * @return ExecuteResult<Role>
      */
     boolean deleteRoleById(Role role);
@@ -31,7 +32,8 @@ public interface RoleService {
     /**
      * 修改角色
      *
-     * @param String roleId, String roleName, String state
+     * @param String
+     *            roleId, String roleName, String state
      * @return ExecuteResult<Role>
      */
     boolean updateRoleById(Role role);
@@ -46,7 +48,8 @@ public interface RoleService {
     /**
      * 验证角色名称是否可用
      *
-     * @param String roleName
+     * @param String
+     *            roleName
      * @return ExecuteResult<Role>
      */
     boolean getRoleNameVerification(Role role);

@@ -23,10 +23,10 @@ import java.util.Map;
 public class MenuServiceImpl implements MenuService {
 
 	public final static String PARENTID = "0";
-	
+
     @Autowired
     MenuMapper menuMapper;
-    
+
     @Override
     public boolean addMenu(Menu menu) {
     	menu = createMenuModel(menu);

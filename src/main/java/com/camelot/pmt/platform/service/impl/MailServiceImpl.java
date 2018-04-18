@@ -18,7 +18,7 @@ import com.camelot.pmt.platform.service.MailService;
 
 @Service
 public class MailServiceImpl implements MailService {
-	
+
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired

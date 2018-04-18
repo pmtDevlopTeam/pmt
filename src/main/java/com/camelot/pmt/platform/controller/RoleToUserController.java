@@ -37,18 +37,18 @@ public class RoleToUserController {
     @Autowired
     private RoleToUserService roleToUserService;
 
-
     /**
      * 根据角色绑定用户
      *
-     * @param String roleIds, String  userId
+     * @param String
+     *            roleIds, String userId
      * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
     @ApiOperation(value = "根据角色绑定用户", notes = "根据角色绑定用户")
     @PostMapping(value = "/addUserByRole")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "roleIds", value = "角色id（格式：1,2 其中要有子ID和父ID）", required = true, paramType = "form", dataType = "string"),
-            @ApiImplicitParam(name = "userIds", value = "用户id（格式：1,2,3,4）", required = true, paramType = "form", dataType = "string"),})
+            @ApiImplicitParam(name = "userIds", value = "用户id（格式：1,2,3,4）", required = true, paramType = "form", dataType = "string"), })
     public JSONObject addUserByRole(@ApiIgnore RoleToUser roleToUser) {
         boolean flag = false;
         try {
@@ -76,13 +76,14 @@ public class RoleToUserController {
     /**
      * 根据角色修改用户
      *
-     * @param String roleIds, String userIds
+     * @param String
+     *            roleIds, String userIds
      * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
     @ApiOperation(value = "根据角色修改用户", notes = "根据角色修改用户")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "roleIds", value = "角色id（格式：1,2 其中要有子ID和父ID）", required = true, paramType = "form", dataType = "string"),
-            @ApiImplicitParam(name = "userIds", value = "用户id（格式：1,2,3,4）", required = true, paramType = "form", dataType = "string"),})
+            @ApiImplicitParam(name = "userIds", value = "用户id（格式：1,2,3,4）", required = true, paramType = "form", dataType = "string"), })
     @PostMapping(value = "/updateUserByRole")
     public JSONObject updateUserByRole(@ApiIgnore RoleToUser roleToUser) {
         boolean flag = false;
@@ -110,13 +111,14 @@ public class RoleToUserController {
     /**
      * 根据角色id查询用户列表
      *
-     * @param String roleId
+     * @param String
+     *            roleId
      * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
     @GetMapping(value = "/queryUserByRole")
     @ApiOperation(value = "根据角色id查询用户列表", notes = "根据角色id查询用户列表")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "roleId", value = "角色id", required = true, paramType = "query", dataType = "string"),})
+            @ApiImplicitParam(name = "roleId", value = "角色id", required = true, paramType = "query", dataType = "string"), })
     public JSONObject queryUserByRole(@ApiIgnore RoleToUser role) {
         try {
             if (StringUtils.isEmpty(role.getRoleId())) {

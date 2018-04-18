@@ -127,7 +127,7 @@ public class OrgServiceImpl implements OrgService {
 		try {
 			long date = new Date().getTime();
 			org.setModifyTime(new Date(date));
-			
+
 			int nums = orgMapper.modifyOrgByOrgId(org);
 			if (nums > 0) {
 				result.setResult("部门修改成功");
@@ -283,7 +283,7 @@ public class OrgServiceImpl implements OrgService {
 	/** 组织机构列表详情(关系到用户  )
 	 * @param OrgToUser
 	 * @return JSONObject
-	 * 
+	 *
 	 **/
 	@Override
 	public ExecuteResult<List<OrgToUser>> queryOrgsDetail() {
@@ -326,7 +326,7 @@ public class OrgServiceImpl implements OrgService {
 	public ExecuteResult<List<OrgToUser>> queryOrgsDetailByOrgId(String orgId) {
 		ExecuteResult<List<OrgToUser>> result = new ExecuteResult<List<OrgToUser>>();
 		try {
-			
+
 			List<OrgToUser> orgList = orgMapper.selectOrgsDetailByOrgId(orgId);
 			List<OrgToUser> orgToUserList = new ArrayList<OrgToUser>();
 			OrgToUser otu = new OrgToUser();

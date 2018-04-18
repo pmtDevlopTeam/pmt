@@ -1,7 +1,7 @@
 package com.camelot.pmt.platform.service;
 
 /**
- * 
+ *
  * @author gnerv
  * @Description 邮件服务类
  * @date 2018年4月18日

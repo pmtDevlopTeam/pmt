@@ -233,9 +233,9 @@ public interface UserMapper {
      * 2018年4月17日下午3:08:17
      */
     String queryUserRoleCreateUserByUserId(String userId);
-    
+
     /**
-     * 
+     *
      * Description:[根据userId判断用户组织表用户是否存在]
      * @param String userJobNum
      * @return long

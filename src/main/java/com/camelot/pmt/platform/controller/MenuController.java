@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 
+ *
  * @author gnerv
  * @Description 基础平台-菜单管理接口
  * @date 2018年4月18日
@@ -32,10 +32,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class MenuController {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
-	
+
     @Autowired
     MenuService menuService;
-    
+
     /**
      * 根据一个菜单对象 创建一个菜单
      * 

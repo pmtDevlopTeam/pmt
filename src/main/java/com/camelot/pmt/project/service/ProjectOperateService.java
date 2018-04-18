@@ -17,14 +17,14 @@ public interface ProjectOperateService {
      * @param createUserId
      * @return
      */
-    ExecuteResult<List<ProjectOperate>> findByCreateUserId(String createUserId);
+    ExecuteResult<List<ProjectOperate>> queryByCreateUserId(String createUserId);
 
     /**
      * 根据项目id进行查询
      * 
-     * @param
+     * @param createUserId
      * @return
      */
-    ExecuteResult<List<ProjectOperate>> findByProjectId(Long projectId);
+    ExecuteResult<List<ProjectOperate>> queryByProjectId(Long projectId);
 
 }

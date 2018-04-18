@@ -3,9 +3,6 @@ package com.camelot.pmt.project.service.impl;
 import java.util.Date;
 import java.util.List;
 
-import com.camelot.pmt.common.DataGrid;
-import com.camelot.pmt.common.ExecuteResult;
-import com.camelot.pmt.common.Pager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +10,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import com.camelot.pmt.common.DataGrid;
+import com.camelot.pmt.common.ExecuteResult;
+import com.camelot.pmt.common.Pager;
 import com.camelot.pmt.project.mapper.DemandMapper;
 import com.camelot.pmt.project.mapper.ProjectBudgetMapper;
 import com.camelot.pmt.project.mapper.ProjectMainMapper;
@@ -52,19 +52,19 @@ public class ProjectMainServiceImpl implements ProjectMainService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public ExecuteResult<String> save(ProjectMain projectMain, ProjectOperate projectOperate,
-                                      ProjectBudget projectBudget, Warning warning) {
+    public ExecuteResult<String> addProject(ProjectMain projectMain, ProjectOperate projectOperate,
+            ProjectBudget projectBudget, Warning warning) {
 
         ExecuteResult<String> result = new ExecuteResult<String>();
         try {
             // 保存projectMain
             projectMain.setCreateTime(new Date());
             projectMain.setModifyTime(new Date());
-            projectMainMapper.insert(projectMain);
+            projectMainMapper.addProject(projectMain);
             // 保存projectOperate
             projectOperate.setProjectId(projectMain.getId());
             projectOperate.setCreateTime(new Date());
-            projectOperateMapper.insert(projectOperate);
+            projectOperateMapper.addProjectOperate(projectOperate);
             // 保存projectBudget
             projectBudget.setProjectId(projectMain.getId());
             projectBudget.setCreateTime(new Date());
@@ -87,10 +87,10 @@ public class ProjectMainServiceImpl implements ProjectMainService {
      * 分页查询
      */
     @Override
-    public ExecuteResult<DataGrid<ProjectMain>> findAllByPage(Pager<?> page) {
+    public ExecuteResult<DataGrid<ProjectMain>> queryAllByPage(Pager<?> page) {
         ExecuteResult<DataGrid<ProjectMain>> result = new ExecuteResult<DataGrid<ProjectMain>>();
         try {
-            List<ProjectMain> list = projectMainMapper.findAllByPage(page);
+            List<ProjectMain> list = projectMainMapper.queryAllByPage(page);
             // 查询出数据为空的话，直接返回
             if (CollectionUtils.isEmpty(list)) {
                 DataGrid<ProjectMain> dg = new DataGrid<ProjectMain>();
@@ -100,7 +100,7 @@ public class ProjectMainServiceImpl implements ProjectMainService {
             DataGrid<ProjectMain> dg = new DataGrid<ProjectMain>();
             dg.setRows(list);
             // 查询总条数
-            Long total = projectMainMapper.findAll();
+            Long total = projectMainMapper.queryAll();
             dg.setTotal(total);
             result.setResult(dg);
         } catch (Exception e) {
@@ -111,16 +111,13 @@ public class ProjectMainServiceImpl implements ProjectMainService {
     }
 
     /**
-     * 按状态分类查询
-     * 
-     * @param projectStatus
-     * @return
+     * 按项目状态分类查询
      */
     @Override
-    public ExecuteResult<List<ProjectMain>> findByProjectStatus(String projectStatus) {
+    public ExecuteResult<List<ProjectMain>> queryByProjectStatus(String projectStatus) {
         ExecuteResult<List<ProjectMain>> result = new ExecuteResult<List<ProjectMain>>();
         try {
-            List<ProjectMain> list = projectMainMapper.findByProjectStatus(projectStatus);
+            List<ProjectMain> list = projectMainMapper.queryByProjectStatus(projectStatus);
             if (list.size() <= 0) {
                 return result;
             }
@@ -134,15 +131,12 @@ public class ProjectMainServiceImpl implements ProjectMainService {
 
     /**
      * 按负责人id查询
-     * 
-     * @param userId
-     * @return
      */
     @Override
-    public ExecuteResult<List<ProjectMain>> findByUserId(String userId) {
+    public ExecuteResult<List<ProjectMain>> queryByUserId(String userId) {
         ExecuteResult<List<ProjectMain>> result = new ExecuteResult<List<ProjectMain>>();
         try {
-            List<ProjectMain> list = projectMainMapper.findByUserId(userId);
+            List<ProjectMain> list = projectMainMapper.queryByUserId(userId);
             if (list.size() <= 0) {
                 return result;
             }
@@ -156,15 +150,12 @@ public class ProjectMainServiceImpl implements ProjectMainService {
 
     /**
      * 按创建人id查询
-     * 
-     * @param createUserId
-     * @return
      */
     @Override
-    public ExecuteResult<List<ProjectMain>> findByCreateUserId(String createUserId) {
+    public ExecuteResult<List<ProjectMain>> queryByCreateUserId(String createUserId) {
         ExecuteResult<List<ProjectMain>> result = new ExecuteResult<List<ProjectMain>>();
         try {
-            List<ProjectMain> list = projectMainMapper.findByCreateUserId(createUserId);
+            List<ProjectMain> list = projectMainMapper.queryByCreateUserId(createUserId);
             if (list.size() <= 0) {
                 return result;
             }
@@ -178,15 +169,12 @@ public class ProjectMainServiceImpl implements ProjectMainService {
 
     /**
      * 按修改人id查询
-     * 
-     * @param
-     * @return
      */
     @Override
-    public ExecuteResult<List<ProjectMain>> findByModifyUserId(String modifyUserId) {
+    public ExecuteResult<List<ProjectMain>> queryByModifyUserId(String modifyUserId) {
         ExecuteResult<List<ProjectMain>> result = new ExecuteResult<List<ProjectMain>>();
         try {
-            List<ProjectMain> list = projectMainMapper.findByModifyUserId(modifyUserId);
+            List<ProjectMain> list = projectMainMapper.queryByModifyUserId(modifyUserId);
             if (list.size() <= 0) {
                 return result;
             }
@@ -200,18 +188,15 @@ public class ProjectMainServiceImpl implements ProjectMainService {
 
     /**
      * 按照主键id进行修改
-     * 
-     * @param id
-     * @return
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ExecuteResult<String> updateByPrimaryKeySelective(Long id, String userId, String modifyUserId,
-            Date modifyTime, String projectNum, String projectName, String projectStatus, String projectDesc,
-            Date startTime, Date endTime, String createUserId, String operateDesc) {
+            String projectNum, String projectName, String projectStatus, String projectDesc, Date startTime,
+            Date endTime, String createUserId, String operateDesc) {
         ExecuteResult<String> result = new ExecuteResult<>();
         try {
-            projectMainMapper.updateByPrimaryKeySelective(id, userId, modifyUserId, modifyTime, projectNum, projectName,
+            projectMainMapper.updateByPrimaryKeySelective(id, userId, modifyUserId, new Date(), projectNum, projectName,
                     projectStatus, projectDesc, startTime, endTime);
 
             ProjectOperate projectOperate = new ProjectOperate();
@@ -220,7 +205,7 @@ public class ProjectMainServiceImpl implements ProjectMainService {
             projectOperate.setCreateUserId(createUserId);
             projectOperate.setOperateDesc(operateDesc);
 
-            projectOperateMapper.insert(projectOperate);
+            projectOperateMapper.addProjectOperate(projectOperate);
             result.setResult("更新数据成功!");
 
         } catch (Exception e) {
@@ -238,7 +223,7 @@ public class ProjectMainServiceImpl implements ProjectMainService {
     public ExecuteResult<String> deleteByPrimaryKey(Long id, String createUserId, String operateDesc) {
         ExecuteResult<String> result = new ExecuteResult<>();
         try {
-            ProjectMain projectMainSelect = projectMainMapper.selectByPrimaryKey(id);
+            ProjectMain projectMainSelect = projectMainMapper.queryByPrimaryKey(id);
             if (projectMainSelect != null && "01".equals(projectMainSelect.getProjectStatus())) {
                 projectMainMapper.deleteByPrimaryKey(id);
 
@@ -248,7 +233,7 @@ public class ProjectMainServiceImpl implements ProjectMainService {
                 projectOperate.setCreateUserId(createUserId);
                 projectOperate.setOperateDesc(operateDesc);
 
-                projectOperateMapper.insert(projectOperate);
+                projectOperateMapper.addProjectOperate(projectOperate);
                 result.setResult("删除数据成功！");
             } else {
                 result.setResult("项目进行中，不允许删除！");
@@ -264,10 +249,10 @@ public class ProjectMainServiceImpl implements ProjectMainService {
      * 根据项目主键查询
      */
     @Override
-    public ExecuteResult<ProjectMain> selectByPrimaryKey(Long id) {
+    public ExecuteResult<ProjectMain> queryByPrimaryKey(Long id) {
         ExecuteResult<ProjectMain> result = new ExecuteResult<ProjectMain>();
         try {
-            ProjectMain projectMain = projectMainMapper.selectByPrimaryKey(id);
+            ProjectMain projectMain = projectMainMapper.queryByPrimaryKey(id);
             if (projectMain == null) {
                 return result;
             }
@@ -280,14 +265,11 @@ public class ProjectMainServiceImpl implements ProjectMainService {
     }
 
     /**
-     * 关闭时，更新数据
-     * 
-     * @param id
-     * @return
+     * 关闭时，更新相关数据
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public ExecuteResult<String> closeProjectById(Long id, String createUserId, String modifyUserId,
+    public ExecuteResult<String> updateByProjectById(Long id, String createUserId, String modifyUserId,
             String projectStatus, String operateDesc, String userStatus, String demandStatus, String closeReason,
             String status, String caseStatus) {
         ExecuteResult<String> result = new ExecuteResult<>();
@@ -302,10 +284,9 @@ public class ProjectMainServiceImpl implements ProjectMainService {
             projectOperate.setProjectId(id);
             projectOperate.setCreateUserId(createUserId);
             projectOperate.setOperateDesc(operateDesc);
-            projectOperateMapper.insert(projectOperate);
+            projectOperateMapper.addProjectOperate(projectOperate);
             // demand需求表更改状态
-            // Demand
-            // demandMapper.
+            demandMapper.updateByProjectId(id, demandStatus, closeReason, modifyUserId, new Date());
             // task任务表更改状态
 
             // userCase用例状态修改
