@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiOperation;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -28,6 +29,7 @@ import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.common.Pager;
 import com.camelot.pmt.project.model.Demand;
 import com.camelot.pmt.project.model.DemandOperate;
+import com.camelot.pmt.project.model.DemandVO;
 import com.camelot.pmt.project.service.DemandService;
 
 /**
@@ -84,17 +86,17 @@ public class DemandController {
     /**
      * 根据id删除
      *
-     * @param id
+     * @param Long id
      * @return
      */
     @ApiOperation(value = "删除需求", notes = "根据id删除需求")
-    @DeleteMapping(value = "/api/demand/deleteById")
+    @DeleteMapping(value = "/demand/deleteById")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "需求id", required = true, paramType = "query", dataType = "Long") })
-    public JSONObject deleteById(Long id) {
+    public JSONObject deleteDemandById(Long id) {
         ExecuteResult<String> result = new ExecuteResult<>();
         try {
-            result = demandService.deleteById(id);
+            result = demandService.deleteDemandById(id);
             if (result.isSuccess()) {
                 return ApiResponse.jsonData(APIStatus.OK_200);
             }
@@ -189,18 +191,17 @@ public class DemandController {
      * @return
      */
     @ApiOperation(value = "需求查看", notes = "根据需求Id查看指定需求")
-    @GetMapping(value = "/api/demand/findById")
+    @GetMapping(value = "/demand/queryById")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "pid", value = "所属一级需求id", required = false, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "id", value = "需求id", required = true, paramType = "query", dataType = "Long") })
-    public JSONObject findById(Long id) {
-        ExecuteResult<Demand> result = new ExecuteResult<>();
+    public JSONObject queryDemandByDemandId(Long id) {
         try {
-            result = demandService.findById(id);
-            return ApiResponse.success(result.getResult());
+            DemandVO demandVO = demandService.queryDemandById(id);
+            return ApiResponse.success(demandVO);
         } catch (Exception e) {
-            logger.error("-------指定id查询需求-------" + e.getMessage());
-            return ApiResponse.error();
+            logger.error(e.getMessage());
+            return ApiResponse.jsonData(APIStatus.ERROR_500);
         }
     }
 
@@ -233,27 +234,68 @@ public class DemandController {
     }
 
     /**
-     * 根据需求id查询子父级需求
-     *
-     * @param id
-     * @return
+     * 根据需求id查询需求变更影响的任务信息
+     *@param  Long demandId
+     *@return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
-    @ApiOperation(value = "需求查看", notes = "根据需求id查询子父级需求")
-    @GetMapping(value = "/api/demand/findChildParentById")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "pid", value = "所属一级需求id", required = false, paramType = "query", dataType = "String"),
-            @ApiImplicitParam(name = "id", value = "需求id", required = true, paramType = "query", dataType = "Long") })
-    public JSONObject findChildParentById(Long id) {
-        ExecuteResult<Map<String, Object>> result = new ExecuteResult<>();
+    @ApiOperation(value = "根据需求id查询需求变更影响的任务", notes = "查询需求变更影响的任务信息")
+    @GetMapping(value = "/queryDemandTaskQuoteById")
+    public JSONObject queryDemandTaskQuoteById(@RequestParam(value = "demandId", required = true) Long demandId) {
+        ExecuteResult<List<Map<String, Object>>> result = new ExecuteResult<>();
         try {
-            result = demandService.findChildParentById(id);
-            return ApiResponse.success(result.getResult());
+            result = demandService.queryDemandTaskQuoteById(demandId);
+            if (result.isSuccess()) {
+                return ApiResponse.success(result.getResult());
+            }
         } catch (Exception e) {
-            logger.error("-------指定id查询子父级需求信息-------" + e.getMessage());
-            return ApiResponse.error();
+            logger.error(e.getMessage());
+            return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
         }
+        return ApiResponse.error();
     }
 
+    /**
+     * 查询需求变更影响的任务信息
+     *@param  Long demandId
+     *@return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
+     */
+    @ApiOperation(value = "根据需求id查询需求变更影响的用例信息", notes = "查询需求变更影响的任务信息")
+    @GetMapping(value = "/queryDemandUseCaseQuoteById")
+    public JSONObject queryDemandUseCaseQuoteById(@RequestParam(value = "demandId", required = true) Long demandId) {
+        ExecuteResult<List<Map<String, Object>>> result = new ExecuteResult<>();
+        try {
+            result = demandService.queryDemandUseCaseQuoteById(demandId);
+            if (result.isSuccess()) {
+                return ApiResponse.success(result.getResult());
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
+        }
+        return ApiResponse.error();
+    }
+
+    /**
+     * 查询需求变更影响的bug信息
+     *@param  Long demandId
+     *@return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
+     */
+    @ApiOperation(value = "根据需求id查询需求变更影响的bug信息", notes = "查询需求变更影响的bug信息")
+    @GetMapping(value = "/queryDemandBugQuoteById")
+    public JSONObject queryDemandBug(@RequestParam(value = "demandId",required = true) Long demandId) {
+        ExecuteResult<List<Map<String, Object>>> result = new ExecuteResult<>();
+        try {
+            result = demandService.queryDemandBugQuoteById(demandId);
+            if (result.isSuccess()) {
+                return ApiResponse.success(result.getResult());
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
+        }
+        return ApiResponse.error();
+    }
+    
     @InitBinder
     public void initBinder(ServletRequestDataBinder binder) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");

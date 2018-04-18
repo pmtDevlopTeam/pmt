@@ -20,6 +20,7 @@ import com.camelot.pmt.project.mapper.DemandMapper;
 import com.camelot.pmt.project.mapper.DemandOperateMapper;
 import com.camelot.pmt.project.model.Demand;
 import com.camelot.pmt.project.model.DemandOperate;
+import com.camelot.pmt.project.model.DemandVO;
 import com.camelot.pmt.project.service.DemandService;
 
 @Service
@@ -83,19 +84,35 @@ public class DemandServiceImpl implements DemandService {
         return result;
     }
 
+    /**
+     * 根据id查询需求(Get)
+     * param  Long id
+     * return DemandVO
+     */
     @Override
-    public ExecuteResult<Demand> findById(Long id) {
-        ExecuteResult<Demand> result = new ExecuteResult<>();
+    public DemandVO queryDemandById(Long id) {
+        DemandVO demandVO = new DemandVO();
         Demand demandWithBLOBs = demandMapper.selectByPrimaryKey(id);
-        if (null == demandWithBLOBs) {
-            return result;
+        Map<String, Object> map = new HashMap<>();
+        map.put("parantDemand", null);
+        List<Demand> childDemandList = demandMapper.selectByPId(id);// 子级需求
+        Demand parantDemand = demandMapper.selectByPrimaryKey(id);
+        if (null != parantDemand) {
+            Long pid = parantDemand.getPid();
+            if (0 != pid) {
+                // 说明不是最顶级需求，有父需求
+                Demand parantDemandList = demandMapper.selectByPrimaryKey(pid);// 有待与前端沟通，是否前端传来pid？
+                map.put("parantDemand", parantDemandList);
+            }
         }
-        result.setResult(demandWithBLOBs);
-        return result;
+        map.put("childDemandList", childDemandList);
+        demandVO.setDemand(demandWithBLOBs);
+        demandVO.setDemandMap(map);
+        return demandVO;
     }
 
     @Override
-    public ExecuteResult<String> deleteById(Long id) {
+    public ExecuteResult<String> deleteDemandById(Long id) {
         ExecuteResult<String> result = new ExecuteResult<>();
         try {
 
@@ -209,6 +226,11 @@ public class DemandServiceImpl implements DemandService {
         return result;
     }
 
+    /**
+     * 查询需求相关进行中的引用
+     *@param
+     *@return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
+     */
     private List<Long> countQuote(Long demandId) {
         // 统计需求相关引用
         List<Long> list = new ArrayList<>();
@@ -221,29 +243,60 @@ public class DemandServiceImpl implements DemandService {
             list.add(demandId);
         }
         return list;
-
+    }
+    
+    /**
+     * 查询影响需求的任务信息
+     *
+     * @param  Long demandId
+     * @return ExecuteResult<List<Map<String, Object>>>
+     */
+    @Override
+    public ExecuteResult<List<Map<String, Object>>> queryDemandTaskQuoteById(Long demandId) {
+        ExecuteResult<List<Map<String, Object>>> result = new ExecuteResult<>();
+        if ((null == demandId) || (0 == demandId)) {
+            result.addErrorMessage("传入的需求id有误");
+            return result;
+        }
+        List<Map<String, Object>> taskList = demandMapper.queryDemandTaskQuoteById(demandId);
+        result.setResult(taskList);
+        return result;
     }
 
     /**
-     * 根据需求id查询子父级需求信息
+     * 查询影响变更需求影响的用例信息
+     *
+     * @param  Long demandId
+     * @return ExecuteResult<List<Map<String, Object>>>
      */
     @Override
-    public ExecuteResult<Map<String, Object>> findChildParentById(Long id) {
-        ExecuteResult<Map<String, Object>> result = new ExecuteResult<>();
-        Map<String, Object> map = new HashMap<>();
-        map.put("parantDemand", null);
-        List<Demand> childDemandList = demandMapper.selectByPId(id);// 子级需求
-        Demand parantDemand = demandMapper.selectByPrimaryKey(id);
-        if (null != parantDemand) {
-            Long pid = parantDemand.getPid();
-            if (0 != pid) {
-                // 说明不是最顶级需求，有父需求
-                Demand parantDemandList = demandMapper.selectByPrimaryKey(pid);// 有待与前端沟通，是否前端传来pid？
-                map.put("parantDemand", parantDemandList);
-            }
+    public ExecuteResult<List<Map<String, Object>>> queryDemandUseCaseQuoteById(Long demandId) {
+        ExecuteResult<List<Map<String, Object>>> result = new ExecuteResult<>();
+        if ((null == demandId) || (0 == demandId)) {
+            result.addErrorMessage("传入的需求id有误");
+            return result;
         }
-        map.put("childDemandList", childDemandList);
-        result.setResult(map);
+        List<Map<String, Object>> taskList = demandMapper.queryDemandUseCaseQuoteById(demandId);
+        result.setResult(taskList);
         return result;
     }
+
+    /**
+     * 查询影响需求变更的bug信息
+     *
+     * @param  Long demandId
+     * @return ExecuteResult<List<Map<String, Object>>>
+     */
+    @Override
+    public ExecuteResult<List<Map<String, Object>>> queryDemandBugQuoteById(Long demandId) {
+        ExecuteResult<List<Map<String, Object>>> result = new ExecuteResult<>();
+        if ((null == demandId) || (0 == demandId)) {
+            result.addErrorMessage("传入的需求id有误");
+            return result;
+        }
+        List<Map<String, Object>> taskList = demandMapper.queryDemandBugQuoteById(demandId);
+        result.setResult(taskList);
+        return result;
+    }
+
 }

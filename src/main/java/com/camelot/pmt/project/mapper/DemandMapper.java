@@ -2,6 +2,7 @@ package com.camelot.pmt.project.mapper;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -114,4 +115,29 @@ public interface DemandMapper {
     int updateByProjectId(@Param("projectId") Long projectId, @Param("demandStatus") String demandStatus,
             @Param("closeReason") String closeReason, @Param("modifyUserId") String modifyUserId,
             @Param("modifyTime") Date modifyTime);
+    
+    /**
+     * 根据需求id查询影响需求变更的任务信息
+     * 
+     * @param demandId
+     * @return
+     */
+    List<Map<String, Object>> queryDemandTaskQuoteById(Long demandId);
+    
+    /**
+     * 根据需求id查询影响需求变更的用例信息
+     * 
+     * @param demandId
+     * @return
+     */
+    List<Map<String, Object>> queryDemandUseCaseQuoteById(Long demandId);
+
+    /**
+     * 根据需求id查询影响变更需求的bug信息
+     * 
+     * @param demandId
+     * @return
+     */
+    List<Map<String, Object>> queryDemandBugQuoteById(Long demandId);
+
 }
