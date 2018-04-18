@@ -542,15 +542,20 @@
 
 
     <!--myp开始-->
-    <!--查询正在进行的任务-->
-    <select id="queryTaskRunning" resultType="java.util.Map" parameterType="String">
-        SELECT
+    <!--根据用户查询所有正在进行的任务的SQL-->
+    <sql id="selectAllRunningTaskByUserId">
         ta.id, ta.task_num, ta.task_name, ta.task_parent_id, ta.project_id, ta.demand_id, ta.priority, ta.assign_user_id,
         ta.beassign_user_id, ta.assign_time, ta.estimate_start_time, ta.estimate_end_time, ta.actual_start_time,
         ta.actual_end_time, ta.task_type, ta.task_speed, ta.status, ta.node_lv, ta.task_describe, ta.demand_change,
         ta.delay_describe, ta.estimate_hour, ta.infact_hour, ta.task_mileage, ta.create_user_id, ta.modify_user_id,
         ta.create_time, ta.modify_time, de.demand_name, de.demand_desc, pro.project_name,pro.project_desc, pl.user_name,
         pl2.user_name
+    </sql>
+
+    <!--查询正在进行的任务-->
+    <select id="queryTaskRunning" resultMap="BaseResultMap" parameterType="String">
+        SELECT
+        <include refid="selectAllRunningTaskByUserId" />
         FROM task ta
         LEFT JOIN demand de ON ta.demand_id = de.id
         LEFT JOIN project_main pro ON ta.project_id = pro.id
@@ -560,25 +565,27 @@
         ORDER BY ta.create_time DESC, ta.priority DESC
     </select>
 
-    
+    <!--根据父级id查询所有的子任务-->
     <select id="queryByPId" parameterType="Long" resultType="com.camelot.pmt.task.model.Task">
         SELECT * FROM task WHERE task_parent_id = #{id}
     </select>
-    <!--关闭任务-->
+    <!--根据任务id关闭任务-->
     <update id="updateRunningToClose" parameterType="java.util.List">
         UPDATE task SET status = 4 WHERE
         <foreach collection="list" item="aid" open="(" close=")" separator="or">
-            <!-- 每个遍历需要生成的串 -->
             id = #{aid}
         </foreach>
     </update>
     <!--完成任务-->
-    <update id="runningtoalready" parameterType="java.util.List">
-        UPDATE task SET status = 3 WHERE
-        <foreach collection="ids" item="p_id" open="(" close=")" separator="or">
-            <!-- 每个遍历需要生成的串 -->
-            task_parent_id = #{p_id}
+    <select id="queryRunningToAlready" parameterType="java.util.List" resultType="com.camelot.pmt.task.model.Task">
+        SELECT * FROM task WHERE
+        <foreach collection="list" item="id" open="(" close=")" separator="or">
+            id = #{id}
         </foreach>
+    </select>
+
+    <update id="updateRunningToAlready" parameterType="Long">
+        UPDATE task SET status = 2 WHERE id = #{id}
     </update>
     <!--myp结束-->
 </mapper>

@@ -19,7 +19,7 @@ public interface TaskMapper {
      * 查询正在进行的任务，根据时间和优先级进行排序
      * myp
      * */
-    List<Map<String,Object>> queryTaskRunning(String id);
+    List<Task> queryTaskRunning(String id);
 
 
     /**
@@ -33,7 +33,8 @@ public interface TaskMapper {
      *将正在进行的任务进行完成操作
      * myp
      * */
-    List<Task> runningtoalready(List alist);
+    void updateRunningToAlready(Long id);
+    List<Task> queryRunningToAlready(List list);
 
     /**
      * 根据任务id查询所有的次id的子任务
