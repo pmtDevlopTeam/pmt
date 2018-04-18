@@ -101,12 +101,11 @@ public class UseCaseController {
 	    @ApiImplicitParams({
 	            @ApiImplicitParam(name = "id", value = "用例id", required = true, paramType = "query", dataType = "long") })
 	    public JSONObject updateUserCaseDelFlag(Long id) {
-		 ExecuteResult<String> result = new ExecuteResult<String>();
 		 	try {
 	            //调用添加bug接口
-	        	result=UseCaseService.updateUserCaseDelFlag(id);
+		 		boolean	result=UseCaseService.updateUserCaseDelFlag(id);
 	            // 成功返回
-	            return ApiResponse.success(result.getResult());
+	            return ApiResponse.success(result);
 	        } catch (Exception e) {
 	            // 异常
 	            return ApiResponse.error();

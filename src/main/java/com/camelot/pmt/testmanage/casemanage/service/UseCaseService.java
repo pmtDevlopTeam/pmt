@@ -28,7 +28,7 @@ public interface UseCaseService {
 	 * 修改用例状态
 	 * @param id
 	 */
-	ExecuteResult<String> updateUserCaseDelFlag(Long id);
+	boolean updateUserCaseDelFlag(Long id);
 
 	/**
 	 * 批量新增

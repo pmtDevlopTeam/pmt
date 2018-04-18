@@ -55,21 +55,9 @@ public class UseCaseServiceImpl implements UseCaseService{
 		        return result;
 	}
 	
-	public ExecuteResult<String> updateUserCaseDelFlag(Long id){
-		ExecuteResult<String> result = new ExecuteResult<String>();
-		 try {
-			 	//判断传入的bug对象是否为空
-	            if (id==null) {
-	                result.addErrorMessage("传入参数错误");
-	                return result;
-	            }
-	            useCaseMapper.updateUserCaseDelFlag(id);
-	            result.setResult("删除成功!");
-	        } catch (Exception e) {
-	            LOGGER.error(e.getMessage());
-	            throw new RuntimeException(e);
-	        }
-	        return result;
+	public boolean updateUserCaseDelFlag(Long id){
+		
+	      return useCaseMapper.updateUserCaseDelFlag(id)==1?true:false;
 	}
 	@Override
 	@Transactional
