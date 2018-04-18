@@ -9,20 +9,21 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 
-import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
+import com.camelot.pmt.platform.model.User;
+import com.camelot.pmt.platform.shiro.ShiroUtils;
 import com.camelot.pmt.project.model.ProjectBudget;
 import com.camelot.pmt.project.service.ProjectBudgetService;
 
@@ -60,40 +61,27 @@ public class ProjectBudgetController {
             @ApiImplicitParam(name = "modifyUserId", value = "修改人id", required = true, paramType = "query", dataType = "String") })
     @PostMapping("/addBudget")
     public JSONObject addBudget(@ApiIgnore ProjectBudget projectBudget) {
-        ExecuteResult<String> result = new ExecuteResult<String>();
         try {
-            result = projectBudgetService.addBudget(projectBudget);
-            if (result.isSuccess()) {
+            if(null == projectBudget){
+                return ApiResponse.errorPara("请求参数异常");
+            }
+            User user = (User) ShiroUtils.getSessionAttribute("user");
+            if (StringUtils.isEmpty(user.getUserId())) {
+                return ApiResponse.jsonData(APIStatus.NOT_USERNAME_404);
+            }
+            projectBudget.setCreateUserId(user.getUserId());
+            projectBudget.setModifyUserId(user.getUserId());
+            boolean flag = projectBudgetService.addBudget(projectBudget);
+            if (flag) {
                 return ApiResponse.success();
             }
+            return ApiResponse.error("添加异常");
         } catch (Exception e) {
             logger.error(e.getMessage());
             return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
         }
-        return ApiResponse.error();
     }
-
-    /**
-     * 查询项目预算接口(查询)
-     *@param  Long projectId
-     *@return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
-     */
-    @ApiOperation(value = "根据projectId查询单个项目预算", notes = "查询单个项目预算")
-    @GetMapping(value = "/queryBudgetByProjectId")
-    public JSONObject queryUserByUserId(@RequestParam(value = "projectId", required = true) Long projectId) {
-        ExecuteResult<ProjectBudget> result = new ExecuteResult<>();
-        try {
-            result = projectBudgetService.queryBudgeByProjectId(projectId);
-            if (result.isSuccess()) {
-                return ApiResponse.success(result.getResult());
-            }
-        } catch (Exception e) {
-            logger.error(e.getMessage());
-            return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
-        }
-        return ApiResponse.error();
-    }
-
+    
     /**
      * 修改项目预算
      *@param  ProjectBudget projectBudget
@@ -109,17 +97,44 @@ public class ProjectBudgetController {
             @ApiImplicitParam(name = "modifyUserId", value = "修改人id", required = true, paramType = "query", dataType = "String") })
     @PostMapping("/updateBudget")
     public JSONObject updateBudget(@ApiIgnore ProjectBudget projectBudget) {
-        ExecuteResult<String> result = new ExecuteResult<String>();
         try {
-            result = projectBudgetService.updateBudget(projectBudget);
-            if (result.isSuccess()) {
+            if(null == projectBudget){
+                return ApiResponse.errorPara("请求参数异常");
+            }
+            User user = (User) ShiroUtils.getSessionAttribute("user");
+            if (StringUtils.isEmpty(user.getUserId())) {
+                return ApiResponse.jsonData(APIStatus.NOT_USERNAME_404);
+            }
+            projectBudget.setModifyUserId(user.getUserId());
+            boolean flag = projectBudgetService.updateBudget(projectBudget);
+            if (flag) {
                 return ApiResponse.success();
             }
+            return ApiResponse.error("修改异常");
         } catch (Exception e) {
             logger.error(e.getMessage());
             return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
         }
-        return ApiResponse.error();
+    }
+
+    /**
+     * 查询项目预算接口(get)
+     *@param  Long projectId
+     *@return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
+     */
+    @ApiOperation(value = "根据projectId查询单个项目预算", notes = "查询单个项目预算")
+    @GetMapping(value = "/queryBudgetByProjectId")
+    public JSONObject queryUserByUserId(@RequestParam(value = "projectId", required = true) Long projectId) {
+        try {
+            if((null == projectId) || (0 == projectId)){
+                return ApiResponse.errorPara("请求参数异常");
+            }
+            ProjectBudget projectBudget = projectBudgetService.queryBudgeByProjectId(projectId);
+            return ApiResponse.success(projectBudget);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
+        }
     }
 
     /**
@@ -149,8 +164,8 @@ public class ProjectBudgetController {
      *@return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
     @ApiOperation(value = "根据项目id查询项目结项", notes = "查询单个项目结项")
-    @GetMapping("/queryProjectEnd")
-    public JSONObject queryProjectEnd(@RequestParam(value = "demandId", required = true) Long projectId) {
+    @GetMapping("/queryProjectEndById")
+    public JSONObject queryProjectEnd(@RequestParam(value = "projectId", required = true) Long projectId) {
         ExecuteResult<Map<String, Object>> result = new ExecuteResult<>();
         try {
             if ("".equals(projectId)) {
@@ -163,69 +178,6 @@ public class ProjectBudgetController {
             /**
              * 调用产出物service统计文档中心文档类型下文档的个数，携带文档名称；
              */
-            if (result.isSuccess()) {
-                return ApiResponse.success(result.getResult());
-            }
-        } catch (Exception e) {
-            logger.error(e.getMessage());
-            return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
-        }
-        return ApiResponse.error();
-    }
-
-    /**
-     * 查询需求变更影响的任务信息
-     *@param  Long demandId
-     *@return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
-     */
-    @ApiOperation(value = "根据需求id查询需求变更影响的任务", notes = "查询需求变更影响的任务信息")
-    @RequestMapping(value = "/queryDemandTaskByDemandId", method = RequestMethod.POST)
-    public JSONObject queryDemandTask(@RequestParam(value = "demandId", required = true) Long demandId) {
-        ExecuteResult<List<Map<String, Object>>> result = new ExecuteResult<>();
-        try {
-            result = projectBudgetService.queryDemandTaskByDeamdId(demandId);
-            if (result.isSuccess()) {
-                return ApiResponse.success(result.getResult());
-            }
-        } catch (Exception e) {
-            logger.error(e.getMessage());
-            return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
-        }
-        return ApiResponse.error();
-    }
-
-    /**
-     * 查询需求变更影响的任务信息
-     *@param  Long demandId
-     *@return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
-     */
-    @ApiOperation(value = "根据需求id查询需求变更影响的用例信息", notes = "查询需求变更影响的任务信息")
-    @GetMapping(value = "/queryDemandUseCaseByDeamdId")
-    public JSONObject queryDemandUseCase(@RequestParam(value = "demandId", required = true) Long demandId) {
-        ExecuteResult<List<Map<String, Object>>> result = new ExecuteResult<>();
-        try {
-            result = projectBudgetService.queryDemandUseCaseByDeamdId(demandId);
-            if (result.isSuccess()) {
-                return ApiResponse.success(result.getResult());
-            }
-        } catch (Exception e) {
-            logger.error(e.getMessage());
-            return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
-        }
-        return ApiResponse.error();
-    }
-
-    /**
-     * 查询需求变更影响的bug信息
-     *@param  Long demandId
-     *@return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
-     */
-    @ApiOperation(value = "根据需求id查询需求变更影响的bug信息", notes = "查询需求变更影响的bug信息")
-    @GetMapping(value = "/queryDemandBugByDeamdId")
-    public JSONObject queryDemandBug(@RequestParam(value = "demandId",required = true) Long demandId) {
-        ExecuteResult<List<Map<String, Object>>> result = new ExecuteResult<>();
-        try {
-            result = projectBudgetService.findDemandBugByDeamdId(demandId);
             if (result.isSuccess()) {
                 return ApiResponse.success(result.getResult());
             }

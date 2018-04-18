@@ -27,7 +27,7 @@ public interface ProjectBudgetService {
      *@param  ProjectBudget projectBudget
      *@return ExecuteResult<String>
      */
-    ExecuteResult<String> addBudget(ProjectBudget projectBudget);
+    boolean addBudget(ProjectBudget projectBudget);
 
     /**
      * 修改项目预算
@@ -35,7 +35,7 @@ public interface ProjectBudgetService {
      *@param  ProjectBudget projectBudget
      *@return ExecuteResult<String>
      */
-    ExecuteResult<String> updateBudget(ProjectBudget projectBudget);
+    boolean updateBudget(ProjectBudget projectBudget);
 
     /**
      * 根据项目id查询项目预算
@@ -43,30 +43,6 @@ public interface ProjectBudgetService {
      *@param  Long projectId
      *@return ExecuteResult<ProjectBudget>
      */
-    ExecuteResult<ProjectBudget> queryBudgeByProjectId(Long projectId);
-
-    /**
-     * 查询影响需求的任务信息
-     * 
-     *@param  Long demandId
-     *@return ExecuteResult<List<Map<String, Object>>>
-     */
-    ExecuteResult<List<Map<String, Object>>> queryDemandTaskByDeamdId(Long demandId);
-
-    /**
-     * 查询影响需求的用例信息
-     * 
-     *@param  Long demandId
-     *@return ExecuteResult<List<Map<String, Object>>>
-     */
-    ExecuteResult<List<Map<String, Object>>> queryDemandUseCaseByDeamdId(Long demandId);
-
-    /**
-     * 查询影响需求的BUG信息
-     * 
-     *@param  Long demandId
-     *@return ExecuteResult<List<Map<String, Object>>>
-     */
-    ExecuteResult<List<Map<String, Object>>> findDemandBugByDeamdId(Long demandId);
+    ProjectBudget queryBudgeByProjectId(Long projectId);
 
 }
