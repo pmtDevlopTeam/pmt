@@ -8,11 +8,11 @@
             <if test="taskNum != null">task_num,</if>
             <if test="taskName != null">task_name,</if>
             <if test="taskParentId != null">task_parent_id,</if>
-            <if test="project.id != null">project_id,</if>
-            <if test="demand.id != null">demand_id,</if>
+            <if test="project != null">project_id,</if>
+            <if test="demand != null">demand_id,</if>
             <if test="priority != null">priority,</if>
-            <if test="assignUser.userId != null">assign_user_id,</if>
-            <if test="beassignUser.userId != null">beassign_user_id,</if>
+            <if test="assignUser != null">assign_user_id,</if>
+            <if test="beassignUser != null">beassign_user_id,</if>
             <if test="assignTime != null">assign_time,</if>
             <if test="estimateStartTime != null">estimate_start_time,</if>
             <if test="estimateEndTime != null">estimate_end_time,</if>
@@ -28,7 +28,7 @@
             <if test="estimateHour != null">estimate_hour,</if>
             <if test="infactHour != null">infact_hour,</if>
             <if test="taskMileage != null">task_mileage,</if>
-            <if test="createUser.userId != null">create_user_id,</if>
+            <if test="createUser != null">create_user_id,</if>
             <if test="modifyUserId != null">modify_user_id,</if>
             <if test="createTime != null">create_time,</if>
             <if test="modifyTime != null">modify_time</if>
@@ -42,11 +42,11 @@
             <if test="taskNum != null">#{taskNum,jdbcType=VARCHAR},</if>
             <if test="taskName != null">#{taskName,jdbcType=VARCHAR},</if>
             <if test="taskParentId != null">#{taskParentId,jdbcType=BIGINT},</if>
-            <if test="project.id != null">#{projectId,jdbcType=BIGINT},</if>
-            <if test="demand.id != null">#{demandId,jdbcType=BIGINT},</if>
+            <if test="project != null">#{projectId,jdbcType=BIGINT},</if>
+            <if test="demand != null">#{demandId,jdbcType=BIGINT},</if>
             <if test="priority != null">#{priority,jdbcType=CHAR},</if>
-            <if test="assignUser.userId != null">#{assignUser.userId,jdbcType=VARCHAR},</if>
-            <if test="beassignUser.userId != null">#{beassignUser.userId,jdbcType=VARCHAR},</if>
+            <if test="assignUser != null">#{assignUser.userId,jdbcType=VARCHAR},</if>
+            <if test="beassignUser != null">#{beassignUser.userId,jdbcType=VARCHAR},</if>
             <if test="assignTime != null">#{assignTime,jdbcType=TIMESTAMP},</if>
             <if test="estimateStartTime != null">#{estimateStartTime,jdbcType=TIMESTAMP},</if>
             <if test="estimateEndTime != null">#{estimateEndTime,jdbcType=TIMESTAMP},</if>
@@ -62,7 +62,7 @@
             <if test="estimateHour != null">#{estimateHour,jdbcType=BIGINT},</if>
             <if test="infactHour != null">#{infactHour,jdbcType=BIGINT},</if>
             <if test="taskMileage != null">#{taskMileage,jdbcType=CHAR},</if>
-            <if test="createUser.userId != null">#{createUser.userId,jdbcType=VARCHAR},</if>
+            <if test="createUser != null">#{createUser.userId,jdbcType=VARCHAR},</if>
             <if test="modifyUserId != null">#{modifyUserId,jdbcType=VARCHAR},</if>
             <if test="createTime != null">#{createTime,jdbcType=TIMESTAMP},</if>
             <if test="modifyTime != null">#{modifyTime,jdbcType=TIMESTAMP}</if>
@@ -162,7 +162,6 @@
         <result column="task_num" property="taskNum" jdbcType="VARCHAR"/>
         <result column="task_name" property="taskName" jdbcType="VARCHAR"/>
         <result column="task_parent_id" property="taskParentId" jdbcType="BIGINT"/>
-        <result column="project_id" property="projectId" jdbcType="BIGINT"/>
         <result column="priority" property="priority" jdbcType="CHAR"/>
         <result column="assign_time" property="assignTime" jdbcType="TIMESTAMP"/>
         <result column="estimate_start_time" property="estimateStartTime" jdbcType="TIMESTAMP"/>
@@ -179,8 +178,6 @@
         <result column="estimate_hour" property="estimateHour" jdbcType="BIGINT"/>
         <result column="infact_hour" property="infactHour" jdbcType="BIGINT"/>
         <result column="task_mileage" property="taskMileage" jdbcType="CHAR"/>
-        <result column="create_user_id" property="createUserId" jdbcType="VARCHAR"/>
-        <result column="modify_user_id" property="modifyUserId" jdbcType="VARCHAR"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP"/>
         <result column="elapsed_time" property="elapsedTime" jdbcType="VARCHAR"/>
