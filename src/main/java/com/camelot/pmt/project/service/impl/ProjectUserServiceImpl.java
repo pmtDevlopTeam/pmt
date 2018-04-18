@@ -27,8 +27,8 @@ public class ProjectUserServiceImpl implements ProjectUserService {
     }
 
     @Override
-    public void insertSelective(ProjectUser pu) {
-        projectUserMapper.insertSelective(pu);
+    public void addUserSelective(ProjectUser pu) {
+        projectUserMapper.addUserSelective(pu);
     }
 
     /**

@@ -22,7 +22,7 @@ public interface ProjectUserService {
      * 
      * @param pu
      */
-    void insertSelective(ProjectUser pu);
+    void addUserSelective(ProjectUser pu);
 
     /**
      * 查询项目成员
@@ -48,7 +48,14 @@ public interface ProjectUserService {
      */
     int count(ProjectUserSearchVO vo);
 
-    int clearUser(Long projectId, String userId, String userStatus);
+    /**
+     * 项目关闭，将成员清除出项目（暂时不用）
+     * @param projectId
+     * @param userId
+     * @param userStatus
+     * @return
+     */
+	int clearUser(Long projectId, String userId, String userStatus);
 
     /**
      * 将人员移出项目，状态改为暂离
