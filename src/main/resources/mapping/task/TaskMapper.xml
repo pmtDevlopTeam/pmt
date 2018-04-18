@@ -551,7 +551,14 @@
         WHERE ta.status in ( 2 ,4 ) AND ta.beassign_user_id = #{id}
         ORDER BY ta.create_time DESC, ta.priority DESC
     </select>
-
+    <!-- zsf-->
+    <!--重做-->
+    <update id="updateTaskAlreadyToRunning" parameterType="java.util.List">
+        UPDATE task SET status = 1 WHERE
+        <foreach collection="list" item="aid" open="(" close=")" separator="or">
+            id = #{aid}
+        </foreach> AND status = 2
+    </update>
 
 
 

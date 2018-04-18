@@ -42,7 +42,7 @@ public interface TaskAlreadyService {
      * @return ExecuteResult<String>    返回类型
      * @throws
      */
-    ExecuteResult<String> updateTaskAlreadyToRunning(Long id, String taskStatus, String delayDescribe, java.util.Date estimateStartTime);
+    ExecuteResult<String> updateTaskAlreadyToRunning(Long id);
 
 
 }

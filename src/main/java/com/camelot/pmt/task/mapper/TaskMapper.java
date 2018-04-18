@@ -287,7 +287,7 @@ public interface TaskMapper {
      * @return JSONObject    返回类型
      * @throws
      */
-    void updateTaskAlreadyToRunning(Long id, String status, String delayDescribe, String estimateStartTime);
+    void updateTaskAlreadyToRunning(List<Long> list);
 
     /**
      *
