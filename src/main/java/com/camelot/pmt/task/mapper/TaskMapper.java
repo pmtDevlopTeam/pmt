@@ -19,27 +19,27 @@ public interface TaskMapper {
      * 查询正在进行的任务，根据时间和优先级进行排序
      * myp
      * */
-    List<Map<String,Object>> listTaskRunning(String id);
+    List<Map<String,Object>> queryTaskRunning(String id);
 
 
     /**
      *将任务进行关闭操作
      * myp
      * */
-    void runningtoclose(List<Long> alist);
+    void updateRunningToClose(List list);
 
 
     /**
      *将正在进行的任务进行完成操作
      * myp
      * */
-    List<Task> runningtoalready(List<Long> alist);
+    List<Task> runningtoalready(List alist);
 
     /**
      * 根据任务id查询所有的次id的子任务
      * myp
      * */
-    List<Task> selectByPId(Long pid);
+    List<Task> queryByPId(Long pid);
 
     /**
      * 根据id查询任务明细

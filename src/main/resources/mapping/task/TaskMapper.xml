@@ -543,7 +543,7 @@
 
     <!--myp开始-->
     <!--查询正在进行的任务-->
-    <select id="listTaskRunning" resultType="java.util.Map" parameterType="String">
+    <select id="queryTaskRunning" resultType="java.util.Map" parameterType="String">
         SELECT
         ta.id, ta.task_num, ta.task_name, ta.task_parent_id, ta.project_id, ta.demand_id, ta.priority, ta.assign_user_id,
         ta.beassign_user_id, ta.assign_time, ta.estimate_start_time, ta.estimate_end_time, ta.actual_start_time,
@@ -560,10 +560,14 @@
         ORDER BY ta.create_time DESC, ta.priority DESC
     </select>
 
+    
+    <select id="queryByPId" parameterType="Long" resultType="com.camelot.pmt.task.model.Task">
+        SELECT * FROM task WHERE task_parent_id = #{id}
+    </select>
     <!--关闭任务-->
-    <update id="runningtoclose" parameterType="java.util.List">
+    <update id="updateRunningToClose" parameterType="java.util.List">
         UPDATE task SET status = 4 WHERE
-        <foreach collection="alist" item="aid" open="(" close=")" separator="or">
+        <foreach collection="list" item="aid" open="(" close=")" separator="or">
             <!-- 每个遍历需要生成的串 -->
             id = #{aid}
         </foreach>

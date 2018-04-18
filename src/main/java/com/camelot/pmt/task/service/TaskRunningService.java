@@ -20,7 +20,7 @@ public interface TaskRunningService {
      * @Title: queryoverdueTaskRunning @Description: TODO @param @param
      * page @param @return @return ExecuteResult<DataGrid<Map<String, Object>>> @throws
      */
-    ExecuteResult<PageInfo<Map<String, Object>>> queryoverdueTaskRunning(int page , int rows, String id);
+    ExecuteResult<PageInfo<Map<String, Object>>> queryTaskRunning(int page , int rows, String id);
 
 
     /**
@@ -47,7 +47,7 @@ public interface TaskRunningService {
      * @return ExecuteResult<String>    返回类型
      * @throws
      */
-    ExecuteResult<String> runningtoclose(Long id);
+    ExecuteResult<String> updateRunningToClose(Long id);
 
 
     /**

@@ -50,13 +50,12 @@ public class TaskRunningServiceImpl implements TaskRunningService{
      * @return ExecuteResult<PageInfo<Map<String, Object>>>
      */
     @Override
-    public ExecuteResult<PageInfo<Map<String, Object>>> queryoverdueTaskRunning(int page , int rows, String id) {
+    public ExecuteResult<PageInfo<Map<String, Object>>> queryTaskRunning(int page , int rows, String id) {
         ExecuteResult<PageInfo<Map<String, Object>>> result = new ExecuteResult<PageInfo<Map<String, Object>>>();
         //利用PageHelper进行分页
         PageHelper.startPage(page, rows);
         //根据用户id查询全部的正在进行的任务
-        List<Map<String, Object>> list = taskMapper.listTaskRunning(id);
-        System.out.println(list.size());
+        List<Map<String, Object>> list = taskMapper.queryTaskRunning(id);
         //分页之后的结果集
         PageInfo<Map<String, Object>> clist = new PageInfo<Map<String, Object>>(list);
         //返回结果集
@@ -74,19 +73,19 @@ public class TaskRunningServiceImpl implements TaskRunningService{
      * @throws
      */
     @Override
-    public ExecuteResult<String> runningtoclose(Long id) {
+    public ExecuteResult<String> updateRunningToClose(Long id) {
         ExecuteResult<String> result=new ExecuteResult<>();
         try{
             //遍历此任务下是否有引用--->查询所有任务父id为id的记录
-            List<Task> taskList = taskMapper.selectByPId(id);
+            List<Task> taskList = taskMapper.queryByPId(id);
             List<Long> list = new ArrayList<Long>();
             if(taskList.size()>0){
                 for (Task task : taskList) {
-                    List<Task> tempList = taskMapper.selectByPId(task.getId());
+                    List<Task> tempList = taskMapper.queryByPId(task.getId());
                     if(tempList.size()>0){
                         System.out.println(tempList.size());
                         for (Task task2 : tempList) {
-                            List<Task> tempList2 = taskMapper.selectByPId(task2.getId());
+                            List<Task> tempList2 = taskMapper.queryByPId(task2.getId());
                             if(tempList2.size()>0){
                                 for (Task task3 : tempList2) {
                                     list.add(task3.getId());
@@ -108,7 +107,7 @@ public class TaskRunningServiceImpl implements TaskRunningService{
                 //说明没有子任务
                 list.add(id);
             }
-            taskMapper.runningtoclose(list);
+            taskMapper.updateRunningToClose(list);
             result.setResult("任务关闭成功");
         }catch (Exception e){
             throw new RuntimeException(e);
@@ -131,15 +130,15 @@ public class TaskRunningServiceImpl implements TaskRunningService{
         ExecuteResult<String> result=new ExecuteResult<>();
         try{
             //遍历此任务下是否有引用--->查询所有任务父id为id的记录
-            List<Task> taskList = taskMapper.selectByPId(id);
+            List<Task> taskList = taskMapper.queryByPId(id);
             List<Long> list = new ArrayList<Long>();
             if(taskList.size()>0){
                 for (Task task : taskList) {
-                    List<Task> tempList = taskMapper.selectByPId(task.getId());
+                    List<Task> tempList = taskMapper.queryByPId(task.getId());
                     if(tempList.size()>0){
                         System.out.println(tempList.size());
                         for (Task task2 : tempList) {
-                            List<Task> tempList2 = taskMapper.selectByPId(task2.getId());
+                            List<Task> tempList2 = taskMapper.queryByPId(task2.getId());
                             if(tempList2.size()>0){
                                 for (Task task3 : tempList2) {
                                     list.add(task3.getId());
