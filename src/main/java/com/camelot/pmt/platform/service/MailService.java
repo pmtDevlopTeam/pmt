@@ -1,12 +1,10 @@
 package com.camelot.pmt.platform.service;
 
 /**
- * <p>
- *  邮件服务类
- * </p>
- *
+ * 
  * @author gnerv
- * @since 2018-04-08
+ * @Description 邮件服务类
+ * @date 2018年4月18日
  */
 public interface MailService {
 	
