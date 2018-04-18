@@ -40,10 +40,10 @@ public class TaskManagerTest {
         user.setUserId("2");
         task.setBeassignUser(user);
         task.setTaskType("任务");
-        task.setTaskName("乱七八糟任务");
+        task.setTaskName("哼哼任务");
         task.setEstimateStartTime(new Date());
         task.setEstimateEndTime(new Date());
-        task.setTaskDescribe("这是任务描述");
+        task.setTaskDescribe("这是任务描述2");
         ExecuteResult<String> stringExecuteResult = taskManagerService.insertTask(task, null);
     }
     @Test

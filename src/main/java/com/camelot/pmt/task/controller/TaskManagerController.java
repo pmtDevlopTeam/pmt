@@ -73,16 +73,17 @@ public class TaskManagerController {
     @PostMapping(value = "/insertTask")
     @ApiOperation(value = "新增任务接口", notes = "新增任务")
     @ApiImplicitParams({
-            @ApiImplicitParam(dataType = "User", name = "beassignUser.username", value = "负责人", required = true),
-            @ApiImplicitParam(dataType = "Long", name = "demand.id", value = "相关需求", required = false),
-            @ApiImplicitParam(dataType = "String", name = "taskType", value = "任务类型", required = true),
-            @ApiImplicitParam(dataType = "String", name = "taskName", value = "任务名称", required = true),
-            @ApiImplicitParam(dataType = "Date", name = "estimateStartTime", value = " 预计开始时间格式yyyy-MM-dd", required = true),
-            @ApiImplicitParam(dataType = "Date", name = "estimateEndTime", value = "预计结束时间格式yyyy-MM-dd", required = true),
-            @ApiImplicitParam(dataType = "String", name = "taskDescribe", value = "任务描述", required = false)
+            @ApiImplicitParam(dataType = "User", name = "beassignUser.userId", paramType = "form", value = "负责人", required = true),
+            @ApiImplicitParam(dataType = "Long", name = "demand.id", paramType = "form", value = "相关需求", required = false),
+            @ApiImplicitParam(dataType = "String", name = "taskType", paramType = "form", value = "任务类型", required = true),
+            @ApiImplicitParam(dataType = "String", name = "taskName", paramType = "form", value = "任务名称", required = true),
+            @ApiImplicitParam(dataType = "date", name = "estimateStartTime", paramType = "form", value = " 预计开始时间格式yyyy/MM/dd", required = true),
+            @ApiImplicitParam(dataType = "date", name = "estimateEndTime", paramType = "form", value = "预计结束时间格式yyyy/MM/dd", required = true),
+            @ApiImplicitParam(dataType = "String", name = "taskDescribe", paramType = "form", value = "任务描述", required = false)
     })
-    public JSONObject insertTask(Task task, MultipartFile file) {
+    public JSONObject insertTask(@ApiIgnore Task task, MultipartFile file) {
         ExecuteResult<String> result = null;
+        System.out.println(task);
         try {
             result = taskManagerService.insertTask(task, file);
             if (result.isSuccess()) {
