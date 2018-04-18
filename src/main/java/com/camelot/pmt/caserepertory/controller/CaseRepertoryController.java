@@ -2,31 +2,36 @@ package com.camelot.pmt.caserepertory.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.camelot.pmt.caserepertory.model.CaseRepertory;
-import com.camelot.pmt.caserepertory.service.CaseRepertoryService;
+import com.camelot.pmt.caserepertory.service.CaseRepertoryService;;
 import com.camelot.pmt.common.APIStatus;
 import com.camelot.pmt.common.ApiResponse;
 import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.caserepertory.PageBean;
-import com.camelot.pmt.testmanage.casemanage.util.ActionBean;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static java.awt.SystemColor.menu;
 
 /**
  * 用例库接口
  *
  * @author Yurnero
  */
-@Api(description = "用例库接口")
 @RestController
-@RequestMapping(value = "/case_repertory")
+@Api(value = "系统管理-用例库接口", description = "系统管理-用例库接口")
+@RequestMapping(value = "/caserepertory")
 public class CaseRepertoryController {
-
+    //日志
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
     private CaseRepertoryService caseRepertoryService;
 
@@ -36,24 +41,22 @@ public class CaseRepertoryController {
      * 描述：把测试用例导入到用例库中
      * 作者：sll
      */
-    @ApiOperation(value = "导入用例库", notes = "导入用例库")
+    @ApiOperation(value = "导入用例库", notes = "批量导入用例库")
     @RequestMapping(value = "/addCaseRepertoryByCaseid", method = RequestMethod.GET)
     @ApiImplicitParam(name = "ids", value = "用例IDS", required = true, paramType = "query", dataType = "String")
     public JSONObject addCaseRepertoryByCaseid(String ids) {
-
-        ExecuteResult<String> result = new ExecuteResult<String>();
         try {
-            //调用添加bug接口
-            result = caseRepertoryService.addCaseRepertoryByCaseid(ids);
-            if (result.getErrorMessages().size() != 0) {
-                return ApiResponse.error(result.getErrorMessage());
+            boolean flag = false;
+            flag = caseRepertoryService.addCaseRepertoryByCaseid(ids);
+            if(flag){
+                return ApiResponse.success();
             }
-            // 成功返回
-            return ApiResponse.success(result.getResult());
+            return ApiResponse.error("添加异常");
         } catch (Exception e) {
-            // 异常
-            return ApiResponse.error();
+            logger.error(e.getMessage());
+            return ApiResponse.jsonData(APIStatus.ERROR_500);
         }
+
     }
 
     /*
@@ -61,55 +64,60 @@ public class CaseRepertoryController {
      * 描述：把测试用例库中的数据导入到用例
      * 作者：sll
      */
-    @ApiOperation(value = "导入用例", notes = "导入用例")
+    @ApiOperation(value = "导入用例", notes = "批量导入用例")
     @RequestMapping(value = "/addUserCaseByCaseRepertoryid", method = RequestMethod.GET)
     @ApiImplicitParam(name = "ids", value = "用例IDS", required = true, paramType = "query", dataType = "String")
     public JSONObject addUserCaseByCaseRepertoryid(String ids) {
-
-        ExecuteResult<String> result = new ExecuteResult<String>();
         try {
-            //调用添加bug接口
-            result = caseRepertoryService.addUserCaseByCaseRepertoryid(ids);
-            if (result.getErrorMessages().size() != 0) {
-                return ApiResponse.error(result.getErrorMessage());
+            boolean flag = false;
+            flag = caseRepertoryService.addUserCaseByCaseRepertoryid(ids);
+            if(flag){
+                return ApiResponse.success();
             }
-            // 成功返回
-            return ApiResponse.success(result.getResult());
+            return ApiResponse.error("添加异常");
         } catch (Exception e) {
-            // 异常
-            return ApiResponse.error();
+            logger.error(e.getMessage());
+            return ApiResponse.jsonData(APIStatus.ERROR_500);
         }
     }
 
     /**
      * 新增用例库
-     *
      * @param caseRepertory 用例库信息
      */
-    @ApiOperation(value = "新增用例")
+    @ApiOperation(value = "新增用例库用例",notes = "新增单条用例到用例库中")
     @PostMapping
     public JSONObject addCaseRepertory(@RequestBody @ApiParam(value = "caseRepertory", required = true) CaseRepertory caseRepertory) {
         try {
-            caseRepertoryService.addCaseRepertory(caseRepertory);
-            return ApiResponse.success();
+            boolean flag = false;
+            flag =caseRepertoryService.addCaseRepertory(caseRepertory);
+            if(flag){
+                return ApiResponse.success();
+            }
+            return ApiResponse.error("添加异常");
         } catch (Exception e) {
-            return ApiResponse.error(e.getMessage());
+            logger.error(e.getMessage());
+            return ApiResponse.jsonData(APIStatus.ERROR_500);
         }
     }
 
     /**
      * 批量新增用例库
-     *
      * @param list 用例库集合
      */
-    @ApiOperation(value = "批量新增")
+    @ApiOperation(value = "批量新增",notes = "新增多条用例到用例库中")
     @PostMapping(value = "/add_batch")
     public JSONObject addBatchCaseRepertory(@RequestBody @ApiParam(value = "list", required = true) List<CaseRepertory> list) {
         try {
-            caseRepertoryService.addBatchCaseRepertory(list);
-            return ApiResponse.success();
+            boolean flag = false;
+            flag = caseRepertoryService.addBatchCaseRepertory(list);
+            if(flag){
+                return ApiResponse.success();
+            }
+            return ApiResponse.error("添加异常");
         } catch (Exception e) {
-            return ApiResponse.error(e.getMessage());
+            logger.error(e.getMessage());
+            return ApiResponse.jsonData(APIStatus.ERROR_500);
         }
     }
 
@@ -118,33 +126,42 @@ public class CaseRepertoryController {
      *
      * @param ids 用例id,多个id用逗号隔开
      */
-    @ApiOperation(value = "批量删除用例")
+    @ApiOperation(value = "批量删除用例",notes = "删除多条用例到用例库中")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "ids", value = "用例id,多个id用逗号隔开", required = true, paramType = "query", dataType = "String")
     })
     @DeleteMapping
     public JSONObject deleteCaseRepertory(String ids) {
         try {
-            caseRepertoryService.deleteCaseRepertory(ids);
-            return ApiResponse.success();
+            boolean flag = false;
+            flag = caseRepertoryService.deleteCaseRepertory(ids);
+            if(flag){
+                return ApiResponse.success();
+            }
+            return ApiResponse.error("删除异常");
         } catch (Exception e) {
-            return ApiResponse.error(e.getMessage());
+            logger.error(e.getMessage());
+            return ApiResponse.jsonData(APIStatus.ERROR_500);
         }
     }
 
     /**
      * 更新用例库信息
-     *
      * @param caseRepertory 用例库信息
      */
-    @ApiOperation(value = "更新用例")
+    @ApiOperation(value = "更新用例",notes = "更新用例到用例库中")
     @PutMapping
     public JSONObject updateCaseRepertory(@RequestBody @ApiParam(value = "caseRepertory", required = true) CaseRepertory caseRepertory) {
         try {
-            caseRepertoryService.updateCaseRepertory(caseRepertory);
-            return ApiResponse.success();
+            boolean flag = false;
+            flag = caseRepertoryService.updateCaseRepertory(caseRepertory);
+            if(flag){
+                return ApiResponse.success();
+            }
+            return ApiResponse.error("更新异常");
         } catch (Exception e) {
-            return ApiResponse.error(e.getMessage());
+            logger.error(e.getMessage());
+            return ApiResponse.jsonData(APIStatus.ERROR_500);
         }
     }
 
@@ -157,9 +174,11 @@ public class CaseRepertoryController {
     @GetMapping(value = "{id}")
     public JSONObject queryCaseRepertoryById(@PathVariable Long id) {
         try {
-            return ApiResponse.success(caseRepertoryService.queryCaseRepertoryById(id));
+            CaseRepertory  caseRepertory=caseRepertoryService.queryCaseRepertoryById(id);
+            return ApiResponse.success(caseRepertory);
         } catch (Exception e) {
-            return ApiResponse.error(e.getMessage());
+            logger.error(e.getMessage());
+            return ApiResponse.jsonData(APIStatus.ERROR_500);
         }
     }
 
@@ -175,35 +194,14 @@ public class CaseRepertoryController {
             @ApiImplicitParam(name = "caseTitle", value = "名称", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "applyPhase", value = "试用阶段", required = true, paramType = "query", dataType = "String")
     })
-    public JSONObject queryCaseRepertoryByPage(Integer currentPage, Integer pageSize, String caseType, String caseTitle, String applyPhase) {
-        PageBean pageBean = new PageBean();
-        pageBean.setCurrentPage(currentPage);
-        pageBean.setPageSize(pageSize);
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("pageBean", pageBean);
-        if (caseType != null) {
-            map.put("caseType", caseType);
-        }
-        if (caseTitle != null) {
-            map.put("caseTitle", caseTitle);
-        }
-        if (caseType != null) {
-            map.put("applyPhase", applyPhase);
-        }
-
-
-        ExecuteResult<PageInfo> result = new ExecuteResult<PageInfo>();
+    public JSONObject queryCaseRepertoryByPage(@ApiIgnore CaseRepertory caseRepertory,@RequestParam(defaultValue = "1") Integer pageSize, @RequestParam(defaultValue = "10") Integer currentPage) {
         try {
-            //调用查询bug分页接口
-            result = caseRepertoryService.selectCondition(map);
-            if (result.getErrorMessages().size() != 0) {
-                return ApiResponse.error(result.getErrorMessage());
-            }
-            // 成功返回
-            return ApiResponse.success(result.getResult());
+            List<CaseRepertory> list = caseRepertoryService.queryCaseRepertoryByPage(caseRepertory, pageSize,currentPage);
+            PageInfo<CaseRepertory> result = new PageInfo<CaseRepertory>(list);
+            return ApiResponse.success(result);
         } catch (Exception e) {
-            // 异常
-            return ApiResponse.error();
+            logger.error(e.getMessage());
+            return ApiResponse.jsonData(APIStatus.ERROR_500);
         }
     }
 }

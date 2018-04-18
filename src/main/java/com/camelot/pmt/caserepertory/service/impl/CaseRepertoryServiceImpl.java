@@ -37,37 +37,30 @@ public class CaseRepertoryServiceImpl implements CaseRepertoryService {
 
 	@Override
 	@Transactional
-	public ExecuteResult<String> addCaseRepertoryByCaseid(String ids) {
-		ExecuteResult<String> result = new ExecuteResult<String>();
-		try {
-			String[] params=ids.split(",");
-			for (int i = 0; i < params.length; i++) {
-				String param= params[i].toString().trim();
-				long param1 =Long.parseLong(param);
-				CaseRepertory caseRepertory=new CaseRepertory();
-				caseRepertory.setId(param1);
-				//复制数据到用例库主表并返回主键id
-				caseRepertoryMapper.addCaseRepertoryByCaseid(caseRepertory);
-				//复制步骤数到用例库步骤表中并且更新父id为 result1
-				long id=caseRepertory.getId();
-				Map<String,Object> map=new HashMap<String,Object>();
-				map.put("param1", param1);
-				map.put("result1", id);
-				int result2 = caseRepertoryMapper.addCaseRepertoryStepByCaseid(map);
-			}
-			result.setResult("成功");
-		} catch (Exception e) {
-			LOGGER.error(e.getMessage());
-			throw new RuntimeException(e);
+	public boolean addCaseRepertoryByCaseid(String ids) {
+		String[] params = ids.split(",");
+		int result1=0;
+		for (int i = 0; i < params.length; i++) {
+			String param = params[i].toString().trim();
+			long param1 = Long.parseLong(param);
+			CaseRepertory caseRepertory = new CaseRepertory();
+			caseRepertory.setId(param1);
+			//复制数据到用例库主表并返回主键id
+			 result1 =caseRepertoryMapper.addCaseRepertoryByCaseid(caseRepertory);
+			//复制步骤数到用例库步骤表中并且更新父id为 result1
+			long id = caseRepertory.getId();
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("param1", param1);
+			map.put("result1", id);
+			int result2 = caseRepertoryMapper.addCaseRepertoryStepByCaseid(map);
 		}
-		return result;
+		return result1>0?true:false;
 	}
 
 	@Override
 	@Transactional
-	public ExecuteResult<String> addUserCaseByCaseRepertoryid(String ids) {
-		ExecuteResult<String> result = new ExecuteResult<String>();
-		try {
+	public boolean addUserCaseByCaseRepertoryid(String ids) {
+		    int result1=0;
 			String[] params=ids.split(",");
 			for (int i = 0; i < params.length; i++) {
 				String param= params[i].toString().trim();
@@ -75,7 +68,7 @@ public class CaseRepertoryServiceImpl implements CaseRepertoryService {
 				CaseRepertory caseRepertory=new CaseRepertory();
 				caseRepertory.setId(param1);
 				//复制数据到用例主表并返回主键id
-				caseRepertoryMapper.addUserCaseByCaseRepertoryid(caseRepertory);
+				result1=caseRepertoryMapper.addUserCaseByCaseRepertoryid(caseRepertory);
 				//复制步骤数到用例步骤表中并且更新父id为 result1
 				long id=caseRepertory.getId();
 				Map<String,Object> map=new HashMap<String,Object>();
@@ -83,34 +76,27 @@ public class CaseRepertoryServiceImpl implements CaseRepertoryService {
 				map.put("result1", id);
 				caseRepertoryMapper.addUserCaseStepByCaseRepertoryid(map);
 			}
-			result.setResult("成功");
-		} catch (Exception e) {
-			LOGGER.error(e.getMessage());
-			throw new RuntimeException(e);
-		}
-		return result;
+		return result1>0?true:false;
 	}
 
 	/**
 	 * 新增测试用例库
-	 *
 	 * @param caseRepertory 用例库
 	 */
 	@Override
 	@Transactional
-	public void addCaseRepertory(CaseRepertory caseRepertory) {
+	public boolean addCaseRepertory(CaseRepertory caseRepertory) {
 		// 新增用例
-		caseRepertoryMapper.insertSelective(caseRepertory);
-
+		int result=caseRepertoryMapper.insertSelective(caseRepertory);
 		// mybatis返回主键,并设置外键
 		Long id = caseRepertory.getId();
 		List<CaseRepertoryStep> list = caseRepertory.getDetail();
 		for (CaseRepertoryStep caseRepertoryStep : list) {
 			caseRepertoryStep.setUseCaseId(id);
 		}
-
 		// 批量新增用例步骤
 		caseRepertoryStepMapper.insertBatch(list);
+		return  result>0?true:false;
 
 	}
 
@@ -121,8 +107,8 @@ public class CaseRepertoryServiceImpl implements CaseRepertoryService {
 	 */
 	@Override
 	@Transactional
-	public void addBatchCaseRepertory(List<CaseRepertory> list) {
-		caseRepertoryMapper.insertBatch(list);
+	public boolean addBatchCaseRepertory(List<CaseRepertory> list) {
+		return  caseRepertoryMapper.insertBatch(list)>0?true:false;
 	}
 
 	/**
@@ -132,7 +118,7 @@ public class CaseRepertoryServiceImpl implements CaseRepertoryService {
 	 */
 	@Override
 	@Transactional
-	public void deleteCaseRepertory(String ids) {
+	public boolean deleteCaseRepertory(String ids) {
 		Map<String, Object> param = new HashMap<>();
 
 		String[] arr = ids.split(",");
@@ -140,15 +126,14 @@ public class CaseRepertoryServiceImpl implements CaseRepertoryService {
 		for (int i = 0; i < arr.length; i++) {
 			intArr[i] = Integer.parseInt(arr[i]);
 		}
-
 		// 删除用例
 		param.put("ids", intArr);
-		caseRepertoryMapper.remove(param);
-
+		int restul=caseRepertoryMapper.remove(param);
 		// 删除用例步骤
 		param.clear();
 		param.put("useCaseIds", intArr);
 		caseRepertoryStepMapper.remove(param);
+		return  restul>0?true:false;
 	}
 
 	/**
@@ -158,10 +143,9 @@ public class CaseRepertoryServiceImpl implements CaseRepertoryService {
 	 */
 	@Override
 	@Transactional
-	public void updateCaseRepertory(CaseRepertory caseRepertory) {
+	public boolean updateCaseRepertory(CaseRepertory caseRepertory) {
 		// 更新用例库
-		caseRepertoryMapper.updateByPrimaryKeySelective(caseRepertory);
-
+		int result=caseRepertoryMapper.updateByPrimaryKeySelective(caseRepertory);
 		// 过滤出删除的步骤
 		List<Long> ids = new ArrayList<>();
 		Long id = caseRepertory.getId();
@@ -182,7 +166,6 @@ public class CaseRepertoryServiceImpl implements CaseRepertoryService {
 				ids.add(oldId);
 			}
 		}
-
 		// 更新用例步骤,若用例步骤ID不为null,则更新步骤,反之插入步骤
 		for (CaseRepertoryStep caseRepertoryStep : list) {
 			if (caseRepertoryStep.getId() != null) {
@@ -192,33 +175,13 @@ public class CaseRepertoryServiceImpl implements CaseRepertoryService {
 				caseRepertoryStepMapper.insertSelective(caseRepertoryStep);
 			}
 		}
-
 		// 删除不存在的步骤
 		if (ids.size() != 0) {
 			Map<String, Object> param = new HashMap<>();
 			param.put("ids", ids);
 			caseRepertoryStepMapper.remove(param);
 		}
-	}
-
-	@Override
-	public ExecuteResult<PageInfo> selectCondition(Map<String, Object> map) {
-		ExecuteResult<PageInfo> result = new ExecuteResult<PageInfo>();
-		try {
-			PageBean pageBean = (PageBean) map.get("pageBean");
-			if (pageBean == null) {
-				result.setResultMessage("传入实体有误!");
-				return result;
-			}
-			PageHelper.startPage(pageBean.getCurrentPage(), pageBean.getPageSize());
-			List<CaseRepertory> docs = caseRepertoryMapper.selectCondition(map);
-			PageInfo<CaseRepertory> pageInfo = new PageInfo<CaseRepertory>(docs);
-			result.setResult(pageInfo);
-		} catch (Exception e) {
-			LOGGER.error(e.getMessage());
-			throw new RuntimeException(e);
-		}
-		return result;
+		return  result>0?true:false;
 	}
 
 	/**
@@ -236,5 +199,12 @@ public class CaseRepertoryServiceImpl implements CaseRepertoryService {
 			return list.get(0);
 		}
 		return null;
+	}
+
+	@Override
+	public List<CaseRepertory> queryCaseRepertoryByPage(CaseRepertory caseRepertory, Integer pageSize,  Integer currentPage) {
+		PageHelper.startPage(currentPage,pageSize);
+		List<CaseRepertory> list=caseRepertoryMapper.selectCondition(caseRepertory);
+		return list;
 	}
 }
