@@ -144,7 +144,7 @@ public interface TaskMapper {
      * @return List<Task>
      * @throws
      */
-    List<Task> queryOverdueTask();
+    List<Map<String,Object>> queryOverdueTask();
 
     /**
     * @author: gxl
@@ -287,7 +287,7 @@ public interface TaskMapper {
      * @return JSONObject    返回类型
      * @throws
      */
-    void updateTaskAlreadyToRunning(Long id, String status, String delayDescribe, String estimateStartTime);
+    void updateTaskAlreadyToRunning(List<Long> list);
 
     /**
      *
@@ -309,7 +309,7 @@ public interface TaskMapper {
      * @return TaskDetail
      * @throws
      */
-    TaskDetail queryOverdueTaskDetailByTaskId(String taskId);
+    Map<String, Object> queryOverdueTaskDetailByTaskId(String taskId);
 
     /**
      * 添加延期信息与预定开始时间
@@ -320,7 +320,7 @@ public interface TaskMapper {
      * @return Integer
      * @throws
      */
-    Integer insertOverduMessage(Task task);
+    int insertOverduMessage(Task task);
 
     /**
      * 根据userId查询个人是否有延期任务

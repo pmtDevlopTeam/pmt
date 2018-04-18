@@ -551,20 +551,59 @@
         WHERE ta.status in ( 2 ,4 ) AND ta.beassign_user_id = #{id}
         ORDER BY ta.create_time DESC, ta.priority DESC
     </select>
-
+    <!-- zsf-->
+    <!--重做-->
+    <update id="updateTaskAlreadyToRunning" parameterType="java.util.List">
+        UPDATE task SET status = 1 WHERE
+        <foreach collection="list" item="aid" open="(" close=")" separator="or">
+            id = #{aid}
+        </foreach> AND status = 2
+    </update>
 
 
 
    <!--  查询逾期列表 -->
     <select id="queryOverdueTask" resultMap="BaseResultMap">
     	select
-    	<include refid="TaskManager_ShowTasks_Column_List" />
+    	<include refid="TaskOverDue_ShowTasks_Column_List" />
     	from task t
     	LEFT JOIN project_main p on p.id =t.project_id
 		LEFT JOIN platform_user u1 on u1.user_id = t.assign_user_id
+		WHERE t.status = 3
 		ORDER BY t.priority ASC,t.estimate_start_time DESC
     </select>
-
+    
+	 <!-- 添加延期信息与预定开始时间 -->
+    <update id="insertOverduMessage" parameterType="com.camelot.pmt.task.model.Task">   
+    	update task t set 
+		t.estimate_start_time = #{estimateStartTime,jdbcType=TIMESTAMP},
+		t.delay_describe=#{delayDescribe} 
+		where t.id = #{id}
+    </update>
+    
+    <!-- 根据任务Id修改状态 -->
+    <update id="updateTaskOverdueStatus" parameterType="String">
+    	update task t set 
+		t.status = 1 
+		where t.id = #{taskId}
+    </update>
+    
+   <!--  查询逾期任务详情 -->
+    <select id="queryOverdueTaskDetailByTaskId" parameterType="String" resultType="map">
+    	SELECT
+		t.id, t.task_num, t.task_name, t.task_parent_id, t.project_id, t.demand_id, t.priority, t.assign_user_id,
+		t.beassign_user_id, t.assign_time, t.estimate_start_time, t.estimate_end_time, t.actual_start_time,
+		t.actual_end_time, t.task_type, t.task_speed, t.status, t.node_lv, t.task_describe, t.demand_change,
+		t.delay_describe, t.estimate_hour, t.infact_hour, t.task_mileage, t.create_user_id, t.modify_user_id,
+		t.create_time, t.modify_time, a.id AS aid, a.user_id, a.user_name, b.id AS bid, b.user_id, b.user_name,
+		c.id AS cid, c.user_id, c.user_name, p.id AS pid, p.project_name, d.id AS did, d.demand_desc
+		from task t LEFT JOIN platform_user a ON t.assign_user_id = a.user_id
+		LEFT JOIN platform_user b ON t.beassign_user_id = b.user_id
+		LEFT JOIN platform_user c on t.create_user_id = c.user_id
+		LEFT JOIN project_main p ON t.project_id = p.id
+		LEFT JOIN demand d ON t.demand_id = d.id
+		WHERE t.id = #{taskId}
+    </select>
 
     <!--myp开始-->
     <!--根据用户查询所有正在进行的任务的SQL-->

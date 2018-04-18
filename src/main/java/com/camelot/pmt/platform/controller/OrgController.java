@@ -3,6 +3,8 @@ package com.camelot.pmt.platform.controller;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -43,6 +45,9 @@ import springfox.documentation.annotations.ApiIgnore;
 @RequestMapping(value = "/platform/org")
 @Api(value = "组织机构管理接口", description = "组织机构管理接口")
 public class OrgController {
+	
+	//日志
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	@Autowired
 	private OrgService orgService;
 	/**
@@ -119,7 +124,6 @@ public class OrgController {
 	@ApiOperation(value = "添加部门机构", notes = "添加部门机构")
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "orgname", value = "部门名称", required = true, paramType = "form", dataType = "String"),
-			@ApiImplicitParam(name = "orgId", value = "部门id", required = true, paramType = "form", dataType = "String"),
 			@ApiImplicitParam(name = "parentId", value = "上级部门", required = true,defaultValue = "0", paramType = "form", dataType = "String"),
 			@ApiImplicitParam(name = "state", value = "部门状态", required = true, defaultValue = "0",paramType = "form", dataType = "String"),
 			@ApiImplicitParam(name = "sortNum", value = "部门排序号", required = true, paramType = "form", dataType = "String"),
@@ -199,14 +203,13 @@ public class OrgController {
 	 */
 	@ApiOperation(value = "编辑部门机构", notes = "编辑部门机构")
 	@ApiImplicitParams({
-		@ApiImplicitParam(name = "orgname", value = "部门名称", required = true, paramType = "form", dataType = "String"),
+		@ApiImplicitParam(name = "orgname", value = "部门名称", required = false, paramType = "form", dataType = "String"),
+		@ApiImplicitParam(name = "parentId", value = "上级部门", required = false, paramType = "form", dataType = "String"),
 		@ApiImplicitParam(name = "orgId", value = "部门id", required = true, paramType = "form", dataType = "String"),
-		@ApiImplicitParam(name = "parentId", value = "上级部门", required = true, paramType = "form", dataType = "String"),
-		@ApiImplicitParam(name = "state", value = "部门状态", required = true, paramType = "form", dataType = "String"),
-		@ApiImplicitParam(name = "sortNum", value = "部门排序号", required = true, paramType = "form", dataType = "String"),
-		@ApiImplicitParam(name = "orgCode", value = "部门编号", required = true, paramType = "form", dataType = "String"),
-		@ApiImplicitParam(name = "creatUserId", value = "创建人", required = true, paramType = "form", dataType = "String"),
-		@ApiImplicitParam(name = "modifyUserId", value = "修改人", required = true, paramType = "form", dataType = "String")
+		@ApiImplicitParam(name = "state", value = "部门状态", required = false, paramType = "form", dataType = "String"),
+		@ApiImplicitParam(name = "sortNum", value = "部门排序号", required = false, paramType = "form", dataType = "String"),
+		@ApiImplicitParam(name = "orgCode", value = "部门编号", required = false, paramType = "form", dataType = "String"),
+		@ApiImplicitParam(name = "modifyUserId", value = "修改人", required = false, paramType = "form", dataType = "String")
 		})
 	@RequestMapping(value = "/updateOrg", method = RequestMethod.POST)
 	@ResponseBody
@@ -250,12 +253,12 @@ public class OrgController {
     	}
     }
     
-	 /** 组织机构列表详情(关系到用户  即部门负责人)
+	 /** 组织机构列表详情(关系到用户 )
 	 * @param OrgToUser
 	 * @return JSONObject
 	 * 
 	 **/
-    @ApiOperation(value="获取组织机构列表详情", notes="获取组织机构列表详情")
+    @ApiOperation(value="获取组织机构列表详情(关系到用户 )", notes="获取组织机构列表详情(关系到用户 )")
     @RequestMapping(value = "/queryOrgsDetail",method = RequestMethod.POST)
     
     public JSONObject queryOrgsDetail(){
@@ -335,7 +338,7 @@ public class OrgController {
     @PostMapping(value = "/modifyOrgByOrgIdAndState")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "orgId", value = "部门id", required = true, paramType = "form", dataType = "string"),
-            @ApiImplicitParam(name = "state", value = "部门状态  0（默认）启用 1 停用 2 锁定", required = true, paramType = "form", dataType = "string")})
+            @ApiImplicitParam(name = "state", value = "部门状态  0（默认）启用 1 停用 2 锁定", required = false, paramType = "form", dataType = "string")})
     
     public JSONObject modifyOrgByOrgIdAndState(@ApiIgnore Org org){
     	ExecuteResult<String> result = new ExecuteResult<String>();
@@ -411,7 +414,7 @@ public class OrgController {
     	}
 
     }
-    /** 组织机构   根据orgId查看详情(关系到用户  即部门负责人)
+    /** 组织机构   根据orgId查看详情(关系到用户 )
 	 * @param OrgToUser
 	 * @return JSONObject
 	 **/
