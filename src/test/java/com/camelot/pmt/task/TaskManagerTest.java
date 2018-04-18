@@ -3,6 +3,8 @@ package com.camelot.pmt.task;
 import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.platform.model.User;
 import com.camelot.pmt.task.model.Task;
+import com.camelot.pmt.task.model.TaskFile;
+import com.camelot.pmt.task.service.TaskFileService;
 import com.camelot.pmt.task.service.TaskManagerService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,6 +26,9 @@ public class TaskManagerTest {
     @Autowired
     private TaskManagerService taskManagerService;
 
+    @Autowired
+    private TaskFileService taskFileService;
+
     @Test
     public void testQueryAllTasks() throws Exception {
         ExecuteResult<List<Task>> listExecuteResult = taskManagerService.queryAllTask();
@@ -39,7 +44,7 @@ public class TaskManagerTest {
         User user = new User();
         user.setUserId("2");
         task.setBeassignUser(user);
-        task.setTaskType("任务");
+        task.setTaskType("需求");
         task.setTaskName("哼哼任务");
         task.setEstimateStartTime(new Date());
         task.setEstimateEndTime(new Date());
@@ -48,9 +53,35 @@ public class TaskManagerTest {
     }
     @Test
     public void testQueryTaskById() throws Exception {
-        ExecuteResult<Map<String, Object>> mapExecuteResult = taskManagerService.queryTaskById((long) 2);
+        ExecuteResult<Map<String, Object>> mapExecuteResult = taskManagerService.queryTaskById((long) 24);
+//        ExecuteResult<Map<String, Object>> mapExecuteResult = taskManagerService.queryTaskById((long) 2);
         Map<String, Object> result = mapExecuteResult.getResult();
         Task task = (Task) result.get("Task");
-        System.out.println(task);
+
+        for (Map.Entry<String, Object> entry : result.entrySet()) {
+            System.out.println(entry.getKey() + ":" + entry.getValue());
+        }
+    }
+    @Test
+    public void testInsertTaskFile() throws Exception {
+        TaskFile taskFile = new TaskFile();
+        taskFile.setSourceId((long) 20);
+        taskFile.setAttachmentSource("任务");
+        taskFile.setAttachmentUrl("d:/abc.txt");
+        taskFile.setAttachmentTile("abc.txt");
+        taskFileService.insert(taskFile);
+    }
+    @Test
+    public void testQueryTaskByTask() throws Exception {
+        Task task = new Task();
+//        User beAssginUser = new User();
+//        beAssginUser.setUsername("sdf");
+        task.setTaskName("第一个");
+//        task.setBeassignUser(beAssginUser);
+        ExecuteResult<List<Task>> listExecuteResult = taskManagerService.queryTaskByTask(task);
+        List<Task> result = listExecuteResult.getResult();
+        for (Task task1 : result) {
+            System.out.println(task1);
+        }
     }
 }

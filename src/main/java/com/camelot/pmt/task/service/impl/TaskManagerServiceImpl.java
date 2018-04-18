@@ -1,6 +1,8 @@
 package com.camelot.pmt.task.service.impl;
 
 import com.camelot.pmt.common.ExecuteResult;
+import com.camelot.pmt.platform.model.User;
+import com.camelot.pmt.platform.service.UserService;
 import com.camelot.pmt.task.mapper.TaskMapper;
 import com.camelot.pmt.task.model.Task;
 import com.camelot.pmt.task.model.TaskFile;
@@ -30,6 +32,9 @@ public class TaskManagerServiceImpl implements TaskManagerService {
 
     @Autowired
     private TaskFileService taskFileService;
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private TaskMapper taskMapper;
@@ -70,10 +75,10 @@ public class TaskManagerServiceImpl implements TaskManagerService {
                 return result;
             }
             String[] ids = null;
-            if (!StringUtils.isEmpty(task.getBeassignUser().getUsername())) {
+            if (task.getBeassignUser() != null) {
                  /*如果负责人条件非空，则根据username查询userId*/
                  // 赋值给string数组传给DAO层
-                 ids = null;
+                 ids = new String[]{"4", "3"};
             }
             List<Task> tasks = taskMapper.queryTaskByTask(task, ids);
             result.setResult(tasks);
@@ -99,6 +104,14 @@ public class TaskManagerServiceImpl implements TaskManagerService {
                 result.addErrorMessage("传入信息有误");
                 return result;
             }
+            // 默认状态下任务状态为未开始 0为未开始的状态码
+            task.setStatus("0");
+            User user = new User();
+            /*这个是根据当前登录用户查询的用户userid*/
+            String userId = "2";
+            user.setUserId(userId);
+            task.setCreateUser(user);
+            int insertTask = taskMapper.insertTask(task);
             // 如果任务类型为需求任务，上传附件
             if ("需求".equals(task.getTaskType())) {
                 String fileName = file.getOriginalFilename();
@@ -118,9 +131,6 @@ public class TaskManagerServiceImpl implements TaskManagerService {
                 taskFileService.insert(taskFile);
             }
 
-            // 默认状态下任务状态为未开始 0为未开始的状态码
-            task.setStatus("0");
-            int insertTask = taskMapper.insertTask(task);
             result.setResult("插入成功");
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
@@ -266,14 +276,20 @@ public class TaskManagerServiceImpl implements TaskManagerService {
             String status = task.getStatus();
             if (!"当前登录用户名".equals(createUserName)) {
                 /*return 没有权限*/
+                result.setResult("没有权限");
+                return result;
             }
             // 已经指派的任务只能关闭不能删除
             if (task.getBeassignUser() != null) {
                 /*return 不能删除已经指派的任务*/
+                result.setResult("已指派的任务不能删除");
+                return result;
             }
             // 已经开始的任务不能删除
             if ("开始任务状态码".equals(status)) {
                 /*return 已经开始的任务不能删除*/
+                result.setResult("已开始的任务不能删除");
+                return result;
             }
 
             // 删除任务
@@ -308,6 +324,8 @@ public class TaskManagerServiceImpl implements TaskManagerService {
             String createUserName = task2.getCreateUser().getUsername();
             if (!"当前登录用户名".equals(createUserName)) {
                 /*return 没有权限*/
+                result.setResult("没有权限");
+                return result;
             }
             taskMapper.updateTaskById(task);
             result.setResult("修改成功");

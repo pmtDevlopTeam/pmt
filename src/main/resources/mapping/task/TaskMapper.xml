@@ -81,20 +81,20 @@
             <if test="taskParentId != null">
                 task_parent_id = #{taskParentId,jdbcType=BIGINT},
             </if>
-            <if test="projectId != null">
-                project_id = #{projectId,jdbcType=BIGINT},
+            <if test="project != null">
+                project_id = #{project.id,jdbcType=BIGINT},
             </if>
-            <if test="demandId != null">
-                demand_id = #{demandId,jdbcType=BIGINT},
+            <if test="demand != null">
+                demand_id = #{demand.id,jdbcType=BIGINT},
             </if>
             <if test="priority != null">
                 priority = #{priority,jdbcType=CHAR},
             </if>
-            <if test="assignUserId != null">
-                assign_user_id = #{assignUserId,jdbcType=VARCHAR},
+            <if test="assignUser != null">
+                assign_user_id = #{assignUser.userId,jdbcType=VARCHAR},
             </if>
-            <if test="beassignUserId != null">
-                beassign_user_id = #{beassignUserId,jdbcType=VARCHAR},
+            <if test="beassignUser != null">
+                beassign_user_id = #{beassignUser.userId,jdbcType=VARCHAR},
             </if>
             <if test="assignTime != null">
                 assign_time = #{assignTime,jdbcType=TIMESTAMP},
@@ -141,8 +141,8 @@
             <if test="taskMileage != null">
                 task_mileage = #{taskMileage,jdbcType=CHAR},
             </if>
-            <if test="createUserId != null">
-                create_user_id = #{createUserId,jdbcType=VARCHAR},
+            <if test="createUser != null">
+                create_user_id = #{createUser.userId,jdbcType=VARCHAR},
             </if>
             <if test="modifyUserId != null">
                 modify_user_id = #{modifyUserId,jdbcType=VARCHAR},
@@ -293,6 +293,9 @@
     <!--zlh-->
     <!--插入任务-->
     <insert id="insertTask" parameterType="com.camelot.pmt.task.model.Task">
+        <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
         insert into task
         <include refid="sql_add_task_columns"/>
         <include refid="sql_add_task_properties"/>
@@ -309,13 +312,13 @@
         LEFT JOIN project_main p ON t.project_id = p.id
         <where>
             <if test="task.taskType != null">and t.task_type = #{task.taskType}</if>
-            <if test="task.actualEndTime != null">and t.actual_end_time = #{task.actualEndTime}</if>
-            <if test="task.taskName != null">and t.task_name = #{task.taskName}</if>
+            <if test="task.actualEndTime != null">and t.actual_end_time &gt;= #{task.actualEndTime}</if>
+            <if test="task.taskName != null">and t.task_name LIKE "%"#{task.taskName}"%"</if>
             <if test="task.status != null">and t.status = #{task.status}</if>
             <if test="ids != null">
                 and beassign_user_id in
-                <foreach collection="ids" item="id" open="(" close=")" separator=",">
-                   id
+                <foreach collection="ids" item="idd" open="(" close=")" separator=",">
+                    #{idd}
                 </foreach>
             </if>
         </where>
