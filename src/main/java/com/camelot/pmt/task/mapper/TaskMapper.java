@@ -1,6 +1,5 @@
 package com.camelot.pmt.task.mapper;
 
-import com.camelot.pmt.common.Pager;
 import com.camelot.pmt.task.model.Task;
 import com.camelot.pmt.task.model.TaskDetail;
 import com.camelot.pmt.task.model.TaskLog;
@@ -26,20 +25,21 @@ public interface TaskMapper {
      *将任务进行关闭操作
      * myp
      * */
-    void runningtoclose(List<Long> alist);
+    void updateRunningToClose(List list);
 
 
     /**
      *将正在进行的任务进行完成操作
      * myp
      * */
-    List<Task> runningtoalready(List<Long> alist);
+    void updateRunningToAlready(Long id);
+    List<Task> queryRunningToAlready(List list);
 
     /**
      * 根据任务id查询所有的次id的子任务
      * myp
      * */
-    List<Task> selectByPId(Long pid);
+    List<Task> queryByPId(Long pid);
 
     /**
      * 根据id查询任务明细
@@ -76,7 +76,7 @@ public interface TaskMapper {
      * 查询已完成的任务，根据时间和优先级进行排序
      * myp
      * */
-    List<Map<String,Object>> listTaskAlready(@Param(value = "page") Pager page, @Param(value = "id") Long id);
+    List<Map<String,Object>> listTaskAlready(String id);
 
     /**
      * 查询已完成任务总个数 @Title: queryCount @Description: TODO @param @return @return
@@ -364,8 +364,6 @@ public interface TaskMapper {
     * @throws
      */
 	int updateTaskOverdueStatus(String taskId);
-
-	
 
 
 
