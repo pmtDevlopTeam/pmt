@@ -55,5 +55,5 @@ public interface UseCaseProcedureImplementMapper {
 
     int insertBatch(List<UseCaseProcedureImplement> list);
 
-    List<UseCaseProcedureImplement> findByImplementId(Long implementId);
+    List<UseCaseProcedureImplement> queryUseCaseProcedureImplementd(Long implementId);
 }
