@@ -334,7 +334,7 @@
 
     <!--zlh-->
     <!--根据id查询任务详情-->
-    <select id="queryTaskById" parameterType="java.lang.Long" resultMap="ShowAllTasks_Column_List">
+    <select id="queryTaskById" parameterType="java.lang.Long" resultMap="BaseResultMap">
         SELECT
         <include refid="ShowAllTasks_Column_List" />
         from task t LEFT JOIN platform_user a ON t.assign_user_id = a.user_id  --指派人user表 别名 a
@@ -355,6 +355,8 @@
 		INNER JOIN platform_user a ON a.user_id = t.assign_user_id
 		INNER JOIN platform_user b ON b.user_id = t.beassign_user_id
 		INNER JOIN platform_user c ON c.user_id = t.create_user_id
+		LEFT JOIN project_main p ON t.project_id = p.id
+		LEFT JOIN demand d ON t.demand_id = d.id
 		where t.id = #{id,jdbcType=BIGINT}
     </select>
 
@@ -428,6 +430,8 @@
 		INNER JOIN platform_user a ON a.user_id = t.assign_user_id
 		INNER JOIN platform_user b ON b.user_id = t.beassign_user_id
 		INNER JOIN platform_user c ON c.user_id = t.create_user_id
+		LEFT JOIN project_main p ON t.project_id = p.id
+		LEFT JOIN demand d ON t.demand_id = d.id
 		where t.beassign_user_id = #{beassignUserId,jdbcType=VARCHAR}
 		<if test="status != null">
 			and t.status = #{status,jdbcType=CHAR}
@@ -458,6 +462,8 @@
 		INNER JOIN platform_user a ON a.user_id = t.assign_user_id
 		INNER JOIN platform_user b ON b.user_id = t.beassign_user_id
 		INNER JOIN platform_user c ON c.user_id = t.create_user_id
+		LEFT JOIN project_main p ON t.project_id = p.id
+		LEFT JOIN demand d ON t.demand_id = d.id
 		where t.task_parent_id = #{id}
 		<if test="status != null">
 			and t.status = #{status,jdbcType=CHAR}
@@ -473,6 +479,8 @@
 		INNER JOIN platform_user a ON a.user_id = t.assign_user_id
 		INNER JOIN platform_user b ON b.user_id = t.beassign_user_id
 		INNER JOIN platform_user c ON c.user_id = t.create_user_id
+		LEFT JOIN project_main p ON t.project_id = p.id
+		LEFT JOIN demand d ON t.demand_id = d.id
 		where t.task_parent_id = #{id} and t.beassign_user_id = #{beassignUserId,jdbcType=VARCHAR}
 		<if test="status != null">
 			and t.status = #{status,jdbcType=CHAR}
@@ -488,6 +496,8 @@
 		INNER JOIN platform_user a ON a.user_id = t.assign_user_id
 		INNER JOIN platform_user b ON b.user_id = t.beassign_user_id
 		INNER JOIN platform_user c ON c.user_id = t.create_user_id
+		LEFT JOIN project_main p ON t.project_id = p.id
+		LEFT JOIN demand d ON t.demand_id = d.id
 		where t.id = #{taskParentId,jdbcType=BIGINT}
 	</select>
 	<!-- 我的待办任务转为延期,会将该节点及节点下的所有子节点变为延期状态 -->
