@@ -1,7 +1,6 @@
 package com.camelot.pmt.task.mapper;
 
 import com.camelot.pmt.task.model.Task;
-import com.camelot.pmt.task.model.TaskDetail;
 import com.camelot.pmt.task.model.TaskLog;
 import org.apache.ibatis.annotations.Param;
 
@@ -366,6 +365,14 @@ public interface TaskMapper {
 	int updateTaskOverdueStatus(String taskId);
 
 
-
-
+    /**
+     * 根据任务Id修改状态
+     * @Title: updateTaskOverdueStatus
+     * @Description: TODO
+     * @param @param taskId
+     * @param @return
+     * @return int
+     * @throws
+     */
+    int updateTaskToTest(Long id);
 }

@@ -45,4 +45,9 @@ public interface TaskAlreadyService {
     ExecuteResult<String> updateTaskAlreadyToRunning(Long id);
 
 
+    /**
+     * @Title: updateTaskToTest 根据任务ID 提测
+     *  @param
+     */
+    ExecuteResult<String> updateTaskToTest(Long id);
 }

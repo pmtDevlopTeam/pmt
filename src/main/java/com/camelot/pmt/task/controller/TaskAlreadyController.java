@@ -123,7 +123,7 @@ public class TaskAlreadyController {
 
     /**
      *
-     * @Title: queryUserAll @Description: TODO查询任务历史记录  重做页面 @param @return @return
+     * @Title: queryUserAll @Description: TODO 查询任务历史记录  重做页面 @param @return @return
      *         JSONObject @throws
      *         myp
      */
@@ -143,7 +143,38 @@ public class TaskAlreadyController {
         }
     }
 
-
+    /**
+     *
+     * @Title: updateTaskAlreadyToRuning
+     * @Description: TODO 我的已办 提测功能
+     * @param @param taskId
+     * @param @return    设定文件
+     * @return JSONObject    返回类型
+     * @throws
+     */
+    @ApiOperation(value = "提测功能", notes = "提测功能")
+    @RequestMapping(value = "/updateTaskToTest", method = RequestMethod.POST)
+    public JSONObject updateTaskToTest(
+            @ApiParam(name = "id", value = "任务ID", required = true) @RequestParam(required = true) Long id){
+        ExecuteResult<String> result = new ExecuteResult<String>();
+        try {
+            Long userLoginId = Long.valueOf(1);
+            //检查用户是否登录，需要去session中获取用户登录信息
+            if(StringUtils.isEmpty(userLoginId)){
+                return ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
+            }
+            //更新我的任务为关闭
+            result = taskAlreadyService.updateTaskToTest(id);
+            //判断是否成功
+            if(result.isSuccess()){
+                return ApiResponse.jsonData(APIStatus.OK_200,result.getResult());
+            }
+            return ApiResponse.jsonData(APIStatus.ERROR_500, result.getResult());
+        }catch (Exception e) {
+            //异常
+            return ApiResponse.jsonData(APIStatus.ERROR_500,e.getMessage());
+        }
+    }
 
 
 
