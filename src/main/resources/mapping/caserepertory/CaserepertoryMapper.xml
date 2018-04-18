@@ -21,9 +21,9 @@
     <insert id="addCaseRepertoryByCaseid" parameterType="com.camelot.pmt.caserepertory.model.CaseRepertory"
             useGeneratedKeys="true" keyProperty="id" keyColumn="id">
         insert into
-        case_repertory(case_title,case_type,description,apply_phase,num,precondition)
+        case_repertory(case_title,case_type,description,apply_phase,num,precondition,create_user_id,create_time,modify_user_id,modify_time)
         select
-        uc.case_title,uc.case_type,uc.description,uc.apply_phase,uc.num,uc.precondition
+        uc.case_title,uc.case_type,uc.description,uc.apply_phase,uc.num,uc.precondition,${createUserId},${createTime},${modifyUserId},${modifyTime}
         from use_case uc
         <where>
             and uc.id=#{id}
@@ -40,9 +40,9 @@
     <insert id="addUserCaseByCaseRepertoryid" parameterType="com.camelot.pmt.caserepertory.model.CaseRepertory"
             useGeneratedKeys="true" keyProperty="id" keyColumn="id">
         insert into
-        use_case (case_title,case_type,description,apply_phase,num,precondition,case_status)
+        use_case (case_title,case_type,description,apply_phase,num,precondition,case_status,create_user_id,create_time,modify_user_id,modify_time)
         select
-        uc.case_title,uc.case_type,uc.description,uc.apply_phase,uc.num,uc.precondition,'不正常'
+        uc.case_title,uc.case_type,uc.description,uc.apply_phase,uc.num,uc.precondition,'不正常',${createUserId},${createTime},${modifyUserId},${modifyTime}
         from case_repertory uc
         <where>
             and uc.id=#{id}
@@ -87,6 +87,7 @@
             <if test="precondition != null">
                 precondition,
             </if>
+            create_user_id,create_time,modify_user_id,modify_time
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -110,6 +111,7 @@
             <if test="precondition != null">
                 #{precondition,jdbcType=VARCHAR},
             </if>
+            #{createUserId,jdbcType=VARCHAR},#{createTime},#{modifyUserId,jdbcType=VARCHAR},#{modifyTime}
         </trim>
     </insert>
     <insert id="insertBatch" parameterType="java.util.List">
@@ -158,6 +160,8 @@
             <if test="precondition != null">
                 precondition = #{precondition,jdbcType=VARCHAR},
             </if>
+            create_user_id=#{createUserId,jdbcType=VARCHAR},create_time=#{createTime},
+            modify_user_id=#{modifyUserId,jdbcType=VARCHAR},modify_time=#{modifyTime}
         </set>
         where id = #{id,jdbcType=BIGINT}
     </update>
