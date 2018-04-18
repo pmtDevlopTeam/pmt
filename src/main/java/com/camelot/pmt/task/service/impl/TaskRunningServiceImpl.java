@@ -50,15 +50,14 @@ public class TaskRunningServiceImpl implements TaskRunningService{
      * @return ExecuteResult<PageInfo<Map<String, Object>>>
      */
     @Override
-    public ExecuteResult<PageInfo<Map<String, Object>>> queryoverdueTaskRunning(int page , int rows, String id) {
-        ExecuteResult<PageInfo<Map<String, Object>>> result = new ExecuteResult<PageInfo<Map<String, Object>>>();
+    public ExecuteResult<PageInfo<Task>> queryTaskRunning(int page , int rows, String id) {
+        ExecuteResult<PageInfo<Task>> result = new ExecuteResult<PageInfo<Task>>();
         //利用PageHelper进行分页
         PageHelper.startPage(page, rows);
         //根据用户id查询全部的正在进行的任务
-        List<Map<String, Object>> list = taskMapper.listTaskRunning(id);
-        System.out.println(list.size());
+        List<Task> list = taskMapper.queryTaskRunning(id);
         //分页之后的结果集
-        PageInfo<Map<String, Object>> clist = new PageInfo<Map<String, Object>>(list);
+        PageInfo<Task> clist = new PageInfo<Task>(list);
         //返回结果集
         result.setResult(clist);
         return result;
@@ -74,19 +73,19 @@ public class TaskRunningServiceImpl implements TaskRunningService{
      * @throws
      */
     @Override
-    public ExecuteResult<String> runningtoclose(Long id) {
+    public ExecuteResult<String> updateRunningToClose(Long id) {
         ExecuteResult<String> result=new ExecuteResult<>();
         try{
             //遍历此任务下是否有引用--->查询所有任务父id为id的记录
-            List<Task> taskList = taskMapper.selectByPId(id);
+            List<Task> taskList = taskMapper.queryByPId(id);
             List<Long> list = new ArrayList<Long>();
             if(taskList.size()>0){
                 for (Task task : taskList) {
-                    List<Task> tempList = taskMapper.selectByPId(task.getId());
+                    List<Task> tempList = taskMapper.queryByPId(task.getId());
                     if(tempList.size()>0){
                         System.out.println(tempList.size());
                         for (Task task2 : tempList) {
-                            List<Task> tempList2 = taskMapper.selectByPId(task2.getId());
+                            List<Task> tempList2 = taskMapper.queryByPId(task2.getId());
                             if(tempList2.size()>0){
                                 for (Task task3 : tempList2) {
                                     list.add(task3.getId());
@@ -108,7 +107,7 @@ public class TaskRunningServiceImpl implements TaskRunningService{
                 //说明没有子任务
                 list.add(id);
             }
-            taskMapper.runningtoclose(list);
+            taskMapper.updateRunningToClose(list);
             result.setResult("任务关闭成功");
         }catch (Exception e){
             throw new RuntimeException(e);
@@ -127,19 +126,19 @@ public class TaskRunningServiceImpl implements TaskRunningService{
      * @throws
      */
     @Override
-    public ExecuteResult<String> runningtoalready(Long id) {
+    public ExecuteResult<String> updateRunningToAlready(Long id) {
         ExecuteResult<String> result=new ExecuteResult<>();
         try{
             //遍历此任务下是否有引用--->查询所有任务父id为id的记录
-            List<Task> taskList = taskMapper.selectByPId(id);
+            List<Task> taskList = taskMapper.queryByPId(id);
             List<Long> list = new ArrayList<Long>();
             if(taskList.size()>0){
                 for (Task task : taskList) {
-                    List<Task> tempList = taskMapper.selectByPId(task.getId());
+                    List<Task> tempList = taskMapper.queryByPId(task.getId());
                     if(tempList.size()>0){
                         System.out.println(tempList.size());
                         for (Task task2 : tempList) {
-                            List<Task> tempList2 = taskMapper.selectByPId(task2.getId());
+                            List<Task> tempList2 = taskMapper.queryByPId(task2.getId());
                             if(tempList2.size()>0){
                                 for (Task task3 : tempList2) {
                                     list.add(task3.getId());
@@ -150,27 +149,31 @@ public class TaskRunningServiceImpl implements TaskRunningService{
                             }
                         }
                     }else{
-                        //说明没有子任务
+                        //说明没有子任务,直接修改此任务的状态即可
                         list.add(task.getId());
                     }
                 }
-            }else{
-                //说明没有子任务
-                list.add(id);
-            }
-            //查询出该节点下的所有任务
-            List<Task> list1 = taskMapper.runningtoalready(list);
-            List<Boolean> booleans = new ArrayList<>();
-            for (Task taskalready : list1) {
-                //判断该节点下的所有任务的状态是否都已完成或者关闭
-                if(taskalready.getStatus().equals("3") || taskalready.getStatus().equals("4")){
-                    booleans.add(true);
+                //查询出该节点下的所有任务
+                List<Task> list1 = taskMapper.queryRunningToAlready(list);
+                List<String> booleans = new ArrayList<String>();
+                for (Task taskalready : list1) {
+                    //判断该节点下的所有子任务的状态是否都已完成或者关闭
+                    if(taskalready.getStatus().equals("2") || taskalready.getStatus().equals("3")){
+                        booleans.add("1");
+                    }
                 }
-            }
-            if(list1.size() == booleans.size()){
-                result.setResult("任务已完成");
+                System.out.println("========================================"+list1.size()+"====================================");
+                System.out.println("========================================"+booleans.size()+"====================================");
+                if(list1.size() == booleans.size()){
+                    taskMapper.updateRunningToAlready(id);
+                    result.setResult("任务完成");
+                }else{
+                    result.setResult("还有子任务未完成！");
+                }
             }else{
-                result.setResult("还有子任务未完成！");
+                //说明没有子任务,直接修改此任务的状态即可
+                taskMapper.updateRunningToAlready(id);
+                result.setResult("任务完成");
             }
         }catch (Exception e){
             throw new RuntimeException(e);
