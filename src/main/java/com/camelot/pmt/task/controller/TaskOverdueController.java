@@ -10,7 +10,11 @@ import com.camelot.pmt.task.model.TaskDetail;
 import com.camelot.pmt.task.service.TaskOverdueService;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.*;
+
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -43,7 +47,7 @@ public class TaskOverdueController {
 	public JSONObject queryOverdueTask(
 			@ApiParam(name = "page", value = "页码", required = true) @RequestParam(required = true) Integer page,
 			@ApiParam(name = "rows", value = "每页数量", required = true) @RequestParam(required = true) Integer rows) {
-		ExecuteResult<PageInfo<Task>> result = new ExecuteResult<PageInfo<Task>>();
+		ExecuteResult<PageInfo<Map<String,Object>>> result = new ExecuteResult<PageInfo<Map<String,Object>>>();
 		try {
 			if (page == null && "".equals(page) || rows == null && "".equals(rows)) {
 
@@ -73,7 +77,7 @@ public class TaskOverdueController {
 	@RequestMapping(value = "/queryOverdueTaskDetailByTaskId", method = RequestMethod.POST)
 	public JSONObject queryOverdueTaskDetailByTaskId(
 			@ApiParam(name = "taskId", value = "延期任务Id", required = true) @RequestParam(required = true) String taskId) {
-		ExecuteResult<TaskDetail> result = new ExecuteResult<TaskDetail>();
+		ExecuteResult<Map<String,Object>> result = new ExecuteResult<Map<String,Object>>();
 		try {
 			result = taskService.queryOverdueTaskDetailByTaskId(taskId);
 			if (result.isSuccess()) {
@@ -90,12 +94,13 @@ public class TaskOverdueController {
 	 * @Title: queryOverdueTask @Description: TODO @param @param
 	 * page @param @return @return JSONObject @throws
 	 */
-
+	
 	@ApiOperation(value = "添加任务延期原因,预计时间开始时间添加", notes = "添加任务延期原因,预计时间开始时间添加")
 	@RequestMapping(value = "/insertoverduemessage", method = RequestMethod.POST)
 	@ApiImplicitParams({
-			@ApiImplicitParam(name = "abnormalDescribe", value = "任务延期原因", required = true, paramType = "form", dataType = "String"),
-			@ApiImplicitParam(name = "estimateStartTime", value = "预计开始时间", required = true, paramType = "form", dataType = "String") })
+		@ApiImplicitParam(name = "id", value = "任务Id", required = true, paramType = "form", dataType = "String"),
+			@ApiImplicitParam(name = "delayDescribe", value = "任务延期原因", required = true, paramType = "form", dataType = "String"),
+			@ApiImplicitParam(name = "estimateStartTime", value = "预计开始时间", required = true, paramType = "form", dataType = "Date") })
 	public JSONObject insertOverduMeessage(@ApiIgnore Task task) {
 		ExecuteResult<String> result = new ExecuteResult<String>();
 		try {

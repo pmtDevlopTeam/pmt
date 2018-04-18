@@ -1,5 +1,7 @@
 package com.camelot.pmt.task.service;
 
+import java.util.Map;
+
 import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.task.model.Task;
 import com.camelot.pmt.task.model.TaskDetail;
@@ -25,7 +27,7 @@ public interface TaskOverdueService {
     * @return ExecuteResult<TaskDetail> 
     * @throws
      */
-	ExecuteResult<TaskDetail> queryOverdueTaskDetailByTaskId(String taskId);
+	ExecuteResult<Map<String, Object>> queryOverdueTaskDetailByTaskId(String taskId);
 
 	/**
 	 * 添加逾期描述,预计开始时间
@@ -54,7 +56,7 @@ public interface TaskOverdueService {
      * @Title: queryoverdueTask @Description: TODO @param @param
      * page @param @return @return ExecuteResult<DataGrid<UserModel>> @throws
      */
-	ExecuteResult<PageInfo<Task>> queryOverdueTask(Integer page, Integer rows);
+	ExecuteResult<PageInfo<Map<String,Object>>> queryOverdueTask(Integer page, Integer rows);
     
     
    
