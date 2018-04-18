@@ -207,11 +207,21 @@
       version_status = #{versionStatus,jdbcType=INTEGER}
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <select id="selectVersionListByProId" resultMap="BaseResultMap" parameterType="long">
+  <select id="selectVersionListByProIdAndPram" resultMap="BaseResultMap" parameterType="map">
     SELECT
     <include refid="Base_Column_List"/>
     FROM version
-    WHERE project_id = #{projectId} and version_status=0 ORDER BY create_time DESC
+    WHERE project_id = #{projectId}
+    <if test="versionVo.versionName != null">
+      and version_name like #{versionVo.versionName}
+    </if>
+    <if test="versionVo.version != null">
+      and version = #{versionVo.version}
+    </if>
+    <if test="versionVo.versionType != null">
+      and version_type = #{versionVo.versionType}
+    </if>
+    and version_status=0 ORDER BY create_time DESC
   </select>
   <select id="queryListByProIdAndVerType" resultMap="BaseResultMap" parameterType="map">
     SELECT
@@ -220,23 +230,6 @@
     WHERE project_id = #{projectId}
     AND version_type=#{versionType} and version_status=0 ORDER BY create_time DESC
   </select>
-  <!-- 分页查询所有 -->
-  <select id="findAllByPage" resultMap="ResultMapWithBLOBs">
-    select
-    <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
-    from
-    version
-    <if test="page!=null">
-      <include refid="pagination_tail" />
-    </if>
-  </select>
-  <!-- 分页公共sql -->
-  <sql id="pagination_tail">
-    limit #{page.pageOffset} , #{page.rows}
-  </sql>
-
   <select id="selectList" resultMap="BaseResultMap" >
     SELECT
     <include refid="Base_Column_List" />
