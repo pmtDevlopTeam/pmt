@@ -1,22 +1,21 @@
 package com.camelot.pmt.task.service.impl;
 
 
-import com.camelot.pmt.common.DataGrid;
+import com.baomidou.mybatisplus.plugins.pagination.PageHelper;
 import com.camelot.pmt.common.ExecuteResult;
-import com.camelot.pmt.common.Pager;
 import com.camelot.pmt.task.mapper.TaskLogMapper;
 import com.camelot.pmt.task.mapper.TaskMapper;
 import com.camelot.pmt.task.model.Task;
 import com.camelot.pmt.task.service.TaskAlreadyService;
 import com.camelot.pmt.task.utils.Constant;
+import com.camelot.pmt.task.utils.DateUtils;
 import com.camelot.pmt.task.utils.RRException;
+import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
-import com.camelot.pmt.task.utils.DateUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -40,25 +39,17 @@ public class TaskAlreadyServiceImpl implements TaskAlreadyService {
      * @description: 查询已完成任务
      * @date: 16:54 2018/4/9
      */
-    public ExecuteResult<DataGrid<Map<String, Object>>> queryoverdueTaskAlready(Pager page, Long id) {
-        ExecuteResult<DataGrid<Map<String, Object>>> result = new ExecuteResult<DataGrid<Map<String, Object>>>();
-        try {
-            List<Map<String, Object>> list = taskMapper.listTaskAlready(page, id);
-            // 如果没有查询到数据，不继续进行
-            if (CollectionUtils.isEmpty(list)) {
-                DataGrid<Map<String, Object>> dg = new DataGrid<Map<String, Object>>();
-                result.setResult(dg);
-                return result;
-            }
-            DataGrid<Map<String, Object>> dg = new DataGrid<Map<String, Object>>();
-            dg.setRows(list);
-            // 查询总条数
-            Long total = taskMapper.queryAlreadyCount();
-            dg.setTotal(total);
-            result.setResult(dg);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    public ExecuteResult<PageInfo<Map<String, Object>>> queryTaskAlready(int page , int rows, String id) {
+        ExecuteResult<PageInfo<Map<String, Object>>> result = new ExecuteResult<PageInfo<Map<String, Object>>>();
+        //利用PageHelper进行分页
+        PageHelper.startPage(page, rows);
+        //根据用户id查询全部的已完成的任务
+        List<Map<String, Object>> list = taskMapper.listTaskAlready(id);
+        System.out.println(list.size());
+        //分页之后的结果集
+        PageInfo<Map<String, Object>> clist = new PageInfo<Map<String, Object>>(list);
+        //返回结果集
+        result.setResult(clist);
         return result;
     }
 

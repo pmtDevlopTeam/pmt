@@ -15,6 +15,10 @@ public class TaskLog implements Serializable{
     /**
      * 操作人ID
      */
+    private String userName;
+    /**
+     * 操作人名字
+     */
     private String userId;
     /**
      * 操作时间
@@ -75,5 +79,13 @@ public class TaskLog implements Serializable{
 
     public void setOperationDescribe(String operationDescribe) {
         this.operationDescribe = operationDescribe == null ? null : operationDescribe.trim();
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }

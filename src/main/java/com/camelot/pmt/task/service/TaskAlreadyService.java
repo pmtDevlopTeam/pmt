@@ -1,9 +1,8 @@
 package com.camelot.pmt.task.service;
 
-import com.camelot.pmt.common.DataGrid;
 import com.camelot.pmt.common.ExecuteResult;
-import com.camelot.pmt.common.Pager;
 import com.camelot.pmt.task.model.Task;
+import com.github.pagehelper.PageInfo;
 
 import java.util.List;
 import java.util.Map;
@@ -16,7 +15,7 @@ public interface TaskAlreadyService {
      * page @param @return @return ExecuteResult<DataGrid<Map<String, Object>>> @throws
      * myp
      */
-    ExecuteResult<DataGrid<Map<String, Object>>> queryoverdueTaskAlready(Pager page, Long id);
+    ExecuteResult<PageInfo<Map<String, Object>>> queryTaskAlready(int page , int rows, String id);
 
     /**
      * @Title: queryUnfinishedTask 查询未完成任务的个数
