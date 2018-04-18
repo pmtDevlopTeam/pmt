@@ -192,23 +192,9 @@ public class TaskManagerServiceImpl implements TaskManagerService {
                 /*return 没有权限*/
             }
 
-            // 指派父任务
             task.getBeassignUser().setUserId(userId);
             taskMapper.updateTaskById(task);
-            // 一并指派子任务
-            if (isAssignAll) {
-                // 根据父id查询所有的子任务id
-                List<Long> ids = taskMapper.querySubTaskIdByParantId(id);
-                // 如果未查询到子任务则返回
-                if (ids.isEmpty()) {
-                    return result;
-                }
-                // 遍历所有子任务进行指派
-                for (Long subId : ids) {
-                    // 递归查询子任务是否还有子任务
-                    updateBeAssignUserById(subId, userId, isAssignAll);
-                }
-            }
+
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
             throw new RuntimeException(e);
@@ -290,17 +276,9 @@ public class TaskManagerServiceImpl implements TaskManagerService {
                 /*return 已经开始的任务不能删除*/
             }
 
-            // 删除父任务
+            // 删除任务
             taskMapper.deleteTaskById(id);
-            // 根据父id查询所有的子任务id
-            List<Long> ids = taskMapper.querySubTaskIdByParantId(id);
-            if (ids.isEmpty()) {
-                return result;
-            }
-            // 递归删除所有子任务
-            for (Long subId : ids) {
-                deleteTaskById(subId);
-            }
+
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
             throw new RuntimeException(e);

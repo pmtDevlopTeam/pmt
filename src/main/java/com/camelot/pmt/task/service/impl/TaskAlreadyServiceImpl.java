@@ -7,17 +7,13 @@ import com.camelot.pmt.task.mapper.TaskLogMapper;
 import com.camelot.pmt.task.mapper.TaskMapper;
 import com.camelot.pmt.task.model.Task;
 import com.camelot.pmt.task.service.TaskAlreadyService;
-import com.camelot.pmt.task.utils.Constant;
-import com.camelot.pmt.task.utils.DateUtils;
-import com.camelot.pmt.task.utils.RRException;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -87,7 +83,7 @@ public class TaskAlreadyServiceImpl implements TaskAlreadyService {
 
     /**
      *
-     * @Title: updateTaskPendingToDelay
+     * @Title: updateTaskAlreadyToRunning
      * @Description: TODO重做(我的已完成任务转为正在进行,会将该节点及节点下的所有子节点变为正在进行(不包括关闭的任务))
      * @param @param taskId taskStatus
      * @param @return    设定文件
@@ -95,40 +91,45 @@ public class TaskAlreadyServiceImpl implements TaskAlreadyService {
      * @throws
      */
     @Override
-    public ExecuteResult<String> updateTaskAlreadyToRunning(Long id,String taskStatus,String delayDescribe,Date estimateStartTime) {
-        ExecuteResult<String> result = new ExecuteResult<String>();
+    public ExecuteResult<String> updateTaskAlreadyToRunning(Long id) {
+        ExecuteResult<String> result=new ExecuteResult<>();
         try{
-            if(id==null || StringUtils.isEmpty(delayDescribe) || estimateStartTime == null){
-                result.addErrorMessage("传入的参数有误!");
-                return result;
-            }
-            //判断状态是否为已完成，如果是已完成更新为正在进行
-            if(Constant.TaskStatus.ALREADY.getValue().equals(taskStatus)){
-                //格式化日期格式为yyyy-mm-dd HH:mm:ss,根据id更新待办任务状态为延期
-                //sql:update task set t.status = #{taskType,jdbcType=VARCHAR},t.delay_describe = #{delayDescribe,jdbcType=VARCHAR},t.estimate_start_time = #{estimateStartTime,jdbcType=TIMESTAMP} where t.id = #{id,jdbcType=BIGINT}
-                if(!Constant.TaskStatus.CLOSE.getValue().equals(taskStatus)){
-                    taskMapper.updateTaskAlreadyToRunning(id,taskStatus,delayDescribe, DateUtils.format(estimateStartTime,DateUtils.DATE_TIME_PATTERN));
-                }
-                //查询taskId下的所有子节点
-                //select * from task t where <if test="id != null" >t.task_parent_id = #{id}</if> <if test="taskType != null" > and t.task_type = #{taskType,jdbcType=BIGINT} </if>
-                List<Task> childTaskNodes = taskMapper.queryTaskListNodeByParentId(id,null);
-                //遍历子节点
-                if(childTaskNodes!=null && childTaskNodes.size()>0){
-                    for(Task child : childTaskNodes){
-                        //递归
-                        //sql需要修改
-                        //<if test="taskType != null" > and t.task_type = #{taskType,jdbcType=BIGINT} </if>
-                        //<if test="beassignUserId != null" > and t.beassign_user_id = #{beassignUserId,jdbcType=BIGINT} </if>
-                        //非关闭需要改为重做
-                        updateTaskAlreadyToRunning(child.getId(),taskStatus,delayDescribe,estimateStartTime);
+            //遍历此任务下是否有引用--->查询所有任务父id为id的记录
+            List<Task> taskList = taskMapper.queryByPId(id);
+            List<Long> list = new ArrayList<Long>();
+            if(taskList.size()>0){
+                for (Task task : taskList) {
+                    List<Task> tempList = taskMapper.queryByPId(task.getId());
+                    if(tempList.size()>0){
+                        System.out.println(tempList.size());
+                        for (Task task2 : tempList) {
+                            List<Task> tempList2 = taskMapper.queryByPId(task2.getId());
+                            if(tempList2.size()>0){
+                                for (Task task3 : tempList2) {
+                                    list.add(task3.getId());
+                                }
+                                list.add(task2.getId());
+                            }else{
+                                //说明没有子任务
+                                list.add(task2.getId());
+                            }
+                        }
+                        list.add(task.getId());
+                    }else{
+                        //说明没有子任务
+                        list.add(task.getId());
                     }
                 }
+                list.add(id);
+            }else{
+                //说明没有子任务
+                list.add(id);
             }
-            result.setResult("重做任务成功！");
-        }
-        catch (Exception e) {
-            LOGGER.error(e.getMessage());
-            throw new RRException(e.getMessage(),e);
+            taskMapper.updateTaskAlreadyToRunning(list);
+            result.setResult("任务关闭成功");
+        }catch (Exception e){
+            throw new RuntimeException(e);
+
         }
         return result;
     }

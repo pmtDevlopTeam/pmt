@@ -40,15 +40,15 @@ public class TaskRunningController {
      *         myp
      */
     @ApiOperation(value = "查询所有正在进行的任务", notes = "查询所有正在进行的任务")
-    @RequestMapping(value = "/queryoverdueTaskRunning", method = RequestMethod.GET)
+    @RequestMapping(value = "/queryTaskRunning", method = RequestMethod.GET)
     @ApiImplicitParams({
             @ApiImplicitParam(name = "page", value = "页码", required = true, paramType = "query", dataType = "int"),
             @ApiImplicitParam(name = "rows", value = "每页数量", required = true, paramType = "query", dataType = "int")})
-    public JSONObject queryoverdueTaskRunning(int page , int rows) {
+    public JSONObject queryTaskRunning(int page , int rows) {
         String userLoginId = String.valueOf(1);
-        ExecuteResult<PageInfo<Map<String, Object>>> result = new ExecuteResult<PageInfo<Map<String, Object>>>();
+        ExecuteResult<PageInfo<Task>> result = new ExecuteResult<PageInfo<Task>>();
         try {
-            result = taskRunningService.queryoverdueTaskRunning(page, rows, "2");
+            result = taskRunningService.queryTaskRunning(page, rows, "2");
             if (result.isSuccess()) {
                 return ApiResponse.success(result.getResult());
             }
@@ -128,7 +128,7 @@ public class TaskRunningController {
                 return ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
             }
             //更新我的任务为关闭
-            result = taskRunningService.runningtoclose(id);
+            result = taskRunningService.updateRunningToClose(id);
             //判断是否成功
             if(result.isSuccess()){
                 return ApiResponse.jsonData(APIStatus.OK_200,result.getResult());
@@ -157,7 +157,7 @@ public class TaskRunningController {
         ExecuteResult<String> result = new ExecuteResult<String>();
         try {
             //更新我的正在进行任务为完成
-            result = taskRunningService.runningtoalready(id);
+            result = taskRunningService.updateRunningToAlready(id);
             //判断是否成功
             if(result.isSuccess()){
                 return ApiResponse.jsonData(APIStatus.OK_200,result.getResult());
