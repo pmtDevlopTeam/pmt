@@ -371,7 +371,7 @@
 	      create_user_id, modify_user_id, create_time, 
 	      modify_time)
 	    values (#{id,jdbcType=BIGINT}, #{taskNum,jdbcType=VARCHAR}, #{taskName,jdbcType=VARCHAR}, 
-	      #{taskParentId,jdbcType=BIGINT}, #{project.proId,jdbcType=BIGINT}, #{demand.id,jdbcType=BIGINT}, 
+	      #{taskParentId,jdbcType=BIGINT}, #{project.id,jdbcType=BIGINT}, #{demand.id,jdbcType=BIGINT}, 
 	      #{priority,jdbcType=CHAR}, #{assignUser.userId,jdbcType=VARCHAR}, #{beassignUser.userId,jdbcType=VARCHAR}, 
 	      #{assignTime,jdbcType=TIMESTAMP}, #{estimateStartTime,jdbcType=TIMESTAMP}, #{estimateEndTime,jdbcType=TIMESTAMP}, 
 	      #{actualStartTime,jdbcType=TIMESTAMP}, #{actualEndTime,jdbcType=TIMESTAMP}, #{taskType,jdbcType=CHAR}, 
@@ -393,7 +393,7 @@
 		    set task_num = #{taskNum,jdbcType=VARCHAR},
 		      task_name = #{taskName,jdbcType=VARCHAR},
 		      task_parent_id = #{taskParentId,jdbcType=BIGINT},
-		      project_id = #{project.proId,jdbcType=BIGINT},
+		      project_id = #{project.id,jdbcType=BIGINT},
 		      demand_id = #{demand.id,jdbcType=BIGINT},
 		      priority = #{priority,jdbcType=CHAR},
 		      assign_user_id = #{assignUser.userId,jdbcType=VARCHAR},
@@ -438,8 +438,8 @@
 		<if test="taskName != null">
 			and t.task_name = #{taskName,jdbcType=CHAR}
 		</if>
-		<if test="project.proId != null">
-			and t.project_id = #{project.proId,jdbcType=CHAR}
+		<if test="project.id != null">
+			and t.project_id = #{project.id,jdbcType=CHAR}
 		</if>
 		<if test="priority != null">
 			and t.priority = #{priority,jdbcType=CHAR}

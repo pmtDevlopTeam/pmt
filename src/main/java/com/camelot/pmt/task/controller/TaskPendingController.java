@@ -48,7 +48,7 @@ public class TaskPendingController {
 	@ApiImplicitParams({
         @ApiImplicitParam(name = "taskNum", value = "任务编号", required = true, paramType = "form", dataType = "String"),
         @ApiImplicitParam(name = "taskName", value = "父级任务标识号", required = true, paramType = "form", dataType = "String"),
-        @ApiImplicitParam(name = "project.proId", value = "项目标识号", required = true, paramType = "form", dataType = "String"),
+        @ApiImplicitParam(name = "project.id", value = "项目标识号", required = true, paramType = "form", dataType = "String"),
         @ApiImplicitParam(name = "priority", value = "优先级", required = true, paramType = "form", dataType = "String"),
         @ApiImplicitParam(name = "assignUser.userId", value = "指派人标识号", required = true, paramType = "form", dataType = "String"),
         @ApiImplicitParam(name = "status", value = "任务状态", required = true, paramType = "form", dataType = "String") })
@@ -87,7 +87,7 @@ public class TaskPendingController {
 	@ApiImplicitParams({
         @ApiImplicitParam(name = "taskNum", value = "任务编号", required = true, paramType = "form", dataType = "String"),
         @ApiImplicitParam(name = "taskName", value = "父级任务标识号", required = true, paramType = "form", dataType = "String"),
-        @ApiImplicitParam(name = "project.proId", value = "项目标识号", required = true, paramType = "form", dataType = "String"),
+        @ApiImplicitParam(name = "project.id", value = "项目标识号", required = true, paramType = "form", dataType = "String"),
         @ApiImplicitParam(name = "priority", value = "优先级", required = true, paramType = "form", dataType = "String"),
         @ApiImplicitParam(name = "assignUser.userId", value = "指派人标识号", required = true, paramType = "form", dataType = "String"),
         @ApiImplicitParam(name = "status", value = "任务状态", required = true, paramType = "form", dataType = "String") })
@@ -324,18 +324,17 @@ public class TaskPendingController {
         @ApiImplicitParam(name = "taskNum", value = "任务编号", required = true, paramType = "form", dataType = "String"),
         @ApiImplicitParam(name = "taskName", value = "任务名称", required = true, paramType = "form", dataType = "String"),
         @ApiImplicitParam(name = "taskParentId", value = "父级任务标识号", required = true, paramType = "form", dataType = "String"),
-        @ApiImplicitParam(name = "project.proId", value = "项目标识号", required = true, paramType = "form", dataType = "String"),
+        @ApiImplicitParam(name = "project.id", value = "项目标识号", required = true, paramType = "form", dataType = "String"),
         @ApiImplicitParam(name = "demand.id", value = "需求标识号", required = true, paramType = "form", dataType = "String"),
         @ApiImplicitParam(name = "priority", value = "优先级", required = true, paramType = "form", dataType = "String"),
         @ApiImplicitParam(name = "assignUser.userId", value = "指派人标识号", required = true, paramType = "form", dataType = "String"),
         @ApiImplicitParam(name = "beassignUser.userId", value = "负责人标识号", required = true, paramType = "form", dataType = "String"),
-        @ApiImplicitParam(name = "estimateStartTime", value = "任务预期开始时间", required = true, paramType = "form", dataType = "String"),
-        @ApiImplicitParam(name = "estimateEndTime", value = "任务预期结束时间", required = true, paramType = "form", dataType = "String"),
+        @ApiImplicitParam(name = "estimateStartTime", value = "任务预期开始时间", required = true, paramType = "form", dataType = "Date"),
+        @ApiImplicitParam(name = "estimateEndTime", value = "任务预期结束时间", required = true, paramType = "form", dataType = "Date"),
         @ApiImplicitParam(name = "taskType", value = "任务类型", required = true, paramType = "form", dataType = "String"),
         @ApiImplicitParam(name = "taskDescribe", value = "任务描述", required = true, paramType = "form", dataType = "String"),
         @ApiImplicitParam(name = "status", value = "任务状态", required = true, paramType = "form", dataType = "String"),
-        @ApiImplicitParam(name = "estimateHour", value = "任务预计工时", required = true, paramType = "form", dataType = "String"),
-        @ApiImplicitParam(name = "comment", value = "备注", required = true, paramType = "form", dataType = "String") })
+        @ApiImplicitParam(name = "estimateHour", value = "任务预计工时", required = true, paramType = "form", dataType = "String") })
 	@RequestMapping(value = "/addTask", method = RequestMethod.POST)
 	public JSONObject addTask(@ApiIgnore Task task) {
 		ExecuteResult<String> result = new ExecuteResult<String>();
@@ -377,13 +376,12 @@ public class TaskPendingController {
         @ApiImplicitParam(name = "priority", value = "优先级", required = true, paramType = "form", dataType = "String"),
         @ApiImplicitParam(name = "assignUser.userId", value = "指派人标识号", required = true, paramType = "form", dataType = "String"),
         @ApiImplicitParam(name = "beassignUser.userId", value = "负责人标识号", required = true, paramType = "form", dataType = "String"),
-        @ApiImplicitParam(name = "estimateStartTime", value = "任务预期开始时间", required = true, paramType = "form", dataType = "String"),
-        @ApiImplicitParam(name = "estimateEndTime", value = "任务预期结束时间", required = true, paramType = "form", dataType = "String"),
+        @ApiImplicitParam(name = "estimateStartTime", value = "任务预期开始时间", required = true, paramType = "form", dataType = "Date"),
+        @ApiImplicitParam(name = "estimateEndTime", value = "任务预期结束时间", required = true, paramType = "form", dataType = "Date"),
         @ApiImplicitParam(name = "taskType", value = "任务类型", required = true, paramType = "form", dataType = "String"),
         @ApiImplicitParam(name = "taskDescribe", value = "任务描述", required = true, paramType = "form", dataType = "String"),
         @ApiImplicitParam(name = "status", value = "任务状态", required = true, paramType = "form", dataType = "String"),
-        @ApiImplicitParam(name = "estimateHour", value = "任务预计工时", required = true, paramType = "form", dataType = "String"),
-        @ApiImplicitParam(name = "comment", value = "备注", required = true, paramType = "form", dataType = "String") })
+        @ApiImplicitParam(name = "estimateHour", value = "任务预计工时", required = true, paramType = "form", dataType = "String") })
 	@RequestMapping(value = "/editTask", method = RequestMethod.POST)
 	public JSONObject editTask(@ApiIgnore Task task) {
 		ExecuteResult<String> result = new ExecuteResult<String>();
