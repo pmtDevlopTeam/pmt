@@ -1,10 +1,14 @@
 package com.camelot.pmt.project.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-public class ProjectBudget {
+public class ProjectBudget implements Serializable{
+    
+    private static final long serialVersionUID = 1L;
+    
     /**
      * 预算id
      */

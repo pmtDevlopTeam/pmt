@@ -5,21 +5,68 @@ import java.util.Map;
 
 import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.project.model.ProjectBudget;
-
+/**
+ * 
+ * @author lixk
+ * @Description: 项目预算接口类
+ * @date 2018年4月18日 上午9:38:32
+ */
 public interface ProjectBudgetService {
 
-    ExecuteResult<Map<String, Object>> findBudgetByProId(Long proId);
+    /**
+     * 查询项目预算
+     * 
+     *@param  Long proId
+     *@return ExecuteResult<Map<String, Object>>
+     */
+    ExecuteResult<Map<String, Object>> queryBudget(Long proId);
 
-    ExecuteResult<String> saveProjectBudget(ProjectBudget projectBudget);
+    /**
+     * 添加项目预算
+     * 
+     *@param  ProjectBudget projectBudget
+     *@return ExecuteResult<String>
+     */
+    ExecuteResult<String> addBudget(ProjectBudget projectBudget);
 
-    ExecuteResult<String> modifyProjectBudget(ProjectBudget projectBudget);
+    /**
+     * 修改项目预算
+     * 
+     *@param  ProjectBudget projectBudget
+     *@return ExecuteResult<String>
+     */
+    ExecuteResult<String> updateBudget(ProjectBudget projectBudget);
 
-    ExecuteResult<ProjectBudget> findProjectBudgeByProjectId(Long projectId);
+    /**
+     * 根据项目id查询项目预算
+     * 
+     *@param  Long projectId
+     *@return ExecuteResult<ProjectBudget>
+     */
+    ExecuteResult<ProjectBudget> queryBudgeByProjectId(Long projectId);
 
-    ExecuteResult<List<Map<String, Object>>> findDemandTaskByDeamdId(Long demandId);
+    /**
+     * 查询影响需求的任务信息
+     * 
+     *@param  Long demandId
+     *@return ExecuteResult<List<Map<String, Object>>>
+     */
+    ExecuteResult<List<Map<String, Object>>> queryDemandTaskByDeamdId(Long demandId);
 
-    ExecuteResult<List<Map<String, Object>>> findDemandUseCaseByDeamdId(Long demandId);
+    /**
+     * 查询影响需求的用例信息
+     * 
+     *@param  Long demandId
+     *@return ExecuteResult<List<Map<String, Object>>>
+     */
+    ExecuteResult<List<Map<String, Object>>> queryDemandUseCaseByDeamdId(Long demandId);
 
+    /**
+     * 查询影响需求的BUG信息
+     * 
+     *@param  Long demandId
+     *@return ExecuteResult<List<Map<String, Object>>>
+     */
     ExecuteResult<List<Map<String, Object>>> findDemandBugByDeamdId(Long demandId);
 
 }
