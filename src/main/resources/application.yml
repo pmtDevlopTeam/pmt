@@ -44,6 +44,7 @@ spring:
     username: ligendwow@163.com     # 用户名
     password: backspace09        # 密码
     default-encoding: UTF-8
+
   profiles:
     active: dev
 
