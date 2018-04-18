@@ -62,16 +62,17 @@ public class MenuController {
     })
     @PostMapping(value = "/addMenu")
     public JSONObject addMenu(@ApiIgnore Menu menu) {
+        boolean flag = false;
         try {
-            result = menuService.addMenu(menu);
-            if (result.isSuccess()) {
+            flag = menuService.addMenu(menu);
+            if(flag){
                 return ApiResponse.success();
             }
+            return ApiResponse.error("添加异常");
         } catch (Exception e) {
             logger.error(e.getMessage());
-            return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
+            return ApiResponse.jsonData(APIStatus.ERROR_500);
         }
-        return ApiResponse.error();
     }
 
     /**
@@ -85,16 +86,17 @@ public class MenuController {
     @ApiParam(name = "menuId", value = "菜单业务di", required = false, paramType = "form", dataType = "String")
     @PostMapping(value = "/deleteMenuByMenuId")
     public JSONObject deleteMenuByMenuId(String menuId) {
+        boolean flag = false;
         try {
-            result = menuService.deleteMenuByMenuId(menuId);
-            if (result.isSuccess()) {
+            flag = menuService.addMenu(menuId);
+            if(flag){
                 return ApiResponse.success();
             }
+            return ApiResponse.error("删除异常");
         } catch (Exception e) {
             logger.error(e.getMessage());
-            return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
+            return ApiResponse.jsonData(APIStatus.ERROR_500);
         }
-        return ApiResponse.error();
     }
 
     /**
@@ -126,15 +128,15 @@ public class MenuController {
     @PostMapping(value = "/updateMenuByMenuId")
     public JSONObject updateMenuByMenuId(@ApiIgnore Menu menu) {
         try {
-            result = menuService.updateMenuByMenuId(menu);
-            if (result.isSuccess()) {
+            flag = menuService.addMenu(menu);
+            if(flag){
                 return ApiResponse.success();
             }
+            return ApiResponse.error("修改异常");
         } catch (Exception e) {
             logger.error(e.getMessage());
-            return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
+            return ApiResponse.jsonData(APIStatus.ERROR_500);
         }
-        return ApiResponse.error();
     }
 
     /**
@@ -148,13 +150,12 @@ public class MenuController {
     @PostMapping(value = "/queryMenuByMenuId")
     public JSONObject queryMenuByMenuId(@ApiParam(name = "menuId", value = "菜单业务di", required = false, paramType = "form", dataType = "String")String menuId) {
         try {
-            result = menuService.queryMenuByMenuId(menuId);
-            if (result.isSuccess()) {
-                return ApiResponse.success(result.getResult());
+            Menu menu = menuService.queryMenuByMenuId(menuId);
+            return ApiResponse.success(menu);
             }
         } catch (Exception e) {
             logger.error(e.getMessage());
-            return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
+            return ApiResponse.jsonData(APIStatus.ERROR_500);
         }
         return ApiResponse.error();
     }
@@ -170,13 +171,11 @@ public class MenuController {
     @GetMapping(value = "/queryMenuByMenuId")
     public JSONObject queryMenuById(@RequestParam(value = "id", required = false, defaultValue = "1") Integer id) {
         try {
-            result = menuService.queryMenuById(id);
-            if (result.isSuccess()) {
-                return ApiResponse.success(result.getResult());
-            }
+            Menu menu = menuService.queryMenuById(id);
+            return ApiResponse.success(menu);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
+            return ApiResponse.jsonData(APIStatus.ERROR_500);
         }
         return ApiResponse.error();
     }
@@ -208,20 +207,16 @@ public class MenuController {
             @ApiImplicitParam(name = "modifyUserId", value = "修改人", required = false, paramType = "query", dataType = "String")
     })
     @PostMapping(value = "/queryAllMenuList")
-    public JSONObject queryAllMenuList(@ApiIgnore Menu menu， @RequestParam(defaultValue = "1") Integer pageSize,@RequestParam(defaultValue = "10") Integer currentPage) {
+    public JSONObject queryAllMenuList(@ApiIgnore Menu menu,@RequestParam(defaultValue = "1") Integer pageSize,@RequestParam(defaultValue = "10") Integer currentPage) {
 
         try {
             List<Menu> list = menuService.selectMenuList(menu);
             PageInfo<Menu> result = new PageInfo<Menu>(list);
-
-            if (result.isSuccess()) {
-                return ApiResponse.success(result.getResult());
-            }
+            return ApiResponse.success(result);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
+            return ApiResponse.jsonData(APIStatus.ERROR_500);
         }
-        return ApiResponse.error();
 
     }
 }
