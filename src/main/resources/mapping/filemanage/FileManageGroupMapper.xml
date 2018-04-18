@@ -164,7 +164,8 @@
 		id, parent_id AS parentId, project_id AS projectId, `name`,fdescribe, create_user_id AS createUserId, create_time AS createTime, modify_user_id AS modifyUserId, modify_time AS modifyTime, del_flag AS delFlag
 	</sql>
   <!--手动编写sql -->
-  <select id="selectFileGroup" parameterType="com.camelot.pmt.filemanage.model.FileManageGroup" resultType="com.camelot.pmt.filemanage.model.FileManageGroup">
+  <!--根据条件查询文件夹-->
+  <select id="querytFileGroup" parameterType="com.camelot.pmt.filemanage.model.FileManageGroup" resultType="com.camelot.pmt.filemanage.model.FileManageGroup">
     select <include refid="Base_Column_List" /> from file_manage_group
     <where>
      <if test="projectId!=null">
@@ -175,9 +176,11 @@
       </if>
     </where>
   </select>
+  <!--根据父级id查询所有文件夹id-->
   <select id="selectFileManagerGroupByParentId" parameterType="long" resultType="long">
     select id from file_manage_group where parent_id=#{parentId}
   </select>
+  <!--根据集合批量删除文件夹-->
   <delete id="deleteBatchFileGroupById" parameterType="long">
   delete from file_manage_group where id in(
     <foreach collection="list" item="q" separator=",">

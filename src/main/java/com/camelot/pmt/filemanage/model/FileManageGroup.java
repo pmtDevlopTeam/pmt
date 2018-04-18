@@ -7,30 +7,29 @@ import java.util.List;
 张战1
  */
 public class FileManageGroup {
-    private Long id;
+    private Long id;//文件夹id
 
-    private Long parentId;
+    private Long parentId;//父级id
 
-    private Long projectId;
+    private Long projectId;//项目id
 
-    private String name;
-    private String fdescribe;
+    private String name;//文件夹名称
+    private String fdescribe;//文件夹描述
 
-    private Long  createUserId;
+    private Long  createUserId;//创建人id
 
-    private Date createTime;
+    private Date createTime;//创建时间
 
-    private Long modifyUserId;
+    private Long modifyUserId;//修改人id
 
-    private Date modifyTime;
+    private Date modifyTime;//修改时间
 
-    private String delFlag;
+    private String delFlag;//删除状态（0未删除，1已删除）
 
-    private Integer isfile;
-    private int currentPage;
-    private int pageSize;
-    private int indexPage;
-    private List<FileManageGroup> listGroup;
+    private Integer isfile;//判断是否是文件
+    private int currentPage;//当前页
+    private int pageSize;//每页显示条数
+    private List<FileManageGroup> listGroup;//文件夹集合
 
     public Long getId() {
         return id;
@@ -136,14 +135,6 @@ public class FileManageGroup {
         this.pageSize = pageSize;
     }
 
-    public int getIndexPage() {
-        return indexPage;
-    }
-
-    public void setIndexPage(int indexPage) {
-        this.indexPage = indexPage;
-    }
-
     public List<FileManageGroup> getListGroup() {
         return listGroup;
     }
@@ -168,7 +159,6 @@ public class FileManageGroup {
                 ", isfile=" + isfile +
                 ", currentPage=" + currentPage +
                 ", pageSize=" + pageSize +
-                ", indexPage=" + indexPage +
                 ", listGroup=" + listGroup +
                 '}';
     }

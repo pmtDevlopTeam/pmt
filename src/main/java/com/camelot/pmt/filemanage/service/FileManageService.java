@@ -15,13 +15,13 @@ import java.util.List;
 
  */
 public interface FileManageService {
-    ExecuteResult<String> addFileManager(HttpServletRequest request, FileManage fileManage);//文件添加
+    Boolean addFileManager(HttpServletRequest request, FileManage fileManage);//文件添加
 
-    ExecuteResult<String> deleteFileById(FileManage fileManage);//文件删除
+    Boolean deleteFileById(FileManage fileManage);//文件删除
 
-    ExecuteResult<String> updateFileById(HttpServletRequest request, FileManage fileManage);//文件修改
+    Boolean updateFileById(HttpServletRequest request, FileManage fileManage);//文件修改
 
-    ExecuteResult<PageInfo> queryFileByGroupId(FileManageGroup fileManageGroup);// 文件详细信息查询（根据组idprojectID）
+    PageInfo<FileManage> queryFileByGroupId(FileManageGroup fileManageGroup);// 文件详细信息查询（根据组idprojectID）
 
     ExecuteResult<List<FileManage>> queryAllFile();
 }

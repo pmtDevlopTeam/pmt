@@ -8,6 +8,7 @@ import com.camelot.pmt.common.APIStatus;
 import com.camelot.pmt.common.ApiResponse;
 import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.caserepertory.PageBean;
+import com.camelot.pmt.platform.model.Menu;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 
@@ -16,6 +17,8 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,12 +34,11 @@ import java.util.List;
  *
  */
 @Controller
-
-
 @Api(value = "文件数据接口", description = "文件数据接口")
-
 @RequestMapping(value = "/file/manager")
 public class FileManageController {
+    //日志
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
     private FileManageService fileManageService;
     @ApiOperation(value = "添加文件功能", notes = "添加文件功能")
@@ -48,19 +50,16 @@ public class FileManageController {
     @RequestMapping(value = "/addFileManager",method = RequestMethod.POST)
     @ResponseBody
     public JSONObject addFileManager(HttpServletRequest request, FileManage fileManage){//添加文件
-        ExecuteResult<String> result = new ExecuteResult<String>();
-        try{
-            //判断非空
-            if(fileManage==null){
-                return ApiResponse.error();
+        Boolean b=null;
+        try {
+            b = fileManageService.addFileManager(request,fileManage);//添加文件夹
+            if(b){
+                return ApiResponse.success();
             }
-            // 不为空调用接口添加
-            result=fileManageService.addFileManager(request,fileManage);//添加文件夹
-            // 成功返回
-            return ApiResponse.success(result.getResult());
-        }catch (Exception e){
-            // 异常
-            return ApiResponse.error();
+            return ApiResponse.error("修改异常");
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return ApiResponse.jsonData(APIStatus.ERROR_500);
         }
     }
 
@@ -70,19 +69,17 @@ public class FileManageController {
             @ApiImplicitParam(name = "id", value = "产出物id", required = true, paramType = "query", dataType = "String") })
     @RequestMapping(value = "/deldeteFileById",method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject deldeteFileById(FileManage fileManage){
-        ExecuteResult<String> result = new ExecuteResult<String>();
-        try{
-            if(fileManage==null){
-                return ApiResponse.jsonData(APIStatus.ERROR_400);
+    public JSONObject deldeteFileById(FileManage fileManage){//删除文件
+        Boolean b=null;
+        try {
+            b = fileManageService.deleteFileById(fileManage);//删除文件
+            if(b){
+                return ApiResponse.success();
             }
-            result=fileManageService.deleteFileById(fileManage);//删除文件
-            if (result.isSuccess()) {
-                return ApiResponse.success(result.getResult());
-            }
-            return ApiResponse.error();
-        }catch (Exception e){
-            return ApiResponse.error();
+            return ApiResponse.error("修改异常");
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return ApiResponse.jsonData(APIStatus.ERROR_500);
         }
     }
     @ApiOperation(value = "根据条件修改文件功能", notes = "根据条件修改文件功能")
@@ -95,17 +92,17 @@ public class FileManageController {
     })
     @RequestMapping(value = "/updateFileById",method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject updateFileById(HttpServletRequest request, FileManage fileManage){
-
-        ExecuteResult<String> result = new ExecuteResult<String>();
-        try{
-            if(fileManage==null){
-                return  ApiResponse.errorPara();
+    public JSONObject updateFileById(HttpServletRequest request, FileManage fileManage){//文件修改
+        Boolean b=null;
+        try {
+            b = fileManageService.updateFileById(request,fileManage);//文件修改
+            if(b){
+                return ApiResponse.success();
             }
-            result=fileManageService.updateFileById(request,fileManage);//文件修改
-            return ApiResponse.success(result.getResult());
-        }catch (Exception e){
-            return ApiResponse.error();
+            return ApiResponse.error("修改异常");
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return ApiResponse.jsonData(APIStatus.ERROR_500);
         }
     }
     @ApiOperation(value = "根据条件查询文件功能", notes = "根据条件查询文件功能")
@@ -116,18 +113,14 @@ public class FileManageController {
     })
     @RequestMapping(value = "/queryFileByGroupId",method = RequestMethod.GET)
     @ResponseBody
-    public JSONObject queryFileByGroupId(FileManageGroup fileManageGroup){
-        ExecuteResult<PageInfo> result = new ExecuteResult<PageInfo>();
+    public JSONObject queryFileByGroupId(FileManageGroup fileManageGroup){//根据组id查询文件
         try {
-            result =fileManageService.queryFileByGroupId(fileManageGroup);//查询文件详细信息
-            if (result.isSuccess()) {
-                return ApiResponse.success(result.getResult());
-            }
-            return ApiResponse.error();
+            PageInfo<FileManage> fileManagePageInfo = fileManageService.queryFileByGroupId(fileManageGroup);//查询文件详细信息
+            return ApiResponse.success(fileManagePageInfo);
         } catch (Exception e) {
-            return ApiResponse.error();
+            logger.error(e.getMessage());
+            return ApiResponse.jsonData(APIStatus.ERROR_500);
         }
-
     }
     @ApiOperation(value = "查询所有文件", notes = "查询所有文件")
     @RequestMapping(value = "/queryAllFile",method = RequestMethod.POST)
@@ -144,6 +137,4 @@ public class FileManageController {
             return ApiResponse.error();
         }
     }
-
-
 }
