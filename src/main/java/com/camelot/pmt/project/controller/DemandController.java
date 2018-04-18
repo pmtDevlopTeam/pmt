@@ -39,7 +39,6 @@ import com.camelot.pmt.project.service.DemandService;
  */
 @RestController
 @Api(value = "项目管理-需求模块", description = "项目管理-需求模块的控制器类")
-@RequestMapping("/project/demond")
 @RequestMapping(value = "/platform/project")
 public class DemandController {
 
