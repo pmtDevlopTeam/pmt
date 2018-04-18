@@ -5,6 +5,7 @@ import com.camelot.pmt.common.*;
 import com.camelot.pmt.common.ApiResponse;
 import com.camelot.pmt.task.model.Task;
 import com.camelot.pmt.task.model.TaskLog;
+import com.camelot.pmt.task.service.TaskManagerService;
 import com.camelot.pmt.task.service.TaskRunningService;
 import com.camelot.pmt.task.utils.Constant;
 import com.github.pagehelper.PageInfo;
@@ -33,6 +34,9 @@ public class TaskRunningController {
 
     @Autowired
     private TaskRunningService taskRunningService;
+
+    @Autowired
+    private TaskManagerService taskManagerService;
 
     /**
      * 查询所有正在进行的任务
@@ -71,9 +75,9 @@ public class TaskRunningController {
     @RequestMapping(value = "user/queryTaskById", method = RequestMethod.POST)
     public JSONObject queryTaskById(
             @ApiParam(name = "id", value = "任务id", required = true) @RequestParam(required = true) Long id) {
-        ExecuteResult<Task> result = new ExecuteResult<Task>();
+        ExecuteResult<Map<String, Object>> result = new ExecuteResult<Map<String, Object>>();
         try {
-            result = taskRunningService.queryTaskById(id);
+            result = taskManagerService.queryTaskById(id);
             if (result.isSuccess()) {
                 return ApiResponse.success(result.getResult());
             }
