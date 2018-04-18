@@ -334,7 +334,7 @@
 
     <!--zlh-->
     <!--根据id查询任务详情-->
-    <select id="queryTaskById" parameterType="java.lang.Long" resultMap="ShowAllTasks_Column_List">
+    <select id="queryTaskById" parameterType="java.lang.Long" resultMap="BaseResultMap">
         SELECT
         <include refid="ShowAllTasks_Column_List" />
         from task t LEFT JOIN platform_user a ON t.assign_user_id = a.user_id  --指派人user表 别名 a
