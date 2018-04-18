@@ -1,12 +1,14 @@
 package com.camelot.pmt.task.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.camelot.pmt.common.*;
+import com.camelot.pmt.common.APIStatus;
 import com.camelot.pmt.common.ApiResponse;
+import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.task.model.Task;
 import com.camelot.pmt.task.service.TaskAlreadyService;
 import com.camelot.pmt.task.service.TaskRunningService;
 import com.camelot.pmt.task.utils.Constant;
+import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -14,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.Date;
 import java.util.Map;
@@ -40,22 +41,15 @@ public class TaskAlreadyController {
      *         myp
      */
     @ApiOperation(value = "查询所有已完成的任务", notes = "查询所有已完成的任务")
-    @RequestMapping(value = "/queryoverdueTaskAlready", method = RequestMethod.GET)
+    @RequestMapping(value = "/queryTaskAlready", method = RequestMethod.GET)
     @ApiImplicitParams({
             @ApiImplicitParam(name = "page", value = "页码", required = true, paramType = "query", dataType = "int"),
             @ApiImplicitParam(name = "rows", value = "每页数量", required = true, paramType = "query", dataType = "int")})
-    public JSONObject queryoverdueTaskAlready(@ApiIgnore Pager page) {
-        ExecuteResult<DataGrid<Map<String, Object>>> result = new ExecuteResult<DataGrid<Map<String, Object>>>();
+    public JSONObject queryTaskAlready(int page , int rows) {
+        String userLoginId = String.valueOf(1);
+        ExecuteResult<PageInfo<Map<String, Object>>> result = new ExecuteResult<PageInfo<Map<String, Object>>>();
         try {
-            Long userLoginId = Long.valueOf(1);
-            //检查用户是否登录，需要去session中获取用户登录信息
-            if(StringUtils.isEmpty(userLoginId)){
-                return ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
-            }
-            if (page == null) {
-                return ApiResponse.errorPara();
-            }
-            result = taskAlreadyService.queryoverdueTaskAlready(page,userLoginId);
+            result = taskAlreadyService.queryTaskAlready(page, rows, "2");
             if (result.isSuccess()) {
                 return ApiResponse.success(result.getResult());
             }
@@ -75,7 +69,7 @@ public class TaskAlreadyController {
      * @return {"status": {"message": "请求处理成功.","code": 200}, "data": {Task}]
      */
     @ApiOperation(value = "根据id查询单个任务明细", notes = "根据id查询单个任务明细")
-    @RequestMapping(value = "user/queryTaskById", method = RequestMethod.POST)
+    @RequestMapping(value = "user/queryTaskById", method = RequestMethod.GET)
     public JSONObject queryTaskById(
             @ApiParam(name = "id", value = "任务id", required = true) @RequestParam(required = true) Long id) {
         ExecuteResult<Task> result = new ExecuteResult<Task>();
@@ -103,7 +97,7 @@ public class TaskAlreadyController {
     @ApiOperation(value = "我的已完成任务转为正在进行、重做功能", notes = "我的已完成任务转为正在进行、重做功能")
     @RequestMapping(value = "/updateTaskAlreadyToRunning", method = RequestMethod.POST)
     public JSONObject updateTaskAlreadyToRunning(
-            @ApiParam(name = "id", value = "任务标识号", required = true) @RequestParam(required = true) Long taskId,
+            @ApiParam(name = "id", value = "任务id", required = true) @RequestParam(required = true) Long taskId,
             @ApiParam(name = "delayDescribe", value = "任务描述", required = true) @RequestParam(required = true) String delayDescribe,
             @ApiParam(name = "estimateStartTime", value = "任务预计开始时间", required = true) @RequestParam(required = true) Date estimateStartTime){
         ExecuteResult<String> result = new ExecuteResult<String>();

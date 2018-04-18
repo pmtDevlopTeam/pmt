@@ -1,6 +1,7 @@
 package com.camelot.pmt.task.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.camelot.pmt.common.APIStatus;
 import com.camelot.pmt.common.ApiResponse;
 import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.task.model.TaskLog;
@@ -8,11 +9,16 @@ import com.camelot.pmt.task.service.TaskLogService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
+
+import java.util.List;
+
 /**
  * 日志管理接口
 	* @ClassName: TaskLogController
@@ -48,6 +54,28 @@ public class TaskLogController {
 		} catch (Exception e) {
 			// 异常
 			return ApiResponse.error();
+		}
+	}
+
+	/**
+	 *
+	 * @Title: queryUserAll @Description: TODO查询任务历史记录 @param @return @return
+	 *         JSONObject @throws
+	 *         myp
+	 */
+	@ApiOperation(value = "查询任务历史记录", notes = "查询任务历史记录")
+	@RequestMapping(value = "/queryTaskLogList", method = RequestMethod.GET)
+	public JSONObject queryTaskLogList(
+			@ApiParam(name = "id", value = "任务id", required = true) @RequestParam(required = true) Long id) {
+		ExecuteResult<List<TaskLog>> result = null;
+		try {
+			result = taskLogService.queryTaskLogList(id);
+			if (result.isSuccess()) {
+				return ApiResponse.success(result.getResult());
+			}
+			return ApiResponse.error();
+		} catch (Exception e) {
+			return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
 		}
 	}
 	

@@ -2,6 +2,9 @@ package com.camelot.pmt.task.service;
 
 import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.task.model.TaskLog;
+
+import java.util.List;
+
 /**
  * 
 	* @ClassName: TaskLogService
@@ -22,4 +25,14 @@ public interface TaskLogService {
 	 */
 	ExecuteResult<String> insertTaskLog(TaskLog tasklog);
 
+	/**
+	 * 查询日志
+	 * @Title: queryTaskLogList
+	 * @Description: TODO
+	 * @param @param tasklog
+	 * @param @return
+	 * @return ExecuteResult<String>
+	 * @throws
+	 */
+    ExecuteResult<List<TaskLog>> queryTaskLogList(Long id);
 }
