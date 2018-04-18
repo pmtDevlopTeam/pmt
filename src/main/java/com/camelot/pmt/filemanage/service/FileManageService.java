@@ -19,12 +19,9 @@ public interface FileManageService {
 
     ExecuteResult<String> deleteFileById(FileManage fileManage);//文件删除
 
-
     ExecuteResult<String> updateFileById(HttpServletRequest request, FileManage fileManage);//文件修改
 
+    ExecuteResult<PageInfo> queryFileByGroupId(FileManageGroup fileManageGroup);// 文件详细信息查询（根据组idprojectID）
 
-
-    ExecuteResult<PageInfo> selectFileByGroupID(FileManageGroup fileManageGroup);// 文件详细信息查询（根据组idprojectID）
-
-    ExecuteResult<List<FileManage>> selectAllFile();
+    ExecuteResult<List<FileManage>> queryAllFile();
 }

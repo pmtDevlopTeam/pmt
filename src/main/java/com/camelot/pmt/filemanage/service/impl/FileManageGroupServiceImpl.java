@@ -148,34 +148,34 @@ public class FileManageGroupServiceImpl implements FileManageGroupService {
         }
 
     }
-
-
-
-   /* @Override
-    public List<FileManageGroup> selectTree(FileManageGroup fileManageGroup) {
-        List<List<FileManageGroup>> groupList1 = null;
+    @Override
+    public List<FileManageGroup> queryTree(FileManageGroup fileManageGroup) {
         FileManageGroup fileManageGroup1=new FileManageGroup();
-        Long projectId = fileManageGroup.getProjectId();
-        Integer isfile = fileManageGroup.getIsfile();
-        Long parentId1 = fileManageGroup.getParentId();
           List<FileManageGroup> groupList=fileManageGroupMapper.selectFileGroup(fileManageGroup);
             for (FileManageGroup group :
             groupList) {
                 Long id = group.getId();
                 fileManageGroup1.setParentId(id);
-                List<FileManageGroup> digui = digui(fileManageGroup1);
-                groupList1.add(digui);
+                List<FileManageGroup> children = this.digui(fileManageGroup1);
+                group.setListGroup(children);
             }
-        return null;
+        System.out.println(groupList);
+        return groupList;
     }
     public List<FileManageGroup> digui(FileManageGroup fileManageGroup){
-        List<FileManageGroup> digui = null;
+        FileManageGroup fileManageGroup1=null;
         List<FileManageGroup> groupList=fileManageGroupMapper.selectFileGroup(fileManageGroup);
         for (FileManageGroup group:
         groupList) {
-
+            List<FileManageGroup> groupList1=fileManageGroupMapper.selectFileGroup(fileManageGroup);
+            if (groupList1 != null && groupList1.size() != 0) {
+                Long id = group.getId();
+                fileManageGroup1.setParentId(id);
+                group.setListGroup(this.digui(fileManageGroup1));
+            } else {
+                return groupList;
+            }
         }
-        digui = digui(group);
         return groupList;
-    }*/
+    }
 }

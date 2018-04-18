@@ -46,7 +46,7 @@ public class FileManageGroupController {
             @ApiImplicitParam(name = "name", value = "文件夹名称", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "fdescribe", value = "文件夹描述", required = true, paramType = "query", dataType = "String"),
     })
-    @RequestMapping(value="/addfilegroup",method = RequestMethod.POST)
+    @RequestMapping(value="/addFileManagerGroup",method = RequestMethod.POST)
     @ResponseBody
     public JSONObject addFileManagerGroup(HttpServletRequest request, FileManageGroup fileManageGroup)
     {
@@ -69,7 +69,7 @@ public class FileManageGroupController {
     @ApiOperation(value = "删除文件夹功能", notes = "删除文件夹功能")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "文件夹id", required = true, paramType = "query", dataType = "String") })
-    @RequestMapping(value="/deletefilegroup",method = RequestMethod.POST)
+    @RequestMapping(value="/deleteFileGroup",method = RequestMethod.POST)
     @ResponseBody
     public JSONObject deleteFileGroup(FileManageGroup fileManageGroup){
         ExecuteResult<String> result = new ExecuteResult<String>();
@@ -96,7 +96,7 @@ public class FileManageGroupController {
             @ApiImplicitParam(name = "fdescribe", value = "文件夹描述", required = false, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "id", value = "文件夹id", required = true, paramType = "query", dataType = "String")
     })
-    @RequestMapping(value="/updatefilegroup",method = RequestMethod.POST)
+    @RequestMapping(value="/updateFileGroupById",method = RequestMethod.POST)
     @ResponseBody
     public JSONObject updateFileGroupById(HttpServletRequest request,FileManageGroup fileManageGroup){
         ExecuteResult<String> result = new ExecuteResult<String>();
@@ -119,7 +119,7 @@ public class FileManageGroupController {
     })
    @RequestMapping(value="/selectFileGroup",method = RequestMethod.GET)
     @ResponseBody
-    public JSONObject selectFileGroupByParentID(FileManageGroup fileManageGroup){//根据parentId查询根据projectId查询
+    public JSONObject selectFileGroup(FileManageGroup fileManageGroup){//根据parentId查询根据projectId查询
         ExecuteResult<List<FileManageGroup>> result = new ExecuteResult<List<FileManageGroup>>();
         try {
             result = fileManageGroupService.selectFileGroup(fileManageGroup);//根据条件查询文件夹
@@ -131,36 +131,13 @@ public class FileManageGroupController {
             return ApiResponse.error();
         }
     }
-    /*@RequestMapping("/batechDeleteFileGroupByIds")
-public JSONObject batechDeleteFileGroupByIds(List<Long> ids){
-        ExecuteResult<String> result = new ExecuteResult<String>();
-        try{
-            FileManageGroup group = new FileManageGroup();
-            for (Long id:
-                    ids) {
-                group.setId(id);
-                result=   fileManageGroupService.deleteFileGroup(group);
-            }
-            if (result.isSuccess()) {
-                return ApiResponse.success(result.getResult());
-            }
-            return ApiResponse.error();
-        }catch (Exception e){
-            return ApiResponse.error();
-        }
-
-
-
-
-
-    }*/
-   /* @ApiOperation(value = "根据条件查询文件夹功能", notes = "根据条件查询文件夹功能")
-    @RequestMapping(value = "/selectTree",method = RequestMethod.GET)
+   @ApiOperation(value = "根据条件查询文件夹功能", notes = "根据条件查询文件夹功能")
+    @RequestMapping(value = "/queryTree",method = RequestMethod.GET)
     @ResponseBody
-    public JSONObject selectTree(FileManageGroup fileManageGroup){
-      List <FileManageGroup>  treeList=fileManageGroupService.selectTree(fileManageGroup);
+    public JSONObject queryTree(FileManageGroup fileManageGroup){
+      List <FileManageGroup>  treeList=fileManageGroupService.queryTree(fileManageGroup);
         return null;
-    }*/
+    }
 
             }
 

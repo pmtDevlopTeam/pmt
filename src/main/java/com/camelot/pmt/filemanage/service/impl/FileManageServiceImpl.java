@@ -106,12 +106,12 @@ public class FileManageServiceImpl implements FileManageService {
     }
 
     @Override
-    public ExecuteResult<PageInfo> selectFileByGroupID(FileManageGroup fileManageGroup) {
+    public ExecuteResult<PageInfo> queryFileByGroupId(FileManageGroup fileManageGroup) {
         ExecuteResult<PageInfo> result = new ExecuteResult<PageInfo>();
         try {
             Long id = fileManageGroup.getId();//获取文件group_id
             PageHelper.startPage(fileManageGroup.getCurrentPage(),fileManageGroup.getPageSize());
-            List<FileManage> fileList= fileManageMapper.selectFileByGroupID(fileManageGroup);//文件查询
+            List<FileManage> fileList= fileManageMapper.queryFileByGroupId(fileManageGroup);//文件查询
             PageInfo<FileManage> fileManagePageInfo = new PageInfo<>(fileList);
             if (fileList.size() <= 0) {
                 return result;
@@ -125,11 +125,11 @@ public class FileManageServiceImpl implements FileManageService {
     }
 
     @Override
-    public ExecuteResult<List<FileManage>> selectAllFile() {
+    public ExecuteResult<List<FileManage>> queryAllFile() {
         ExecuteResult<List<FileManage>> result = new ExecuteResult<List<FileManage>>();
         try {
 
-            List<FileManage> fileList= fileManageMapper.selectAllFile();//文件查询
+            List<FileManage> fileList= fileManageMapper.queryAllFile();//文件查询
             if (fileList.size() <= 0) {
                 return result;
             }

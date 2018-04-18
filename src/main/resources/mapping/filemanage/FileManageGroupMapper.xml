@@ -163,16 +163,7 @@
 	<sql id="Base_Column_List">
 		id, parent_id AS parentId, project_id AS projectId, `name`,fdescribe, create_user_id AS createUserId, create_time AS createTime, modify_user_id AS modifyUserId, modify_time AS modifyTime, del_flag AS delFlag
 	</sql>
-  <!--
-  <sql id="Base_Column_List">
-    id, parent_id, project_id, name, create_user_id, create_time, modify_user_id, modify_time,
-    del_flag, isfile
-  </sql>
-  -->
   <!--手动编写sql -->
-  <!--<select id="selectFileGroupByProjectID" parameterType="Long" resultType="com.camelot.pmt.filemanage.model.FileManageGroup">
-    select * from file_manage_group where project_id=#{projectId}
-  </select>-->
   <select id="selectFileGroup" parameterType="com.camelot.pmt.filemanage.model.FileManageGroup" resultType="com.camelot.pmt.filemanage.model.FileManageGroup">
     select <include refid="Base_Column_List" /> from file_manage_group
     <where>

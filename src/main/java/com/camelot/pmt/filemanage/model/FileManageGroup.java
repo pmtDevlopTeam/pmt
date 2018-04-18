@@ -1,6 +1,8 @@
 package com.camelot.pmt.filemanage.model;
 
 import java.util.Date;
+import java.util.List;
+
 /*
 张战1
  */
@@ -28,6 +30,7 @@ public class FileManageGroup {
     private int currentPage;
     private int pageSize;
     private int indexPage;
+    private List<FileManageGroup> listGroup;
 
     public Long getId() {
         return id;
@@ -141,6 +144,14 @@ public class FileManageGroup {
         this.indexPage = indexPage;
     }
 
+    public List<FileManageGroup> getListGroup() {
+        return listGroup;
+    }
+
+    public void setListGroup(List<FileManageGroup> listGroup) {
+        this.listGroup = listGroup;
+    }
+
     @Override
     public String toString() {
         return "FileManageGroup{" +
@@ -158,6 +169,7 @@ public class FileManageGroup {
                 ", currentPage=" + currentPage +
                 ", pageSize=" + pageSize +
                 ", indexPage=" + indexPage +
+                ", listGroup=" + listGroup +
                 '}';
     }
 }
