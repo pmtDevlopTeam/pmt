@@ -1,22 +1,27 @@
 package com.camelot.pmt.testmanage.casemanage.controller;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
 import com.camelot.pmt.caserepertory.PageBean;
+import com.camelot.pmt.common.APIStatus;
 import com.camelot.pmt.common.ApiResponse;
 import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.platform.model.User;
@@ -30,6 +35,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import springfox.documentation.annotations.ApiIgnore;
 /**
  * @author 
  * @Description:用例管理接口
@@ -40,60 +46,43 @@ import io.swagger.annotations.ApiParam;
 @RequestMapping(value = "/casemanage")
 public class UseCaseController {
 	
+	 //日志
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+	
 	@Autowired
 	UseCaseService UseCaseService;
 	
 	@ApiOperation(value = "新增用例")
 	@PostMapping(value = "userCase/add")
-	public ActionBean add(HttpServletRequest request, @RequestBody @ApiParam(value = "useCase", required = true) UseCase useCase) {
-		ActionBean actionBean = new ActionBean();
-	 	try {
-			User user = (User) request.getSession().getAttribute("user");
-			UseCaseService.add(user, useCase);
-			actionBean.setCode(200);
-			actionBean.setResult(true);
-		} catch (Exception e) {
-			actionBean.setCode(500);
-			actionBean.setResult(false);
-			actionBean.setErrorMessage(e.getMessage());
-		}
-		return actionBean;
+	public JSONObject addUseCase(HttpServletRequest request,  @ApiParam(value = "useCase", required = true) UseCase useCase) {
+	 	 try {
+	 		 	User user = (User) request.getSession().getAttribute("user");
+	           boolean flag = UseCaseService.addUseCase(user, useCase);
+	            if(flag){
+	                return ApiResponse.success();
+	            }
+	            return ApiResponse.error("新增异常");
+	        } catch (Exception e) {
+	            logger.error(e.getMessage());
+	            return ApiResponse.jsonData(APIStatus.ERROR_500);
+	        }
 	}
 
 	@ApiOperation(value = "批量新增用例")
 	@PostMapping(value = "userCase/addBatch")
-	public ActionBean addBatch(HttpServletRequest request, @RequestBody @ApiParam(value = "list", required = true) List<UseCase> list) {
-		ActionBean actionBean = new ActionBean();
-	 	try {
-			User user = (User) request.getSession().getAttribute("user");
-			UseCaseService.addBatch(user, list);
-			actionBean.setCode(200);
-			actionBean.setResult(true);
-		} catch (Exception e) {
-			actionBean.setCode(500);
-			actionBean.setResult(false);
-			actionBean.setErrorMessage(e.getMessage());
-		}
-		return actionBean;
+	public JSONObject addBatchUseCase(HttpServletRequest request, @RequestBody @ApiParam(value = "list", required = true) List<UseCase> list) {
+		try {
+ 		 	User user = (User) request.getSession().getAttribute("user");
+           boolean flag = UseCaseService.addBatchUseCase(user, list);
+            if(flag){
+                return ApiResponse.success();
+            }
+            return ApiResponse.error("批量新增异常");
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return ApiResponse.jsonData(APIStatus.ERROR_500);
+        }
 	}
-	 
-	 
-	 @ApiOperation(value = "通过id获取用例信息", notes = "通过id获取用例信息")
-	    @RequestMapping(value = "userCase/queryByUseCaseId", method = RequestMethod.GET)
-	    @ApiImplicitParams({
-	            @ApiImplicitParam(name = "id", value = "用例id", required = true, paramType = "query", dataType = "long") })
-	    public JSONObject queryByUseCaseId(Long id) {
-		 	 ExecuteResult<UseCase> result = new ExecuteResult<UseCase>();
-		        try {
-		            //调用添加bug接口
-		        	result=UseCaseService.getUseCaseByUseCaseId(id);
-		            // 成功返回
-		            return ApiResponse.success(result.getResult());
-		        } catch (Exception e) {
-		            // 异常
-		            return ApiResponse.error();
-		        }
-	    }
 	 
 	 
 	 @ApiOperation(value = "根据id删除用例信息", notes = "根据id删除用例信息")
@@ -102,7 +91,7 @@ public class UseCaseController {
 	            @ApiImplicitParam(name = "id", value = "用例id", required = true, paramType = "query", dataType = "long") })
 	    public JSONObject updateUserCaseDelFlag(Long id) {
 		 	try {
-	            //调用添加bug接口
+	            //调用修改用例接口
 		 		boolean	result=UseCaseService.updateUserCaseDelFlag(id);
 	            // 成功返回
 	            return ApiResponse.success(result);
@@ -114,15 +103,14 @@ public class UseCaseController {
 	 
 	 
 	 	@ApiOperation(value = "编辑用例")
-		@PostMapping(value = "userCase/edit")
-		public JSONObject edit(HttpServletRequest request, @RequestBody @ApiParam(value = "useCase", required = true) UseCase useCase) {
-			ExecuteResult<String> result = new ExecuteResult<String>();
+		@PostMapping(value = "userCase/updateUserCase")
+		public JSONObject updateUserCase(HttpServletRequest request,@ApiIgnore @ApiParam(value = "useCase", required = true) UseCase useCase) {
 		 	try {
-	            //调用添加bug接口
 		 		User user = (User) request.getSession().getAttribute("user");
-	        	result=UseCaseService.edit(user, useCase);
+	            //调用修改接口
+		 		boolean	result=UseCaseService.updateUserCase(user, useCase);
 	            // 成功返回
-	            return ApiResponse.success(result.getResult());
+	            return ApiResponse.success(result);
 	        } catch (Exception e) {
 	            // 异常
 	            return ApiResponse.error();
@@ -170,6 +158,26 @@ public class UseCaseController {
 		            return ApiResponse.error();
 		        }
 		    }
+	 	 
+	 	 
+	 	 
+		 @ApiOperation(value = "通过id获取用例信息", notes = "通过id获取用例信息")
+		    @RequestMapping(value = "userCase/queryByUseCaseId", method = RequestMethod.GET)
+		    @ApiImplicitParams({
+		            @ApiImplicitParam(name = "id", value = "用例id", required = true, paramType = "query", dataType = "long") })
+		    public JSONObject queryByUseCaseId(Long id) {
+			 	 ExecuteResult<UseCase> result = new ExecuteResult<UseCase>();
+			        try {
+			            //调用添加bug接口
+			        	result=UseCaseService.getUseCaseByUseCaseId(id);
+			            // 成功返回
+			            return ApiResponse.success(result.getResult());
+			        } catch (Exception e) {
+			            // 异常
+			            return ApiResponse.error();
+			        }
+		    }
+		 
 
 	
 }

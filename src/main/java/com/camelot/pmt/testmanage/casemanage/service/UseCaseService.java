@@ -15,7 +15,15 @@ public interface UseCaseService {
 	 *
 	 * @param useCase 测试用例
 	 */
-	void add(User userModel, UseCase useCase);
+	boolean addUseCase(User userModel, UseCase useCase);
+	
+	/**
+	 * 批量新增
+	 *
+	 * @param userModel 用户信息
+	 * @param list      用例集合
+	 */
+	boolean addBatchUseCase(User userModel, List<UseCase> list);
 	
 	/**
 	 * 根据用例id获取用例
@@ -30,20 +38,12 @@ public interface UseCaseService {
 	 */
 	boolean updateUserCaseDelFlag(Long id);
 
-	/**
-	 * 批量新增
-	 *
-	 * @param userModel 用户信息
-	 * @param list      用例集合
-	 */
-	void addBatch(User userModel, List<UseCase> list);
-	
 	/***
 	 * 修改用例
 	 * @param userModel
 	 * @param useCase
 	 */
-	ExecuteResult<String> edit(User userModel, UseCase useCase);
+	boolean updateUserCase(User userModel, UseCase useCase);
 	
 	/**
 	 * 用例分页查询
