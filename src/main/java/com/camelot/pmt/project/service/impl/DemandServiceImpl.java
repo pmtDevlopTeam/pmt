@@ -51,7 +51,7 @@ public class DemandServiceImpl implements DemandService {
             }
             flag = true;
         } catch (Exception e) {
-            throw  new RuntimeException();
+            throw  new RuntimeException(e);
         }
         return flag;
     }
@@ -280,6 +280,7 @@ public class DemandServiceImpl implements DemandService {
      */
     @Override
     public boolean updateByReview(Demand demand, User user) {
+        boolean flag=false;
         try {
             int resultCount = demandMapper.updateByPrimaryKeySelective(demand);
             if (resultCount > 0) {
@@ -292,9 +293,10 @@ public class DemandServiceImpl implements DemandService {
                 demandOperate.setRunType("02");
                 demandOperateMapper.insert(demandOperate);
             }
-            return true;
+            flag= true;
         } catch (Exception e) {
-            return false;
+            throw new RuntimeException(e);
         }
+        return flag;
     }
 }
