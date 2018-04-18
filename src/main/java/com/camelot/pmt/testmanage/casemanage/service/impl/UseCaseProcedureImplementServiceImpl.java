@@ -14,9 +14,9 @@ public class UseCaseProcedureImplementServiceImpl implements UseCaseProcedureImp
 	@Autowired
 	UseCaseProcedureImplementService useCaseProcedureImplementService;
 	@Override
-	public List<UseCaseProcedureImplement> findByImplementId(Long implementId) {
+	public List<UseCaseProcedureImplement> queryUseCaseProcedureImplementd(Long implementId) {
 		
-		return useCaseProcedureImplementService.findByImplementId(implementId);
+		return useCaseProcedureImplementService.queryUseCaseProcedureImplementd(implementId);
 	}
 
 }

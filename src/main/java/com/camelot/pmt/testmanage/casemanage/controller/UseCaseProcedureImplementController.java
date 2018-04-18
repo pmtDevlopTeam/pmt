@@ -24,13 +24,13 @@ public class UseCaseProcedureImplementController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "implementId", value = "测试执行id", required = true, paramType = "query", dataType = "Long")
     })
-	 @RequestMapping(value = "useCaseProcedure/findUseCaseProcedureImplementd", method = RequestMethod.GET)
-    public ActionBean findUseCaseProcedureImplementd(Long implementId) {
+	 @RequestMapping(value = "useCaseProcedure/queryUseCaseProcedureImplementd", method = RequestMethod.GET)
+    public ActionBean queryUseCaseProcedureImplementd(Long implementId) {
         ActionBean actionBean = new ActionBean();
         try {
             actionBean.setCode(200);
             actionBean.setResult(true);
-            actionBean.setResponse(useCaseProcedureImplementService.findByImplementId(implementId));
+            actionBean.setResponse(useCaseProcedureImplementService.queryUseCaseProcedureImplementd(implementId));
         } catch (Exception e) {
             actionBean.setCode(500);
             actionBean.setResult(false);
