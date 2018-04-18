@@ -19,14 +19,14 @@ public interface RoleMapper {
      * 
      * @param role
      */
-    void createRole(Role role);
+    int addRole(Role role);
 
     /**
      * 修改角色
      * 
      * @param role
      */
-    void modifyRoleById(Role role);
+    int updateRoleById(Role role);
 
     /**
      * 删除角色
