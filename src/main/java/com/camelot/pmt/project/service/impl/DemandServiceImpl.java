@@ -8,14 +8,16 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import com.camelot.pmt.platform.model.User;
+import com.camelot.pmt.platform.shiro.ShiroUtils;
+import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.camelot.pmt.common.DataGrid;
 import com.camelot.pmt.common.ExecuteResult;
-import com.camelot.pmt.common.Pager;
 import com.camelot.pmt.project.mapper.DemandMapper;
 import com.camelot.pmt.project.mapper.DemandOperateMapper;
 import com.camelot.pmt.project.model.Demand;
@@ -32,56 +34,39 @@ public class DemandServiceImpl implements DemandService {
     DemandOperateMapper demandOperateMapper;
 
     @Override
-    public ExecuteResult<String> save(Demand demandWithBLOBs) {
-        ExecuteResult<String> result = new ExecuteResult<>();
+    @Transactional(rollbackFor = Exception.class)
+    public boolean save(Demand demand, User user) {
         try {
-            if (demandWithBLOBs == null) {
-                result.setResultMessage("传入参数不能为空");
-                return result;
+            int resultCount = demandMapper.insert(demand);
+            if (resultCount > 0) {
+                DemandOperate demandOperate = new DemandOperate();
+                demandOperate.setCreateUserId(demand.getCreateUserId());
+                demandOperate.setCreateTime(demand.getCreateTime());
+                demandOperate.setDemandId(demand.getId());
+                demandOperate.setOperateDesc(user.getUsername() + "创建");
+                //常规操作
+                demandOperate.setRunType("01");
+                demandOperateMapper.insert(demandOperate);
             }
-            demandMapper.insert(demandWithBLOBs);
-            DemandOperate demandOperate = new DemandOperate();
-            // TODO
-            Date currentDate = new Date();
-            demandOperate.setId(0l);
-            demandOperate.setCreateTime(currentDate);
-            demandOperate.setDemandId(demandWithBLOBs.getId());
-            demandOperate.setOperateDesc("新增需求");
-            demandOperateMapper.insert(demandOperate);
-            result.setResult("新增需求成功");
+            return true;
         } catch (Exception e) {
-            logger.error("--------新增需求-------" + e.getMessage());
+            e.printStackTrace();
+            return false;
         }
-        return result;
     }
 
     /**
      * 查询需求分页
-     * 
+     *
      * @param demand
      * @return
      */
     @Override
-    public ExecuteResult<DataGrid<Demand>> findAllByPage(Pager<?> pager, Demand demand) {
-        ExecuteResult<DataGrid<Demand>> result = new ExecuteResult<>();
-        try {
-            List<Demand> demandWithBLOBsList = demandMapper.findAllByPage(pager, demand);
-            if (CollectionUtils.isEmpty(demandWithBLOBsList)) {
-                DataGrid<Demand> dg = new DataGrid<Demand>();
-                result.setResult(dg);
-                return result;
-            }
-            DataGrid<Demand> dg = new DataGrid<Demand>();
-            dg.setRows(demandWithBLOBsList);
-            // 查询总条数
-            Long total = demandMapper.queryCount(demand);
-            dg.setTotal(total);
-            result.setResult(dg);
-        } catch (Exception e) {
-            logger.error("-------需求查询分页------" + e.getMessage());
-            throw new RuntimeException(e);
-        }
-        return result;
+    public List<Demand> queryByPage(Demand demand,Integer pageSize,Integer currentPage) {
+            PageHelper.startPage(currentPage,pageSize);
+            return demandMapper.queryByPage(demand);
+
+
     }
 
     /**
@@ -89,7 +74,7 @@ public class DemandServiceImpl implements DemandService {
      * param  Long id
      * return DemandVO
      */
-    @Override
+
     public DemandVO queryDemandById(Long id) {
         DemandVO demandVO = new DemandVO();
         Demand demandWithBLOBs = demandMapper.selectByPrimaryKey(id);
@@ -112,6 +97,7 @@ public class DemandServiceImpl implements DemandService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public ExecuteResult<String> deleteDemandById(Long id) {
         ExecuteResult<String> result = new ExecuteResult<>();
         try {
@@ -150,17 +136,16 @@ public class DemandServiceImpl implements DemandService {
                 return result;
             }
             demandMapper.deleteByList(list);
-            result.setResult("删除需求成功");
-            // 暂留操作日志
-
-            DemandOperate demandOperate = new DemandOperate();
-            Date currentDate = new Date();
-            demandOperate.setId(0l);
-            demandOperate.setCreateTime(currentDate);
-            demandOperate.setCreateUserId("1");
-            demandOperate.setDemandId(id);
-            demandOperate.setOperateDesc("删除需求");
-            demandOperateMapper.insert(demandOperate);
+            User user = (User) ShiroUtils.getSessionAttribute("user");
+            if(null!=user) {
+                DemandOperate demandOperate = new DemandOperate();
+                Date currentDate = new Date();
+                demandOperate.setCreateTime(currentDate);
+                demandOperate.setCreateUserId(user.getUserId());
+                demandOperate.setDemandId(id);
+                demandOperate.setOperateDesc(user.getUsername()+"删除需求");
+                demandOperateMapper.insert(demandOperate);
+            }
             result.setResult("删除需求成功");
         } catch (Exception e) {
             logger.error("-------需求业务根据id删除------" + e.getMessage());
@@ -173,57 +158,45 @@ public class DemandServiceImpl implements DemandService {
 
     /**
      * 根据实体更新
-     * 
-     * @param demandWithBLOBs
+     *
+     * @param demand
      * @return
      */
     @Override
-    public ExecuteResult<String> updateByDemand(Demand demandWithBLOBs) {
-        ExecuteResult<String> result = new ExecuteResult<>();
+    @Transactional(rollbackFor = Exception.class)
+    public boolean updateByDemand(Demand demand,User user) {
+       boolean flag=false;
         try {
-            int updateResult = demandMapper.updateByPrimaryKeyWithBLOBs(demandWithBLOBs);
-
-            if (updateResult > 0) {
-                // 更新成功
-                result.setResult("更新需求成功");
-                // 暂留操作日志 TODO
+            int updateCount = demandMapper.updateByPrimaryKeySelective(demand);
+            if (updateCount > 0) {
                 DemandOperate demandOperate = new DemandOperate();
                 Date currentDate = new Date();
-                demandOperate.setId(0l);
                 demandOperate.setCreateTime(currentDate);
-                demandOperate.setDemandId(demandWithBLOBs.getId());
-                demandOperate.setOperateDesc("更新需求");
+                demandOperate.setDemandId(demand.getId());
+                demandOperate.setOperateDesc(user.getUsername()+"更新需求");
+                demandOperate.setCreateUserId(user.getUserId());
+                demandOperate.setRunType("02");
                 demandOperateMapper.insert(demandOperate);
             }
-            result.setResult("更新失败");
+           return true;
         } catch (Exception e) {
             logger.error("------需求更新------" + e.getMessage());
-            throw new RuntimeException();
+            return false;
         }
-        return result;
+
     }
 
     @Override
-    public ExecuteResult<DataGrid<DemandOperate>> findAllByPage(Pager<?> pager, DemandOperate demandOperate) {
+    public List<DemandOperate> queryOperateByPage(DemandOperate demandOperate,Integer pageSize,Integer currentPage) {
         ExecuteResult<DataGrid<DemandOperate>> result = new ExecuteResult<>();
         try {
-            List<DemandOperate> demandWithBLOBsList = demandOperateMapper.findAllByPage(pager, demandOperate);
-            if (CollectionUtils.isEmpty(demandWithBLOBsList)) {
-                DataGrid<DemandOperate> dg = new DataGrid<DemandOperate>();
-                result.setResult(dg);
-                return result;
-            }
-            DataGrid<DemandOperate> dg = new DataGrid<DemandOperate>();
-            dg.setRows(demandWithBLOBsList);
-            // 查询总条数
-            Long total = demandOperateMapper.queryCount(demandOperate);
-            dg.setTotal(total);
-            result.setResult(dg);
+            PageHelper.startPage(currentPage,pageSize);
+            List<DemandOperate> demandOperatesList = demandOperateMapper.queryOperateByPage(demandOperate);
+            return demandOperatesList;
         } catch (Exception e) {
             logger.error("-------需求查询分页------" + e.getMessage());
             throw new RuntimeException(e);
         }
-        return result;
     }
 
     /**
@@ -244,11 +217,11 @@ public class DemandServiceImpl implements DemandService {
         }
         return list;
     }
-    
+
     /**
      * 查询影响需求的任务信息
      *
-     * @param  Long demandId
+     * @param   demandId
      * @return ExecuteResult<List<Map<String, Object>>>
      */
     @Override
@@ -266,7 +239,7 @@ public class DemandServiceImpl implements DemandService {
     /**
      * 查询影响变更需求影响的用例信息
      *
-     * @param  Long demandId
+     * @param   demandId
      * @return ExecuteResult<List<Map<String, Object>>>
      */
     @Override
@@ -284,7 +257,7 @@ public class DemandServiceImpl implements DemandService {
     /**
      * 查询影响需求变更的bug信息
      *
-     * @param  Long demandId
+     * @param   demandId
      * @return ExecuteResult<List<Map<String, Object>>>
      */
     @Override
@@ -299,4 +272,29 @@ public class DemandServiceImpl implements DemandService {
         return result;
     }
 
+    /**
+     * 需求评审
+     *
+     * @param demand
+     * @return
+     */
+    @Override
+    public boolean updateByReview(Demand demand, User user) {
+        try {
+            int resultCount = demandMapper.updateByPrimaryKeySelective(demand);
+            if (resultCount > 0) {
+                DemandOperate demandOperate = new DemandOperate();
+                demandOperate.setCreateUserId(demand.getCreateUserId());
+                demandOperate.setCreateTime(demand.getCreateTime());
+                demandOperate.setDemandId(demand.getId());
+                demandOperate.setOperateDesc(user.getUsername() + "评审需求");
+                //评审操作
+                demandOperate.setRunType("02");
+                demandOperateMapper.insert(demandOperate);
+            }
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }

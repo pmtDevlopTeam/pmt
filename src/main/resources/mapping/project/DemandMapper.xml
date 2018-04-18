@@ -1,225 +1,254 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.camelot.pmt.project.mapper.DemandMapper" >
-  <resultMap id="BaseResultMap" type="com.camelot.pmt.project.model.Demand" >
-    <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="pid" property="pid" jdbcType="BIGINT" />
-    <result column="project_id" property="projectId" jdbcType="BIGINT" />
-    <result column="demand_name" property="demandName" jdbcType="VARCHAR" />
-    <result column="demand_num" property="demandNum" jdbcType="VARCHAR" />
-    <result column="demand_status" property="demandStatus" jdbcType="CHAR" />
-    <result column="demand_level" property="demandLevel" jdbcType="CHAR" />
-    <result column="demand_source" property="demandSource" jdbcType="VARCHAR" />
-    <result column="source_remark" property="sourceRemark" jdbcType="VARCHAR" />
-    <result column="create_user_id" property="createUserId" jdbcType="VARCHAR" />
-    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-    <result column="modify_user_id" property="modifyUserId" jdbcType="VARCHAR" />
-    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
-    <result column="demandNeed" property="demand_need" jdbcType="CHAR" />
-    <result column="reviewTime" property="review_time" jdbcType="TIMESTAMP" />
-    <result column="reviewResults" property="review_results" jdbcType="CHAR" />
-    <result column="assignedTo" property="assigned_to" jdbcType="VARCHAR" />
-    <result column="reviewedWith" property="reviewed_with" jdbcType="TIMESTAMP" />
-    <result column="reviewRemark" property="review_remark" jdbcType="VARCHAR" />
-    <result column="reasonsejection" property="reasons_rejection" jdbcType="VARCHAR" />
-
-    <result column="demand_desc" property="demandDesc" jdbcType="LONGVARCHAR" />
-    <result column="close_reason" property="closeReason" jdbcType="LONGVARCHAR" />
-  </resultMap>
-  <sql id="Base_Column_List" >
+<mapper namespace="com.camelot.pmt.project.mapper.DemandMapper">
+    <resultMap id="BaseResultMap" type="com.camelot.pmt.project.model.Demand">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="pid" property="pid" jdbcType="BIGINT"/>
+        <result column="project_id" property="projectId" jdbcType="BIGINT"/>
+        <result column="demand_name" property="demandName" jdbcType="VARCHAR"/>
+        <result column="demand_num" property="demandNum" jdbcType="VARCHAR"/>
+        <result column="demand_status" property="demandStatus" jdbcType="CHAR"/>
+        <result column="demand_level" property="demandLevel" jdbcType="CHAR"/>
+        <result column="demand_source" property="demandSource" jdbcType="VARCHAR"/>
+        <result column="source_remark" property="sourceRemark" jdbcType="VARCHAR"/>
+        <result column="create_user_id" property="createUserId" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="modify_user_id" property="modifyUserId" jdbcType="VARCHAR"/>
+        <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP"/>
+        <result column="demandNeed" property="demand_need" jdbcType="CHAR"/>
+        <result column="reviewTime" property="review_time" jdbcType="TIMESTAMP"/>
+        <result column="reviewResults" property="review_results" jdbcType="CHAR"/>
+        <result column="assignedTo" property="assigned_to" jdbcType="VARCHAR"/>
+        <result column="reviewedWith" property="reviewed_with" jdbcType="TIMESTAMP"/>
+        <result column="reviewRemark" property="review_remark" jdbcType="VARCHAR"/>
+        <result column="reasonsejection" property="reasons_rejection" jdbcType="VARCHAR"/>
+        <result column="demand_desc" property="demandDesc" jdbcType="LONGVARCHAR"/>
+        <result column="close_reason" property="closeReason" jdbcType="LONGVARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
     id, pid, project_id, demand_name, demand_num, demand_status, demand_level, demand_source, 
     source_remark, create_user_id, create_time, modify_user_id, modify_time,demand_need,review_time,review_results,assigned_to,reviewed_with,review_remark,reasons_rejection, demand_desc, close_reason
   </sql>
-  <sql id="dynamicWhere">
-    <where>
-      <if test="demand.id!=null"> AND id=#{demand.id} </if>
-      <if test="demand.pid!= null"> AND pid=#{demand.pid} </if>
-      <if test="demand.projectId!= null"> AND project_id=#{demand.projectId} </if>
-      <if test="demand.demandName!= null"> AND demand_name=#{demand.demandName} </if>
-      <if test="demand.demandNum!= null"> AND demand_num=#{demand.demandNum} </if>
-      <if test="demand.demandStatus!= null"> AND demand_status=#{demand.demandStatus} </if>
-      <if test="demand.demandLevel!= null"> AND demand_level=#{demand.demandLevel} </if>
-      <if test="demand.demandSource!= null"> AND demand_source=#{demand.demandSource} </if>
-      <if test="demand.sourceRemark!= null"> AND source_remark=#{demand.sourceRemark} </if>
-      <if test="demand.createUserId!= null"> AND create_user_id=#{demand.createUserId} </if>
-      <if test="demand.createTime!= null"> AND create_time=#{demand.createTime} </if>
-      <if test="demand.modifyUserId!= null"> AND modify_user_id=#{demand.modifyUserId} </if>
-      <if test="demand.modifyTime!= null"> AND modify_time=#{demand.modifyTime} </if>
-      <if test="demand.reviewedWith!= null"> AND find_in_set(${demand.reviewedWith},reviewed_with)>0 </if>
-    </where>
-  </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select 
-    <include refid="Base_Column_List" />
-    from demand
-    where id = #{id,jdbcType=BIGINT}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    <sql id="dynamicWhere">
+        <where>
+            <if test="demand.id!=null">AND id=#{demand.id}</if>
+            <if test="demand.pid!= null">AND pid=#{demand.pid}</if>
+            <if test="demand.projectId!= null">AND project_id=#{demand.projectId}</if>
+            <if test="demand.demandName!= null">AND demand_name=#{demand.demandName}</if>
+            <if test="demand.demandNum!= null">AND demand_num=#{demand.demandNum}</if>
+            <if test="demand.demandStatus!= null">AND demand_status=#{demand.demandStatus}</if>
+            <if test="demand.demandLevel!= null">AND demand_level=#{demand.demandLevel}</if>
+            <if test="demand.demandSource!= null">AND demand_source=#{demand.demandSource}</if>
+            <if test="demand.sourceRemark!= null">AND source_remark=#{demand.sourceRemark}</if>
+            <if test="demand.createUserId!= null">AND create_user_id=#{demand.createUserId}</if>
+            <if test="demand.createTime!= null">AND create_time=#{demand.createTime}</if>
+            <if test="demand.modifyUserId!= null">AND modify_user_id=#{demand.modifyUserId}</if>
+            <if test="demand.modifyTime!= null">AND modify_time=#{demand.modifyTime}</if>
+            <if test="demand.reviewedWith!= null">AND find_in_set(${demand.reviewedWith},reviewed_with)>0</if>
+            <if test="demand.demandNeed!= null">AND demand_need=#{demand.demandNeed}</if>
+            <if test="demand.reviewTime!= null">AND review_time=#{demand.reviewTime}</if>
+            <if test="demand.reviewResults!= null">AND review_results=#{reviewResults.reviewTime}</if>
+            <if test="demand.assignedTo!= null">AND assigned_to=#{assignedTo.reviewTime}</if>
+        </where>
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from demand
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from demand
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.camelot.pmt.project.model.Demand" >
-    insert into demand (id, pid, project_id, 
-      demand_name, demand_num, demand_status, 
-      demand_level, demand_source, source_remark, 
-      create_user_id, create_time, modify_user_id, 
-      modify_time, demand_desc, close_reason
+    <insert id="insert" parameterType="com.camelot.pmt.project.model.Demand"  useGeneratedKeys="true" keyProperty="id">
+    insert into demand (id, pid, project_id,
+      demand_name, demand_num, demand_status,
+      demand_level, demand_source, source_remark,
+      create_user_id, create_time, modify_user_id,
+      modify_time,demand_desc,close_reason,demand_need,
+      review_time,review_results,assigned_to,reviewed_with,
+      review_remark,reasons_rejection
       )
-    values (#{id,jdbcType=BIGINT}, #{pid,jdbcType=BIGINT}, #{projectId,jdbcType=BIGINT}, 
-      #{demandName,jdbcType=VARCHAR}, #{demandNum,jdbcType=VARCHAR}, #{demandStatus,jdbcType=CHAR}, 
-      #{demandLevel,jdbcType=CHAR}, #{demandSource,jdbcType=VARCHAR}, #{sourceRemark,jdbcType=VARCHAR}, 
-      #{createUserId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=VARCHAR}, 
-      #{modifyTime,jdbcType=TIMESTAMP}, #{demandDesc,jdbcType=LONGVARCHAR}, #{closeReason,jdbcType=LONGVARCHAR}
-      )
+    values (#{id,jdbcType=BIGINT}, #{pid,jdbcType=BIGINT}, #{projectId,jdbcType=BIGINT},
+      #{demandName,jdbcType=VARCHAR}, #{demandNum,jdbcType=VARCHAR}, #{demandStatus,jdbcType=CHAR},
+      #{demandLevel,jdbcType=CHAR}, #{demandSource,jdbcType=VARCHAR}, #{sourceRemark,jdbcType=VARCHAR},
+      #{createUserId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=VARCHAR},
+      #{modifyTime,jdbcType=TIMESTAMP}, #{demandDesc,jdbcType=LONGVARCHAR}, #{closeReason,jdbcType=LONGVARCHAR},
+      #{demandNeed,jdbcType=CHAR},#{reviewTime,jdbcType=TIMESTAMP},#{reviewResults,jdbcType=VARCHAR},#{assignedTo,jdbcType=VARCHAR},
+      #{reviewedWith,jdbcType=VARCHAR},#{reviewRemark,jdbcType=VARCHAR},#{reasonsRejection,jdbcType=VARCHAR}
+  )
   </insert>
-  <insert id="insertSelective" parameterType="com.camelot.pmt.project.model.Demand" >
-    insert into demand
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        id,
-      </if>
-      <if test="pid != null" >
-        pid,
-      </if>
-      <if test="projectId != null" >
-        project_id,
-      </if>
-      <if test="demandName != null" >
-        demand_name,
-      </if>
-      <if test="demandNum != null" >
-        demand_num,
-      </if>
-      <if test="demandStatus != null" >
-        demand_status,
-      </if>
-      <if test="demandLevel != null" >
-        demand_level,
-      </if>
-      <if test="demandSource != null" >
-        demand_source,
-      </if>
-      <if test="sourceRemark != null" >
-        source_remark,
-      </if>
-      <if test="createUserId != null" >
-        create_user_id,
-      </if>
-      <if test="createTime != null" >
-        create_time,
-      </if>
-      <if test="modifyUserId != null" >
-        modify_user_id,
-      </if>
-      <if test="modifyTime != null" >
-        modify_time,
-      </if>
-      <if test="demandDesc != null" >
-        demand_desc,
-      </if>
-      <if test="closeReason != null" >
-        close_reason,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        #{id,jdbcType=BIGINT},
-      </if>
-      <if test="pid != null" >
-        #{pid,jdbcType=BIGINT},
-      </if>
-      <if test="projectId != null" >
-        #{projectId,jdbcType=BIGINT},
-      </if>
-      <if test="demandName != null" >
-        #{demandName,jdbcType=VARCHAR},
-      </if>
-      <if test="demandNum != null" >
-        #{demandNum,jdbcType=VARCHAR},
-      </if>
-      <if test="demandStatus != null" >
-        #{demandStatus,jdbcType=CHAR},
-      </if>
-      <if test="demandLevel != null" >
-        #{demandLevel,jdbcType=CHAR},
-      </if>
-      <if test="demandSource != null" >
-        #{demandSource,jdbcType=VARCHAR},
-      </if>
-      <if test="sourceRemark != null" >
-        #{sourceRemark,jdbcType=VARCHAR},
-      </if>
-      <if test="createUserId != null" >
-        #{createUserId,jdbcType=VARCHAR},
-      </if>
-      <if test="createTime != null" >
-        #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="modifyUserId != null" >
-        #{modifyUserId,jdbcType=VARCHAR},
-      </if>
-      <if test="modifyTime != null" >
-        #{modifyTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="demandDesc != null" >
-        #{demandDesc,jdbcType=LONGVARCHAR},
-      </if>
-      <if test="closeReason != null" >
-        #{closeReason,jdbcType=LONGVARCHAR},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.camelot.pmt.project.model.Demand" >
+    <insert id="insertSelective" parameterType="com.camelot.pmt.project.model.Demand">
+        insert into demand
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="pid != null">
+                pid,
+            </if>
+            <if test="projectId != null">
+                project_id,
+            </if>
+            <if test="demandName != null">
+                demand_name,
+            </if>
+            <if test="demandNum != null">
+                demand_num,
+            </if>
+            <if test="demandStatus != null">
+                demand_status,
+            </if>
+            <if test="demandLevel != null">
+                demand_level,
+            </if>
+            <if test="demandSource != null">
+                demand_source,
+            </if>
+            <if test="sourceRemark != null">
+                source_remark,
+            </if>
+            <if test="createUserId != null">
+                create_user_id,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="modifyUserId != null">
+                modify_user_id,
+            </if>
+            <if test="modifyTime != null">
+                modify_time,
+            </if>
+            <if test="demandDesc != null">
+                demand_desc,
+            </if>
+            <if test="closeReason != null">
+                close_reason,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="pid != null">
+                #{pid,jdbcType=BIGINT},
+            </if>
+            <if test="projectId != null">
+                #{projectId,jdbcType=BIGINT},
+            </if>
+            <if test="demandName != null">
+                #{demandName,jdbcType=VARCHAR},
+            </if>
+            <if test="demandNum != null">
+                #{demandNum,jdbcType=VARCHAR},
+            </if>
+            <if test="demandStatus != null">
+                #{demandStatus,jdbcType=CHAR},
+            </if>
+            <if test="demandLevel != null">
+                #{demandLevel,jdbcType=CHAR},
+            </if>
+            <if test="demandSource != null">
+                #{demandSource,jdbcType=VARCHAR},
+            </if>
+            <if test="sourceRemark != null">
+                #{sourceRemark,jdbcType=VARCHAR},
+            </if>
+            <if test="createUserId != null">
+                #{createUserId,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifyUserId != null">
+                #{modifyUserId,jdbcType=VARCHAR},
+            </if>
+            <if test="modifyTime != null">
+                #{modifyTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="demandDesc != null">
+                #{demandDesc,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="closeReason != null">
+                #{closeReason,jdbcType=LONGVARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.camelot.pmt.project.model.Demand">
+        update demand
+        <set>
+            <if test="pid != null">
+                pid = #{pid,jdbcType=BIGINT},
+            </if>
+            <if test="projectId != null">
+                project_id = #{projectId,jdbcType=BIGINT},
+            </if>
+            <if test="demandName != null">
+                demand_name = #{demandName,jdbcType=VARCHAR},
+            </if>
+            <if test="demandNum != null">
+                demand_num = #{demandNum,jdbcType=VARCHAR},
+            </if>
+            <if test="demandStatus != null">
+                demand_status = #{demandStatus,jdbcType=CHAR},
+            </if>
+            <if test="demandLevel != null">
+                demand_level = #{demandLevel,jdbcType=CHAR},
+            </if>
+            <if test="demandSource != null">
+                demand_source = #{demandSource,jdbcType=VARCHAR},
+            </if>
+            <if test="sourceRemark != null">
+                source_remark = #{sourceRemark,jdbcType=VARCHAR},
+            </if>
+            <if test="createUserId != null">
+                create_user_id = #{createUserId,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifyUserId != null">
+                modify_user_id = #{modifyUserId,jdbcType=VARCHAR},
+            </if>
+            <if test="modifyTime != null">
+                modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="demandDesc != null">
+                demand_desc = #{demandDesc,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="closeReason != null">
+                close_reason = #{closeReason,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="reviewTime != null">
+                review_time = #{reviewTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="reviewResults != null">
+                review_results = #{reviewResults,jdbcType=VARCHAR},
+            </if>
+            <if test="assignedTo != null">
+                assigned_to = #{assignedTo,jdbcType=VARCHAR},
+            </if>
+            <if test="reviewedWith != null">
+                reviewed_with = #{reviewedWith,jdbcType=VARCHAR},
+            </if>
+            <if test="reviewRemark != null">
+                review_remark = #{reviewRemark,jdbcType=VARCHAR},
+            </if>
+            <if test="reasonsRejection != null">
+                reasons_rejection = #{reasonsRejection,jdbcType=VARCHAR},
+            </if>
+            <if test="demandNeed != null">
+                demand_need = #{demandNeed,jdbcType=CHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.camelot.pmt.project.model.Demand">
     update demand
-    <set >
-      <if test="pid != null" >
-        pid = #{pid,jdbcType=BIGINT},
-      </if>
-      <if test="projectId != null" >
-        project_id = #{projectId,jdbcType=BIGINT},
-      </if>
-      <if test="demandName != null" >
-        demand_name = #{demandName,jdbcType=VARCHAR},
-      </if>
-      <if test="demandNum != null" >
-        demand_num = #{demandNum,jdbcType=VARCHAR},
-      </if>
-      <if test="demandStatus != null" >
-        demand_status = #{demandStatus,jdbcType=CHAR},
-      </if>
-      <if test="demandLevel != null" >
-        demand_level = #{demandLevel,jdbcType=CHAR},
-      </if>
-      <if test="demandSource != null" >
-        demand_source = #{demandSource,jdbcType=VARCHAR},
-      </if>
-      <if test="sourceRemark != null" >
-        source_remark = #{sourceRemark,jdbcType=VARCHAR},
-      </if>
-      <if test="createUserId != null" >
-        create_user_id = #{createUserId,jdbcType=VARCHAR},
-      </if>
-      <if test="createTime != null" >
-        create_time = #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="modifyUserId != null" >
-        modify_user_id = #{modifyUserId,jdbcType=VARCHAR},
-      </if>
-      <if test="modifyTime != null" >
-        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="demandDesc != null" >
-        demand_desc = #{demandDesc,jdbcType=LONGVARCHAR},
-      </if>
-      <if test="closeReason != null" >
-        close_reason = #{closeReason,jdbcType=LONGVARCHAR},
-      </if>
-    </set>
-    where id = #{id,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.camelot.pmt.project.model.Demand" >
-    update demand
-    set pid = #{pid,jdbcType=BIGINT},
+    set
+      pid = #{pid,jdbcType=BIGINT},
       project_id = #{projectId,jdbcType=BIGINT},
       demand_name = #{demandName,jdbcType=VARCHAR},
       demand_num = #{demandNum,jdbcType=VARCHAR},
@@ -235,7 +264,7 @@
       close_reason = #{closeReason,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.camelot.pmt.project.model.Demand" >
+    <update id="updateByPrimaryKey" parameterType="com.camelot.pmt.project.model.Demand">
     update demand
     set pid = #{pid,jdbcType=BIGINT},
       project_id = #{projectId,jdbcType=BIGINT},
@@ -252,31 +281,22 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
 
-  <!--查询需求根据条件 -->
-  <sql id="pagination_tail">
+    <!--查询需求根据条件 -->
+    <sql id="pagination_tail">
   limit #{pager.pageOffset} , #{pager.rows}
   </sql>
-      <select id="findAllByPage" resultMap="BaseResultMap" parameterType="com.camelot.pmt.project.model.Demand">
+    <select id="queryByPage" resultMap="BaseResultMap" parameterType="com.camelot.pmt.project.model.Demand">
         select
-        <include refid="Base_Column_List" />
-        from demand
-        <include refid="dynamicWhere"/>
-        <if test="pager!=null">
-          <include refid="pagination_tail" />
-        </if>
-      </select>
-
-    <select id="queryCount"  parameterType="com.camelot.pmt.project.model.Demand" resultType="java.lang.Long">
-        select
-        COUNT(1)
+        <include refid="Base_Column_List"/>
         from demand
         <include refid="dynamicWhere"/>
     </select>
+
     <!-- 根据pid查询需求 -->
     <select id="selectByPId" parameterType="long" resultMap="BaseResultMap">
-    	select 
-		<include refid="Base_Column_List" />
- 		from demand where pid = #{pid,jdbcType=BIGINT}
+        select
+        <include refid="Base_Column_List"/>
+        from demand where pid = #{pid,jdbcType=BIGINT}
     </select>
     <!-- 查询需求下用例引用 -->
     <select id="findDemandUseCase" parameterType="long" resultType="long">
@@ -297,11 +317,11 @@
     	where demand_id = #{demandId,jdbcType=BIGINT}
     </select>
     <!-- 批量删除需求 -->
-    <delete id="deleteByList" parameterType="long" >
-    	delete from demand where 
-    	<foreach collection="list" open="(" close=")" separator="or" item="demandId">
-    		id = #{demandId,jdbcType=BIGINT}
-    	</foreach>
+    <delete id="deleteByList" parameterType="long">
+        delete from demand where
+        <foreach collection="list" open="(" close=")" separator="or" item="demandId">
+            id = #{demandId,jdbcType=BIGINT}
+        </foreach>
     </delete>
     <!-- 根据需求id查询影响变更需求的任务信息 -->
   <select id="queryDemandTaskQuoteById" parameterType="long" resultType="map">

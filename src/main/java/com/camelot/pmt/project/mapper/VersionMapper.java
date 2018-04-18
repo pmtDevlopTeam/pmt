@@ -56,9 +56,7 @@ public interface VersionMapper {
     List<Version> queryListByProIdAndVerType(@Param("projectId") Long projectId,
             @Param("versionType") String versionType);
 
-    List<Version> selectVersionListByProId(Long projectId);
-
-    List<VersionVo> findAllByPage(@Param(value = "page") Pager<?> page);
+    List<Version> selectVersionListByProIdAndPram(@Param(value = "projectId")Long projectId,@Param(value = "versionVo")VersionVo versionVo);
 
     List<Version> selectList();
 }

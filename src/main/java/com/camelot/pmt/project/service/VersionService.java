@@ -1,7 +1,11 @@
 package com.camelot.pmt.project.service;
 
 import com.alibaba.fastjson.JSONObject;
+import com.camelot.pmt.project.model.Version;
 import com.camelot.pmt.project.model.VersionVo;
+import com.github.pagehelper.PageInfo;
+
+import java.util.List;
 
 /**
  * @Package: com.camelot.pmt.project.service
@@ -19,7 +23,7 @@ public interface VersionService {
      * @param versionVo
      * @return
      */
-    JSONObject addVersion(Long projectId, String userId, VersionVo versionVo);
+    boolean addVersion(Long projectId, String userId, VersionVo versionVo);
 
     /**
      * @Description: 逻辑删除版本信息
@@ -28,7 +32,7 @@ public interface VersionService {
      * @author: xueyj
      * @date: 2018/4/13 19:14
      */
-    JSONObject deleteVersionById(String userId, Long versionId);
+    boolean deleteVersionById(String userId, Long versionId);
 
     /**
      * @Description: 根据versionid查询version信息
@@ -37,7 +41,7 @@ public interface VersionService {
      * @author: xueyj
      * @date: 2018/4/13 19:14
      */
-    JSONObject queryVersionInfoById(Long versionId);
+    VersionVo queryVersionInfoById(Long versionId);
 
     /**
      * @Description: 根据指定id修改version信息
@@ -46,7 +50,7 @@ public interface VersionService {
      * @author: xueyj
      * @date: 2018/4/13 19:15
      */
-    JSONObject updateVersonInfo(Long projectId, String userId, VersionVo versionVo);
+    boolean updateVersonInfo(String userId, Version version);
 
     /**
      * @Description: 根据项目id查询版本信息
@@ -55,7 +59,7 @@ public interface VersionService {
      * @author: xueyj
      * @date: 2018/4/13 19:14
      */
-    JSONObject queryVerListByProId(Long projectId);
+    List<VersionVo> queryVerListByProId(Long projectId,VersionVo versionVo);
 
     /**
      * @Description: 根据项目id,分页查询版本信息
@@ -64,23 +68,5 @@ public interface VersionService {
      * @author: xueyj
      * @date: 2018/4/17 10:34
      */
-    JSONObject queryVerListByPageAndProId(int pageNum, int pageSize, Long projectId);
-
-    /**
-     * @Description: 根据项目id、版本类型，查询versionList
-     * @param:
-     * @return:
-     * @author: xueyj
-     * @date: 2018/4/17 9:46
-     */
-    JSONObject queryVerListByProIdAndVerType(Long projectId, String versionType);
-
-    /**
-     * @Description: 根据项目id、版本类型，分页查询versionList
-     * @param:
-     * @return:
-     * @author: xueyj
-     * @date: 2018/4/17 10:34
-     */
-    JSONObject queryVerListByPageAndProIdAndVerType(int pageNum, int pageSize, Long projectId, String versionType);
+    PageInfo queryVerListByPageAndProId(int pageNum, int pageSize, Long projectId,VersionVo versionVo);
 }
