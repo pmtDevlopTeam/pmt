@@ -69,7 +69,7 @@ public interface TaskMapper {
      * @description: 根据条件查询任务
      * @return
      */
-    List<Task> queryTaskByTask(@Param("task") Task task, @Param("ids") String[] ids);
+    List<Task> queryTaskByTask(@Param("task") Task task, @Param("ids") List<String> ids);
 
     /**
      * 查询已完成的任务，根据时间和优先级进行排序

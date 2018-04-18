@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -74,11 +75,16 @@ public class TaskManagerServiceImpl implements TaskManagerService {
                 result.addErrorMessage("参数有误");
                 return result;
             }
-            String[] ids = null;
+            List<String> ids = null;
             if (task.getBeassignUser() != null) {
                  /*如果负责人条件非空，则根据username查询userId*/
-                 // 赋值给string数组传给DAO层
-                 ids = new String[]{"4", "3"};
+                ExecuteResult<List<User>> usersResult = userService.queryUsersByUserName(task.getBeassignUser().getUsername());
+                List<User> users = usersResult.getResult();
+                // 赋值给string数组传给DAO层
+                ids = new ArrayList<String>();
+                for (User user : users) {
+                    ids.add(user.getUserId());
+                }
             }
             List<Task> tasks = taskMapper.queryTaskByTask(task, ids);
             result.setResult(tasks);
