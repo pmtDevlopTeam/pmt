@@ -12,27 +12,16 @@
     <result column="run_type" property="runType" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, demand_id, create_user_id, create_time,run_type
-  </sql>
-  <sql id="Blob_Column_List" >
-    operate_desc
+    id, demand_id, create_user_id, create_time,run_type,operate_desc
   </sql>
   <sql id="dynamicWhere">
     <where>
-      <if test="demand.id!=null"> AND id=#{demand.id} </if>
-      <if test="demand.pid!= null"> AND pid=#{demand.pid} </if>
-      <if test="demand.projectId!= null"> AND project_id=#{demand.projectId} </if>
-      <if test="demand.demandName!= null"> AND demand_name=#{demand.demandName} </if>
-      <if test="demand.demandNum!= null"> AND demand_num=#{demand.demandNum} </if>
-      <if test="demand.demandStatus!= null"> AND demand_status=#{demand.demandStatus} </if>
-      <if test="demand.demandLevel!= null"> AND demand_level=#{demand.demandLevel} </if>
-      <if test="demand.demandSource!= null"> AND demand_source=#{demand.demandSource} </if>
-      <if test="demand.sourceRemark!= null"> AND source_remark=#{demand.sourceRemark} </if>
-      <if test="demand.createUserId!= null"> AND create_user_id=#{demand.createUserId} </if>
-      <if test="demand.createTime!= null"> AND create_time=#{demand.createTime} </if>
-      <if test="demand.modifyUserId!= null"> AND modify_user_id=#{demand.modifyUserId} </if>
-      <if test="demand.modifyTime!= null"> AND modify_time=#{demand.modifyTime} </if>
-      <if test="demand.reviewedWith!= null"> AND find_in_set(${demand.reviewedWith},reviewed_with)>0 </if>
+      <if test="demandOperate.id!=null"> AND id=#{demandOperate.id} </if>
+      <if test="demandOperate.demandId!= null"> AND demand_id=#{demandOperate.demandId} </if>
+      <if test="demandOperate.createUserId!= null"> AND create_user_id=#{demandOperate.createUserId} </if>
+      <if test="demandOperate.createUserId!= null"> AND create_user_id=#{demand.createUserId} </if>
+      <if test="demandOperate.createTime!= null"> AND create_time=#{demand.createTime} </if>
+      <if test="demandOperate.runType!= null"> AND run_type=#{demandOperate.runType} </if>
     </where>
   </sql>
 
@@ -42,8 +31,6 @@
   <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
     select 
     <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
     from demand_operate
     where id = #{id,jdbcType=BIGINT}
   </select>
@@ -53,7 +40,7 @@
   </delete>
   <insert id="insert" parameterType="com.camelot.pmt.project.model.DemandOperate" >
     insert into demand_operate (id, demand_id, create_user_id, 
-      create_time, operate_desc,demandOperate)
+      create_time, operate_desc,run_type)
     values (#{id,jdbcType=BIGINT}, #{demandId,jdbcType=BIGINT}, #{createUserId,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{operateDesc,jdbcType=LONGVARCHAR},#{runType,jdbcType=VARCHAR})
   </insert>
@@ -128,10 +115,10 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
 
-  <select id="findWithOperate">
-
-
-
+  <select id="queryOperateByPage" resultMap="ResultMapWithBLOBs" parameterType="com.camelot.pmt.project.model.DemandOperate">
+    select
+    <include refid="Base_Column_List"/>
+    from demand_operate
+    <include refid="dynamicWhere"/>
   </select>
-
 </mapper>

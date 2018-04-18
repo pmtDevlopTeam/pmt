@@ -23,19 +23,19 @@ public interface ProjectMainService {
      * @param id
      * @return
      */
-    ExecuteResult<ProjectMain> selectByPrimaryKey(Long id);
+    ExecuteResult<ProjectMain> queryByPrimaryKey(Long id);
 
     /**
      * 保存立项时相关联表数据
      * 
      * @param projectMain
-     * @param warning
-     * @param projectBudget
      * @param projectOperate
+     * @param projectBudget
+     * @param warning
      * @return
      */
-    ExecuteResult<String> save(ProjectMain projectMain, ProjectOperate projectOperate, ProjectBudget projectBudget,
-                               Warning warning);
+    ExecuteResult<String> addProject(ProjectMain projectMain, ProjectOperate projectOperate,
+            ProjectBudget projectBudget, Warning warning);
 
     /**
      * 分页查询
@@ -43,7 +43,7 @@ public interface ProjectMainService {
      * @param page
      * @return
      */
-    ExecuteResult<DataGrid<ProjectMain>> findAllByPage(Pager<?> page);
+    ExecuteResult<DataGrid<ProjectMain>> queryAllByPage(Pager<?> page);
 
     /**
      * 按状态分类查询
@@ -51,7 +51,7 @@ public interface ProjectMainService {
      * @param projectStatus
      * @return
      */
-    ExecuteResult<List<ProjectMain>> findByProjectStatus(String projectStatus);
+    ExecuteResult<List<ProjectMain>> queryByProjectStatus(String projectStatus);
 
     /**
      * 按负责人id查询
@@ -59,7 +59,7 @@ public interface ProjectMainService {
      * @param userId
      * @return
      */
-    ExecuteResult<List<ProjectMain>> findByUserId(String userId);
+    ExecuteResult<List<ProjectMain>> queryByUserId(String userId);
 
     /**
      * 按创建人id查询
@@ -67,7 +67,7 @@ public interface ProjectMainService {
      * @param createUserId
      * @return
      */
-    ExecuteResult<List<ProjectMain>> findByCreateUserId(String createUserId);
+    ExecuteResult<List<ProjectMain>> queryByCreateUserId(String createUserId);
 
     /**
      * 按修改人id查询
@@ -75,33 +75,55 @@ public interface ProjectMainService {
      * @param modifyUserId
      * @return
      */
-    ExecuteResult<List<ProjectMain>> findByModifyUserId(String modifyUserId);
+    ExecuteResult<List<ProjectMain>> queryByModifyUserId(String modifyUserId);
 
     /**
      * 按主键id进行更新
      * 
-     * @param projectMain
+     * @param id
+     * @param userId
+     * @param modifyUserId
+     * @param modifyTime
+     * @param projectNum
+     * @param projectName
+     * @param projectStatus
+     * @param projectDesc
+     * @param startTime
+     * @param endTime
+     * @param createUserId
+     * @param operateDesc
      * @return
      */
-    ExecuteResult<String> updateByPrimaryKeySelective(Long id, String userId, String modifyUserId, Date modifyTime,
-            String projectNum, String projectName, String projectStatus, String projectDesc, Date startTime,
-            Date endTime, String createUserId, String operateDesc);
+    ExecuteResult<String> updateByPrimaryKeySelective(Long id, String userId, String modifyUserId, String projectNum,
+            String projectName, String projectStatus, String projectDesc, Date startTime, Date endTime,
+            String createUserId, String operateDesc);
 
     /**
-     * 删除项目
+     * 根据id删除项目
      * 
      * @param id
+     * @param createUserId
+     * @param operateDesc
      * @return
      */
     ExecuteResult<String> deleteByPrimaryKey(Long id, String createUserId, String operateDesc);
 
     /**
-     * 关闭时，更新数据
+     * 关闭时，更新相关数据
      * 
      * @param id
+     * @param createUserId
+     * @param modifyUserId
+     * @param projectStatus
+     * @param operateDesc
+     * @param userStatus
+     * @param demandStatus
+     * @param closeReason
+     * @param status
+     * @param caseStatus
      * @return
      */
-    ExecuteResult<String> closeProjectById(Long id, String createUserId, String modifyUserId, String projectStatus,
+    ExecuteResult<String> updateByProjectById(Long id, String createUserId, String modifyUserId, String projectStatus,
             String operateDesc, String userStatus, String demandStatus, String closeReason, String status,
             String caseStatus);
 

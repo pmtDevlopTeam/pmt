@@ -1,24 +1,15 @@
 /**
- * @Package: com.camelot.pmt.project.service 
  * @author: jh 
  * @date: 2018年4月12日 下午5:16:34 
  */
 package com.camelot.pmt.project.service;
 
 
-import com.camelot.pmt.common.ExecuteResult;
-
 /**
- * @ClassName: ProjectWarningService
- * @Description: TODO
- * @author lixiaokang
- * @date 2018年4月12日 下午5:16:34
+ * @author lixk
+ * @Description: 项目模块-项目预警接口
+ * @date 2018年4月17日 下午5:48:37
  */
 public interface ProjectWarningService {
 
-    /**
-     * @param param
-     * @return
-     */
-    ExecuteResult<String> startProjectWarning(String param);
 }

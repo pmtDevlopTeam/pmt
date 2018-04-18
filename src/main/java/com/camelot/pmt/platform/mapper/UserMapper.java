@@ -57,7 +57,7 @@ public interface UserMapper {
      * @param userModel void
      * @author [name]
      */
-    void deleteUserByUserId(User userModel);
+    void deleteUserByUserId(String userId);
     
     
     /**
@@ -110,13 +110,6 @@ public interface UserMapper {
      */
     Long countUser();
     
-//    /**
-//     * 
-//     * Description:[分页查询用户]
-//     * @return List<UserModel>
-//     * @author [maple]
-//     */
-//    List<User> findUsersByPage(@Param(value = "page") Pager page);
     
     /**
      * 
@@ -234,5 +227,23 @@ public interface UserMapper {
      */
     String queryUserRoleCreateUserByUserId(String userId);
 
+    /**
+     *
+     * Description:[根据userId判断用户组织表用户是否存在]
+     * @param String userJobNum
+     * @return long
+     * @author [maple]
+     * 2018年4月17日下午2:43:13
+     */
+    long checkUserOrgExistByUserId(String userId);
+
+    /**
+     * 
+     * Description:[根据用户名模糊查询获取用户对象]
+     * @return List<User>
+     * @author [maple]
+     * 2018年4月13日下午3:38:28
+     */
+    List<User> queryUsersByUserName(String username);
 
 }

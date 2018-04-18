@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
  * 
  * @Title: ExecuteResult.java
  * @Description: TODO(用一句话描述该文件做什么)
- * @author: 
+ * @author:
  */
 @Component
 public class ExecuteResult<T> implements Serializable {
@@ -27,10 +27,10 @@ public class ExecuteResult<T> implements Serializable {
     }
 
     public void setSuccess(boolean success) {
-		this.success = success;
-	}
+        this.success = success;
+    }
 
-	public T getResult() {
+    public T getResult() {
         return result;
     }
 

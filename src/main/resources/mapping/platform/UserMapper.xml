@@ -278,6 +278,11 @@
 	 <select id="checkUserExistByUserJobNum" parameterType="java.lang.String" resultType="long">
         SELECT count(1) FROM platform_user_info where user_job_num = #{userJobNum}
     </select>
+    
+    <!-- 检查用户组织表userId是否存在 -->
+	 <select id="checkUserOrgExistByUserId" parameterType="java.lang.String" resultType="long">
+        SELECT count(1) FROM platform_user_org where user_id = #{user_id}
+    </select>
 
 	<!-- 根据用户名查找用户密码-->
     <select id="findUserPasswordByLoginCode" resultType="java.lang.String" parameterType="java.lang.String" >
@@ -310,21 +315,11 @@
 		<include refid="count_Tail"></include>
 	</select>
 	
-	<!-- 分页公共sql -->
-	<sql id="pagination_tail">
-	  limit #{page.pageOffset} , #{page.rows}
-	</sql>
+	<!--根据用户名模糊查询，获取用户对象-->
+	<select id="queryUsersByUserName" resultMap="userModel" parameterType="java.lang.String">
+		select <include refid="userColumnsNoPassword"/> from platform_user where user_name LIKE  CONCAT('%',#{username},'%')
+	</select>
 	
-    <!-- 分页查询所有用户列表 -->
-    <select id="findUsersByPage" resultMap="userModel">
-        select
-        <include refid="userColumnsNoPassword"/>
-        from platform_user
-        <if test="page!=null">
-			<include refid="pagination_tail" />
-		</if>
-    </select>
-
 	<!--查询所有用户,不分页-->
 	<select id="queryAllUsers" resultMap="userModel">
 		select <include refid="userColumnsNoPassword"/> from platform_user
@@ -346,7 +341,7 @@
     </select>
 
     <!-- 根据Id删除用户 -->
-    <delete id="deleteUserByUserId" parameterType="com.camelot.pmt.platform.model.User" >
+    <delete id="deleteUserByUserId" parameterType="java.lang.String" >
         delete FROM platform_user WHERE user_id = #{userId}
     </delete>
 
