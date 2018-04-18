@@ -60,22 +60,17 @@ public class FileManageGroupServiceImpl implements FileManageGroupService {
         Boolean b=null;
             Long id = fileManageGroup.getId();//文件夹id
         int i = fileManageGroupMapper.deleteByPrimaryKey(id);
-        if(i<=0){
-            b=false;
-        }
         b = deleteFileGroupAndFileById(id);
         return b;
     }
     public Boolean  deleteFileGroupAndFileById(Long id){//删除文件夹和文件
-        int i=0;
-        int i1=0;
         List<Long> fileManageGroupIds=fileManageGroupMapper.selectFileManagerGroupByParentId(id);//获取子文件夹的id
         if(fileManageGroupIds.size()>0){
-             i = fileManageGroupMapper.deleteBatchFileGroupById(fileManageGroupIds);//批量删除文件夹
+              fileManageGroupMapper.deleteBatchFileGroupById(fileManageGroupIds);//批量删除文件夹
         }
         List fileManagerIds= fileManageMapper.selectFileManagerByGroupId(id);//查询文件夹下的所有文件id
         if(fileManagerIds.size()>0){
-             i1 = fileManageMapper.deleteBatchFileById(fileManagerIds);//删除文件夹下的文档
+             fileManageMapper.deleteBatchFileById(fileManagerIds);//删除文件夹下的文档
         }
         if(fileManageGroupIds.size()>0){
             for (Long l:
@@ -83,12 +78,7 @@ public class FileManageGroupServiceImpl implements FileManageGroupService {
                 deleteFileGroupAndFileById(l);
             }
         }
-        if(i==0||i1==0){
-            return false;
-        }
         return true;
-
-
     }
 
     @Override

@@ -16,7 +16,7 @@
     id, group_id, file_title, file_address, create_user_id, create_time, modify_user_id, 
     modify_time, del_flag
   </sql>-->
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultType="com.camelot.pmt.filemanage.model.FileManage">
     select 
     <include refid="Base_Column_List" />
     from file_manage
@@ -148,7 +148,7 @@
 <!--手动编写sql -->
   <!--根据组id查询所有文件-->
   <select id="queryFileByGroupId" parameterType="com.camelot.pmt.filemanage.model.FileManageGroup" resultType="com.camelot.pmt.filemanage.model.FileManage">
-    select <include refid="Base_Column_List" /> from file_manage where group_id=#{id}
+    select <include refid="Base_Column_List"/> from file_manage where group_id=#{id}
   </select>
   <!--根据组id查询所有文件的文件id-->
 <select id="selectFileManagerByGroupId" resultType="long" parameterType="long">

@@ -43,9 +43,9 @@ public class FileManageController {
     private FileManageService fileManageService;
     @ApiOperation(value = "添加文件功能", notes = "添加文件功能")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "fileTitle", value = "", required = true, paramType = "query", dataType = "String"),
-            @ApiImplicitParam(name = "fileAdress", value = "", required = false, paramType = "query", dataType = "String"),
-            @ApiImplicitParam(name = "groupId", value = "", required = false, paramType = "query", dataType = "String")
+            @ApiImplicitParam(name = "fileTitle", value = "文件标题", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "fileAddress", value = "文件地址", required = false, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "groupId", value = "组id", required = false, paramType = "query", dataType = "String")
     })
     @RequestMapping(value = "/addFileManager",method = RequestMethod.POST)
     @ResponseBody
@@ -76,7 +76,7 @@ public class FileManageController {
             if(b){
                 return ApiResponse.success();
             }
-            return ApiResponse.error("修改异常");
+            return ApiResponse.error("删除异常");
         } catch (Exception e) {
             logger.error(e.getMessage());
             return ApiResponse.jsonData(APIStatus.ERROR_500);
@@ -107,9 +107,9 @@ public class FileManageController {
     }
     @ApiOperation(value = "根据条件查询文件功能", notes = "根据条件查询文件功能")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "产出物id", required = false, paramType = "query", dataType = "String"),
-            @ApiImplicitParam(name = "currentPage", value = "当前页", required = false, paramType = "query", dataType = "String"),
-            @ApiImplicitParam(name = "pageSize", value = "分页大小", required = false, paramType = "query", dataType = "String")
+            @ApiImplicitParam(name = "id", value = "产出物id", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "currentPage", value = "当前页", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "pageSize", value = "分页大小", required = true, paramType = "query", dataType = "String")
     })
     @RequestMapping(value = "/queryFileByGroupId",method = RequestMethod.GET)
     @ResponseBody

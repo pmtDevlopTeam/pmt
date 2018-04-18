@@ -55,9 +55,10 @@ public class FileManageServiceImpl implements FileManageService {
     @Transactional
     public Boolean deleteFileById(FileManage fileManage) {//文件删除操作
         Long id = fileManage.getId();//获取文件id
-        Long groupId = fileManage.getGroupId();
+        FileManage fileManage1 = fileManageMapper.selectByPrimaryKey(id);
+        Long groupId1 = fileManage1.getGroupId();
         int i = fileManageMapper.deleteByPrimaryKey(id);//文件删除
-        int i1 = fileManageGroupMapper.deleteByPrimaryKey(groupId);
+        int i1 = fileManageGroupMapper.deleteByPrimaryKey(groupId1);
         Boolean b=true;
         if(i<=0||i1<=0){
             b=false;
