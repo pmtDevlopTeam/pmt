@@ -11,7 +11,7 @@ public interface ProjectOperateMapper {
      * @param createUserId
      * @return
      */
-    List<ProjectOperate> findByProjectId(Long projectId);
+    List<ProjectOperate> queryByProjectId(Long projectId);
 
     /**
      * 根据创建人id进行查询
@@ -19,7 +19,7 @@ public interface ProjectOperateMapper {
      * @param createUserId
      * @return
      */
-    List<ProjectOperate> findByCreateUserId(String createUserId);
+    List<ProjectOperate> queryByCreateUserId(String createUserId);
 
     /**
      * 插入数据
@@ -27,6 +27,6 @@ public interface ProjectOperateMapper {
      * @param projectOperate
      * @return
      */
-    int insert(ProjectOperate projectOperate);
+    int addProjectOperate(ProjectOperate projectOperate);
 
 }

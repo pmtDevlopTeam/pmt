@@ -2,8 +2,6 @@ package com.camelot.pmt.project.controller;
 
 import java.util.List;
 
-import com.camelot.pmt.common.ApiResponse;
-import com.camelot.pmt.common.ExecuteResult;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
+import com.camelot.pmt.common.ApiResponse;
+import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.project.model.ProjectOperate;
 import com.camelot.pmt.project.service.ProjectOperateService;
 
@@ -40,8 +40,8 @@ public class ProjectOperateController {
      * @return
      */
     @ApiOperation(value = "按创建人id查询", notes = "按创建人id查询")
-    @GetMapping(value = "/api/projectOperate/findByCreateUserId")
-    public JSONObject findByCreateUserId(
+    @GetMapping(value = "/api/projectOperate/queryByCreateUserId")
+    public JSONObject queryByCreateUserId(
             @ApiParam(value = "创建人id", required = true) @RequestParam String createUserId) {
         logger.info("入参封装的数据为：createUserId={}", createUserId);
         ExecuteResult<List<ProjectOperate>> result = new ExecuteResult<>();
@@ -49,7 +49,7 @@ public class ProjectOperateController {
             if (StringUtils.isEmpty(createUserId)) {
                 return ApiResponse.errorPara();
             }
-            result = projectOperateService.findByCreateUserId(createUserId);
+            result = projectOperateService.queryByCreateUserId(createUserId);
             if (result.isSuccess()) {
                 return ApiResponse.success(result.getResult());
             }
@@ -66,8 +66,8 @@ public class ProjectOperateController {
      * @return
      */
     @ApiOperation(value = "按项目id查询", notes = "按项目id查询")
-    @GetMapping(value = "/api/projectOperate/findByProjectId")
-    public JSONObject findByProjectId(@ApiParam(value = "项目id", required = true) @RequestParam Long projectId) {
+    @GetMapping(value = "/api/projectOperate/queryByProjectId")
+    public JSONObject queryByProjectId(@ApiParam(value = "项目id", required = true) @RequestParam Long projectId) {
 
         logger.info("入参封装的数据为：projectId={}", projectId);
         ExecuteResult<List<ProjectOperate>> result = new ExecuteResult<>();
@@ -75,7 +75,7 @@ public class ProjectOperateController {
             if (projectId == null) {
                 return ApiResponse.errorPara();
             }
-            result = projectOperateService.findByProjectId(projectId);
+            result = projectOperateService.queryByProjectId(projectId);
             if (result.isSuccess()) {
                 return ApiResponse.success(result.getResult());
             }
