@@ -20,10 +20,11 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * Shiro配置
- *
+ * 
+ * @author gnerv
+ * @Description Shiro配置
+ * @date 2018年4月18日
  */
-
 @Configuration
 public class ShiroConfig {
 

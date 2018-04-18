@@ -2,73 +2,58 @@ package com.camelot.pmt.platform.service;
 
 import java.util.List;
 
-import com.baomidou.mybatisplus.plugins.Page;
-import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.platform.model.Menu;
+import com.camelot.pmt.util.Tree;
 
 /**
- * <p>
- * 权限菜单服务接口类
- * </p>
- *
+ * 
  * @author gnerv
- * @since 2018-04-08
+ * @Description 权限菜单服务接口类
+ * @date 2018年4月18日
  */
 public interface MenuService {
 
-    /**
-     * 根据一个菜单对象 增加一个菜单
-     * 
-     * @param Menu menu
-     * @return ExecuteResult<Menu>
-     */
-	ExecuteResult<Menu> createMenu(Menu menu);
+	/**
+	 * 根据一个菜单对象 增加一个菜单
+	 * @param menu
+	 * @return true 成功 false 失败
+	 */
+	boolean addMenu(Menu menu);
 
     /**
      * 根据菜单id 删除一个菜单
-     * 
-     * @param String menuId
-     * @return ExecuteResult<Menu>
+	 * @param menuId
+	 * @return true 成功 false 失败
      */
-	ExecuteResult<Menu> deleteMenuByMenuId(String menuId);
+	boolean deleteMenuByMenuId(String menuId);
 
     /**
      * 根据菜单id 修改一个菜单
-     * 
-     * @param Menu menu
-     * @return ExecuteResult<Menu>
+	 * @param menu
+	 * @return true 成功 false 失败
      */
-	ExecuteResult<Menu> modifyMenuByMenuId(Menu menu);
+	boolean updateMenuByMenuId(Menu menu);
 
-    /**
-     * 根据菜单id 查询一个菜单
-     * 
-     * @param String menuId
-     * @return ExecuteResult<Menu>
-     */
-	ExecuteResult<Menu> queryMenuByMenuId(String menuId);
+	/**
+	 * 根据菜单id 查询一个菜单
+	 * @param menuId
+	 * @return Menu
+	 */
+	Menu queryMenuByMenuId(String menuId);
 
     /**
      * 查询全部菜单树
-     * 
      * @param 
-     * @return ExecuteResult<List<Menu>>
+     * @return List
      */
-	ExecuteResult<List<Menu>> queryAllMenu();
+	List<Tree<Menu>> queryAllMenuList();
     
     /**
      * 根据菜单id 查询指定菜单的子菜单树
      * 
-     * @param String menuId
+     * @param menuId
      * @return ExecuteResult<List<Menu>>
      */
-	ExecuteResult<List<Menu>> querySubMenuByMenuId(String menuId);
+	List<Tree<Menu>> querySubMenuListByMenuId(String menuId);
     
-    /**
-     * 菜单分页测试
-     * @param page
-     * @param state
-     * @return
-     */
-    Page<Menu> selectMenuPage(Page<Menu> page);
 }

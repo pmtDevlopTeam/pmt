@@ -14,30 +14,35 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.time.LocalDate;
 
+/**
+ * 
+ * @author gnerv
+ * @Description Swagger2配置
+ * @date 2018年4月18日
+ */
 @Configuration
 @EnableSwagger2
 public class Swagger2Config {
 
     @Bean
     public Docket petApi() {
-        return new Docket(DocumentationType.SWAGGER_2).select()//
-                //.apis(RequestHandlerSelectors.any())
+        return new Docket(DocumentationType.SWAGGER_2).select()
         		.apis(RequestHandlerSelectors.basePackage("com.camelot.pmt"))
-                .build().pathMapping("/")//
-                .directModelSubstitute(LocalDate.class, String.class)//
+                .build().pathMapping("/")
+                .directModelSubstitute(LocalDate.class, String.class)
                 .genericModelSubstitutes(ResponseEntity.class).useDefaultResponseMessages(false)
-                .tags(new Tag("pmt-Service", "PMT服务"))//
+                .tags(new Tag("pmt-Service", "PMT服务"))
                 .apiInfo(apiInfo());
     }
 
     private ApiInfo apiInfo() {
         Contact contact = new Contact("PMT服务", "", "");
-        return new ApiInfoBuilder()//
-                .title("PMT提供的Api")//
-                .description("PMT服务接口说明")//
-                .license("Camelot License Version 1.0")//
-                .contact(contact)//
-                .version("1.0")//
+        return new ApiInfoBuilder()
+                .title("PMT提供的Api")
+                .description("PMT服务接口说明")
+                .license("Camelot License Version 1.0")
+                .contact(contact)
+                .version("1.0")
                 .build();
     }
 }
