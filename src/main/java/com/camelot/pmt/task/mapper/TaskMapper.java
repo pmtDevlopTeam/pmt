@@ -1,5 +1,6 @@
 package com.camelot.pmt.task.mapper;
 
+import com.camelot.pmt.common.Pager;
 import com.camelot.pmt.task.model.Task;
 import com.camelot.pmt.task.model.TaskDetail;
 import com.camelot.pmt.task.model.TaskLog;
@@ -18,7 +19,7 @@ public interface TaskMapper {
      * 查询正在进行的任务，根据时间和优先级进行排序
      * myp
      * */
-    List<Map<String,Object>> listTaskRunning(String id);
+    List<Task> queryTaskRunning(String id);
 
 
     /**
@@ -75,7 +76,7 @@ public interface TaskMapper {
      * 查询已完成的任务，根据时间和优先级进行排序
      * myp
      * */
-    List<Map<String,Object>> listTaskAlready(String id);
+    List<Map<String,Object>> listTaskAlready(@Param(value = "page") Pager page, @Param(value = "id") Long id);
 
     /**
      * 查询已完成任务总个数 @Title: queryCount @Description: TODO @param @return @return
@@ -143,7 +144,7 @@ public interface TaskMapper {
      * @return List<Task>
      * @throws
      */
-    List<Task> queryOverdueTask();
+    List<Map<String,Object>> queryOverdueTask();
 
     /**
     * @author: gxl
@@ -308,7 +309,7 @@ public interface TaskMapper {
      * @return TaskDetail
      * @throws
      */
-    TaskDetail queryOverdueTaskDetailByTaskId(String taskId);
+    Map<String, Object> queryOverdueTaskDetailByTaskId(String taskId);
 
     /**
      * 添加延期信息与预定开始时间
@@ -319,7 +320,7 @@ public interface TaskMapper {
      * @return Integer
      * @throws
      */
-    Integer insertOverduMessage(Task task);
+    int insertOverduMessage(Task task);
 
     /**
      * 根据userId查询个人是否有延期任务
@@ -363,6 +364,8 @@ public interface TaskMapper {
     * @throws
      */
 	int updateTaskOverdueStatus(String taskId);
+
+	
 
 
 

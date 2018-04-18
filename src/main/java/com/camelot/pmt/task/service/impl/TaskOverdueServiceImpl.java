@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 
@@ -39,19 +40,19 @@ public class TaskOverdueServiceImpl implements TaskOverdueService {
      * 查询所有逾期任务+分页   
      */
     @Override
-    public ExecuteResult<PageInfo<Task>> queryOverdueTask(Integer page, Integer rows) {
-        ExecuteResult<PageInfo<Task>> result = new ExecuteResult<PageInfo<Task>>();
+    public ExecuteResult<PageInfo<Map<String,Object>>> queryOverdueTask(Integer page, Integer rows) {
+        ExecuteResult<PageInfo<Map<String,Object>>> result = new ExecuteResult<PageInfo<Map<String,Object>>>();
         try {
         	//分页初始化
         	PageHelper.startPage(page,rows);
-            List<Task> list = taskMapper.queryOverdueTask();
+            List<Map<String,Object>> list = taskMapper.queryOverdueTask();
             // 如果没有查询到数据，不继续进行
             if (CollectionUtils.isEmpty(list)) {                    
-               PageInfo<Task> pageInfo = new PageInfo<>();
+               PageInfo<Map<String,Object>> pageInfo = new PageInfo<>();
                 result.setResult(pageInfo);
                 return result;
             }
-            PageInfo<Task> pageInfo = new PageInfo<>(list);
+            PageInfo<Map<String,Object>> pageInfo = new PageInfo<>(list);
             result.setResult(pageInfo);
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -62,11 +63,11 @@ public class TaskOverdueServiceImpl implements TaskOverdueService {
      * 查询延期任务详情
      */
 	@Override
-	public ExecuteResult<TaskDetail> queryOverdueTaskDetailByTaskId(String taskId) {
-		 ExecuteResult<TaskDetail> result = new ExecuteResult<TaskDetail>();
+	public ExecuteResult<Map<String,Object>> queryOverdueTaskDetailByTaskId(String taskId) {
+		 ExecuteResult<Map<String,Object>> result = new ExecuteResult<Map<String,Object>>();
 	        try {
 	            if (!taskId.equals("") && !taskId.equals("0")) {
-	            	TaskDetail queryResult = taskMapper.queryOverdueTaskDetailByTaskId(taskId);
+	            	Map<String,Object> queryResult = taskMapper.queryOverdueTaskDetailByTaskId(taskId);
 	                result.setResult(queryResult);
 	                return result;
 	            }
@@ -90,7 +91,7 @@ public class TaskOverdueServiceImpl implements TaskOverdueService {
 			     return result;
 			     }
 			     //进行任务的更改(根据id去更改,修改延期描述,修改)
-			     Integer count = taskMapper.insertOverduMessage(task);
+			     int count = taskMapper.insertOverduMessage(task);
 			      if(count == 0){
 			      result.setResult("更新任务失败!");
 			      return result;

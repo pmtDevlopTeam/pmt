@@ -8,11 +8,11 @@
             <if test="taskNum != null">task_num,</if>
             <if test="taskName != null">task_name,</if>
             <if test="taskParentId != null">task_parent_id,</if>
-            <if test="project.id != null">project_id,</if>
-            <if test="demand.id != null">demand_id,</if>
+            <if test="project != null">project_id,</if>
+            <if test="demand != null">demand_id,</if>
             <if test="priority != null">priority,</if>
-            <if test="assignUser.userId != null">assign_user_id,</if>
-            <if test="beassignUser.userId != null">beassign_user_id,</if>
+            <if test="assignUser != null">assign_user_id,</if>
+            <if test="beassignUser != null">beassign_user_id,</if>
             <if test="assignTime != null">assign_time,</if>
             <if test="estimateStartTime != null">estimate_start_time,</if>
             <if test="estimateEndTime != null">estimate_end_time,</if>
@@ -28,7 +28,7 @@
             <if test="estimateHour != null">estimate_hour,</if>
             <if test="infactHour != null">infact_hour,</if>
             <if test="taskMileage != null">task_mileage,</if>
-            <if test="createUser.userId != null">create_user_id,</if>
+            <if test="createUser != null">create_user_id,</if>
             <if test="modifyUserId != null">modify_user_id,</if>
             <if test="createTime != null">create_time,</if>
             <if test="modifyTime != null">modify_time</if>
@@ -42,11 +42,11 @@
             <if test="taskNum != null">#{taskNum,jdbcType=VARCHAR},</if>
             <if test="taskName != null">#{taskName,jdbcType=VARCHAR},</if>
             <if test="taskParentId != null">#{taskParentId,jdbcType=BIGINT},</if>
-            <if test="project.id != null">#{projectId,jdbcType=BIGINT},</if>
-            <if test="demand.id != null">#{demandId,jdbcType=BIGINT},</if>
+            <if test="project != null">#{projectId,jdbcType=BIGINT},</if>
+            <if test="demand != null">#{demandId,jdbcType=BIGINT},</if>
             <if test="priority != null">#{priority,jdbcType=CHAR},</if>
-            <if test="assignUser.userId != null">#{assignUser.userId,jdbcType=VARCHAR},</if>
-            <if test="beassignUser.userId != null">#{beassignUser.userId,jdbcType=VARCHAR},</if>
+            <if test="assignUser != null">#{assignUser.userId,jdbcType=VARCHAR},</if>
+            <if test="beassignUser != null">#{beassignUser.userId,jdbcType=VARCHAR},</if>
             <if test="assignTime != null">#{assignTime,jdbcType=TIMESTAMP},</if>
             <if test="estimateStartTime != null">#{estimateStartTime,jdbcType=TIMESTAMP},</if>
             <if test="estimateEndTime != null">#{estimateEndTime,jdbcType=TIMESTAMP},</if>
@@ -62,7 +62,7 @@
             <if test="estimateHour != null">#{estimateHour,jdbcType=BIGINT},</if>
             <if test="infactHour != null">#{infactHour,jdbcType=BIGINT},</if>
             <if test="taskMileage != null">#{taskMileage,jdbcType=CHAR},</if>
-            <if test="createUser.userId != null">#{createUser.userId,jdbcType=VARCHAR},</if>
+            <if test="createUser != null">#{createUser.userId,jdbcType=VARCHAR},</if>
             <if test="modifyUserId != null">#{modifyUserId,jdbcType=VARCHAR},</if>
             <if test="createTime != null">#{createTime,jdbcType=TIMESTAMP},</if>
             <if test="modifyTime != null">#{modifyTime,jdbcType=TIMESTAMP}</if>
@@ -162,7 +162,6 @@
         <result column="task_num" property="taskNum" jdbcType="VARCHAR"/>
         <result column="task_name" property="taskName" jdbcType="VARCHAR"/>
         <result column="task_parent_id" property="taskParentId" jdbcType="BIGINT"/>
-        <result column="project_id" property="projectId" jdbcType="BIGINT"/>
         <result column="priority" property="priority" jdbcType="CHAR"/>
         <result column="assign_time" property="assignTime" jdbcType="TIMESTAMP"/>
         <result column="estimate_start_time" property="estimateStartTime" jdbcType="TIMESTAMP"/>
@@ -179,8 +178,6 @@
         <result column="estimate_hour" property="estimateHour" jdbcType="BIGINT"/>
         <result column="infact_hour" property="infactHour" jdbcType="BIGINT"/>
         <result column="task_mileage" property="taskMileage" jdbcType="CHAR"/>
-        <result column="create_user_id" property="createUserId" jdbcType="VARCHAR"/>
-        <result column="modify_user_id" property="modifyUserId" jdbcType="VARCHAR"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP"/>
         <result column="elapsed_time" property="elapsedTime" jdbcType="VARCHAR"/>
@@ -287,9 +284,9 @@
     <select id="queryAllTask" resultMap="BaseResultMap">
         select
         <include refid="TaskManager_ShowTasks_Column_List" />
-        from task t LEFT JOIN platform_user a ON t.assign_user_id = a.user_id  --指派人user表 别名 a
-        LEFT JOIN platform_user b ON t.beassign_user_id = b.user_id  --被指派人user表 别名 b
-        LEFT JOIN platform_user c on t.create_user_id = c.user_id  --创建人user表 别名 c
+        from task t LEFT JOIN platform_user a ON t.assign_user_id = a.user_id
+        LEFT JOIN platform_user b ON t.beassign_user_id = b.user_id
+        LEFT JOIN platform_user c on t.create_user_id = c.user_id
         LEFT JOIN project_main p ON t.project_id = p.id
     </select>
 
@@ -306,9 +303,9 @@
     <select id="queryTaskByTask" resultMap="BaseResultMap">
         SELECT
         <include refid="TaskManager_ShowTasks_Column_List" />
-        from task t LEFT JOIN platform_user a ON t.assign_user_id = a.user_id  --指派人user表 别名 a
-        LEFT JOIN platform_user b ON t.beassign_user_id = b.user_id  --被指派人user表 别名 b
-        LEFT JOIN platform_user c on t.create_user_id = c.user_id  --创建人user表 别名 c
+        from task t LEFT JOIN platform_user a ON t.assign_user_id = a.user_id
+        LEFT JOIN platform_user b ON t.beassign_user_id = b.user_id
+        LEFT JOIN platform_user c on t.create_user_id = c.user_id
         LEFT JOIN project_main p ON t.project_id = p.id
         <where>
             <if test="task.taskType != null">and t.task_type = #{task.taskType}</if>
@@ -337,14 +334,18 @@
     <select id="queryTaskById" parameterType="java.lang.Long" resultMap="BaseResultMap">
         SELECT
         <include refid="ShowAllTasks_Column_List" />
-        from task t LEFT JOIN platform_user a ON t.assign_user_id = a.user_id  --指派人user表 别名 a
-        LEFT JOIN platform_user b ON t.beassign_user_id = b.user_id  --被指派人user表 别名 b
-        LEFT JOIN platform_user c on t.create_user_id = c.user_id  --创建人user表 别名 c
+        from task t LEFT JOIN platform_user a ON t.assign_user_id = a.user_id
+        LEFT JOIN platform_user b ON t.beassign_user_id = b.user_id
+        LEFT JOIN platform_user c on t.create_user_id = c.user_id
         LEFT JOIN project_main p ON t.project_id = p.id
         LEFT JOIN demand d ON t.demand_id = d.id
         WHERE t.id = #{id,jdbcType=BIGINT}
     </select>
 
+    <delete id="deleteTaskById" parameterType="java.lang.Long">
+        DELETE FROM task
+        WHERE id = #{id,jdbcType=BIGINT}
+    </delete>
   <!-- gxl start -->
   	<!--查询任务-->
     <select id="queryTaskNodeById" resultMap="BaseResultMap" parameterType="long">
@@ -557,24 +558,30 @@
    <!--  查询逾期列表 -->
     <select id="queryOverdueTask" resultMap="BaseResultMap">
     	select
-    	<include refid="TaskManager_ShowTasks_Column_List" />
+    	<include refid="TaskOverDue_ShowTasks_Column_List" />
     	from task t
     	LEFT JOIN project_main p on p.id =t.project_id
 		LEFT JOIN platform_user u1 on u1.user_id = t.assign_user_id
+		WHERE t.status = 3
 		ORDER BY t.priority ASC,t.estimate_start_time DESC
     </select>
 
 
     <!--myp开始-->
-    <!--查询正在进行的任务-->
-    <select id="listTaskRunning" resultType="java.util.Map" parameterType="String">
-        SELECT
+    <!--根据用户查询所有正在进行的任务的SQL-->
+    <sql id="selectAllRunningTaskByUserId">
         ta.id, ta.task_num, ta.task_name, ta.task_parent_id, ta.project_id, ta.demand_id, ta.priority, ta.assign_user_id,
         ta.beassign_user_id, ta.assign_time, ta.estimate_start_time, ta.estimate_end_time, ta.actual_start_time,
         ta.actual_end_time, ta.task_type, ta.task_speed, ta.status, ta.node_lv, ta.task_describe, ta.demand_change,
         ta.delay_describe, ta.estimate_hour, ta.infact_hour, ta.task_mileage, ta.create_user_id, ta.modify_user_id,
         ta.create_time, ta.modify_time, de.demand_name, de.demand_desc, pro.project_name,pro.project_desc, pl.user_name,
         pl2.user_name
+    </sql>
+
+    <!--查询正在进行的任务-->
+    <select id="queryTaskRunning" resultMap="BaseResultMap" parameterType="String">
+        SELECT
+        <include refid="selectAllRunningTaskByUserId" />
         FROM task ta
         LEFT JOIN demand de ON ta.demand_id = de.id
         LEFT JOIN project_main pro ON ta.project_id = pro.id
@@ -584,21 +591,27 @@
         ORDER BY ta.create_time DESC, ta.priority DESC
     </select>
 
-    <!--关闭任务-->
-    <update id="runningtoclose" parameterType="java.util.List">
+    <!--根据父级id查询所有的子任务-->
+    <select id="queryByPId" parameterType="Long" resultType="com.camelot.pmt.task.model.Task">
+        SELECT * FROM task WHERE task_parent_id = #{id}
+    </select>
+    <!--根据任务id关闭任务-->
+    <update id="updateRunningToClose" parameterType="java.util.List">
         UPDATE task SET status = 4 WHERE
-        <foreach collection="alist" item="aid" open="(" close=")" separator="or">
-            <!-- 每个遍历需要生成的串 -->
+        <foreach collection="list" item="aid" open="(" close=")" separator="or">
             id = #{aid}
         </foreach>
     </update>
     <!--完成任务-->
-    <update id="runningtoalready" parameterType="java.util.List">
-        UPDATE task SET status = 3 WHERE
-        <foreach collection="ids" item="p_id" open="(" close=")" separator="or">
-            <!-- 每个遍历需要生成的串 -->
-            task_parent_id = #{p_id}
+    <select id="queryRunningToAlready" parameterType="java.util.List" resultType="com.camelot.pmt.task.model.Task">
+        SELECT * FROM task WHERE
+        <foreach collection="list" item="id" open="(" close=")" separator="or">
+            id = #{id}
         </foreach>
+    </select>
+
+    <update id="updateRunningToAlready" parameterType="Long">
+        UPDATE task SET status = 2 WHERE id = #{id}
     </update>
     <!--myp结束-->
 </mapper>
