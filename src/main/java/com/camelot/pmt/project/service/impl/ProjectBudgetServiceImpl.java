@@ -2,7 +2,6 @@ package com.camelot.pmt.project.service.impl;
 
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import com.camelot.pmt.common.ExecuteResult;
@@ -32,27 +31,18 @@ public class ProjectBudgetServiceImpl implements ProjectBudgetService {
      * @return ExecuteResult<String>
      */
     @Override
-    public ExecuteResult<String> addBudget(ProjectBudget projectBudget) {
-        ExecuteResult<String> result = new ExecuteResult<String>();
+    public boolean addBudget(ProjectBudget projectBudget) {
         Date currentDate = new Date();
+        boolean flag = false;
         try {
-            if (null == projectBudget) {
-                result.addErrorMessage("传入的项目预算实体有误!");
-                return result;
-            }
-            // 对象不为空则添加新的项目实体
             projectBudget.setCreateTime(currentDate);
             projectBudget.setModifyTime(currentDate);
-            int resu = proBuggetMapper.insertSelective(projectBudget);
-            if (resu > 0) {
-                result.setResult("添加项目预算成功!");
-            } else {
-                result.addErrorMessage("添加项目预算失败!");
-            }
+            flag =proBuggetMapper.insertSelective(projectBudget)==1?true:false;
         } catch (Exception e) {
+            flag = false;
             throw new RuntimeException(e);
         }
-        return result;
+        return flag;
     }
 
     /**
@@ -62,16 +52,9 @@ public class ProjectBudgetServiceImpl implements ProjectBudgetService {
      * @return ExecuteResult<ProjectBudget>
      */
     @Override
-    public ExecuteResult<ProjectBudget> queryBudgeByProjectId(Long projectId) {
-        ExecuteResult<ProjectBudget> result = new ExecuteResult<ProjectBudget>();
+    public ProjectBudget queryBudgeByProjectId(Long projectId) {
         try {
-            if (("".equals(projectId)) || (0 == projectId)) {
-                result.addErrorMessage("查询失败！");
-                return result;
-            }
-            ProjectBudget projectBudget = proBuggetMapper.selectProjectBudgetByProId(projectId);
-            result.setResult(projectBudget);
-            return result;
+            return proBuggetMapper.selectProjectBudgetByProId(projectId);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -84,26 +67,19 @@ public class ProjectBudgetServiceImpl implements ProjectBudgetService {
      * @return ExecuteResult<String>
      */
     @Override
-    public ExecuteResult<String> updateBudget(ProjectBudget projectBudget) {
-        ExecuteResult<String> result = new ExecuteResult<String>();
+    public boolean updateBudget(ProjectBudget projectBudget) {
         Date currentDate = new Date();
+        boolean flag = false;
         try {
-            if (projectBudget == null) {
-                result.addErrorMessage("传入的用户实体有误!");
-                return result;
-            }
-            // 对象不为空则添加新的项目实体
+            projectBudget.setCreateTime(currentDate);
             projectBudget.setModifyTime(currentDate);
-            int resu = proBuggetMapper.updateByPrimaryKeySelective(projectBudget);
-            if (resu > 0) {
-                result.setResult("修改项目预算信息成功!");
-            } else {
-                result.addErrorMessage("修改项目预算信息失败!");
-            }
+            flag =proBuggetMapper.updateByPrimaryKeySelective(projectBudget)==1?true:false;
         } catch (Exception e) {
+            flag = false;
             throw new RuntimeException(e);
         }
-        return result;
+        return flag;
+        
     }
 
     /**
@@ -139,60 +115,6 @@ public class ProjectBudgetServiceImpl implements ProjectBudgetService {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        return result;
-    }
-
-    /**
-     * 查询影响需求的任务信息
-     *
-     * @param  Long demandId
-     * @return ExecuteResult<List<Map<String, Object>>>
-     */
-    @Override
-    public ExecuteResult<List<Map<String, Object>>> queryDemandTaskByDeamdId(Long demandId) {
-        ExecuteResult<List<Map<String, Object>>> result = new ExecuteResult<>();
-        if ((null == demandId) || (0 == demandId)) {
-            result.addErrorMessage("传入的需求id有误");
-            return result;
-        }
-        List<Map<String, Object>> taskList = proBuggetMapper.findDemandTaskByDeamdId(demandId);
-        result.setResult(taskList);
-        return result;
-    }
-
-    /**
-     * 查询影响变更需求影响的用例信息
-     *
-     * @param  Long demandId
-     * @return ExecuteResult<List<Map<String, Object>>>
-     */
-    @Override
-    public ExecuteResult<List<Map<String, Object>>> queryDemandUseCaseByDeamdId(Long demandId) {
-        ExecuteResult<List<Map<String, Object>>> result = new ExecuteResult<>();
-        if ((null == demandId) || (0 == demandId)) {
-            result.addErrorMessage("传入的需求id有误");
-            return result;
-        }
-        List<Map<String, Object>> taskList = proBuggetMapper.findDemandUseCaseByDeamdId(demandId);
-        result.setResult(taskList);
-        return result;
-    }
-
-    /**
-     * 查询影响需求变更的bug信息
-     *
-     * @param  Long demandId
-     * @return ExecuteResult<List<Map<String, Object>>>
-     */
-    @Override
-    public ExecuteResult<List<Map<String, Object>>> findDemandBugByDeamdId(Long demandId) {
-        ExecuteResult<List<Map<String, Object>>> result = new ExecuteResult<>();
-        if ((null == demandId) || (0 == demandId)) {
-            result.addErrorMessage("传入的需求id有误");
-            return result;
-        }
-        List<Map<String, Object>> taskList = proBuggetMapper.findDemandBugByDeamdId(demandId);
-        result.setResult(taskList);
         return result;
     }
 
