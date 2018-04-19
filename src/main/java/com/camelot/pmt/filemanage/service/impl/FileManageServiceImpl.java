@@ -6,6 +6,8 @@ import com.camelot.pmt.filemanage.model.FileManage;
 import com.camelot.pmt.filemanage.model.FileManageGroup;
 import com.camelot.pmt.filemanage.service.FileManageService;
 import com.camelot.pmt.common.ExecuteResult;
+import com.camelot.pmt.platform.model.User;
+import com.camelot.pmt.platform.shiro.ShiroUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
@@ -31,13 +33,17 @@ public class FileManageServiceImpl implements FileManageService {
     private FileManageMapper fileManageMapper;
     @Autowired
     private FileManageGroupMapper fileManageGroupMapper;
+    @Autowired
+    private ShiroUtils shiroUtils;
     @Override
     @Transactional
     public Boolean addFileManager(HttpServletRequest request, FileManage fileManage) {//文件添加
         String createUserId = (String) request.getSession().getAttribute("");//从session获取创建者id
         long l= fileManageMapper.insertSelective(fileManage);//添加结果
         FileManageGroup group = new FileManageGroup();//新创建组对象
-        Long createUserId2 = (Long) request.getSession().getAttribute("");//从session获取创建者id
+        User user = (User) shiroUtils.getSessionAttribute("user");//获取用户id
+        String userId = user.getUserId();
+        Long createUserId2 = Long.valueOf(userId);
         if(createUserId2!=null){
             Date createTime = new Date();//创建时间
             group.setCreateUserId(createUserId2);//设置创建时间
@@ -68,7 +74,9 @@ public class FileManageServiceImpl implements FileManageService {
     @Override
     @Transactional
     public Boolean updateFileById(HttpServletRequest request,FileManage fileManage) {//文件修改
-        Long  modifyUserId = (Long) request.getSession().getAttribute("");//获取修改人id
+        User user = (User) shiroUtils.getSessionAttribute("user");//获取用户id
+        String userId = user.getUserId();
+        Long modifyUserId = Long.valueOf(userId);
         if(modifyUserId!=null){
             Date modifyTime = new Date();//获取当前时间
             fileManage.setModifyUserId(modifyUserId);

@@ -6,6 +6,8 @@ import com.camelot.pmt.filemanage.model.FileManageGroup;
 import com.camelot.pmt.filemanage.service.FileManageGroupService;
 import com.camelot.pmt.common.ApiResponse;
 import com.camelot.pmt.common.ExecuteResult;
+import com.camelot.pmt.platform.model.User;
+import com.camelot.pmt.platform.shiro.ShiroUtils;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +31,8 @@ public class FileManageGroupServiceImpl implements FileManageGroupService {
     private FileManageGroupMapper fileManageGroupMapper;
     @Autowired
     private FileManageMapper fileManageMapper;
+    @Autowired
+    private ShiroUtils shiroUtils;
     @Override
     public Boolean addFileManagerGroup(HttpServletRequest request, FileManageGroup fileManageGroup) {//添加文件夹
         Long parentId = fileManageGroup.getParentId();
@@ -40,12 +44,14 @@ public class FileManageGroupServiceImpl implements FileManageGroupService {
                 fileManageGroup.setProjectId(null);//如果是子文件夹的时候设置项目id（projectID）为null
             }
         }
-        Long  createId= (Long) request.getSession().getAttribute("  ");//从session获取创建者
-        if(createId!=null){
+        User user = (User) shiroUtils.getSessionAttribute("user");//获取用户id
+        String userId = user.getUserId();
+        Long aLong = Long.valueOf(userId);
+        if(aLong!=null){
             Date date = new Date();
             fileManageGroup.setCreateTime(date);
         }
-        fileManageGroup.setCreateUserId(createId);
+        fileManageGroup.setCreateUserId(aLong);
         fileManageGroup.setIsfile(0);
         int i = fileManageGroupMapper.insertSelective(fileManageGroup);//添加结果
         Boolean b=true;
@@ -84,7 +90,9 @@ public class FileManageGroupServiceImpl implements FileManageGroupService {
     @Override
     public Boolean updateFileGroupById(HttpServletRequest request,FileManageGroup fileManageGroup) {//修改文件夹
         Date date = new Date();//修改时间
-        Long  modifyUserID = (Long) request.getSession().getAttribute("");
+        User user = (User) shiroUtils.getSessionAttribute("user");//获取用户id
+        String userId = user.getUserId();
+        Long modifyUserID = Long.valueOf(userId);
         if(modifyUserID!=null){
             fileManageGroup.setModifyTime(date);
             fileManageGroup.setModifyUserId(modifyUserID);
