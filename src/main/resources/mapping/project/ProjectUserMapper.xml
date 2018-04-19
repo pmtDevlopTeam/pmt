@@ -182,19 +182,6 @@
 		where id = #{id,jdbcType=BIGINT}
 	</delete>
 
-	<!--根据项目id更新项目成员状态 -->
-	<update id="updateUserStatusByProjectId">
-		update project_user set
-		real_out_time =
-		#{realOutTime}, user_status =
-		#{userStatus},
-		modify_user_id =
-		#{modifyUserId}, modify_time =
-		#{modifyTime}
-		where project_id =
-		#{projectId}
-	</update>
-
 	<!-- 修改用户 -->
 	<update id="updateByPrimaryKeySelective" parameterType="com.camelot.pmt.project.model.ProjectUser">
 		update project_user
