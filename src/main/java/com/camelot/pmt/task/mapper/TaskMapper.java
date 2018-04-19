@@ -341,7 +341,7 @@ public interface TaskMapper {
      * @return int
      * @throws
      */
-    int queryUnfinishedTask(@Param("projectId") long projectId, @Param("userId") String userId);
+    int queryUnfinishedTask(@Param("projectId") Long projectId, @Param("userId") String userId);
 
     /**
      * 根据demandId 查询任务
@@ -352,7 +352,7 @@ public interface TaskMapper {
      * @return List<Task>
      * @throws
      */
-    List<Task> queryTaskByDemandId(long demandId);
+    List<Task> queryTaskByDemandId(Long demandId);
     /**
      * 根据任务Id修改状态
     * @Title: updateTaskOverdueStatus
