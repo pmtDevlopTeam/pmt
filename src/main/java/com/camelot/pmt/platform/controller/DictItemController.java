@@ -69,28 +69,33 @@ public class DictItemController {
         @ApiImplicitParam(
                 name="sortNum",value="排序号",required=true,paramType="form",dataType="Integer"),
         @ApiImplicitParam(
-                name="dictIds",value="字典ID",required=true,paramType="form",dataType="String"),
+                name="dictId",value="字典ID",required=true,paramType="form",dataType="String"),
     })
 	@RequestMapping(value="/addDictItem", method=RequestMethod.POST)
-	public JSONObject addDictItem(@ApiIgnore @RequestParam(required = true)String dictIds,@ApiIgnore DictItem dictItem) {
+	public JSONObject addDictItem(@ApiIgnore DictItem dictItem) {
+		ExecuteResult<String> result = new ExecuteResult<String>();
 		boolean flag = false;
 		try {
 			//if非空
 	    	if(dictItem.equals(null)){
 	    		return ApiResponse.errorPara();
 	    	}
-	    	if (StringUtils.isEmpty(dictIds)||StringUtils.isEmpty(dictItem.getDictItemName())
+	    	if (StringUtils.isEmpty(dictItem.getDictId())||StringUtils.isEmpty(dictItem.getDictItemName())
 	    		||StringUtils.isEmpty(dictItem.getDictItemCode())||StringUtils.isEmpty(dictItem.getDictItemValue()) )
 	    	{
 	    		return ApiResponse.errorPara();
             }
-	    	//不为空调用接口查询
-	    	 dictItem.setDictId(dictIds);
-	    	 flag = dictItemService.addDictItem(dictItem);
-	          if(flag){
-	              return ApiResponse.success();
-	          }
-	          return ApiResponse.error("添加异常");
+	    	//检查字典项编码跟字典项名称是否唯一
+	    	 result = dictItemService.checkDictItemCodeOrDictItemNameIsExist(dictItem);
+	    	//如果字典项编码跟字典项名称唯一
+	    	 if(result.getResultMessage()!=null) {
+		 	    flag = dictItemService.addDictItem(dictItem);
+		        if(flag){
+		        	return ApiResponse.success();
+		        }
+		        return ApiResponse.error("添加异常");
+		     }
+		    	return ApiResponse.success(result.getResult());	    	 
 		}catch (Exception e) {
     		//异常
     		return ApiResponse.error();
@@ -149,16 +154,23 @@ public class DictItemController {
     })
 	@RequestMapping(value="/updateDictItemByDictItemId", method=RequestMethod.POST)
 	public JSONObject updateDictItemByDictItemId(@ApiIgnore DictItem dictItem) {
+		ExecuteResult<String> result = new ExecuteResult<String>();
 		boolean flag = false;
         try {
 	    	if(StringUtils.isEmpty(dictItem.getDictItemId())){
 	    		return ApiResponse.errorPara();
 	        }
-	    	flag = dictItemService.updateDictItemByDictItemId(dictItem);
-            if(flag){
-                return ApiResponse.success();
-            }
-            return ApiResponse.error("修改异常");
+            //检查字典项编码跟字典项名称是否唯一
+	    	 result = dictItemService.checkDictItemCodeOrDictItemNameIsExistUpdate(dictItem);
+	    	//如果字典项编码跟字典项名称唯一
+	    	 if(result.getResultMessage()!=null) {
+	    		 	flag = dictItemService.updateDictItemByDictItemId(dictItem);
+			        if(flag){
+			        	return ApiResponse.success();
+			        }
+			        return ApiResponse.error("修改异常");
+			 }
+			    	return ApiResponse.success(result.getResult());	   
         } catch (Exception e){
         	logger.error(e.getMessage());
             return ApiResponse.error();

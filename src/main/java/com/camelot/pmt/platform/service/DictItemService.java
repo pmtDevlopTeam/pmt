@@ -37,13 +37,6 @@ public interface DictItemService {
 	 * @return boolean
 	 */
 	boolean updateDictItemByDictItemId(DictItem dictItem);
-	/**
-	 * 根据字典类型dictId 修改字典项
-	 * 
-	 * @param DictItem dictItem
-	 * @return boolean
-	 */
-	boolean updateDictItemByDictId(DictItem dictItem);
     /**
      * 根据字典项dictItemId 查询一个字典项
      * 
@@ -86,6 +79,13 @@ public interface DictItemService {
 	  * @param DictItem dictItem
 	  * @return ExecuteResult<DictItem>
 	  */
-	 boolean checkDictItemCodeOrDictItemNameIsExist(DictItem dictItem);
+	ExecuteResult<String> checkDictItemCodeOrDictItemNameIsExist(DictItem dictItem);
+	 /**
+	  * 检查字典项编码与字典项名称是否存在 update
+	  * 
+	  * @param DictItem dictItem
+	  * @return ExecuteResult<DictItem>
+	  */
+	ExecuteResult<String> checkDictItemCodeOrDictItemNameIsExistUpdate(DictItem dictItem);
 	
 }

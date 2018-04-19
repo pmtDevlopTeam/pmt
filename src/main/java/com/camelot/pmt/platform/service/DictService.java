@@ -1,6 +1,7 @@
 package com.camelot.pmt.platform.service;
 
 
+import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.platform.model.Dict;
 
 import java.util.List;
@@ -68,7 +69,14 @@ public interface DictService {
      * @param Dict dict
      * @return boolean
      */
-	boolean checkDictCodeOrDictNameIsExist(Dict dict);
+	ExecuteResult<String> checkDictCodeOrDictNameIsExist(Dict dict);
+    /**
+     * 检查字典编码与字典名称是否存在  updaete
+     *
+     * @param Dict dict
+     * @return boolean
+     */
+	ExecuteResult<String> checkDictCodeOrDictNameIsExistUpdate(Dict dict);
 
 	
 }

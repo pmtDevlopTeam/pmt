@@ -27,20 +27,14 @@ public class DictServiceImpl implements DictService {
 
 	@Override
 	public boolean addDict(Dict dict) {
-		boolean flag = false;
 		try{
 			String uuid = UUIDUtil.getUUID();
 			dict.setDictId(uuid);
 			dict.setCreateUserId("1");
             long date = new Date().getTime();
             dict.setCreateTime(new Date(date));
-            //检查字典编码与字典名称是否唯一
-            flag = checkDictCodeOrDictNameIsExist(dict);
-            if(flag==true) {
-            	return (dictMapper.addDict(dict)==1)?true:false;
-            }else {
-            	return flag;
-            }
+            
+            return (dictMapper.addDict(dict)==1)?true:false;
 		}catch(Exception e){
 			throw new RuntimeException(e);
 		}
@@ -66,7 +60,6 @@ public class DictServiceImpl implements DictService {
 
 	@Override
 	public boolean updateDictByDictId(Dict dict) {
-		boolean flag = false;
 	       try {
 				if(StringUtils.isEmpty(dict.getDictId()) ){
 					return false;
@@ -74,13 +67,8 @@ public class DictServiceImpl implements DictService {
 	            long date = new Date().getTime();
 	            dict.setModifyTime(new Date(date));
 	            dict.setModifyUserId("2");
-	            //检查字典编码与字典名称是否唯一
-	            flag = checkDictCodeOrDictNameIsExistUpdate(dict);
-	            if(flag == true) {
-	            	 return (dictMapper.updateDictByDictId(dict)==1)?true:false;
-	            }else {
-	            	return flag;
-	            }
+	            
+	            return (dictMapper.updateDictByDictId(dict)==1)?true:false;
 	        } catch (Exception e){
 	            throw new RuntimeException(e);
 	        }
@@ -146,7 +134,7 @@ public class DictServiceImpl implements DictService {
 //	}
 	
 	@Override
-	public boolean checkDictCodeOrDictNameIsExist(Dict dict) {
+	public ExecuteResult<String> checkDictCodeOrDictNameIsExist(Dict dict) {
 		ExecuteResult<String> result = new ExecuteResult<String>();
 		//1.检查字典编码与字典名称是否为null
     	if (!StringUtils.isEmpty(dict.getDictCode()) && !StringUtils.isEmpty(dict.getDictName()) ){
@@ -156,27 +144,27 @@ public class DictServiceImpl implements DictService {
     		if(dictc == null && dictn == null) {
     			result.setResult("字典编码,字典名称不重复!");
     			result.setResultMessage("字典编码,字典名称不重复!");
-				return true;
+				return result;
     		}
     		if(dictc != null && dictn == null) {
     			result.setResult("字典编码重复!");
-				return false;
+				return result;
     		}
     		if(dictc == null && dictn != null) {
     			result.setResult("字典名称重复!");
-				return false;
+				return result;
     		}
     		if(dictc != null && dictn != null) {
     			result.setResult("字典编码重复,字典名称重复!");
-				return false;
+				return result;
     		}
     		
         }
-		return false;
+		return result;
 	}
 	
-	
-	public boolean checkDictCodeOrDictNameIsExistUpdate(Dict dict) {
+	@Override
+	public ExecuteResult<String> checkDictCodeOrDictNameIsExistUpdate(Dict dict) {
 		ExecuteResult<String> result = new ExecuteResult<String>();
 		//1.检查字典编码与字典名称是否存在
 		if (!StringUtils.isEmpty(dict.getDictCode()) && !StringUtils.isEmpty(dict.getDictName()) ){
@@ -186,49 +174,49 @@ public class DictServiceImpl implements DictService {
     		if(dictc == null && dictn == null) {
     			result.setResultMessage("字典编码,字典名称不重复!");
     			result.setResult("字典编码,字典名称不重复!");
-				return true;
+				return result;
     		}
     		if(dictc != null && dictn == null) {
     			if(dictc.getDictId().equals(dict.getDictId())) {
     				result.setResultMessage("字典编码不重复!");
     				result.setResult("字典编码不重复!");
-    				return true;
+    				return result;
     			}
     			result.setResult("字典编码重复!");
-				return false;
+				return result;
     		}
     		if(dictc == null && dictn != null) {
     			if(dict.getDictId().equals(dictn.getDictId())) {
     				result.setResultMessage("字典名称不重复!");
     				result.setResult("字典名称不重复!");
-    				return true;
+    				return result;
     			}
     			result.setResult("字典名称重复!");
-				return false;
+				return result;
     		}
     		if(dictc != null && dictn != null) {
     			if(dict.getDictId().equals(dictc.getDictId())&&dict.getDictId().equals(dictn.getDictId())) {
         			result.setResultMessage("字典编码,字典名称不重复!");
         			result.setResult("字典编码,字典名称不重复!");
-    				return true;
+    				return result;
     			}
     			if(!dict.getDictId().equals(dictc.getDictId())&&dict.getDictId().equals(dictn.getDictId())) {
     				result.setResult("字典编码重复!");
-    				return false;
+    				return result;
     			}
     			if(dict.getDictId().equals(dictc.getDictId())&&!dict.getDictId().equals(dictn.getDictId())) {
     				result.setResult("字典名称重复!");
-    				return false;
+    				return result;
     			}
     			if(!dict.getDictId().equals(dictc.getDictId())&&!dict.getDictId().equals(dictn.getDictId())) {
     				result.setResult("字典编码,字典名称重复!");
-    				return false;
+    				return result;
     			}
     			
     		}
     		
         }
-		return false;
+		return result;
 	}
 	
 }
