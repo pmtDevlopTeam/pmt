@@ -192,67 +192,20 @@
         </association>
         <association property="createUser" javaType="com.camelot.pmt.platform.model.User">
             <result property="id" column="cid"/>
-            <result property="userId" column="user_id"/>
-            <result property="username" column="user_name"/>
+            <result property="userId" column="cuser_id"/>
+            <result property="username" column="cuser_name"/>
         </association>
         <association property="assignUser" javaType="com.camelot.pmt.platform.model.User">
             <result property="id" column="aid"/>
-            <result property="userId" column="user_id"/>
-            <result property="username" column="user_name"/>
+            <result property="userId" column="auser_id"/>
+            <result property="username" column="auser_name"/>
         </association>
         <association property="beassignUser" javaType="com.camelot.pmt.platform.model.User">
             <result property="id" column="bid"/>
-            <result property="userId" column="user_id"/>
-            <result property="username" column="user_name"/>
+            <result property="userId" column="buser_id"/>
+            <result property="username" column="buser_name"/>
         </association>
-        <collection property="taskLogList" ofType="TaskLog" >
-            <id column="lid" property="id"/><!-- 这里的column对应的是下面查询的别名，而不是表字段名 -->
-            <result column="task_id" property="taskId"/><!-- property对应JavaBean中的属性名 -->
-            <result column="user_id" property="userId"/>
-            <result column="operation_time" property="operationTime"/>
-            <result column="operation_button" property="operationButton"/>
-            <result column="operation_describe" property="operationDescribe"/>
-        </collection>
     </resultMap>
-
-    <resultMap id="TaskResultMap" type="com.camelot.pmt.task.model.Task">
-        <id column="id" property="id" jdbcType="BIGINT"/>
-        <result column="task_num" property="taskNum" jdbcType="VARCHAR"/>
-        <result column="task_name" property="taskName" jdbcType="VARCHAR"/>
-        <result column="task_parent_id" property="taskParentId" jdbcType="BIGINT"/>
-        <result column="project_id" property="projectId" jdbcType="BIGINT"/>
-        <result column="demand_id" property="demandId" jdbcType="BIGINT"/>
-        <result column="priority" property="priority" jdbcType="CHAR"/>
-        <result column="assign_user_id" property="assignUserId" jdbcType="VARCHAR"/>
-        <result column="beassign_user_id" property="beassignUserId" jdbcType="VARCHAR"/>
-        <result column="assign_time" property="assignTime" jdbcType="TIMESTAMP"/>
-        <result column="estimate_start_time" property="estimateStartTime" jdbcType="TIMESTAMP"/>
-        <result column="estimate_end_time" property="estimateEndTime" jdbcType="TIMESTAMP"/>
-        <result column="actual_start_time" property="actualStartTime" jdbcType="TIMESTAMP"/>
-        <result column="actual_end_time" property="actualEndTime" jdbcType="TIMESTAMP"/>
-        <result column="task_type" property="taskType" jdbcType="CHAR"/>
-        <result column="task_speed" property="taskSpeed" jdbcType="VARCHAR"/>
-        <result column="status" property="status" jdbcType="CHAR"/>
-        <result column="node_lv" property="nodeLv" jdbcType="CHAR"/>
-        <result column="task_describe" property="taskDescribe" jdbcType="VARCHAR"/>
-        <result column="demand_change" property="demandChange" jdbcType="CHAR"/>
-        <result column="delay_describe" property="delayDescribe" jdbcType="VARCHAR"/>
-        <result column="estimate_hour" property="estimateHour" jdbcType="BIGINT"/>
-        <result column="infact_hour" property="infactHour" jdbcType="BIGINT"/>
-        <result column="task_mileage" property="taskMileage" jdbcType="CHAR"/>
-        <result column="create_user_id" property="createUserId" jdbcType="VARCHAR"/>
-        <result column="modify_user_id" property="modifyUserId" jdbcType="VARCHAR"/>
-        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
-        <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP"/>
-    </resultMap>
-
-    <sql id="Base_Column_List">
-        id, task_num, task_name, task_parent_id, project_id, demand_id, priority, assign_user_id,
-        beassign_user_id, assign_time, estimate_start_time, estimate_end_time, actual_start_time,
-        actual_end_time, task_type, task_speed, status, node_lv, task_describe, demand_change,
-        delay_describe, estimate_hour, infact_hour, task_mileage, create_user_id, modify_user_id,
-        create_time, modify_time
-    </sql>
 
     <!--通用多表（项目表、指派user表、负责user表、创建user表、需求表）查所有-->
     <sql id="ShowAllTasks_Column_List">
@@ -260,8 +213,9 @@
         t.beassign_user_id, t.assign_time, t.estimate_start_time, t.estimate_end_time, t.actual_start_time,
         t.actual_end_time, t.task_type, t.task_speed, t.status, t.node_lv, t.task_describe, t.demand_change,
         t.delay_describe, t.estimate_hour, t.infact_hour, t.task_mileage, t.create_user_id, t.modify_user_id,
-        t.create_time, t.modify_time, a.id AS aid, a.user_id, a.user_name, b.id AS bid, b.user_id, b.user_name,
-        c.id AS cid, c.user_id, c.user_name, p.id AS pid, p.project_name, d.id AS did, d.demand_desc
+        t.create_time, t.modify_time, a.id AS aid, a.user_id AS auser_id, a.user_name AS auser_name, b.id AS bid, b.user_id AS buser_id,
+        b.user_name AS buser_name,
+        c.id AS cid, c.user_id AS cuser_id, c.user_name AS cuser_name, p.id AS pid, p.project_name, d.id AS did, d.demand_desc
     </sql>
 
     <!--zlh-->
@@ -272,6 +226,7 @@
         t.task_type, t.task_mileage, t.priority, c.id AS cid, c.user_id, c.user_name,
         a.id AS aid, a.user_id, a.user_name, t.assign_time, p.id pid, p.project_name
     </sql>
+
 	<!-- 查询逾期任务列表所有字段 -->
 	<sql id="TaskOverDue_ShowTasks_Column_List">
 	t.id,t.task_num,t.priority,t.task_name,p.project_name,
@@ -279,6 +234,7 @@
 	t.estimate_end_time ,t.estimate_hour,DATEDIFF(CURDATE(),t.estimate_start_time)*8 elapsed_time,
 	t.estimate_hour - (DATEDIFF(CURDATE(),estimate_start_time)*8) remaining_work,t.task_speed
 	</sql>
+
     <!--zlh-->
     <!--查询所有任务列表-->
     <select id="queryAllTask" resultMap="BaseResultMap">
@@ -312,11 +268,11 @@
         LEFT JOIN project_main p ON t.project_id = p.id
         <where>
             <if test="task.taskType != null">and t.task_type = #{task.taskType}</if>
-            <if test="task.actualEndTime != null">and t.actual_end_time &gt;= #{task.actualEndTime}</if>
+            <if test="task.actualEndTime != null">and Date(t.actual_end_time) = #{task.actualEndTime}</if>
             <if test="task.taskName != null">and t.task_name LIKE "%"#{task.taskName}"%"</if>
             <if test="task.status != null">and t.status = #{task.status}</if>
             <if test="ids != null">
-                and beassign_user_id in
+                and t.beassign_user_id in
                 <foreach collection="ids" item="idd" open="(" close=")" separator=",">
                     #{idd}
                 </foreach>
@@ -345,10 +301,13 @@
         WHERE t.id = #{id,jdbcType=BIGINT}
     </select>
 
+    <!--zlh-->
+    <!--根据id删除任务-->
     <delete id="deleteTaskById" parameterType="java.lang.Long">
         DELETE FROM task
         WHERE id = #{id,jdbcType=BIGINT}
     </delete>
+
   <!-- gxl start -->
   	<!--查询任务-->
     <select id="queryTaskNodeById" resultMap="BaseResultMap" parameterType="long">
