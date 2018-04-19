@@ -150,4 +150,13 @@
   	select sum(infact_hour) from task
   	where project_id = #{projectId,jdbcType = BIGINT} and status = '2'
   </select>
+  <!-- 查询项目下所有文件组 -->
+  <select id="queryFileGroup" parameterType="long" resultType="map">
+  	select id,parent_id,project_id,name,fdescribe,del_flag,isfile
+  	from file_manage_group where project_id = #{projectId,jdbcType=BIGINT} and isfile = 0
+  </select>
+  <!-- 查询文件组下所有文件 -->
+  <select id="queryFile" parameterType="long" resultType="map">
+  	select file_title,file_address,modify_time from file_manage where group_id = #{groupId,jdbcType=BIGINT}
+  </select>
 </mapper>
