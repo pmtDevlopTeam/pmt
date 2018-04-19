@@ -2,6 +2,7 @@ package com.camelot.pmt.project.mapper;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -25,33 +26,37 @@ public interface ProjectUserMapper {
             @Param("modifyTime") Date modifyTime);
 
     /**
-     *
-     * @mbggenerated 2018-04-13
+     * 通过主键删除
+     * @param id
+     * @return
      */
     int deleteByPrimaryKey(Long id);
 
     /**
-     *
-     * @mbggenerated 2018-04-13
+     * 插入数据
+     * @param record
+     * @return
      */
     int insert(ProjectUser record);
 
     /**
-     * 项目添加成员
-     * 
-     * @mbggenerated 2018-04-13
+     *  项目添加成员
+     * @param record
+     * @return
      */
-    int insertSelective(ProjectUser record);
+    int addUserSelective(ProjectUser record);
 
     /**
-     *
-     * @mbggenerated 2018-04-13
+     * 通过主键查询
+     * @param id
+     * @return
      */
     ProjectUser selectByPrimaryKey(Long id);
 
     /**
-     *
-     * @mbggenerated 2018-04-13
+     * 修改，可选择性修改
+     * @param record
+     * @return
      */
     int updateByPrimaryKeySelective(ProjectUser record);
 
@@ -85,10 +90,48 @@ public interface ProjectUserMapper {
      */
     List<ProjectUserShow> searchUserByCondition(ProjectUserSearchVO vo);
 
+    /**
+     * 查询成员数量
+     * @param vo
+     * @return
+     */
     int count(ProjectUserSearchVO vo);
 
-    void clearUser(@Param("projectId") Long projectId, @Param("userId") String userId);
-
+    /**
+     * 项目关闭清除所有成员，暂时不用
+     * @param projectId
+     * @param userId
+     * @param userStatus
+     * @return
+     */
     int clearUserAll(@Param("projectId") Long projectId, @Param("userId") String userId,
             @Param("userStatus") String userStatus);
+
+    /**
+     * 将人员状态修改为暂离
+     * 
+     * @param map
+     */
+    void clearUser(Map<String, Object> map);
+    
+    
+
+    // ----------------------附加-------------------
+    // 关于将成员移出项目
+    /**
+     * 查询task表，根据所有的id进行批量操作，如果成功则返回查询的条数
+     * 
+     * @param map
+     * @return
+     */
+    int checkTask(Map<String, Object> map);
+
+    /**
+     * 查询task表，根据所有的id进行批量操作，如果成功则返回查询的条数
+     * 
+     * @param map
+     * @return
+     */
+    int checkBug(Map<String, Object> map);
+
 }

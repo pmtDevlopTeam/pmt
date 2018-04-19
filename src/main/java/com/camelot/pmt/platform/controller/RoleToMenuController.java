@@ -13,6 +13,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,23 +33,25 @@ import java.util.List;
 @Api(value = "角色绑定权限管理", description = "角色绑定权限管理")
 public class RoleToMenuController {
 
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @Autowired
     private RoleToMenuService roleToMenuService;
-
 
     /**
      * 角色绑定权限
      *
-     * @param String roleId, String menuId
+     * @param String
+     *            roleId, String menuId
      * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
     @ApiOperation(value = "角色绑定权限", notes = "角色绑定权限")
     @PostMapping(value = "/createRoleToMenu")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "roleId", value = "角色id", required = true, paramType = "form", dataType = "string"),
-            @ApiImplicitParam(name = "menuIds", value = "菜单ids（格式：1,2,3,4）要有子id和父id", required = true, paramType = "form", dataType = "string"),})
+            @ApiImplicitParam(name = "menuIds", value = "菜单ids（格式：1,2,3,4）要有子id和父id", required = true, paramType = "form", dataType = "string"), })
     public JSONObject createRoleToMenu(@ApiIgnore RoleToMenu roleToMenu) {
-        ExecuteResult<RoleToMenu> result;
+        boolean flag = false;
         try {
             User user = (User) ShiroUtils.getSessionAttribute("user");
             if (StringUtils.isEmpty(user.getUserId())) {
@@ -58,12 +62,13 @@ public class RoleToMenuController {
             if (StringUtils.isEmpty(roleToMenu.getRoleId()) && StringUtils.isEmpty(roleToMenu.getMenuId())) {
                 return ApiResponse.jsonData(APIStatus.ERROR_400);
             }
-            result = roleToMenuService.createRoleToMenu(roleToMenu);
-            if (result.getResult() == null) {
+            flag = roleToMenuService.createRoleToMenu(roleToMenu);
+            if (flag) {
                 return ApiResponse.jsonData(APIStatus.ERROR_400);
             }
-            return ApiResponse.jsonData(APIStatus.OK_200, result.getResult());
+            return ApiResponse.jsonData(APIStatus.OK_200);
         } catch (Exception e) {
+            logger.error(e.getMessage());
             return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
         }
     }
@@ -71,16 +76,17 @@ public class RoleToMenuController {
     /**
      * 修改角色绑定权限
      *
-     * @param String roleId, String menuIds
+     * @param String
+     *            roleId, String menuIds
      * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
     @PostMapping(value = "/updateRoleToMenu")
     @ApiOperation(value = "修改角色绑定权限", notes = "修改角色绑定权限")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "roleId", value = "角色id", required = true, paramType = "form", dataType = "string"),
-            @ApiImplicitParam(name = "menuIds", value = "菜单ids（格式：1,2,3,4 要有子id和父id）", required = true, paramType = "form", dataType = "string"),})
+            @ApiImplicitParam(name = "menuIds", value = "菜单ids（格式：1,2,3,4 要有子id和父id）", required = true, paramType = "form", dataType = "string"), })
     public JSONObject updateRoleToMenu(@ApiIgnore RoleToMenu roleToMenu) {
-        ExecuteResult result;
+        boolean flag = false;
         try {
             User user = (User) ShiroUtils.getSessionAttribute("user");
             if (StringUtils.isEmpty(user.getUserId())) {
@@ -92,37 +98,38 @@ public class RoleToMenuController {
                 return ApiResponse.jsonData(APIStatus.ERROR_400);
             }
 
-            result = roleToMenuService.updateRoleToMenu(roleToMenu);
-            if (result.getResult() == null) {
+            flag = roleToMenuService.updateRoleToMenu(roleToMenu);
+            if (flag) {
                 return ApiResponse.jsonData(APIStatus.ERROR_400);
             }
-            return ApiResponse.success(result.getResult());
+            return ApiResponse.success();
         } catch (Exception e) {
+            logger.error(e.getMessage());
             return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
         }
     }
 
-
     /**
      * 根据角色id查询权限菜单
      *
-     * @param String roleId
+     * @param String
+     *            roleId
      * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
     @ApiOperation(value = "根据角色id查询权限菜单", notes = "根据角色id查询权限菜单")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "roleId", value = "角色id", required = true, paramType = "query", dataType = "string"),})
+            @ApiImplicitParam(name = "roleId", value = "角色id", required = true, paramType = "query", dataType = "string"), })
 
     @GetMapping(value = "/selectMenuByRoleId")
     public JSONObject selectMenuByRoleId(@ApiIgnore RoleToMenu roleToMenu) {
-        ExecuteResult<List<Menu>> result;
         try {
             if (StringUtils.isEmpty(roleToMenu.getRoleId())) {
                 return ApiResponse.jsonData(APIStatus.ERROR_400);
             }
-            result = roleToMenuService.selectMenuByRoleId(roleToMenu);
-            return ApiResponse.success(result.getResult());
+            List<Menu> list = roleToMenuService.selectMenuByRoleId(roleToMenu);
+            return ApiResponse.success(list);
         } catch (Exception e) {
+            logger.error(e.getMessage());
             return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
         }
     }

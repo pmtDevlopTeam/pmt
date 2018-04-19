@@ -1,18 +1,14 @@
 package com.camelot.pmt.task.mapper;
 
 import com.camelot.pmt.task.model.Task;
-import com.camelot.pmt.task.model.TaskDetail;
 import com.camelot.pmt.task.model.TaskLog;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 public interface TaskMapper {
-    int deleteByPrimaryKey(Long id);
-
-    Task selectByPrimaryKey(Long id);
-
 
     /**
      * 查询正在进行的任务，根据时间和优先级进行排序
@@ -76,7 +72,7 @@ public interface TaskMapper {
      * 查询已完成的任务，根据时间和优先级进行排序
      * myp
      * */
-    List<Map<String,Object>> listTaskAlready(String id);
+    List<Task> listTaskAlready(String id);
 
     /**
      * 查询已完成任务总个数 @Title: queryCount @Description: TODO @param @return @return
@@ -109,14 +105,6 @@ public interface TaskMapper {
      * @date: 17:08 2018/4/12
      */
     Task queryTaskById(Long id);
-
-    /**
-     * @author: zlh
-     * @param:  id 父id
-     * @description: 根据父id查询所有的子任务id
-     * @date: 16:04 2018/4/12
-     */
-    List<Long> querySubTaskIdByParantId(Long id);
 
     /**
      * @author: zlh
@@ -230,7 +218,7 @@ public interface TaskMapper {
      * @return List<Task>    返回类型
      * @throws
      */
-    List<Task> queryTopTaskNameList(@Param("status") String status, @Param("beassignUserId") Long beassignUserId);
+    List<Task> queryTopTaskNameList(@Param("status") String status, @Param("userId") Long userId);
 
     /**
      * @author: gxl
@@ -241,7 +229,7 @@ public interface TaskMapper {
      * @return JSONObject    返回类型
      * @throws
      */
-    void updateTaskPendingToDelay(@Param("id") Long id, @Param("status") String status, @Param("delayDescribe") String delayDescribe, @Param("estimateStartTime") String estimateStartTime);
+    void updateTaskPendingToDelay(@Param("id") Long id, @Param("status") String status, @Param("delayDescribe") String delayDescribe, @Param("estimateStartTime") Date estimateStartTime);
 
     /**
      * @author: gxl
@@ -253,6 +241,17 @@ public interface TaskMapper {
      * @throws
      */
     void updateTaskPendingToRunning(@Param("id") Long id, @Param("status") String status);
+    
+    /**
+     * @author: gxl
+     * @Title: taskParentId
+     * @Description: TODO(设置父Id为null)
+     * @param @param id
+     * @param @return    设定文件
+     * @return int    返回类型
+     * @throws
+     */
+    void updateTaskParentIdIsNull(@Param("id") Long id);
 
     /**
      * @author: gxl
@@ -366,6 +365,14 @@ public interface TaskMapper {
 	int updateTaskOverdueStatus(String taskId);
 
 
-
-
+    /**
+     * 根据任务Id修改状态
+     * @Title: updateTaskOverdueStatus
+     * @Description: TODO
+     * @param @param taskId
+     * @param @return
+     * @return int
+     * @throws
+     */
+    int updateTaskToTest(Long id);
 }

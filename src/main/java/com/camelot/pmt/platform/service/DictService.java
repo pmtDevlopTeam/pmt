@@ -7,11 +7,9 @@ import com.camelot.pmt.platform.model.Dict;
 import java.util.List;
 
 /**
- * <p>
- *  字典Service类
- * </p>
+ * 字典服务接口类
  *
- * @author sqw
+ * @author pmt
  * @since 2018-04-08
  */
 public interface DictService {
@@ -20,37 +18,37 @@ public interface DictService {
 	 * 根据一个字典 增加一个字典
 	 * 
 	 * @param Dict dict
-	 * @return ExecuteResult<Dict>
+	 * @return boolean
 	 */
-	ExecuteResult<String> createDict(Dict dict);
+	boolean addDict(Dict dict);
 	/**
 	 * 根据字典dictId 删除一个字典
 	 * 
 	 * @param String dictId
-	 * @return ExecuteResult<String>
+	 * @return boolean
 	 */
-	ExecuteResult<String> deleteDictByDictId(String dictId);
+	boolean deleteDictByDictId(String dictId);
 	/**
 	 * 根据字典dictId 修改一个字典
 	 * 
 	 * @param Dict dict
-	 * @return ExecuteResult<Dict>
+	 * @return boolean
 	 */
-	ExecuteResult<String> modifyDictByDictId(Dict dict);
+	boolean updateDictByDictId(Dict dict);
     /**
      * 根据字典dictId 查询一个字典
      * 
      * @param String dictId
-     * @return ExecuteResult<Dict>
+     * @return Dict
      */
-	ExecuteResult<Dict> queryDictByDictId(String dictId);
+	Dict queryDictByDictId(String dictId);
     /**
      * 查询全部字典
      * 
      * @param 
-     * @return ExecuteResult<List<Dict>>
+     * @return List<Dict>
      */
-	ExecuteResult<List<Dict>> queryAllDict();
+	List<Dict> selectDictListAll();
 //    /**
 //     *检查字典编码是否存在
 //     *
@@ -69,9 +67,16 @@ public interface DictService {
      * 检查字典编码与字典名称是否存在 
      *
      * @param Dict dict
-     * @return ExecuteResult<Dict>
+     * @return boolean
      */
 	ExecuteResult<String> checkDictCodeOrDictNameIsExist(Dict dict);
+    /**
+     * 检查字典编码与字典名称是否存在  updaete
+     *
+     * @param Dict dict
+     * @return boolean
+     */
+	ExecuteResult<String> checkDictCodeOrDictNameIsExistUpdate(Dict dict);
 
 	
 }

@@ -84,7 +84,7 @@
 		</trim>		
 	</sql>
 	<!-- 新增用户 -->
-	<insert id="insertUser" useGeneratedKeys="true" keyProperty="id" parameterType="com.camelot.pmt.platform.model.User">
+	<insert id="addUser" useGeneratedKeys="true" keyProperty="id" parameterType="com.camelot.pmt.platform.model.User">
 		insert into platform_user(
 			<include refid="sql_add_user_columns"/>
 		)values(
@@ -117,7 +117,7 @@
 		</trim>		
 	</sql>
 	<!-- 新增用户信息 -->
-	<insert id="insertUserInfo" useGeneratedKeys="true" keyProperty="id" parameterType="com.camelot.pmt.platform.model.User">
+	<insert id="addUserInfo" useGeneratedKeys="true" keyProperty="id" parameterType="com.camelot.pmt.platform.model.User">
 		insert into platform_user_info(
 			<include refid="sql_add_user_info_columns"/>
 		)values(
@@ -145,7 +145,7 @@
 		</trim>		
 	</sql>
 	<!-- 新增用户组织 -->
-	<insert id="insertUserOrg" useGeneratedKeys="true" keyProperty="id" parameterType="com.camelot.pmt.platform.model.User">
+	<insert id="addUserOrg" useGeneratedKeys="true" keyProperty="id" parameterType="com.camelot.pmt.platform.model.User">
 		insert into platform_user_org(
 			<include refid="sql_add_user_org_columns"/>
 		)values(
@@ -173,7 +173,7 @@
 		</trim>		
 	</sql>
 	<!-- 新增用户信息 -->
-	<insert id="insertUserRole" useGeneratedKeys="true" keyProperty="id" parameterType="com.camelot.pmt.platform.model.User">
+	<insert id="addUserRole" useGeneratedKeys="true" keyProperty="id" parameterType="com.camelot.pmt.platform.model.User">
 		insert into platform_user_role(
 			<include refid="sql_add_user_role_columns"/>
 		)values(
@@ -278,6 +278,11 @@
 	 <select id="checkUserExistByUserJobNum" parameterType="java.lang.String" resultType="long">
         SELECT count(1) FROM platform_user_info where user_job_num = #{userJobNum}
     </select>
+    
+    <!-- 检查用户组织表userId是否存在 -->
+	 <select id="checkUserOrgExistByUserId" parameterType="java.lang.String" resultType="long">
+        SELECT count(1) FROM platform_user_org where user_id = #{user_id}
+    </select>
 
 	<!-- 根据用户名查找用户密码-->
     <select id="findUserPasswordByLoginCode" resultType="java.lang.String" parameterType="java.lang.String" >
@@ -290,7 +295,7 @@
     </select>
     
     <!-- 根据userId获取单个信息 -->
-    <select id="selectUserById" resultMap="userModel" parameterType="java.lang.String" >
+    <select id="queryUserByUserId" resultMap="userModel" parameterType="java.lang.String" >
         select <include refid="userColumnsNoPassword"/> from platform_user where user_id = #{userId}
     </select>
 
@@ -310,21 +315,11 @@
 		<include refid="count_Tail"></include>
 	</select>
 	
-	<!-- 分页公共sql -->
-	<sql id="pagination_tail">
-	  limit #{page.pageOffset} , #{page.rows}
-	</sql>
+	<!--根据用户名模糊查询，获取用户对象-->
+	<select id="queryUsersByUserName" resultMap="userModel" parameterType="java.lang.String">
+		select <include refid="userColumnsNoPassword"/> from platform_user where user_name LIKE  CONCAT('%',#{username},'%')
+	</select>
 	
-    <!-- 分页查询所有用户列表 -->
-    <select id="findUsersByPage" resultMap="userModel">
-        select
-        <include refid="userColumnsNoPassword"/>
-        from platform_user
-        <if test="page!=null">
-			<include refid="pagination_tail" />
-		</if>
-    </select>
-
 	<!--查询所有用户,不分页-->
 	<select id="queryAllUsers" resultMap="userModel">
 		select <include refid="userColumnsNoPassword"/> from platform_user
@@ -346,13 +341,13 @@
     </select>
 
     <!-- 根据Id删除用户 -->
-    <delete id="deleteUserByUserId" parameterType="com.camelot.pmt.platform.model.User" >
-        delete FROM platform_user WHERE user_id = #{userId}
+    <delete id="deleteUserByUserId" parameterType="java.lang.String" >
+        delete from platform_user where user_id = #{userId}
     </delete>
 
     <!-- 根据Id删除用户角色表中所有的角色 -->
     <delete id="deleteUserRoleByUserId" parameterType="java.lang.String">
-        delete FROM platform_user_role WHERE user_id = #{userId}
+        delete FROM platform_user_role where user_id = #{userId}
     </delete>
 
 	<!-- 用户列表展示，多表关联结果集 -->

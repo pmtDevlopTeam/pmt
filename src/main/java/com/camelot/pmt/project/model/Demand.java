@@ -96,6 +96,16 @@ public class Demand {
      * 需求层级
      */
     private String demandNeed;
+    /**
+     * 需求描述
+     */
+    private String demandDesc;
+
+    /**
+     * 关闭原因
+     */
+    private String closeReason;
+
 
     /**
      * 需求id
@@ -388,7 +398,7 @@ public class Demand {
         return reasonsRejection;
     }
 
-    public void setReasonsejection(String reasonsRejection) {
+    public void setReasonsRejection(String reasonsRejection) {
         this.reasonsRejection = reasonsRejection;
     }
 
@@ -399,16 +409,6 @@ public class Demand {
     public void setDemandNeed(String demandNeed) {
         this.demandNeed = demandNeed;
     }
-
-    /**
-     * 需求描述
-     */
-    private String demandDesc;
-
-    /**
-     * 关闭原因
-     */
-    private String closeReason;
 
     /**
      * 需求描述

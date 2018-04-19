@@ -5,7 +5,6 @@ import com.camelot.pmt.task.model.Task;
 import com.github.pagehelper.PageInfo;
 
 import java.util.List;
-import java.util.Map;
 
 public interface TaskAlreadyService {
 
@@ -15,7 +14,7 @@ public interface TaskAlreadyService {
      * page @param @return @return ExecuteResult<DataGrid<Map<String, Object>>> @throws
      * myp
      */
-    ExecuteResult<PageInfo<Map<String, Object>>> queryTaskAlready(int page , int rows, String id);
+    ExecuteResult<PageInfo<Task>> queryTaskAlready(int page , int rows, String id);
 
     /**
      * @Title: queryUnfinishedTask 查询未完成任务的个数
@@ -45,4 +44,9 @@ public interface TaskAlreadyService {
     ExecuteResult<String> updateTaskAlreadyToRunning(Long id);
 
 
+    /**
+     * @Title: updateTaskToTest 根据任务ID 提测
+     *  @param
+     */
+    ExecuteResult<String> updateTaskToTest(Long id);
 }

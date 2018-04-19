@@ -39,9 +39,7 @@ public class RoleToUserServiceImpl implements RoleToUserService {
      * @return
      */
     @Override
-    public ExecuteResult addUserByRole(RoleToUser roleToUser) {
-        ExecuteResult result = new ExecuteResult();
-        try {
+    public boolean addUserByRole(RoleToUser roleToUser) {
             boolean isContains = true;
             List<String> roleId = Arrays.asList(roleToUser.getRoleIds());
             for (int i = 0; i < roleId.size(); i++) {
@@ -62,7 +60,7 @@ public class RoleToUserServiceImpl implements RoleToUserService {
                 }
             }
             if (isContains == false) {
-                return result;
+                return true;
             }
             for (String role : roleToUser.getRoleIds()) {
                 for (String user : roleToUser.getUserIds()) {
@@ -74,12 +72,7 @@ public class RoleToUserServiceImpl implements RoleToUserService {
                     roleToUserMapper.addUserByRole(roleToUser);
                 }
             }
-            result.setResult(roleToUser);
-        } catch (Exception e) {
-            LOGGER.error(e.getMessage());
-            throw new RuntimeException(e);
-        }
-        return result;
+        return false;
     }
 
     /**
@@ -89,9 +82,7 @@ public class RoleToUserServiceImpl implements RoleToUserService {
      * @return
      */
     @Override
-    public ExecuteResult updateUserByRole(RoleToUser roleToUser) {
-        ExecuteResult result = new ExecuteResult();
-        try {
+    public boolean updateUserByRole(RoleToUser roleToUser) {
             boolean isContains = true;
             List<String> roleId = Arrays.asList(roleToUser.getRoleIds());
             for (int i = 0; i < roleId.size(); i++) {
@@ -112,7 +103,7 @@ public class RoleToUserServiceImpl implements RoleToUserService {
                 }
             }
             if (isContains == false) {
-                return result;
+                return true;
             }
 
             List<String> roleIds = Arrays.asList(roleToUser.getRoleIds());
@@ -129,12 +120,7 @@ public class RoleToUserServiceImpl implements RoleToUserService {
                     roleToUserMapper.addUserByRole(roleToUser);
                 }
             }
-            result.setResult(roleToUser);
-        } catch (Exception e) {
-            LOGGER.error(e.getMessage());
-            throw new RuntimeException();
-        }
-        return result;
+        return false;
     }
 
     /**
@@ -144,26 +130,19 @@ public class RoleToUserServiceImpl implements RoleToUserService {
      * @return
      */
     @Override
-    public ExecuteResult<List<User>> queryUserByRole(RoleToUser role) {
-        ExecuteResult<List<User>> result = new ExecuteResult<List<User>>();
-        try {
+    public List<User> queryUserByRole(RoleToUser role) {
             List<RoleToUser> list = roleToUserMapper.queryUserByRole(role);
             if (CollectionUtils.isEmpty(list)) {
-                return result;
+                return null;
             }
             List<User> userModels = new ArrayList<User>();
             for (RoleToUser roleToUser : list) {
-                User userModel = userMapper.selectUserById(roleToUser.getUserId());
+                User userModel = userMapper.queryUserByUserId(roleToUser.getUserId());
                 userModels.add(userModel);
             }
             if (CollectionUtils.isEmpty(userModels)) {
-                return result;
+                return null;
             }
-            result.setResult(userModels);
-        } catch (Exception e) {
-            LOGGER.error(e.getMessage());
-            throw new RuntimeException(e);
-        }
-        return result;
+        return userModels;
     }
 }

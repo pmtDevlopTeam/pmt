@@ -3,8 +3,6 @@ package com.camelot.pmt.platform.service.impl;
 import java.util.Date;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -15,125 +13,88 @@ import com.camelot.pmt.platform.model.Dict;
 import com.camelot.pmt.platform.service.DictService;
 import com.camelot.pmt.util.UUIDUtil;
 
+/**
+ * 字典服务接口类
+ *
+ * @author pmt
+ * @since 2018-04-08
+ */
 @Service
 public class DictServiceImpl implements DictService {
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(DictServiceImpl.class);
-
 	@Autowired
 	DictMapper dictMapper; 
 
 	@Override
-	public ExecuteResult<String> createDict(Dict dict) {
-		ExecuteResult<String> result = new ExecuteResult<String>();
+	public boolean addDict(Dict dict) {
 		try{
-			if(dict == null){
-				result.setSuccess(false);
-				result.addErrorMessage("传入的字典实体有误!");
-				return result;
-			}
 			String uuid = UUIDUtil.getUUID();
 			dict.setDictId(uuid);
 			dict.setCreateUserId("1");
             long date = new Date().getTime();
             dict.setCreateTime(new Date(date));
-            //检查字典编码与字典名称是否唯一
-            result = checkDictCodeOrDictNameIsExist(dict);
-            if(result.getResultMessage()==null) {
-            	return result;
-            }
-			dictMapper.createDict(dict);
-			result.setResult("添加字典成功!");
+            
+            return (dictMapper.addDict(dict)==1)?true:false;
 		}catch(Exception e){
-			LOGGER.error(e.getMessage());
 			throw new RuntimeException(e);
 		}
-		return result;
 
 	}
 
 	@Override
-	public ExecuteResult<String> deleteDictByDictId(String dictId) {
-		ExecuteResult<String> result = new ExecuteResult<String>();
+	public boolean deleteDictByDictId(String dictId) {
+		boolean flag = false;
     	try {
-			if(StringUtils.isEmpty(dictId)){
-				result.setSuccess(false);
-				result.addErrorMessage("传入参数有误!");
-				return result;
-			}
-			dictMapper.deleteDictByDictId(dictId);
+    		int i= dictMapper.deleteDictByDictId(dictId);
     		dictMapper.deleteDictItemByDictId(dictId);
-    		result.setResult("删除字典成功！");
+    		if(i == 1) {
+    			flag = true;
+    		}
     	} catch (Exception e) {
-    		LOGGER.error(e.getMessage());
 			throw new RuntimeException(e);
 		}
-		return result;
+    	return flag;
 
 	}
 		
 
 	@Override
-	public ExecuteResult<String> modifyDictByDictId(Dict dict) {
-		ExecuteResult<String> result = new ExecuteResult<String>();
+	public boolean updateDictByDictId(Dict dict) {
 	       try {
 				if(StringUtils.isEmpty(dict.getDictId()) ){
-					result.setSuccess(false);
-					result.addErrorMessage("传入的字典实体有误!");
-					return result;
+					return false;
 				}
 	            long date = new Date().getTime();
 	            dict.setModifyTime(new Date(date));
 	            dict.setModifyUserId("2");
-	            //检查字典编码与字典名称是否唯一
-	            result = checkDictCodeOrDictNameIsExistUpdate(dict);
-	            if(result.getResultMessage()==null) {
-	            	return result;
-	            }
-	            dictMapper.modifyDictByDictId(dict);
-	            result.setResult("修改字典成功");
+	            
+	            return (dictMapper.updateDictByDictId(dict)==1)?true:false;
 	        } catch (Exception e){
-	            LOGGER.error(e.getMessage());
 	            throw new RuntimeException(e);
 	        }
-		return result;
-
+	       
 	}
 
 	@Override
-	public ExecuteResult<Dict> queryDictByDictId(String dictId) {
-		ExecuteResult<Dict> result = new ExecuteResult<Dict>();
+	public Dict queryDictByDictId(String dictId) {
 		try {
-			if(!StringUtils.isEmpty(dictId)) {
-				Dict dict = dictMapper.queryDictByDictId(dictId);
-				result.setResult(dict);
-				return result;
-			}
-			result.setSuccess(false);
-			result.addErrorMessage("dictId为null查询失败！");
-		} catch (Exception e) {
-			LOGGER.error(e.getMessage());
-			throw new RuntimeException(e);
-		}
-		return result;
+			Dict dict = dictMapper.queryDictByDictId(dictId);
+			return dict;
+		}catch (Exception e) {
+            throw new RuntimeException(e);
 
+		}
 	}
+	
 
 	@Override
-	public ExecuteResult<List<Dict>> queryAllDict() {
-		ExecuteResult<List<Dict>> result = new ExecuteResult<List<Dict>>();
-    	try {
-    		List<Dict> list = dictMapper.queryAllDict();
-    		if(list.size() <= 0) {
-				return result;
-			}
-    		result.setResult(list);
-    	} catch (Exception e) {
-    		LOGGER.error(e.getMessage());
-			throw new RuntimeException(e);
-		}
-       return result;
-		
+	public List<Dict> selectDictListAll() {
+    		try {
+    			List<Dict> list = dictMapper.selectDictListAll();
+        		return list;
+    		}catch (Exception e) {
+                throw new RuntimeException(e);
+    		}
 	}
 
 //	@Override
@@ -202,7 +163,7 @@ public class DictServiceImpl implements DictService {
 		return result;
 	}
 	
-	
+	@Override
 	public ExecuteResult<String> checkDictCodeOrDictNameIsExistUpdate(Dict dict) {
 		ExecuteResult<String> result = new ExecuteResult<String>();
 		//1.检查字典编码与字典名称是否存在

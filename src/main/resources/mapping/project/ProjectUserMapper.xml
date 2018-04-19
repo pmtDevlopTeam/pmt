@@ -1,18 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.camelot.pmt.project.mapper.ProjectUserMapper">
-	<!--根据项目id更新项目成员状态 -->
-	<update id="updateUserStatusByProjectId">
-		update project_user set
-		real_out_time =
-		#{realOutTime}, user_status =
-		#{userStatus},
-		modify_user_id =
-		#{modifyUserId}, modify_time =
-		#{modifyTime}
-		where project_id =
-		#{projectId}
-	</update>
+
+	<!-- 返回封装数据 -->
 	<resultMap id="BaseResultMap" type="com.camelot.pmt.project.model.ProjectUser">
 		<id column="id" property="id" jdbcType="BIGINT" />
 		<result column="project_id" property="projectId" jdbcType="BIGINT" />
@@ -32,6 +22,8 @@
 			jdbcType="VARCHAR" />
 		<result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
 	</resultMap>
+	
+	<!-- base_column_list -->
 	<sql id="Base_Column_List">
 		id, project_id, user_id, pre_join_time, real_join_time,
 		pre_out_time,
@@ -41,6 +33,8 @@
 		modify_user_id,
 		modify_time
 	</sql>
+	
+	<!-- 通过主键查询 -->
 	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
 		parameterType="java.lang.Long">
 		select
@@ -48,11 +42,8 @@
 		from project_user
 		where id = #{id,jdbcType=BIGINT}
 	</select>
-	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-		delete from
-		project_user
-		where id = #{id,jdbcType=BIGINT}
-	</delete>
+	
+	<!-- 插入数据 -->
 	<insert id="insert" parameterType="com.camelot.pmt.project.model.ProjectUser">
 		insert into project_user (id,
 		project_id, user_id,
@@ -72,7 +63,9 @@
 		#{createUserId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
 		#{modifyUserId,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP})
 	</insert>
-	<insert id="insertSelective" parameterType="com.camelot.pmt.project.model.ProjectUser">
+	
+	<!-- 添加用户 -->
+	<insert id="addUserSelective" parameterType="com.camelot.pmt.project.model.ProjectUser">
 		insert into project_user
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="id != null">
@@ -163,6 +156,28 @@
 			</if>
 		</trim>
 	</insert>
+	
+	<!-- 通过主键删除 -->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		project_user
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	
+		<!--根据项目id更新项目成员状态 -->
+	<update id="updateUserStatusByProjectId">
+		update project_user set
+		real_out_time =
+		#{realOutTime}, user_status =
+		#{userStatus},
+		modify_user_id =
+		#{modifyUserId}, modify_time =
+		#{modifyTime}
+		where project_id =
+		#{projectId}
+	</update>
+	
+	<!-- 修改用户 -->
 	<update id="updateByPrimaryKeySelective" parameterType="com.camelot.pmt.project.model.ProjectUser">
 		update project_user
 		<set>
@@ -208,6 +223,8 @@
 		</set>
 		where id = #{id,jdbcType=BIGINT}
 	</update>
+	
+	<!-- 通过id修改用户 -->
 	<update id="updateByPrimaryKey" parameterType="com.camelot.pmt.project.model.ProjectUser">
 		update
 		project_user
@@ -249,7 +266,25 @@
 		where id =
 		#{id}
 	</update>
+	
+	<!-- 移出成员 -->
+	<update id="clearUser" parameterType="java.util.Map">
+		update project_user set user_status = #{userStatus}, real_out_time = #{realOutTime},
+		modify_user_id = #{operator}, modify_time = #{modifyTime}
+		where project_user.project_id = #{projectId}
+		and project_user.user_id in
+		<foreach collection="list" item="item" index="index" separator="," open="(" close=")">
+			#{item}
+		</foreach>
+	</update>
 
+	<!-- 移出所有成员 -->
+	<update id="clearUserAll">
+		update project_user set user_status = #{user_status}, create_user_id = #{userId}, modify_time = now(), real_out_time = now()
+		where project_user.project_id = #{projectId}
+	</update>
+
+	<!-- 基本返回数据类型 -->
 	<resultMap id="projectUserMap" type="com.camelot.pmt.project.model.ProjectUserShow">
 		<id column="id" property="id" jdbcType="BIGINT" />
 		<result column="project_id" property="projectId" jdbcType="BIGINT" />
@@ -271,6 +306,7 @@
 		</collection>
 	</resultMap>
 
+	<!-- 通过项目id查询所有成员 -->
 	<select id="searchUserByProjectId" parameterType="java.lang.Long"
 		resultMap="projectUserMap">
 		SELECT project_user.id, project_user.project_id,
@@ -300,6 +336,7 @@
 		project_user.project_id = #{projectId}
 	</select>
 
+	<!-- 条件查询 -->
 	<select id="searchUserByCondition" parameterType="com.camelot.pmt.project.model.ProjectUserSearchVO"
 		resultMap="projectUserMap">
 		SELECT project_user.id, project_user.project_id, project_user.user_id,
@@ -345,6 +382,7 @@
 		</if>
 	</select>
 
+	<!-- 查询总数 -->
 	<select id="count" parameterType="com.camelot.pmt.project.model.ProjectUserSearchVO"
 		resultType="java.lang.Integer">
 		select count(1) from (
@@ -379,18 +417,27 @@
 		</if>
 		group by project_user.user_id) temps
 	</select>
-
-	<update id="clearUser">
-		update project_user set user_status = 04 where
-		project_user.projectId = #{projectId}
-		and project_user.user_id =
-		#{userId}
-	</update>
-
-	<update id="clearUserAll">
-		update project_user set user_status = #{user_status},
-		create_user_id = #{userId}, modify_time = now(), real_out_time = now()
-		where project_user.projectId = #{projectId}
-	</update>
+	
+	
+	<!-- 查询是否还有未完成的任务 -->
+	<select id="checkTask" parameterType="java.util.Map" resultType="java.lang.Integer">
+		select count(1) from 
+		task where task.project_id = #{projectId}
+		and task.status in (0, 1, 3) and task.beassign_user_id in
+		<foreach collection="list" item="item" index="index" separator="," open="(" close=")">
+			#{item}
+		</foreach>
+	</select>
+	
+	<!-- 查询是否还有未改完的bug -->
+	<select id="checkBug" parameterType="java.util.Map" resultType="java.lang.Integer">
+		select count(1)
+    	from bug_manage
+    	where project_id=#{projectId} and designated_id in
+    	<foreach collection="list" item="item" index="index" separator="," open="(" close=")">
+			#{item}
+		</foreach>
+    	and bug_status in(0,1)
+	</select>
 
 </mapper>

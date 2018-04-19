@@ -14,6 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 
+/**
+ * 
+ * @author gnerv
+ * @Description 用户登录、退出
+ * @date 2018年4月18日
+ */
 @ResponseBody
 @RestController
 @Api(value = "用户登陆接口", description = "用户登陆接口")
