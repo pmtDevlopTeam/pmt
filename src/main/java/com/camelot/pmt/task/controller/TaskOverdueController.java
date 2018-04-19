@@ -44,11 +44,17 @@ public class TaskOverdueController {
 	 * @Title: queryUserAll @Description: TODO查询所有任务 @param @return @return
 	 * JSONObject @throws
 	 */
-	@ApiOperation(value = "查询逾期所有任务", notes = "查询逾期所有任务")
+	@ApiOperation(value = "查询逾期所有任务+分页+模糊查询", notes = "查询逾期所有任务")
 	@RequestMapping(value = "/queryOverdueTask", method = RequestMethod.GET)
 	public JSONObject queryOverdueTask(
-			@ApiParam(name = "page", value = "页码", required = true) @RequestParam(required = true) Integer page,
-			@ApiParam(name = "rows", value = "每页数量", required = true) @RequestParam(required = true) Integer rows) {
+			/*@ApiParam(name = "taskId", value = "任务编号", required = true,defaultValue = "1") @RequestParam(required = true) Integer page,
+			@ApiParam(name = "taskName", value = "任务名称", required = true,defaultValue = "1") @RequestParam(required = true) Integer page,
+			@ApiParam(name = "priority", value = "优先级", required = true,defaultValue = "1") @RequestParam(required = true) Integer page,
+			@ApiParam(name = "page", value = "项目负责人", required = true,defaultValue = "1") @RequestParam(required = true) Integer page,
+			@ApiParam(name = "page", value = "状态", required = true,defaultValue = "1") @RequestParam(required = true) Integer page,
+			@ApiParam(name = "page", value = "项目", required = true,defaultValue = "1") @RequestParam(required = true) Integer page,*/
+			@ApiParam(name = "page", value = "页码", required = true,defaultValue = "1") @RequestParam(required = true) Integer page,
+			@ApiParam(name = "rows", value = "每页数量", required = true,defaultValue = "10") @RequestParam(required = true) Integer rows) {
 		ExecuteResult<PageInfo<Map<String,Object>>> result = new ExecuteResult<PageInfo<Map<String,Object>>>();
 		try {
 			if (page == null && "".equals(page) || rows == null && "".equals(rows)) {
