@@ -78,7 +78,7 @@ public class VersionServiceImpl implements VersionService {
         version.setModifyTime(dateTime);
         // 设置版本状态
         version.setVersionStatus(-1);
-        return versionMapper.updateByPrimaryKey(version) == 1 ? true : false;
+        return versionMapper.updateByPrimaryKeySelective(version) == 1 ? true : false;
     }
 
     /**
