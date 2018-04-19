@@ -24,6 +24,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 
@@ -49,7 +50,7 @@ public class FileManageController {
     })
     @RequestMapping(value = "/addFileManager",method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject addFileManager(HttpServletRequest request, FileManage fileManage,Long parentId){//添加文件
+    public JSONObject addFileManager(HttpServletRequest request, @ApiIgnore FileManage fileManage, Long parentId){//添加文件
         Boolean b=null;
         try {
             b = fileManageService.addFileManager(request,fileManage,parentId);//添加文件夹
@@ -69,7 +70,7 @@ public class FileManageController {
             @ApiImplicitParam(name = "id", value = "产出物id", required = true, paramType = "query", dataType = "String") })
     @RequestMapping(value = "/deldeteFileById",method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject deldeteFileById(FileManage fileManage){//删除文件
+    public JSONObject deldeteFileById(@ApiIgnore FileManage fileManage){//删除文件
         Boolean b=null;
         try {
             b = fileManageService.deleteFileById(fileManage);//删除文件
@@ -86,11 +87,12 @@ public class FileManageController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "产出物id", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "groupId", value = "组id", required = false, paramType = "query", dataType = "String"),
-            @ApiImplicitParam(name = "fileTitle", value = "文件标题", required = false, paramType = "query", dataType = "String")
+            @ApiImplicitParam(name = "fileTitle", value = "文件标题", required = false, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "fileAddress", value = "文件路径", required = false, paramType = "query", dataType = "String")
     })
     @RequestMapping(value = "/updateFileById",method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject updateFileById(HttpServletRequest request, FileManage fileManage){//文件修改
+    public JSONObject updateFileById(HttpServletRequest request,@ApiIgnore FileManage fileManage){//文件修改
         Boolean b=null;
         try {
             b = fileManageService.updateFileById(request,fileManage);//文件修改
@@ -111,7 +113,7 @@ public class FileManageController {
     })
     @RequestMapping(value = "/queryFileByGroupId",method = RequestMethod.GET)
     @ResponseBody
-    public JSONObject queryFileByGroupId(FileManageGroup fileManageGroup){//根据组id查询文件
+    public JSONObject queryFileByGroupId(@ApiIgnore FileManageGroup fileManageGroup){//根据组id查询文件
         try {
             PageInfo<FileManage> fileManagePageInfo = fileManageService.queryFileByGroupId(fileManageGroup);//查询文件详细信息
             return ApiResponse.success(fileManagePageInfo);

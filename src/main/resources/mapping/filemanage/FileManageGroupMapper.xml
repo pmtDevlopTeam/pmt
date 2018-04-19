@@ -177,7 +177,7 @@
     </where>
   </select>
   <!--根据父级id查询所有文件夹id-->
-  <select id="selectFileManagerGroupByParentId" parameterType="long" resultType="long">
+  <select id="queryFileManagerGroupByParentId" parameterType="long" resultType="long">
     select id from file_manage_group where parent_id=#{parentId}
   </select>
   <!--根据集合批量删除文件夹-->
