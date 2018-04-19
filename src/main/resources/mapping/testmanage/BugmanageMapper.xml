@@ -9,7 +9,7 @@
 		<result column="project_id" jdbcType="BIGINT" property="projectId" />
 		<result column="demand_id" jdbcType="BIGINT" property="demandId" />
 		<result column="task_id" jdbcType="BIGINT" property="taskId" />
-		<result column="task1_id" jdbcType="BIGINT" property="task1Id" />
+		<result column="demand1_id" jdbcType="BIGINT" property="demand1Id" />
 		<result column="designated_id" jdbcType="VARCHAR" property="designatedId" />
 		<result column="version_id" jdbcType="BIGINT" property="versionId" />
 		<result column="bug_type" jdbcType="VARCHAR" property="bugType" />
@@ -67,7 +67,7 @@
 	<sql id="Base_Column_GET">
 		id,create_user_id,bug_title,DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%s') as create_time,version_id,
 		solve_id,solve_program,close_id,DATE_FORMAT(close_time,'%Y-%m-%d %H:%i:%s') as close_time,
-		project_id,demand_id,case_id,task_id,task1_id,bug_type,serious_degree,bug_level,bug_status,
+		project_id,demand_id,case_id,task_id,demand1_id,bug_type,serious_degree,bug_level,bug_status,
 		designated_id,DATE_FORMAT(end_time,'%Y-%m-%d %H:%i:%s') as end_time,case_environment,case_terminal
 	</sql>
 	
@@ -93,8 +93,8 @@
 			<if test="taskId != null">
 				task_id,
 			</if>
-			<if test="task1Id != null">
-				task1_id,
+			<if test="demand1Id != null">
+				demand1_id,
 			</if>
 			<if test="designatedId != null">
 				designated_id,
@@ -188,8 +188,8 @@
 			<if test="taskId != null">
 				#{taskId,jdbcType=BIGINT},
 			</if>
-			<if test="task1Id != null">
-				#{task1Id,jdbcType=BIGINT},
+			<if test="demand1Id != null">
+				#{demand1Id,jdbcType=BIGINT},
 			</if>
 			<if test="designatedId != null">
 				#{designatedId,jdbcType=VARCHAR},
@@ -279,8 +279,8 @@
 			<if test="taskId != null">
 				task_id = #{taskId,jdbcType=BIGINT},
 			</if>
-			<if test="task1Id != null">
-				task1_id = #{taskId,jdbcType=BIGINT},
+			<if test="demand1Id != null">
+				demand1_id = #{demand1Id,jdbcType=BIGINT},
 			</if>
 			<if test="designatedId != null">
 				designated_id = #{designatedId,jdbcType=VARCHAR},
@@ -373,8 +373,8 @@
 			<if test="taskId != null">
 				task_id = #{taskId,jdbcType=BIGINT},
 			</if>
-			<if test="task1Id != null">
-				task1_id = #{taskId,jdbcType=BIGINT},
+			<if test="demand1Id != null">
+				demand1_id = #{demand1Id,jdbcType=BIGINT},
 			</if>
 			<if test="designatedId != null">
 				designated_id = #{designatedId,jdbcType=VARCHAR},
@@ -468,8 +468,8 @@
 			<if test="taskId != null">
 				task_id = #{taskId,jdbcType=BIGINT},
 			</if>
-			<if test="task1Id != null">
-				task1_id = #{taskId,jdbcType=BIGINT},
+			<if test="demand1Id != null">
+				demand1_id = #{demand1Id,jdbcType=BIGINT},
 			</if>
 			<if test="designatedId != null">
 				designated_id = #{designatedId,jdbcType=VARCHAR},
@@ -563,8 +563,8 @@
 			<if test="taskId != null">
 				task_id = #{taskId,jdbcType=BIGINT},
 			</if>
-			<if test="task1Id != null">
-				task1_id = #{taskId,jdbcType=BIGINT},
+			<if test="demand1Id != null">
+				demand1_id = #{demand1Id,jdbcType=BIGINT},
 			</if>
 			<if test="designatedId != null">
 				designated_id = #{designatedId,jdbcType=VARCHAR},
@@ -659,8 +659,8 @@
 			<if test="taskId != null">
 				task_id = #{taskId,jdbcType=BIGINT},
 			</if>
-			<if test="task1Id != null">
-				task1_id = #{taskId,jdbcType=BIGINT},
+			<if test="demand1Id != null">
+				demand1_id = #{demand1Id,jdbcType=BIGINT},
 			</if>
 			<if test="designatedId != null">
 				designated_id = #{designatedId,jdbcType=VARCHAR},
@@ -754,8 +754,8 @@
 			<if test="taskId != null">
 				task_id = #{taskId,jdbcType=BIGINT},
 			</if>
-			<if test="task1Id != null">
-				task1_id = #{taskId,jdbcType=BIGINT},
+			<if test="demand1Id != null">
+				demand1_id = #{demand1Id,jdbcType=BIGINT},
 			</if>
 			<if test="designatedId != null">
 				designated_id = #{designatedId,jdbcType=VARCHAR},

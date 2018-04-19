@@ -13,8 +13,8 @@ public class BugManage{
     private Long demandId;
     //相关任务ID
     private Long taskId;
-    //所属一级任务模块
-    private Long task1Id;
+    //一级需求ID
+    private Long demand1Id;
     //指派人
     private String designatedId;
     //影响版本ID
@@ -70,6 +70,9 @@ public class BugManage{
 		this.id = id;
 	}
 	public String getBugTitle() {
+		if(bugTitle==null||"null".equals(bugTitle)){
+			return "";
+		}
 		return bugTitle;
 	}
 	public void setBugTitle(String bugTitle) {
@@ -106,12 +109,18 @@ public class BugManage{
 		this.versionId = versionId;
 	}
 	public String getBugType() {
+		if(bugType==null||"null".equals(bugType)){
+			return "";
+		}
 		return bugType;
 	}
 	public void setBugType(String bugType) {
 		this.bugType = bugType;
 	}
 	public String getCaseTerminal() {
+		if(caseTerminal==null||"null".equals(caseTerminal)){
+			return "";
+		}
 		return caseTerminal;
 	}
 	public void setCaseTerminal(String caseTerminal) {
@@ -124,6 +133,9 @@ public class BugManage{
 		this.caseEnvironment = caseEnvironment;
 	}
 	public String getBugLevel() {
+		if(bugLevel==null||"null".equals(bugLevel)){
+			return "";
+		}
 		return bugLevel;
 	}
 	public void setBugLevel(String bugLevel) {
@@ -172,6 +184,9 @@ public class BugManage{
 		this.delFlag = delFlag;
 	}
 	public String getStepsReproduce() {
+		if(stepsReproduce==null||"null".equals(stepsReproduce)){
+			return "";
+		}
 		return stepsReproduce;
 	}
 	public void setStepsReproduce(String stepsReproduce) {
@@ -208,6 +223,9 @@ public class BugManage{
 		this.closeId = closeId;
 	}
 	public String getSeriousDegree() {
+		if(seriousDegree==null||"null".equals(seriousDegree)){
+			return "";
+		}
 		return seriousDegree;
 	}
 	public void setSeriousDegree(String seriousDegree) {
@@ -226,6 +244,9 @@ public class BugManage{
 		this.caseId = caseId;
 	}
 	public String getBugDescribe() {
+		if(bugDescribe==null||"null".equals(bugDescribe)){
+			return "";
+		}
 		return bugDescribe;
 	}
 	public void setBugDescribe(String bugDescribe) {
@@ -243,16 +264,16 @@ public class BugManage{
 	public void setBugNo(String bugNo) {
 		this.bugNo = bugNo;
 	}
-	public Long getTask1Id() {
-		return task1Id;
+	public Long getDemand1Id() {
+		return demand1Id;
 	}
-	public void setTask1Id(Long task1Id) {
-		this.task1Id = task1Id;
+	public void setDemand1Id(Long demand1Id) {
+		this.demand1Id = demand1Id;
 	}
 	@Override
 	public String toString() {
 		return "BugManage [id=" + id + ", bugNo=" + bugNo + ", bugTitle=" + bugTitle + ", projectId=" + projectId
-				+ ", demandId=" + demandId + ", taskId=" + taskId + ", task1Id=" + task1Id + ", designatedId="
+				+ ", demandId=" + demandId + ", taskId=" + taskId + ", demand1Id=" + demand1Id + ", designatedId="
 				+ designatedId + ", versionId=" + versionId + ", bugType=" + bugType + ", caseTerminal=" + caseTerminal
 				+ ", caseEnvironment=" + caseEnvironment + ", bugLevel=" + bugLevel + ", bugStatus=" + bugStatus
 				+ ", createUserId=" + createUserId + ", createTime=" + createTime + ", endTime=" + endTime

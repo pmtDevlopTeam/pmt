@@ -64,7 +64,7 @@ public class BugManageController {
 	            @ApiImplicitParam(name = "projectId", value = "项目id", required = true, paramType = "form", dataType = "Long"),
 	            @ApiImplicitParam(name = "demandId", value = "需求id", required = false, paramType = "form", dataType = "Long"),
 	            @ApiImplicitParam(name = "taskId", value = "任务id", required = false, paramType = "form", dataType = "Long"),
-	            @ApiImplicitParam(name = "task1Id", value = "所属一级任务id", required = false, paramType = "form", dataType = "Long"),
+	            @ApiImplicitParam(name = "demand1Id", value = "一级需求id", required = false, paramType = "form", dataType = "Long"),
 	            @ApiImplicitParam(name = "designatedId", value = "指派给", required = false, paramType = "form", dataType = "String"),
 	            @ApiImplicitParam(name = "versionId", value = "影响版本", required = true, paramType = "form", dataType = "Long"),
 	            @ApiImplicitParam(name = "bugTitle", value = "bug标题", required = true, paramType = "form", dataType = "String"),
@@ -101,7 +101,7 @@ public class BugManageController {
 		            @ApiImplicitParam(name = "projectId", value = "项目id", required = true, paramType = "form", dataType = "Long"),
 		            @ApiImplicitParam(name = "demandId", value = "需求id", required = false, paramType = "form", dataType = "Long"),
 		            @ApiImplicitParam(name = "taskId", value = "任务id", required = false, paramType = "form", dataType = "Long"),
-		            @ApiImplicitParam(name = "task1Id", value = "所属一级任务id", required = false, paramType = "form", dataType = "Long"),
+		            @ApiImplicitParam(name = "demand1Id", value = "一级需求id", required = false, paramType = "form", dataType = "Long"),
 		            @ApiImplicitParam(name = "caseId", value = "用例id", required = false, paramType = "form", dataType = "Long"),
 		            
 		            @ApiImplicitParam(name = "bugTitle", value = "bug标题", required = false, paramType = "form", dataType = "String"),

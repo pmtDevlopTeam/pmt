@@ -348,7 +348,7 @@ public class BugManageServiceImpl implements BugManageService {
 		if("4".equals(bugStatus)){
 			return "已撤销"; 
 		}
-		return null;
+		return "";
 	}
 	
 	public void selectStatus(BugManage bugManage,String userId,String operation){
@@ -358,112 +358,118 @@ public class BugManageServiceImpl implements BugManageService {
          if(!"添加".equals(operation)){
         	  if(bugManage.getBugTitle()!=null){
                	if(bug.getBugTitle()!=bugManage.getBugTitle()){
-               		operationRecord.append("修改了 bug标题 ,旧值为'"+bug.getBugTitle()==null?"":bug.getBugTitle()+"' , 新值为'"+bugManage.getBugTitle()+"'。");
+               		operationRecord.append("修改了 bug标题 ,旧值为'"+bug.getBugTitle()+"' , 新值为'"+bugManage.getBugTitle()+"'。");
                	}
                }
                if(bugManage.getStepsReproduce()!=null){
                	if(bug.getStepsReproduce()!=bugManage.getStepsReproduce()){
-               		operationRecord.append("修改了 重现步骤 ,旧值为'"+bug.getStepsReproduce()==null?"":bug.getStepsReproduce()+"' , 新值为'"+bugManage.getStepsReproduce()+"'。");
+               		operationRecord.append("修改了 重现步骤 ,旧值为'"+bug.getStepsReproduce()+"' , 新值为'"+bugManage.getStepsReproduce()+"'。");
                	}
                }
                if(bugManage.getBugDescribe()!=null){
                	if(bug.getBugDescribe()!=bugManage.getBugDescribe()){
-               		operationRecord.append("修改了 备注 ,旧值为'"+bug.getBugDescribe()==null?"":bug.getStepsReproduce()+"' , 新值为'"+bugManage.getBugDescribe()+"'。");
+               		operationRecord.append("修改了 备注 ,旧值为'"+bug.getBugDescribe()+"' , 新值为'"+bugManage.getBugDescribe()+"'。");
                	}
                }
                if(bugManage.getDesignatedId()!=null){
                	if(bug.getDesignatedId()!=bugManage.getDesignatedId()){
                		String username = userMapper.selectUserById(bug.getDesignatedId()).getUsername();
                		String newusername = userMapper.selectUserById(bug.getDesignatedId()).getUsername();
-               		operationRecord.append("修改了 指派人 ,旧值为'"+username==null?"":username+"' , 新值为'"+newusername+"'。");
+               		operationRecord.append("修改了 指派人 ,旧值为'"+username+"' , 新值为'"+newusername+"'。");
                	}
                }
                if(bugManage.getVersionId()!=null){
                	if(bug.getVersionId()!=bugManage.getVersionId()){
-               		operationRecord.append("修改了 版本 ,旧值为'"+bug.getVersionId()==null?"":bug.getVersionId()+"' , 新值为'"+bugManage.getVersionId()+"'。");
+               		String old=bug.getVersionId()==null?"":bug.getVersionId().toString();
+               		operationRecord.append("修改了 版本 ,旧值为'"+old+"' , 新值为'"+bugManage.getVersionId()+"'。");
                	}
                }
                if(bugManage.getBugType()!=null){
                	if(bug.getBugType()!=bugManage.getBugType()){
-               		operationRecord.append("修改了 bug类型 ,旧值为'"+bug.getBugType()==null?"":bug.getBugType()+"' , 新值为'"+bugManage.getBugType()+"'。");
+               		operationRecord.append("修改了 bug类型 ,旧值为'"+bug.getBugType()+"' , 新值为'"+bugManage.getBugType()+"'。");
                	}
                }
                if(bugManage.getSeriousDegree()!=null){
                	if(bug.getSeriousDegree()!=bugManage.getSeriousDegree()){
-               		operationRecord.append("修改了 bug严重程度 ,旧值为'"+bug.getSeriousDegree()==null?"":bug.getSeriousDegree()+"' , 新值为'"+bugManage.getSeriousDegree()+"'。");
+               		operationRecord.append("修改了 bug严重程度 ,旧值为'"+bug.getSeriousDegree()+"' , 新值为'"+bugManage.getSeriousDegree()+"'。");
                	}
                	
                }
                if(bugManage.getBugLevel()!=null){
                	if(!bugManage.getBugLevel().equals(bug.getBugLevel())){
-               		operationRecord.append("修改了 bug优先级  ,旧值为'"+bug.getBugLevel()==null?"":bug.getBugLevel()+"' , 新值为'"+bugManage.getBugLevel()+"'。");
+               		operationRecord.append("修改了 bug优先级  ,旧值为'"+bug.getBugLevel()+"' , 新值为'"+bugManage.getBugLevel()+"'。");
                	}
                }
                if(bugManage.getBugStatus()!=null){
                	if(!bugManage.getBugStatus().equals(bug.getBugStatus())){
                		String status=getStatus(bug);
                		String newStatus=getStatus(bugManage);
-               		operationRecord.append("修改了 bug状态 ,旧值为'"+status==null?"":status+"' , 新值为'"+newStatus+"'。");
+               		operationRecord.append("修改了 bug状态 ,旧值为'"+status+"' , 新值为'"+newStatus+"'。");
                	}
                }
                if(bugManage.getEndTime()!=null){
                	if(bug.getEndTime()!=bugManage.getEndTime()){
-               		operationRecord.append("修改了 截止日期  ,旧值为'"+bug.getEndTime()==null?"":bug.getEndTime()+"' , 新值为'"+bugManage.getEndTime()+"'。");
+               		operationRecord.append("修改了 截止日期  ,旧值为'"+bug.getEndTime()+"' , 新值为'"+bugManage.getEndTime()+"'。");
                	}
                }
                if(bugManage.getCaseEnvironment()!=null){
                	if(bug.getCaseEnvironment()!=bugManage.getCaseEnvironment()){
-               		operationRecord.append("修改了 测试环境  ,旧值为'"+bug.getCaseEnvironment()==null?"":bug.getCaseEnvironment()+"' , 新值为'"+bugManage.getCaseEnvironment()+"'。");
+               		operationRecord.append("修改了 测试环境  ,旧值为'"+bug.getCaseEnvironment()+"' , 新值为'"+bugManage.getCaseEnvironment()+"'。");
                	}
                }
                if(bugManage.getCaseTerminal()!=null){
                	if(bug.getCaseTerminal()!=bugManage.getCaseTerminal()){
-               		operationRecord.append("修改了 测试终端  ,旧值为'"+bug.getCaseTerminal()==null?"":bug.getCaseTerminal()+"' , 新值为'"+bugManage.getCaseTerminal()+"'。");
+               		operationRecord.append("修改了 测试终端  ,旧值为'"+bug.getCaseTerminal()+"' , 新值为'"+bugManage.getCaseTerminal()+"'。");
                	}
                }
                if(bugManage.getProjectId()!=null){
                	if(bug.getProjectId()!=bugManage.getProjectId()){
-               		operationRecord.append("修改了 所属项目 ,旧值为'"+bug.getProjectId()==null?"":bug.getProjectId()+"' , 新值为'"+bugManage.getProjectId()+"'。");
+               		String old=bug.getProjectId()==null?"":bug.getProjectId().toString();
+               		operationRecord.append("修改了 所属项目 ,旧值为'"+old+"' , 新值为'"+bugManage.getProjectId()+"'。");
                	}
                }
                if(bugManage.getDemandId()!=null){
                	if(bug.getDemandId()!=bugManage.getDemandId()){
-               		operationRecord.append("修改了 相关需求 ,旧值为'"+bug.getDemandId()==null?"":bug.getDemandId()+"' , 新值为'"+bugManage.getDemandId()+"'。");
+               		String old=bug.getDemandId()==null?"":bug.getDemandId().toString();
+               		operationRecord.append("修改了 相关需求 ,旧值为'"+old+"' , 新值为'"+bugManage.getDemandId()+"'。");
                	}
                }
                if(bugManage.getTaskId()!=null){
                	if(bug.getTaskId()!=bugManage.getTaskId()){
-               		operationRecord.append("修改了 相关任务 ,旧值为'"+bug.getTaskId()==null?"":bug.getTaskId()+"' , 新值为'"+bugManage.getTaskId()+"'。");
+               		String old=bug.getTaskId()==null?"":bug.getTaskId().toString();
+               		operationRecord.append("修改了 相关任务 ,旧值为'"+old+"' , 新值为'"+bugManage.getTaskId()+"'。");
                	}
                }
                if(bugManage.getCaseId()!=null){
                	if(bug.getCaseId()!=bugManage.getCaseId()){
-               		operationRecord.append("修改了 相关用例 ,旧值为'"+bug.getCaseId()==null?"":bug.getCaseId()+"' , 新值为'"+bugManage.getCaseId()+"'。");
+               		String old=bug.getCaseId()==null?"":bug.getCaseId().toString();
+               		operationRecord.append("修改了 相关用例 ,旧值为'"+old+"' , 新值为'"+bugManage.getCaseId()+"'。");
                	}
                }
                if(bugManage.getSolveId()!=null){
                	if(bug.getSolveId()!=bugManage.getSolveId()){
                		String username = userMapper.selectUserById(bug.getSolveId()).getUsername();
                		String newusername = userMapper.selectUserById(bug.getSolveId()).getUsername();
-               		operationRecord.append("修改了 解决者 ,旧值为'"+username==null?"":username+"' , 新值为'"+newusername+"'。");
+               		operationRecord.append("修改了 解决者 ,旧值为'"+username+"' , 新值为'"+newusername+"'。");
                	}
                }
                if(bugManage.getSolveProgram()!=null){
                	if(bug.getSolveProgram()!=bugManage.getSolveProgram()){
-               		operationRecord.append("修改了 解决方案 ,旧值为'"+bug.getSolveProgram()==null?"":bug.getSolveProgram()+"' , 新值为'"+bugManage.getSolveProgram()+"'。");
+               		String old=bug.getSolveProgram()==null?"":bug.getSolveProgram().toString();
+               		operationRecord.append("修改了 解决方案 ,旧值为'"+old+"' , 新值为'"+bugManage.getSolveProgram()+"'。");
                	}
                }
                if(bugManage.getCloseId()!=null){
                	if(bug.getCloseId()!=bugManage.getCloseId()){
                		String username = userMapper.selectUserById(bug.getCloseId()).getUsername();
                		String newusername = userMapper.selectUserById(bug.getCloseId()).getUsername();
-               		operationRecord.append("修改了 关闭人 ,旧值为'"+username==null?"":username+"' , 新值为'"+newusername+"'。");
+               		operationRecord.append("修改了 关闭人 ,旧值为'"+username+"' , 新值为'"+newusername+"'。");
                	}
                	
                }
                if(bugManage.getCloseTime()!=null){
                	if(bug.getCloseTime()!=bugManage.getCloseTime()){
-               		operationRecord.append("修改了关闭日期,旧值为'"+bug.getCloseTime()==null?"":bug.getCloseTime()+"' , 新值为'"+bugManage.getCloseTime()+"'。");
+               		operationRecord.append("修改了关闭日期,旧值为'"+bug.getCloseTime()+"' , 新值为'"+bugManage.getCloseTime()+"'。");
                	}
                	
                }
