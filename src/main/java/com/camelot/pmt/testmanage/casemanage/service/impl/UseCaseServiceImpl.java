@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.alibaba.fastjson.JSONObject;
 import com.camelot.pmt.platform.model.User;
 import com.camelot.pmt.platform.shiro.ShiroUtils;
 import com.camelot.pmt.testmanage.casemanage.mapper.UseCaseHistoryMapper;
@@ -97,15 +98,17 @@ public class UseCaseServiceImpl implements UseCaseService{
 	 * 
 	 * 获取用例信息
 	 */
-	public  UseCase queryUseCaseByUseCaseId (Long id){
-		
-		 	UseCase useCase=useCaseMapper.selectByPrimaryKey(id);
-			//获取步骤
-			List<UseCaseProcedure> useCaseProcedureList=useCaseProcedureMapper.selectByUseCaseId(useCase.getId());
-			if(useCaseProcedureList!=null){
-				useCase.setProcedure(useCaseProcedureList);
-			}
-			return useCase;
+	public  JSONObject queryUseCaseByUseCaseId (Long id){
+		JSONObject jSONObject = new JSONObject();
+	 	UseCase useCase=useCaseMapper.selectByPrimaryKey(id);
+		//获取步骤
+		List<UseCaseProcedure> useCaseProcedureList=useCaseProcedureMapper.selectByUseCaseId(useCase.getId());
+		if(useCaseProcedureList!=null){
+			useCase.setProcedure(useCaseProcedureList);
+		}
+		jSONObject.put("useCase", useCase);
+		jSONObject.put("useCaseHistory", useCaseHistoryMapper.queryByuseHistory(id));
+		return jSONObject;
 	}
 	
 	public boolean updateUserCaseDelFlag(Long id){

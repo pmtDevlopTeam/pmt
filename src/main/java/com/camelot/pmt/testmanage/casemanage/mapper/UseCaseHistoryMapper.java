@@ -1,5 +1,8 @@
 package com.camelot.pmt.testmanage.casemanage.mapper;
 
+import java.util.List;
+import java.util.Map;
+
 import com.camelot.pmt.testmanage.casemanage.model.UseCaseHistory;
 
 public interface UseCaseHistoryMapper {
@@ -50,4 +53,7 @@ public interface UseCaseHistoryMapper {
      * @mbggenerated Thu Apr 19 15:22:54 CST 2018
      */
     int updateByPrimaryKey(UseCaseHistory record);
+    
+    
+   List<Map<String,Object>> queryByuseHistory(Long id);
 }

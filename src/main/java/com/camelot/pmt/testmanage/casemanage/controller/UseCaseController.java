@@ -169,14 +169,14 @@ public class UseCaseController {
 		    @ApiImplicitParams({
 		            @ApiImplicitParam(name = "id", value = "用例id", required = true, paramType = "query", dataType = "long") })
 		    public JSONObject queryByUseCaseId(Long id) {
-			        try {
-			            //调用添加bug接口
-			            // 成功返回
-			            return ApiResponse.success(UseCaseService.queryUseCaseByUseCaseId(id));
-			        } catch (Exception e) {
-			            // 异常
-			            return ApiResponse.error();
-			        }
+		        try {
+		            //调用添加bug接口
+		            // 成功返回
+		            return ApiResponse.success(UseCaseService.queryUseCaseByUseCaseId(id));
+		        } catch (Exception e) {
+		            // 异常
+		            return ApiResponse.error();
+		        }
 		    }
 		 
 
