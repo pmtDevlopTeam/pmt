@@ -24,7 +24,7 @@
     </sql>
 
     <!-- 增加一个菜单 -->
-    <insert id="createMenu">
+    <insert id="addMenu">
 		insert into platform_menu(
 	        <trim suffixOverrides=",">
 	            <if test="menuId != null">menu_id,</if>
@@ -64,7 +64,7 @@
         delete from platform_menu where menu_id = #{menuId}
 	</delete>
 	<!-- 根据菜单id 修改一个菜单 -->
-	<update id="modifyMenuByMenuId">
+	<update id="updateMenuByMenuId">
         update platform_menu
 		set
             <trim suffixOverrides=",">
@@ -89,11 +89,7 @@
        select <include refid="Base_Column_List" /> from platform_menu where menu_id = #{menuId}
     </select>
     <!-- 查询全部菜单 -->
-    <select id="queryAllMenu" resultMap="BaseResultMap">
-       select <include refid="Base_Column_List" /> from platform_menu
-    </select>
-
-    <select id="selectMenuList" resultMap="BaseResultMap">
+    <select id="queryAllMenuList" resultMap="BaseResultMap">
        select <include refid="Base_Column_List" /> from platform_menu
     </select>
 

@@ -3,6 +3,8 @@ package com.camelot.pmt.platform.controller;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,10 +13,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
-import com.camelot.pmt.common.APIStatus;
 import com.camelot.pmt.common.ApiResponse;
 import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.platform.model.Dict;
+import com.camelot.pmt.platform.model.Menu;
 import com.camelot.pmt.platform.service.DictService;
 
 import io.swagger.annotations.Api;
@@ -34,9 +36,11 @@ import springfox.documentation.annotations.ApiIgnore;
  */
 @RestController
 @RequestMapping(value = "/platform/dict")
-@Api(value = "字典管理接口", description = "字典管理接口")
+@Api(value = "基础平台-字典管理接口", description = "基础平台-字典管理接口")
 public class DictController {
 
+    //日志
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	@Autowired
 	DictService dictService; 
@@ -45,7 +49,7 @@ public class DictController {
      *  根据一个字典对象  创建一个字典
      *  
      *  @param Dict dict
-     *  @return JSONObject  {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
+     *  @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
 	@ApiOperation(value="创建字典接口", notes="创建单个字典")
     @ApiImplicitParams({
@@ -58,9 +62,10 @@ public class DictController {
         @ApiImplicitParam(
                 name="state",value="字典状态",required=true,paramType="form",dataType="String"),
     })
-	@RequestMapping(value="/createDict", method=RequestMethod.POST)
-	public JSONObject createDict(@ApiIgnore Dict dict) {
+	@RequestMapping(value="/addDict", method=RequestMethod.POST)
+	public JSONObject addDict(@ApiIgnore Dict dict) {
 		ExecuteResult<String> result = new ExecuteResult<String>();
+		boolean flag = false;
 		try {
 			//if非空
 	    	if(dict == null){
@@ -69,14 +74,19 @@ public class DictController {
 	    	if (StringUtils.isEmpty(dict.getDictCode())||StringUtils.isEmpty(dict.getDictName())||StringUtils.isEmpty(dict.getDictType())){
 	    		return ApiResponse.errorPara();
             }
-	    	//不为空调用接口查询
-	    	 result = dictService.createDict(dict);
-	    	 if(result.isSuccess()){
-	            return ApiResponse.success(result.getResult());
-	          }
-	            return ApiResponse.error(result.getErrorMessage());
+	    	//检查字典编码跟字典名称是否唯一
+	    	 result = dictService.checkDictCodeOrDictNameIsExist(dict);
+	    	//如果字典编码跟字典名称唯一
+	    	 if(result.getResultMessage()!=null) {
+	 	    	flag = dictService.addDict(dict);
+	            if(flag){
+	                return ApiResponse.success();
+	            }
+	            return ApiResponse.error("添加异常");
+	    	 }
+	    	 return ApiResponse.success(result.getResult());
 		}catch (Exception e) {
-    		//异常
+			logger.error(e.getMessage());
     		return ApiResponse.error();
 		}
 		
@@ -95,17 +105,18 @@ public class DictController {
     })
 	@RequestMapping(value="/deleteDictByDictId", method=RequestMethod.POST)
 	public JSONObject deleteDictByDictId(@ApiIgnore String dictId) {
-    	ExecuteResult<String> result = new ExecuteResult<String>();
+		boolean flag = false;
 	   	try {
     		if(StringUtils.isEmpty(dictId)) {
     			return ApiResponse.errorPara();
     		}
-    		result = dictService.deleteDictByDictId(dictId);
-    		if(result.isSuccess()) {
-    			return ApiResponse.success(result.getResult());
-    		}
-    		return ApiResponse.error(result.getErrorMessage());
+    		flag = dictService.deleteDictByDictId(dictId);
+            if(flag){
+                return ApiResponse.success();
+            }
+            return ApiResponse.error("删除异常");
     	} catch (Exception e) {
+    		logger.error(e.getMessage());
     		return ApiResponse.error();
 		}
 	   	
@@ -130,23 +141,30 @@ public class DictController {
         @ApiImplicitParam(
                 name="state",value="字典状态",required=true,paramType="form",dataType="String"),
     })
-	@RequestMapping(value="/modifyDictByDictId", method=RequestMethod.POST)
-	public JSONObject modifyDictByDictId(@ApiIgnore Dict dict) {
+	@RequestMapping(value="/updateDictByDictId", method=RequestMethod.POST)
+	public JSONObject updateDictByDictId(@ApiIgnore Dict dict) {
+		boolean flag = false;
 		ExecuteResult<String> result = new ExecuteResult<String>();
         try {
             if(StringUtils.isEmpty(dict.getDictCode())||StringUtils.isEmpty(dict.getDictType())
             ||StringUtils.isEmpty(dict.getDictName()) || StringUtils.isEmpty(dict.getDictId()) ){
             	return ApiResponse.errorPara();
             }
-            result = dictService.modifyDictByDictId(dict);
-            if(result.isSuccess()){
-                return ApiResponse.success(result.getResult());
-            }
-            return ApiResponse.error(result.getErrorMessage());
-
-        } catch (Exception e){
-            return ApiResponse.error();
-        }
+            //检查字典编码跟字典名称是否唯一
+	    	 result = dictService.checkDictCodeOrDictNameIsExistUpdate(dict);
+	    	//如果字典编码跟字典名称唯一
+	    	 if(result.getResultMessage()!=null) {
+	    		 flag = dictService.updateDictByDictId(dict);
+		         if(flag){
+		        	 return ApiResponse.success();
+		         }
+		          	 return ApiResponse.error("修改异常");
+		     }
+		    	 	 return ApiResponse.success(result.getResult());
+        	} catch (Exception e){
+        		logger.error(e.getMessage());
+        		return ApiResponse.error();
+        	}
         
 	}
 
@@ -154,136 +172,77 @@ public class DictController {
      * 根据一个字典dictId  查询一个字典
      * 
      * @param  String dictId
-     * @return {"status": {"code":xxx,"message":"xxx"}, "data": {xxx}]
+     * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
-	@ApiOperation(value="根据字典dictId查询单个字典", notes="查询单个字典")
+	@ApiOperation(value="查询字典接口", notes="查询单个字典")
 	@RequestMapping(value="/queryDictByDictId", method=RequestMethod.POST)
 	public JSONObject queryDictByDictId(@ApiParam(value = "字典dictId", required = true) @RequestParam(required = true) String dictId) {
-		ExecuteResult<Dict> result = new ExecuteResult<Dict>();
 		try {
             if(StringUtils.isEmpty(dictId)){
             	return ApiResponse.errorPara();
             }
-            result = dictService.queryDictByDictId(dictId);
-            if(result.isSuccess()) {
-                return ApiResponse.success(result.getResult());
-            }
-            return ApiResponse.error(result.getErrorMessage());
+            	Dict dict = dictService.queryDictByDictId(dictId);
+            	return ApiResponse.success(dict);
         }catch (Exception e) {
+        	logger.error(e.getMessage());
             return ApiResponse.error();
         }
-		
 	}
 	
     /**
      * 查询全部字典
      * 
      * @param  
-     * @return {"status": {"code":xxx,"message":"xxx"}, "data": {xxx}]
+     * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
 	@ApiOperation(value="查询所有字典", notes="查询所有字典")
-	@RequestMapping(value="/queryAllDict", method=RequestMethod.GET)
-	public JSONObject queryAllDict() {
-        ExecuteResult<List<Dict>> result = new ExecuteResult<List<Dict>>();
+	@RequestMapping(value="/selectDictListAll", method=RequestMethod.GET)
+	public JSONObject selectDictListAll() {
         try {
-            result = dictService.queryAllDict();
-            if(result.isSuccess()) {
-                return ApiResponse.success(result.getResult());
-            }
-            return ApiResponse.error();
+        	List<Dict> list = dictService.selectDictListAll();
+            return ApiResponse.success(list);
         }catch (Exception e) {
+        	logger.error(e.getMessage());
             return ApiResponse.error();
         }
         
 	}
 	
-    /**
-     * 检查字典编码与字典名称是否存在
-     * 
-     * @param Dict dict
-     * @return {"status":{"code":xxx,"message":"xxx"},"data":{xxx}
-     */
-  @ApiOperation(value="检查字典编码与字典名称是否存在", notes="检查字典编码与字典名称是否存在")
-  @ApiImplicitParams({
-          @ApiImplicitParam(
-                  name="dictCode",value="字典编码",required=true,paramType="form",dataType="String"),
-          @ApiImplicitParam(
-                  name="dictName",value="字典名称",required=true,paramType="form",dataType="String"),
-  })
-  @RequestMapping(value = "/checkDictCodeOrDictNameIsExist",method = RequestMethod.POST)
-  public JSONObject checkDictCodeOrDictNameIsExist(@ApiIgnore Dict dict) {
-  	ExecuteResult<String> result = new ExecuteResult<String>();
-		try {
-  		//判断非空
-	    	if(dict == null){
-	    		return ApiResponse.errorPara();
-	    	}
-	    	//不为空调用接口查询
-	    	 result = dictService.checkDictCodeOrDictNameIsExist(dict);
-	    	//成功返回
-	    	 if(result.isSuccess()) {
-	    		 return ApiResponse.success(result.getResult());
-	    	 }
-	    	return ApiResponse.error();
-  	} catch (Exception e) {
-  		//异常
-  		return ApiResponse.error();
-		}
-	}
+//    /**
+//     * 检查字典编码与字典名称是否存在
+//     * 
+//     * @param Dict dict
+//     * @return {"status":{"code":xxx,"message":"xxx"},"data":{xxx}
+//     */
+//  @ApiOperation(value="检查字典编码与字典名称是否存在", notes="检查字典编码与字典名称是否存在")
+//  @ApiImplicitParams({
+//          @ApiImplicitParam(
+//                  name="dictCode",value="字典编码",required=true,paramType="form",dataType="String"),
+//          @ApiImplicitParam(
+//                  name="dictName",value="字典名称",required=true,paramType="form",dataType="String"),
+//  })
+//  @RequestMapping(value = "/checkDictCodeOrDictNameIsExist",method = RequestMethod.POST)
+//  public JSONObject checkDictCodeOrDictNameIsExist(@ApiIgnore Dict dict) {
+//  	ExecuteResult<String> result = new ExecuteResult<String>();
+//		try {
+//  		//判断非空
+//	    	if(dict == null){
+//	    		return ApiResponse.errorPara();
+//	    	}
+//	    	//不为空调用接口查询
+//	    	 result = dictService.checkDictCodeOrDictNameIsExist(dict);
+//	    	//成功返回
+//	    	 if(result.isSuccess()) {
+//	    		 return ApiResponse.success(result.getResult());
+//	    	 }
+//	    	return ApiResponse.error();
+//  	} catch (Exception e) {
+//  		//异常
+//  		return ApiResponse.error();
+//		}
+//	}
 	
-//    @ApiOperation(value="检查字典编码是否唯一", notes="检查字典编码是否唯一")
-//    @ApiImplicitParams({
-//            @ApiImplicitParam(
-//                    name="dictCode",value="字典编码",required=true,paramType="form",dataType="String"),
-//    })
-//    @RequestMapping(value = "/checkDictCode",method = RequestMethod.POST)
-//    public JSONObject checkDictCode(@ApiIgnore String dictCode) {
-//    	ExecuteResult<Dict> result = new ExecuteResult<Dict>();
-//		try {
-//    		//判断非空
-//	    	if(dictCode == null){
-//	    		return ApiResponse.errorPara();
-//	    	}
-//	    	//不为空调用接口查询
-//	    	 result = dictService.findDictCode(dictCode);
-//	    	 if(result.getResult() == null) {
-//	    		 return ApiResponse.success(result.getResultMessage());
-//	    	 }
-//	    	//成功返回
-////	    	return ApiResponse.success(result.getResult());
-//	    	return ApiResponse.success(result.getResultMessage());
-//    	} catch (Exception e) {
-//    		//异常
-//    		return ApiResponse.error();
-//		}
-//	}
-//    
-//    @ApiOperation(value="检查字典名称是否唯一", notes="检查字典名称是否唯一")
-//    @ApiImplicitParams({
-//            @ApiImplicitParam(
-//                    name="dictName",value="字典名称",required=true,paramType="form",dataType="String"),
-//    })
-//    @RequestMapping(value = "/checkDictName",method = RequestMethod.POST)
-//    public JSONObject checkDictName(@ApiIgnore String dictName) {
-//    	ExecuteResult<Dict> result = new ExecuteResult<Dict>();
-//		try {
-//    		//判断非空
-//	    	if(dictName == null){
-//	    		return ApiResponse.errorPara();
-//	    	}
-//	    	//不为空调用接口查询
-//	    	 result = dictService.findDictName(dictName);
-//	    	 if(result.getResult() == null) {
-//	    		 return ApiResponse.success(result.getResultMessage());
-//	    	 }
-//	    	//成功返回
-////	    	return ApiResponse.success(result.getResult());
-//	    	return ApiResponse.success(result.getResultMessage());
-//    	} catch (Exception e) {
-//    		//异常
-//    		return ApiResponse.error();
-//		}
-//	}
+
 	
 	
 }

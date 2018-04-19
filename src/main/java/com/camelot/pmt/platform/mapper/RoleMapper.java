@@ -1,6 +1,5 @@
 package com.camelot.pmt.platform.mapper;
 
-
 import com.camelot.pmt.platform.model.Role;
 
 import java.util.List;
@@ -19,14 +18,14 @@ public interface RoleMapper {
      * 
      * @param role
      */
-    void createRole(Role role);
+    int addRole(Role role);
 
     /**
      * 修改角色
      * 
      * @param role
      */
-    void modifyRoleById(Role role);
+    int updateRoleById(Role role);
 
     /**
      * 删除角色
@@ -52,6 +51,7 @@ public interface RoleMapper {
 
     /**
      * 验证角色名称是否存在
+     * 
      * @param role
      * @return
      */

@@ -3,9 +3,9 @@ package com.camelot.pmt.project.mapper;
 import java.util.Date;
 import java.util.List;
 
-import com.camelot.pmt.common.Pager;
 import org.apache.ibatis.annotations.Param;
 
+import com.camelot.pmt.common.Pager;
 import com.camelot.pmt.project.model.ProjectMain;
 
 public interface ProjectMainMapper {
@@ -13,7 +13,10 @@ public interface ProjectMainMapper {
     /**
      * 关闭时，按主键id更新数据
      * 
-     * @param userId
+     * @param id
+     * @param projectStatus
+     * @param modifyUserId
+     * @param modifyTime
      * @return
      */
     int updateById(@Param("id") Long id, @Param("projectStatus") String projectStatus,
@@ -25,7 +28,7 @@ public interface ProjectMainMapper {
      * @param userId
      * @return
      */
-    List<ProjectMain> findByModifyUserId(String modifyUserId);
+    List<ProjectMain> queryByModifyUserId(String modifyUserId);
 
     /**
      * 按创建人Id查询
@@ -33,7 +36,7 @@ public interface ProjectMainMapper {
      * @param userId
      * @return
      */
-    List<ProjectMain> findByCreateUserId(String createUserId);
+    List<ProjectMain> queryByCreateUserId(String createUserId);
 
     /**
      * 按负责人Id查询
@@ -41,7 +44,7 @@ public interface ProjectMainMapper {
      * @param userId
      * @return
      */
-    List<ProjectMain> findByUserId(String userId);
+    List<ProjectMain> queryByUserId(String userId);
 
     /**
      * 按状态分类查询展示
@@ -49,7 +52,7 @@ public interface ProjectMainMapper {
      * @param projectStatus
      * @return
      */
-    List<ProjectMain> findByProjectStatus(String projectStatus);
+    List<ProjectMain> queryByProjectStatus(String projectStatus);
 
     /**
      * 分页查询
@@ -57,37 +60,46 @@ public interface ProjectMainMapper {
      * @param projectStatus
      * @return
      */
-    List<ProjectMain> findAllByPage(@Param(value = "page") Pager<?> page);
+    List<ProjectMain> queryAllByPage(@Param(value = "page") Pager<?> page);
 
     /**
-     *
-     * @mbggenerated 2018-04-13
+     * 根据id 删除项目
+     * 
+     * @param id
+     * @return
      */
     int deleteByPrimaryKey(Long id);
 
     /**
-     *
-     * @mbggenerated 2018-04-13
+     * 插入数据
+     * 
+     * @param projectMain
+     * @return
      */
-    int insert(ProjectMain record);
-
-    /**
-     *
-     * @mbggenerated 2018-04-13
-     */
-    int insertSelective(ProjectMain record);
+    int addProject(ProjectMain projectMain);
 
     /**
      * 根据项目id查询详情
      * 
-     * @mbggenerated 2018-04-13
+     * @param id
+     * @return
      */
-    ProjectMain selectByPrimaryKey(Long id);
+    ProjectMain queryByPrimaryKey(Long id);
 
     /**
      * 根据按主键id更新数据
      * 
-     * @mbggenerated 2018-04-13
+     * @param id
+     * @param userId
+     * @param modifyUserId
+     * @param modifyTime
+     * @param projectNum
+     * @param projectName
+     * @param projectStatus
+     * @param projectDesc
+     * @param startTime
+     * @param endTime
+     * @return
      */
     int updateByPrimaryKeySelective(@Param("id") Long id, @Param("userId") String userId,
             @Param("modifyUserId") String modifyUserId, @Param("modifyTime") Date modifyTime,
@@ -96,22 +108,9 @@ public interface ProjectMainMapper {
             @Param("startTime") Date startTime, @Param("endTime") Date endTime);
 
     /**
-     *
-     * @mbggenerated 2018-04-13
-     */
-    int updateByPrimaryKeyWithBLOBs(ProjectMain record);
-
-    /**
-     * 
-     * 
-     * @mbggenerated 2018-04-13
-     */
-    int updateByPrimaryKey(ProjectMain record);
-
-    /**
      * 查询所有数量
      * 
      * @return
      */
-    Long findAll();
+    Long queryAll();
 }

@@ -8,11 +8,16 @@ import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.platform.model.User;
 import com.camelot.pmt.platform.model.vo.UserVo;
 import com.camelot.pmt.platform.service.UserService;
+import com.github.pagehelper.PageInfo;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +34,8 @@ import java.util.List;
 @RestController
 @Api(value = "用户管理接口", description = "用户管理接口")
 public class UserController {
+	
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private UserService service;
@@ -41,14 +48,18 @@ public class UserController {
     @ApiOperation(value="根据userId查询单个用户", notes="查询单个用户")
     @RequestMapping(value = "user/queryUserById",method = RequestMethod.POST)
     public JSONObject queryUserByUserId(@ApiParam(name="userId",value = "用户useId", required = true) @RequestParam(required = true) String userId){
-        ExecuteResult<User> result = new ExecuteResult<User>();
         try {
-            result = service.findUserByUserId(userId);
-            if(result.isSuccess()) {
-                return ApiResponse.success(result.getResult());
+        	if(StringUtils.isEmpty(userId)) {
+        		return ApiResponse.jsonData(APIStatus.ERROR_400);
+        	}
+            User result = service.queryUserByUserId(userId);
+            if(result != null) {
+                return ApiResponse.success(result);
+            }else {
+            	return ApiResponse.success("该用户不存在！");
             }
-            return ApiResponse.error();
         }catch (Exception e) {
+        	logger.error(e.getMessage());
             return ApiResponse.error();
         }
     }
@@ -58,18 +69,15 @@ public class UserController {
      * @return {"status": {"message": "请求处理成功.","code": 200}, "data": {userModel列表}]
      */
     @ApiOperation(value="查询所有用户", notes="查询所有用户")
-    @RequestMapping(value = "user/queryAllUsers",method = RequestMethod.GET)
-    public JSONObject queryUserAll(){
-        ExecuteResult<List<User>> result = new ExecuteResult<List<User>>();
-        try {
-            result = service.queryAllUsers();
-            if(result.isSuccess()) {
-                return ApiResponse.success(result.getResult());
-            }
-            return ApiResponse.error();
-        }catch (Exception e) {
-            return ApiResponse.error();
-        }
+    @RequestMapping(value = "user/queryAllUsers",method = RequestMethod.POST)
+	public JSONObject queryUserAll() {
+		try {
+			List<User> allUsers = service.queryAllUsers();
+			return ApiResponse.success(allUsers);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			return ApiResponse.error();
+		}
     }
 
     /**
@@ -86,7 +94,7 @@ public class UserController {
     		@ApiImplicitParam(
     				name="orgId",value="用户所属部门ID",required=false,paramType="form",dataType="String"),
     		@ApiImplicitParam(
-    				name="roleId",value="用户角色ID",required=false,paramType="form",dataType="String"),
+    				name="roleIds",value="用户角色IDS",required=false,paramType="form",dataType="String"),
         	@ApiImplicitParam(
         			name="loginCode",value="登录账号",required=true,paramType="form",dataType="String"),
             @ApiImplicitParam(
@@ -101,20 +109,16 @@ public class UserController {
                     name="modifyUserId",value="用户修改人ID",required=false,paramType="form",dataType="String")
     })
     @RequestMapping(value = "user/addUser",method = RequestMethod.POST)
-    public JSONObject createUser(@ApiIgnore User userModel) {
-    	ExecuteResult<String> result = new ExecuteResult<String>();
+	public JSONObject addUser(@ApiIgnore User userModel) {
 		try {
-    		//判断非空
-	    	if(userModel == null){
-	    		return ApiResponse.errorPara();
-	    	}
-	    	//不为空调用接口查询
-	    	 result = service.createUser(userModel);
-	    	//成功返回
-	    	return ApiResponse.success(result.getResult());
-    	} catch (Exception e) {
-    		//异常
-    		return ApiResponse.error();
+			if (StringUtils.isEmpty(userModel.getUserJobNum())) {
+				return ApiResponse.jsonData(APIStatus.ERROR_400);
+			}
+			String result = service.addUser(userModel);
+			return ApiResponse.success(result);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			return ApiResponse.error();
 		}
 	}
     
@@ -123,7 +127,7 @@ public class UserController {
      * @param  User userModel
      * @return {"status": {"message": "请求处理成功.","code": 200}, "data": {更新用户成功!}]
      */
-    @ApiOperation(value="添加用户", notes="添加用户")
+    @ApiOperation(value="更新用户详情", notes="更新用户详情")
     @ApiImplicitParams({
     		@ApiImplicitParam(
     				name="userId",value="用户ID",required=true,paramType="form",dataType="String"),
@@ -142,27 +146,20 @@ public class UserController {
     		@ApiImplicitParam(
     				name="orgId",value="用户所属部门ID",required=false,paramType="form",dataType="String"),
     		@ApiImplicitParam(
-    				name="roleId",value="用户角色ID",required=false,paramType="form",dataType="String"),
+    				name="roleIds",value="用户角色ID",required=false,paramType="form",dataType="String"),
             @ApiImplicitParam(
                     name="modifyUserId",value="用户修改人ID",required=false,paramType="form",dataType="String")
     })
     @RequestMapping(value = "user/modifyUserDetailsByUserId",method = RequestMethod.POST)
     public JSONObject modifyUserDetailsByUserId(@ApiIgnore User userModel) {
-    	ExecuteResult<String> result = new ExecuteResult<String>();
 		try {
-    		//判断非空
-	    	if(userModel == null){
-	    		return ApiResponse.errorPara();
+			if(StringUtils.isEmpty(userModel.getUserId())){
+	    		return ApiResponse.jsonData(APIStatus.ERROR_400);
 	    	}
-	    	//不为空调用接口查询
-	    	result = service.modifyUserDetailsByUserId(userModel);
-	    	if(result.isSuccess()) {
-	    		return ApiResponse.success(result.getResult());
-	        }
-	    	//更新失败返回
-	    	return ApiResponse.error(result.getErrorMessage());
+	    	String result = service.modifyUserDetailsByUserId(userModel);
+	    	return ApiResponse.success(result);
     	} catch (Exception e) {
-    		//异常
+    		logger.error(e.getMessage());
     		return ApiResponse.error();
 		}
 	}
@@ -175,26 +172,24 @@ public class UserController {
      * @author [maple]
      */
     @ApiOperation(value="删除用户", notes="删除用户")
-    @ApiImplicitParams({
-            @ApiImplicitParam(
-                    name="userId",value="用户userId",required=true,paramType="query",dataType="String")
-    })
-    @RequestMapping(value = "user/deleteUserByUserId",method = RequestMethod.POST)
-    public JSONObject deleteUserByUserId(@ApiIgnore User userModel){
-    	ExecuteResult<String> result = new ExecuteResult<String>();
-    	try {
-    		if("".equals(userModel.getUserId()) || "0".equals(userModel.getUserId()) || userModel.getUserId() == null) {
-    			return ApiResponse.jsonData(APIStatus.ERROR_400);
-    		}
-    		result = service.deleteUserByUserId(userModel);
-    		if(result.isSuccess()) {
-    			return ApiResponse.success(result.getResult());
-    		}
-    		return ApiResponse.error();
-    	} catch (Exception e) {
-    		return ApiResponse.error();
+	@RequestMapping(value = "user/deleteUserByUserId", method = RequestMethod.POST)
+	public JSONObject deleteUserByUserId(
+			@ApiParam(name = "userId", value = "用户useId", required = true) @RequestParam(required = true) String userId) {
+		try {
+			if (StringUtils.isEmpty(userId)) {
+				return ApiResponse.jsonData(APIStatus.ERROR_400);
+			}
+			boolean deleteResult = service.deleteUserByUserId(userId);
+			if (deleteResult) {
+                return ApiResponse.success();
+            }else {
+            	return ApiResponse.error();
+            }
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			return ApiResponse.error();
 		}
-    }
+	}
     
     
     /**
@@ -210,72 +205,41 @@ public class UserController {
                     name="password",value="密码",required=true,paramType="form",dataType="String")
     })
     @RequestMapping(value = "user/checkUser",method = RequestMethod.POST)
-    public JSONObject checkUser(@ApiIgnore User userModel) {
-    	ExecuteResult<User> result = new ExecuteResult<User>();
+	public JSONObject checkUser(@ApiIgnore User userModel) {
 		try {
-    		//判断非空
-	    	if(userModel == null){
-	    		return ApiResponse.errorPara();
-	    	}
-	    	//不为空调用接口查询
-	    	 result = service.queryLoginCodeAndPassword(userModel);
-	    	 if(result.getResult() == null) {
-	    		 return ApiResponse.success(result.getResultMessage());
-	    	 }
-	    	//成功返回
-	    	return ApiResponse.success(result.getResult());
-    	} catch (Exception e) {
-    		//异常
-    		return ApiResponse.error();
+			if (StringUtils.isEmpty(userModel.getLoginCode()) || StringUtils.isEmpty(userModel.getPassword())) {
+				return ApiResponse.jsonData(APIStatus.ERROR_400);
+			}
+			User result = service.queryLoginCodeAndPassword(userModel);
+			return ApiResponse.success(result);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			return ApiResponse.error();
 		}
 	}
-//    
-//    /**
-//     * <p>Description:[分页查询用户列表]</p>
-//     * @param  page 页码,rows 每页数量
-//     * @return "data": {"total": 总数量,"rows":[查询的结果集],"status": {"code": 200,"message": "请求处理成功."}}
-//     */
-//    @ApiOperation(value="分页获取用户列表", notes="分页获取用户列表")
-//    @RequestMapping(value = "user/queryUsersByPage",method = RequestMethod.GET)
-//    @ApiImplicitParams({
-//    	@ApiImplicitParam(name = "page", value = "页码", required = false, paramType = "query", dataType = "int"),
-//    	@ApiImplicitParam(name = "rows", value = "每页数量", required = false, paramType = "query", dataType = "int")
-//    })
-//    public JSONObject queryUsersByPage(@ApiIgnore Pager page){
-//    	ExecuteResult<DataGrid<User>> result = new ExecuteResult<DataGrid<User>>();
-//    	try {
-//    		if(page == null) {
-//    			return ApiResponse.errorPara();
-//    		}
-//    		result = service.queryUsersByPage(page);
-//    		if(result.isSuccess()) {
-//    			return ApiResponse.success(result.getResult());
-//    		}
-//    		return ApiResponse.error();
-//    	}catch (Exception e) {
-//    		return ApiResponse.error();
-//    	}
-//    }
+
     
     /**
      * <p>Description:[查询所有用户 和 条件查询]</p>
      * @param  
      * @return {"status": {"message": "请求处理成功.","code": 200}, "data": {userVo列表}]
      */
-    @ApiOperation(value="用户列表展示", notes="用户列表展示")
+    @ApiOperation(value="用户详情列表展示", notes="用户详情列表展示")
     @ApiImplicitParams({
     	@ApiImplicitParam(name = "userJobNum", value = "员工号", required = false, paramType = "query", dataType = "String"),
     	@ApiImplicitParam(name = "userName", value = "用户名", required = false, paramType = "query", dataType = "String"),
     	@ApiImplicitParam(name = "roleId", value = "用户角色ID", required = false, paramType = "query", dataType = "String"),
-    	@ApiImplicitParam(name = "state", value = "用户状态", required = false, paramType = "query", dataType = "String")
+    	@ApiImplicitParam(name = "state", value = "用户状态", required = false, paramType = "query", dataType = "String"),
+    	@ApiImplicitParam(name = "pageNum", value = "页码", defaultValue = "1" ,required = true, paramType = "query", dataType = "int"),
+    	@ApiImplicitParam(name = "pageSize", value = "每页数量", defaultValue = "10" ,required = true, paramType = "query", dataType = "int")
     })
-    @RequestMapping(value = "user/queryUsersList",method = RequestMethod.GET)
-    public JSONObject queryUsersList(@ApiIgnore UserVo userVo){
-    	ExecuteResult<List<UserVo>> result = new ExecuteResult<List<UserVo>>();
+    @RequestMapping(value = "user/queryUsersList",method = RequestMethod.POST)
+    public JSONObject queryUsersList(@ApiIgnore UserVo userVo,@RequestParam int pageNum,@RequestParam int pageSize){
         try {
-            result = service.queryUsersList(userVo);
-            return ApiResponse.success(result.getResult());
+            PageInfo result = service.queryUsersList(userVo, pageNum, pageSize);
+            return ApiResponse.success(result);
         }catch (Exception e) {
+        	logger.error(e.getMessage());
             return ApiResponse.error();
         }
     }
@@ -291,14 +255,18 @@ public class UserController {
     @ApiOperation(value="根据userId查询单个用户的信息", notes="查询单个用户信息表")
     @RequestMapping(value = "user/queryUserInfoById",method = RequestMethod.POST)
     public JSONObject queryUserInfoById(@ApiParam(name="userId",value = "用户useId", required = true) @RequestParam(required = true) String userId){
-        ExecuteResult<User> result = new ExecuteResult<User>();
         try {
-            result = service.queryUserInfoById(userId);
-            if(result.getResult() == null) {
-                return ApiResponse.success(result.getResultMessage());
+        	if(StringUtils.isEmpty(userId)) {
+        		return ApiResponse.jsonData(APIStatus.ERROR_400);
+        	}
+            User result = service.queryUserInfoById(userId);
+            if(result != null) {
+                return ApiResponse.success(result);
+            }else {
+            	return ApiResponse.success("此用户不存在！");
             }
-            return ApiResponse.success(result.getResult());
         }catch (Exception e) {
+        	logger.error(e.getMessage());
             return ApiResponse.error();
         }
     }
@@ -312,19 +280,31 @@ public class UserController {
     })
     @RequestMapping(value = "user/resetPasswordByUserId",method = RequestMethod.POST)
     public JSONObject resetUserPasswordByUserId(@ApiIgnore User userModel){
-    	ExecuteResult<String> result = new ExecuteResult<String>();
     	try {
     		if(StringUtils.isEmpty(userModel.getUserId())) {
     			return ApiResponse.jsonData(APIStatus.ERROR_400);
     		}
-    		result = service.resetUserPasswordByUserId(userModel);
-    		if(result.isSuccess()) {
-    			return ApiResponse.success(result.getResult());
-    		}
-    		return ApiResponse.error();
+    		String result = service.resetUserPasswordByUserId(userModel);
+    		return ApiResponse.success(result);
     	} catch (Exception e) {
+    		logger.error(e.getMessage());
     		return ApiResponse.error();
 		}
+    }
+    
+    @ApiOperation(value="根据用户名称模糊查询用户列表", notes="根据用户名模糊查询获取用户列表")
+    @RequestMapping(value = "user/queryUsersByUserName",method = RequestMethod.POST)
+    public JSONObject queryUsersByUserName(@ApiParam(name="username",value = "用户名称", required = true) @RequestParam(required = true) String username){
+         try {
+        	 if(StringUtils.isEmpty(username)) {
+     			return ApiResponse.jsonData(APIStatus.ERROR_400);
+     		}
+             List<User> result = service.queryUsersByUserName(username);
+             return ApiResponse.success(result);
+         }catch (Exception e) {
+        	 logger.error(e.getMessage());
+             return ApiResponse.error();
+         }
     }
 
 

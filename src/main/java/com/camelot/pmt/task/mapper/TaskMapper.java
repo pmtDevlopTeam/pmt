@@ -1,7 +1,6 @@
 package com.camelot.pmt.task.mapper;
 
 import com.camelot.pmt.task.model.Task;
-import com.camelot.pmt.task.model.TaskDetail;
 import com.camelot.pmt.task.model.TaskLog;
 import org.apache.ibatis.annotations.Param;
 
@@ -10,36 +9,33 @@ import java.util.List;
 import java.util.Map;
 
 public interface TaskMapper {
-    int deleteByPrimaryKey(Long id);
-
-    Task selectByPrimaryKey(Long id);
-
 
     /**
      * 查询正在进行的任务，根据时间和优先级进行排序
      * myp
      * */
-    List<Map<String,Object>> listTaskRunning(String id);
+    List<Task> queryTaskRunning(String id);
 
 
     /**
      *将任务进行关闭操作
      * myp
      * */
-    void runningtoclose(List<Long> alist);
+    void updateRunningToClose(List list);
 
 
     /**
      *将正在进行的任务进行完成操作
      * myp
      * */
-    List<Task> runningtoalready(List<Long> alist);
+    void updateRunningToAlready(Long id);
+    List<Task> queryRunningToAlready(List list);
 
     /**
      * 根据任务id查询所有的次id的子任务
      * myp
      * */
-    List<Task> selectByPId(Long pid);
+    List<Task> queryByPId(Long pid);
 
     /**
      * 根据id查询任务明细
@@ -76,7 +72,7 @@ public interface TaskMapper {
      * 查询已完成的任务，根据时间和优先级进行排序
      * myp
      * */
-    List<Map<String,Object>> listTaskAlready(String id);
+    List<Task> listTaskAlready(String id);
 
     /**
      * 查询已完成任务总个数 @Title: queryCount @Description: TODO @param @return @return
@@ -112,14 +108,6 @@ public interface TaskMapper {
 
     /**
      * @author: zlh
-     * @param:  id 父id
-     * @description: 根据父id查询所有的子任务id
-     * @date: 16:04 2018/4/12
-     */
-    List<Long> querySubTaskIdByParantId(Long id);
-
-    /**
-     * @author: zlh
      * @param: id 需要删除的任务的id
      * @description: 根据任务删除id
      * @date: 17:22 2018/4/12
@@ -144,7 +132,7 @@ public interface TaskMapper {
      * @return List<Task>
      * @throws
      */
-    List<Task> queryOverdueTask();
+    List<Map<String,Object>> queryOverdueTask();
 
     /**
     * @author: gxl
@@ -298,7 +286,7 @@ public interface TaskMapper {
      * @return JSONObject    返回类型
      * @throws
      */
-    void updateTaskAlreadyToRunning(Long id, String status, String delayDescribe, String estimateStartTime);
+    void updateTaskAlreadyToRunning(List<Long> list);
 
     /**
      *
@@ -320,7 +308,7 @@ public interface TaskMapper {
      * @return TaskDetail
      * @throws
      */
-    TaskDetail queryOverdueTaskDetailByTaskId(String taskId);
+    Map<String, Object> queryOverdueTaskDetailByTaskId(String taskId);
 
     /**
      * 添加延期信息与预定开始时间
@@ -331,7 +319,7 @@ public interface TaskMapper {
      * @return Integer
      * @throws
      */
-    Integer insertOverduMessage(Task task);
+    int insertOverduMessage(Task task);
 
     /**
      * 根据userId查询个人是否有延期任务
@@ -377,6 +365,14 @@ public interface TaskMapper {
 	int updateTaskOverdueStatus(String taskId);
 
 
-
-
+    /**
+     * 根据任务Id修改状态
+     * @Title: updateTaskOverdueStatus
+     * @Description: TODO
+     * @param @param taskId
+     * @param @return
+     * @return int
+     * @throws
+     */
+    int updateTaskToTest(Long id);
 }

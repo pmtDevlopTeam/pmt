@@ -11,7 +11,7 @@ public interface ProjectOperateMapper {
      * @param createUserId
      * @return
      */
-    List<ProjectOperate> findByProjectId(Long projectId);
+    List<ProjectOperate> queryByProjectId(Long projectId);
 
     /**
      * 根据创建人id进行查询
@@ -19,47 +19,14 @@ public interface ProjectOperateMapper {
      * @param createUserId
      * @return
      */
-    List<ProjectOperate> findByCreateUserId(String createUserId);
+    List<ProjectOperate> queryByCreateUserId(String createUserId);
 
     /**
-     *
-     * @mbggenerated 2018-04-13
+     * 插入数据
+     * 
+     * @param projectOperate
+     * @return
      */
-    int deleteByPrimaryKey(Integer id);
+    int addProjectOperate(ProjectOperate projectOperate);
 
-    /**
-     *
-     * @mbggenerated 2018-04-13
-     */
-    int insert(ProjectOperate record);
-
-    /**
-     *
-     * @mbggenerated 2018-04-13
-     */
-    int insertSelective(ProjectOperate record);
-
-    /**
-     *
-     * @mbggenerated 2018-04-13
-     */
-    ProjectOperate selectByPrimaryKey(Integer id);
-
-    /**
-     *
-     * @mbggenerated 2018-04-13
-     */
-    int updateByPrimaryKeySelective(ProjectOperate record);
-
-    /**
-     *
-     * @mbggenerated 2018-04-13
-     */
-    int updateByPrimaryKeyWithBLOBs(ProjectOperate record);
-
-    /**
-     *
-     * @mbggenerated 2018-04-13
-     */
-    int updateByPrimaryKey(ProjectOperate record);
 }

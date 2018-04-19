@@ -81,20 +81,20 @@
             <if test="taskParentId != null">
                 task_parent_id = #{taskParentId,jdbcType=BIGINT},
             </if>
-            <if test="projectId != null">
-                project_id = #{projectId,jdbcType=BIGINT},
+            <if test="project != null">
+                project_id = #{project.id,jdbcType=BIGINT},
             </if>
-            <if test="demandId != null">
-                demand_id = #{demandId,jdbcType=BIGINT},
+            <if test="demand != null">
+                demand_id = #{demand.id,jdbcType=BIGINT},
             </if>
             <if test="priority != null">
                 priority = #{priority,jdbcType=CHAR},
             </if>
-            <if test="assignUserId != null">
-                assign_user_id = #{assignUserId,jdbcType=VARCHAR},
+            <if test="assignUser != null">
+                assign_user_id = #{assignUser.userId,jdbcType=VARCHAR},
             </if>
-            <if test="beassignUserId != null">
-                beassign_user_id = #{beassignUserId,jdbcType=VARCHAR},
+            <if test="beassignUser != null">
+                beassign_user_id = #{beassignUser.userId,jdbcType=VARCHAR},
             </if>
             <if test="assignTime != null">
                 assign_time = #{assignTime,jdbcType=TIMESTAMP},
@@ -141,8 +141,8 @@
             <if test="taskMileage != null">
                 task_mileage = #{taskMileage,jdbcType=CHAR},
             </if>
-            <if test="createUserId != null">
-                create_user_id = #{createUserId,jdbcType=VARCHAR},
+            <if test="createUser != null">
+                create_user_id = #{createUser.userId,jdbcType=VARCHAR},
             </if>
             <if test="modifyUserId != null">
                 modify_user_id = #{modifyUserId,jdbcType=VARCHAR},
@@ -192,67 +192,20 @@
         </association>
         <association property="createUser" javaType="com.camelot.pmt.platform.model.User">
             <result property="id" column="cid"/>
-            <result property="userId" column="user_id"/>
-            <result property="username" column="user_name"/>
+            <result property="userId" column="cuser_id"/>
+            <result property="username" column="cuser_name"/>
         </association>
         <association property="assignUser" javaType="com.camelot.pmt.platform.model.User">
             <result property="id" column="aid"/>
-            <result property="userId" column="user_id"/>
-            <result property="username" column="user_name"/>
+            <result property="userId" column="auser_id"/>
+            <result property="username" column="auser_name"/>
         </association>
         <association property="beassignUser" javaType="com.camelot.pmt.platform.model.User">
             <result property="id" column="bid"/>
-            <result property="userId" column="user_id"/>
-            <result property="username" column="user_name"/>
+            <result property="userId" column="buser_id"/>
+            <result property="username" column="buser_name"/>
         </association>
-        <collection property="taskLogList" ofType="TaskLog" >
-            <id column="lid" property="id"/><!-- 这里的column对应的是下面查询的别名，而不是表字段名 -->
-            <result column="task_id" property="taskId"/><!-- property对应JavaBean中的属性名 -->
-            <result column="user_id" property="userId"/>
-            <result column="operation_time" property="operationTime"/>
-            <result column="operation_button" property="operationButton"/>
-            <result column="operation_describe" property="operationDescribe"/>
-        </collection>
     </resultMap>
-
-    <resultMap id="TaskResultMap" type="com.camelot.pmt.task.model.Task">
-        <id column="id" property="id" jdbcType="BIGINT"/>
-        <result column="task_num" property="taskNum" jdbcType="VARCHAR"/>
-        <result column="task_name" property="taskName" jdbcType="VARCHAR"/>
-        <result column="task_parent_id" property="taskParentId" jdbcType="BIGINT"/>
-        <result column="project_id" property="projectId" jdbcType="BIGINT"/>
-        <result column="demand_id" property="demandId" jdbcType="BIGINT"/>
-        <result column="priority" property="priority" jdbcType="CHAR"/>
-        <result column="assign_user_id" property="assignUserId" jdbcType="VARCHAR"/>
-        <result column="beassign_user_id" property="beassignUserId" jdbcType="VARCHAR"/>
-        <result column="assign_time" property="assignTime" jdbcType="TIMESTAMP"/>
-        <result column="estimate_start_time" property="estimateStartTime" jdbcType="TIMESTAMP"/>
-        <result column="estimate_end_time" property="estimateEndTime" jdbcType="TIMESTAMP"/>
-        <result column="actual_start_time" property="actualStartTime" jdbcType="TIMESTAMP"/>
-        <result column="actual_end_time" property="actualEndTime" jdbcType="TIMESTAMP"/>
-        <result column="task_type" property="taskType" jdbcType="CHAR"/>
-        <result column="task_speed" property="taskSpeed" jdbcType="VARCHAR"/>
-        <result column="status" property="status" jdbcType="CHAR"/>
-        <result column="node_lv" property="nodeLv" jdbcType="CHAR"/>
-        <result column="task_describe" property="taskDescribe" jdbcType="VARCHAR"/>
-        <result column="demand_change" property="demandChange" jdbcType="CHAR"/>
-        <result column="delay_describe" property="delayDescribe" jdbcType="VARCHAR"/>
-        <result column="estimate_hour" property="estimateHour" jdbcType="BIGINT"/>
-        <result column="infact_hour" property="infactHour" jdbcType="BIGINT"/>
-        <result column="task_mileage" property="taskMileage" jdbcType="CHAR"/>
-        <result column="create_user_id" property="createUserId" jdbcType="VARCHAR"/>
-        <result column="modify_user_id" property="modifyUserId" jdbcType="VARCHAR"/>
-        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
-        <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP"/>
-    </resultMap>
-
-    <sql id="Base_Column_List">
-        id, task_num, task_name, task_parent_id, project_id, demand_id, priority, assign_user_id,
-        beassign_user_id, assign_time, estimate_start_time, estimate_end_time, actual_start_time,
-        actual_end_time, task_type, task_speed, status, node_lv, task_describe, demand_change,
-        delay_describe, estimate_hour, infact_hour, task_mileage, create_user_id, modify_user_id,
-        create_time, modify_time
-    </sql>
 
     <!--通用多表（项目表、指派user表、负责user表、创建user表、需求表）查所有-->
     <sql id="ShowAllTasks_Column_List">
@@ -260,8 +213,9 @@
         t.beassign_user_id, t.assign_time, t.estimate_start_time, t.estimate_end_time, t.actual_start_time,
         t.actual_end_time, t.task_type, t.task_speed, t.status, t.node_lv, t.task_describe, t.demand_change,
         t.delay_describe, t.estimate_hour, t.infact_hour, t.task_mileage, t.create_user_id, t.modify_user_id,
-        t.create_time, t.modify_time, a.id AS aid, a.user_id, a.user_name, b.id AS bid, b.user_id, b.user_name,
-        c.id AS cid, c.user_id, c.user_name, p.id AS pid, p.project_name, d.id AS did, d.demand_desc
+        t.create_time, t.modify_time, a.id AS aid, a.user_id AS auser_id, a.user_name AS auser_name, b.id AS bid, b.user_id AS buser_id,
+        b.user_name AS buser_name,
+        c.id AS cid, c.user_id AS cuser_id, c.user_name AS cuser_name, p.id AS pid, p.project_name, d.id AS did, d.demand_desc
     </sql>
 
     <!--zlh-->
@@ -272,6 +226,7 @@
         t.task_type, t.task_mileage, t.priority, c.id AS cid, c.user_id, c.user_name,
         a.id AS aid, a.user_id, a.user_name, t.assign_time, p.id pid, p.project_name
     </sql>
+
 	<!-- 查询逾期任务列表所有字段 -->
 	<sql id="TaskOverDue_ShowTasks_Column_List">
 	t.id,t.task_num,t.priority,t.task_name,p.project_name,
@@ -279,6 +234,7 @@
 	t.estimate_end_time ,t.estimate_hour,DATEDIFF(CURDATE(),t.estimate_start_time)*8 elapsed_time,
 	t.estimate_hour - (DATEDIFF(CURDATE(),estimate_start_time)*8) remaining_work,t.task_speed
 	</sql>
+
     <!--zlh-->
     <!--查询所有任务列表-->
     <select id="queryAllTask" resultMap="BaseResultMap">
@@ -293,6 +249,9 @@
     <!--zlh-->
     <!--插入任务-->
     <insert id="insertTask" parameterType="com.camelot.pmt.task.model.Task">
+        <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
         insert into task
         <include refid="sql_add_task_columns"/>
         <include refid="sql_add_task_properties"/>
@@ -309,13 +268,13 @@
         LEFT JOIN project_main p ON t.project_id = p.id
         <where>
             <if test="task.taskType != null">and t.task_type = #{task.taskType}</if>
-            <if test="task.actualEndTime != null">and t.actual_end_time = #{task.actualEndTime}</if>
-            <if test="task.taskName != null">and t.task_name = #{task.taskName}</if>
+            <if test="task.actualEndTime != null">and Date(t.actual_end_time) = #{task.actualEndTime}</if>
+            <if test="task.taskName != null">and t.task_name LIKE "%"#{task.taskName}"%"</if>
             <if test="task.status != null">and t.status = #{task.status}</if>
             <if test="ids != null">
-                and beassign_user_id in
-                <foreach collection="ids" item="id" open="(" close=")" separator=",">
-                   id
+                and t.beassign_user_id in
+                <foreach collection="ids" item="idd" open="(" close=")" separator=",">
+                    #{idd}
                 </foreach>
             </if>
         </where>
@@ -342,10 +301,13 @@
         WHERE t.id = #{id,jdbcType=BIGINT}
     </select>
 
+    <!--zlh-->
+    <!--根据id删除任务-->
     <delete id="deleteTaskById" parameterType="java.lang.Long">
         DELETE FROM task
         WHERE id = #{id,jdbcType=BIGINT}
     </delete>
+
   <!-- gxl start -->
   	<!--查询任务-->
     <select id="queryTaskNodeById" resultMap="BaseResultMap" parameterType="long">
@@ -569,47 +531,91 @@
     </select>
     <!--zsf-->
     <!--查询已完成的任务-->
-    <select id="listTaskAlready" resultType="java.util.Map" parameterType="String">
+    <select id="listTaskAlready" resultMap="BaseResultMap" parameterType="String">
         SELECT
-        ta.id, ta.task_num, ta.task_name, ta.task_parent_id, ta.project_id, ta.demand_id, ta.priority, ta.assign_user_id,
-        ta.beassign_user_id, ta.assign_time, ta.estimate_start_time, ta.estimate_end_time, ta.actual_start_time,
-        ta.actual_end_time, ta.task_type, ta.task_speed, ta.status, ta.node_lv, ta.task_describe, ta.demand_change,
-        ta.delay_describe, ta.estimate_hour, ta.infact_hour, ta.task_mileage, ta.create_user_id, ta.modify_user_id,
-        ta.create_time, ta.modify_time, de.demand_name, de.demand_desc, pro.project_name,pro.project_desc, pl.user_name,
-        pl2.user_name
+        <include refid="selectAllRunningTaskByUserId" />
         FROM task ta
         LEFT JOIN demand de ON ta.demand_id = de.id
         LEFT JOIN project_main pro ON ta.project_id = pro.id
         LEFT JOIN platform_user pl ON ta.assign_user_id = pl.user_id
         LEFT JOIN platform_user pl2 ON ta.beassign_user_id = pl2.user_id
-        WHERE ta.status in ( 2 ,4 ) AND ta.beassign_user_id = #{id}
+        WHERE ta.status in ( 2, 4 ,5 ) AND ta.beassign_user_id = #{id}
         ORDER BY ta.create_time DESC, ta.priority DESC
     </select>
-
+    <!-- zsf-->
+    <!--重做-->
+    <update id="updateTaskAlreadyToRunning" parameterType="java.util.List">
+        UPDATE task SET status = 1 WHERE
+        <foreach collection="list" item="aid" open="(" close=")" separator="or">
+            id = #{aid}
+        </foreach> AND status = 2
+    </update>
+    <!-- zsf-->
+    <!--提测-->
+    <update id="updateTaskToTest" parameterType="long">
+        UPDATE task SET status = 5 WHERE id = #{id}
+    </update>
 
 
 
    <!--  查询逾期列表 -->
     <select id="queryOverdueTask" resultMap="BaseResultMap">
     	select
-    	<include refid="TaskManager_ShowTasks_Column_List" />
+    	<include refid="TaskOverDue_ShowTasks_Column_List" />
     	from task t
     	LEFT JOIN project_main p on p.id =t.project_id
 		LEFT JOIN platform_user u1 on u1.user_id = t.assign_user_id
+		WHERE t.status = 3
 		ORDER BY t.priority ASC,t.estimate_start_time DESC
     </select>
-
+    
+	 <!-- 添加延期信息与预定开始时间 -->
+    <update id="insertOverduMessage" parameterType="com.camelot.pmt.task.model.Task">   
+    	update task t set 
+		t.estimate_start_time = #{estimateStartTime,jdbcType=TIMESTAMP},
+		t.delay_describe=#{delayDescribe}
+		where t.id = #{id}
+    </update>
+    
+    <!-- 根据任务Id修改状态 -->
+    <update id="updateTaskOverdueStatus" parameterType="String">
+    	update task t set 
+		t.status = 1 
+		where t.id = #{taskId}
+    </update>
+    
+   <!--  查询逾期任务详情 -->
+    <select id="queryOverdueTaskDetailByTaskId" parameterType="String" resultType="map">
+    	SELECT
+		t.id, t.task_num, t.task_name, t.task_parent_id, t.project_id, t.demand_id, t.priority, t.assign_user_id,
+		t.beassign_user_id, t.assign_time, t.estimate_start_time, t.estimate_end_time, t.actual_start_time,
+		t.actual_end_time, t.task_type, t.task_speed, t.status, t.node_lv, t.task_describe, t.demand_change,
+		t.delay_describe, t.estimate_hour, t.infact_hour, t.task_mileage, t.create_user_id, t.modify_user_id,
+		t.create_time, t.modify_time, a.id AS aid, a.user_id, a.user_name, b.id AS bid, b.user_id, b.user_name,
+		c.id AS cid, c.user_id, c.user_name, p.id AS pid, p.project_name, d.id AS did, d.demand_desc
+		from task t LEFT JOIN platform_user a ON t.assign_user_id = a.user_id
+		LEFT JOIN platform_user b ON t.beassign_user_id = b.user_id
+		LEFT JOIN platform_user c on t.create_user_id = c.user_id
+		LEFT JOIN project_main p ON t.project_id = p.id
+		LEFT JOIN demand d ON t.demand_id = d.id
+		WHERE t.id = #{taskId}
+    </select>
 
     <!--myp开始-->
-    <!--查询正在进行的任务-->
-    <select id="listTaskRunning" resultType="java.util.Map" parameterType="String">
-        SELECT
+    <!--根据用户查询所有正在进行的任务的SQL-->
+    <sql id="selectAllRunningTaskByUserId">
         ta.id, ta.task_num, ta.task_name, ta.task_parent_id, ta.project_id, ta.demand_id, ta.priority, ta.assign_user_id,
         ta.beassign_user_id, ta.assign_time, ta.estimate_start_time, ta.estimate_end_time, ta.actual_start_time,
         ta.actual_end_time, ta.task_type, ta.task_speed, ta.status, ta.node_lv, ta.task_describe, ta.demand_change,
         ta.delay_describe, ta.estimate_hour, ta.infact_hour, ta.task_mileage, ta.create_user_id, ta.modify_user_id,
         ta.create_time, ta.modify_time, de.demand_name, de.demand_desc, pro.project_name,pro.project_desc, pl.user_name,
         pl2.user_name
+    </sql>
+
+    <!--查询正在进行的任务-->
+    <select id="queryTaskRunning" resultMap="BaseResultMap" parameterType="String">
+        SELECT
+        <include refid="selectAllRunningTaskByUserId" />
         FROM task ta
         LEFT JOIN demand de ON ta.demand_id = de.id
         LEFT JOIN project_main pro ON ta.project_id = pro.id
@@ -619,21 +625,27 @@
         ORDER BY ta.create_time DESC, ta.priority DESC
     </select>
 
-    <!--关闭任务-->
-    <update id="runningtoclose" parameterType="java.util.List">
-        UPDATE task SET status = 4 WHERE
-        <foreach collection="alist" item="aid" open="(" close=")" separator="or">
-            <!-- 每个遍历需要生成的串 -->
+    <!--根据父级id查询所有的子任务-->
+    <select id="queryByPId" parameterType="Long" resultType="com.camelot.pmt.task.model.Task">
+        SELECT * FROM task WHERE task_parent_id = #{pid}
+    </select>
+    <!--根据任务id关闭任务-->
+    <update id="updateRunningToClose" parameterType="java.util.List">
+        UPDATE task SET status = 3 WHERE
+        <foreach collection="list" item="aid" open="(" close=")" separator="or">
             id = #{aid}
         </foreach>
     </update>
     <!--完成任务-->
-    <update id="runningtoalready" parameterType="java.util.List">
-        UPDATE task SET status = 3 WHERE
-        <foreach collection="ids" item="p_id" open="(" close=")" separator="or">
-            <!-- 每个遍历需要生成的串 -->
-            task_parent_id = #{p_id}
+    <select id="queryRunningToAlready" parameterType="java.util.List" resultType="com.camelot.pmt.task.model.Task">
+        SELECT * FROM task WHERE
+        <foreach collection="list" item="id" open="(" close=")" separator="or">
+            id = #{id}
         </foreach>
+    </select>
+
+    <update id="updateRunningToAlready" parameterType="Long">
+        UPDATE task SET status = 2 WHERE id = #{id}
     </update>
     <!--myp结束-->
 </mapper>

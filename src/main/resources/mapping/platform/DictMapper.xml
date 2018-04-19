@@ -51,7 +51,7 @@
 		</trim>
 	</sql>
   <!-- 增加一个字典 -->
-  <insert id="createDict" >
+  <insert id="addDict" >
     insert into platform_dict (
 	     <include refid="sql_add_dict_columns"/>
 		)values(
@@ -69,7 +69,7 @@
     where dict_id = #{dictId}
   </delete>
   <!-- 根据字典dictId 修改一个字典 -->
-  <update id="modifyDictByDictId">
+  <update id="updateDictByDictId">
     update platform_dict
     	<set>
     	    <if test="dictCode != null">
@@ -90,7 +90,7 @@
             <if test="createUserId != null">
                 create_user_id = #{createUserId},
             </if>
-            <if test="createTime != null">
+            <if test="modifyTime != null">
                 modify_time = #{modifyTime},
             </if>
             <if test="modifyUserId != null">
@@ -109,7 +109,7 @@
 
   
    <!-- 根据字典all -->
-  <select id="queryAllDict" resultMap="BaseResultMap" >
+  <select id="selectDictListAll" resultMap="BaseResultMap" >
     select 
     <include refid="Base_Column_List" />
     from platform_dict

@@ -69,7 +69,7 @@
     </select>
 
     <!--添加角色-->
-    <insert id="createRole" parameterType="Role">
+    <insert id="addRole" parameterType="Role">
         INSERT INTO platform_role(
             <include refid="add_Column_List"/>
             ) VALUES (
@@ -78,7 +78,7 @@
     </insert>
 
     <!--修改角色-->
-    <update id="modifyRoleById" parameterType="Role">
+    <update id="updateRoleById" parameterType="Role">
         UPDATE platform_role
         <set>
             <if test="roleName != null">

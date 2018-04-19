@@ -5,9 +5,13 @@ import com.baomidou.mybatisplus.toolkit.StringUtils;
 import com.camelot.pmt.common.DataGrid;
 import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.common.Pager;
+import com.camelot.pmt.task.mapper.TaskFileMapper;
+import com.camelot.pmt.task.mapper.TaskLogMapper;
 import com.camelot.pmt.task.mapper.TaskMapper;
 import com.camelot.pmt.task.model.Task;
 import com.camelot.pmt.task.model.TaskDetail;
+import com.camelot.pmt.task.model.TaskFile;
+import com.camelot.pmt.task.model.TaskLog;
 import com.camelot.pmt.task.service.TaskOverdueService;
 import com.github.pagehelper.PageInfo;
 
@@ -17,7 +21,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 
@@ -32,6 +38,12 @@ public class TaskOverdueServiceImpl implements TaskOverdueService {
 
     @Autowired
     private TaskMapper taskMapper;
+    
+    @Autowired
+    private TaskLogMapper logMapper;
+    
+    @Autowired
+    private TaskFileMapper fileMapper;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TaskOverdueServiceImpl.class);
 
@@ -39,19 +51,20 @@ public class TaskOverdueServiceImpl implements TaskOverdueService {
      * 查询所有逾期任务+分页   
      */
     @Override
-    public ExecuteResult<PageInfo<Task>> queryOverdueTask(Integer page, Integer rows) {
-        ExecuteResult<PageInfo<Task>> result = new ExecuteResult<PageInfo<Task>>();
+    public ExecuteResult<PageInfo<Map<String,Object>>> queryOverdueTask(Integer page, Integer rows) {
+        ExecuteResult<PageInfo<Map<String,Object>>> result = new ExecuteResult<PageInfo<Map<String,Object>>>();
         try {
         	//分页初始化
         	PageHelper.startPage(page,rows);
-            List<Task> list = taskMapper.queryOverdueTask();
+            List<Map<String,Object>> list = taskMapper.queryOverdueTask();
+             
             // 如果没有查询到数据，不继续进行
             if (CollectionUtils.isEmpty(list)) {                    
-               PageInfo<Task> pageInfo = new PageInfo<>();
+               PageInfo<Map<String,Object>> pageInfo = new PageInfo<>();
                 result.setResult(pageInfo);
                 return result;
             }
-            PageInfo<Task> pageInfo = new PageInfo<>(list);
+            PageInfo<Map<String,Object>> pageInfo = new PageInfo<>(list);
             result.setResult(pageInfo);
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -62,12 +75,20 @@ public class TaskOverdueServiceImpl implements TaskOverdueService {
      * 查询延期任务详情
      */
 	@Override
-	public ExecuteResult<TaskDetail> queryOverdueTaskDetailByTaskId(String taskId) {
-		 ExecuteResult<TaskDetail> result = new ExecuteResult<TaskDetail>();
+	public ExecuteResult<Map<String,Object>> queryOverdueTaskDetailByTaskId(String taskId) {
+		 ExecuteResult<Map<String,Object>> result = new ExecuteResult<Map<String,Object>>();
 	        try {
 	            if (!taskId.equals("") && !taskId.equals("0")) {
-	            	TaskDetail queryResult = taskMapper.queryOverdueTaskDetailByTaskId(taskId);
-	                result.setResult(queryResult);
+	            	HashMap<String, Object> map = new HashMap<String,Object>();
+	            	//查询详细
+	            	Map<String,Object> queryOverdueTaskDetailByTaskId = taskMapper.queryOverdueTaskDetailByTaskId(taskId);
+	            	//根据taskId查询历史记录
+	            	List<TaskLog> logList = logMapper.queryTaskLogList(Long.valueOf(taskId));
+	            
+	            	map.put("queryOverdueTaskDetailByTaskId", queryOverdueTaskDetailByTaskId);
+	            	map.put("logList", logList);
+	            	
+	                result.setResult(map);
 	                return result;
 	            }
 	            result.addErrorMessage("查询失败！");
@@ -90,7 +111,7 @@ public class TaskOverdueServiceImpl implements TaskOverdueService {
 			     return result;
 			     }
 			     //进行任务的更改(根据id去更改,修改延期描述,修改)
-			     Integer count = taskMapper.insertOverduMessage(task);
+			     int count = taskMapper.insertOverduMessage(task);
 			      if(count == 0){
 			      result.setResult("更新任务失败!");
 			      return result;
