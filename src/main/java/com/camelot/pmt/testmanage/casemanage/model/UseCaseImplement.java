@@ -14,7 +14,7 @@ public class UseCaseImplement {
 
     private String executeUserId;
 
-    private List<UseCaseProcedureImplement> detail;
+    private List<UseCaseDetail> detail;
 
     public Long getId() {
         return id;
@@ -56,11 +56,11 @@ public class UseCaseImplement {
         this.executeUserId = executeUserId;
     }
 
-    public List<UseCaseProcedureImplement> getDetail() {
+    public List<UseCaseDetail> getDetail() {
         return detail;
     }
 
-    public void setDetail(List<UseCaseProcedureImplement> detail) {
+    public void setDetail(List<UseCaseDetail> detail) {
         this.detail = detail;
     }
 }

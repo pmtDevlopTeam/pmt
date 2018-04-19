@@ -93,7 +93,7 @@ public class TaskManagerTest {
 
     @Test
     public void testQueryUserByUsername(){
-        ExecuteResult<List<User>> lv = userService.queryUsersByUserName("风");
+        ExecuteResult<List<User>> lv = (ExecuteResult<List<User>>) userService.queryUsersByUserName("风");
         List<User> result = lv.getResult();
         for (User user : result) {
             System.out.println(user.getUserId());
