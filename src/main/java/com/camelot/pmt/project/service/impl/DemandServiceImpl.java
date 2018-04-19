@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import com.camelot.pmt.common.compareBeanAttr;
 import com.camelot.pmt.platform.model.User;
 import com.camelot.pmt.platform.shiro.ShiroUtils;
 import com.github.pagehelper.PageHelper;
@@ -179,13 +180,17 @@ public class DemandServiceImpl implements DemandService {
     public boolean updateByDemand(Demand demand, User user) {
         boolean flag = false;
         try {
+            Demand oldDemand = demandMapper.selectByPrimaryKey(demand.getId());
+            Object obj= compareBeanAttr.compareBeanAttr(Demand.class, demand, oldDemand, new String[]{"id"});
+            String operateDesc=(String)obj;
+
             int updateCount = demandMapper.updateByPrimaryKeySelective(demand);
             if (updateCount > 0) {
                 DemandOperate demandOperate = new DemandOperate();
                 Date currentDate = new Date();
                 demandOperate.setCreateTime(currentDate);
                 demandOperate.setDemandId(demand.getId());
-                demandOperate.setOperateDesc(user.getUsername() + "更新需求");
+                demandOperate.setOperateDesc(user.getUsername()+":" + operateDesc);
                 demandOperate.setCreateUserId(user.getUserId());
                 demandOperate.setRunType("02");
                 demandOperateMapper.insert(demandOperate);
