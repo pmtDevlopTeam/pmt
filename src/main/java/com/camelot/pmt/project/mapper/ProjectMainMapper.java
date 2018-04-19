@@ -107,9 +107,9 @@ public interface ProjectMainMapper {
             @Param("endTime") Date endTime);
 
     /**
-     * 查询所有数量
+     * 获取数据库项目编号最大值
      * 
      * @return
      */
-    Long queryAll();
+    String getMaxProjectNum();
 }
