@@ -7,30 +7,21 @@
 		<result column="project_id" property="projectId" jdbcType="BIGINT" />
 		<result column="demand_name" property="demandName" jdbcType="VARCHAR" />
 		<result column="demand_num" property="demandNum" jdbcType="VARCHAR" />
-		<result column="demand_status" property="demandStatus"
-			jdbcType="CHAR" />
+		<result column="demand_status" property="demandStatus" jdbcType="CHAR" />
 		<result column="demand_level" property="demandLevel" jdbcType="CHAR" />
-		<result column="demand_source" property="demandSource"
-			jdbcType="VARCHAR" />
-		<result column="source_remark" property="sourceRemark"
-			jdbcType="VARCHAR" />
-		<result column="create_user_id" property="createUserId"
-			jdbcType="VARCHAR" />
+		<result column="demand_source" property="demandSource" jdbcType="VARCHAR" />
+		<result column="source_remark" property="sourceRemark" jdbcType="VARCHAR" />
+		<result column="create_user_id" property="createUserId" jdbcType="VARCHAR" />
 		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-		<result column="modify_user_id" property="modifyUserId"
-			jdbcType="VARCHAR" />
+		<result column="modify_user_id" property="modifyUserId" jdbcType="VARCHAR" />
 		<result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
 		<result column="demandNeed" property="demand_need" jdbcType="CHAR" />
 		<result column="reviewTime" property="review_time" jdbcType="TIMESTAMP" />
-		<result column="reviewResults" property="review_results"
-			jdbcType="CHAR" />
+		<result column="reviewResults" property="review_results" jdbcType="CHAR" />
 		<result column="assignedTo" property="assigned_to" jdbcType="VARCHAR" />
-		<result column="reviewedWith" property="reviewed_with"
-			jdbcType="TIMESTAMP" />
-		<result column="reviewRemark" property="review_remark"
-			jdbcType="VARCHAR" />
-		<result column="reasonsejection" property="reasons_rejection"
-			jdbcType="VARCHAR" />
+		<result column="reviewedWith" property="reviewed_with" jdbcType="TIMESTAMP" />
+		<result column="reviewRemark" property="review_remark" jdbcType="VARCHAR" />
+		<result column="reasonsejection" property="reasons_rejection" jdbcType="VARCHAR" />
 		<result column="demand_desc" property="demandDesc" jdbcType="LONGVARCHAR" />
 		<result column="close_reason" property="closeReason" jdbcType="LONGVARCHAR" />
 	</resultMap>
@@ -335,10 +326,6 @@
 		where id = #{id,jdbcType=BIGINT}
 	</update>
 
-	<!--查询需求根据条件 -->
-	<sql id="pagination_tail">
-		limit #{pager.pageOffset} , #{pager.rows}
-	</sql>
 	<select id="queryByPage" resultMap="BaseResultMap"
 		parameterType="com.camelot.pmt.project.model.Demand">
 		select
@@ -387,14 +374,14 @@
 		select
 		t.task_num,t.priority,t.task_name,t.estimate_start_time,t.estimate_end_time,u.user_name,t.status
 		from task t
-		left join platform_user u on t.beassign_user_id = u.user_id
+		right join platform_user u on t.beassign_user_id = u.user_id
 		where t.demand_id = #{demandId,jdbcType=BIGINT}
 		order by t.priority
 		desc
 	</select>
 	<!-- 根据需求id查询影响变更需求的用例信息 -->
 	<select id="queryDemandUseCaseQuoteById" parameterType="long"
-		resultType="map">
+		resultType="java.util.Map">
 		select
 		uc.case_title,uc.case_level,uc.description,uc.case_status,uc.apply_phase,uc.precondition,uc.execute_time
 		,pu.user_name
@@ -402,7 +389,7 @@
 		left join platform_user pu on
 		uc.execute_user_id = pu.user_id
 		where uc.demand_id =
-		#{demandId,jdbcType=BIGINT} and del_flag = '0'
+		#{demandId,jdbcType=BIGINT} 
 		order by uc.case_level
 		desc
 	</select>
