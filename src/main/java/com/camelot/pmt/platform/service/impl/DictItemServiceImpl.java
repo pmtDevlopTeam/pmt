@@ -29,27 +29,19 @@ import com.github.pagehelper.PageHelper;
 @Service
 public class DictItemServiceImpl implements DictItemService {
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(DictItemServiceImpl.class);
-
 	@Autowired
 	DictItemMapper dictItemMapper; 
 	
 	@Override
 	public boolean addDictItem(DictItem dictItem) {
-		boolean flag = false;
 		try{
 			String uuid = UUIDUtil.getUUID();
 			dictItem.setDictItemId(uuid);
 			dictItem.setCreateUserId("1");
             long date = new Date().getTime();
             dictItem.setCreateTime(new Date(date));
-            //检查字典项编码与字典项名称是否唯一
-            flag = checkDictItemCodeOrDictItemNameIsExist(dictItem);
-            if(flag==true) {
-            	return (dictItemMapper.addDictItem(dictItem)==1)?true:false;
-            }else {
-            	return flag;
-            }
+            
+            return (dictItemMapper.addDictItem(dictItem)==1)?true:false;
 		}catch(Exception e){
 			throw new RuntimeException(e);
 		}
@@ -74,7 +66,6 @@ public class DictItemServiceImpl implements DictItemService {
 
 	@Override
 	public boolean updateDictItemByDictItemId(DictItem dictItem) {
-		boolean flag = false;
 	       try {
 				if(StringUtils.isEmpty(dictItem.getDictItemId()) ){
 					return false;
@@ -82,40 +73,14 @@ public class DictItemServiceImpl implements DictItemService {
 	            long date = new Date().getTime();
 	            dictItem.setModifyTime(new Date(date));
 	            dictItem.setModifyUserId("2");
-	            //检查字典项编码与字典项名称是否唯一
-	            flag = checkDictItemCodeOrDictItemNameIsExistUpdate(dictItem);
-	            if(flag == true) {
-	            	 return (dictItemMapper.updateDictItemByDictItemId(dictItem)==1)?true:false;
-	            }else {
-	            	return flag;
-	            }
+	            
+	            return (dictItemMapper.updateDictItemByDictItemId(dictItem)==1)?true:false;
 	        } catch (Exception e){
 	            throw new RuntimeException(e);
 	        }
 
 	}
 
-	@Override
-	public boolean updateDictItemByDictId(DictItem dictItem) {
-		boolean flag = false;
-	       try {
-				if(StringUtils.isEmpty(dictItem.getDictId()) ){
-					return false;
-				}
-	            long date = new Date().getTime();
-	            dictItem.setModifyTime(new Date(date));
-	            dictItem.setModifyUserId("2");
-	            //检查字典项编码与字典项名称是否唯一
-	            flag = checkDictItemCodeOrDictItemNameIsExistUpdate(dictItem);
-	            if(flag == true) {
-	            	 return (dictItemMapper.updateDictItemByDictId(dictItem)==1)?true:false;
-	            }else {
-	            	return flag;
-	            }
-	        } catch (Exception e){
-	            throw new RuntimeException(e);
-	        }
-	}
 
 	@Override
 	public DictItem queryDictItemByDictItemId(String dictItemId) {
@@ -208,7 +173,7 @@ public class DictItemServiceImpl implements DictItemService {
 //	}
 	
 	@Override
-	public boolean checkDictItemCodeOrDictItemNameIsExist(DictItem dictItem) {
+	public ExecuteResult<String> checkDictItemCodeOrDictItemNameIsExist(DictItem dictItem) {
 		ExecuteResult<String> result = new ExecuteResult<String>();
     	if (!StringUtils.isEmpty(dictItem.getDictItemCode()) && !StringUtils.isEmpty(dictItem.getDictItemName()) ){
     		//2.检查字典项是否存在
@@ -217,27 +182,27 @@ public class DictItemServiceImpl implements DictItemService {
     		if(dictItemc == null && dictItemn == null) {
     			result.setResult("字典项编码,字典项名称不重复!");
     			result.setResultMessage("字典项编码,字典项名称不重复!");
-				return true;
+				return result;
     		}
     		if(dictItemc != null && dictItemn == null) {
     			result.setResult("字典项编码重复!");
-				return false;
+				return result;
     		}
     		if(dictItemc == null && dictItemn != null) {
     			result.setResult("字典项名称重复!");
-				return false;
+				return result;
     		}
     		if(dictItemc != null && dictItemn != null) {
     			result.setResult("字典项编码重复,字典项名称重复!");
-				return false;
+				return result;
     		}
     		
         }
-		return false;
+		return result;
 	}
 
 	
-	public boolean checkDictItemCodeOrDictItemNameIsExistUpdate(DictItem dictItem) {
+	public ExecuteResult<String> checkDictItemCodeOrDictItemNameIsExistUpdate(DictItem dictItem) {
 		ExecuteResult<String> result = new ExecuteResult<String>();
 		//1.检查字典项编码与字典项名称是否存在
 		if (!StringUtils.isEmpty(dictItem.getDictItemCode()) && !StringUtils.isEmpty(dictItem.getDictItemName()) ){
@@ -247,48 +212,50 @@ public class DictItemServiceImpl implements DictItemService {
     		if(dictItemc == null && dictItemn == null) {
     			result.setResultMessage("字典项编码,字典项名称不重复!");
     			result.setResult("字典项编码,字典项名称不重复!");
-				return true;
+				return result;
     		}
     		if(dictItemc != null && dictItemn == null) {
     			if(dictItemc.getDictItemId().equals(dictItem.getDictItemId())) {
     				result.setResultMessage("字典项编码不重复!");
     				result.setResult("字典项编码不重复!");
-    				return true;
+    				return result;
     			}
     			result.setResult("字典项编码重复!");
-				return false;
+				return result;
     		}
     		if(dictItemc == null && dictItemn != null) {
     			if(dictItemn.getDictItemId().equals(dictItem.getDictItemId())) {
     				result.setResultMessage("字典项名称不重复!");
     				result.setResult("字典项名称不重复!");
-    				return true;
+    				return result;
     			}
     			result.setResult("字典项名称重复!");
-				return false;
+				return result;
     		}
     		if(dictItemc != null && dictItemn != null) {
     			if(dictItem.getDictItemId().equals(dictItemc.getDictItemId())&&dictItem.getDictItemId().equals(dictItemn.getDictItemId())) {
         			result.setResultMessage("字典项编码,字典项名称不重复!");
         			result.setResult("字典项编码,字典项名称不重复!");
-    				return true;
+    				return result;
     			}
     			if(!dictItem.getDictItemId().equals(dictItemc.getDictItemId())&&dictItem.getDictItemId().equals(dictItemn.getDictItemId())) {
     				result.setResult("字典项编码重复!");
-    				return false;
+    				return result;
     			}
     			if(dictItem.getDictItemId().equals(dictItemc.getDictItemId())&&!dictItem.getDictItemId().equals(dictItemn.getDictItemId())) {
     				result.setResult("字典项名称重复!");
-    				return false;
+    				return result;
     			}
     			if(!dictItem.getDictItemId().equals(dictItemc.getDictItemId())&&!dictItem.getDictItemId().equals(dictItemn.getDictItemId())) {
     				result.setResult("字典项编码,字典项名称重复!");
-    				return false;
+    				return result;
     			}
     			
     		}
     		
         }
-		return false;
+		return result;
 	}
+	
+	
 }

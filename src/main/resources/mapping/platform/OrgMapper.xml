@@ -157,20 +157,20 @@
         )
     </insert>
      
-     <insert id="createOrgToUser" parameterType="Org" useGeneratedKeys="true" keyProperty="id"  >
+     <insert id="updateOrgToUser" parameterType="Org" useGeneratedKeys="true" keyProperty="id"  >
         INSERT INTO platform_user_org(
             id,user_id,org_id,create_time,modify_time,create_user_id,modify_user_id
             ) VALUES (
             #{id},#{userId},#{orgId},#{createTime},#{modifyTime},#{creatUserId},#{modifyUserId}
         )
     </insert>
-    <select id="selectOrgAndUserByOrgIdAndUserId"  parameterType="java.lang.String" resultMap="OrgAndUserresultMap">
+    <select id="queryOrgAndUserByOrgIdAndUserId"  parameterType="java.lang.String" resultMap="OrgAndUserresultMap">
        SELECT 
        id,user_id,org_id,create_time,modify_time,create_user_id,modify_user_id
 	   FROM platform_user_org where user_id=#{userId} and org_id=#{orgId}
     </select>
     
-    <select id="selectUsersByOrgId"  parameterType="java.lang.String" resultMap="OrgAndUserresultMap">
+    <select id="queryOrgAndUserByOrgId"  parameterType="java.lang.String" resultMap="OrgAndUserresultMap">
        SELECT 
        id,user_id,org_id,create_time,modify_time,create_user_id,modify_user_id
 	   FROM platform_user_org where org_id=#{orgId}
@@ -229,7 +229,7 @@
     </delete>
     
 
-    <select id="selectOrgChildrenByParentId" resultMap="BaseResultMap"  >
+    <select id="queryOrgSubByParentId" resultMap="BaseResultMap"  >
        SELECT 
        <include refid="Base_Column_List" />
 	   FROM platform_org
@@ -270,7 +270,7 @@
         UPDATE platform_org
         <set>
             <if test="state != null">
-                state = #{state},
+                state = #{state}
             </if>
         </set>
         WHERE org_id = #{orgId}
@@ -293,7 +293,7 @@
 	</select>
 	
     <!-- 分页查询所有部门列表 -->
-    <select id="findOrgsByPage" resultMap="BaseResultMap" >
+    <select id="queryOrgsByPage" resultMap="BaseResultMap" >
         SELECT 
        <include refid="Base_Column_List" />
 	   FROM platform_org

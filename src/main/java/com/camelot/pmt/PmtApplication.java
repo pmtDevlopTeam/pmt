@@ -11,7 +11,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
   * @date 2018/3/26 16:28
   */
 @SpringBootApplication
-@EnableScheduling //启用定时任务配置
+//@EnableScheduling //启用定时任务配置
 @MapperScan("com.camelot.pmt.**.mapper")
 public class PmtApplication {
 

@@ -27,72 +27,21 @@ public class TaskAlreadyServiceImpl implements TaskAlreadyService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TaskAlreadyServiceImpl.class);
 
-
     /**
-     * @author: zsf
-     * @param:
-     * @description: 查询我的已办 根据被负责人ID
-     * @date: 16:54 2018/4/9
-     */
-    public ExecuteResult<PageInfo<Task>> queryTaskAlready(int page , int rows, String id) {
-        ExecuteResult<PageInfo<Task>> result = new ExecuteResult<PageInfo<Task>>();
-        //利用PageHelper进行分页
-        PageHelper.startPage(page, rows);
-        //根据用户id查询全部的已完成的任务
-        List<Task> list = taskMapper.listTaskAlready(id);
-        System.out.println(list.size());
-        //分页之后的结果集
-        PageInfo<Task> clist = new PageInfo<Task>(list);
-        //返回结果集
-        result.setResult(clist);
-        return result;
-    }
-
-    /**
-     * @author: zsf
-     * @param:
-     * @description: 查询未完成任务的个数
-     * @date: 10:17 2018/4/17
-     */
-    @Override
-    public int queryUnfinishedTask(long projectId, String userId) {
-
-        return taskMapper.queryUnfinishedTask(projectId, userId);
-    }
-
-    /**
-     * @author: zsf
-     * @param:
-     * @description: 根据需求ID 查任务列表
-     * @date: 10:17 2018/4/17
-     */
-    @Override
-    public ExecuteResult<List<Task>> queryTaskByDemandId(long demandId) {
-        ExecuteResult<List<Task>> result = new ExecuteResult<List<Task>>();
-        try {
-            List<Task> taskList = taskMapper.queryTaskByDemandId(demandId);
-            result.setResult(taskList);
-        } catch (Exception e) {
-            LOGGER.error(e.getMessage());
-            throw new RuntimeException(e);
-        }
-        return result;
-    }
-
-
-    /**
+     * TODO重做(我的任务状态转为正在进行)
      *
-     * @Title: updateTaskAlreadyToRunning
-     * @Description: TODO重做(我的已完成任务转为正在进行,会将该节点及节点下的所有子节点变为正在进行(不包括关闭的任务))
-     * @param @param taskId taskStatus
-     * @param @return    设定文件
-     * @return JSONObject    返回类型
-     * @throws
+     * @param Long id
+     * @return ExecuteResult<String>
      */
+
     @Override
     public ExecuteResult<String> updateTaskAlreadyToRunning(Long id) {
         ExecuteResult<String> result=new ExecuteResult<>();
         try{
+            if(id==null){
+                result.setResult("该任务不存在!");
+                return result;
+            }
             //遍历此任务下是否有引用--->查询所有任务父id为id的记录
             List<Task> taskList = taskMapper.queryByPId(id);
             List<Long> list = new ArrayList<Long>();
@@ -133,6 +82,13 @@ public class TaskAlreadyServiceImpl implements TaskAlreadyService {
         return result;
     }
 
+    /**
+     * 根据任务ID 提测
+     *
+     * @param Long id
+     * @return ExecuteResult<String>
+     */
+
     @Override
     public ExecuteResult<String> updateTaskToTest(Long id) {
         ExecuteResult<String> result = new ExecuteResult<String>();
@@ -155,6 +111,60 @@ public class TaskAlreadyServiceImpl implements TaskAlreadyService {
         result.setResult("修改任务状态成功!");
         return result;
     }
+
+    /**
+     * 查询我的已办任务列表
+     *
+     * @param Long id
+     * @return ExecuteResult<PageInfo<Task>>
+     */
+    public ExecuteResult<PageInfo<Task>> queryTaskAlready(int page , int rows, String id) {
+        ExecuteResult<PageInfo<Task>> result = new ExecuteResult<PageInfo<Task>>();
+        //利用PageHelper进行分页
+        PageHelper.startPage(page, rows);
+        //根据用户id查询全部的已完成的任务
+        List<Task> list = taskMapper.listTaskAlready(id);
+        System.out.println(list.size());
+        //分页之后的结果集
+        PageInfo<Task> clist = new PageInfo<Task>(list);
+        //返回结果集
+        result.setResult(clist);
+        return result;
+    }
+
+    /**
+     * 查询未完成任务的个数
+     *
+     * @param long projectId, String userId
+     * @return int
+     */
+    @Override
+    public int queryUnfinishedTask(Long projectId, String userId) {
+
+        return taskMapper.queryUnfinishedTask(projectId, userId);
+    }
+
+    /**
+     * 根据需求ID 查询任务列表
+     *
+     * @param long demandId
+     * @return ExecuteResult<List<Task>>
+     */
+
+    @Override
+    public ExecuteResult<List<Task>> queryTaskByDemandId(Long demandId) {
+        ExecuteResult<List<Task>> result = new ExecuteResult<List<Task>>();
+        try {
+            List<Task> taskList = taskMapper.queryTaskByDemandId(demandId);
+            result.setResult(taskList);
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+        return result;
+    }
+
+
 
 
 }

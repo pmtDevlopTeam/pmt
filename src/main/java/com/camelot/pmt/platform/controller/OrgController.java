@@ -73,16 +73,16 @@ public class OrgController {
 	 * @param orgId 
 	 * @return List<Org>
 	 */
-	@ApiOperation(value = "根据parentId查询子部门机构接口", notes = "查询本部门以及孩子部门机构")
-	@RequestMapping(value = "/queryOrgAndChildrenByOrgId", method = RequestMethod.POST)
-	public JSONObject queryOrgAndChildrenByOrgtId(
+	@ApiOperation(value = "根据orgId查询本部门以及子部门机构接口", notes = "查询本部门以及子部门机构")
+	@RequestMapping(value = "/queryOrgAndSubByOrgId", method = RequestMethod.POST)
+	public JSONObject queryOrgAndSubByOrgId(
 			@ApiParam(value = "orgId", required = true) @RequestParam(required = true) String orgId) {
 		List<Tree<Org>> result = new ArrayList<Tree<Org>>();
 		try {
 			if (StringUtils.isEmpty(orgId)) {
                 ApiResponse.jsonData(APIStatus.ERROR_400);
             }
-			result = orgService.queryOrgAndChildrenById(orgId);
+			result = orgService.queryOrgAndSubByOrgId(orgId);
 				return ApiResponse.success(result);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
@@ -147,7 +147,7 @@ public class OrgController {
 	@ApiOperation(value = "删除部门机构", notes = "删除单个部门机构(只是当前节点)")
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "orgId", value = "部门id", required = true, paramType = "query", dataType = "String") })
-	@RequestMapping(value = "/deleteOrgByorgId", method = RequestMethod.POST)
+	@RequestMapping(value = "/deleteOrgByOrgId", method = RequestMethod.POST)
 	@ResponseBody
 	public JSONObject deleteOrgByorgId(@ApiIgnore Org org) {
 		try {
@@ -168,15 +168,15 @@ public class OrgController {
 	@ApiOperation(value = "删除部门本身以及孩子部门", notes = "删除部门本身以及孩子部门")
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "orgId", value = "部门id", required = true, paramType = "query", dataType = "String") })
-	@RequestMapping(value = "/deleteOrgByOrgId", method = RequestMethod.POST)
+	@RequestMapping(value = "/deleteOrgSubByOrgId", method = RequestMethod.POST)
 	@ResponseBody
-	public JSONObject deleteOrgByOrgId(@ApiIgnore String orgId) {
+	public JSONObject deleteOrgSubByOrgId(@ApiIgnore String orgId) {
 		String result="";
 		try {
 			if (StringUtils.isEmpty(orgId)) {
                 ApiResponse.jsonData(APIStatus.ERROR_400);
             }
-			result = orgService.deleteOrgByOrgId(orgId);
+			result = orgService.deleteOrgSubByOrgId(orgId);
 				return ApiResponse.success(result);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
@@ -199,7 +199,7 @@ public class OrgController {
 		@ApiImplicitParam(name = "orgCode", value = "部门编号", required = false, paramType = "form", dataType = "String"),
 		@ApiImplicitParam(name = "modifyUserId", value = "修改人", required = false, paramType = "form", dataType = "String")
 		})
-	@RequestMapping(value = "/updateOrg", method = RequestMethod.POST)
+	@RequestMapping(value = "/updateOrgByOrgId", method = RequestMethod.POST)
 	@ResponseBody
 	public JSONObject updateOrgByOrgId(@ApiIgnore Org org) {
 		String result = "";
@@ -327,7 +327,7 @@ public class OrgController {
 	 * 
 	 **/
     @ApiOperation(value = "修改组织机构的状态", notes = "修改组织机构的状态")
-    @PostMapping(value = "/modifyOrgByOrgIdAndState")
+    @PostMapping(value = "/updateOrgByOrgIdAndState")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "orgId", value = "部门id", required = true, paramType = "form", dataType = "string"),
             @ApiImplicitParam(name = "state", value = "部门状态  0（默认）启用 1 停用 2 锁定", required = false, paramType = "form", dataType = "string")})
@@ -356,17 +356,17 @@ public class OrgController {
 	 * 
 	 **/
     @ApiOperation(value = "组织机构绑定用户  根据orgId查询所有用户", notes = "组织机构绑定用户  根据orgId查询所有用户")
-    @PostMapping(value = "/queryOrgToUserByOrgId")
+    @PostMapping(value = "/queryUsersByOrgId")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "orgId", value = "部门id", required = true, paramType = "form", dataType = "string")
             })
     
-    public JSONObject queryOrgToUserByOrgId(String orgId){
+    public JSONObject queryUsersByOrgId(String orgId){
     	try {
     		if (StringUtils.isEmpty(orgId)) {
                 return ApiResponse.jsonData(APIStatus.ERROR_400);
             }
-    			return ApiResponse.success(orgService.queryOrgToUserByOrgId(orgId));
+    			return ApiResponse.success(orgService.queryUsersByOrgId(orgId));
     	}catch (Exception e) {
     		logger.error(e.getMessage());
     		return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
@@ -383,17 +383,13 @@ public class OrgController {
     @ApiOperation(value = "组织机构  根据orgId,orgCode,orgname 多条件模糊查询所有部门信息", notes = "组织机构  根据orgId,orgCode,orgname 多条件模糊查询所有部门信息组织机构绑定用户  根据orgId查询所有用户")
     @PostMapping(value = "/queryOrgByParameters")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "orgId", value = "部门id", required = false, paramType = "form", dataType = "string"),
-            @ApiImplicitParam(name = "orgCode", value = "部门编号", required = false, paramType = "form", dataType = "string"),
-            @ApiImplicitParam(name = "orgname", value = "部门名称", required = false, paramType = "form", dataType = "string"),
-            @ApiImplicitParam(name = "pageNum", value = "页码", defaultValue = "1" ,required = true, paramType = "query", dataType = "int"),
-        	@ApiImplicitParam(name = "pageSize", value = "每页数量", defaultValue = "10" ,required = true, paramType = "query", dataType = "int")
+        	@ApiImplicitParam(name = "Strings", value = "参数",required = true, paramType = "query", dataType = "String")
             })
     
-    public JSONObject queryOrgToUser(@ApiIgnore Org org ,int pageNum,int pageSize){
+    public JSONObject queryOrgInfo(@ApiIgnore Org org ,int pageNum,int pageSize){
     	PageInfo result = new PageInfo();
     	try {
-    			return ApiResponse.success(orgService.queryOrgByParameters(org,pageNum,pageSize));
+    			return ApiResponse.success(orgService.queryOrgInfo(org,pageNum,pageSize));
     	}catch (Exception e) {
     		logger.error(e.getMessage());
     		return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());

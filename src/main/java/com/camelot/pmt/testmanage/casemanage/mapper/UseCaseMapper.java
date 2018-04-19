@@ -20,10 +20,9 @@ public interface UseCaseMapper {
 
     int updateByPrimaryKey(UseCase record);
     
-    
-    List<UseCase>selectUseCase(Map<String, Object> condition);
-    
     int updateUserCaseDelFlag(Long id);
 
     int insertBatch(List<UseCase> list);
+    
+    List<UseCase>queryAllUserCaseList(Map<String, Object> condition);
 }

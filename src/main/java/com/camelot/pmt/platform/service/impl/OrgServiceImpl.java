@@ -1,5 +1,4 @@
 package com.camelot.pmt.platform.service.impl;
-import static org.hamcrest.CoreMatchers.nullValue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -7,20 +6,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
-import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.camelot.pmt.common.DataGrid;
-import com.camelot.pmt.common.ExecuteResult;
-import com.camelot.pmt.common.Pager;
 import com.camelot.pmt.platform.mapper.OrgMapper;
 import com.camelot.pmt.platform.mapper.UserMapper;
 import com.camelot.pmt.platform.model.Org;
@@ -160,7 +152,7 @@ public class OrgServiceImpl implements OrgService {
 	@Override
 	public PageInfo queryOrgsByPage(int pageNum,int pageSize) {
 			PageHelper.startPage(pageNum,pageSize);
-			List<Org> list = orgMapper.findOrgsByPage();
+			List<Org> list = orgMapper.queryOrgsByPage();
 			if (CollectionUtils.isEmpty(list)) {
 				return null;
 			}
@@ -174,7 +166,7 @@ public class OrgServiceImpl implements OrgService {
 	 * @return
 	 */
 	@Override
-	public List<Tree<Org>> queryOrgAndChildrenById(String OrgId) {
+	public List<Tree<Org>> queryOrgAndSubByOrgId(String OrgId) {
 		List<Tree<Org>> trees = new ArrayList<Tree<Org>>();
 		List<Tree<Org>> list=null;
 		List<Org> orgListItem = new ArrayList<Org>();
@@ -205,7 +197,7 @@ public class OrgServiceImpl implements OrgService {
 			orgListItem.add(org);
 		}
 		// 查找子节点,递归算法一定要有一个退出的条件
-		List<Org> OrgList = orgMapper.selectOrgChildrenByParentId(orgId);
+		List<Org> OrgList = orgMapper.queryOrgSubByParentId(orgId);
 		for (Org org2Item : OrgList) {
 			findChildCategory(orgListItem, org2Item.getOrgId());
 		}
@@ -215,12 +207,12 @@ public class OrgServiceImpl implements OrgService {
 	 * 删除多个子部门机构  递归删除
 	 */
 	@Override
-	public String deleteOrgByOrgId(String orgId) {
+	public String deleteOrgSubByOrgId(String orgId) {
 		orgMapper.deleteOrgByOrgId(orgId);
-		List<Org> OrgList = orgMapper.selectOrgChildrenByParentId(orgId);
+		List<Org> OrgList = orgMapper.queryOrgSubByParentId(orgId);
 		for (Org org : OrgList) {
 			orgMapper.deleteOrgByOrgParentId(org.getParentId());
-			deleteOrgByOrgId(org.getOrgId());
+			deleteOrgSubByOrgId(org.getOrgId());
 		}
 		return "刪除多个子部门成功";
 	}
@@ -283,11 +275,11 @@ public class OrgServiceImpl implements OrgService {
 		int count = 0;
 			List<String> userIds = Arrays.asList(org.getUserIds());
 			for (String ids : userIds) {
-				OrgAndUser orgAndUser = orgMapper.selectOrgAndUserByOrgIdAndUserId(ids,org.getOrgId());
+				OrgAndUser orgAndUser = orgMapper.queryOrgAndUserByOrgIdAndUserId(ids,org.getOrgId());
 				if (orgAndUser != null) {
 					orgMapper.deleteOrgByUserIdAndOrgId(ids,org.getOrgId());
 				}
-				User user = userMapper.selectUserById(ids);
+				User user = userMapper.queryUserByUserId(ids);
 				Org orgObj = orgMapper.queryOrgByOrgId(org.getOrgId());
 				if (user == null) {
 					return "传入的用户参数不正确";
@@ -300,7 +292,7 @@ public class OrgServiceImpl implements OrgService {
 					long date = new Date().getTime();
 					o.setCreateTime(new Date(date));
 		            o.setModifyTime(new Date(date));
-					count=orgMapper.createOrgToUser(o);
+					count=orgMapper.updateOrgToUser(o);
 				}
 			}
 			if (count >0) {
@@ -311,15 +303,15 @@ public class OrgServiceImpl implements OrgService {
 	}
 
 	@Override
-	public List<User> queryOrgToUserByOrgId(String orgId) {
+	public List<User> queryUsersByOrgId(String orgId) {
 		
 			List<User> usersList = new ArrayList<User>();
-			List<OrgAndUser> OrgAndUserList = orgMapper.selectUsersByOrgId(orgId);
+			List<OrgAndUser> OrgAndUserList = orgMapper.queryOrgAndUserByOrgId(orgId);
 			if (CollectionUtils.isEmpty(OrgAndUserList)) {
                 return usersList;
             }
 			for (OrgAndUser orgAndUser : OrgAndUserList) {
-				User user = userMapper.selectUserById(orgAndUser.getUserId());
+				User user = userMapper.queryUserByUserId(orgAndUser.getUserId());
 				if (user != null) {
 					usersList.add(user);
 				}
@@ -328,7 +320,7 @@ public class OrgServiceImpl implements OrgService {
 	}
 
 	@Override
-	public PageInfo queryOrgByParameters(Org org,int pageNum,int pageSize) {
+	public PageInfo queryOrgInfo(Org org,int pageNum,int pageSize) {
 		PageHelper.startPage(pageNum,pageSize);
 		List<Org> orgsList = orgMapper.queryOrgByParameters(org);
 		if (CollectionUtils.isEmpty(orgsList)) {
@@ -354,7 +346,7 @@ public class OrgServiceImpl implements OrgService {
 			List<String> userIds = Arrays.asList(org.getUserIds());
 			orgMapper.deleteOrgToUserByOrgId(org.getOrgId());
 			for (String ids : userIds) {
-				User user = userMapper.selectUserById(ids);
+				User user = userMapper.queryUserByUserId(ids);
 				Org orgObj = orgMapper.queryOrgByOrgId(org.getOrgId());
 				if (user == null) {
 					return "传入的用户参数不正确";
@@ -366,7 +358,7 @@ public class OrgServiceImpl implements OrgService {
 					o.setOrgId(org.getOrgId());
 					long date = new Date().getTime();
 		            o.setModifyTime(new Date(date));
-					count=orgMapper.createOrgToUser(o);
+					count=orgMapper.updateOrgToUser(o);
 				}
 			}
 			if (count >0) {

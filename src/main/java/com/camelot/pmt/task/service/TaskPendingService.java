@@ -99,7 +99,7 @@ public interface TaskPendingService {
 	* @return Task    返回类型 
 	* @throws
 	 */
-	ExecuteResult<List<Task>> queryTopAllTaskTreeByTaskId(Long id);
+	ExecuteResult<List<Task>> queryTopAllTaskTreeByTaskId(Long id,List<Task> list);
 	
 	/**
 	 * 
