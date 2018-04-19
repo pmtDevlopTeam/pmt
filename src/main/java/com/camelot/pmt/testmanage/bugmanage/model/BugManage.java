@@ -70,9 +70,6 @@ public class BugManage{
 		this.id = id;
 	}
 	public String getBugTitle() {
-		if(bugTitle==null||"null".equals(bugTitle)){
-			return "";
-		}
 		return bugTitle;
 	}
 	public void setBugTitle(String bugTitle) {
@@ -109,18 +106,12 @@ public class BugManage{
 		this.versionId = versionId;
 	}
 	public String getBugType() {
-		if(bugType==null||"null".equals(bugType)){
-			return "";
-		}
 		return bugType;
 	}
 	public void setBugType(String bugType) {
 		this.bugType = bugType;
 	}
 	public String getCaseTerminal() {
-		if(caseTerminal==null||"null".equals(caseTerminal)){
-			return "";
-		}
 		return caseTerminal;
 	}
 	public void setCaseTerminal(String caseTerminal) {
@@ -133,9 +124,6 @@ public class BugManage{
 		this.caseEnvironment = caseEnvironment;
 	}
 	public String getBugLevel() {
-		if(bugLevel==null||"null".equals(bugLevel)){
-			return "";
-		}
 		return bugLevel;
 	}
 	public void setBugLevel(String bugLevel) {
@@ -184,9 +172,6 @@ public class BugManage{
 		this.delFlag = delFlag;
 	}
 	public String getStepsReproduce() {
-		if(stepsReproduce==null||"null".equals(stepsReproduce)){
-			return "";
-		}
 		return stepsReproduce;
 	}
 	public void setStepsReproduce(String stepsReproduce) {
@@ -223,9 +208,6 @@ public class BugManage{
 		this.closeId = closeId;
 	}
 	public String getSeriousDegree() {
-		if(seriousDegree==null||"null".equals(seriousDegree)){
-			return "";
-		}
 		return seriousDegree;
 	}
 	public void setSeriousDegree(String seriousDegree) {
@@ -244,9 +226,6 @@ public class BugManage{
 		this.caseId = caseId;
 	}
 	public String getBugDescribe() {
-		if(bugDescribe==null||"null".equals(bugDescribe)){
-			return "";
-		}
 		return bugDescribe;
 	}
 	public void setBugDescribe(String bugDescribe) {
