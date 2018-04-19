@@ -7,10 +7,10 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-public class ProjectBudget implements Serializable{
-    
+public class ProjectBudget implements Serializable {
+
     private static final long serialVersionUID = 1L;
-    
+
     /**
      * 预算id
      */

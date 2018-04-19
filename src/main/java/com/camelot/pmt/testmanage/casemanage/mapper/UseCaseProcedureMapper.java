@@ -21,6 +21,6 @@ public interface UseCaseProcedureMapper {
     int updateByPrimaryKey(UseCaseProcedure record);
 
     int insertBatch(List<UseCaseProcedure> list);
-    
-   List<UseCaseProcedure> selectByUseCaseId(long useCaseId);
+
+    List<UseCaseProcedure> selectByUseCaseId(long useCaseId);
 }

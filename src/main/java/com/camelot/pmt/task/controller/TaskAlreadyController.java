@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 
-
 @RestController
 @RequestMapping("/task/taskAlready")
 @Api(value = "我的工作台-我的已办-接口", description = "我的工作台-我的已办-接口")
@@ -30,20 +29,17 @@ public class TaskAlreadyController {
     @Autowired
     private TaskRunningService taskRunningService;
 
-
-
     /**
      *
      * @Title: queryUserAll @Description: TODO查询所有已完成的任务 @param @return @return
-     *         JSONObject @throws
-     *         myp
+     *         JSONObject @throws myp
      */
     @ApiOperation(value = "查询所有已完成的任务", notes = "查询所有已完成的任务")
     @RequestMapping(value = "/queryTaskAlready", method = RequestMethod.GET)
     @ApiImplicitParams({
             @ApiImplicitParam(name = "page", value = "页码", required = true, paramType = "query", dataType = "int"),
-            @ApiImplicitParam(name = "rows", value = "每页数量", required = true, paramType = "query", dataType = "int")})
-    public JSONObject queryTaskAlready(int page , int rows) {
+            @ApiImplicitParam(name = "rows", value = "每页数量", required = true, paramType = "query", dataType = "int") })
+    public JSONObject queryTaskAlready(int page, int rows) {
         String userLoginId = String.valueOf(1);
         ExecuteResult<PageInfo<Map<String, Object>>> result = new ExecuteResult<PageInfo<Map<String, Object>>>();
         try {
@@ -82,42 +78,34 @@ public class TaskAlreadyController {
         }
     }
 
-
     /**
      *
-     * @Title: updateTaskAlreadyToRuning
-     * @Description: TODO(我的已完成任务转为正在进行)   重做功能
-     * @param @param taskId
-     * @param @return    设定文件
-     * @return JSONObject    返回类型
-     * @throws
+     * @Title: updateTaskAlreadyToRuning @Description: TODO(我的已完成任务转为正在进行)
+     *         重做功能 @param @param taskId @param @return 设定文件 @return JSONObject
+     *         返回类型 @throws
      */
     @ApiOperation(value = "我的已完成任务转为正在进行、重做功能", notes = "我的已完成任务转为正在进行、重做功能")
     @RequestMapping(value = "/updateTaskAlreadyToRunning", method = RequestMethod.POST)
     public JSONObject updateTaskAlreadyToRunning(
-            @ApiParam(name = "id", value = "任务ID", required = true) @RequestParam(required = true) Long id){
+            @ApiParam(name = "id", value = "任务ID", required = true) @RequestParam(required = true) Long id) {
         ExecuteResult<String> result = new ExecuteResult<String>();
         try {
             Long userLoginId = Long.valueOf(1);
-            //检查用户是否登录，需要去session中获取用户登录信息
-            if(StringUtils.isEmpty(userLoginId)){
+            // 检查用户是否登录，需要去session中获取用户登录信息
+            if (StringUtils.isEmpty(userLoginId)) {
                 return ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
             }
-            //更新我的任务为关闭
+            // 更新我的任务为关闭
             result = taskAlreadyService.updateTaskAlreadyToRunning(id);
-            //判断是否成功
-            if(result.isSuccess()){
-                return ApiResponse.jsonData(APIStatus.OK_200,result.getResult());
+            // 判断是否成功
+            if (result.isSuccess()) {
+                return ApiResponse.jsonData(APIStatus.OK_200, result.getResult());
             }
             return ApiResponse.jsonData(APIStatus.ERROR_500, result.getResult());
-        }catch (Exception e) {
-            //异常
-            return ApiResponse.jsonData(APIStatus.ERROR_500,e.getMessage());
+        } catch (Exception e) {
+            // 异常
+            return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
         }
     }
-
-
-
-
 
 }

@@ -1,6 +1,7 @@
 package com.camelot.pmt.filemanage.model;
 
 import java.util.Date;
+
 /*
 张战
  */
@@ -13,11 +14,11 @@ public class FileManage {
 
     private String fileAddress;
 
-    private Long  createUserId;
+    private Long createUserId;
 
     private Date createTime;
 
-    private Long   modifyUserId;
+    private Long modifyUserId;
 
     private Date modifyTime;
 
@@ -124,19 +125,9 @@ public class FileManage {
 
     @Override
     public String toString() {
-        return "FileManage{" +
-                "id=" + id +
-                ", groupId=" + groupId +
-                ", fileTitle='" + fileTitle + '\'' +
-                ", fileAddress='" + fileAddress + '\'' +
-                ", createUserId=" + createUserId +
-                ", createTime=" + createTime +
-                ", modifyUserId=" + modifyUserId +
-                ", modifyTime=" + modifyTime +
-                ", delFlag='" + delFlag + '\'' +
-                ", currentPage=" + currentPage +
-                ", pageSize=" + pageSize +
-                ", indexPage=" + indexPage +
-                '}';
+        return "FileManage{" + "id=" + id + ", groupId=" + groupId + ", fileTitle='" + fileTitle + '\''
+                + ", fileAddress='" + fileAddress + '\'' + ", createUserId=" + createUserId + ", createTime="
+                + createTime + ", modifyUserId=" + modifyUserId + ", modifyTime=" + modifyTime + ", delFlag='" + delFlag
+                + '\'' + ", currentPage=" + currentPage + ", pageSize=" + pageSize + ", indexPage=" + indexPage + '}';
     }
 }

@@ -37,16 +37,16 @@ public class TaskRunningController {
     /**
      * 查询所有正在进行的任务
      *
-     * @param
-     *      int page， int rows
+     * @param int
+     *            page， int rows
      * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
     @ApiOperation(value = "查询所有正在进行的任务", notes = "查询所有正在进行的任务")
     @RequestMapping(value = "/queryTaskRunning", method = RequestMethod.GET)
     @ApiImplicitParams({
             @ApiImplicitParam(name = "page", value = "页码", required = true, paramType = "query", dataType = "int"),
-            @ApiImplicitParam(name = "rows", value = "每页数量", required = true, paramType = "query", dataType = "int")})
-    public JSONObject queryTaskRunning(int page , int rows) {
+            @ApiImplicitParam(name = "rows", value = "每页数量", required = true, paramType = "query", dataType = "int") })
+    public JSONObject queryTaskRunning(int page, int rows) {
         String userLoginId = String.valueOf(1);
         ExecuteResult<PageInfo<Task>> result = new ExecuteResult<PageInfo<Task>>();
         try {
@@ -60,11 +60,11 @@ public class TaskRunningController {
         }
     }
 
-
     /**
      * 根据id查询单个任务明细
      *
-     * @param Long id
+     * @param Long
+     *            id
      * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
     @ApiOperation(value = "根据id查询单个任务明细", notes = "根据id查询单个任务明细")
@@ -86,56 +86,57 @@ public class TaskRunningController {
     /**
      * 我的任务转为关闭
      *
-     * @param Long id
+     * @param Long
+     *            id
      * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
     @ApiOperation(value = "我的任务转为关闭", notes = "我的任务转为关闭")
     @RequestMapping(value = "/updateTaskToClose", method = RequestMethod.GET)
     public JSONObject updateTaskToClose(
-            @ApiParam(name = "id", value = "任务标识号", required = true) @RequestParam(required = true) Long id){
+            @ApiParam(name = "id", value = "任务标识号", required = true) @RequestParam(required = true) Long id) {
         ExecuteResult<String> result = new ExecuteResult<String>();
         try {
             Long userLoginId = Long.valueOf(1);
-            //检查用户是否登录，需要去session中获取用户登录信息
-            if(StringUtils.isEmpty(userLoginId)){
+            // 检查用户是否登录，需要去session中获取用户登录信息
+            if (StringUtils.isEmpty(userLoginId)) {
                 return ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
             }
-            //更新我的任务为关闭
+            // 更新我的任务为关闭
             result = taskRunningService.updateRunningToClose(id);
-            //判断是否成功
-            if(result.isSuccess()){
-                return ApiResponse.jsonData(APIStatus.OK_200,result.getResult());
+            // 判断是否成功
+            if (result.isSuccess()) {
+                return ApiResponse.jsonData(APIStatus.OK_200, result.getResult());
             }
             return ApiResponse.jsonData(APIStatus.ERROR_500, result.getResult());
-        }catch (Exception e) {
-            //异常
-            return ApiResponse.jsonData(APIStatus.ERROR_500,e.getMessage());
+        } catch (Exception e) {
+            // 异常
+            return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
         }
     }
-
 
     /**
      * 我的正在进行任务转为已完成、实现完成功能
      *
-     * @param Long id
+     * @param Long
+     *            id
      * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
     @ApiOperation(value = "我的正在进行任务转为已完成、实现完成功能", notes = "我的正在进行任务转为已完成、实现完成功能")
     @RequestMapping(value = "/updateTaskRunningToAlready", method = RequestMethod.POST)
     public JSONObject updateTaskRunningToAlready(
-            @ApiParam(name = "id", value = "任务标识号", required = true) @RequestParam(required = true) Long id){
+            @ApiParam(name = "id", value = "任务标识号", required = true) @RequestParam(required = true) Long id) {
         ExecuteResult<String> result = new ExecuteResult<String>();
         try {
-            //更新我的正在进行任务为完成
+            // 更新我的正在进行任务为完成
             result = taskRunningService.updateRunningToAlready(id);
-            //判断是否成功
-            if(result.isSuccess()){
-                return ApiResponse.jsonData(APIStatus.OK_200,result.getResult());
+            // 判断是否成功
+            if (result.isSuccess()) {
+                return ApiResponse.jsonData(APIStatus.OK_200, result.getResult());
             }
             return ApiResponse.jsonData(APIStatus.ERROR_500, result.getResult());
-        }catch (Exception e) {
-            //异常
-            return ApiResponse.jsonData(APIStatus.ERROR_500,e.getMessage());
+        } catch (Exception e) {
+            // 异常
+            return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
         }
     }
 

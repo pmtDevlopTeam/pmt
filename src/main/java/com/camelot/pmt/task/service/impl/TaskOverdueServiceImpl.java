@@ -37,98 +37,97 @@ public class TaskOverdueServiceImpl implements TaskOverdueService {
     private static final Logger LOGGER = LoggerFactory.getLogger(TaskOverdueServiceImpl.class);
 
     /**
-     * 查询所有逾期任务+分页   
+     * 查询所有逾期任务+分页
      */
     @Override
-    public ExecuteResult<PageInfo<Map<String,Object>>> queryOverdueTask(Integer page, Integer rows) {
-        ExecuteResult<PageInfo<Map<String,Object>>> result = new ExecuteResult<PageInfo<Map<String,Object>>>();
+    public ExecuteResult<PageInfo<Map<String, Object>>> queryOverdueTask(Integer page, Integer rows) {
+        ExecuteResult<PageInfo<Map<String, Object>>> result = new ExecuteResult<PageInfo<Map<String, Object>>>();
         try {
-        	//分页初始化
-        	PageHelper.startPage(page,rows);
-            List<Map<String,Object>> list = taskMapper.queryOverdueTask();
+            // 分页初始化
+            PageHelper.startPage(page, rows);
+            List<Map<String, Object>> list = taskMapper.queryOverdueTask();
             // 如果没有查询到数据，不继续进行
-            if (CollectionUtils.isEmpty(list)) {                    
-               PageInfo<Map<String,Object>> pageInfo = new PageInfo<>();
+            if (CollectionUtils.isEmpty(list)) {
+                PageInfo<Map<String, Object>> pageInfo = new PageInfo<>();
                 result.setResult(pageInfo);
                 return result;
             }
-            PageInfo<Map<String,Object>> pageInfo = new PageInfo<>(list);
+            PageInfo<Map<String, Object>> pageInfo = new PageInfo<>(list);
             result.setResult(pageInfo);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
         return result;
     }
+
     /**
      * 查询延期任务详情
      */
-	@Override
-	public ExecuteResult<Map<String,Object>> queryOverdueTaskDetailByTaskId(String taskId) {
-		 ExecuteResult<Map<String,Object>> result = new ExecuteResult<Map<String,Object>>();
-	        try {
-	            if (!taskId.equals("") && !taskId.equals("0")) {
-	            	Map<String,Object> queryResult = taskMapper.queryOverdueTaskDetailByTaskId(taskId);
-	                result.setResult(queryResult);
-	                return result;
-	            }
-	            result.addErrorMessage("查询失败！");
-	        } catch (Exception e) {
-	            LOGGER.error(e.getMessage());
-	            throw new RuntimeException(e);
-	        }
-	        return result;
-	}
-	
-	/**
-	 * 添加延期描述,预计开始时间
-	 */
-	@Override
-	public ExecuteResult<String> insertOverduMessage(Task task) {
-		 ExecuteResult<String> result = new ExecuteResult<String>();
-		     try{
-			     if( task.getId() == 0 || task.getId() == null){
-			     result.setResult("该任务不存在!");
-			     return result;
-			     }
-			     //进行任务的更改(根据id去更改,修改延期描述,修改)
-			     int count = taskMapper.insertOverduMessage(task);
-			      if(count == 0){
-			      result.setResult("更新任务失败!");
-			      return result;
-			      }
-		     }
-		     catch(Exception e){
-			     LOGGER.error(e.getMessage());
-			     throw new RuntimeException(e);
-		     }
-		     result.setResult("更新任务成功!");
-		     return result;
-	}
-	
-	/**
-	 * 根据任务Id修改状态
-	 */
-	@Override
-	public ExecuteResult<String> updateTaskOverdueStatus(String taskId) {
-		 ExecuteResult<String> result = new ExecuteResult<String>();
-	     try{
-		     if(StringUtils.isEmpty(taskId)){
-		     result.setResult("该任务不存在!");
-		     return result;
-		     }
-		     //进行任务的状态更改(根据id去更改任务的状态)
-		      int count = taskMapper.updateTaskOverdueStatus(taskId);
-		      if(count == 0){
-		      result.setResult("修改任务状态失败!");
-		      return result;
-		      }
-	     }
-	     catch(Exception e){
-		     LOGGER.error(e.getMessage());
-		     throw new RuntimeException(e);
-	     }
-	     result.setResult("修改任务状态成功!");
-	     return result;
-	}
+    @Override
+    public ExecuteResult<Map<String, Object>> queryOverdueTaskDetailByTaskId(String taskId) {
+        ExecuteResult<Map<String, Object>> result = new ExecuteResult<Map<String, Object>>();
+        try {
+            if (!taskId.equals("") && !taskId.equals("0")) {
+                Map<String, Object> queryResult = taskMapper.queryOverdueTaskDetailByTaskId(taskId);
+                result.setResult(queryResult);
+                return result;
+            }
+            result.addErrorMessage("查询失败！");
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+        return result;
+    }
+
+    /**
+     * 添加延期描述,预计开始时间
+     */
+    @Override
+    public ExecuteResult<String> insertOverduMessage(Task task) {
+        ExecuteResult<String> result = new ExecuteResult<String>();
+        try {
+            if (task.getId() == 0 || task.getId() == null) {
+                result.setResult("该任务不存在!");
+                return result;
+            }
+            // 进行任务的更改(根据id去更改,修改延期描述,修改)
+            int count = taskMapper.insertOverduMessage(task);
+            if (count == 0) {
+                result.setResult("更新任务失败!");
+                return result;
+            }
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+        result.setResult("更新任务成功!");
+        return result;
+    }
+
+    /**
+     * 根据任务Id修改状态
+     */
+    @Override
+    public ExecuteResult<String> updateTaskOverdueStatus(String taskId) {
+        ExecuteResult<String> result = new ExecuteResult<String>();
+        try {
+            if (StringUtils.isEmpty(taskId)) {
+                result.setResult("该任务不存在!");
+                return result;
+            }
+            // 进行任务的状态更改(根据id去更改任务的状态)
+            int count = taskMapper.updateTaskOverdueStatus(taskId);
+            if (count == 0) {
+                result.setResult("修改任务状态失败!");
+                return result;
+            }
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+        result.setResult("修改任务状态成功!");
+        return result;
+    }
 
 }

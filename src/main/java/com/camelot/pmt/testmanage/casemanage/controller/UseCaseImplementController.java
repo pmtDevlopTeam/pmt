@@ -28,7 +28,8 @@ public class UseCaseImplementController {
 
     @ApiOperation(value = "新增执行信息")
     @PostMapping
-    public ActionBean add(HttpServletRequest request, @RequestBody @ApiParam(value = "useCaseImplement", required = true) UseCaseImplement useCaseImplement) {
+    public ActionBean add(HttpServletRequest request,
+            @RequestBody @ApiParam(value = "useCaseImplement", required = true) UseCaseImplement useCaseImplement) {
         ActionBean actionBean = new ActionBean();
         try {
             User user = (User) request.getSession().getAttribute("user");
@@ -45,8 +46,7 @@ public class UseCaseImplementController {
 
     @ApiOperation(value = "根据测试用例ID查询执行信息")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "useCaseId", value = "测试用例ID", required = true, paramType = "query", dataType = "Long")
-    })
+            @ApiImplicitParam(name = "useCaseId", value = "测试用例ID", required = true, paramType = "query", dataType = "Long") })
     @GetMapping
     public ActionBean findByUseCaseId(Long useCaseId) {
         ActionBean actionBean = new ActionBean();

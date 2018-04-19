@@ -22,26 +22,26 @@ import java.util.Map;
 @Service
 public class MenuServiceImpl implements MenuService {
 
-	public final static String PARENTID = "0";
+    public final static String PARENTID = "0";
 
     @Autowired
     MenuMapper menuMapper;
 
     @Override
     public boolean addMenu(Menu menu) {
-    	menu = createMenuModel(menu);
-        return menuMapper.addMenu(menu) == 1?true:false;
+        menu = createMenuModel(menu);
+        return menuMapper.addMenu(menu) == 1 ? true : false;
     }
 
     @Override
     public boolean deleteMenuByMenuId(String menuId) {
-        return menuMapper.deleteMenuByMenuId(menuId) == 1?true:false;
+        return menuMapper.deleteMenuByMenuId(menuId) == 1 ? true : false;
     }
 
     @Override
     public boolean updateMenuByMenuId(Menu menu) {
-    	menu = updateMenuModel(menu);
-        return menuMapper.updateMenuByMenuId(menu) == 1?true:false;
+        menu = updateMenuModel(menu);
+        return menuMapper.updateMenuByMenuId(menu) == 1 ? true : false;
     }
 
     @Override
@@ -74,8 +74,8 @@ public class MenuServiceImpl implements MenuService {
         return list;
     }
 
-	@Override
-	public List<Tree<Menu>> querySubMenuListByMenuId(String menuId) {
+    @Override
+    public List<Tree<Menu>> querySubMenuListByMenuId(String menuId) {
         List<Tree<Menu>> trees = new ArrayList<Tree<Menu>>();
         List<Tree<Menu>> list = null;
         List<Menu> queryAllMenu = menuMapper.queryAllMenuList();
@@ -97,38 +97,38 @@ public class MenuServiceImpl implements MenuService {
             list = BuildTree.buildList(trees, menuId);
         }
         return list;
-	}
+    }
 
-	private Menu createMenuModel(Menu menu) {
-		menu.setMenuId(UUIDUtil.getUUID());
+    private Menu createMenuModel(Menu menu) {
+        menu.setMenuId(UUIDUtil.getUUID());
         if (menu.getState() != null) {
         } else {
-        	menu.setState(BaseState.ZERO);
+            menu.setState(BaseState.ZERO);
         }
-		long date = new Date().getTime();
-		menu.setCreateTime(new Date(date));
-		menu.setModifyTime(new Date(date));
-		User user = (User) ShiroUtils.getSessionAttribute("user");
-		if(user != null) {
-			menu.setCreateUserId(user.getUserId());
-			menu.setModifyUserId(user.getUserId());
-		}
-		return menu;
-	}
-	
-	private Menu updateMenuModel(Menu menu) {
-		menu.setMenuId(UUIDUtil.getUUID());
+        long date = new Date().getTime();
+        menu.setCreateTime(new Date(date));
+        menu.setModifyTime(new Date(date));
+        User user = (User) ShiroUtils.getSessionAttribute("user");
+        if (user != null) {
+            menu.setCreateUserId(user.getUserId());
+            menu.setModifyUserId(user.getUserId());
+        }
+        return menu;
+    }
+
+    private Menu updateMenuModel(Menu menu) {
+        menu.setMenuId(UUIDUtil.getUUID());
         if (menu.getState() != null) {
         } else {
-        	menu.setState(BaseState.ZERO);
+            menu.setState(BaseState.ZERO);
         }
-		long date = new Date().getTime();
-		menu.setModifyTime(new Date(date));
-		User user = (User) ShiroUtils.getSessionAttribute("user");
-		if(user != null) {
-			menu.setModifyUserId(user.getUserId());
-		}
-		return menu;
-	}
+        long date = new Date().getTime();
+        menu.setModifyTime(new Date(date));
+        User user = (User) ShiroUtils.getSessionAttribute("user");
+        if (user != null) {
+            menu.setModifyUserId(user.getUserId());
+        }
+        return menu;
+    }
 
 }

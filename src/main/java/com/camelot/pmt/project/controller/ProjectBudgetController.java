@@ -41,7 +41,7 @@ import springfox.documentation.annotations.ApiIgnore;
 @RequestMapping(value = "/project/pojectbudget")
 public class ProjectBudgetController {
 
-    //日志
+    // 日志
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
@@ -49,8 +49,10 @@ public class ProjectBudgetController {
 
     /**
      * 添加项目预算信息
-     *@param  ProjectBudget projectBudget 
-     *@return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
+     * 
+     * @param ProjectBudget
+     *            projectBudget
+     * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
     @ApiOperation(value = "添加项目预算", notes = "添加预算")
     @ApiImplicitParams({
@@ -63,7 +65,7 @@ public class ProjectBudgetController {
     @PostMapping("/addBudget")
     public JSONObject addBudget(@ApiIgnore ProjectBudget projectBudget) {
         try {
-            if(null == projectBudget){
+            if (null == projectBudget) {
                 return ApiResponse.errorPara("请求参数异常");
             }
             User user = (User) ShiroUtils.getSessionAttribute("user");
@@ -82,11 +84,13 @@ public class ProjectBudgetController {
             return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
         }
     }
-    
+
     /**
      * 修改项目预算
-     *@param  ProjectBudget projectBudget
-     *@return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
+     * 
+     * @param ProjectBudget
+     *            projectBudget
+     * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
     @ApiOperation(value = "修改项目预算", notes = "修改项目预算")
     @ApiImplicitParams({
@@ -99,7 +103,7 @@ public class ProjectBudgetController {
     @PostMapping("/updateBudget")
     public JSONObject updateBudget(@ApiIgnore ProjectBudget projectBudget) {
         try {
-            if(null == projectBudget){
+            if (null == projectBudget) {
                 return ApiResponse.errorPara("请求参数异常");
             }
             User user = (User) ShiroUtils.getSessionAttribute("user");
@@ -120,14 +124,16 @@ public class ProjectBudgetController {
 
     /**
      * 查询项目预算接口(get)
-     *@param  Long projectId
-     *@return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
+     * 
+     * @param Long
+     *            projectId
+     * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
     @ApiOperation(value = "根据projectId查询单个项目预算", notes = "查询单个项目预算")
     @GetMapping(value = "/queryBudgetByProjectId")
     public JSONObject queryUserByUserId(@RequestParam(value = "projectId", required = true) Long projectId) {
         try {
-            if((null == projectId) || (0 == projectId)){
+            if ((null == projectId) || (0 == projectId)) {
                 return ApiResponse.errorPara("请求参数异常");
             }
             ProjectBudget projectBudget = projectBudgetService.queryBudgeByProjectId(projectId);
@@ -140,8 +146,10 @@ public class ProjectBudgetController {
 
     /**
      * 查询项目预算
-     *@param  Long projectId
-     *@return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
+     * 
+     * @param Long
+     *            projectId
+     * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
     @ApiOperation(value = "根据项目id查询项目预算", notes = "查询单个项目预算")
     @GetMapping("/queryBudget")
@@ -160,18 +168,20 @@ public class ProjectBudgetController {
     }
 
     /**
-     *查询项目结项
-     *@param  Long projectId
-     *@return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
+     * 查询项目结项
+     * 
+     * @param Long
+     *            projectId
+     * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
     @ApiOperation(value = "根据项目id查询项目结项", notes = "查询单个项目结项")
     @GetMapping("/queryProjectEndById")
     public JSONObject queryProjectEnd(@RequestParam(value = "projectId", required = true) Long projectId) {
         try {
-            if (("".equals(projectId))||(0==projectId)) {
+            if (("".equals(projectId)) || (0 == projectId)) {
                 return ApiResponse.errorPara("项目id为空");
             }
-            Map<String,Object> fileList = projectBudgetService.queryProjectEndById(projectId);
+            Map<String, Object> fileList = projectBudgetService.queryProjectEndById(projectId);
             return ApiResponse.success(fileList);
         } catch (Exception e) {
             logger.error(e.getMessage());

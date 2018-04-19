@@ -84,15 +84,17 @@ public interface ProjectBudgetMapper {
 
     /**
      * 查询项目下所有文件组
-     *@param
-     *@return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
+     * 
+     * @param
+     * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
     List<Map<String, Object>> queryFileGroup(Long projectId);
 
     /**
      * 查询该文件组下所有文件
-     *@param
-     *@return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
+     * 
+     * @param
+     * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
     List<Map<String, Object>> queryFile(Long groupId);
 

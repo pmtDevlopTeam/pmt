@@ -80,9 +80,6 @@
 		<include refid="Blob_Column_List" />
 		from
 		project_main
-		<if test="page!=null">
-			<include refid="pagination_tail" />
-		</if>
 	</select>
 	<!-- 分页公共sql -->
 	<sql id="pagination_tail">
@@ -220,9 +217,6 @@
 		<trim prefix="set" suffixOverrides=",">
 			<if test="userId != null">
 				user_id = #{userId,jdbcType=VARCHAR},
-			</if>
-			<if test="projectNum != null">
-				project_num = #{projectNum,jdbcType=CHAR},
 			</if>
 			<if test="projectName != null">
 				project_name = #{projectName,jdbcType=VARCHAR},

@@ -59,7 +59,8 @@ public class UseCaseImplementServiceImpl implements UseCaseImplementService {
                 break;
             }
         }
-        if (useCaseImplement.getImplementResult() == null) useCaseImplement.setImplementResult("通过");
+        if (useCaseImplement.getImplementResult() == null)
+            useCaseImplement.setImplementResult("通过");
         useCaseImplementMapper.insertSelective(useCaseImplement);
 
         // mybatis返回主键
@@ -74,7 +75,8 @@ public class UseCaseImplementServiceImpl implements UseCaseImplementService {
         useCaseProcedureImplementMapper.insertBatch(list);
 
         // 更新测试用例的执行人和执行时间
-        if (useCase != null) useCaseMapper.updateByPrimaryKeySelective(useCase);
+        if (useCase != null)
+            useCaseMapper.updateByPrimaryKeySelective(useCase);
     }
 
     @Override

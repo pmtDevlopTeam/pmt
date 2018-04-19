@@ -106,7 +106,6 @@ public class Demand {
      */
     private String closeReason;
 
-
     /**
      * 需求id
      * 

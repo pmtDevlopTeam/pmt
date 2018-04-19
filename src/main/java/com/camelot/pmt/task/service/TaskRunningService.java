@@ -11,7 +11,7 @@ import java.util.Map;
 
 /**
  * @author muyuanpei
- * @date 2018/4/10    15:19
+ * @date 2018/4/10 15:19
  */
 public interface TaskRunningService {
 
@@ -21,8 +21,7 @@ public interface TaskRunningService {
      * @author myp
      * @since 2018-04-08
      */
-    ExecuteResult<PageInfo<Task>> queryTaskRunning(int page , int rows, String id);
-
+    ExecuteResult<PageInfo<Task>> queryTaskRunning(int page, int rows, String id);
 
     /**
      * 根据id查询任务
@@ -47,7 +46,6 @@ public interface TaskRunningService {
      * @since 2018-04-08
      */
     ExecuteResult<String> updateRunningToClose(Long id);
-
 
     /**
      * 修改任务完成接口

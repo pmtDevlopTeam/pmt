@@ -9,7 +9,6 @@ import com.camelot.pmt.project.model.ProjectUserShow;
 
 public interface ProjectUserService {
 
-
     /**
      * 项目添加成员
      * 
@@ -24,7 +23,7 @@ public interface ProjectUserService {
      * @return
      */
     void confirmUser(ProjectUser pu);
-    
+
     /**
      * 项目关闭，将成员清除出项目（暂时不用）
      * 
@@ -34,14 +33,14 @@ public interface ProjectUserService {
      * @return
      */
     int clearUser(Long projectId, String userId, String userStatus);
-    
+
     /**
      * 将人员移出项目，状态改为暂离
      * 
      * @param map
      */
     void clearUser(Map<String, Object> map);
-    
+
     /**
      * 查询项目成员
      * 
@@ -49,7 +48,6 @@ public interface ProjectUserService {
      * @return
      */
     List<ProjectUserShow> searchUserByProjectId(Long projectId);
-    
 
     /**
      * 条件查询
@@ -69,6 +67,7 @@ public interface ProjectUserService {
 
     /**
      * 获取用户信息
+     * 
      * @return
      */
     public String getLoginUser();
