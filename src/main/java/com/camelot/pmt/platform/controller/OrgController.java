@@ -1,6 +1,7 @@
 package com.camelot.pmt.platform.controller;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -38,14 +39,12 @@ import springfox.documentation.annotations.ApiIgnore;
 /**
  * @author pmt
  * @Description: 基础平台-组织管理管理接口
- * 注意：所有方法按照增删改查顺序添加
  * @date 2018-04-11
  */
 @RestController
 @RequestMapping(value = "/platform/org")
 @Api(value = "组织机构管理接口", description = "组织机构管理接口")
 public class OrgController {
-
 	//日志
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	@Autowired
@@ -59,17 +58,13 @@ public class OrgController {
 	@RequestMapping(value = "/queryOrgByOrgId", method = RequestMethod.POST)
 	public JSONObject queryOrgByOrgId(
 			@ApiParam(value = "orgId", required = true) @RequestParam(required = true) String orgId) {
-		ExecuteResult<Org> result = new ExecuteResult<Org>();
 		try {
 			if (StringUtils.isEmpty(orgId)) {
                 ApiResponse.jsonData(APIStatus.ERROR_400);
             }
-			result = orgService.queryOrgByOrgId(orgId);
-			if (result.isSuccess()) {
-				return ApiResponse.success(result.getResult());
-			}
-			return ApiResponse.error();
+				return ApiResponse.success(orgService.queryOrgByOrgId(orgId));
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
 		}
 	}
@@ -78,21 +73,19 @@ public class OrgController {
 	 * @param orgId 
 	 * @return List<Org>
 	 */
-	@ApiOperation(value = "根据parentId查询子部门机构", notes = "查询子部门机构")
+	@ApiOperation(value = "根据parentId查询子部门机构接口", notes = "查询本部门以及孩子部门机构")
 	@RequestMapping(value = "/queryOrgAndChildrenByOrgId", method = RequestMethod.POST)
 	public JSONObject queryOrgAndChildrenByOrgtId(
 			@ApiParam(value = "orgId", required = true) @RequestParam(required = true) String orgId) {
-		ExecuteResult<List<Tree<Org>>> result = new ExecuteResult<List<Tree<Org>>>();
+		List<Tree<Org>> result = new ArrayList<Tree<Org>>();
 		try {
 			if (StringUtils.isEmpty(orgId)) {
                 ApiResponse.jsonData(APIStatus.ERROR_400);
             }
 			result = orgService.queryOrgAndChildrenById(orgId);
-			if (result.isSuccess()) {
-				return ApiResponse.success(result.getResult());
-			}
-			return ApiResponse.error();
+				return ApiResponse.success(result);
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
 		}
 	}
@@ -105,14 +98,12 @@ public class OrgController {
 	@RequestMapping(value = "/queryOrgAll", method = RequestMethod.POST)
 	@ResponseBody
 	public JSONObject queryOrgAll() {
-		ExecuteResult<List<Tree<Org>>> result = new ExecuteResult<List<Tree<Org>>>();
+		List<Tree<Org>> result = new ArrayList<Tree<Org>>();
 		try {
 			result = orgService.queryAllOrgs();
-			if (result.isSuccess()) {
-				return ApiResponse.success(result.getResult());
-			}
-			return ApiResponse.error();
+				return ApiResponse.success(result);
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
 		}
 	}
@@ -121,7 +112,7 @@ public class OrgController {
 	 * 添加部门机构
 	 * @param Org
 	 */
-	@ApiOperation(value = "添加部门机构", notes = "添加部门机构")
+	@ApiOperation(value = "添加部门组织机构接口", notes = "添加部门组织机构")
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "orgname", value = "部门名称", required = true, paramType = "form", dataType = "String"),
 			@ApiImplicitParam(name = "parentId", value = "上级部门", required = true,defaultValue = "0", paramType = "form", dataType = "String"),
@@ -130,22 +121,23 @@ public class OrgController {
 			@ApiImplicitParam(name = "orgCode", value = "部门编号", required = true, paramType = "form", dataType = "String")
 			
 			})
-	@RequestMapping(value = "/creatOrg", method = RequestMethod.POST)
-	public JSONObject creatOrg(@ApiIgnore Org org) {
-		ExecuteResult<String> result = new ExecuteResult<String>();
+	@RequestMapping(value = "/addOrg", method = RequestMethod.POST)
+	public JSONObject addOrg(@ApiIgnore Org org) {
+		String result="";
 		try {
-			/*User user = (User) ShiroUtils.getSessionAttribute("user");
+			User user = (User) ShiroUtils.getSessionAttribute("user");
             if (StringUtils.isEmpty(user.getUserId())) {
                 ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
             }
             org.setCreatUserId(user.getUserId());
-            org.setModifyUserId(user.getUserId());*/
+            org.setModifyUserId(user.getUserId());
             if (StringUtils.isEmpty(org.getOrgId()) && StringUtils.isEmpty(org.getOrgCode()) && StringUtils.isEmpty(org.getOrgname()) && StringUtils.isEmpty(org.getSortNum()) && StringUtils.isEmpty(org.getState())) {
                 ApiResponse.jsonData(APIStatus.ERROR_400);
             }
-			result = orgService.creatOrg(org);
-			return ApiResponse.success(result.getResult());
+			result = orgService.addOrg(org);
+			return ApiResponse.success(result);
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
 		}
 	}
@@ -158,40 +150,36 @@ public class OrgController {
 	@RequestMapping(value = "/deleteOrgByorgId", method = RequestMethod.POST)
 	@ResponseBody
 	public JSONObject deleteOrgByorgId(@ApiIgnore Org org) {
-		ExecuteResult<String> result = new ExecuteResult<String>();
 		try {
+			String result="";
 			if (StringUtils.isEmpty(org.getOrgId())) {
                 ApiResponse.jsonData(APIStatus.ERROR_400);
             }
 			result = orgService.deleteOrgByOrgId(org);
-			if (result.isSuccess()) {
-				return ApiResponse.success(result.getResult());
-			}
-			return ApiResponse.error();
+			return ApiResponse.success(result);
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());	
 		}
 	}
 	/**
 	 * 删除多个子部门机构  递归删除
 	 */
-	@ApiOperation(value = "删除部门本身以及子部门", notes = "删除部门本身以及子部门")
+	@ApiOperation(value = "删除部门本身以及孩子部门", notes = "删除部门本身以及孩子部门")
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "orgId", value = "部门id", required = true, paramType = "query", dataType = "String") })
 	@RequestMapping(value = "/deleteOrgByOrgId", method = RequestMethod.POST)
 	@ResponseBody
 	public JSONObject deleteOrgByOrgId(@ApiIgnore String orgId) {
-		ExecuteResult<String> result = new ExecuteResult<String>();
+		String result="";
 		try {
 			if (StringUtils.isEmpty(orgId)) {
                 ApiResponse.jsonData(APIStatus.ERROR_400);
             }
 			result = orgService.deleteOrgByOrgId(orgId);
-			if (result.isSuccess()) {
-				return ApiResponse.success(result.getResult());
-			}
-			return ApiResponse.error();
+				return ApiResponse.success(result);
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
 		}
 	}
@@ -213,18 +201,22 @@ public class OrgController {
 		})
 	@RequestMapping(value = "/updateOrg", method = RequestMethod.POST)
 	@ResponseBody
-	public JSONObject modifyOrgByOrgId(@ApiIgnore Org org) {
-		ExecuteResult<String> result = new ExecuteResult<String>();
+	public JSONObject updateOrgByOrgId(@ApiIgnore Org org) {
+		String result = "";
 		try {
+			User user = (User) ShiroUtils.getSessionAttribute("user");
+            if (StringUtils.isEmpty(user.getUserId())) {
+                ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
+            }
+            org.setCreatUserId(user.getUserId());
+            org.setModifyUserId(user.getUserId());
 			if (StringUtils.isEmpty(org.getOrgname()) && StringUtils.isEmpty(org.getOrgId()) && StringUtils.isEmpty(org.getOrgCode())) {
                 ApiResponse.jsonData(APIStatus.ERROR_400);
             }
-			result = orgService.modifyOrgByOrgId(org);
-			if (result.isSuccess()) {
-				return ApiResponse.success(result.getResult());
-			}
-			return ApiResponse.error();
+			result = orgService.updateOrgByOrgId(org);
+				return ApiResponse.success(result);
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
 		}
 	}
@@ -232,7 +224,7 @@ public class OrgController {
 	/**
      * <p>Description:[分页查询部门列表]</p>
      * @param  page 页码,rows 每页数量
-     * @return "data": {"total": 总数量,"rows":[查询的结果集],"status": {"code": 200,"message": "请求处理成功."}}
+     * @return JSONObject
      */
     @ApiOperation(value="分页获取部门列表", notes="分页获取部门列表")
     @RequestMapping(value = "/queryOrgsByPage",method = RequestMethod.POST)
@@ -241,14 +233,12 @@ public class OrgController {
     	@ApiImplicitParam(name = "pageSize", value = "每页数量", defaultValue = "10" ,required = true, paramType = "query", dataType = "int")
     })
     public JSONObject queryOrgsByPage(int pageNum,int pageSize){
-    	ExecuteResult<PageInfo> result = new ExecuteResult<PageInfo>();
+    	PageInfo result = new PageInfo();
     	try {
     		result = orgService.queryOrgsByPage(pageNum,pageSize);
-    		if(result.isSuccess()) {
-    			return ApiResponse.success(result.getResult());
-    		}
-    		return ApiResponse.error();
+    			return ApiResponse.success(result);
     	}catch (Exception e) {
+    		logger.error(e.getMessage());
     		return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
     	}
     }
@@ -256,20 +246,18 @@ public class OrgController {
 	 /** 组织机构列表详情(关系到用户 )
 	 * @param OrgToUser
 	 * @return JSONObject
-	 *
+	 * 
 	 **/
     @ApiOperation(value="获取组织机构列表详情(关系到用户 )", notes="获取组织机构列表详情(关系到用户 )")
     @RequestMapping(value = "/queryOrgsDetail",method = RequestMethod.POST)
     
     public JSONObject queryOrgsDetail(){
-    	ExecuteResult<List<OrgToUser>> result = new ExecuteResult<List<OrgToUser>>();
+    	List<OrgToUser> result = new ArrayList<OrgToUser>();
     	try {
     		result = orgService.queryOrgsDetail();
-    		if(result.isSuccess()) {
-    			return ApiResponse.success(result.getResult());
-    		}
-    		return ApiResponse.error();
+    			return ApiResponse.success(result);
     	}catch (Exception e) {
+    		logger.error(e.getMessage());
     		return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
     	}
     }
@@ -286,17 +274,19 @@ public class OrgController {
             @ApiImplicitParam(name = "userIds", value = "用户ids（格式：1,2,3,4）", required = true, paramType = "form", dataType = "string")})
     
     public JSONObject addOrgToUser(@ApiIgnore Org org){
-    	ExecuteResult<String> result = new ExecuteResult<String>();
     	try {
+    		User user = (User) ShiroUtils.getSessionAttribute("user");
+            if (StringUtils.isEmpty(user.getUserId())) {
+                ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
+            }
+            org.setCreatUserId(user.getUserId());
+            org.setModifyUserId(user.getUserId());
     		if (StringUtils.isEmpty(org.getOrgId()) && StringUtils.isEmpty(org.getUserId()) && StringUtils.isEmpty(org.getUserIds())) {
                 return ApiResponse.jsonData(APIStatus.ERROR_400);
             }
-    		result = orgService.addOrgToUser(org);
-    		if(result.isSuccess()) {
-    			return ApiResponse.success(result.getResult());
-    		}
-    		return ApiResponse.error();
+    			return ApiResponse.success(orgService.addOrgToUser(org));
     	}catch (Exception e) {
+    		logger.error(e.getMessage());
     		return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
     	}
 
@@ -308,23 +298,25 @@ public class OrgController {
 	 * 
 	 **/
     @ApiOperation(value = "修改组织机构绑定用户", notes = "组织机构绑定用户")
-    @PostMapping(value = "/modifyOrgToUser")
+    @PostMapping(value = "/updateOrgToUser")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "orgId", value = "部门id", required = true, paramType = "form", dataType = "string"),
             @ApiImplicitParam(name = "userIds", value = "用户ids（格式：1,2,3,4）", required = true, paramType = "form", dataType = "string")})
     
-    public JSONObject modifyOrgToUser(@ApiIgnore Org org){
-    	ExecuteResult<String> result = new ExecuteResult<String>();
+    public JSONObject updateOrgToUser(@ApiIgnore Org org){
     	try {
+    		User user = (User) ShiroUtils.getSessionAttribute("user");
+            if (StringUtils.isEmpty(user.getUserId())) {
+                ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
+            }
+            org.setCreatUserId(user.getUserId());
+            org.setModifyUserId(user.getUserId());
     		if (StringUtils.isEmpty(org.getOrgId()) && StringUtils.isEmpty(org.getUserId()) && StringUtils.isEmpty(org.getUserIds())) {
                 return ApiResponse.jsonData(APIStatus.ERROR_400);
             }
-    		result = orgService.modifyOrgToUser(org);
-    		if(result.isSuccess()) {
-    			return ApiResponse.success(result.getResult());
-    		}
-    		return ApiResponse.error();
+    			return ApiResponse.success(orgService.updateOrgToUser(org));
     	}catch (Exception e) {
+    		logger.error(e.getMessage());
     		return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
     	}
 
@@ -340,18 +332,20 @@ public class OrgController {
             @ApiImplicitParam(name = "orgId", value = "部门id", required = true, paramType = "form", dataType = "string"),
             @ApiImplicitParam(name = "state", value = "部门状态  0（默认）启用 1 停用 2 锁定", required = false, paramType = "form", dataType = "string")})
     
-    public JSONObject modifyOrgByOrgIdAndState(@ApiIgnore Org org){
-    	ExecuteResult<String> result = new ExecuteResult<String>();
+    public JSONObject updateOrgByOrgIdAndState(@ApiIgnore Org org){
     	try {
+    		User user = (User) ShiroUtils.getSessionAttribute("user");
+            if (StringUtils.isEmpty(user.getUserId())) {
+                ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
+            }
+            org.setCreatUserId(user.getUserId());
+            org.setModifyUserId(user.getUserId());
     		if (StringUtils.isEmpty(org.getOrgId()) && StringUtils.isEmpty(org.getState())) {
                 return ApiResponse.jsonData(APIStatus.ERROR_400);
             }
-    		result = orgService.modifyOrgByOrgIdAndState(org);
-    		if(result.isSuccess()) {
-    			return ApiResponse.success(result.getResult());
-    		}
-    		return ApiResponse.error();
+    			return ApiResponse.success(orgService.updateOrgByOrgIdAndState(org));
     	}catch (Exception e) {
+    		logger.error(e.getMessage());
     		return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
     	}
 
@@ -368,17 +362,13 @@ public class OrgController {
             })
     
     public JSONObject queryOrgToUserByOrgId(String orgId){
-    	ExecuteResult<List<User>> result = new ExecuteResult<List<User>>();
     	try {
     		if (StringUtils.isEmpty(orgId)) {
                 return ApiResponse.jsonData(APIStatus.ERROR_400);
             }
-    		result = orgService.queryOrgToUserByOrgId(orgId);
-    		if(result.isSuccess()) {
-    			return ApiResponse.success(result.getResult());
-    		}
-    		return ApiResponse.error();
+    			return ApiResponse.success(orgService.queryOrgToUserByOrgId(orgId));
     	}catch (Exception e) {
+    		logger.error(e.getMessage());
     		return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
     	}
 
@@ -395,24 +385,19 @@ public class OrgController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "orgId", value = "部门id", required = false, paramType = "form", dataType = "string"),
             @ApiImplicitParam(name = "orgCode", value = "部门编号", required = false, paramType = "form", dataType = "string"),
-            @ApiImplicitParam(name = "orgname", value = "部门名称", required = false, paramType = "form", dataType = "string")
+            @ApiImplicitParam(name = "orgname", value = "部门名称", required = false, paramType = "form", dataType = "string"),
+            @ApiImplicitParam(name = "pageNum", value = "页码", defaultValue = "1" ,required = true, paramType = "query", dataType = "int"),
+        	@ApiImplicitParam(name = "pageSize", value = "每页数量", defaultValue = "10" ,required = true, paramType = "query", dataType = "int")
             })
     
-    public JSONObject queryOrgToUser(@ApiIgnore Org org){
-    	ExecuteResult<List<Org>> result = new ExecuteResult<List<Org>>();
+    public JSONObject queryOrgToUser(@ApiIgnore Org org ,int pageNum,int pageSize){
+    	PageInfo result = new PageInfo();
     	try {
-    		if (StringUtils.isEmpty(org.getOrgId()) && StringUtils.isEmpty(org.getOrgCode()) && StringUtils.isEmpty(org.getOrgname())) {
-                return ApiResponse.jsonData(APIStatus.ERROR_400);
-            }
-    		result = orgService.queryOrgByParameters(org);
-    		if(result.isSuccess()) {
-    			return ApiResponse.success(result.getResult());
-    		}
-    		return ApiResponse.error();
+    			return ApiResponse.success(orgService.queryOrgByParameters(org,pageNum,pageSize));
     	}catch (Exception e) {
+    		logger.error(e.getMessage());
     		return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
     	}
-
     }
     /** 组织机构   根据orgId查看详情(关系到用户 )
 	 * @param OrgToUser
@@ -421,17 +406,13 @@ public class OrgController {
     @ApiOperation(value="组织机构   根据orgId查看详情", notes="组织机构   根据orgId查看详情")
     @RequestMapping(value = "/queryOrgsDetailByOrgId",method = RequestMethod.POST)
     public JSONObject queryOrgsDetail(String orgId){
-    	ExecuteResult<List<OrgToUser>> result = new ExecuteResult<List<OrgToUser>>();
     	try {
     		if (StringUtils.isEmpty(orgId)) {
                 return ApiResponse.jsonData(APIStatus.ERROR_400);
             }
-    		result = orgService.queryOrgsDetailByOrgId(orgId);
-    		if(result.isSuccess()) {
-    			return ApiResponse.success(result.getResult());
-    		}
-    		return ApiResponse.success(result.getResult());
+    			return ApiResponse.success(orgService.queryOrgsDetailByOrgId(orgId));
     	}catch (Exception e) {
+    		logger.error(e.getMessage());
     		return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
     	}
     }

@@ -81,20 +81,20 @@
             <if test="taskParentId != null">
                 task_parent_id = #{taskParentId,jdbcType=BIGINT},
             </if>
-            <if test="projectId != null">
-                project_id = #{projectId,jdbcType=BIGINT},
+            <if test="project != null">
+                project_id = #{project.id,jdbcType=BIGINT},
             </if>
-            <if test="demandId != null">
-                demand_id = #{demandId,jdbcType=BIGINT},
+            <if test="demand != null">
+                demand_id = #{demand.id,jdbcType=BIGINT},
             </if>
             <if test="priority != null">
                 priority = #{priority,jdbcType=CHAR},
             </if>
-            <if test="assignUserId != null">
-                assign_user_id = #{assignUserId,jdbcType=VARCHAR},
+            <if test="assignUser != null">
+                assign_user_id = #{assignUser.userId,jdbcType=VARCHAR},
             </if>
-            <if test="beassignUserId != null">
-                beassign_user_id = #{beassignUserId,jdbcType=VARCHAR},
+            <if test="beassignUser != null">
+                beassign_user_id = #{beassignUser.userId,jdbcType=VARCHAR},
             </if>
             <if test="assignTime != null">
                 assign_time = #{assignTime,jdbcType=TIMESTAMP},
@@ -141,8 +141,8 @@
             <if test="taskMileage != null">
                 task_mileage = #{taskMileage,jdbcType=CHAR},
             </if>
-            <if test="createUserId != null">
-                create_user_id = #{createUserId,jdbcType=VARCHAR},
+            <if test="createUser != null">
+                create_user_id = #{createUser.userId,jdbcType=VARCHAR},
             </if>
             <if test="modifyUserId != null">
                 modify_user_id = #{modifyUserId,jdbcType=VARCHAR},
@@ -293,6 +293,9 @@
     <!--zlh-->
     <!--插入任务-->
     <insert id="insertTask" parameterType="com.camelot.pmt.task.model.Task">
+        <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
         insert into task
         <include refid="sql_add_task_columns"/>
         <include refid="sql_add_task_properties"/>
@@ -309,13 +312,13 @@
         LEFT JOIN project_main p ON t.project_id = p.id
         <where>
             <if test="task.taskType != null">and t.task_type = #{task.taskType}</if>
-            <if test="task.actualEndTime != null">and t.actual_end_time = #{task.actualEndTime}</if>
-            <if test="task.taskName != null">and t.task_name = #{task.taskName}</if>
+            <if test="task.actualEndTime != null">and t.actual_end_time &gt;= #{task.actualEndTime}</if>
+            <if test="task.taskName != null">and t.task_name LIKE "%"#{task.taskName}"%"</if>
             <if test="task.status != null">and t.status = #{task.status}</if>
             <if test="ids != null">
                 and beassign_user_id in
-                <foreach collection="ids" item="id" open="(" close=")" separator=",">
-                   id
+                <foreach collection="ids" item="idd" open="(" close=")" separator=",">
+                    #{idd}
                 </foreach>
             </if>
         </where>
@@ -535,20 +538,15 @@
     </select>
     <!--zsf-->
     <!--查询已完成的任务-->
-    <select id="listTaskAlready" resultType="java.util.Map" parameterType="String">
+    <select id="listTaskAlready" resultMap="BaseResultMap" parameterType="String">
         SELECT
-        ta.id, ta.task_num, ta.task_name, ta.task_parent_id, ta.project_id, ta.demand_id, ta.priority, ta.assign_user_id,
-        ta.beassign_user_id, ta.assign_time, ta.estimate_start_time, ta.estimate_end_time, ta.actual_start_time,
-        ta.actual_end_time, ta.task_type, ta.task_speed, ta.status, ta.node_lv, ta.task_describe, ta.demand_change,
-        ta.delay_describe, ta.estimate_hour, ta.infact_hour, ta.task_mileage, ta.create_user_id, ta.modify_user_id,
-        ta.create_time, ta.modify_time, de.demand_name, de.demand_desc, pro.project_name,pro.project_desc, pl.user_name,
-        pl2.user_name
+        <include refid="selectAllRunningTaskByUserId" />
         FROM task ta
         LEFT JOIN demand de ON ta.demand_id = de.id
         LEFT JOIN project_main pro ON ta.project_id = pro.id
         LEFT JOIN platform_user pl ON ta.assign_user_id = pl.user_id
         LEFT JOIN platform_user pl2 ON ta.beassign_user_id = pl2.user_id
-        WHERE ta.status in ( 2 ,4 ) AND ta.beassign_user_id = #{id}
+        WHERE ta.status in ( 2, 4 ,5 ) AND ta.beassign_user_id = #{id}
         ORDER BY ta.create_time DESC, ta.priority DESC
     </select>
     <!-- zsf-->
@@ -558,6 +556,11 @@
         <foreach collection="list" item="aid" open="(" close=")" separator="or">
             id = #{aid}
         </foreach> AND status = 2
+    </update>
+    <!-- zsf-->
+    <!--提测-->
+    <update id="updateTaskToTest" parameterType="long">
+        UPDATE task SET status = 5 WHERE id = #{id}
     </update>
 
 
@@ -577,7 +580,7 @@
     <update id="insertOverduMessage" parameterType="com.camelot.pmt.task.model.Task">   
     	update task t set 
 		t.estimate_start_time = #{estimateStartTime,jdbcType=TIMESTAMP},
-		t.delay_describe=#{delayDescribe} 
+		t.delay_describe=#{delayDescribe}
 		where t.id = #{id}
     </update>
     

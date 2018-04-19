@@ -149,7 +149,7 @@
         </trim>
     </sql>
     
-    <insert id="createOrg" parameterType="Org" useGeneratedKeys="true" keyProperty="id"  >
+    <insert id="addOrg" parameterType="Org" useGeneratedKeys="true" keyProperty="id"  >
         INSERT INTO platform_org(
             <include refid="add_Column_List"/>
             ) VALUES (
@@ -209,6 +209,7 @@
 	   	  and org_name = #{orgname} 
 	   	</if>
 	   </where> 
+	   order by parent_id asc,sort_num desc
     </select>
     
     
@@ -235,7 +236,7 @@
 	   WHERE parent_id = #{parentId}
     </select>
 
-    <update id="modifyOrgByOrgId" parameterType="Org">
+    <update id="updateOrgByOrgId" parameterType="Org">
         UPDATE platform_org
         <set>
             <if test="orgname != null">
@@ -265,7 +266,7 @@
     </update>
     
     
-    <update id="modifyOrgByOrgIdAndState" parameterType="Org">
+    <update id="updateOrgByOrgIdAndState" parameterType="Org">
         UPDATE platform_org
         <set>
             <if test="state != null">

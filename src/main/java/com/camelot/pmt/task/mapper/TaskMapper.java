@@ -1,7 +1,6 @@
 package com.camelot.pmt.task.mapper;
 
 import com.camelot.pmt.task.model.Task;
-import com.camelot.pmt.task.model.TaskDetail;
 import com.camelot.pmt.task.model.TaskLog;
 import org.apache.ibatis.annotations.Param;
 
@@ -70,13 +69,13 @@ public interface TaskMapper {
      * @description: 根据条件查询任务
      * @return
      */
-    List<Task> queryTaskByTask(@Param("task") Task task, @Param("ids") String[] ids);
+    List<Task> queryTaskByTask(@Param("task") Task task, @Param("ids") List<String> ids);
 
     /**
      * 查询已完成的任务，根据时间和优先级进行排序
      * myp
      * */
-    List<Map<String,Object>> listTaskAlready(String id);
+    List<Task> listTaskAlready(String id);
 
     /**
      * 查询已完成任务总个数 @Title: queryCount @Description: TODO @param @return @return
@@ -366,6 +365,14 @@ public interface TaskMapper {
 	int updateTaskOverdueStatus(String taskId);
 
 
-
-
+    /**
+     * 根据任务Id修改状态
+     * @Title: updateTaskOverdueStatus
+     * @Description: TODO
+     * @param @param taskId
+     * @param @return
+     * @return int
+     * @throws
+     */
+    int updateTaskToTest(Long id);
 }

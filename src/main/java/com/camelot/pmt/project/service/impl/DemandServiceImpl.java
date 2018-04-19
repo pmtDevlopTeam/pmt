@@ -36,6 +36,7 @@ public class DemandServiceImpl implements DemandService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean save(Demand demand, User user) {
+       boolean flag=false;
         try {
             int resultCount = demandMapper.insert(demand);
             if (resultCount > 0) {
@@ -48,11 +49,11 @@ public class DemandServiceImpl implements DemandService {
                 demandOperate.setRunType("01");
                 demandOperateMapper.insert(demandOperate);
             }
-            return true;
+            flag = true;
         } catch (Exception e) {
-            e.printStackTrace();
-            return false;
+            throw  new RuntimeException();
         }
+        return flag;
     }
 
     /**
@@ -84,7 +85,7 @@ public class DemandServiceImpl implements DemandService {
         Demand parantDemand = demandMapper.selectByPrimaryKey(id);
         if (null != parantDemand) {
             Long pid = parantDemand.getPid();
-            if (0 != pid) {
+            if ((null != pid)&&(0 != pid)) {
                 // 说明不是最顶级需求，有父需求
                 Demand parantDemandList = demandMapper.selectByPrimaryKey(pid);// 有待与前端沟通，是否前端传来pid？
                 map.put("parantDemand", parantDemandList);
@@ -101,7 +102,6 @@ public class DemandServiceImpl implements DemandService {
     public ExecuteResult<String> deleteDemandById(Long id) {
         ExecuteResult<String> result = new ExecuteResult<>();
         try {
-
             // 遍历此需求下是否有引用--->查询所有需求父id为id的记录
             List<Demand> demandList = demandMapper.selectByPId(id);
             List<Long> list = new ArrayList<Long>();
@@ -178,12 +178,12 @@ public class DemandServiceImpl implements DemandService {
                 demandOperate.setRunType("02");
                 demandOperateMapper.insert(demandOperate);
             }
-           return true;
+           flag = true;
         } catch (Exception e) {
             logger.error("------需求更新------" + e.getMessage());
-            return false;
+            throw new RuntimeException();
         }
-
+        return flag;
     }
 
     @Override
