@@ -159,4 +159,22 @@
   <select id="queryFile" parameterType="long" resultType="map">
   	select file_title,file_address,modify_time from file_manage where group_id = #{groupId,jdbcType=BIGINT}
   </select>
+  <!--创建项目时，增加预算表信息 -->
+	<insert id="addProjectBudget" parameterType="com.camelot.pmt.project.model.ProjectBudget">
+		insert into
+		project_budget
+		(id, project_id, actual_hours,
+		budgetary_hours, other,
+		create_user_id,
+		create_time, modify_user_id, modify_time
+		)
+		values
+		(#{id,jdbcType=BIGINT}, #{projectId,jdbcType=BIGINT},
+		#{actualHours,jdbcType=INTEGER},
+		#{budgetaryHours,jdbcType=INTEGER},
+		#{other,jdbcType=VARCHAR}, #{createUserId,jdbcType=VARCHAR},
+		#{createTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=VARCHAR},
+		#{modifyTime,jdbcType=TIMESTAMP}
+		)
+	</insert>
 </mapper>
