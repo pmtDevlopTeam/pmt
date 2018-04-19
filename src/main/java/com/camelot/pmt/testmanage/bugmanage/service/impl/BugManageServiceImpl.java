@@ -373,8 +373,8 @@ public class BugManageServiceImpl implements BugManageService {
                }
                if(bugManage.getDesignatedId()!=null){
                	if(bug.getDesignatedId()!=bugManage.getDesignatedId()){
-               		String username = userMapper.selectUserById(bug.getDesignatedId()).getUsername();
-               		String newusername = userMapper.selectUserById(bug.getDesignatedId()).getUsername();
+               		String username = userMapper.queryUserByUserId(bug.getDesignatedId()).getUsername();
+               		String newusername = userMapper.queryUserByUserId(bug.getDesignatedId()).getUsername();
                		operationRecord.append("修改了 指派人 ,旧值为'"+username+"' , 新值为'"+newusername+"'。");
                	}
                }
@@ -448,8 +448,8 @@ public class BugManageServiceImpl implements BugManageService {
                }
                if(bugManage.getSolveId()!=null){
                	if(bug.getSolveId()!=bugManage.getSolveId()){
-               		String username = userMapper.selectUserById(bug.getSolveId()).getUsername();
-               		String newusername = userMapper.selectUserById(bug.getSolveId()).getUsername();
+               		String username = userMapper.queryUserByUserId(bug.getSolveId()).getUsername();
+               		String newusername = userMapper.queryUserByUserId(bug.getSolveId()).getUsername();
                		operationRecord.append("修改了 解决者 ,旧值为'"+username+"' , 新值为'"+newusername+"'。");
                	}
                }
@@ -461,8 +461,8 @@ public class BugManageServiceImpl implements BugManageService {
                }
                if(bugManage.getCloseId()!=null){
                	if(bug.getCloseId()!=bugManage.getCloseId()){
-               		String username = userMapper.selectUserById(bug.getCloseId()).getUsername();
-               		String newusername = userMapper.selectUserById(bug.getCloseId()).getUsername();
+               		String username = userMapper.queryUserByUserId(bug.getCloseId()).getUsername();
+               		String newusername = userMapper.queryUserByUserId(bug.getCloseId()).getUsername();
                		operationRecord.append("修改了 关闭人 ,旧值为'"+username+"' , 新值为'"+newusername+"'。");
                	}
                	
