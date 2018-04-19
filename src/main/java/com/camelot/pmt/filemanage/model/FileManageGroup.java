@@ -16,11 +16,11 @@ public class FileManageGroup {
     private String name;//文件夹名称
     private String fdescribe;//文件夹描述
 
-    private Long  createUserId;//创建人id
+    private String  createUserId;//创建人id
 
     private Date createTime;//创建时间
 
-    private Long modifyUserId;//修改人id
+    private String modifyUserId;//修改人id
 
     private Date modifyTime;//修改时间
 
@@ -30,6 +30,7 @@ public class FileManageGroup {
     private int currentPage;//当前页
     private int pageSize;//每页显示条数
     private List<FileManageGroup> listGroup;//文件夹集合
+
 
     public Long getId() {
         return id;
@@ -71,11 +72,11 @@ public class FileManageGroup {
         this.fdescribe = fdescribe;
     }
 
-    public Long getCreateUserId() {
+    public String getCreateUserId() {
         return createUserId;
     }
 
-    public void setCreateUserId(Long createUserId) {
+    public void setCreateUserId(String createUserId) {
         this.createUserId = createUserId;
     }
 
@@ -87,11 +88,11 @@ public class FileManageGroup {
         this.createTime = createTime;
     }
 
-    public Long getModifyUserId() {
+    public String getModifyUserId() {
         return modifyUserId;
     }
 
-    public void setModifyUserId(Long modifyUserId) {
+    public void setModifyUserId(String modifyUserId) {
         this.modifyUserId = modifyUserId;
     }
 
@@ -151,9 +152,9 @@ public class FileManageGroup {
                 ", projectId=" + projectId +
                 ", name='" + name + '\'' +
                 ", fdescribe='" + fdescribe + '\'' +
-                ", createUserId=" + createUserId +
+                ", createUserId='" + createUserId + '\'' +
                 ", createTime=" + createTime +
-                ", modifyUserId=" + modifyUserId +
+                ", modifyUserId='" + modifyUserId + '\'' +
                 ", modifyTime=" + modifyTime +
                 ", delFlag='" + delFlag + '\'' +
                 ", isfile=" + isfile +

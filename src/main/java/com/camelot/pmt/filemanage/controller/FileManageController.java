@@ -45,18 +45,18 @@ public class FileManageController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "fileTitle", value = "文件标题", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "fileAddress", value = "文件地址", required = false, paramType = "query", dataType = "String"),
-            @ApiImplicitParam(name = "groupId", value = "组id", required = false, paramType = "query", dataType = "String")
+            @ApiImplicitParam(name = "parentId", value = "文件夹父级id", required = false, paramType = "query", dataType = "String")
     })
     @RequestMapping(value = "/addFileManager",method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject addFileManager(HttpServletRequest request, FileManage fileManage){//添加文件
+    public JSONObject addFileManager(HttpServletRequest request, FileManage fileManage,Long parentId){//添加文件
         Boolean b=null;
         try {
-            b = fileManageService.addFileManager(request,fileManage);//添加文件夹
+            b = fileManageService.addFileManager(request,fileManage,parentId);//添加文件夹
             if(b){
                 return ApiResponse.success();
             }
-            return ApiResponse.error("修改异常");
+            return ApiResponse.error("添加异常");
         } catch (Exception e) {
             logger.error(e.getMessage());
             return ApiResponse.jsonData(APIStatus.ERROR_500);
@@ -86,9 +86,7 @@ public class FileManageController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "产出物id", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "groupId", value = "组id", required = false, paramType = "query", dataType = "String"),
-            @ApiImplicitParam(name = "fileTitle", value = "文件标题", required = false, paramType = "query", dataType = "String"),
-            @ApiImplicitParam(name = "createUserId", value = "创建人", required = false, paramType = "query", dataType = "String"),
-            @ApiImplicitParam(name = "createTime", value = "创建时间", required = false, paramType = "query", dataType = "String")
+            @ApiImplicitParam(name = "fileTitle", value = "文件标题", required = false, paramType = "query", dataType = "String")
     })
     @RequestMapping(value = "/updateFileById",method = RequestMethod.POST)
     @ResponseBody
@@ -107,7 +105,7 @@ public class FileManageController {
     }
     @ApiOperation(value = "根据条件查询文件功能", notes = "根据条件查询文件功能")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "产出物id", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "id", value = "组id", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "currentPage", value = "当前页", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "pageSize", value = "分页大小", required = true, paramType = "query", dataType = "String")
     })
@@ -122,19 +120,5 @@ public class FileManageController {
             return ApiResponse.jsonData(APIStatus.ERROR_500);
         }
     }
-    @ApiOperation(value = "查询所有文件", notes = "查询所有文件")
-    @RequestMapping(value = "/queryAllFile",method = RequestMethod.POST)
-    @ResponseBody
-    public JSONObject queryAllFile(){
-        ExecuteResult<List<FileManage>> result = new ExecuteResult<List<FileManage>>();
-        try {
-            result =fileManageService.queryAllFile();//查询文件详细信息
-            if (result.isSuccess()) {
-                return ApiResponse.success(result.getResult());
-            }
-            return ApiResponse.error();
-        } catch (Exception e) {
-            return ApiResponse.error();
-        }
-    }
+
 }

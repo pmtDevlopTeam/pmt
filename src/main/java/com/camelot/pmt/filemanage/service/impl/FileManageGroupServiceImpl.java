@@ -45,13 +45,13 @@ public class FileManageGroupServiceImpl implements FileManageGroupService {
             }
         }
         User user = (User) shiroUtils.getSessionAttribute("user");//获取用户id
-        String userId = user.getUserId();
-        Long aLong = Long.valueOf(userId);
-        if(aLong!=null){
-            Date date = new Date();
-            fileManageGroup.setCreateTime(date);
+        if(user!=null){
+            if(user.getUserId()!=null){
+                Date date = new Date();//获取按当前时间
+                fileManageGroup.setCreateTime(date);
+            }
         }
-        fileManageGroup.setCreateUserId(aLong);
+        fileManageGroup.setCreateUserId(user.getUserId());
         fileManageGroup.setIsfile(0);
         int i = fileManageGroupMapper.insertSelective(fileManageGroup);//添加结果
         Boolean b=true;
@@ -91,12 +91,13 @@ public class FileManageGroupServiceImpl implements FileManageGroupService {
     public Boolean updateFileGroupById(HttpServletRequest request,FileManageGroup fileManageGroup) {//修改文件夹
         Date date = new Date();//修改时间
         User user = (User) shiroUtils.getSessionAttribute("user");//获取用户id
-        String userId = user.getUserId();
-        Long modifyUserID = Long.valueOf(userId);
-        if(modifyUserID!=null){
-            fileManageGroup.setModifyTime(date);
-            fileManageGroup.setModifyUserId(modifyUserID);
+        if(user!=null){
+            if(user.getUserId()!=null){
+                fileManageGroup.setModifyTime(date);
+                fileManageGroup.setModifyUserId(user.getUserId());
+            }
         }
+
         int i = fileManageGroupMapper.updateByPrimaryKeySelective(fileManageGroup);//文件夹修改
         Boolean b=true;
         if(i<=0){

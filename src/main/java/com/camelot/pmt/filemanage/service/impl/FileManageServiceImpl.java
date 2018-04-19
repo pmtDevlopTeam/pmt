@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -37,22 +38,31 @@ public class FileManageServiceImpl implements FileManageService {
     private ShiroUtils shiroUtils;
     @Override
     @Transactional
-    public Boolean addFileManager(HttpServletRequest request, FileManage fileManage) {//文件添加
-        String createUserId = (String) request.getSession().getAttribute("");//从session获取创建者id
-        long l= fileManageMapper.insertSelective(fileManage);//添加结果
-        FileManageGroup group = new FileManageGroup();//新创建组对象
+    public Boolean addFileManager(HttpServletRequest request, FileManage fileManage,Long parentId) {//文件添加
         User user = (User) shiroUtils.getSessionAttribute("user");//获取用户id
-        String userId = user.getUserId();
-        Long createUserId2 = Long.valueOf(userId);
-        if(createUserId2!=null){
-            Date createTime = new Date();//创建时间
-            group.setCreateUserId(createUserId2);//设置创建时间
-            group.setCreateTime(createTime);//
+        FileManageGroup group = new FileManageGroup();//新创建组对象
+        if(user!=null){
+            if(user.getUserId()!=null){
+                Date createTime = new Date();//创建时间
+                group.setCreateUserId(user.getUserId());//设置创建时间
+                group.setCreateTime(createTime);//
+            }
         }
+        group.setParentId(parentId);//获取文件夹父级id
         group.setIsfile(1);//设置文件格式（0，文件夹，1:文件）
         int i = fileManageGroupMapper.insertSelective(group);//添加文件的文件夹
+        Long groupId = group.getId();
+        fileManage.setGroupId(groupId);
+        if(user!=null){
+            if(user.getUserId()!=null){
+                fileManage.setCreateUserId(user.getUserId());
+                Date createTime = new Date();
+                fileManage.setCreateTime(createTime);
+            }
+        }
+        long l= fileManageMapper.insertSelective(fileManage);//添加结果
         Boolean b=true;
-        if(i<=0){
+        if(i<=0||l<=0){
             b=false;
         }
             return  b;
@@ -75,13 +85,14 @@ public class FileManageServiceImpl implements FileManageService {
     @Transactional
     public Boolean updateFileById(HttpServletRequest request,FileManage fileManage) {//文件修改
         User user = (User) shiroUtils.getSessionAttribute("user");//获取用户id
-        String userId = user.getUserId();
-        Long modifyUserId = Long.valueOf(userId);
-        if(modifyUserId!=null){
-            Date modifyTime = new Date();//获取当前时间
-            fileManage.setModifyUserId(modifyUserId);
-            fileManage.setModifyTime(modifyTime);
-        }
+            if(user!=null){
+                String userId = user.getUserId();
+                if(userId!=null){
+                    Date modifyTime = new Date();//获取当前时间
+                    fileManage.setModifyUserId(userId);
+                    fileManage.setModifyTime(modifyTime);
+                }
+            }
         int i = fileManageMapper.updateByPrimaryKeySelective(fileManage);//文件修改
         Boolean b=true;
         if(i<=0){
@@ -97,22 +108,5 @@ public class FileManageServiceImpl implements FileManageService {
             List<FileManage> fileList= fileManageMapper.queryFileByGroupId(fileManageGroup);//文件查询
             PageInfo<FileManage> fileManagePageInfo = new PageInfo<>(fileList);
            return fileManagePageInfo;
-    }
-
-    @Override
-    public ExecuteResult<List<FileManage>> queryAllFile() {
-        ExecuteResult<List<FileManage>> result = new ExecuteResult<List<FileManage>>();
-        try {
-
-            List<FileManage> fileList= fileManageMapper.queryAllFile();//文件查询
-            if (fileList.size() <= 0) {
-                return result;
-            }
-            result.setResult(fileList);
-        } catch (Exception e) {
-            LOGGER.error(e.getMessage());
-            throw new RuntimeException(e);
-        }
-        return result;
     }
 }
