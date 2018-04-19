@@ -30,18 +30,18 @@ public class MenuServiceImpl implements MenuService {
     @Override
     public boolean addMenu(Menu menu) {
     	menu = createMenuModel(menu);
-        return menuMapper.addMenu(menu) == 1?true:false;
+        return menuMapper.addMenu(menu) == 1 ? true:false;
     }
 
     @Override
     public boolean deleteMenuByMenuId(String menuId) {
-        return menuMapper.deleteMenuByMenuId(menuId) == 1?true:false;
+        return menuMapper.deleteMenuByMenuId(menuId) == 1 ? true:false;
     }
 
     @Override
     public boolean updateMenuByMenuId(Menu menu) {
     	menu = updateMenuModel(menu);
-        return menuMapper.updateMenuByMenuId(menu) == 1?true:false;
+        return menuMapper.updateMenuByMenuId(menu) == 1 ? true:false;
     }
 
     @Override
@@ -117,7 +117,6 @@ public class MenuServiceImpl implements MenuService {
 	}
 	
 	private Menu updateMenuModel(Menu menu) {
-		menu.setMenuId(UUIDUtil.getUUID());
         if (menu.getState() != null) {
         } else {
         	menu.setState(BaseState.ZERO);

@@ -39,7 +39,7 @@ public class MenuController {
     /**
      * 根据一个菜单对象 创建一个菜单
      * 
-     * @param Menu menu
+     * @param menu
      * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
     @ApiOperation(value = "创建菜单接口", notes = "创建单个菜单")
