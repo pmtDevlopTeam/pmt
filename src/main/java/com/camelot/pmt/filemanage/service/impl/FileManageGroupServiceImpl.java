@@ -6,11 +6,14 @@ import com.camelot.pmt.filemanage.model.FileManageGroup;
 import com.camelot.pmt.filemanage.service.FileManageGroupService;
 import com.camelot.pmt.common.ApiResponse;
 import com.camelot.pmt.common.ExecuteResult;
+import com.camelot.pmt.platform.model.User;
+import com.camelot.pmt.platform.shiro.ShiroUtils;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -29,7 +32,10 @@ public class FileManageGroupServiceImpl implements FileManageGroupService {
     private FileManageGroupMapper fileManageGroupMapper;
     @Autowired
     private FileManageMapper fileManageMapper;
+    @Autowired
+    private ShiroUtils shiroUtils;
     @Override
+    @Transactional
     public Boolean addFileManagerGroup(HttpServletRequest request, FileManageGroup fileManageGroup) {//添加文件夹
         Long parentId = fileManageGroup.getParentId();
         if(parentId==null){//当添加的文件夹是父节点时
@@ -40,12 +46,15 @@ public class FileManageGroupServiceImpl implements FileManageGroupService {
                 fileManageGroup.setProjectId(null);//如果是子文件夹的时候设置项目id（projectID）为null
             }
         }
-        Long  createId= (Long) request.getSession().getAttribute("  ");//从session获取创建者
-        if(createId!=null){
-            Date date = new Date();
-            fileManageGroup.setCreateTime(date);
+        User user = (User) shiroUtils.getSessionAttribute("user");//获取用户id
+        if(user!=null){
+            if(user.getUserId()!=null){
+                Date date = new Date();//获取按当前时间
+                fileManageGroup.setCreateTime(date);
+            }
+            fileManageGroup.setCreateUserId(user.getUserId());
         }
-        fileManageGroup.setCreateUserId(createId);
+
         fileManageGroup.setIsfile(0);
         int i = fileManageGroupMapper.insertSelective(fileManageGroup);//添加结果
         Boolean b=true;
@@ -56,6 +65,7 @@ public class FileManageGroupServiceImpl implements FileManageGroupService {
     }
 
     @Override
+    @Transactional
     public Boolean deleteFileGroup(FileManageGroup fileManageGroup) {
         Boolean b=null;
             Long id = fileManageGroup.getId();//文件夹id
@@ -82,13 +92,17 @@ public class FileManageGroupServiceImpl implements FileManageGroupService {
     }
 
     @Override
+    @Transactional
     public Boolean updateFileGroupById(HttpServletRequest request,FileManageGroup fileManageGroup) {//修改文件夹
         Date date = new Date();//修改时间
-        Long  modifyUserID = (Long) request.getSession().getAttribute("");
-        if(modifyUserID!=null){
-            fileManageGroup.setModifyTime(date);
-            fileManageGroup.setModifyUserId(modifyUserID);
+        User user = (User) shiroUtils.getSessionAttribute("user");//获取用户id
+        if(user!=null){
+            if(user.getUserId()!=null){
+                fileManageGroup.setModifyTime(date);
+                fileManageGroup.setModifyUserId(user.getUserId());
+            }
         }
+
         int i = fileManageGroupMapper.updateByPrimaryKeySelective(fileManageGroup);//文件夹修改
         Boolean b=true;
         if(i<=0){

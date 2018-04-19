@@ -13,11 +13,11 @@ public class FileManage {
 
     private String fileAddress;//文件路径
 
-    private Long  createUserId;//创建人id
+    private String  createUserId;//创建人id
 
     private Date createTime;//创建时间
 
-    private Long   modifyUserId;//修改人id
+    private String   modifyUserId;//修改人id
 
     private Date modifyTime;//修改时间
 
@@ -57,11 +57,11 @@ public class FileManage {
         this.fileAddress = fileAddress;
     }
 
-    public Long getCreateUserId() {
+    public String getCreateUserId() {
         return createUserId;
     }
 
-    public void setCreateUserId(Long createUserId) {
+    public void setCreateUserId(String createUserId) {
         this.createUserId = createUserId;
     }
 
@@ -73,11 +73,11 @@ public class FileManage {
         this.createTime = createTime;
     }
 
-    public Long getModifyUserId() {
+    public String getModifyUserId() {
         return modifyUserId;
     }
 
-    public void setModifyUserId(Long modifyUserId) {
+    public void setModifyUserId(String modifyUserId) {
         this.modifyUserId = modifyUserId;
     }
 
@@ -120,9 +120,9 @@ public class FileManage {
                 ", groupId=" + groupId +
                 ", fileTitle='" + fileTitle + '\'' +
                 ", fileAddress='" + fileAddress + '\'' +
-                ", createUserId=" + createUserId +
+                ", createUserId='" + createUserId + '\'' +
                 ", createTime=" + createTime +
-                ", modifyUserId=" + modifyUserId +
+                ", modifyUserId='" + modifyUserId + '\'' +
                 ", modifyTime=" + modifyTime +
                 ", delFlag='" + delFlag + '\'' +
                 ", currentPage=" + currentPage +

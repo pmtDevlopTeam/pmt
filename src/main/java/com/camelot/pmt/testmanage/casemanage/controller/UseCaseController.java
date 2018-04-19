@@ -169,7 +169,6 @@ public class UseCaseController {
 		    @ApiImplicitParams({
 		            @ApiImplicitParam(name = "id", value = "用例id", required = true, paramType = "query", dataType = "long") })
 		    public JSONObject queryByUseCaseId(Long id) {
-			 	 ExecuteResult<UseCase> result = new ExecuteResult<UseCase>();
 			        try {
 			            //调用添加bug接口
 			            // 成功返回

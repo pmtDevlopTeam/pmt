@@ -15,7 +15,7 @@ import java.util.List;
 
  */
 public interface FileManageService {
-    Boolean addFileManager(HttpServletRequest request, FileManage fileManage);//文件添加
+    Boolean addFileManager(HttpServletRequest request, FileManage fileManage,Long parentId);//文件添加
 
     Boolean deleteFileById(FileManage fileManage);//文件删除
 
@@ -23,5 +23,4 @@ public interface FileManageService {
 
     PageInfo<FileManage> queryFileByGroupId(FileManageGroup fileManageGroup);// 文件详细信息查询（根据组idprojectID）
 
-    ExecuteResult<List<FileManage>> queryAllFile();
 }
