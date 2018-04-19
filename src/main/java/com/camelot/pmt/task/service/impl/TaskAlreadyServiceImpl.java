@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class TaskAlreadyServiceImpl implements TaskAlreadyService {
@@ -32,18 +31,18 @@ public class TaskAlreadyServiceImpl implements TaskAlreadyService {
     /**
      * @author: zsf
      * @param:
-     * @description: 查询已完成任务
+     * @description: 查询我的已办 根据被负责人ID
      * @date: 16:54 2018/4/9
      */
-    public ExecuteResult<PageInfo<Map<String, Object>>> queryTaskAlready(int page , int rows, String id) {
-        ExecuteResult<PageInfo<Map<String, Object>>> result = new ExecuteResult<PageInfo<Map<String, Object>>>();
+    public ExecuteResult<PageInfo<Task>> queryTaskAlready(int page , int rows, String id) {
+        ExecuteResult<PageInfo<Task>> result = new ExecuteResult<PageInfo<Task>>();
         //利用PageHelper进行分页
         PageHelper.startPage(page, rows);
         //根据用户id查询全部的已完成的任务
-        List<Map<String, Object>> list = taskMapper.listTaskAlready(id);
+        List<Task> list = taskMapper.listTaskAlready(id);
         System.out.println(list.size());
         //分页之后的结果集
-        PageInfo<Map<String, Object>> clist = new PageInfo<Map<String, Object>>(list);
+        PageInfo<Task> clist = new PageInfo<Task>(list);
         //返回结果集
         result.setResult(clist);
         return result;

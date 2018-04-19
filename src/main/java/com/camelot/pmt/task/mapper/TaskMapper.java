@@ -71,7 +71,7 @@ public interface TaskMapper {
      * 查询已完成的任务，根据时间和优先级进行排序
      * myp
      * */
-    List<Map<String,Object>> listTaskAlready(String id);
+    List<Task> listTaskAlready(String id);
 
     /**
      * 查询已完成任务总个数 @Title: queryCount @Description: TODO @param @return @return

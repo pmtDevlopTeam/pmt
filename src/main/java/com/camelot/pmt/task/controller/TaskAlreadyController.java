@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.camelot.pmt.common.APIStatus;
 import com.camelot.pmt.common.ApiResponse;
 import com.camelot.pmt.common.ExecuteResult;
+import com.camelot.pmt.task.model.Task;
 import com.camelot.pmt.task.model.TaskLog;
 import com.camelot.pmt.task.service.TaskAlreadyService;
 import com.camelot.pmt.task.service.TaskLogService;
@@ -50,7 +51,7 @@ public class TaskAlreadyController {
             @ApiImplicitParam(name = "rows", value = "每页数量", required = true, paramType = "query", dataType = "int")})
     public JSONObject queryTaskAlready(int page , int rows) {
         String userLoginId = String.valueOf(1);
-        ExecuteResult<PageInfo<Map<String, Object>>> result = new ExecuteResult<PageInfo<Map<String, Object>>>();
+        ExecuteResult<PageInfo<Task>> result = new ExecuteResult<PageInfo<Task>>();
         try {
             result = taskAlreadyService.queryTaskAlready(page, rows, "2");
             if (result.isSuccess()) {
