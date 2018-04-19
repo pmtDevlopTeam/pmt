@@ -15,7 +15,7 @@ public interface TaskFileService {
      * @description: 插入需求类型任务的附件元信息
      * @date: 10:21 2018/4/17
      */
-    ExecuteResult<String> insert(TaskFile taskFile);
+    boolean insert(TaskFile taskFile);
 
     /**
      * @author: zlh

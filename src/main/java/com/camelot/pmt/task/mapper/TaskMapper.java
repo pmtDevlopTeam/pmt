@@ -2,7 +2,6 @@ package com.camelot.pmt.task.mapper;
 
 import com.camelot.pmt.task.model.Task;
 import com.camelot.pmt.task.model.TaskFile;
-import com.camelot.pmt.task.model.TaskLog;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
@@ -208,6 +207,17 @@ public interface TaskMapper {
     List<Task> queryAllTaskList(Task task);
 
     /**
+     *
+    * @Title: queryMyPendingTaskList
+    * @Description: TODO(查询我的待办Task任务列表)
+    * @param @param task
+    * @param @return    设定文件
+    * @return List<Task>    返回类型
+    * @throws
+     */
+    List<Task> queryMyPendingTaskList(Task task);
+
+    /**
      * @author: gxl
      * @Title: queryTopTaskNameList
      * @Description: TODO(查询顶级我的待办任务)
@@ -338,7 +348,7 @@ public interface TaskMapper {
      * @return int
      * @throws
      */
-    int queryUnfinishedTask(@Param("projectId") long projectId, @Param("userId") String userId);
+    int queryUnfinishedTask(@Param("projectId") Long projectId, @Param("userId") String userId);
 
     /**
      * 根据demandId 查询任务

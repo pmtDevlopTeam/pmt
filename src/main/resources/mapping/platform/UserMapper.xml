@@ -279,11 +279,6 @@
         SELECT count(1) FROM platform_user_info where user_job_num = #{userJobNum}
     </select>
     
-    <!-- 检查用户组织表userId是否存在 -->
-	 <select id="checkUserOrgExistByUserId" parameterType="java.lang.String" resultType="long">
-        SELECT count(1) FROM platform_user_org where user_id = #{user_id}
-    </select>
-
 	<!-- 根据用户名查找用户密码-->
     <select id="findUserPasswordByLoginCode" resultType="java.lang.String" parameterType="java.lang.String" >
         select password from platform_user where login_code = #{loginCode}
@@ -335,6 +330,11 @@
         select <include refid="userInfoColumns"/> from platform_user_info where user_id = #{userId}
     </select>
 
+ 	<!-- 检查用户组织表userId是否存在 -->
+	<select id="checkUserOrgExistByUserId" parameterType="java.lang.String" resultType="long">
+        SELECT count(1) FROM platform_user_org where user_id = #{user_id}
+    </select>
+    
     <!-- 根据userId获取用户角色中间表记录是否存在 -->
     <select id="checkUserRoleIsExistByUserId" parameterType="java.lang.String" resultType="long">
         select count(1) from platform_user_role where user_id = #{userId}
@@ -343,6 +343,16 @@
     <!-- 根据Id删除用户 -->
     <delete id="deleteUserByUserId" parameterType="java.lang.String" >
         delete from platform_user where user_id = #{userId}
+    </delete>
+    
+    <!-- 根据Id删除用户信息表中记录 -->
+    <delete id="deleteUserInfoByUserId" parameterType="java.lang.String">
+        delete FROM platform_user_info where user_id = #{userId}
+    </delete>
+    
+     <!-- 根据Id删除用户部门表中记录 -->
+    <delete id="deleteUserOrgByUserId" parameterType="java.lang.String">
+        delete FROM platform_user_org where user_id = #{userId}
     </delete>
 
     <!-- 根据Id删除用户角色表中所有的角色 -->
