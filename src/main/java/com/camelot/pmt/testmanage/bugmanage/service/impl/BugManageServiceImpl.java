@@ -55,6 +55,14 @@ public class BugManageServiceImpl implements BugManageService {
 		return addCount==1?true:false;
 	}
 	private BugManage createBugManageModel(BugManage bugManage) {
+		SelectBugManage queryBugLimit = bugManageMapper.queryBugLimit();
+		String bugNo="";
+		if(queryBugLimit==null||queryBugLimit.getBugNo()==null){
+			 bugNo=getIncreNum("");
+		}else{
+			 bugNo=getIncreNum(queryBugLimit.getBugNo());
+		}
+		bugManage.setBugNo(bugNo);
 		//创建时间
         bugManage.setCreateTime(DateUtils.format(new Date(),DateUtils.DATE_TIME_PATTERN));
         //bug默认状态 未确认
@@ -331,6 +339,12 @@ public class BugManageServiceImpl implements BugManageService {
 		return false;
 	}
 	
+	
+	@Override
+	public SelectBugManage queryBugLimit() {
+		 return bugManageMapper.queryBugLimit();
+	}
+	
 	private String getStatus(BugManage bug) {
 		String bugStatus=bug.getBugStatus();
 		if("0".equals(bugStatus)){
@@ -497,7 +511,21 @@ public class BugManageServiceImpl implements BugManageService {
         bugHistory.setOperationFunction(operation);
         bugHistoryMapper.addBugHistory(bugHistory);
 	}
-
+	
+	public String getIncreNum(String str) {
+        if (StringUtils.isEmpty(str)) {
+            return "BUG01";
+        }
+        str=str.substring(3);
+        Long parseInt = Long.parseLong(str);
+        if (parseInt < 9 && parseInt > 0) {
+            String valueOf = String.valueOf(++parseInt);
+            return "BUG0" + valueOf;
+        } else if (parseInt <= 0) {
+            return "BUG01";
+        }
+        return "BUG"+String.valueOf(++parseInt);
+    }
 	
 
 
