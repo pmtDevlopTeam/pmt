@@ -54,11 +54,11 @@ public interface OrgService {
      * 查询多个子部门
      * @return ExecuteResult<List<Org>>
      */
-	List<Tree<Org>> queryOrgAndChildrenById(String orgId);
+	List<Tree<Org>> queryOrgAndSubByOrgId(String orgId);
 	/**
 	 * 删除多个子部门机构  递归删除
 	 */
-	String deleteOrgByOrgId(String orgId);
+	String deleteOrgSubByOrgId(String orgId);
 	/**
 	 * 组织机构列表详情(关系到用户  即部门负责人)
 	 */
@@ -78,12 +78,12 @@ public interface OrgService {
 	 * @return List<User>
 	 * 
 	 **/
-	List<User> queryOrgToUserByOrgId(String orgId);
+	List<User> queryUsersByOrgId(String orgId);
 	/** 组织机构  根据orgId,orgCode,orgname 多条件模糊查询所有部门信息
 	 * @param orgId,orgCode,orgname
 	 * @return List<Org>
 	 **/
-	PageInfo queryOrgByParameters(Org org,int pageNum,int pageSize);
+	PageInfo queryOrgInfo(Org org,int pageNum,int pageSize);
 	/** 修改组织机构的状态
 	 * @param orgId state
 	 * @return JSONObject
