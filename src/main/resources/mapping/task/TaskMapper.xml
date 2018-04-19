@@ -654,5 +654,16 @@
     <update id="updateRunningToAlready" parameterType="Long">
         UPDATE task SET status = 2 WHERE id = #{id}
     </update>
+    
+    <update id="updateInfact_hourAndActual_end_time" parameterType="com.camelot.pmt.task.model.Task">
+        UPDATE task SET actual_end_time = #{actual_end_time},infact_hour = #{infact_hour} WHERE id = #{id}
+    </update>
+    
+    <insert id="addAttachment" parameterType="com.camelot.pmt.task.model.TaskFile">
+        INSERT INTO attachment (attachment_url,
+        attachment_tile,attachment_source,source_id,create_user_id,create_time,modify_user_id,modify_time)
+        VALUES (#{attachment_url},#{attachment_tile},#{attachment_source},#{source_id},#{create_user_id},
+        #{create_time},#{modify_user_id},#{modify_time})
+    </insert>
     <!--myp结束-->
 </mapper>
