@@ -274,7 +274,7 @@ public class DemandController {
      * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
     @ApiOperation(value = "根据需求id查询需求变更影响的任务", notes = "查询需求变更影响的任务信息")
-    @GetMapping(value = "/queryDemandTaskQuoteById")
+    @GetMapping(value = "/demand/queryDemandTaskQuoteById")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "currentPage", value = "页码", required = false, paramType = "query", dataType = "int"),
             @ApiImplicitParam(name = "pageSize", value = "显示行数", required = false, paramType = "query", dataType = "int"),
@@ -302,7 +302,7 @@ public class DemandController {
      * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
     @ApiOperation(value = "根据需求id查询需求变更影响的用例信息", notes = "查询需求变更影响的任务信息")
-    @GetMapping(value = "/queryDemandUseCaseQuoteById")
+    @GetMapping(value = "/demand/queryDemandUseCaseQuoteById")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "currentPage", value = "页码", required = false, paramType = "query", dataType = "int"),
             @ApiImplicitParam(name = "pageSize", value = "显示行数", required = false, paramType = "query", dataType = "int"),
@@ -327,7 +327,7 @@ public class DemandController {
      * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
     @ApiOperation(value = "根据需求id查询需求变更影响的bug信息", notes = "查询需求变更影响的bug信息")
-    @GetMapping(value = "/queryDemandBugQuoteById")
+    @GetMapping(value = "/demand/queryDemandBugQuoteById")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "currentPage", value = "页码", required = false, paramType = "query", dataType = "int"),
             @ApiImplicitParam(name = "pageSize", value = "显示行数", required = false, paramType = "query", dataType = "int"),
