@@ -209,6 +209,17 @@ public interface TaskMapper {
      * @throws
      */
     List<Task> queryAllTaskList(Task task);
+    
+    /**
+     * 
+    * @Title: queryMyPendingTaskList 
+    * @Description: TODO(查询我的待办Task任务列表) 
+    * @param @param task
+    * @param @return    设定文件 
+    * @return List<Task>    返回类型 
+    * @throws
+     */
+    List<Task> queryMyPendingTaskList(Task task);
 
     /**
      * @author: gxl

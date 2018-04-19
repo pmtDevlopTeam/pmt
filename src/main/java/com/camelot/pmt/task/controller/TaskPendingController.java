@@ -107,8 +107,7 @@ public class TaskPendingController {
 			User user = new User();
 			user.setUserId(userLoginId.toString());
 			task.setBeassignUser(user);
-			task.setStatus(TaskStatus.PENDINHG.getValue());
-			result = taskPendingService.queryAllTaskList(task);
+			result = taskPendingService.queryMyPendingTaskList(task);
 			//判断是否成功
 			if(result.isSuccess()){
 				return ApiResponse.jsonData(APIStatus.OK_200,result.getResult());
