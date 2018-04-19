@@ -87,7 +87,6 @@ public class CaseRepertoryController {
      */
     @ApiOperation(value = "新增用例库用例",notes = "新增单条用例到用例库中")
     @PostMapping
-    @RequestMapping(value = "/addCaseRepertory", method = RequestMethod.POST)
     public JSONObject addCaseRepertory(@RequestBody @ApiParam(value = "caseRepertory", required = true) CaseRepertory caseRepertory) {
         try {
             boolean flag = false;
@@ -133,7 +132,6 @@ public class CaseRepertoryController {
             @ApiImplicitParam(name = "ids", value = "用例id,多个id用逗号隔开", required = true, paramType = "query", dataType = "String")
     })
     @DeleteMapping
-    @RequestMapping(value = "/deleteCaseRepertory", method = RequestMethod.GET)
     public JSONObject deleteCaseRepertory(String ids) {
         try {
             boolean flag = false;
@@ -154,7 +152,6 @@ public class CaseRepertoryController {
      */
     @ApiOperation(value = "更新用例",notes = "更新用例到用例库中")
     @PutMapping
-    @RequestMapping(value = "/updateCaseRepertory", method = RequestMethod.POST)
     public JSONObject updateCaseRepertory(@RequestBody @ApiParam(value = "caseRepertory", required = true) CaseRepertory caseRepertory) {
         try {
             boolean flag = false;
@@ -176,8 +173,7 @@ public class CaseRepertoryController {
      */
     @ApiOperation(value = "根据ID查询用例")
     @GetMapping(value = "{id}")
-    @RequestMapping(value = "/queryCaseRepertoryById", method = RequestMethod.GET)
-    public JSONObject queryCaseRepertoryById(@PathVariable Long id) {
+    public JSONObject queryCaseRepertoryById( Long id) {
         try {
             CaseRepertory  caseRepertory=caseRepertoryService.queryCaseRepertoryById(id);
             return ApiResponse.success(caseRepertory);
@@ -191,7 +187,7 @@ public class CaseRepertoryController {
       * 用例库查询
 	  */
     @ApiOperation(value = "分页获取用例库列表", notes = "分页获取用例库列表")
-
+    @RequestMapping(value = "/selectCondition", method = RequestMethod.GET)
     @ApiImplicitParams({
             @ApiImplicitParam(name = "currentPage", value = "页码", required = true, paramType = "query", dataType = "int"),
             @ApiImplicitParam(name = "pageSize", value = "每页数量", required = true, paramType = "query", dataType = "int"),
@@ -199,8 +195,7 @@ public class CaseRepertoryController {
             @ApiImplicitParam(name = "caseTitle", value = "名称", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "applyPhase", value = "试用阶段", required = true, paramType = "query", dataType = "String")
     })
-    @RequestMapping(value = "/selectCondition", method = RequestMethod.GET)
-    public JSONObject queryCaseRepertoryByPage(@ApiIgnore CaseRepertory caseRepertory,@RequestParam(defaultValue = "10") Integer pageSize, @RequestParam(defaultValue = "1") Integer currentPage) {
+    public JSONObject queryCaseRepertoryByPage(@ApiIgnore CaseRepertory caseRepertory,@RequestParam(defaultValue = "1") Integer pageSize, @RequestParam(defaultValue = "10") Integer currentPage) {
         try {
             List<CaseRepertory> list = caseRepertoryService.queryCaseRepertoryByPage(caseRepertory, pageSize,currentPage);
             PageInfo<CaseRepertory> result = new PageInfo<CaseRepertory>(list);
