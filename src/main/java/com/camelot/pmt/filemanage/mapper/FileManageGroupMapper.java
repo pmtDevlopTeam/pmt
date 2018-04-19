@@ -23,7 +23,7 @@ public interface FileManageGroupMapper {
 
     List<FileManageGroup> querytFileGroup(FileManageGroup fileManageGroup);//根据不同条件查询（parentID，projectID）
 
-    List<Long> selectFileManagerGroupByParentId(Long id);//根据父级ID进行查询
+    List<Long> queryFileManagerGroupByParentId(Long id);//根据父级ID进行查询
 
 
 }
