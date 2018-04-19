@@ -369,8 +369,7 @@ public class TaskManagerServiceImpl implements TaskManagerService {
             String[] ids = null;
             if (task.getBeassignUser() != null) {
                 /*如果负责人条件非空，则根据username查询userId*/
-                ExecuteResult<List<User>> usersResult = userService.queryUsersByUserName(task.getBeassignUser().getUsername());
-                List<User> users = usersResult.getResult();
+                List<User> users = userService.queryUsersByUserName(task.getBeassignUser().getUsername());
                 // 赋值给string数组传给DAO层
                 ids =new String[users.size()];
                 for (int i = 0;i<users.size();i++) {
