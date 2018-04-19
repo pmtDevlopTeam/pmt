@@ -8,89 +8,71 @@ import com.camelot.pmt.platform.model.Dict;
 import com.camelot.pmt.platform.model.DictItem;
 
 /**
- * <p>
- * 字典Mapper类
- * </p>
+ * 字典管理Mapper数据层接口
  *
- * @author sqw
+ * @author pmt
  * @since 2018-04-08
  */
 @Mapper
 public interface DictMapper {
-
+	
+	/**
+	 * 根据一个字典 增加一个字典
+	 * 
+	 * @param Dict dict
+	 * @return int	1：成功；非1：失败
+	 */
+	int addDict(Dict dict);
+	/**
+	 * 根据字典dictId 删除一个字典
+	 * 
+	 * @param String dictId
+	 * @return int	1：成功；非1：失败
+	 */
+	int deleteDictByDictId(String dictId);
     /**
-     * 根据一个字典 增加一个字典
-     * 
-     * @param Dict
-     *            dict
-     * @return
-     */
-    void createDict(Dict dict);
-
-    /**
-     * 根据字典dictId 删除一个字典
-     * 
-     * @param String
-     *            dictId
-     * @return
-     */
-    void deleteDictByDictId(String dictId);
-
-    /**
-     * 根据字典dictId 删除字典项
-     * 
-     * @param dictId
-     * @return
-     */
-    void deleteDictItemByDictId(String dictId);
-
-    /**
-     * 根据字典dictId 修改一个字典
-     * 
-     * @param Dict
-     *            dict
-     * @return
-     */
-    void modifyDictByDictId(Dict dict);
-
+	 * 根据字典dictId 删除字典项
+	 * 
+	 * @param dictId
+	 * @return int	1：成功；非1：失败
+	 */
+	int deleteDictItemByDictId(String dictId);
+	/**
+	 * 根据字典dictId 修改一个字典
+	 * @param Dict dict
+	 * @return int	1：成功；非1：失败
+	 */
+	int updateDictByDictId(Dict dict);
     /**
      * 根据字典dictId 查询一个字典
-     * 
-     * @param String
-     *            dictId
+     * @param String dictId
      * @return Dict
      */
     Dict queryDictByDictId(String dictId);
-
     /**
      * 查询全部字典
      * 
-     * @param
+     * @param 
      * @return List<Dict>
      */
-    List<Dict> queryAllDict();
-
+    List<Dict> selectDictListAll();
     /**
-     * 查询字典总数量
+     *查询字典总数量
      *
      * @return Long
      */
     Long countDict();
-
     /**
      * 检查字典编码是否存在
      * 
-     * @param String
-     *            dictCode
+     * @param String dictCode
      * @return Dict
      */
     Dict checkDictCodeIsExist(String dictCode);
-
     /**
      * 检查字典名称是否存在
      * 
-     * @param String
-     *            dictName
+     * @param String dictName
      * @return Dict
      */
     Dict checkDictNameIsExist(String dictName);

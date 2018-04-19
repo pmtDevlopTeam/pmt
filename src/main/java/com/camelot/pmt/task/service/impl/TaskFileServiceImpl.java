@@ -29,22 +29,18 @@ public class TaskFileServiceImpl implements TaskFileService {
      * @date: 10:21 2018/4/17
      */
     @Override
-    public ExecuteResult<String> insert(TaskFile taskFile) {
-        ExecuteResult<String> result = new ExecuteResult<String>();
+    public boolean insert(TaskFile taskFile) {
         try {
             // check参数
             if (taskFile == null) {
-                result.addErrorMessage("传入信息有误");
-                return result;
+                /*返回参数错误*/
             }
-
-            int insert = taskFileMapper.insert(taskFile);
-            result.setResult("插入成功");
+            int insertResult = taskFileMapper.insert(taskFile);
+            return insertResult==1 ? true : false;
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
             throw new RuntimeException(e);
         }
-        return result;
     }
 
     /**

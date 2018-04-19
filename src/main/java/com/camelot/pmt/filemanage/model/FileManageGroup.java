@@ -1,34 +1,36 @@
 package com.camelot.pmt.filemanage.model;
 
 import java.util.Date;
+import java.util.List;
 
 /*
 张战1
  */
 public class FileManageGroup {
-    private Long id;
+    private Long id;//文件夹id
 
-    private Long parentId;
+    private Long parentId;//父级id
 
-    private Long projectId;
+    private Long projectId;//项目id
 
-    private String name;
-    private String fdescribe;
+    private String name;//文件夹名称
+    private String fdescribe;//文件夹描述
 
-    private Long createUserId;
+    private String  createUserId;//创建人id
 
-    private Date createTime;
+    private Date createTime;//创建时间
 
-    private Long modifyUserId;
+    private String modifyUserId;//修改人id
 
-    private Date modifyTime;
+    private Date modifyTime;//修改时间
 
-    private String delFlag;
+    private String delFlag;//删除状态（0未删除，1已删除）
 
-    private Integer isfile;
-    private int currentPage;
-    private int pageSize;
-    private int indexPage;
+    private Integer isfile;//判断是否是文件
+    private int currentPage;//当前页
+    private int pageSize;//每页显示条数
+    private List<FileManageGroup> listGroup;//文件夹集合
+
 
     public Long getId() {
         return id;
@@ -70,11 +72,11 @@ public class FileManageGroup {
         this.fdescribe = fdescribe;
     }
 
-    public Long getCreateUserId() {
+    public String getCreateUserId() {
         return createUserId;
     }
 
-    public void setCreateUserId(Long createUserId) {
+    public void setCreateUserId(String createUserId) {
         this.createUserId = createUserId;
     }
 
@@ -86,11 +88,11 @@ public class FileManageGroup {
         this.createTime = createTime;
     }
 
-    public Long getModifyUserId() {
+    public String getModifyUserId() {
         return modifyUserId;
     }
 
-    public void setModifyUserId(Long modifyUserId) {
+    public void setModifyUserId(String modifyUserId) {
         this.modifyUserId = modifyUserId;
     }
 
@@ -134,20 +136,31 @@ public class FileManageGroup {
         this.pageSize = pageSize;
     }
 
-    public int getIndexPage() {
-        return indexPage;
+    public List<FileManageGroup> getListGroup() {
+        return listGroup;
     }
 
-    public void setIndexPage(int indexPage) {
-        this.indexPage = indexPage;
+    public void setListGroup(List<FileManageGroup> listGroup) {
+        this.listGroup = listGroup;
     }
 
     @Override
     public String toString() {
-        return "FileManageGroup{" + "id=" + id + ", parentId=" + parentId + ", projectId=" + projectId + ", name='"
-                + name + '\'' + ", fdescribe='" + fdescribe + '\'' + ", createUserId=" + createUserId + ", createTime="
-                + createTime + ", modifyUserId=" + modifyUserId + ", modifyTime=" + modifyTime + ", delFlag='" + delFlag
-                + '\'' + ", isfile=" + isfile + ", currentPage=" + currentPage + ", pageSize=" + pageSize
-                + ", indexPage=" + indexPage + '}';
+        return "FileManageGroup{" +
+                "id=" + id +
+                ", parentId=" + parentId +
+                ", projectId=" + projectId +
+                ", name='" + name + '\'' +
+                ", fdescribe='" + fdescribe + '\'' +
+                ", createUserId='" + createUserId + '\'' +
+                ", createTime=" + createTime +
+                ", modifyUserId='" + modifyUserId + '\'' +
+                ", modifyTime=" + modifyTime +
+                ", delFlag='" + delFlag + '\'' +
+                ", isfile=" + isfile +
+                ", currentPage=" + currentPage +
+                ", pageSize=" + pageSize +
+                ", listGroup=" + listGroup +
+                '}';
     }
 }
