@@ -33,7 +33,7 @@ public interface TaskAlreadyService {
      * @return ExecuteResult<PageInfo<Task>>
      */
 
-    ExecuteResult<PageInfo<Task>> queryTaskAlready(int page , int rows, String id);
+    ExecuteResult<PageInfo<Task>> queryTaskAlready(Integer page , Integer rows, String id);
 
     /**
      * 查询未完成任务的个数
