@@ -50,6 +50,14 @@ public class CaseRepertoryServiceImpl implements CaseRepertoryService {
 			caseRepertory.setCreateTime(new Date());
 			caseRepertory.setModifyUserId(user.getUserId());
 			caseRepertory.setModifyTime(new Date());
+			String num1;
+			int num=caseRepertoryMapper.querySequence();
+			if(num<10){
+				num1="CR"+"0"+String.valueOf(num);
+			}else{
+				num1="CR"+String.valueOf(num);
+			}
+			caseRepertory.setNum(num1);
 			//复制数据到用例库主表并返回主键id
 			 result1 =caseRepertoryMapper.addCaseRepertoryByCaseid(caseRepertory);
 			//复制步骤数到用例库步骤表中并且更新父id为 result1
@@ -102,6 +110,14 @@ public class CaseRepertoryServiceImpl implements CaseRepertoryService {
 		caseRepertory.setCreateTime(new Date());
 		caseRepertory.setModifyUserId(user.getUserId());
 		caseRepertory.setModifyTime(new Date());
+		String num1;
+		int num=caseRepertoryMapper.querySequence();
+		if(num<10){
+			num1="CR"+"0"+String.valueOf(num);
+		}else{
+			num1="CR"+String.valueOf(num);
+		}
+		caseRepertory.setNum(num1);
 		int result=caseRepertoryMapper.insertSelective(caseRepertory);
 		// mybatis返回主键,并设置外键
 		Long id = caseRepertory.getId();
