@@ -24,7 +24,7 @@ public interface UserMapper {
 	 * @param User userModel
 	 * @author [maple]
 	 */
-    void insertUser(User userModel);
+    void addUser(User userModel);
     
     /**
 	 * 
@@ -32,7 +32,7 @@ public interface UserMapper {
 	 * @param User userModel
 	 * @author [maple]
 	 */
-    void insertUserInfo(User userModel);
+    void addUserInfo(User userModel);
     
     /**
 	 * 
@@ -40,7 +40,7 @@ public interface UserMapper {
 	 * @param User userModel
 	 * @author [maple]
 	 */
-    void insertUserOrg(User userModel);
+    void addUserOrg(User userModel);
     
     /**
 	 * 
@@ -48,7 +48,7 @@ public interface UserMapper {
 	 * @param User userModel
 	 * @author [maple]
 	 */
-    void insertUserRole(User userModel);
+    void addUserRole(User userModel);
     
   
     /**
@@ -57,7 +57,7 @@ public interface UserMapper {
      * @param userModel void
      * @author [name]
      */
-    void deleteUserByUserId(String userId);
+    int deleteUserByUserId(String userId);
     
     
     /**
@@ -94,7 +94,7 @@ public interface UserMapper {
      * @return UserModel
      * @author [maple]
      */
-    User selectUserById(String userId);
+    User queryUserByUserId(String userId);
     
     /**
      * Description:[查询用户不分页]
