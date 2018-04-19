@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 import java.util.Map;
@@ -110,9 +111,15 @@ public class TaskAlreadyController {
     @ApiOperation(value = "查询所有已完成的任务", notes = "查询所有已完成的任务")
     @RequestMapping(value = "/queryTaskAlready", method = RequestMethod.GET)
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "page", value = "页码", required = true, paramType = "query", dataType = "int"),
-            @ApiImplicitParam(name = "rows", value = "每页数量", required = true, paramType = "query", dataType = "int")})
-    public JSONObject queryTaskAlready(int page , int rows) {
+            @ApiImplicitParam(name = "taskNum", value = "任务编号", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "taskName", value = "任务名称", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "priority", value = "优先级", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "projectId", value = "项目ID", required = true, paramType = "query", dataType = "Long"),
+            @ApiImplicitParam(name = "project.projectName", value = "项目名称", required = true, paramType = "query", dataType = "ProjectMain"),
+
+            @ApiImplicitParam(name = "page", value = "页码", required = true, paramType = "query", dataType = "Integer"),
+            @ApiImplicitParam(name = "rows", value = "每页数量", required = true, paramType = "query", dataType = "Integer")})
+    public JSONObject queryTaskAlready(@ApiIgnore Task task, Integer page , Integer rows) {
         String userLoginId = String.valueOf(1);
         ExecuteResult<PageInfo<Task>> result = new ExecuteResult<PageInfo<Task>>();
         try {
