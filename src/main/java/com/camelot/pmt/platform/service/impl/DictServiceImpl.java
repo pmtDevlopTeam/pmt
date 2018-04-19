@@ -30,10 +30,8 @@ public class DictServiceImpl implements DictService {
 		try{
 			String uuid = UUIDUtil.getUUID();
 			dict.setDictId(uuid);
-			dict.setCreateUserId("1");
             long date = new Date().getTime();
             dict.setCreateTime(new Date(date));
-            
             return (dictMapper.addDict(dict)==1)?true:false;
 		}catch(Exception e){
 			throw new RuntimeException(e);
@@ -66,8 +64,6 @@ public class DictServiceImpl implements DictService {
 				}
 	            long date = new Date().getTime();
 	            dict.setModifyTime(new Date(date));
-	            dict.setModifyUserId("2");
-	            
 	            return (dictMapper.updateDictByDictId(dict)==1)?true:false;
 	        } catch (Exception e){
 	            throw new RuntimeException(e);
