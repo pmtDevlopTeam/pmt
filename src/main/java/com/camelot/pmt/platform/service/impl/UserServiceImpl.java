@@ -89,7 +89,23 @@ public class UserServiceImpl implements UserService{
      */
 	@Override
 	public boolean deleteUserByUserId(String userId) {
-		return userMapper.deleteUserByUserId(userId)==1?true:false;
+		int deleteUserByUserIdResult = userMapper.deleteUserByUserId(userId);
+		int deleteUserInfoByUserIdResult = userMapper.deleteUserInfoByUserId(userId);
+		//判断用户部门表中间表是否有记录
+		long checkUserOrg = userMapper.checkUserOrgExistByUserId(userId);
+		if(checkUserOrg != 0) {
+			userMapper.deleteUserOrgByUserId(userId);
+		}
+		long checkUserRole = userMapper.checkUserRoleIsExistByUserId(userId);
+		if(checkUserRole != 0) {
+			userMapper.deleteUserRoleByUserId(userId);
+		}
+		if(deleteUserByUserIdResult!= 0 && deleteUserInfoByUserIdResult !=0) {
+			return true;
+		}else {
+			return false;
+		}
+		
 	}
 
 	/**

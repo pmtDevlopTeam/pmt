@@ -177,15 +177,36 @@ public interface UserMapper {
      */
     User queryUserInfoById(String userId);
     
+    
     /**
      * 
-     * Description:[根据userId 删除用户角色中间表记录]
-     * @param 
-     * @return 
+     * Description:[根据userId 删除用户部门表记录]
+     * @param String userId
+     * @return int
      * @author [maple]
      * 2018年4月16日下午4:05:53
      */
-    void deleteUserRoleByUserId(String userId);
+    int deleteUserInfoByUserId(String userId);
+    
+    /**
+     * 
+     * Description:[根据userId 删除用户部门表记录]
+     * @param String userId
+     * @return int
+     * @author [maple]
+     * 2018年4月16日下午4:05:53
+     */
+    int deleteUserOrgByUserId(String userId);
+    
+    /**
+     * 
+     * Description:[根据userId 删除用户角色中间表记录]
+     * @param String userId
+     * @return int
+     * @author [maple]
+     * 2018年4月16日下午4:05:53
+     */
+    int deleteUserRoleByUserId(String userId);
     
     /**
      * 

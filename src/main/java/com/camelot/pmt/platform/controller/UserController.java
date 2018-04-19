@@ -181,7 +181,7 @@ public class UserController {
 			}
 			boolean deleteResult = service.deleteUserByUserId(userId);
 			if (deleteResult) {
-                return ApiResponse.success();
+                return ApiResponse.success("删除用户成功！");
             }else {
             	return ApiResponse.error();
             }
