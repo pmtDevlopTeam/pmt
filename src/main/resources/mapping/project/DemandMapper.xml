@@ -425,4 +425,14 @@
 		</trim>
 		where project_id =#{projectId,jdbcType=BIGINT}
 	</update>
+	<!-- 查询需求编号 -->
+	<select id="queryMaxDemandNumByDemand" parameterType="com.camelot.pmt.project.model.Demand" resultType="java.lang.String">
+		select demand_num from demand where project_id =#{projectId,jdbcType=BIGINT} and demand_need = #{demandNeed,jdbcType=CHAR}
+		and pid = #{pid,jdbcType=BIGINT}
+		order by demand_num desc limit 0,1
+	</select>
+	<!-- 查询父级需求编号 -->
+	<select id="queryParantDemandById" parameterType="long" resultType="java.lang.String">
+		select demand_num from demand where id =#{pid,jdbcType=BIGINT}
+	</select>
 </mapper>

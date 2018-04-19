@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.camelot.pmt.common.DataGrid;
 import com.camelot.pmt.common.ExecuteResult;
+import com.camelot.pmt.common.IncrementNumber;
 import com.camelot.pmt.project.mapper.DemandMapper;
 import com.camelot.pmt.project.mapper.DemandOperateMapper;
 import com.camelot.pmt.project.model.Demand;
@@ -40,6 +41,18 @@ public class DemandServiceImpl implements DemandService {
     public boolean save(Demand demand, User user) {
         boolean flag = false;
         try {
+            String demandNum = "01";
+            //查询是否已有同级别需求
+            String num = demandMapper.queryMaxDemandNumByDemand(demand);
+            String parantNum = demandMapper.queryParantDemandById(demand.getPid());
+            if(null != num){
+                demandNum= IncrementNumber.getIncreNum(num.substring(num.lastIndexOf(".")+1));//最后一位
+            }
+            if(null != parantNum){
+                demand.setDemandNum(parantNum+"."+demandNum);
+            }else{
+                demand.setDemandNum(demandNum);
+            }
             int resultCount = demandMapper.insert(demand);
             if (resultCount > 0) {
                 DemandOperate demandOperate = new DemandOperate();

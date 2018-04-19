@@ -139,4 +139,8 @@ public interface DemandMapper {
      */
     List<Map<String, Object>> queryDemandBugQuoteById(Long demandId);
 
+    String queryMaxDemandNumByDemand(Demand demand);
+
+    String queryParantDemandById(Long pid);
+
 }

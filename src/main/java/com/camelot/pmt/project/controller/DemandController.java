@@ -58,7 +58,6 @@ public class DemandController {
             @ApiImplicitParam(name = "pid", value = "所属一级需求id", required = false, paramType = "query", dataType = "Long", defaultValue = "0"),
             @ApiImplicitParam(name = "projectId", value = "项目id", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "demandName", value = "需求名称", required = true, paramType = "query", dataType = "String"),
-            @ApiImplicitParam(name = "demandNum", value = "需求编号", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "demandSource", value = "需求来源", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "demandLevel", value = "优先级", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "sourceRemark", value = "需求来源备注", required = true, paramType = "query", dataType = "String"),
