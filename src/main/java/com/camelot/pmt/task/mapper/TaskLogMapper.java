@@ -17,11 +17,10 @@ public interface TaskLogMapper {
 
     int updateByPrimaryKey(TaskLog record);
 
-
     /**
      * 添加任务
      */
-	int insertTaskLog(TaskLog tasklog);
+    int insertTaskLog(TaskLog tasklog);
 
     /**
      * 任务流转记录查询

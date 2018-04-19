@@ -29,7 +29,8 @@ public class ProjectBudgetServiceImpl implements ProjectBudgetService {
     /**
      * 添加项目预算信息
      *
-     * @param  ProjectBudget projectBudget
+     * @param ProjectBudget
+     *            projectBudget
      * @return ExecuteResult<String>
      */
     @Override
@@ -39,7 +40,7 @@ public class ProjectBudgetServiceImpl implements ProjectBudgetService {
         try {
             projectBudget.setCreateTime(currentDate);
             projectBudget.setModifyTime(currentDate);
-            flag =proBuggetMapper.insertSelective(projectBudget)==1?true:false;
+            flag = proBuggetMapper.insertSelective(projectBudget) == 1 ? true : false;
         } catch (Exception e) {
             flag = false;
             throw new RuntimeException(e);
@@ -50,7 +51,8 @@ public class ProjectBudgetServiceImpl implements ProjectBudgetService {
     /**
      * 查询单个项目预算信息
      *
-     * @param  Long projectId
+     * @param Long
+     *            projectId
      * @return ExecuteResult<ProjectBudget>
      */
     @Override
@@ -65,7 +67,8 @@ public class ProjectBudgetServiceImpl implements ProjectBudgetService {
     /**
      * 修改项目预算信息
      *
-     * @param  ProjectBudget projectBudget
+     * @param ProjectBudget
+     *            projectBudget
      * @return ExecuteResult<String>
      */
     @Override
@@ -75,19 +78,20 @@ public class ProjectBudgetServiceImpl implements ProjectBudgetService {
         try {
             projectBudget.setCreateTime(currentDate);
             projectBudget.setModifyTime(currentDate);
-            flag =proBuggetMapper.updateByPrimaryKeySelective(projectBudget)==1?true:false;
+            flag = proBuggetMapper.updateByPrimaryKeySelective(projectBudget) == 1 ? true : false;
         } catch (Exception e) {
             flag = false;
             throw new RuntimeException(e);
         }
         return flag;
-        
+
     }
 
     /**
      * 查询项目统计预算信息
      *
-     * @param  Long proId
+     * @param Long
+     *            proId
      * @return ExecuteResult<Map<String, Object>>
      */
     @Override
@@ -118,24 +122,22 @@ public class ProjectBudgetServiceImpl implements ProjectBudgetService {
     }
 
     /**
-     * 查询统计项目结项
-     * param  Long projectId
-     * return Map<String,Object>
+     * 查询统计项目结项 param Long projectId return Map<String,Object>
      */
     @Override
-    public Map<String,Object> queryProjectEndById(Long projectId) {
-        //查询此项目下所有文件分组
-        List<Map<String,Object>> fileGroupList = proBuggetMapper.queryFileGroup(projectId);
-        List<Map<String,Object>> file = new ArrayList<Map<String,Object>>();
+    public Map<String, Object> queryProjectEndById(Long projectId) {
+        // 查询此项目下所有文件分组
+        List<Map<String, Object>> fileGroupList = proBuggetMapper.queryFileGroup(projectId);
+        List<Map<String, Object>> file = new ArrayList<Map<String, Object>>();
         // 查询任务表中所有已完成任务的实际工时
         Long totalActualHours = proBuggetMapper.queryTotalActualHours(projectId);
-        Map<String,Object> fileMap = new HashMap<>();
+        Map<String, Object> fileMap = new HashMap<>();
         fileMap.put("totalActualHours", totalActualHours);
-        if((null!= fileGroupList)&&(fileGroupList.size()>0)){
+        if ((null != fileGroupList) && (fileGroupList.size() > 0)) {
             for (Map<String, Object> map : fileGroupList) {
                 Long groupId = (Long) map.get("id");
-                //根据分组id查询该组下所有文件
-                List<Map<String,Object>> fileList = proBuggetMapper.queryFile(groupId);
+                // 根据分组id查询该组下所有文件
+                List<Map<String, Object>> fileList = proBuggetMapper.queryFile(groupId);
                 map.put("fileList", fileList);
                 map.put("fileCount", fileList.size());
                 file.add(map);

@@ -30,8 +30,8 @@ public class CaseRepertoryController2 {
     private CaseRepertoryService caseRepertoryService;
 
     /*
-      * 用例库查询
-	  */
+     * 用例库查询
+     */
     @ApiOperation(value = "分页获取用例库列表", notes = "分页获取用例库列表")
     @RequestMapping(value = "/selectCondition", method = RequestMethod.GET)
     @ApiImplicitParams({
@@ -39,9 +39,9 @@ public class CaseRepertoryController2 {
             @ApiImplicitParam(name = "pageSize", value = "每页数量", required = true, paramType = "query", dataType = "int"),
             @ApiImplicitParam(name = "caseType", value = "类型", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "caseTitle", value = "名称", required = true, paramType = "query", dataType = "String"),
-            @ApiImplicitParam(name = "applyPhase", value = "试用阶段", required = true, paramType = "query", dataType = "String")
-    })
-    public JSONObject queryCaseRepertoryByPage(Integer currentPage, Integer pageSize, String caseType, String caseTitle, String applyPhase) {
+            @ApiImplicitParam(name = "applyPhase", value = "试用阶段", required = true, paramType = "query", dataType = "String") })
+    public JSONObject queryCaseRepertoryByPage(Integer currentPage, Integer pageSize, String caseType, String caseTitle,
+            String applyPhase) {
         PageBean pageBean = new PageBean();
         pageBean.setCurrentPage(currentPage);
         pageBean.setPageSize(pageSize);
@@ -57,10 +57,9 @@ public class CaseRepertoryController2 {
             map.put("applyPhase", applyPhase);
         }
 
-
         ExecuteResult<PageInfo> result = new ExecuteResult<PageInfo>();
         try {
-            //调用查询bug分页接口
+            // 调用查询bug分页接口
             result = caseRepertoryService.selectCondition(map);
             if (result.getErrorMessages().size() != 0) {
                 return ApiResponse.error(result.getErrorMessage());
@@ -74,9 +73,8 @@ public class CaseRepertoryController2 {
     }
 
     /*
-     *功能： 批量选择测试用例导入到用例库（这是不可以编辑的）单条导入可以用 用例复制功能的查询接口  并将回显到新增用例库用例的页面上进行编辑
-     * 描述：把测试用例导入到用例库中
-     * 作者：sll
+     * 功能： 批量选择测试用例导入到用例库（这是不可以编辑的）单条导入可以用 用例复制功能的查询接口 并将回显到新增用例库用例的页面上进行编辑
+     * 描述：把测试用例导入到用例库中 作者：sll
      */
     @ApiOperation(value = "导入用例库", notes = "导入用例库")
     @RequestMapping(value = "/addCaseRepertoryByCaseid", method = RequestMethod.GET)
@@ -85,7 +83,7 @@ public class CaseRepertoryController2 {
 
         ExecuteResult<String> result = new ExecuteResult<String>();
         try {
-            //调用添加bug接口
+            // 调用添加bug接口
             result = caseRepertoryService.addCaseRepertoryByCaseid(ids);
             if (result.getErrorMessages().size() != 0) {
                 return ApiResponse.error(result.getErrorMessage());
@@ -99,9 +97,8 @@ public class CaseRepertoryController2 {
     }
 
     /*
-     *功能： 批量选择测试用例库导入到用例表中（这是不可以编辑的）单条导入可以用 用例复制功能的查询接口  并将回显到新增用例库用例的页面上进行编辑
-     * 描述：把测试用例库中的数据导入到用例
-     * 作者：sll
+     * 功能： 批量选择测试用例库导入到用例表中（这是不可以编辑的）单条导入可以用 用例复制功能的查询接口 并将回显到新增用例库用例的页面上进行编辑
+     * 描述：把测试用例库中的数据导入到用例 作者：sll
      */
     @ApiOperation(value = "导入用例", notes = "导入用例")
     @RequestMapping(value = "/addUserCaseByCaseRepertoryid", method = RequestMethod.GET)
@@ -110,7 +107,7 @@ public class CaseRepertoryController2 {
 
         ExecuteResult<String> result = new ExecuteResult<String>();
         try {
-            //调用添加bug接口
+            // 调用添加bug接口
             result = caseRepertoryService.addUserCaseByCaseRepertoryid(ids);
             if (result.getErrorMessages().size() != 0) {
                 return ApiResponse.error(result.getErrorMessage());
@@ -140,7 +137,8 @@ public class CaseRepertoryController2 {
 
     @ApiOperation(value = "新增用例")
     @PostMapping
-    public ActionBean add(@RequestBody @ApiParam(value = "caseRepertory", required = true) CaseRepertory caseRepertory) {
+    public ActionBean add(
+            @RequestBody @ApiParam(value = "caseRepertory", required = true) CaseRepertory caseRepertory) {
         ActionBean actionBean = new ActionBean();
         try {
             caseRepertoryService.add(caseRepertory);
@@ -170,7 +168,8 @@ public class CaseRepertoryController2 {
 
     @ApiOperation(value = "更新用例")
     @PutMapping
-    public ActionBean update(@RequestBody @ApiParam(value = "caseRepertory", required = true) CaseRepertory caseRepertory) {
+    public ActionBean update(
+            @RequestBody @ApiParam(value = "caseRepertory", required = true) CaseRepertory caseRepertory) {
         ActionBean actionBean = new ActionBean();
         try {
             caseRepertoryService.update(caseRepertory);
@@ -185,8 +184,7 @@ public class CaseRepertoryController2 {
 
     @ApiOperation(value = "批量删除用例")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "ids", value = "用例id,多个id用逗号隔开", required = true, paramType = "query", dataType = "String")
-    })
+            @ApiImplicitParam(name = "ids", value = "用例id,多个id用逗号隔开", required = true, paramType = "query", dataType = "String") })
     @DeleteMapping
     public ActionBean remove(String ids) {
         ActionBean actionBean = new ActionBean();

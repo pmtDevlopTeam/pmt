@@ -11,9 +11,9 @@ public class DemandVO {
     private String roleId;
     private Integer page;
     private Integer size;
-    private Map<String,Object> demandMap;
+    private Map<String, Object> demandMap;
     private Demand demand;
-    
+
     public Long getDemandId() {
         return demandId;
     }

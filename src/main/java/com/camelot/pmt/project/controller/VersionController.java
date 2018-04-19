@@ -38,6 +38,7 @@ public class VersionController {
     @Resource
     VersionService versionService;
     private final Logger log = LoggerFactory.getLogger(this.getClass());
+
     /**
      * @Description: 添加版本信息
      * @param: projectId
@@ -59,13 +60,13 @@ public class VersionController {
     public JSONObject addVersion(Long projectId, @ApiIgnore VersionVo versionVo) {
         try {
             User user = (User) ShiroUtils.getSessionAttribute("user");
-            if(user != null){
-                boolean  flag=versionService.addVersion(projectId, user.getUserId(), versionVo);
-                if(flag){
+            if (user != null) {
+                boolean flag = versionService.addVersion(projectId, user.getUserId(), versionVo);
+                if (flag) {
                     return ApiResponse.success();
                 }
                 return ApiResponse.error("添加异常");
-            }else{
+            } else {
                 return ApiResponse.error("用户未登录，请登录！");
             }
         } catch (Exception e) {
@@ -89,13 +90,13 @@ public class VersionController {
     public JSONObject deleteVersonById(Long versionId) {
         try {
             User user = (User) ShiroUtils.getSessionAttribute("user");
-            if(user != null){
-                boolean flag=versionService.deleteVersionById(user.getUserId(), versionId);
-                if(flag){
+            if (user != null) {
+                boolean flag = versionService.deleteVersionById(user.getUserId(), versionId);
+                if (flag) {
                     return ApiResponse.success();
                 }
                 return ApiResponse.error("删除异常");
-            }else{
+            } else {
                 return ApiResponse.error("用户未登录，请登录！");
             }
         } catch (Exception e) {
@@ -118,10 +119,10 @@ public class VersionController {
     public JSONObject queryVersionInfoById(Long versionId) {
         try {
             User user = (User) ShiroUtils.getSessionAttribute("user");
-            if(user != null){
-                 VersionVo versionVo = versionService.queryVersionInfoById(versionId);
-                 return ApiResponse.success(versionVo);
-            }else{
+            if (user != null) {
+                VersionVo versionVo = versionService.queryVersionInfoById(versionId);
+                return ApiResponse.success(versionVo);
+            } else {
                 return ApiResponse.error("用户未登录，请登录！");
             }
         } catch (Exception e) {
@@ -149,13 +150,13 @@ public class VersionController {
     public JSONObject updateVersonInfo(@ApiIgnore Version version) {
         try {
             User user = (User) ShiroUtils.getSessionAttribute("user");
-            if(user != null){
-                boolean  flag=versionService.updateVersonInfo(user.getUserId(), version);
-                if(flag){
+            if (user != null) {
+                boolean flag = versionService.updateVersonInfo(user.getUserId(), version);
+                if (flag) {
                     return ApiResponse.success();
                 }
                 return ApiResponse.error("更新异常");
-            }else{
+            } else {
                 return ApiResponse.error("用户未登录，请登录！");
             }
         } catch (Exception e) {
@@ -178,13 +179,13 @@ public class VersionController {
             @ApiImplicitParam(name = "versionType", value = "版本类型", required = false, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "projectId", value = "项目id", required = true, paramType = "query", dataType = "Long") })
     @RequestMapping(value = "/queryVerListByProId", method = RequestMethod.GET)
-    public JSONObject queryVerListByProId(Long projectId,@ApiIgnore VersionVo versionVo) {
+    public JSONObject queryVerListByProId(Long projectId, @ApiIgnore VersionVo versionVo) {
         try {
             User user = (User) ShiroUtils.getSessionAttribute("user");
-            if(user != null){
-                List<VersionVo> versionVoList = versionService.queryVerListByProId(projectId,versionVo);
+            if (user != null) {
+                List<VersionVo> versionVoList = versionService.queryVerListByProId(projectId, versionVo);
                 return ApiResponse.success(versionVoList);
-            }else{
+            } else {
                 return ApiResponse.error("用户未登录，请登录！");
             }
         } catch (Exception e) {
@@ -209,13 +210,15 @@ public class VersionController {
             @ApiImplicitParam(name = "versionType", value = "版本类型", required = false, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "projectId", value = "项目id", required = true, paramType = "query", dataType = "Long") })
     @RequestMapping(value = "/queryVerListByPageAndProIdAndParm", method = RequestMethod.GET)
-    public JSONObject queryVerListByPageAndProIdAndParm(@ApiIgnore Pager<?> page,Long projectId, @ApiIgnore VersionVo versionVo) {
+    public JSONObject queryVerListByPageAndProIdAndParm(@ApiIgnore Pager<?> page, Long projectId,
+            @ApiIgnore VersionVo versionVo) {
         try {
             User user = (User) ShiroUtils.getSessionAttribute("user");
-            if(user != null){
-                PageInfo pageInfo = versionService.queryVerListByPageAndProId(page.getPage(), page.getRows(), projectId,versionVo);
+            if (user != null) {
+                PageInfo pageInfo = versionService.queryVerListByPageAndProId(page.getPage(), page.getRows(), projectId,
+                        versionVo);
                 return ApiResponse.success(pageInfo);
-            }else{
+            } else {
                 return ApiResponse.error("用户未登录，请登录！");
             }
         } catch (Exception e) {

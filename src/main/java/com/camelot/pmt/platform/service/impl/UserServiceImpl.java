@@ -1,6 +1,5 @@
 package com.camelot.pmt.platform.service.impl;
 
-
 import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,369 +24,379 @@ import javax.servlet.http.Cookie;
 
 /**
  * 
- * @Title:  UserServiceImpl.java
+ * @Title: UserServiceImpl.java
  * @Description: TODO(用户操作实现层)
  * @author: jh
- * @date:  2018年2月5日 下午3:12:12
+ * @date: 2018年2月5日 下午3:12:12
  */
 @Service
 @Primary
-@Transactional(rollbackFor=Exception.class)
-public class UserServiceImpl implements UserService{
+@Transactional(rollbackFor = Exception.class)
+public class UserServiceImpl implements UserService {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
-	
     @Autowired
     private UserMapper userMapper;
-    
 
     /**
-     * <p>Description:[新增用户]<p>
-     * @param User user
+     * <p>
+     * Description:[新增用户]
+     * <p>
+     * 
+     * @param User
+     *            user
      * @return ExecuteResult<User>
      */
     @Override
     public ExecuteResult<String> createUser(User user) {
-    	ExecuteResult<String> result = new ExecuteResult<String>();
-		try{
-			if(user == null){
-				result.addErrorMessage("传入的用户实体有误!");
-				return result;
-			}
-			//1.插入用户表
-			String userId = UUIDUtil.getUUID();
-			user.setUserId(userId);
-			String inputPassword = user.getPassword();
-			String encryptPassword = new Sha256Hash(inputPassword).toHex();
-			user.setPassword(encryptPassword);
-			user.setModifyUserId(user.getCreateUserId());
-			//2.插入用户信息表
-			  //检查用户名是否存在，不存在的话再插入用户表
-			User dbModel = userMapper.findUserByLoginCode(user.getLoginCode());
-			if(dbModel != null) {
-				result.setResult("该用户已经存在！");
-				return result;
-			}
-			long checkCount = userMapper.checkUserExistByUserJobNum(user.getUserJobNum());
-			if(checkCount == 1) {
-				result.setResult("该员工号已经存在！");
-				return result;
-			}
-			userMapper.insertUser(user);
-			userMapper.insertUserInfo(user);
-			//3.如果指定了部门，就插入用户组织表
-			if(!StringUtils.isEmpty(user.getOrgId())) {
-				userMapper.insertUserOrg(user);
-			}
-			//4.如果指定了角色，就插入用户角色表
-			if(user.getRoleIds() != null && user.getRoleIds().length != 0) {
-				String[] roleIds = user.getRoleIds();
-				for (String roleId : roleIds) {
-					user.setRoleId(roleId);
-					userMapper.insertUserRole(user);
-				}
-			}
-			//5.通过邮件发送新添加的用户信息
-			result.setResult("添加用户成功!");
-		}catch(Exception e){
-			LOGGER.error(e.getMessage());
-			throw new RuntimeException(e);
-		}
-		return result;
+        ExecuteResult<String> result = new ExecuteResult<String>();
+        try {
+            if (user == null) {
+                result.addErrorMessage("传入的用户实体有误!");
+                return result;
+            }
+            // 1.插入用户表
+            String userId = UUIDUtil.getUUID();
+            user.setUserId(userId);
+            String inputPassword = user.getPassword();
+            String encryptPassword = new Sha256Hash(inputPassword).toHex();
+            user.setPassword(encryptPassword);
+            user.setModifyUserId(user.getCreateUserId());
+            // 2.插入用户信息表
+            // 检查用户名是否存在，不存在的话再插入用户表
+            User dbModel = userMapper.findUserByLoginCode(user.getLoginCode());
+            if (dbModel != null) {
+                result.setResult("该用户已经存在！");
+                return result;
+            }
+            long checkCount = userMapper.checkUserExistByUserJobNum(user.getUserJobNum());
+            if (checkCount == 1) {
+                result.setResult("该员工号已经存在！");
+                return result;
+            }
+            userMapper.insertUser(user);
+            userMapper.insertUserInfo(user);
+            // 3.如果指定了部门，就插入用户组织表
+            if (!StringUtils.isEmpty(user.getOrgId())) {
+                userMapper.insertUserOrg(user);
+            }
+            // 4.如果指定了角色，就插入用户角色表
+            if (user.getRoleIds() != null && user.getRoleIds().length != 0) {
+                String[] roleIds = user.getRoleIds();
+                for (String roleId : roleIds) {
+                    user.setRoleId(roleId);
+                    userMapper.insertUserRole(user);
+                }
+            }
+            // 5.通过邮件发送新添加的用户信息
+            result.setResult("添加用户成功!");
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+        return result;
     }
 
-
     /**
-     * <p>Description:[根据ID删除用户]<p>
-     * @param User user
+     * <p>
+     * Description:[根据ID删除用户]
+     * <p>
+     * 
+     * @param User
+     *            user
      * @return ExecuteResult<String>
      */
-	@Override
-	public ExecuteResult<String> deleteUserByUserId(String userId) {
-		ExecuteResult<String> result = new ExecuteResult<String>();
-    	try {
-    		userMapper.deleteUserByUserId(userId);
-    		result.setResult("删除用户成功！");
-    	} catch (Exception e) {
-    		LOGGER.error(e.getMessage());
-			throw new RuntimeException(e);
-		}
+    @Override
+    public ExecuteResult<String> deleteUserByUserId(String userId) {
+        ExecuteResult<String> result = new ExecuteResult<String>();
+        try {
+            userMapper.deleteUserByUserId(userId);
+            result.setResult("删除用户成功！");
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
         return result;
-	}
+    }
 
+    /**
+     * 
+     * Description:[查询所有用户]
+     * 
+     * @return ExecuteResult<List<User>>
+     * @author [maple]
+     */
+    @Override
+    public ExecuteResult<List<User>> queryAllUsers() {
+        ExecuteResult<List<User>> result = new ExecuteResult<List<User>>();
+        try {
+            List<User> list = userMapper.queryAllUsers();
+            if (list.size() <= 0) {
+                return result;
+            }
+            result.setResult(list);
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+        return result;
+    }
 
-	/**
-	 * 
-	 * Description:[查询所有用户]
-	 * @return ExecuteResult<List<User>>
-	 * @author [maple]
-	 */
-	@Override
-	public ExecuteResult<List<User>> queryAllUsers() {
-    	ExecuteResult<List<User>> result = new ExecuteResult<List<User>>();
-    	try {
-    		List<User> list = userMapper.queryAllUsers();
-    		if(list.size() <= 0) {
-				return result;
-			}
-    		result.setResult(list);
-    	} catch (Exception e) {
-    		LOGGER.error(e.getMessage());
-			throw new RuntimeException(e);
-		}
-       return result;
-	}
-
-
-	/**
+    /**
      * Description:[根据userId获取单个用户信息]
-     * @param String userId
+     * 
+     * @param String
+     *            userId
      * @return ExecuteResult<User>
      */
-	@Override
-	public ExecuteResult<User> findUserByUserId(String userId) {
-		ExecuteResult<User> result = new ExecuteResult<User>();
-		try {
-			User queryResult = userMapper.selectUserById(userId);
-			if(queryResult == null) {
-				result.setResultMessage("用户不存在！");
-				return result;
-			}
-			result.setResult(queryResult);
-		} catch (Exception e) {
-			LOGGER.error(e.getMessage());
-			throw new RuntimeException(e);
-		}
-		return result;
-	}
+    @Override
+    public ExecuteResult<User> findUserByUserId(String userId) {
+        ExecuteResult<User> result = new ExecuteResult<User>();
+        try {
+            User queryResult = userMapper.selectUserById(userId);
+            if (queryResult == null) {
+                result.setResultMessage("用户不存在！");
+                return result;
+            }
+            result.setResult(queryResult);
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+        return result;
+    }
 
-	/**
+    /**
      * Description:[根据用户登录账号和密码检查用户信息]
-     * @param User user
+     * 
+     * @param User
+     *            user
      * @return ExecuteResult<User>
      */
-	@Override
-	public ExecuteResult<User> queryLoginCodeAndPassword(User user) {
-		ExecuteResult<User> result = new ExecuteResult<User>();
-		try {
-			if(user != null && !"".equals(user.getLoginCode()) && user.getLoginCode() != null ) {
-				//1.获取用户输入的登录账号
-				String inputLoginCode = user.getLoginCode();
-				//2.根据登录账号去库中获取用户信息,检查用户是否存在
-				User dbModel = userMapper.findUserByLoginCode(inputLoginCode);
-				if(dbModel == null) {
-					result.setResultMessage("该用户不存在！");
-					return result;
-				}
-				//3.记录存在，再检查用的输入密码与库里的密码是否匹配 
-				String dbPassword = dbModel.getPassword();
-				String inputPassword = user.getPassword();
-				String encryptPassword = new Sha256Hash(inputPassword).toHex();
-				if(!dbPassword.equals(encryptPassword)) {
-					result.setResultMessage("密码不正确!");
-					return result;
-				}
-				user.setPassword(dbPassword);
-				User reusltUser = userMapper.checkUserLoginCodeAndPassword(user);
-				result.setResult(reusltUser);
-			}
-		} catch (Exception e) {
-			LOGGER.error(e.getMessage());
-			throw new RuntimeException(e);
-		}
-		return result;
-	}
+    @Override
+    public ExecuteResult<User> queryLoginCodeAndPassword(User user) {
+        ExecuteResult<User> result = new ExecuteResult<User>();
+        try {
+            if (user != null && !"".equals(user.getLoginCode()) && user.getLoginCode() != null) {
+                // 1.获取用户输入的登录账号
+                String inputLoginCode = user.getLoginCode();
+                // 2.根据登录账号去库中获取用户信息,检查用户是否存在
+                User dbModel = userMapper.findUserByLoginCode(inputLoginCode);
+                if (dbModel == null) {
+                    result.setResultMessage("该用户不存在！");
+                    return result;
+                }
+                // 3.记录存在，再检查用的输入密码与库里的密码是否匹配
+                String dbPassword = dbModel.getPassword();
+                String inputPassword = user.getPassword();
+                String encryptPassword = new Sha256Hash(inputPassword).toHex();
+                if (!dbPassword.equals(encryptPassword)) {
+                    result.setResultMessage("密码不正确!");
+                    return result;
+                }
+                user.setPassword(dbPassword);
+                User reusltUser = userMapper.checkUserLoginCodeAndPassword(user);
+                result.setResult(reusltUser);
+            }
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+        return result;
+    }
 
+    /**
+     * 
+     * Description:[列表展示用户]
+     * 
+     * @param UserVo
+     *            userVo
+     * @return ExecuteResult<List<UserVo>>
+     * @author [maple] 2018年4月13日下午3:15:16
+     */
+    @Override
+    public ExecuteResult<PageInfo> queryUsersList(UserVo userVo, int pageNum, int pageSize) {
+        ExecuteResult<PageInfo> result = new ExecuteResult<PageInfo>();
+        try {
+            PageHelper.startPage(pageNum, pageSize);
+            // 利用userVo做 条件查询，默认查询所有的
+            List<UserVo> usersList = userMapper.selectUsersList(userVo);
+            if (CollectionUtils.isEmpty(usersList)) {
+                return result;
+            }
+            PageInfo pageResult = new PageInfo(usersList);
+            pageResult.setList(usersList);
+            result.setResult(pageResult);
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+        return result;
+    }
 
+    /**
+     * 
+     * Description:[根据用户ID更新一个用户详情]
+     * 
+     * @param User
+     * @return ExecuteResult<String>
+     * @author [maple]
+     */
+    @Override
+    public ExecuteResult<String> modifyUserDetailsByUserId(User user) {
+        ExecuteResult<String> result = new ExecuteResult<String>();
+        try {
+            // 1.判断用户表需要更新的字段
+            if (!StringUtils.isEmpty(user.getUsername()) || !StringUtils.isEmpty(user.getLoginCode())
+                    || !StringUtils.isEmpty(user.getPassword()) || !StringUtils.isEmpty(user.getState())
+                    || !StringUtils.isEmpty(user.getModifyUserId())) {
+                if (!StringUtils.isEmpty(user.getPassword())) {
+                    String encryptPassword = new Sha256Hash(user.getPassword()).toHex();
+                    user.setPassword(encryptPassword);
+                }
+                int updateResult = userMapper.modifyUserByUserId(user);
+                if (updateResult == 0) {
+                    result.setResultMessage("更新用户失败！");
+                    return result;
+                }
+            }
+            // 2.判断用户信息表更新
+            if (!StringUtils.isEmpty(user.getUserPhone()) || !StringUtils.isEmpty(user.getUserMail())) {
+                int updateResult = userMapper.modifyUserInfoByUserId(user);
+                if (updateResult == 0) {
+                    result.setResultMessage("更新用户失败！");
+                    return result;
+                }
+            }
+            // 3.判断用户组织表
+            if (!StringUtils.isEmpty(user.getOrgId())) {
+                long checkResult = userMapper.checkUserOrgExistByUserId(user.getUserId());
+                if (checkResult == 0) {
+                    user.setCreateUserId(user.getModifyUserId());
+                    userMapper.insertUserOrg(user);
+                } else {
+                    int updateResult = userMapper.modifyUserOrgByUserId(user);
+                    if (updateResult == 0) {
+                        result.setResultMessage("更新用户失败！");
+                        return result;
+                    }
+                }
 
-	/**
-	  * 
-	  * Description:[列表展示用户]
-	  * @param UserVo userVo
-	  * @return ExecuteResult<List<UserVo>>
-	  * @author [maple]
-	  * 2018年4月13日下午3:15:16
-	  */
-	@Override
-	public ExecuteResult<PageInfo> queryUsersList(UserVo userVo,int pageNum,int pageSize) {
-		ExecuteResult<PageInfo> result = new ExecuteResult<PageInfo>();
-    	try {
-    		PageHelper.startPage(pageNum,pageSize);
-    		//利用userVo做 条件查询，默认查询所有的
-    		List<UserVo> usersList = userMapper.selectUsersList(userVo);
-    		if(CollectionUtils.isEmpty(usersList)) {
-				return result;
-			}
-    		PageInfo pageResult = new PageInfo(usersList);
-    		pageResult.setList(usersList);
-    		result.setResult(pageResult);
-    	} catch (Exception e) {
-    		LOGGER.error(e.getMessage());
-			throw new RuntimeException(e);
-		}
-       return result;
-	}
+            }
+            // 4.用户信角色表更新
+            if (user.getRoleIds() != null && user.getRoleIds().length != 0) {
+                String[] roleIds = user.getRoleIds();
+                // 检查用户角色表是否存在该用户
+                long checkCount = userMapper.checkUserRoleIsExistByUserId(user.getUserId());
+                if (checkCount <= 0) {
+                    for (String roleId : roleIds) {
+                        user.setRoleId(roleId);
+                        user.setCreateUserId(user.getModifyUserId());
+                        userMapper.insertUserRole(user);
+                    }
+                } else {
+                    // 如果存在该用户，先删除后，再添加一遍
+                    String userRoleCreateUserId = userMapper.queryUserRoleCreateUserByUserId(user.getUserId());
+                    userMapper.deleteUserRoleByUserId(user.getUserId());
+                    user.setCreateUserId(userRoleCreateUserId);
+                    for (String roleId : roleIds) {
+                        user.setRoleId(roleId);
+                        userMapper.insertUserRole(user);
+                    }
+                }
+            }
+            result.setResult("更新用户成功！");
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+        return result;
+    }
 
-	/**
-	 * 
-	 * Description:[根据用户ID更新一个用户详情]
-	 * @param User 
-	 * @return ExecuteResult<String>
-	 * @author [maple]
-	 */
-	@Override
-	public ExecuteResult<String> modifyUserDetailsByUserId(User user) {
-		ExecuteResult<String> result = new ExecuteResult<String>();
-		try {
-			//1.判断用户表需要更新的字段
-			if(!StringUtils.isEmpty(user.getUsername()) || !StringUtils.isEmpty(user.getLoginCode()) || !StringUtils.isEmpty(user.getPassword()) || !StringUtils.isEmpty(user.getState()) || !StringUtils.isEmpty(user.getModifyUserId())){
-				if(!StringUtils.isEmpty(user.getPassword())) {
-					String encryptPassword = new Sha256Hash(user.getPassword()).toHex();
-					user.setPassword(encryptPassword);
-				}
-				int updateResult = userMapper.modifyUserByUserId(user);
-				if(updateResult == 0) {
-					result.setResultMessage("更新用户失败！");
-					return result;
-				}
-			}
-			//2.判断用户信息表更新
-			if(!StringUtils.isEmpty(user.getUserPhone()) || !StringUtils.isEmpty(user.getUserMail()) ) {
-				int updateResult = userMapper.modifyUserInfoByUserId(user);
-				if(updateResult == 0) {
-					result.setResultMessage("更新用户失败！");
-					return result;
-				}
-			}
-			//3.判断用户组织表
-			if (!StringUtils.isEmpty(user.getOrgId())) {
-				long checkResult = userMapper.checkUserOrgExistByUserId(user.getUserId());
-				if (checkResult == 0) {
-					user.setCreateUserId(user.getModifyUserId());
-					userMapper.insertUserOrg(user);
-				}else {
-					int updateResult = userMapper.modifyUserOrgByUserId(user);
-					if (updateResult == 0) {
-						result.setResultMessage("更新用户失败！");
-						return result;
-					}
-				}
+    /**
+     * 
+     * Description:[根据用户ID更新一个用户信息详情]
+     * 
+     * @param String
+     *            userId
+     * @return ExecuteResult<User>
+     * @author [maple]
+     */
+    @Override
+    public ExecuteResult<User> queryUserInfoById(String userId) {
+        ExecuteResult<User> result = new ExecuteResult<User>();
+        try {
+            if (!"".equals(userId) && userId != null) {
+                User queryResult = userMapper.queryUserInfoById(userId);
+                if (queryResult == null) {
+                    result.setResultMessage("查询的用户信息不存在！");
+                    return result;
+                }
+                result.setResult(queryResult);
+                return result;
+            }
+            result.addErrorMessage("查询失败！");
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+        return result;
+    }
 
-			}
-			//4.用户信角色表更新
-			if (user.getRoleIds() != null && user.getRoleIds().length != 0) {
-				String[] roleIds = user.getRoleIds();
-				// 检查用户角色表是否存在该用户
-				long checkCount = userMapper.checkUserRoleIsExistByUserId(user.getUserId());
-				if (checkCount <= 0) {
-					for (String roleId : roleIds) {
-						user.setRoleId(roleId);
-						user.setCreateUserId(user.getModifyUserId());
-						userMapper.insertUserRole(user);
-					}
-				} else {
-					// 如果存在该用户，先删除后，再添加一遍
-					String userRoleCreateUserId = userMapper.queryUserRoleCreateUserByUserId(user.getUserId());
-					userMapper.deleteUserRoleByUserId(user.getUserId());
-					user.setCreateUserId(userRoleCreateUserId);
-					for (String roleId : roleIds) {
-						user.setRoleId(roleId);
-						userMapper.insertUserRole(user);
-					}
-				}
-			}
-			result.setResult("更新用户成功！");
-    	} catch (Exception e) {
-    		LOGGER.error(e.getMessage());
-			throw new RuntimeException(e);
-		}
-       return result;
-	}
+    /**
+     * 
+     * Description:[用户重置密码]
+     * 
+     * @param User
+     *            user
+     * @return ExecuteResult<String>
+     * @author [maple] 2018年4月16日下午10:44:45
+     */
+    @Override
+    public ExecuteResult<String> resetUserPasswordByUserId(User user) {
+        ExecuteResult<String> result = new ExecuteResult<String>();
+        try {
+            if (StringUtils.isEmpty(user.getPassword())) {
+                String random = UUIDUtil.getUUID();
+                String generatePassword = random.substring(0, 6);
+                String encryptPassword = new Sha256Hash(generatePassword).toHex();
+                user.setPassword(encryptPassword);
+                int updateResult = userMapper.resetUserPasswordByUserId(user);
+                if (updateResult < 0) {
+                    result.addErrorMessage("重置密码失败！");
+                    return result;
+                }
+                result.setResult(generatePassword);
+                return result;
+            }
+            String inputPassword = user.getPassword();
+            String encryptPassword = new Sha256Hash(inputPassword).toHex();
+            user.setPassword(encryptPassword);
+            int updateResult = userMapper.resetUserPasswordByUserId(user);
+            if (updateResult < 0) {
+                result.addErrorMessage("重置密码失败！");
+                return result;
+            }
+            result.setResult("重置密码成功！");
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+        return result;
+    }
 
-	
-	/**
-	 * 
-	 * Description:[根据用户ID更新一个用户信息详情]
-	 * @param String userId 
-	 * @return ExecuteResult<User>
-	 * @author [maple]
-	 */
-	@Override
-	public ExecuteResult<User> queryUserInfoById(String userId) {
-		ExecuteResult<User> result = new ExecuteResult<User>();
-		try {
-			if(!"".equals(userId) && userId != null) {
-				User queryResult = userMapper.queryUserInfoById(userId);
-				if(queryResult == null) {
-					result.setResultMessage("查询的用户信息不存在！");
-					return result;
-				}
-				result.setResult(queryResult);
-				return result;
-				}
-			result.addErrorMessage("查询失败！");
-		} catch (Exception e) {
-			LOGGER.error(e.getMessage());
-			throw new RuntimeException(e);
-		}
-		return result;
-	}
-
-
-	/**
-	 * 
-	 * Description:[用户重置密码]
-	 * @param User user
-	 * @return ExecuteResult<String>
-	 * @author [maple]
-	 * 2018年4月16日下午10:44:45
-	 */
-	@Override
-	public ExecuteResult<String> resetUserPasswordByUserId(User user) {
-		ExecuteResult<String> result = new ExecuteResult<String>();
-		try {
-			if (StringUtils.isEmpty(user.getPassword())) {
-				String random = UUIDUtil.getUUID();
-				String generatePassword = random.substring(0, 6);
-				String encryptPassword = new Sha256Hash(generatePassword).toHex();
-				user.setPassword(encryptPassword);
-				int updateResult = userMapper.resetUserPasswordByUserId(user);
-				if(updateResult < 0 ) {
-					result.addErrorMessage("重置密码失败！");
-					return result;
-				}
-				result.setResult(generatePassword);
-				return result;
-			}
-			String inputPassword = user.getPassword();
-			String encryptPassword = new Sha256Hash(inputPassword).toHex();
-			user.setPassword(encryptPassword);
-			int updateResult = userMapper.resetUserPasswordByUserId(user);
-			if(updateResult < 0 ) {
-				result.addErrorMessage("重置密码失败！");
-				return result;
-			}
-			result.setResult("重置密码成功！");
-		} catch (Exception e) {
-			LOGGER.error(e.getMessage());
-			throw new RuntimeException(e);
-		}
-		return result;
-	}
-
-
-	@Override
-	public ExecuteResult<List<User>> queryUsersByUserName(String username) {
-		ExecuteResult<List<User>> result = new ExecuteResult<List<User>>();
-    	try {
-    		List<User> userList = userMapper.queryUsersByUserName(username);
-    		result.setResult(userList);
-    	} catch (Exception e) {
-    		LOGGER.error(e.getMessage());
-			throw new RuntimeException(e);
-		}
-       return result;
-	}
+    @Override
+    public ExecuteResult<List<User>> queryUsersByUserName(String username) {
+        ExecuteResult<List<User>> result = new ExecuteResult<List<User>>();
+        try {
+            List<User> userList = userMapper.queryUsersByUserName(username);
+            result.setResult(userList);
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+        return result;
+    }
 
 }

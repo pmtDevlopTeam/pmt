@@ -59,7 +59,7 @@ public interface VersionService {
      * @author: xueyj
      * @date: 2018/4/13 19:14
      */
-    List<VersionVo> queryVerListByProId(Long projectId,VersionVo versionVo);
+    List<VersionVo> queryVerListByProId(Long projectId, VersionVo versionVo);
 
     /**
      * @Description: 根据项目id,分页查询版本信息
@@ -68,5 +68,5 @@ public interface VersionService {
      * @author: xueyj
      * @date: 2018/4/17 10:34
      */
-    PageInfo queryVerListByPageAndProId(int pageNum, int pageSize, Long projectId,VersionVo versionVo);
+    PageInfo queryVerListByPageAndProId(int pageNum, int pageSize, Long projectId, VersionVo versionVo);
 }

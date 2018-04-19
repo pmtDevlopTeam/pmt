@@ -15,7 +15,8 @@ public interface UseCaseImplementService {
     /**
      * 增加用例执行和用例执行详细信息
      *
-     * @param useCaseImplement 用例执行
+     * @param useCaseImplement
+     *            用例执行
      */
     void add(User userModel, UseCaseImplement useCaseImplement);
 

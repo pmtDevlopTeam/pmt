@@ -36,7 +36,7 @@ public class DemandServiceImpl implements DemandService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean save(Demand demand, User user) {
-       boolean flag=false;
+        boolean flag = false;
         try {
             int resultCount = demandMapper.insert(demand);
             if (resultCount > 0) {
@@ -45,13 +45,13 @@ public class DemandServiceImpl implements DemandService {
                 demandOperate.setCreateTime(demand.getCreateTime());
                 demandOperate.setDemandId(demand.getId());
                 demandOperate.setOperateDesc(user.getUsername() + "创建");
-                //常规操作
+                // 常规操作
                 demandOperate.setRunType("01");
                 demandOperateMapper.insert(demandOperate);
             }
             flag = true;
         } catch (Exception e) {
-            throw  new RuntimeException(e);
+            throw new RuntimeException(e);
         }
         return flag;
     }
@@ -63,17 +63,14 @@ public class DemandServiceImpl implements DemandService {
      * @return
      */
     @Override
-    public List<Demand> queryByPage(Demand demand,Integer pageSize,Integer currentPage) {
-            PageHelper.startPage(currentPage,pageSize);
-            return demandMapper.queryByPage(demand);
-
+    public List<Demand> queryByPage(Demand demand, Integer pageSize, Integer currentPage) {
+        PageHelper.startPage(currentPage, pageSize);
+        return demandMapper.queryByPage(demand);
 
     }
 
     /**
-     * 根据id查询需求(Get)
-     * param  Long id
-     * return DemandVO
+     * 根据id查询需求(Get) param Long id return DemandVO
      */
 
     public DemandVO queryDemandById(Long id) {
@@ -85,7 +82,7 @@ public class DemandServiceImpl implements DemandService {
         Demand parantDemand = demandMapper.selectByPrimaryKey(id);
         if (null != parantDemand) {
             Long pid = parantDemand.getPid();
-            if ((null != pid)&&(0 != pid)) {
+            if ((null != pid) && (0 != pid)) {
                 // 说明不是最顶级需求，有父需求
                 Demand parantDemandList = demandMapper.selectByPrimaryKey(pid);// 有待与前端沟通，是否前端传来pid？
                 map.put("parantDemand", parantDemandList);
@@ -137,13 +134,13 @@ public class DemandServiceImpl implements DemandService {
             }
             demandMapper.deleteByList(list);
             User user = (User) ShiroUtils.getSessionAttribute("user");
-            if(null!=user) {
+            if (null != user) {
                 DemandOperate demandOperate = new DemandOperate();
                 Date currentDate = new Date();
                 demandOperate.setCreateTime(currentDate);
                 demandOperate.setCreateUserId(user.getUserId());
                 demandOperate.setDemandId(id);
-                demandOperate.setOperateDesc(user.getUsername()+"删除需求");
+                demandOperate.setOperateDesc(user.getUsername() + "删除需求");
                 demandOperateMapper.insert(demandOperate);
             }
             result.setResult("删除需求成功");
@@ -164,8 +161,8 @@ public class DemandServiceImpl implements DemandService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean updateByDemand(Demand demand,User user) {
-       boolean flag=false;
+    public boolean updateByDemand(Demand demand, User user) {
+        boolean flag = false;
         try {
             int updateCount = demandMapper.updateByPrimaryKeySelective(demand);
             if (updateCount > 0) {
@@ -173,12 +170,12 @@ public class DemandServiceImpl implements DemandService {
                 Date currentDate = new Date();
                 demandOperate.setCreateTime(currentDate);
                 demandOperate.setDemandId(demand.getId());
-                demandOperate.setOperateDesc(user.getUsername()+"更新需求");
+                demandOperate.setOperateDesc(user.getUsername() + "更新需求");
                 demandOperate.setCreateUserId(user.getUserId());
                 demandOperate.setRunType("02");
                 demandOperateMapper.insert(demandOperate);
             }
-           flag = true;
+            flag = true;
         } catch (Exception e) {
             logger.error("------需求更新------" + e.getMessage());
             throw new RuntimeException();
@@ -187,10 +184,10 @@ public class DemandServiceImpl implements DemandService {
     }
 
     @Override
-    public List<DemandOperate> queryOperateByPage(DemandOperate demandOperate,Integer pageSize,Integer currentPage) {
+    public List<DemandOperate> queryOperateByPage(DemandOperate demandOperate, Integer pageSize, Integer currentPage) {
         ExecuteResult<DataGrid<DemandOperate>> result = new ExecuteResult<>();
         try {
-            PageHelper.startPage(currentPage,pageSize);
+            PageHelper.startPage(currentPage, pageSize);
             List<DemandOperate> demandOperatesList = demandOperateMapper.queryOperateByPage(demandOperate);
             return demandOperatesList;
         } catch (Exception e) {
@@ -201,8 +198,9 @@ public class DemandServiceImpl implements DemandService {
 
     /**
      * 查询需求相关进行中的引用
-     *@param
-     *@return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
+     * 
+     * @param
+     * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
     private List<Long> countQuote(Long demandId) {
         // 统计需求相关引用
@@ -221,7 +219,7 @@ public class DemandServiceImpl implements DemandService {
     /**
      * 查询影响需求的任务信息
      *
-     * @param   demandId
+     * @param demandId
      * @return ExecuteResult<List<Map<String, Object>>>
      */
     @Override
@@ -239,7 +237,7 @@ public class DemandServiceImpl implements DemandService {
     /**
      * 查询影响变更需求影响的用例信息
      *
-     * @param   demandId
+     * @param demandId
      * @return ExecuteResult<List<Map<String, Object>>>
      */
     @Override
@@ -257,7 +255,7 @@ public class DemandServiceImpl implements DemandService {
     /**
      * 查询影响需求变更的bug信息
      *
-     * @param   demandId
+     * @param demandId
      * @return ExecuteResult<List<Map<String, Object>>>
      */
     @Override
@@ -280,7 +278,7 @@ public class DemandServiceImpl implements DemandService {
      */
     @Override
     public boolean updateByReview(Demand demand, User user) {
-        boolean flag=false;
+        boolean flag = false;
         try {
             int resultCount = demandMapper.updateByPrimaryKeySelective(demand);
             if (resultCount > 0) {
@@ -289,11 +287,11 @@ public class DemandServiceImpl implements DemandService {
                 demandOperate.setCreateTime(demand.getCreateTime());
                 demandOperate.setDemandId(demand.getId());
                 demandOperate.setOperateDesc(user.getUsername() + "评审需求");
-                //评审操作
+                // 评审操作
                 demandOperate.setRunType("02");
                 demandOperateMapper.insert(demandOperate);
             }
-            flag= true;
+            flag = true;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

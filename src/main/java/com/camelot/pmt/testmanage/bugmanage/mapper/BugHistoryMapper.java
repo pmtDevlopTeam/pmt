@@ -8,11 +8,11 @@ import com.camelot.pmt.testmanage.bugmanage.model.BugHistory;
 
 @Mapper
 public interface BugHistoryMapper {
-  
+
     int insertSelective(BugHistory record);
 
     List<BugHistory> selectBugHistoryAll(Long bugId);
-    
+
     BugHistory getBugHistoryByBugId(Long bugId);
 
 }

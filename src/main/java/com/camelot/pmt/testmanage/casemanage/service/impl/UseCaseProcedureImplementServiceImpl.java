@@ -9,14 +9,15 @@ import com.camelot.pmt.testmanage.casemanage.model.UseCaseProcedureImplement;
 import com.camelot.pmt.testmanage.casemanage.service.UseCaseProcedureImplementService;
 
 @Service
-public class UseCaseProcedureImplementServiceImpl implements UseCaseProcedureImplementService{
-	
-	@Autowired
-	UseCaseProcedureImplementService useCaseProcedureImplementService;
-	@Override
-	public List<UseCaseProcedureImplement> findByImplementId(Long implementId) {
-		
-		return useCaseProcedureImplementService.findByImplementId(implementId);
-	}
+public class UseCaseProcedureImplementServiceImpl implements UseCaseProcedureImplementService {
+
+    @Autowired
+    UseCaseProcedureImplementService useCaseProcedureImplementService;
+
+    @Override
+    public List<UseCaseProcedureImplement> findByImplementId(Long implementId) {
+
+        return useCaseProcedureImplementService.findByImplementId(implementId);
+    }
 
 }

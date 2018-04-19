@@ -162,6 +162,7 @@ public class VersionVo {
     public void setRemarks(String remarks) {
         this.remarks = remarks == null ? null : remarks.trim();
     }
+
     /**
      * 版本编号
      *

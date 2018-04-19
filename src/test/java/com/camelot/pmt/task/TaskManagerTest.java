@@ -33,6 +33,7 @@ public class TaskManagerTest {
             System.out.println(task);
         }
     }
+
     @Test
     public void testInsertTask() throws Exception {
         Task task = new Task();
@@ -46,6 +47,7 @@ public class TaskManagerTest {
         task.setTaskDescribe("这是任务描述");
         ExecuteResult<String> stringExecuteResult = taskManagerService.insertTask(task, null);
     }
+
     @Test
     public void testQueryTaskById() throws Exception {
         ExecuteResult<Map<String, Object>> mapExecuteResult = taskManagerService.queryTaskById((long) 2);
