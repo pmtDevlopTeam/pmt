@@ -151,7 +151,7 @@
     select <include refid="Base_Column_List"/> from file_manage where group_id=#{id}
   </select>
   <!--根据组id查询所有文件的文件id-->
-<select id="queryFileByGroupId" resultType="long" parameterType="long">
+<select id="queryFileIdByGroupId" resultType="long" parameterType="long">
   select id from file_manage where group_id=#{id}
 </select>
   <!--根据id的集合批量删除文件-->

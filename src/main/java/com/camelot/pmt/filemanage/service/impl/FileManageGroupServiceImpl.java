@@ -78,7 +78,7 @@ public class FileManageGroupServiceImpl implements FileManageGroupService {
         if(fileManageGroupIds.size()>0){
               fileManageGroupMapper.deleteBatchFileGroupById(fileManageGroupIds);//批量删除文件夹
         }
-        List fileManagerIds= fileManageMapper.queryFileByGroupId(id);//查询文件夹下的所有文件id
+        List fileManagerIds= fileManageMapper.queryFileIdByGroupId(id);//查询文件夹下的所有文件id
         if(fileManagerIds.size()>0){
              fileManageMapper.deleteBatchFileById(fileManagerIds);//删除文件夹下的文档
         }
