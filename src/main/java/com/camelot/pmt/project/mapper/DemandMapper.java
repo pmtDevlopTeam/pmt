@@ -115,7 +115,7 @@ public interface DemandMapper {
     int updateByProjectId(@Param("projectId") Long projectId, @Param("demandStatus") String demandStatus,
             @Param("closeReason") String closeReason, @Param("modifyUserId") String modifyUserId,
             @Param("modifyTime") Date modifyTime);
-    
+
     /**
      * 根据需求id查询影响需求变更的任务信息
      * 
@@ -123,7 +123,7 @@ public interface DemandMapper {
      * @return
      */
     List<Map<String, Object>> queryDemandTaskQuoteById(Long demandId);
-    
+
     /**
      * 根据需求id查询影响需求变更的用例信息
      * 

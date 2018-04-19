@@ -13,33 +13,37 @@ import com.camelot.pmt.project.model.ProjectBudget;
  */
 public interface ProjectBudgetMapper {
     /**
-     * 根据预算id   删除一个预算
+     * 根据预算id 删除一个预算
      * 
-     * @param  Long id
-     * @return int  1：成功；非1：失败
+     * @param Long
+     *            id
+     * @return int 1：成功；非1：失败
      */
     int deleteByPrimaryKey(Long id);
 
     /**
      * 根据一个预算 增加一个预算
      * 
-     * @param  ProjectBudget record
-     * @return int  1：成功；非1：失败
+     * @param ProjectBudget
+     *            record
+     * @return int 1：成功；非1：失败
      */
     int insert(ProjectBudget record);
 
     /**
      * 根据一个预算 增加一个预算
      * 
-     * @param  ProjectBudget record
-     * @return int  1：成功；非1：失败
+     * @param ProjectBudget
+     *            record
+     * @return int 1：成功；非1：失败
      */
     int insertSelective(ProjectBudget record);
 
     /**
      * 根据预算id 查询一个预算
      *
-     * @param Long id
+     * @param Long
+     *            id
      * @return ProjectBudget
      */
     ProjectBudget selectByPrimaryKey(Long id);
@@ -47,16 +51,18 @@ public interface ProjectBudgetMapper {
     /**
      * 根据预算id 修改一个预算
      * 
-     * @param  ProjectBudget record
-     * @return int  1：成功；非1：失败
+     * @param ProjectBudget
+     *            record
+     * @return int 1：成功；非1：失败
      */
     int updateByPrimaryKeySelective(ProjectBudget record);
 
     /**
      * 根据预算id 修改一个预算
      * 
-     * @param  ProjectBudget record
-     * @return int  1：成功；非1：失败
+     * @param ProjectBudget
+     *            record
+     * @return int 1：成功；非1：失败
      */
     int updateByPrimaryKey(ProjectBudget record);
 
@@ -99,4 +105,12 @@ public interface ProjectBudgetMapper {
      * @return
      */
     Long queryTotalActualHours(Long proId);
+
+    /**
+     * 创建项目时，插入预算表
+     * 
+     * @param projectBudget
+     * @return
+     */
+    int addProjectBudget(ProjectBudget projectBudget);
 }

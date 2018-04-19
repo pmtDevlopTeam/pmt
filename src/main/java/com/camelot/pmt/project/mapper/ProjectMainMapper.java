@@ -11,7 +11,7 @@ import com.camelot.pmt.project.model.ProjectMain;
 public interface ProjectMainMapper {
 
     /**
-     * 关闭时，按主键id更新数据
+     * 关闭项目时，更新相关表
      * 
      * @param id
      * @param projectStatus
@@ -25,7 +25,7 @@ public interface ProjectMainMapper {
     /**
      * 按修改人Id查询
      * 
-     * @param userId
+     * @param modifyUserId
      * @return
      */
     List<ProjectMain> queryByModifyUserId(String modifyUserId);
@@ -33,7 +33,7 @@ public interface ProjectMainMapper {
     /**
      * 按创建人Id查询
      * 
-     * @param userId
+     * @param createUserId
      * @return
      */
     List<ProjectMain> queryByCreateUserId(String createUserId);
@@ -57,7 +57,7 @@ public interface ProjectMainMapper {
     /**
      * 分页查询
      * 
-     * @param projectStatus
+     * @param page
      * @return
      */
     List<ProjectMain> queryAllByPage(@Param(value = "page") Pager<?> page);
