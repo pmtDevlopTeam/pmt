@@ -59,7 +59,13 @@ public class UseCaseServiceImpl implements UseCaseService{
 
 		// 插入
 		useCaseMapper.insertSelective(useCase);
-		
+		//加入编号
+		if(useCase.getId()>0){
+			useCase.setNum("YL"+useCase.getId());
+		}else{
+			useCase.setNum("YL0"+useCase.getId());	
+		}
+		useCaseMapper.updateByPrimaryKey(useCase);
 		// 返回主键
 		Long id = useCase.getId();
 		List<UseCaseProcedure> list = useCase.getProcedure();
@@ -90,7 +96,18 @@ public class UseCaseServiceImpl implements UseCaseService{
 			useCase.setCreateTime(date);
 		}
 		// 批量插入
-		return  useCaseMapper.insertBatch(list)==1?true:false;
+		boolean flag= useCaseMapper.insertBatch(list)==1?true:false;
+		
+		for(UseCase useCase:list){
+			if(useCase.getId()>0){
+				useCase.setNum("YL"+useCase.getId());
+			}else{
+				useCase.setNum("YL0"+useCase.getId());	
+			}
+			useCaseMapper.updateByPrimaryKey(useCase);
+		}
+		
+		return flag;
 	}
 	
 	
