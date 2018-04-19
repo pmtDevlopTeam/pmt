@@ -57,7 +57,7 @@ public class UseCaseController {
 	
 	@ApiOperation(value = "新增用例")
 	@PostMapping(value = "userCase/addUseCase")
-	public JSONObject addUseCase(HttpServletRequest request,  @ApiParam(value = "useCase", required = true) UseCase useCase) {
+	public JSONObject addUseCase(HttpServletRequest request, @RequestBody @ApiParam(value = "useCase", required = true) UseCase useCase) {
 	 	 try {
 	 		 	User user = (User) request.getSession().getAttribute("user");
 	           boolean flag = UseCaseService.addUseCase(user, useCase);
@@ -73,7 +73,7 @@ public class UseCaseController {
 
 	@ApiOperation(value = "批量新增用例")
 	@PostMapping(value = "userCase/addBatchUseCase")
-	public JSONObject addBatchUseCase(HttpServletRequest request, @RequestBody @ApiParam(value = "list", required = true) List<UseCase> list) {
+	public JSONObject addBatchUseCase(HttpServletRequest request,  @RequestBody @ApiParam(value = "list", required = true) List<UseCase> list) {
 		try {
 			User user = (User) shiroUtils.getSessionAttribute("user");
            boolean flag = UseCaseService.addBatchUseCase(user, list);
@@ -107,7 +107,7 @@ public class UseCaseController {
 	 
 	 	@ApiOperation(value = "编辑用例")
 		@PostMapping(value = "userCase/updateUserCase")
-		public JSONObject updateUserCase(HttpServletRequest request,@ApiIgnore @ApiParam(value = "useCase", required = true) UseCase useCase) {
+		public JSONObject updateUserCase(HttpServletRequest request,@RequestBody @ApiParam(value = "useCase", required = true) UseCase useCase) {
 		 	try {
 		 		User user = (User) shiroUtils.getSessionAttribute("user");
 	            //调用修改接口

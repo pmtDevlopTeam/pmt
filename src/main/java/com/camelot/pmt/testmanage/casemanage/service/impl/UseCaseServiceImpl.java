@@ -4,22 +4,22 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import com.camelot.pmt.platform.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.camelot.pmt.common.ExecuteResult;
-import com.camelot.pmt.caserepertory.PageBean;
+import com.camelot.pmt.platform.model.User;
+import com.camelot.pmt.platform.shiro.ShiroUtils;
+import com.camelot.pmt.testmanage.casemanage.mapper.UseCaseHistoryMapper;
 import com.camelot.pmt.testmanage.casemanage.mapper.UseCaseMapper;
 import com.camelot.pmt.testmanage.casemanage.mapper.UseCaseProcedureMapper;
 import com.camelot.pmt.testmanage.casemanage.model.UseCase;
+import com.camelot.pmt.testmanage.casemanage.model.UseCaseHistory;
 import com.camelot.pmt.testmanage.casemanage.model.UseCaseProcedure;
 import com.camelot.pmt.testmanage.casemanage.service.UseCaseService;
 import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 
 @Service
 public class UseCaseServiceImpl implements UseCaseService{
@@ -33,7 +33,12 @@ public class UseCaseServiceImpl implements UseCaseService{
 	@Autowired
 	UseCaseMapper useCaseMapper;
 	
+	@Autowired
+	UseCaseHistoryMapper useCaseHistoryMapper;
 	
+	
+	@Autowired
+	ShiroUtils shiroUtils;
 	
 	
 	/**
@@ -43,22 +48,27 @@ public class UseCaseServiceImpl implements UseCaseService{
 	@Override
 	@Transactional
 	public boolean addUseCase(User userModel, UseCase useCase) {
-
+		UseCaseHistory useCaseHistory =new UseCaseHistory();
 		// 设置创建人和创建时间
 		if (userModel != null) {
 			useCase.setCreateUserId(userModel.getUserId());
 			useCase.setCreateTime(new Date());
+			useCaseHistory.setOperationId(userModel.getUserId());
 		}
 
 		// 插入
 		useCaseMapper.insertSelective(useCase);
-
+		
 		// 返回主键
 		Long id = useCase.getId();
 		List<UseCaseProcedure> list = useCase.getProcedure();
 		for (UseCaseProcedure useCaseProcedure : list) {
 			useCaseProcedure.setUseCaseId(id);
 		}
+		useCaseHistory.setCreatetime(new Date());
+		useCaseHistory.setOperationFunction("新增");
+		useCaseHistory.setUseCaseId(id);
+		useCaseHistoryMapper.insertSelective(useCaseHistory);
 
 		// 批量插入
 		return useCaseProcedureMapper.insertBatch(list)==1?true:false;
@@ -70,7 +80,6 @@ public class UseCaseServiceImpl implements UseCaseService{
 	 */
 	@Override
 	public boolean addBatchUseCase(User userModel, List<UseCase> list) {
-
 		// 设置创建人和时间
 		String id = null;
 		Date date = new Date();
@@ -79,9 +88,8 @@ public class UseCaseServiceImpl implements UseCaseService{
 			useCase.setCreateUserId(id);
 			useCase.setCreateTime(date);
 		}
-
 		// 批量插入
-		return useCaseMapper.insertBatch(list)==1?true:false;
+		return  useCaseMapper.insertBatch(list)==1?true:false;
 	}
 	
 	
@@ -109,10 +117,12 @@ public class UseCaseServiceImpl implements UseCaseService{
 	@Override
 	@Transactional
 	public boolean updateUserCase(User userModel, UseCase useCase) {
+		UseCaseHistory useCaseHistory =new UseCaseHistory();
 		boolean flag=true;		// 设置修改人和修改时间时间
 			if (userModel != null) {
 				useCase.setModifyUserId(userModel.getUserId());
 				useCase.setModifyTime(new Date());
+				useCaseHistory.setOperationId(userModel.getUserId());
 			}
 
 			// 修改
@@ -133,6 +143,12 @@ public class UseCaseServiceImpl implements UseCaseService{
 				}
 			}
 			
+			useCaseHistory.setCreatetime(new Date());
+			useCaseHistory.setOperationFunction("编辑");
+			if(useCase.getId()!=null){
+				useCaseHistory.setUseCaseId(useCase.getId());
+			}
+			useCaseHistoryMapper.insertSelective(useCaseHistory);
 			return flag;
 	}
 
