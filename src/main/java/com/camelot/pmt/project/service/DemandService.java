@@ -26,26 +26,29 @@ public interface DemandService {
     /**
      * 查询影响需求的任务信息
      *
-     *@param  Long demandId ,Integer pageSize,Integer currentPage
-     *@return ExecuteResult<List<Map<String, Object>>>
+     * @param Long
+     *            demandId ,Integer pageSize,Integer currentPage
+     * @return ExecuteResult<List<Map<String, Object>>>
      */
-    PageInfo<Map<String, Object>> queryDemandTaskQuoteById(Long demandId,Integer pageSize,Integer currentPage);
+    PageInfo<Map<String, Object>> queryDemandTaskQuoteById(Long demandId, Integer pageSize, Integer currentPage);
 
     /**
      * 查询影响需求的用例信息
      *
-     *@param  Long demandId ,Integer pageSize,Integer currentPage
-     *@return ExecuteResult<List<Map<String, Object>>>
+     * @param Long
+     *            demandId ,Integer pageSize,Integer currentPage
+     * @return ExecuteResult<List<Map<String, Object>>>
      */
-    PageInfo<Map<String, Object>> queryDemandUseCaseQuoteById(Long demandId,Integer pageSize,Integer currentPage);
+    PageInfo<Map<String, Object>> queryDemandUseCaseQuoteById(Long demandId, Integer pageSize, Integer currentPage);
 
     /**
      * 查询影响需求的bug信息
      *
-     *@param  Long demandId ,Integer pageSize,Integer currentPage
-     *@return ExecuteResult<List<Map<String, Object>>>
+     * @param Long
+     *            demandId ,Integer pageSize,Integer currentPage
+     * @return ExecuteResult<List<Map<String, Object>>>
      */
-    PageInfo<Map<String, Object>> queryDemandBugQuoteById(Long demandId,Integer pageSize,Integer currentPage);
+    PageInfo<Map<String, Object>> queryDemandBugQuoteById(Long demandId, Integer pageSize, Integer currentPage);
 
     boolean updateByReview(Demand demand, User user);
 }

@@ -225,10 +225,11 @@ public class DemandServiceImpl implements DemandService {
      * @return ExecuteResult<List<Map<String, Object>>>
      */
     @Override
-    public PageInfo<Map<String, Object>> queryDemandTaskQuoteById(Long demandId,Integer pageSize,Integer currentPage) {
-        PageHelper.startPage(currentPage,pageSize);
+    public PageInfo<Map<String, Object>> queryDemandTaskQuoteById(Long demandId, Integer pageSize,
+            Integer currentPage) {
+        PageHelper.startPage(currentPage, pageSize);
         List<Map<String, Object>> taskList = demandMapper.queryDemandTaskQuoteById(demandId);
-        PageInfo<Map<String,Object>> pageInfo = new PageInfo<>(taskList);
+        PageInfo<Map<String, Object>> pageInfo = new PageInfo<>(taskList);
         return pageInfo;
     }
 
@@ -239,10 +240,11 @@ public class DemandServiceImpl implements DemandService {
      * @return ExecuteResult<List<Map<String, Object>>>
      */
     @Override
-    public PageInfo<Map<String, Object>> queryDemandUseCaseQuoteById(Long demandId,Integer pageSize,Integer currentPage) {
-        PageHelper.startPage(currentPage,pageSize);
+    public PageInfo<Map<String, Object>> queryDemandUseCaseQuoteById(Long demandId, Integer pageSize,
+            Integer currentPage) {
+        PageHelper.startPage(currentPage, pageSize);
         List<Map<String, Object>> userCaseList = demandMapper.queryDemandUseCaseQuoteById(demandId);
-        PageInfo<Map<String,Object>> pageInfo = new PageInfo<>(userCaseList);
+        PageInfo<Map<String, Object>> pageInfo = new PageInfo<>(userCaseList);
         return pageInfo;
     }
 
@@ -253,10 +255,10 @@ public class DemandServiceImpl implements DemandService {
      * @return ExecuteResult<List<Map<String, Object>>>
      */
     @Override
-    public PageInfo<Map<String, Object>> queryDemandBugQuoteById(Long demandId,Integer pageSize,Integer currentPage) {
-        PageHelper.startPage(currentPage,pageSize);
+    public PageInfo<Map<String, Object>> queryDemandBugQuoteById(Long demandId, Integer pageSize, Integer currentPage) {
+        PageHelper.startPage(currentPage, pageSize);
         List<Map<String, Object>> bugList = demandMapper.queryDemandBugQuoteById(demandId);
-        PageInfo<Map<String,Object>> pageInfo = new PageInfo<>(bugList);
+        PageInfo<Map<String, Object>> pageInfo = new PageInfo<>(bugList);
         return pageInfo;
     }
 
