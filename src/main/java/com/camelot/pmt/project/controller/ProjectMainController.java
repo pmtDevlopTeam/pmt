@@ -19,9 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
 import com.camelot.pmt.common.ApiResponse;
-import com.camelot.pmt.common.DataGrid;
-import com.camelot.pmt.common.ExecuteResult;
-import com.camelot.pmt.common.Pager;
 import com.camelot.pmt.project.model.ProjectMain;
 import com.camelot.pmt.project.service.ProjectMainService;
 
@@ -83,25 +80,24 @@ public class ProjectMainController {
     /**
      * 分页查询
      * 
-     * @param page
-     * @param rows
+     * @param currentPage
+     * @param pageSize
      * @return
      */
     @ApiOperation(value = "分页查询所有", notes = "分页查询所有")
     @GetMapping(value = "/queryAllByPage")
     public JSONObject queryAllByPage(@ApiParam(//
-            value = "页码", required = true) @RequestParam int page, //
-            @ApiParam(value = "每页数量", required = true) @RequestParam int rows) {
-        logger.info("入参封装的数据为：page={},rows={}", page, rows);
-        ExecuteResult<DataGrid<ProjectMain>> result = new ExecuteResult<DataGrid<ProjectMain>>();
-        Pager<?> pager = new Pager<>();
+            value = "当前页数", required = true) @RequestParam Integer currentPage, //
+            @ApiParam(value = "每页数量", required = true) @RequestParam Integer pageSize) {
+        logger.info("入参封装的数据为：currentPage={},pageSize={}", currentPage, pageSize);
         try {
-            if (page == 0 && rows == 0) {
+
+            if (currentPage == null || pageSize == null) {
                 return ApiResponse.errorPara();
             }
-            result = projectMainService.queryAllByPage(pager);
-            if (result.isSuccess()) {
-                return ApiResponse.success(result.getResult());
+            List<ProjectMain> list = projectMainService.queryAllByPage(currentPage, pageSize);
+            if (list.size() > 0) {
+                return ApiResponse.success(list);
             }
             return ApiResponse.error();
         } catch (Exception e) {

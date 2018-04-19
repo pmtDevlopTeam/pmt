@@ -652,4 +652,23 @@
         UPDATE task SET status = 2 WHERE id = #{id}
     </update>
     <!--myp结束-->
+    <!-- 项目关闭时，更新任务状态 -->
+    <update id="updateByProjectId">
+		update task
+		<trim prefix="set" suffixOverrides=",">
+			<if test="status != null">
+				status = #{status,jdbcType=CHAR},
+			</if>
+			<if test="actualEndTime != null">
+				actual_end_time = #{actualEndTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="modifyUserId != null">
+				modify_user_id = #{modifyUserId,jdbcType=VARCHAR},
+			</if>
+			<if test="modifyTime != null">
+				modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+			</if>
+		</trim>
+		where project_id =#{projectId,jdbcType=BIGINT}
+	</update>
 </mapper>

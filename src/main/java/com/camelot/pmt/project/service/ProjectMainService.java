@@ -3,9 +3,6 @@ package com.camelot.pmt.project.service;
 import java.util.Date;
 import java.util.List;
 
-import com.camelot.pmt.common.DataGrid;
-import com.camelot.pmt.common.ExecuteResult;
-import com.camelot.pmt.common.Pager;
 import com.camelot.pmt.project.model.ProjectMain;
 
 /**
@@ -35,10 +32,11 @@ public interface ProjectMainService {
     /**
      * 分页查询
      * 
-     * @param page
+     * @param pageSize
+     * @param currentPage
      * @return
      */
-    ExecuteResult<DataGrid<ProjectMain>> queryAllByPage(Pager<?> page);
+    List<ProjectMain> queryAllByPage(Integer pageSize, Integer currentPage);
 
     /**
      * 按状态分类查询
@@ -91,8 +89,6 @@ public interface ProjectMainService {
      * 根据id删除项目
      * 
      * @param id
-     * @param createUserId
-     * @param operateDesc
      * @return
      */
     int deleteByPrimaryKey(Long id);
@@ -101,10 +97,7 @@ public interface ProjectMainService {
      * 关闭项目时，更新相关表
      * 
      * @param id
-     * @param createUserId
-     * @param modifyUserId
      * @param projectStatus
-     * @param operateDesc
      * @param userStatus
      * @param demandStatus
      * @param closeReason
