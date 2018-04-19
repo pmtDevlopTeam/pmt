@@ -19,20 +19,23 @@ public interface TaskManagerService {
     /**
      * 新增任务
      *
-     * @author: zlh
-     * @param:  taskManager 插入任务的数据
-     * @date: 9:10 2018/4/12
+     * @author zlh
+     * @param task
+     * @param file
+     * @date 9:10 2018/4/12
+     * @return boolean
      */
-    ExecuteResult<String> insertTask(Task task, MultipartFile file);
+    boolean insertTask(Task task, MultipartFile file);
 
     /**
      * 根据id删除任务
      *
-     * @author: zlh
-     * @param: id 需要删除的任务的id，isDeleteAll 是否删除子任务
-     * @date: 17:24 2018/4/12
+     * @author zlh
+     * @param id 需要删除的任务的id，isDeleteAll 是否删除子任务
+     * @date 17:24 2018/4/12
+     * @return boolean
      */
-    ExecuteResult<String> deleteTaskById(Long id);
+    boolean deleteTaskById(Long id);
 
     /**
      * 编辑任务

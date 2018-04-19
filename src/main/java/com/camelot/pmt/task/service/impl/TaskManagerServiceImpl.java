@@ -53,13 +53,10 @@ public class TaskManagerServiceImpl implements TaskManagerService {
      * @date: 9:10 2018/4/12
      */
     @Override
-    public ExecuteResult<String> insertTask(Task task, MultipartFile file) {
-        ExecuteResult<String> result = new ExecuteResult<String>();
+    public boolean insertTask(Task task, MultipartFile file) {
         try {
             // check参数
             if (task == null) {
-                result.addErrorMessage("传入信息有误");
-                return result;
             }
             // 默认状态下任务状态为未开始 0为未开始的状态码
             task.setStatus("0");
@@ -68,7 +65,7 @@ public class TaskManagerServiceImpl implements TaskManagerService {
             String userId = "2";
             user.setUserId(userId);
             task.setCreateUser(user);
-            int insertTask = taskMapper.insertTask(task);
+            int insertTaskResult = taskMapper.insertTask(task);
             // 如果任务有附件，上传附件
             if (file != null) {
                 String fileName = file.getOriginalFilename();
@@ -93,15 +90,14 @@ public class TaskManagerServiceImpl implements TaskManagerService {
                 // 来源id
                 taskFile.setSourceId(task.getId());
 
-                taskFileService.insert(taskFile);
+                boolean insertTaskFileResult = taskFileService.insert(taskFile);
+                return (insertTaskFileResult && insertTaskResult == 1) ? true : false;
             }
-
-            result.setResult("插入成功");
+            return (insertTaskResult==1) ? true : false;
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
             throw new RuntimeException(e);
         }
-        return result;
     }
 
     /**
@@ -111,45 +107,35 @@ public class TaskManagerServiceImpl implements TaskManagerService {
      * @date: 17:24 2018/4/12
      */
     @Override
-    public ExecuteResult<String> deleteTaskById(Long id) {
-        ExecuteResult<String> result = new ExecuteResult<String>();
+    public boolean deleteTaskById(Long id) {
         try {
             // check参数
             if (id == null) {
-                result.addErrorMessage("参数传入有误");
-                return result;
+                throw new RuntimeException("参数错误");
             }
-
             // 检查权限
             Task task = taskMapper.queryTaskById(id);
             String createUserName = task.getCreateUser().getUsername();
             String status = task.getStatus();
             if (!"当前登录用户名".equals(createUserName)) {
-                /*return 没有权限*/
-                result.setResult("没有权限");
-                return result;
+                throw new RuntimeException("没有权限");
             }
             // 已经指派的任务只能关闭不能删除
             if (task.getBeassignUser() != null) {
-                /*return 不能删除已经指派的任务*/
-                result.setResult("已指派的任务不能删除");
-                return result;
+                throw new RuntimeException("已指派的任务不能删除");
             }
             // 已经开始的任务不能删除
             if ("开始任务状态码".equals(status)) {
-                /*return 已经开始的任务不能删除*/
-                result.setResult("已开始的任务不能删除");
-                return result;
+                throw new RuntimeException("已开始的任务不能删除");
             }
-
             // 删除任务
-            taskMapper.deleteTaskById(id);
+            int deleteTaskByIdResult = taskMapper.deleteTaskById(id);
 
+            return deleteTaskByIdResult == 1 ? true : false;
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
             throw new RuntimeException(e);
         }
-        return result;
     }
 
     /**
