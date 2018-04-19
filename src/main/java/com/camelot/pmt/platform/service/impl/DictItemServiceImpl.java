@@ -37,10 +37,8 @@ public class DictItemServiceImpl implements DictItemService {
 		try{
 			String uuid = UUIDUtil.getUUID();
 			dictItem.setDictItemId(uuid);
-			dictItem.setCreateUserId("1");
             long date = new Date().getTime();
             dictItem.setCreateTime(new Date(date));
-            
             return (dictItemMapper.addDictItem(dictItem)==1)?true:false;
 		}catch(Exception e){
 			throw new RuntimeException(e);
@@ -72,8 +70,6 @@ public class DictItemServiceImpl implements DictItemService {
 				}
 	            long date = new Date().getTime();
 	            dictItem.setModifyTime(new Date(date));
-	            dictItem.setModifyUserId("2");
-	            
 	            return (dictItemMapper.updateDictItemByDictItemId(dictItem)==1)?true:false;
 	        } catch (Exception e){
 	            throw new RuntimeException(e);

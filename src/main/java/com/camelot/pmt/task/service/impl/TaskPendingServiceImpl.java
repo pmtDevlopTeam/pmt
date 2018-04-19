@@ -160,18 +160,29 @@ public class TaskPendingServiceImpl implements TaskPendingService{
 		ExecuteResult<List<Task>> result = new ExecuteResult<List<Task>>();
 		try{
 			//查询所有的Task任务列表
-			//List<Task> resultList = new ArrayList<Task>();
 			List<Task> allTaskList = taskMapper.queryAllTaskList(task);
-			/*if(allTaskList != null && allTaskList.size()>0){
-				for(Task t:allTaskList){
-					if(TaskType.DEVELOPMENTTASK.getValue().equals(t.getTaskType())){
-						if(TaskStatus.CHECKINTEST.getValue().equals(t.getStatus())){
-							
-						}
-						resultList.add(t);
-					}
-				}
-			}*/
+			result.setResult(allTaskList);
+		}catch (Exception e) {
+			LOGGER.error(e.getMessage());
+            throw new RRException(e.getMessage(),e);
+		}
+		return result;
+	}
+	
+	/**
+	 * 
+	* @Title: queryMyPendingTaskList 
+	* @Description: TODO(查询我的待办Task任务列表) 
+	* @param @return    设定文件 
+	* @return ExecuteResult<List<Task>>    返回类型 
+	* @throws
+	 */
+	@Override
+	public ExecuteResult<List<Task>> queryMyPendingTaskList(Task task){
+		ExecuteResult<List<Task>> result = new ExecuteResult<List<Task>>();
+		try{
+			//查询所有的Task任务列表
+			List<Task> allTaskList = taskMapper.queryMyPendingTaskList(task);
 			result.setResult(allTaskList);
 		}catch (Exception e) {
 			LOGGER.error(e.getMessage());
@@ -403,15 +414,15 @@ public class TaskPendingServiceImpl implements TaskPendingService{
 			if(taskObj != null && TaskStatus.PENDINHG.getValue().equals(taskStatus)){
 				//根据id更新任务状态为正在进行
 				taskMapper.updateTaskPendingToRunning(id,TaskStatus.RUNING.getValue());
-				if(taskObj.getTaskParentId() != null){
+				//if(taskObj.getTaskParentId() != null){
 					//查询taskId下的所有子节点
-					Task parentTaskNodes = taskMapper.queryParentTaskNodeById(taskObj.getTaskParentId());
+					//Task parentTaskNodes = taskMapper.queryParentTaskNodeById(taskObj.getTaskParentId());
 					//判断是否有父节点
-					if(parentTaskNodes!=null){
+					//if(parentTaskNodes!=null){
 						//递归
-						return updateTaskPendingToRunning(parentTaskNodes.getId(),parentTaskNodes.getStatus());
-					}
-				}
+						//return updateTaskPendingToRunning(parentTaskNodes.getId(),parentTaskNodes.getStatus());
+					//}
+				//}
 			}
 			result.setResult("修改任务状态成功！");
 		}
@@ -449,15 +460,15 @@ public class TaskPendingServiceImpl implements TaskPendingService{
 					taskMapper.updateTaskPendingToDelay(id,TaskStatus.OVERDUE.getValue(),delayDescribe,estimateStartTime);
 				}
 				//查询taskId下的所有子节点
-				List<Task> childTaskNodes = taskMapper.queryTaskListNodeByParentId(id,null); 
+				//List<Task> childTaskNodes = taskMapper.queryTaskListNodeByParentId(id,null); 
 				//遍历子节点
-				if(childTaskNodes!=null && childTaskNodes.size()>0){
+				/*if(childTaskNodes!=null && childTaskNodes.size()>0){
 					for(Task child : childTaskNodes){
 						//递归
 						//非关闭需要改为延期
 						updateTaskPendingToDelay(child.getId(),taskStatus,delayDescribe,estimateStartTime);
 					}
-				}
+				}*/
 			}
 			result.setResult("修改任务状态成功！");
 		}

@@ -70,6 +70,16 @@ public interface TaskPendingService {
 	
 	/**
 	 * 
+	* @Title: queryMyPendingTaskList 
+	* @Description: TODO(查询我的待办Task任务列表) 
+	* @param @return    设定文件 
+	* @return ExecuteResult<List<Task>>    返回类型 
+	* @throws
+	 */
+	ExecuteResult<List<Task>> queryMyPendingTaskList(Task task);
+	
+	/**
+	 * 
 	* @Title: queryMyTaskListNodeByParentId 
 	* @Description: TODO(查询taskId下的一级子节点) 
 	* @param @param taskId

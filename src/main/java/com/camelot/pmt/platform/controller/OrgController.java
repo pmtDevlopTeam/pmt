@@ -117,20 +117,19 @@ public class OrgController {
 			@ApiImplicitParam(name = "orgname", value = "部门名称", required = true, paramType = "form", dataType = "String"),
 			@ApiImplicitParam(name = "parentId", value = "上级部门", required = true,defaultValue = "0", paramType = "form", dataType = "String"),
 			@ApiImplicitParam(name = "state", value = "部门状态", required = true, defaultValue = "0",paramType = "form", dataType = "String"),
-			@ApiImplicitParam(name = "sortNum", value = "部门排序号", required = true, paramType = "form", dataType = "String"),
-			@ApiImplicitParam(name = "orgCode", value = "部门编号", required = true, paramType = "form", dataType = "String")
+			@ApiImplicitParam(name = "sortNum", value = "部门排序号", required = true, paramType = "form", dataType = "String")
 			
 			})
 	@RequestMapping(value = "/addOrg", method = RequestMethod.POST)
 	public JSONObject addOrg(@ApiIgnore Org org) {
 		String result="";
 		try {
-			User user = (User) ShiroUtils.getSessionAttribute("user");
+			/*User user = (User) ShiroUtils.getSessionAttribute("user");
             if (StringUtils.isEmpty(user.getUserId())) {
                 ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
             }
             org.setCreatUserId(user.getUserId());
-            org.setModifyUserId(user.getUserId());
+            org.setModifyUserId(user.getUserId());*/
             if (StringUtils.isEmpty(org.getOrgId()) && StringUtils.isEmpty(org.getOrgCode()) && StringUtils.isEmpty(org.getOrgname()) && StringUtils.isEmpty(org.getSortNum()) && StringUtils.isEmpty(org.getState())) {
                 ApiResponse.jsonData(APIStatus.ERROR_400);
             }

@@ -56,7 +56,7 @@ public interface TaskOverdueService {
      * @Title: queryoverdueTask @Description: TODO @param @param
      * page @param @return @return ExecuteResult<DataGrid<UserModel>> @throws
      */
-	ExecuteResult<PageInfo<Map<String,Object>>> queryOverdueTask(Integer page, Integer rows);
+	ExecuteResult<PageInfo<Map<String,Object>>> queryOverdueTask(Task task,Integer page, Integer rows);
     
     
    
