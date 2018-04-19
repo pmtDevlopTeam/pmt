@@ -422,6 +422,18 @@
 		      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
 		    where id = #{id,jdbcType=BIGINT}
     </update>
+    <select id="queryTopTaskNameList" resultMap="BaseResultMap">
+    	 select
+			t.id,t.task_name
+		 from task t where t.task_parent_id is not null 
+		 <if test="userId != null">
+		 	and t.beassign_user_id = #{userId,jdbcType=VARCHAR}
+		 </if>
+		 <if test="status != null">
+		 	and t.status = #{status,jdbcType=CHAR}
+		 </if>
+		  order by t.estimate_start_time,t.priority asc
+    </select>
   	<!--查询所有任务列表-->
     <select id="queryAllTaskList" resultMap="BaseResultMap" parameterType="com.camelot.pmt.task.model.Task">
 	    select
@@ -433,7 +445,7 @@
 		INNER JOIN platform_user c ON c.user_id = t.create_user_id
 		LEFT JOIN project_main p ON t.project_id = p.id
 		LEFT JOIN demand d ON t.demand_id = d.id
-		where t.beassign_user_id = #{beassignUserId,jdbcType=VARCHAR}
+		where t.beassign_user_id = #{beassignUser.userId,jdbcType=VARCHAR}
 		<if test="status != null">
 			and t.status = #{status,jdbcType=CHAR}
 		</if>
@@ -443,13 +455,13 @@
 		<if test="taskName != null">
 			and t.task_name = #{taskName,jdbcType=CHAR}
 		</if>
-		<if test="project.id != null">
+		<if test="project != null and project.id !=null">
 			and t.project_id = #{project.id,jdbcType=CHAR}
 		</if>
 		<if test="priority != null">
 			and t.priority = #{priority,jdbcType=CHAR}
 		</if>
-		<if test="assignUserId != null">
+		<if test="assignUser != null and assignUser.userId != null">
 			and t.assign_user_id = #{assignUser.userId,jdbcType=CHAR}
 		</if>
 		 order by t.estimate_start_time,t.priority asc
@@ -511,6 +523,18 @@
 	<update id="updateTaskPendingToRunning" parameterType="com.camelot.pmt.task.model.Task">
 		update task t set 
 		t.status = #{status,jdbcType=CHAR} 
+		where t.id = #{id,jdbcType=BIGINT}
+	</update>
+	<!-- 我的待办任务转为正在进行 -->
+	<update id="updateTaskToAssign" parameterType="com.camelot.pmt.task.model.Task">
+		update task t set 
+		t.assign_user_id = #{assignUserId,jdbcType=VARCHAR},
+		t.beassign_user_id = #{beassignUserId,jdbcType=VARCHAR}
+		where t.id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateTaskParentIdIsNull" parameterType="com.camelot.pmt.task.model.Task">
+		update task t set 
+		t.task_parent_id = null
 		where t.id = #{id,jdbcType=BIGINT}
 	</update>
   <!-- gxl end -->
