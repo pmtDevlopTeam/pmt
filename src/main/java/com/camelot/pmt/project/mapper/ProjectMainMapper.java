@@ -102,9 +102,9 @@ public interface ProjectMainMapper {
      */
     int updateByPrimaryKeySelective(@Param("id") Long id, @Param("userId") String userId,
             @Param("modifyUserId") String modifyUserId, @Param("modifyTime") Date modifyTime,
-            @Param("projectNum") String projectNum, @Param("projectName") String projectName,
-            @Param("projectStatus") String projectStatus, @Param("projectDesc") String projectDesc,
-            @Param("startTime") Date startTime, @Param("endTime") Date endTime);
+            @Param("projectName") String projectName, @Param("projectStatus") String projectStatus,
+            @Param("projectDesc") String projectDesc, @Param("startTime") Date startTime,
+            @Param("endTime") Date endTime);
 
     /**
      * 查询所有数量

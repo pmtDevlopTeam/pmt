@@ -82,7 +82,7 @@ public class ProjectMainServiceImpl implements ProjectMainService {
                 projectOperate.setCreateUserId(user.getUserId());
                 projectOperate.setProjectId(projectMain.getId());
                 projectOperate.setCreateTime(new Date());
-                projectOperate.setOperateDesc(user.getUsername() + "     新增项目");
+                projectOperate.setOperateDesc(new Date() + "    " + user.getUsername() + "     新增项目");
                 projectOperateNum = projectOperateMapper.addProjectOperate(projectOperate);
                 // 保存projectBudget
                 ProjectBudget projectBudget = new ProjectBudget();
@@ -193,7 +193,7 @@ public class ProjectMainServiceImpl implements ProjectMainService {
             User user = (User) ShiroUtils.getSessionAttribute("user");
             if (user != null && user.getUserId() != null) {
                 projectMainNum = projectMainMapper.updateByPrimaryKeySelective(id, userId, user.getUserId(), new Date(),
-                        "0000000009", projectName, projectStatus, projectDesc, startTime, endTime);
+                        projectName, projectStatus, projectDesc, startTime, endTime);
                 ProjectOperate projectOperate = new ProjectOperate();
                 projectOperate.setCreateTime(new Date());
                 projectOperate.setProjectId(id);

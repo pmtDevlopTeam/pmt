@@ -218,9 +218,6 @@
 			<if test="userId != null">
 				user_id = #{userId,jdbcType=VARCHAR},
 			</if>
-			<if test="projectNum != null">
-				project_num = #{projectNum,jdbcType=CHAR},
-			</if>
 			<if test="projectName != null">
 				project_name = #{projectName,jdbcType=VARCHAR},
 			</if>
