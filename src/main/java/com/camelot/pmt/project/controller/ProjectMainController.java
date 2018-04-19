@@ -23,11 +23,8 @@ import com.camelot.pmt.project.model.ProjectMain;
 import com.camelot.pmt.project.service.ProjectMainService;
 
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * 
@@ -51,19 +48,20 @@ public class ProjectMainController {
      */
     @ApiOperation(notes = "新建项目", value = "根据具有立项权限的用户新建项目")
     @PostMapping("/addProject")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "userId", value = "负责人id", required = true, paramType = "query", dataType = "String"),
-            @ApiImplicitParam(name = "projectName", value = "项目名称", required = true, paramType = "query", dataType = "String"),
-            @ApiImplicitParam(name = "projectStatus", value = "项目状态", required = true, paramType = "query", dataType = "String"),
-            @ApiImplicitParam(name = "startTime", value = "开始时间", required = true, paramType = "query", dataType = "Date"),
-            @ApiImplicitParam(name = "endTime", value = "结束时间", required = true, paramType = "query", dataType = "Date"),
-            @ApiImplicitParam(name = "projectDesc", value = "项目描述", required = true, paramType = "query", dataType = "String") })
-    public JSONObject addProject(@ApiIgnore ProjectMain projectMain) {
+    public JSONObject addProject(//
+            @ApiParam(value = "负责人Id", required = true) @RequestParam String userId, //
+            @ApiParam(value = "项目名称", required = true) @RequestParam String projectName, //
+            @ApiParam(value = "项目状态", required = true) @RequestParam String projectStatus, //
+            @ApiParam(value = "开始时间", required = true) @RequestParam @DateTimeFormat(iso = ISO.DATE) Date startTime, //
+            @ApiParam(value = "结束时间", required = true) @RequestParam @DateTimeFormat(iso = ISO.DATE) Date endTime, //
+            @ApiParam(value = "项目描述", required = true) @RequestParam String projectDesc) {
 
-        logger.info("入参封装的数据为：projectMain={}", projectMain);
+        logger.info("入参封装的数据为：userId={},projectName={},projectStatus={},startTime={},endTime={},projectDesc={}", userId,
+                projectName, projectStatus, startTime, endTime, projectDesc);
         try {
             // 调用addProject方法保存数据
-            int projectMainNum = projectMainService.addProject(projectMain);
+            int projectMainNum = projectMainService.addProject(userId, projectName, projectStatus, startTime, endTime,
+                    projectDesc);
             logger.debug("调用projectMainService的addProject接口返回的条数为：", projectMainNum);
             if (projectMainNum > 0) {
                 return ApiResponse.success();
@@ -86,8 +84,8 @@ public class ProjectMainController {
      */
     @ApiOperation(value = "分页查询所有", notes = "分页查询所有")
     @GetMapping(value = "/queryAllByPage")
-    public JSONObject queryAllByPage(@ApiParam(//
-            value = "当前页数", required = true) @RequestParam Integer currentPage, //
+    public JSONObject queryAllByPage(//
+            @ApiParam(value = "当前页数", required = true) @RequestParam Integer currentPage, //
             @ApiParam(value = "每页数量", required = true) @RequestParam Integer pageSize) {
         logger.info("入参封装的数据为：currentPage={},pageSize={}", currentPage, pageSize);
         try {

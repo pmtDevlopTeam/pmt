@@ -81,7 +81,8 @@ public class TaskAlreadyController {
     /**
      *
      * @Title: updateTaskAlreadyToRuning @Description: TODO(我的已完成任务转为正在进行)
-     * 重做功能 @param @param taskId @param @return 设定文件 @return JSONObject 返回类型 @throws
+     *         重做功能 @param @param taskId @param @return 设定文件 @return JSONObject
+     *         返回类型 @throws
      */
     @ApiOperation(value = "我的已完成任务转为正在进行、重做功能", notes = "我的已完成任务转为正在进行、重做功能")
     @RequestMapping(value = "/updateTaskAlreadyToRunning", method = RequestMethod.POST)

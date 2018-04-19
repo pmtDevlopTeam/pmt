@@ -22,12 +22,16 @@ public interface ProjectMainService {
     /**
      * 保存立项时相关联表数据
      * 
-     * @param projectMain
-     * @param projectOperate
-     * @param projectBudget
+     * @param userId
+     * @param projectName
+     * @param projectStatus
+     * @param projectDesc
+     * @param startTime
+     * @param endTime
      * @return
      */
-    int addProject(ProjectMain projectMain);
+    int addProject(String userId, String projectName, String projectStatus, Date startTime, Date endTime,
+            String projectDesc);
 
     /**
      * 分页查询

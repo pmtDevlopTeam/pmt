@@ -39,7 +39,7 @@ public class TaskPendingController {
     /**
      * 
      * @Title: queryAllTaskList @Description: TODO(查询整个任务列表) @param @return
-     * 设定文件 @return JSONObject 返回类型 @throws
+     *         设定文件 @return JSONObject 返回类型 @throws
      */
     @ApiOperation(value = "查询我的全部的任务列表", notes = "查询我的全部的任务列表")
     @ApiImplicitParams({
@@ -75,7 +75,7 @@ public class TaskPendingController {
     /**
      * 
      * @Title: queryMyPendingTaskList @Description: TODO(查询整个任务列表) @param @return
-     * 设定文件 @return JSONObject 返回类型 @throws
+     *         设定文件 @return JSONObject 返回类型 @throws
      */
     @ApiOperation(value = "查询我的待办全部的任务列表", notes = "查询我的待办全部的任务列表")
     @ApiImplicitParams({
@@ -112,8 +112,8 @@ public class TaskPendingController {
     /**
      * 
      * @Title: queryMyTaskListNodeByParentId @Description:
-     * TODO(查询taskId下的所有一级子节点) @param @param taskId @param @return 设定文件 @return
-     * JSONObject 返回类型 @throws
+     *         TODO(查询taskId下的所有一级子节点) @param @param taskId @param @return
+     *         设定文件 @return JSONObject 返回类型 @throws
      */
     @ApiOperation(value = "查询我的待办任务taskId下的所有一级子节点", notes = "查询我的待办任务taskId下的所有一级子节点")
     @RequestMapping(value = "/queryMyTaskListNodeByParentId", method = RequestMethod.POST)
@@ -141,8 +141,8 @@ public class TaskPendingController {
     /**
      * 
      * @Title: queryTaskListNodeByParentId @Description:
-     * TODO(查询taskId下的所有一级子节点) @param @param taskId @param @return 设定文件 @return
-     * JSONObject 返回类型 @throws
+     *         TODO(查询taskId下的所有一级子节点) @param @param taskId @param @return
+     *         设定文件 @return JSONObject 返回类型 @throws
      */
     @ApiOperation(value = "查询taskId下的所有一级子节点", notes = "查询taskId下的所有一级子节点")
     @RequestMapping(value = "/queryTaskListNodeByParentId", method = RequestMethod.POST)
@@ -197,8 +197,8 @@ public class TaskPendingController {
     /**
      * 
      * @Title: queryTopAllTaskTreeByTaskId @Description:
-     * TODO(查询该任务的父级节点以及祖宗节点，不包含本身，接口用来判断层级结构是否可以拆分子任务) @param @param
-     * taskId @param @return 设定文件 @return JSONObject 返回类型 @throws
+     *         TODO(查询该任务的父级节点以及祖宗节点，不包含本身，接口用来判断层级结构是否可以拆分子任务) @param @param
+     *         taskId @param @return 设定文件 @return JSONObject 返回类型 @throws
      */
     @ApiOperation(value = "查询该任务的父级节点以及祖宗节点", notes = "查询该任务的父级节点以及祖宗节点，list中不包含本身")
     @RequestMapping(value = "/queryTopAllTaskTreeByTaskId", method = RequestMethod.POST)
@@ -228,8 +228,8 @@ public class TaskPendingController {
     /**
      * 
      * @Title: updateTaskPendingToRuning @Description:
-     * TODO(我的待办任务转为正在进行) @param @param taskId @param @return 设定文件 @return
-     * JSONObject 返回类型 @throws
+     *         TODO(我的待办任务转为正在进行) @param @param taskId @param @return 设定文件 @return
+     *         JSONObject 返回类型 @throws
      */
     @ApiOperation(value = "我的待办任务转为正在进行", notes = "我的待办任务转为正在进行")
     @RequestMapping(value = "/updateTaskPendingToRunning", method = RequestMethod.POST)
@@ -335,7 +335,7 @@ public class TaskPendingController {
     /**
      *
      * @Title: editUser @Description: TODO(修改Task对象接口方法) @param @param
-     * task @param @return 设定文件 @return JSONObject 返回类型 @throws
+     *         task @param @return 设定文件 @return JSONObject 返回类型 @throws
      */
     @ApiOperation(value = "修改任务单元", notes = "修改任务单元")
     @ApiImplicitParams({
@@ -379,8 +379,8 @@ public class TaskPendingController {
     /**
      * 
      * @Title: assignTask @Description: TODO(指派任务:更新指派人和被指派人标识号) @param @param
-     * assignUserId @param @param beassignUserId @param @return 设定文件 @return
-     * JSONObject 返回类型 @throws
+     *         assignUserId @param @param beassignUserId @param @return 设定文件 @return
+     *         JSONObject 返回类型 @throws
      */
     @ApiOperation(value = "指派任务-更新指派人和被指派人标识号", notes = "指派任务-更新指派人和被指派人标识号")
     @RequestMapping(value = "/updateTaskToAssign", method = RequestMethod.POST)

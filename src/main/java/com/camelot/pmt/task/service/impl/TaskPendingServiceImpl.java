@@ -36,7 +36,7 @@ public class TaskPendingServiceImpl implements TaskPendingService {
     /**
      * 
      * @Title: save @Description: TODO(保存任务) @param @param task @param @return
-     * 设定文件 @return ExecuteResult<String> 返回类型 @throws
+     *         设定文件 @return ExecuteResult<String> 返回类型 @throws
      */
     @Override
     public ExecuteResult<String> save(Task task) {
@@ -59,7 +59,7 @@ public class TaskPendingServiceImpl implements TaskPendingService {
     /**
      * 
      * @Title: update @Description: TODO(修改任务) @param @param task @param @return
-     * 设定文件 @return ExecuteResult<String> 返回类型 @throws
+     *         设定文件 @return ExecuteResult<String> 返回类型 @throws
      */
     @Override
     public ExecuteResult<String> update(Task task) {
@@ -76,7 +76,7 @@ public class TaskPendingServiceImpl implements TaskPendingService {
     /**
      * 
      * @Title: saveOrUpdate @Description: TODO(更新或保存Task对象方法) @param @param task
-     * 设定文件 @return void 返回类型 @throws
+     *         设定文件 @return void 返回类型 @throws
      */
     @Override
     public ExecuteResult<String> saveOrUpdate(Task task) {
@@ -112,8 +112,8 @@ public class TaskPendingServiceImpl implements TaskPendingService {
     /**
      * 
      * @Title: delete @Description:
-     * TODO(根据taskId删除该任务，若删除该任务下的所有子任务请调用deleteTaskTreeById（）方法) @param @param
-     * taskId @param @return 设定文件 @return ExecuteResult<String> 返回类型 @throws
+     *         TODO(根据taskId删除该任务，若删除该任务下的所有子任务请调用deleteTaskTreeById（）方法) @param @param
+     *         taskId @param @return 设定文件 @return ExecuteResult<String> 返回类型 @throws
      */
     @Override
     public ExecuteResult<String> delete(Long id) {
@@ -135,7 +135,7 @@ public class TaskPendingServiceImpl implements TaskPendingService {
     /**
      * 
      * @Title: queryAllTaskList @Description: TODO(查询所有的Task任务列表) @param @return
-     * 设定文件 @return ExecuteResult<List<Task>> 返回类型 @throws
+     *         设定文件 @return ExecuteResult<List<Task>> 返回类型 @throws
      */
     @Override
     public ExecuteResult<List<Task>> queryAllTaskList(Task task) {
@@ -154,8 +154,8 @@ public class TaskPendingServiceImpl implements TaskPendingService {
     /**
      * 
      * @Title: queryMyTaskListNodeByParentId @Description:
-     * TODO(查询taskId下的一级子节点) @param @param taskId @param @return 设定文件 @return
-     * ExecuteResult<List<Task>> 返回类型 @throws
+     *         TODO(查询taskId下的一级子节点) @param @param taskId @param @return
+     *         设定文件 @return ExecuteResult<List<Task>> 返回类型 @throws
      */
     public ExecuteResult<List<Task>> queryMyTaskListNodeByParentId(Long id, String taskStatus, Long beassignUserId) {
         ExecuteResult<List<Task>> result = new ExecuteResult<List<Task>>();
@@ -177,8 +177,8 @@ public class TaskPendingServiceImpl implements TaskPendingService {
     /**
      * 
      * @Title: queryTaskListNodeByParentId @Description:
-     * TODO(查询taskId下的一级子节点) @param @param taskId taskStatus @param @return
-     * 设定文件 @return ExecuteResult<List<Task>> 返回类型 @throws
+     *         TODO(查询taskId下的一级子节点) @param @param taskId taskStatus @param @return
+     *         设定文件 @return ExecuteResult<List<Task>> 返回类型 @throws
      */
     public ExecuteResult<List<Task>> queryTaskListNodeByParentId(Long id, String taskStatus) {
         ExecuteResult<List<Task>> result = new ExecuteResult<List<Task>>();
@@ -200,8 +200,8 @@ public class TaskPendingServiceImpl implements TaskPendingService {
     /**
      * 
      * @Title: deletePendingTaskTreeById @Description:
-     * TODO(根据Id删除待办任务及以下的所有node节点，调用递归方法，taskId不能为空) @param @param
-     * task @param @return 设定文件 @return ExecuteResult<String> 返回类型 @throws
+     *         TODO(根据Id删除待办任务及以下的所有node节点，调用递归方法，taskId不能为空) @param @param
+     *         task @param @return 设定文件 @return ExecuteResult<String> 返回类型 @throws
      */
     @Override
     public ExecuteResult<String> deletePendingTaskTreeById(Long id, String taskStatus) {
@@ -315,7 +315,7 @@ public class TaskPendingServiceImpl implements TaskPendingService {
     /**
      * 
      * @Title: queryTopTaskNameList @Description: TODO(查询我的顶级待办任务) @param @return
-     * 设定文件 @return JSONObject 返回类型 @throws
+     *         设定文件 @return JSONObject 返回类型 @throws
      */
     public ExecuteResult<List<Task>> queryTopTaskNameList(String taskStatus, Long beassignUserId) {
         ExecuteResult<List<Task>> result = new ExecuteResult<List<Task>>();
@@ -338,8 +338,8 @@ public class TaskPendingServiceImpl implements TaskPendingService {
     /**
      * 
      * @Title: updateTaskPendingToRuning @Description:
-     * TODO(我的待办任务转为正在进行) @param @param taskId taskStatus @param @return
-     * 设定文件 @return JSONObject 返回类型 @throws
+     *         TODO(我的待办任务转为正在进行) @param @param taskId taskStatus @param @return
+     *         设定文件 @return JSONObject 返回类型 @throws
      */
     @Override
     public ExecuteResult<String> updateTaskPendingToRunning(Long id, String taskStatus) {
@@ -375,8 +375,8 @@ public class TaskPendingServiceImpl implements TaskPendingService {
     /**
      * 
      * @Title: updateTaskPendingToDelay @Description:
-     * TODO(我的待办任务转为延期,会将该节点及节点下的所有子节点变为延期状态) @param @param taskId
-     * taskStatus @param @return 设定文件 @return JSONObject 返回类型 @throws
+     *         TODO(我的待办任务转为延期,会将该节点及节点下的所有子节点变为延期状态) @param @param taskId
+     *         taskStatus @param @return 设定文件 @return JSONObject 返回类型 @throws
      */
     @Override
     public ExecuteResult<String> updateTaskPendingToDelay(Long id, String taskStatus, String delayDescribe,
@@ -428,8 +428,8 @@ public class TaskPendingServiceImpl implements TaskPendingService {
     /**
      * 
      * @Title: updateTaskToAssign @Description: TODO(更新指派人和被指派人标识号) @param @param
-     * assignUserId @param @param beassignUserId @param @return 设定文件 @return
-     * ExecuteResult<String> 返回类型 @throws
+     *         assignUserId @param @param beassignUserId @param @return 设定文件 @return
+     *         ExecuteResult<String> 返回类型 @throws
      */
     @Override
     public ExecuteResult<String> updateTaskToAssign(Long id, Long assignUserId, Long beassignUserId) {

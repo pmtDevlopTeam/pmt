@@ -55,7 +55,8 @@ public class ProjectMainServiceImpl implements ProjectMainService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public int addProject(ProjectMain projectMain) {
+    public int addProject(String userId, String projectName, String projectStatus, Date startTime, Date endTime,
+            String projectDesc) {
         int projectMainNum = 0;
         int projectOperateNum = 0;
         int projectBudgetNum = 0;
@@ -63,6 +64,13 @@ public class ProjectMainServiceImpl implements ProjectMainService {
             // 保存projectMain
             User user = (User) ShiroUtils.getSessionAttribute("user");
             if (user != null && user.getUserId() != null) {
+                ProjectMain projectMain = new ProjectMain();
+                projectMain.setUserId(userId);
+                projectMain.setProjectName(projectName);
+                projectMain.setProjectStatus(projectStatus);
+                projectMain.setStartTime(startTime);
+                projectMain.setEndTime(endTime);
+                projectMain.setProjectDesc(projectDesc);
                 projectMain.setCreateUserId(user.getUserId());
                 projectMain.setModifyUserId(user.getUserId());
                 projectMain.setCreateTime(new Date());
@@ -84,9 +92,9 @@ public class ProjectMainServiceImpl implements ProjectMainService {
                 projectBudget.setCreateTime(new Date());
                 projectBudget.setModifyTime(new Date());
                 SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-                String startTime = df.format(projectMain.getStartTime());
-                String endTime = df.format(projectMain.getEndTime());
-                projectBudget.setBudgetaryHours(GetDutys.getDutyDays(startTime, endTime) * 8);
+                String startTime1 = df.format(startTime);
+                String endTime1 = df.format(endTime);
+                projectBudget.setBudgetaryHours(GetDutys.getDutyDays(startTime1, endTime1) * 8);
                 projectBudgetNum = projectBudgetMapper.addProjectBudget(projectBudget);
                 if (projectMainNum > 0 && projectOperateNum > 0 && projectBudgetNum > 0) {
                     return 1;
