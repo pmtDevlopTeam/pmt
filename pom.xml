@@ -36,6 +36,12 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		
+		<!-- spring AOP 切面类依赖 -->
+		<dependency>  
+		    <groupId>org.springframework.boot</groupId>  
+		    <artifactId>spring-boot-starter-aop</artifactId>  
+		</dependency>
 
 		<!-- spring devtools -->
 		<dependency>
