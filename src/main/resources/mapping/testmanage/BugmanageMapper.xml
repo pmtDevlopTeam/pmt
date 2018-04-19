@@ -9,7 +9,7 @@
 		<result column="project_id" jdbcType="BIGINT" property="projectId" />
 		<result column="demand_id" jdbcType="BIGINT" property="demandId" />
 		<result column="task_id" jdbcType="BIGINT" property="taskId" />
-		<result column="task1_id" jdbcType="BIGINT" property="task1Id" />
+		<result column="demand1_id" jdbcType="BIGINT" property="demand1Id" />
 		<result column="designated_id" jdbcType="VARCHAR" property="designatedId" />
 		<result column="version_id" jdbcType="BIGINT" property="versionId" />
 		<result column="bug_type" jdbcType="VARCHAR" property="bugType" />
@@ -67,65 +67,12 @@
 	<sql id="Base_Column_GET">
 		id,create_user_id,bug_title,DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%s') as create_time,version_id,
 		solve_id,solve_program,close_id,DATE_FORMAT(close_time,'%Y-%m-%d %H:%i:%s') as close_time,
-		project_id,demand_id,case_id,task_id,task1_id,bug_type,serious_degree,bug_level,bug_status,
+		project_id,demand_id,case_id,task_id,demand1_id,bug_type,serious_degree,bug_level,bug_status,
 		designated_id,DATE_FORMAT(end_time,'%Y-%m-%d %H:%i:%s') as end_time,case_environment,case_terminal
 	</sql>
 	
-	<select id="selectByPrimaryKey" resultMap="BaseResultMap">
-		select
-		<include refid="Base_Column_GET" />
-		from bug_manage
-		where id = #{id}
-	</select>
-	
-	<select id="selectCondition" resultMap="SelectBaseResultMap">
-		select id,bug_no,bug_title,serious_degree,create_user_id,designated_id,solve_id,bug_status,bug_level
-		from bug_manage
-		<where>
-			<if test="projectId!=null">
-				AND project_id=#{projectId}
-			</if>
-			<if test="status==1">
-				AND designated_id=#{userId}
-			</if>
-			<if test="status==2">
-				AND create_user_id=#{userId}
-			</if>
-			<if test="status==3">
-				AND solve_id=#{userId}
-			</if>
-			<if test="status==4">
-				AND designated_id is null
-			</if>
-			<if test="status==5">
-				AND solve_id is null
-			</if>
-			<if test="qStartTime!=null"> 
-		        AND create_time >=#{qStartTime}
-			</if>
-			<if test="qEndTime!=null">
-		        AND create_time <![CDATA[ <=#{qEndTime}]]>
-			 </if>
-			 <if test="bugNo!=null and bugNo!=''">
-			 	AND bugNo=#{bugNo}
-			 </if> 
-			 <if test="bugStatus!=null and bugStatus!=''">
-				AND bug_status=#{bugStatus}
-			  </if> 
-			 <if test="bugTitle!=null and bugTitle!=''">
-				<bind name="bugTitleLike" value="'%' +bugTitle+ '%'"/>
-				AND bug_title like #{bugTitleLike}
-			  </if> 
-		</where>
-	</select>
-	
-	<select id="selectByPUS" resultMap="SelectBaseResultMap">
-		select id,bug_no,bug_title,serious_degree,create_user_id,designated_id,solve_id,bug_status,bug_level
-		from bug_manage
-		where project_id=#{projectId} and designated_id=#{userId} and bug_status in(0,1)
-	</select>
-	
-	<insert id="insertSelective" useGeneratedKeys="true" keyProperty="id">
+	<!-- 添加bug -->
+	<insert id="addBugManage" useGeneratedKeys="true" keyProperty="id">
 		insert into bug_manage
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="id != null">
@@ -146,8 +93,8 @@
 			<if test="taskId != null">
 				task_id,
 			</if>
-			<if test="task1Id != null">
-				task1_id,
+			<if test="demand1Id != null">
+				demand1_id,
 			</if>
 			<if test="designatedId != null">
 				designated_id,
@@ -241,8 +188,8 @@
 			<if test="taskId != null">
 				#{taskId,jdbcType=BIGINT},
 			</if>
-			<if test="task1Id != null">
-				#{task1Id,jdbcType=BIGINT},
+			<if test="demand1Id != null">
+				#{demand1Id,jdbcType=BIGINT},
 			</if>
 			<if test="designatedId != null">
 				#{designatedId,jdbcType=VARCHAR},
@@ -317,8 +264,10 @@
 				#{closeStauts,jdbcType=VARCHAR},
 			</if>
 		</trim>
-	</insert>
-	<update id="updateByPrimaryKeySelective">
+	</insert> 
+	
+	<!-- 更新bug -->
+	<update id="updateBugManage">
 		update bug_manage
 		<set>
 			<if test="projectId != null">
@@ -330,8 +279,8 @@
 			<if test="taskId != null">
 				task_id = #{taskId,jdbcType=BIGINT},
 			</if>
-			<if test="task1Id != null">
-				task1_id = #{taskId,jdbcType=BIGINT},
+			<if test="demand1Id != null">
+				demand1_id = #{demand1Id,jdbcType=BIGINT},
 			</if>
 			<if test="designatedId != null">
 				designated_id = #{designatedId,jdbcType=VARCHAR},
@@ -411,7 +360,6 @@
 		</set>
 		where id = #{id,jdbcType=BIGINT}
 	</update>
-
 	<!-- 撤销操作 -->
 	<update id="updateBugStatusRevoke">
 		update bug_manage
@@ -425,8 +373,8 @@
 			<if test="taskId != null">
 				task_id = #{taskId,jdbcType=BIGINT},
 			</if>
-			<if test="task1Id != null">
-				task1_id = #{taskId,jdbcType=BIGINT},
+			<if test="demand1Id != null">
+				demand1_id = #{demand1Id,jdbcType=BIGINT},
 			</if>
 			<if test="designatedId != null">
 				designated_id = #{designatedId,jdbcType=VARCHAR},
@@ -520,8 +468,8 @@
 			<if test="taskId != null">
 				task_id = #{taskId,jdbcType=BIGINT},
 			</if>
-			<if test="task1Id != null">
-				task1_id = #{taskId,jdbcType=BIGINT},
+			<if test="demand1Id != null">
+				demand1_id = #{demand1Id,jdbcType=BIGINT},
 			</if>
 			<if test="designatedId != null">
 				designated_id = #{designatedId,jdbcType=VARCHAR},
@@ -615,8 +563,8 @@
 			<if test="taskId != null">
 				task_id = #{taskId,jdbcType=BIGINT},
 			</if>
-			<if test="task1Id != null">
-				task1_id = #{taskId,jdbcType=BIGINT},
+			<if test="demand1Id != null">
+				demand1_id = #{demand1Id,jdbcType=BIGINT},
 			</if>
 			<if test="designatedId != null">
 				designated_id = #{designatedId,jdbcType=VARCHAR},
@@ -711,8 +659,8 @@
 			<if test="taskId != null">
 				task_id = #{taskId,jdbcType=BIGINT},
 			</if>
-			<if test="task1Id != null">
-				task1_id = #{taskId,jdbcType=BIGINT},
+			<if test="demand1Id != null">
+				demand1_id = #{demand1Id,jdbcType=BIGINT},
 			</if>
 			<if test="designatedId != null">
 				designated_id = #{designatedId,jdbcType=VARCHAR},
@@ -806,8 +754,8 @@
 			<if test="taskId != null">
 				task_id = #{taskId,jdbcType=BIGINT},
 			</if>
-			<if test="task1Id != null">
-				task1_id = #{taskId,jdbcType=BIGINT},
+			<if test="demand1Id != null">
+				demand1_id = #{demand1Id,jdbcType=BIGINT},
 			</if>
 			<if test="designatedId != null">
 				designated_id = #{designatedId,jdbcType=VARCHAR},
@@ -888,5 +836,63 @@
 		,bug_status=2
 		where id = #{id,jdbcType=BIGINT}
 	</update>
+	<select id="queryBugById" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_GET" />
+		from bug_manage
+		where id = #{id}
+	</select>
+	
+	<select id="queryBugManageCondition" resultMap="SelectBaseResultMap">
+		select id,bug_no,bug_title,serious_degree,create_user_id,designated_id,solve_id,bug_status,bug_level
+		from bug_manage
+		<where>
+			<if test="projectId!=null">
+				AND project_id=#{projectId}
+			</if>
+			<if test="status==1">
+				AND designated_id=#{userId}
+			</if>
+			<if test="status==2">
+				AND create_user_id=#{userId}
+			</if>
+			<if test="status==3">
+				AND solve_id=#{userId}
+			</if>
+			<if test="status==4">
+				AND designated_id is null
+			</if>
+			<if test="status==5">
+				AND solve_id is null
+			</if>
+			<if test="qStartTime!=null"> 
+		        AND create_time >=#{qStartTime}
+			</if>
+			<if test="qEndTime!=null">
+		        AND create_time <![CDATA[ <=#{qEndTime}]]>
+			 </if>
+			 <if test="bugNo!=null and bugNo!=''">
+			 	AND bugNo=#{bugNo}
+			 </if> 
+			 <if test="bugStatus!=null and bugStatus!=''">
+				AND bug_status=#{bugStatus}
+			  </if> 
+			 <if test="bugTitle!=null and bugTitle!=''">
+				<bind name="bugTitleLike" value="'%' +bugTitle+ '%'"/>
+				AND bug_title like #{bugTitleLike}
+			  </if> 
+		</where>
+	</select>
+	
+	<select id="queryByPUS" resultMap="SelectBaseResultMap">
+		select id,bug_no,bug_title,serious_degree,create_user_id,designated_id,solve_id,bug_status,bug_level
+		from bug_manage
+		where project_id=#{projectId} and designated_id=#{userId} and bug_status in(0,1)
+	</select>
+	
+	
+	
+
+	
 
 </mapper>

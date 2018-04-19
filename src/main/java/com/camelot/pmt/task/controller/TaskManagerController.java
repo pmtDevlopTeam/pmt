@@ -11,6 +11,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,6 +35,11 @@ import java.util.Map;
 @Api(value = "任务-任务管理接口", description = "任务-任务管理接口")
 public class TaskManagerController {
 
+    /**
+     * 日志
+     */
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @Autowired
     private TaskManagerService taskManagerService;
 
@@ -54,15 +61,15 @@ public class TaskManagerController {
             @ApiImplicitParam(dataType = "String", name = "taskDescribe", paramType = "form", value = "任务描述", required = false)
     })
     public JSONObject addTask(@ApiIgnore Task task, MultipartFile file) {
-        ExecuteResult<String> result = null;
         try {
-            result = taskManagerService.insertTask(task, file);
-            if (result.isSuccess()) {
-                return ApiResponse.success(result.getResult());
+            boolean result = taskManagerService.insertTask(task, file);
+            if (result) {
+                return ApiResponse.success();
             }
-            return ApiResponse.error();
+            return ApiResponse.error("添加异常");
         } catch (Exception e) {
-            return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
+            logger.error(e.getMessage());
+            return ApiResponse.jsonData(APIStatus.ERROR_500);
         }
     }
 
@@ -78,15 +85,15 @@ public class TaskManagerController {
             @ApiImplicitParam(dataType = "Long", name = "id", paramType = "form", value = "任务id", required = true)
     })
     public JSONObject deleteTaskById(Long id) {
-        ExecuteResult<String> result;
         try {
-            result = taskManagerService.deleteTaskById(id);
-            if (result.isSuccess()) {
-                return ApiResponse.success(result.getResult());
+            boolean result = taskManagerService.deleteTaskById(id);
+            if (result) {
+                return ApiResponse.success();
             }
-            return ApiResponse.error();
+            return ApiResponse.error("删除异常");
         } catch (Exception e) {
-            return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
+            logger.error(e.getMessage());
+            return ApiResponse.jsonData(APIStatus.ERROR_500);
         }
     }
 
