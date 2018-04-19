@@ -3,6 +3,7 @@ package com.camelot.pmt.project.controller;
 import com.camelot.pmt.platform.model.User;
 import com.camelot.pmt.platform.shiro.ShiroUtils;
 import com.github.pagehelper.PageInfo;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -271,18 +272,23 @@ public class DemandController {
      */
     @ApiOperation(value = "根据需求id查询需求变更影响的任务", notes = "查询需求变更影响的任务信息")
     @GetMapping(value = "/queryDemandTaskQuoteById")
-    public JSONObject queryDemandTaskQuoteById(@RequestParam(value = "demandId", required = true) Long demandId) {
-        ExecuteResult<List<Map<String, Object>>> result = new ExecuteResult<>();
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "currentPage", value = "页码", required = false, paramType = "query", dataType = "int"),
+        @ApiImplicitParam(name = "pageSize", value = "显示行数", required = false, paramType = "query", dataType = "int"),
+        @ApiImplicitParam(name = "demandId", value = "需求id", required = true, paramType = "query", dataType = "Long") })
+    public JSONObject queryDemandTaskQuoteById(@RequestParam(value = "demandId", required = true) Long demandId,
+            @RequestParam(defaultValue = "10")Integer pageSize,
+            @RequestParam(defaultValue = "1")Integer currentPage) {
         try {
-            result = demandService.queryDemandTaskQuoteById(demandId);
-            if (result.isSuccess()) {
-                return ApiResponse.success(result.getResult());
+            if ((null == demandId) || (0 == demandId)) {
+                return ApiResponse.errorPara("传入的需求id有误");
             }
+            PageInfo<Map<String, Object>> taskList = demandService.queryDemandTaskQuoteById(demandId, pageSize, currentPage);
+            return ApiResponse.success(taskList);
         } catch (Exception e) {
             logger.error(e.getMessage());
             return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
         }
-        return ApiResponse.error();
     }
 
     /**
@@ -292,18 +298,20 @@ public class DemandController {
      */
     @ApiOperation(value = "根据需求id查询需求变更影响的用例信息", notes = "查询需求变更影响的任务信息")
     @GetMapping(value = "/queryDemandUseCaseQuoteById")
-    public JSONObject queryDemandUseCaseQuoteById(@RequestParam(value = "demandId", required = true) Long demandId) {
-        ExecuteResult<List<Map<String, Object>>> result = new ExecuteResult<>();
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "currentPage", value = "页码", required = false, paramType = "query", dataType = "int"),
+        @ApiImplicitParam(name = "pageSize", value = "显示行数", required = false, paramType = "query", dataType = "int"),
+        @ApiImplicitParam(name = "demandId", value = "需求id", required = true, paramType = "query", dataType = "Long") })
+    public JSONObject queryDemandUseCaseQuoteById(@RequestParam(value = "demandId", required = true) Long demandId,
+            @RequestParam(defaultValue = "10")Integer pageSize,
+            @RequestParam(defaultValue = "1")Integer currentPage) {
         try {
-            result = demandService.queryDemandUseCaseQuoteById(demandId);
-            if (result.isSuccess()) {
-                return ApiResponse.success(result.getResult());
-            }
+            PageInfo<Map<String, Object>> useCaseList = demandService.queryDemandUseCaseQuoteById(demandId, pageSize, currentPage);
+            return ApiResponse.success(useCaseList);
         } catch (Exception e) {
             logger.error(e.getMessage());
             return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
         }
-        return ApiResponse.error();
     }
 
     /**
@@ -313,18 +321,20 @@ public class DemandController {
      */
     @ApiOperation(value = "根据需求id查询需求变更影响的bug信息", notes = "查询需求变更影响的bug信息")
     @GetMapping(value = "/queryDemandBugQuoteById")
-    public JSONObject queryDemandBug(@RequestParam(value = "demandId",required = true) Long demandId) {
-        ExecuteResult<List<Map<String, Object>>> result = new ExecuteResult<>();
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "currentPage", value = "页码", required = false, paramType = "query", dataType = "int"),
+        @ApiImplicitParam(name = "pageSize", value = "显示行数", required = false, paramType = "query", dataType = "int"),
+        @ApiImplicitParam(name = "demandId", value = "需求id", required = true, paramType = "query", dataType = "Long") })
+    public JSONObject queryDemandBug(@RequestParam(value = "demandId",required = true) Long demandId,
+            @RequestParam(defaultValue = "10")Integer pageSize,
+            @RequestParam(defaultValue = "1")Integer currentPage) {
         try {
-            result = demandService.queryDemandBugQuoteById(demandId);
-            if (result.isSuccess()) {
-                return ApiResponse.success(result.getResult());
-            }
+            PageInfo<Map<String, Object>> bugList = demandService.queryDemandBugQuoteById(demandId, pageSize, currentPage);
+            return ApiResponse.success(bugList);
         } catch (Exception e) {
             logger.error(e.getMessage());
             return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
         }
-        return ApiResponse.error();
     }
 
     @InitBinder

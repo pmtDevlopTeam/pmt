@@ -11,6 +11,8 @@ import javax.annotation.Resource;
 import com.camelot.pmt.platform.model.User;
 import com.camelot.pmt.platform.shiro.ShiroUtils;
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -225,15 +227,11 @@ public class DemandServiceImpl implements DemandService {
      * @return ExecuteResult<List<Map<String, Object>>>
      */
     @Override
-    public ExecuteResult<List<Map<String, Object>>> queryDemandTaskQuoteById(Long demandId) {
-        ExecuteResult<List<Map<String, Object>>> result = new ExecuteResult<>();
-        if ((null == demandId) || (0 == demandId)) {
-            result.addErrorMessage("传入的需求id有误");
-            return result;
-        }
+    public PageInfo<Map<String, Object>> queryDemandTaskQuoteById(Long demandId,Integer pageSize,Integer currentPage) {
+        PageHelper.startPage(currentPage,pageSize);
         List<Map<String, Object>> taskList = demandMapper.queryDemandTaskQuoteById(demandId);
-        result.setResult(taskList);
-        return result;
+        PageInfo<Map<String,Object>> pageInfo = new PageInfo<>(taskList);
+        return pageInfo;
     }
 
     /**
@@ -243,15 +241,11 @@ public class DemandServiceImpl implements DemandService {
      * @return ExecuteResult<List<Map<String, Object>>>
      */
     @Override
-    public ExecuteResult<List<Map<String, Object>>> queryDemandUseCaseQuoteById(Long demandId) {
-        ExecuteResult<List<Map<String, Object>>> result = new ExecuteResult<>();
-        if ((null == demandId) || (0 == demandId)) {
-            result.addErrorMessage("传入的需求id有误");
-            return result;
-        }
-        List<Map<String, Object>> taskList = demandMapper.queryDemandUseCaseQuoteById(demandId);
-        result.setResult(taskList);
-        return result;
+    public PageInfo<Map<String, Object>> queryDemandUseCaseQuoteById(Long demandId,Integer pageSize,Integer currentPage) {
+        PageHelper.startPage(currentPage,pageSize);
+        List<Map<String, Object>> userCaseList = demandMapper.queryDemandUseCaseQuoteById(demandId);
+        PageInfo<Map<String,Object>> pageInfo = new PageInfo<>(userCaseList);
+        return pageInfo;
     }
 
     /**
@@ -261,15 +255,11 @@ public class DemandServiceImpl implements DemandService {
      * @return ExecuteResult<List<Map<String, Object>>>
      */
     @Override
-    public ExecuteResult<List<Map<String, Object>>> queryDemandBugQuoteById(Long demandId) {
-        ExecuteResult<List<Map<String, Object>>> result = new ExecuteResult<>();
-        if ((null == demandId) || (0 == demandId)) {
-            result.addErrorMessage("传入的需求id有误");
-            return result;
-        }
-        List<Map<String, Object>> taskList = demandMapper.queryDemandBugQuoteById(demandId);
-        result.setResult(taskList);
-        return result;
+    public PageInfo<Map<String, Object>> queryDemandBugQuoteById(Long demandId,Integer pageSize,Integer currentPage) {
+        PageHelper.startPage(currentPage,pageSize);
+        List<Map<String, Object>> bugList = demandMapper.queryDemandBugQuoteById(demandId);
+        PageInfo<Map<String,Object>> pageInfo = new PageInfo<>(bugList);
+        return pageInfo;
     }
 
     /**

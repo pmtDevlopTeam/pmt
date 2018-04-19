@@ -8,6 +8,7 @@ import com.camelot.pmt.platform.model.User;
 import com.camelot.pmt.project.model.Demand;
 import com.camelot.pmt.project.model.DemandOperate;
 import com.camelot.pmt.project.model.DemandVO;
+import com.github.pagehelper.PageInfo;
 
 public interface DemandService {
     boolean save(Demand demand,User user);
@@ -25,26 +26,26 @@ public interface DemandService {
     /**
      * 查询影响需求的任务信息
      *
-     *@param   demandId
+     *@param  Long demandId ,Integer pageSize,Integer currentPage
      *@return ExecuteResult<List<Map<String, Object>>>
      */
-    ExecuteResult<List<Map<String, Object>>> queryDemandTaskQuoteById(Long demandId);
+    PageInfo<Map<String, Object>> queryDemandTaskQuoteById(Long demandId,Integer pageSize,Integer currentPage);
 
     /**
      * 查询影响需求的用例信息
      *
-     *@param   demandId
+     *@param  Long demandId,Integer pageSize,Integer currentPage
      *@return ExecuteResult<List<Map<String, Object>>>
      */
-    ExecuteResult<List<Map<String, Object>>> queryDemandUseCaseQuoteById(Long demandId);
+    PageInfo<Map<String, Object>> queryDemandUseCaseQuoteById(Long demandId,Integer pageSize,Integer currentPage);
 
     /**
      * 查询影响需求的BUG信息
      *
-     *@param   demandId
+     *@param  Long demandId,Integer pageSize,Integer currentPage
      *@return ExecuteResult<List<Map<String, Object>>>
      */
-    ExecuteResult<List<Map<String, Object>>> queryDemandBugQuoteById(Long demandId);
+    PageInfo<Map<String, Object>> queryDemandBugQuoteById(Long demandId,Integer pageSize,Integer currentPage);
 
     boolean updateByReview(Demand demand,User user);
 }
