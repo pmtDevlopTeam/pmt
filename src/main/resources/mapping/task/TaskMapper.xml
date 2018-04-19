@@ -412,10 +412,10 @@
 			and t.status = #{status,jdbcType=CHAR}
 		</if>
 		<if test="taskNum != null">
-			and t.task_num = #{taskNum,jdbcType=CHAR}
+			and t.task_num like CONCAT('%',#{taskNum,jdbcType=CHAR},'%') 
 		</if>
 		<if test="taskName != null">
-			and t.task_name = #{taskName,jdbcType=CHAR}
+			and t.task_name like CONCAT('%',#{taskName,jdbcType=CHAR},'%') 
 		</if>
 		<if test="project != null and project.id !=null">
 			and t.project_id = #{project.id,jdbcType=CHAR}
@@ -439,12 +439,15 @@
 		INNER JOIN platform_user c ON c.user_id = t.create_user_id
 		LEFT JOIN project_main p ON t.project_id = p.id
 		LEFT JOIN demand d ON t.demand_id = d.id
-		where t.beassign_user_id = #{beassignUser.userId,jdbcType=VARCHAR} and t.status in (0,5) 
+		where t.beassign_user_id = #{beassignUser.userId,jdbcType=VARCHAR} 
+		<if test="status != null">
+			and t.status = #{status,jdbcType=CHAR}
+		</if>
 		<if test="taskNum != null">
-			and t.task_num = #{taskNum,jdbcType=CHAR}
+			and t.task_num like CONCAT('%',#{taskNum,jdbcType=CHAR},'%') 
 		</if>
 		<if test="taskName != null">
-			and t.task_name = #{taskName,jdbcType=CHAR}
+			and t.task_name like CONCAT('%',#{taskName,jdbcType=CHAR},'%') 
 		</if>
 		<if test="project != null and project.id !=null">
 			and t.project_id = #{project.id,jdbcType=CHAR}

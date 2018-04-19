@@ -8,7 +8,12 @@ import com.camelot.pmt.platform.model.User;
 import com.camelot.pmt.task.model.Task;
 import com.camelot.pmt.task.service.TaskPendingService;
 import com.camelot.pmt.task.utils.Constant.TaskStatus;
+import com.github.pagehelper.PageInfo;
+
 import io.swagger.annotations.*;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,6 +39,8 @@ import java.util.List;
 @RequestMapping(value="/task/taskPending")
 @Api(value = "我的工作台-我的待办：管理接口", description ="我的工作台-我的待办：管理接口")
 public class TaskPendingController {
+	//日志
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	@Autowired
 	private TaskPendingService taskPendingService;
@@ -49,14 +56,17 @@ public class TaskPendingController {
 	@ApiOperation(value = "查询我的全部的任务列表", notes = "查询我的全部的任务列表")
 	@ApiImplicitParams({
         @ApiImplicitParam(name = "taskNum", value = "任务编号", required = false, paramType = "form", dataType = "String"),
-        @ApiImplicitParam(name = "taskName", value = "父级任务标识号", required = false, paramType = "form", dataType = "String"),
+        @ApiImplicitParam(name = "taskName", value = "任务名称", required = false, paramType = "form", dataType = "String"),
         @ApiImplicitParam(name = "project.id", value = "项目标识号", required = false, paramType = "form", dataType = "String"),
         @ApiImplicitParam(name = "priority", value = "优先级", required = false, paramType = "form", dataType = "String"),
         @ApiImplicitParam(name = "assignUser.userId", value = "指派人标识号", required = false, paramType = "form", dataType = "String"),
         @ApiImplicitParam(name = "status", value = "任务状态", required = false, paramType = "form", dataType = "String") })
 	@RequestMapping(value = "/queryAllTaskList", method = RequestMethod.POST)
-	public JSONObject queryAllTaskList(@ApiIgnore Task task){
-		ExecuteResult<List<Task>> result = new ExecuteResult<List<Task>>();
+	public JSONObject queryAllTaskList(
+			@ApiIgnore Task task,
+			@ApiParam(name = "page", value = "页码", required = true) @RequestParam(required = true) Integer page,
+			@ApiParam(name = "rows", value = "每页数量", required = true) @RequestParam(required = true) Integer rows){
+		ExecuteResult<PageInfo<Task>> result = new ExecuteResult<PageInfo<Task>>();
 		try {
 			Long userLoginId = Long.valueOf(1);
 			//检查用户是否登录，需要去session中获取用户登录信息
@@ -67,7 +77,7 @@ public class TaskPendingController {
 			User user = new User();
 			user.setUserId(userLoginId.toString());
 			task.setBeassignUser(user);
-			result = taskPendingService.queryAllTaskList(task);
+			result = taskPendingService.queryAllTaskList(task,page,rows);
 			//判断是否成功
 			if(result.isSuccess()){
 				return ApiResponse.jsonData(APIStatus.OK_200,result.getResult());
@@ -90,13 +100,16 @@ public class TaskPendingController {
 	@ApiOperation(value = "查询我的待办全部的任务列表", notes = "查询我的待办全部的任务列表")
 	@ApiImplicitParams({
         @ApiImplicitParam(name = "taskNum", value = "任务编号", required = false, paramType = "form", dataType = "String"),
-        @ApiImplicitParam(name = "taskName", value = "父级任务标识号", required = false, paramType = "form", dataType = "String"),
+        @ApiImplicitParam(name = "taskName", value = "任务名称", required = false, paramType = "form", dataType = "String"),
         @ApiImplicitParam(name = "project.id", value = "项目标识号", required = false, paramType = "form", dataType = "String"),
         @ApiImplicitParam(name = "priority", value = "优先级", required = false, paramType = "form", dataType = "String"),
         @ApiImplicitParam(name = "assignUser.userId", value = "指派人标识号", required = false, paramType = "form", dataType = "String") })
 	@RequestMapping(value = "/queryMyPendingTaskList", method = RequestMethod.POST)
-	public JSONObject queryMyPendingTaskList(@ApiIgnore Task task){
-		ExecuteResult<List<Task>> result = new ExecuteResult<List<Task>>();
+	public JSONObject queryMyPendingTaskList(
+			@ApiIgnore Task task,
+			@ApiParam(name = "page", value = "页码", required = true) @RequestParam(required = true) Integer page,
+			@ApiParam(name = "rows", value = "每页数量", required = true) @RequestParam(required = true) Integer rows){
+		ExecuteResult<PageInfo<Task>> result = new ExecuteResult<PageInfo<Task>>();
 		try {
 			Long userLoginId = Long.valueOf(1);
 			//检查用户是否登录，需要去session中获取用户登录信息
@@ -107,13 +120,15 @@ public class TaskPendingController {
 			User user = new User();
 			user.setUserId(userLoginId.toString());
 			task.setBeassignUser(user);
-			result = taskPendingService.queryMyPendingTaskList(task);
+			task.setStatus(TaskStatus.PENDINHG.getValue());
+			result = taskPendingService.queryMyPendingTaskList(task,page,rows);
 			//判断是否成功
 			if(result.isSuccess()){
 				return ApiResponse.jsonData(APIStatus.OK_200,result.getResult());
 			}
 			return ApiResponse.jsonData(APIStatus.ERROR_500, result.getResult());
 		}catch (Exception e) {
+			logger.error(e.getMessage());
 			//异常
 			return ApiResponse.jsonData(APIStatus.ERROR_500,e.getMessage());
 		}
@@ -147,6 +162,7 @@ public class TaskPendingController {
 			}
 			return ApiResponse.jsonData(APIStatus.ERROR_500, result.getResult());
 		}catch (Exception e) {
+			logger.error(e.getMessage());
 			//异常
 			return ApiResponse.jsonData(APIStatus.ERROR_500,e.getMessage());
 		}
@@ -180,6 +196,7 @@ public class TaskPendingController {
 			}
 			return ApiResponse.jsonData(APIStatus.ERROR_500, result.getResult());
 		}catch (Exception e) {
+			logger.error(e.getMessage());
 			//异常
 			return ApiResponse.jsonData(APIStatus.ERROR_500,e.getMessage());
 		}
@@ -215,6 +232,7 @@ public class TaskPendingController {
 			}
 			return ApiResponse.jsonData(APIStatus.ERROR_500, result.getResult());
 		}catch (Exception e) {
+			logger.error(e.getMessage());
 			//异常错误
 			return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
 		}
@@ -229,7 +247,7 @@ public class TaskPendingController {
 	* @return JSONObject    返回类型 
 	* @throws
 	 */
-	@ApiOperation(value = "查询taskId下的所有一级子节点", notes = "勿调用，一期无用接口，查询taskId下的所有一级子节点")
+	@ApiOperation(value = "勿调用，一期无用接口，查询taskId下的所有一级子节点", notes = "勿调用，一期无用接口，查询taskId下的所有一级子节点")
 	@RequestMapping(value = "/queryTaskListNodeByParentId", method = RequestMethod.POST)
 	public JSONObject queryTaskListNodeByParentId(
 			@ApiParam(name = "id", value = "任务标识号", required = true) @RequestParam(required = true) Long id){
@@ -247,6 +265,7 @@ public class TaskPendingController {
 			}
 			return ApiResponse.jsonData(APIStatus.ERROR_500, result.getResult());
 		}catch (Exception e) {
+			logger.error(e.getMessage());
 			//异常
 			return ApiResponse.jsonData(APIStatus.ERROR_500,e.getMessage());
 		}
@@ -260,7 +279,7 @@ public class TaskPendingController {
 	* @return JSONObject    返回类型 
 	* @throws
 	 */
-	@ApiOperation(value = "查询我的顶级待办任务", notes = "勿调用，一期无用接口，查询我的顶级待办任务")
+	@ApiOperation(value = "勿调用，一期无用接口，查询我的顶级待办任务", notes = "勿调用，一期无用接口，查询我的顶级待办任务")
 	@RequestMapping(value = "/queryTopTaskNameList", method = RequestMethod.GET)
 	public JSONObject queryTopTaskNameList(){
 		ExecuteResult<List<Task>> result = new ExecuteResult<List<Task>>();
@@ -278,6 +297,7 @@ public class TaskPendingController {
 			}
 			return ApiResponse.jsonData(APIStatus.ERROR_500, result.getResult());
 		}catch (Exception e) {
+			logger.error(e.getMessage());
 			//异常
 			return ApiResponse.jsonData(APIStatus.ERROR_500,e.getMessage());
 		}
@@ -292,7 +312,7 @@ public class TaskPendingController {
 	* @return JSONObject    返回类型 
 	* @throws
 	 */
-	@ApiOperation(value = "查询该任务的父级节点以及祖宗节点", notes = "勿调用，一期无用接口，查询该任务的父级节点以及祖宗节点，list中包含本身")
+	@ApiOperation(value = "勿调用，一期无用接口，查询该任务的父级节点以及祖宗节点", notes = "勿调用，一期无用接口，查询该任务的父级节点以及祖宗节点，list中包含本身")
 	@RequestMapping(value = "/queryTopAllTaskTreeByTaskId", method = RequestMethod.POST)
 	public JSONObject queryTopAllTaskTreeByTaskId(
 			@ApiParam(name = "id", value = "任务标识号", required = true) @RequestParam(required = true) Long id){
@@ -312,6 +332,7 @@ public class TaskPendingController {
 			}
 			return ApiResponse.jsonData(APIStatus.ERROR_500, result.getResult());
 		}catch (Exception e) {
+			logger.error(e.getMessage());
 			//异常
 			return ApiResponse.jsonData(APIStatus.ERROR_500,e.getMessage());
 		}
@@ -326,7 +347,7 @@ public class TaskPendingController {
 	* @return JSONObject    返回类型 
 	* @throws
 	 */
-	@ApiOperation(value = "查询我的待办任务taskId下的所有一级子节点", notes = "勿调用，一期无用接口,查询我的待办任务taskId下的所有一级子节点")
+	@ApiOperation(value = "勿调用，一期无用接口，查询我的待办任务taskId下的所有一级子节点", notes = "勿调用，一期无用接口,查询我的待办任务taskId下的所有一级子节点")
 	@RequestMapping(value = "/queryMyTaskListNodeByParentId", method = RequestMethod.POST)
 	public JSONObject queryMyTaskListNodeByParentId(
 			@ApiParam(name = "id", value = "任务标识号", required = true) @RequestParam(required = true) Long id){
@@ -344,6 +365,7 @@ public class TaskPendingController {
 			}
 			return ApiResponse.jsonData(APIStatus.ERROR_500, result.getResult());
 		}catch (Exception e) {
+			logger.error(e.getMessage());
 			//异常
 			return ApiResponse.jsonData(APIStatus.ERROR_500,e.getMessage());
 		}
@@ -358,7 +380,7 @@ public class TaskPendingController {
 	* @return JSONObject    返回类型 
 	* @throws
 	 */
-	@ApiOperation(value = "添加子任务", notes = "勿调用，一期无用接口，添加子任务")
+	@ApiOperation(value = "勿调用，一期无用接口，添加子任务", notes = "勿调用，一期无用接口，添加子任务")
 	@ApiImplicitParams({
         @ApiImplicitParam(name = "taskNum", value = "任务编号", required = true, paramType = "form", dataType = "String"),
         @ApiImplicitParam(name = "taskName", value = "任务名称", required = true, paramType = "form", dataType = "String"),
@@ -390,6 +412,7 @@ public class TaskPendingController {
 			}
 			return ApiResponse.jsonData(APIStatus.ERROR_500, result.getResult());
 		}catch (Exception e) {
+			logger.error(e.getMessage());
 			//异常错误
 			return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
 		}
@@ -404,7 +427,7 @@ public class TaskPendingController {
 	* @return JSONObject    返回类型 
 	* @throws
 	 */
-	@ApiOperation(value = "修改任务单元", notes = "勿调用，一期无用接口，修改任务单元")
+	@ApiOperation(value = "勿调用，一期无用接口，修改任务单元", notes = "勿调用，一期无用接口，修改任务单元")
 	@ApiImplicitParams({
 		@ApiImplicitParam(name = "id", value = "任务标识号", required = true, paramType = "form", dataType = "String"),
        @ApiImplicitParam(name = "taskNum", value = "任务编号", required = true, paramType = "form", dataType = "String"),
@@ -437,6 +460,7 @@ public class TaskPendingController {
 			}
 			return ApiResponse.jsonData(APIStatus.ERROR_500, result.getResult());
 		}catch (Exception e) {
+			logger.error(e.getMessage());
 			//异常错误
 			return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
 		}
@@ -451,7 +475,7 @@ public class TaskPendingController {
 	* @return JSONObject    返回类型 
 	* @throws
 	 */
-	@ApiOperation(value = "删除单个任务单元", notes = "勿调用，一期无用接口，删除单个任务单元")
+	@ApiOperation(value = "勿调用，一期无用接口，删除单个任务单元", notes = "勿调用，一期无用接口，删除单个任务单元")
     @RequestMapping(value = "/deleteTask", method = RequestMethod.POST)
 	public JSONObject deleteTask(
 			@ApiParam(name = "id", value = "任务标识号", required = true) @RequestParam(required = true) Long id){
@@ -469,6 +493,7 @@ public class TaskPendingController {
             }
             return ApiResponse.jsonData(APIStatus.ERROR_500, result.getResult());
 		}catch (Exception e) {
+			logger.error(e.getMessage());
 			//异常错误
 			return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
 		}
@@ -483,7 +508,7 @@ public class TaskPendingController {
 	* @return JSONObject    返回类型 
 	* @throws
 	 */
-	@ApiOperation(value = "删除待办任务", notes = "勿调用，一期无用接口，删除待办任务")
+	@ApiOperation(value = "勿调用，一期无用接口，删除待办任务", notes = "勿调用，一期无用接口，删除待办任务")
 	@RequestMapping(value = "/deletePendingTaskTreeById", method = RequestMethod.POST)
 	public JSONObject deletePendingTaskTreeById(
 			@ApiParam(name = "id", value = "任务标识号", required = true) @RequestParam(required = true) String id){
@@ -501,6 +526,7 @@ public class TaskPendingController {
 			}
 			return ApiResponse.error();
 		}catch (Exception e) {
+			logger.error(e.getMessage());
 			//异常
 			return ApiResponse.jsonData(APIStatus.ERROR_500,e.getMessage());
 		}
@@ -515,7 +541,7 @@ public class TaskPendingController {
 	* @return JSONObject    返回类型 
 	* @throws
 	 */
-	@ApiOperation(value = "添加或更新任务单元", notes = "勿调用，一期无用接口，添加或更新任务单元")
+	@ApiOperation(value = "勿调用，一期无用接口，添加或更新任务单元", notes = "勿调用，一期无用接口，添加或更新任务单元")
 	@ApiImplicitParams({
         @ApiImplicitParam(name = "id", value = "任务标识号", required = true, paramType = "form", dataType = "String"),
         @ApiImplicitParam(name = "taskName", value = "任务名称", required = true, paramType = "form", dataType = "String"),
@@ -563,6 +589,7 @@ public class TaskPendingController {
 			}
 			return ApiResponse.error();
 		}catch (Exception e) {
+			logger.error(e.getMessage());
 			//异常错误
 			return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
 		}
@@ -577,7 +604,7 @@ public class TaskPendingController {
 	* @return JSONObject    返回类型 
 	* @throws
 	 */
-	@ApiOperation(value = "查询taskId下的所有子节点", notes = "勿调用，一期无用接口，查询taskId下的所有子节点")
+	@ApiOperation(value = "勿调用，一期无用接口，查询taskId下的所有子节点", notes = "勿调用，一期无用接口，查询taskId下的所有子节点")
 	@RequestMapping(value = "/queryTaskTreeByTaskId", method = RequestMethod.POST)
 	public JSONObject queryTaskTreeByTaskId(
 			@ApiParam(name = "taskId", value = "任务标识号", required = true) @RequestParam(required = true) String taskId){
@@ -595,6 +622,7 @@ public class TaskPendingController {
 			}
 			return ApiResponse.error();
 		}catch (Exception e) {
+			logger.error(e.getMessage());
 			//异常
 			return ApiResponse.jsonData(APIStatus.ERROR_500,e.getMessage());
 		}
