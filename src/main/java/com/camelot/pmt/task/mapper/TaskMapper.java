@@ -1,7 +1,7 @@
 package com.camelot.pmt.task.mapper;
 
 import com.camelot.pmt.task.model.Task;
-import com.camelot.pmt.task.model.TaskLog;
+import com.camelot.pmt.task.model.TaskFile;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
@@ -21,7 +21,7 @@ public interface TaskMapper {
      *将任务进行关闭操作
      * myp
      * */
-    void updateRunningToClose(List list);
+    int updateRunningToClose(List list);
 
 
     /**
@@ -30,6 +30,18 @@ public interface TaskMapper {
      * */
     void updateRunningToAlready(Long id);
     List<Task> queryRunningToAlready(List list);
+
+    /**
+     *点击完成时，修改实际完成时间和实际工时
+     * myp
+     * */
+    int updateInfact_hourAndActual_end_time(Task task);
+
+    /**
+     *点击完成时，添加附件
+     * myp
+     * */
+    int addAttachment(TaskFile taskFile);
 
     /**
      * 根据任务id查询所有的次id的子任务
@@ -42,15 +54,6 @@ public interface TaskMapper {
      * myp
      * */
     Task selectTaskById(Long id);
-
-
-    /**
-     * 添加历史记录 @Title: queryCount @Description: TODO @param @return @return
-     * Long @throws
-     * myp
-     */
-    Long saveHistoryLog(TaskLog taskLog);
-
 
     /**
      * @author: zlh
@@ -73,14 +76,6 @@ public interface TaskMapper {
      * myp
      * */
     List<Task> listTaskAlready(String id);
-
-    /**
-     * 查询已完成任务总个数 @Title: queryCount @Description: TODO @param @return @return
-     * Long @throws
-     * myp
-     */
-    Long queryAlreadyCount();
-
 
     /**
      * @author: zlh
@@ -123,6 +118,7 @@ public interface TaskMapper {
      * @throws
      */
     Long queryCount();
+
     /**
      * 查询延期任务列表+分页+排序+时间正序+优先级倒序
      * @Title: queryOverdueTask
@@ -209,6 +205,17 @@ public interface TaskMapper {
      * @throws
      */
     List<Task> queryAllTaskList(Task task);
+
+    /**
+     *
+    * @Title: queryMyPendingTaskList
+    * @Description: TODO(查询我的待办Task任务列表)
+    * @param @param task
+    * @param @return    设定文件
+    * @return List<Task>    返回类型
+    * @throws
+     */
+    List<Task> queryMyPendingTaskList(Task task);
 
     /**
      * @author: gxl
@@ -352,7 +359,8 @@ public interface TaskMapper {
      * @return List<Task>
      * @throws
      */
-    List<Task> queryTaskByDemandId(Long demandId);
+    List<Task> queryTaskByDemandId(long demandId);
+
     /**
      * 根据任务Id修改状态
     * @Title: updateTaskOverdueStatus
@@ -363,7 +371,6 @@ public interface TaskMapper {
     * @throws
      */
 	int updateTaskOverdueStatus(String taskId);
-
 
     /**
      * 根据任务Id修改状态

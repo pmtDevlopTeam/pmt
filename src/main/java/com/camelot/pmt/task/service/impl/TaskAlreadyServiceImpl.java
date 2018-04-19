@@ -118,7 +118,7 @@ public class TaskAlreadyServiceImpl implements TaskAlreadyService {
      * @param Long id
      * @return ExecuteResult<PageInfo<Task>>
      */
-    public ExecuteResult<PageInfo<Task>> queryTaskAlready(int page , int rows, String id) {
+    public ExecuteResult<PageInfo<Task>> queryTaskAlready(Integer page , Integer rows, String id) {
         ExecuteResult<PageInfo<Task>> result = new ExecuteResult<PageInfo<Task>>();
         //利用PageHelper进行分页
         PageHelper.startPage(page, rows);

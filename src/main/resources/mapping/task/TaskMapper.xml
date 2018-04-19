@@ -428,6 +428,35 @@
 		</if>
 		 order by t.estimate_start_time,t.priority asc
     </select>
+    <!--查询我的所有待办任务列表-->
+    <select id="queryMyPendingTaskList" resultMap="BaseResultMap" parameterType="com.camelot.pmt.task.model.Task">
+	    select
+		<include refid="ShowAllTasks_Column_List" />
+		from
+			task t
+		INNER JOIN platform_user a ON a.user_id = t.assign_user_id
+		INNER JOIN platform_user b ON b.user_id = t.beassign_user_id
+		INNER JOIN platform_user c ON c.user_id = t.create_user_id
+		LEFT JOIN project_main p ON t.project_id = p.id
+		LEFT JOIN demand d ON t.demand_id = d.id
+		where t.beassign_user_id = #{beassignUser.userId,jdbcType=VARCHAR} and t.status in (0,5) 
+		<if test="taskNum != null">
+			and t.task_num = #{taskNum,jdbcType=CHAR}
+		</if>
+		<if test="taskName != null">
+			and t.task_name = #{taskName,jdbcType=CHAR}
+		</if>
+		<if test="project != null and project.id !=null">
+			and t.project_id = #{project.id,jdbcType=CHAR}
+		</if>
+		<if test="priority != null">
+			and t.priority = #{priority,jdbcType=CHAR}
+		</if>
+		<if test="assignUser != null and assignUser.userId != null">
+			and t.assign_user_id = #{assignUser.userId,jdbcType=CHAR}
+		</if>
+		 order by t.estimate_start_time,t.priority asc
+    </select>
     <!-- 查询taskId下的一级子节点 -->
   	<select id="queryTaskListNodeByParentId" resultMap="BaseResultMap">
   		select
@@ -662,5 +691,16 @@
     <update id="updateRunningToAlready" parameterType="Long">
         UPDATE task SET status = 2 WHERE id = #{id}
     </update>
+    
+    <update id="updateInfact_hourAndActual_end_time" parameterType="com.camelot.pmt.task.model.Task">
+        UPDATE task SET actual_end_time = #{actualEndTime},infact_hour = #{infactHour} WHERE id = #{id}
+    </update>
+    
+    <insert id="addAttachment" parameterType="com.camelot.pmt.task.model.TaskFile">
+        INSERT INTO attachment (attachment_url,
+        attachment_tile,attachment_source,source_id,create_user_id,create_time,modify_user_id,modify_time)
+        VALUES (#{attachmentUrl},#{attachmentTile},#{attachmentSource},#{sourceId},#{createUserId},
+        #{createTime},#{modifyUserId},#{modifyTime})
+    </insert>
     <!--myp结束-->
 </mapper>
