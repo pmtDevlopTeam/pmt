@@ -64,6 +64,7 @@ public class DictController {
     })
 	@RequestMapping(value="/addDict", method=RequestMethod.POST)
 	public JSONObject addDict(@ApiIgnore Dict dict) {
+		ExecuteResult<String> result = new ExecuteResult<String>();
 		boolean flag = false;
 		try {
 			//if非空
@@ -73,12 +74,17 @@ public class DictController {
 	    	if (StringUtils.isEmpty(dict.getDictCode())||StringUtils.isEmpty(dict.getDictName())||StringUtils.isEmpty(dict.getDictType())){
 	    		return ApiResponse.errorPara();
             }
-	    	//不为空调用接口查询
-	    	flag = dictService.addDict(dict);
-            if(flag){
-                return ApiResponse.success();
-            }
-            return ApiResponse.error("添加异常");
+	    	//检查字典编码跟字典名称是否唯一
+	    	 result = dictService.checkDictCodeOrDictNameIsExist(dict);
+	    	//如果字典编码跟字典名称唯一
+	    	 if(result.getResultMessage()!=null) {
+	 	    	flag = dictService.addDict(dict);
+	            if(flag){
+	                return ApiResponse.success();
+	            }
+	            return ApiResponse.error("添加异常");
+	    	 }
+	    	 return ApiResponse.success(result.getResult());
 		}catch (Exception e) {
 			logger.error(e.getMessage());
     		return ApiResponse.error();
@@ -138,20 +144,27 @@ public class DictController {
 	@RequestMapping(value="/updateDictByDictId", method=RequestMethod.POST)
 	public JSONObject updateDictByDictId(@ApiIgnore Dict dict) {
 		boolean flag = false;
+		ExecuteResult<String> result = new ExecuteResult<String>();
         try {
             if(StringUtils.isEmpty(dict.getDictCode())||StringUtils.isEmpty(dict.getDictType())
             ||StringUtils.isEmpty(dict.getDictName()) || StringUtils.isEmpty(dict.getDictId()) ){
             	return ApiResponse.errorPara();
             }
-            flag = dictService.updateDictByDictId(dict);
-            if(flag){
-                return ApiResponse.success();
-            }
-            return ApiResponse.error("修改异常");
-        } catch (Exception e){
-        	logger.error(e.getMessage());
-            return ApiResponse.error();
-        }
+            //检查字典编码跟字典名称是否唯一
+	    	 result = dictService.checkDictCodeOrDictNameIsExistUpdate(dict);
+	    	//如果字典编码跟字典名称唯一
+	    	 if(result.getResultMessage()!=null) {
+	    		 flag = dictService.updateDictByDictId(dict);
+		         if(flag){
+		        	 return ApiResponse.success();
+		         }
+		          	 return ApiResponse.error("修改异常");
+		     }
+		    	 	 return ApiResponse.success(result.getResult());
+        	} catch (Exception e){
+        		logger.error(e.getMessage());
+        		return ApiResponse.error();
+        	}
         
 	}
 

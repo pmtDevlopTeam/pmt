@@ -2,10 +2,12 @@ package com.camelot.pmt.task;
 
 import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.platform.model.User;
+import com.camelot.pmt.platform.service.UserService;
 import com.camelot.pmt.task.model.Task;
 import com.camelot.pmt.task.model.TaskFile;
 import com.camelot.pmt.task.service.TaskFileService;
 import com.camelot.pmt.task.service.TaskManagerService;
+import com.github.pagehelper.PageInfo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,12 +31,15 @@ public class TaskManagerTest {
     @Autowired
     private TaskFileService taskFileService;
 
+    @Autowired
+    private UserService userService;
+
     @Test
     public void testQueryAllTasks() throws Exception {
-        ExecuteResult<List<Task>> listExecuteResult = taskManagerService.queryAllTask();
-        List<Task> result = listExecuteResult.getResult();
-
-        for (Task task : result) {
+        ExecuteResult<PageInfo<Task>> pageInfoExecuteResult = taskManagerService.queryAllTask(1, 10);
+        PageInfo<Task> result = pageInfoExecuteResult.getResult();
+        List<Task> list = result.getList();
+        for (Task task : list) {
             System.out.println(task);
         }
     }
@@ -75,13 +80,23 @@ public class TaskManagerTest {
     public void testQueryTaskByTask() throws Exception {
         Task task = new Task();
 //        User beAssginUser = new User();
-//        beAssginUser.setUsername("sdf");
-        task.setTaskName("第一个");
+//        beAssginUser.setUsername("lyh");
 //        task.setBeassignUser(beAssginUser);
-        ExecuteResult<List<Task>> listExecuteResult = taskManagerService.queryTaskByTask(task);
-        List<Task> result = listExecuteResult.getResult();
-        for (Task task1 : result) {
+//        task.setTaskName("第一个");
+        ExecuteResult<PageInfo<Task>> pageInfoExecuteResult = taskManagerService.queryTaskByTask(task, 1, 10);
+        PageInfo<Task> result1 = pageInfoExecuteResult.getResult();
+        List<Task> list = result1.getList();
+        for (Task task1 : list) {
             System.out.println(task1);
+        }
+    }
+
+    @Test
+    public void testQueryUserByUsername(){
+        ExecuteResult<List<User>> lv = userService.queryUsersByUserName("风");
+        List<User> result = lv.getResult();
+        for (User user : result) {
+            System.out.println(user.getUserId());
         }
     }
 }

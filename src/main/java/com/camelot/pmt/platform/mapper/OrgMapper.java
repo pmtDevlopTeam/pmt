@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
-import com.camelot.pmt.common.Pager;
 import com.camelot.pmt.platform.model.Org;
 import com.camelot.pmt.platform.model.OrgAndUser;
 import com.camelot.pmt.platform.model.OrgToUser;
@@ -60,7 +59,7 @@ public interface OrgMapper {
      * @param org
      * @return
      */
-	List<Org> findOrgsByPage();
+	List<Org> queryOrgsByPage();
 	/**
      * 查询部门表总条数
      * @param org
@@ -72,7 +71,7 @@ public interface OrgMapper {
      * @param orgId
      * @return
      */
-	List<Org> selectOrgChildrenByParentId(String parentId);
+	List<Org> queryOrgSubByParentId(String parentId);
 	/**
      * 根据部门parentId 递归删除子部门
      * @param orgId
@@ -90,7 +89,7 @@ public interface OrgMapper {
 	/** 
 	 * 组织机构与用户的绑定(关系到用户 )
 	 **/
-	int createOrgToUser(Org org);
+	int updateOrgToUser(Org org);
 	/** 
 	 * 删除组织机构与用户的已绑定(关系到用户 )
 	 **/
@@ -99,12 +98,12 @@ public interface OrgMapper {
 	 * 查询组织机构与用户的已绑定(关系到用户 )
 	 * @return 
 	 **/
-	OrgAndUser selectOrgAndUserByOrgIdAndUserId(@Param("userId") String userId, @Param("orgId") String orgId);
+	OrgAndUser queryOrgAndUserByOrgIdAndUserId(@Param("userId") String userId, @Param("orgId") String orgId);
 	 /** 组织机构与用户的绑定 根据orgId查询所有用户(关系到用户 )
 	  * @param orgId 
 	  * @return List<User>
 	 **/
-	List<OrgAndUser> selectUsersByOrgId(String orgId);
+	List<OrgAndUser> queryOrgAndUserByOrgId(String orgId);
 	/** 组织机构  根据orgId,orgCode,orgname 多条件模糊查询所有部门信息
 	 * @param orgId,orgCode,orgname
 	 * @return List<Org>
