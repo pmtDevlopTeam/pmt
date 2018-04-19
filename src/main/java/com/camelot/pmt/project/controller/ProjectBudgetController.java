@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -166,26 +167,16 @@ public class ProjectBudgetController {
     @ApiOperation(value = "根据项目id查询项目结项", notes = "查询单个项目结项")
     @GetMapping("/queryProjectEndById")
     public JSONObject queryProjectEnd(@RequestParam(value = "projectId", required = true) Long projectId) {
-        ExecuteResult<Map<String, Object>> result = new ExecuteResult<>();
         try {
-            if ("".equals(projectId)) {
+            if (("".equals(projectId))||(0==projectId)) {
                 return ApiResponse.errorPara("项目id为空");
             }
-            /**
-             * 调用产出物模块service统计发包信息
-             */
-            result = projectBudgetService.queryBudget(projectId);
-            /**
-             * 调用产出物service统计文档中心文档类型下文档的个数，携带文档名称；
-             */
-            if (result.isSuccess()) {
-                return ApiResponse.success(result.getResult());
-            }
+            Map<String,Object> fileList = projectBudgetService.queryProjectEndById(projectId);
+            return ApiResponse.success(fileList);
         } catch (Exception e) {
             logger.error(e.getMessage());
             return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
         }
-        return ApiResponse.error();
     }
 
 }

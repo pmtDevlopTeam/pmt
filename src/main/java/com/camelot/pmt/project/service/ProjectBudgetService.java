@@ -45,4 +45,10 @@ public interface ProjectBudgetService {
      */
     ProjectBudget queryBudgeByProjectId(Long projectId);
 
+    /**
+     * 统计查询项目结项
+     *@param  Long projectId
+     */
+    Map<String,Object> queryProjectEndById(Long projectId);
+
 }
