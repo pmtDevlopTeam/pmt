@@ -8,10 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 public interface TaskMapper {
-    int deleteByPrimaryKey(Long id);
-
-    Task selectByPrimaryKey(Long id);
-
 
     /**
      * 查询正在进行的任务，根据时间和优先级进行排序
@@ -69,7 +65,7 @@ public interface TaskMapper {
      * @description: 根据条件查询任务
      * @return
      */
-    List<Task> queryTaskByTask(@Param("task") Task task, @Param("ids") List<String> ids);
+    List<Task> queryTaskByTask(@Param("task") Task task, @Param("ids") String[] ids);
 
     /**
      * 查询已完成的任务，根据时间和优先级进行排序
@@ -108,14 +104,6 @@ public interface TaskMapper {
      * @date: 17:08 2018/4/12
      */
     Task queryTaskById(Long id);
-
-    /**
-     * @author: zlh
-     * @param:  id 父id
-     * @description: 根据父id查询所有的子任务id
-     * @date: 16:04 2018/4/12
-     */
-    List<Long> querySubTaskIdByParantId(Long id);
 
     /**
      * @author: zlh
