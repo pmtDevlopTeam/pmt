@@ -267,14 +267,15 @@ public class DemandServiceImpl implements DemandService {
      * @return
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public boolean updateByReview(Demand demand, User user) {
         boolean flag = false;
         try {
             int resultCount = demandMapper.updateByPrimaryKeySelective(demand);
             if (resultCount > 0) {
                 DemandOperate demandOperate = new DemandOperate();
-                demandOperate.setCreateUserId(demand.getCreateUserId());
-                demandOperate.setCreateTime(demand.getCreateTime());
+                demandOperate.setCreateUserId(user.getUserId());
+                demandOperate.setCreateTime(demand.getModifyTime());
                 demandOperate.setDemandId(demand.getId());
                 demandOperate.setOperateDesc(user.getUsername() + "评审需求");
                 // 评审操作
