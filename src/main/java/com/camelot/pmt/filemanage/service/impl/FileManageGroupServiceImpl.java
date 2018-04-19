@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -34,6 +35,7 @@ public class FileManageGroupServiceImpl implements FileManageGroupService {
     @Autowired
     private ShiroUtils shiroUtils;
     @Override
+    @Transactional
     public Boolean addFileManagerGroup(HttpServletRequest request, FileManageGroup fileManageGroup) {//添加文件夹
         Long parentId = fileManageGroup.getParentId();
         if(parentId==null){//当添加的文件夹是父节点时
@@ -50,8 +52,9 @@ public class FileManageGroupServiceImpl implements FileManageGroupService {
                 Date date = new Date();//获取按当前时间
                 fileManageGroup.setCreateTime(date);
             }
+            fileManageGroup.setCreateUserId(user.getUserId());
         }
-        fileManageGroup.setCreateUserId(user.getUserId());
+
         fileManageGroup.setIsfile(0);
         int i = fileManageGroupMapper.insertSelective(fileManageGroup);//添加结果
         Boolean b=true;
@@ -62,6 +65,7 @@ public class FileManageGroupServiceImpl implements FileManageGroupService {
     }
 
     @Override
+    @Transactional
     public Boolean deleteFileGroup(FileManageGroup fileManageGroup) {
         Boolean b=null;
             Long id = fileManageGroup.getId();//文件夹id
@@ -88,6 +92,7 @@ public class FileManageGroupServiceImpl implements FileManageGroupService {
     }
 
     @Override
+    @Transactional
     public Boolean updateFileGroupById(HttpServletRequest request,FileManageGroup fileManageGroup) {//修改文件夹
         Date date = new Date();//修改时间
         User user = (User) shiroUtils.getSessionAttribute("user");//获取用户id
