@@ -55,12 +55,12 @@ public class TaskOverdueServiceImpl implements TaskOverdueService {
      * 查询所有逾期任务+分页   
      */
     @Override
-    public ExecuteResult<PageInfo<Map<String,Object>>> queryOverdueTask(Integer page, Integer rows) {
+    public ExecuteResult<PageInfo<Map<String,Object>>> queryOverdueTask(Task task,Integer page, Integer rows) {
         ExecuteResult<PageInfo<Map<String,Object>>> result = new ExecuteResult<PageInfo<Map<String,Object>>>();
         try {
         	//分页初始化
         	PageHelper.startPage(page,rows);
-            List<Map<String,Object>> list = taskMapper.queryOverdueTask();
+            List<Map<String,Object>> list = taskMapper.queryOverdueTask(task);
              
             // 如果没有查询到数据，不继续进行
             if (CollectionUtils.isEmpty(list)) {                    

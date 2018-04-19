@@ -45,24 +45,27 @@ public class TaskOverdueController {
 	 * JSONObject @throws
 	 */
 	@ApiOperation(value = "查询逾期所有任务+分页+模糊查询", notes = "查询逾期所有任务")
-	@RequestMapping(value = "/queryOverdueTask", method = RequestMethod.GET)
+	@ApiImplicitParams({
+        @ApiImplicitParam(name = "taskNum", value = "任务编号", required = false, paramType = "form", dataType = "String"),
+        @ApiImplicitParam(name = "taskName", value = "任务名称", required = false, paramType = "form", dataType = "String"),
+        @ApiImplicitParam(name = "project.id", value = "项目标识号", required = false, paramType = "form", dataType = "String"),
+        @ApiImplicitParam(name = "priority", value = "优先级", required = false, paramType = "form", dataType = "String"),
+        @ApiImplicitParam(dataType = "Integer", defaultValue = "1",name = "page", paramType = "query", value = "页码", required = true),
+        @ApiImplicitParam(dataType = "Integer", defaultValue = "10",name = "rows", paramType = "query", value = "每页数量", required = true)
+        })
+	@RequestMapping(value = "/queryOverdueTask", method = RequestMethod.POST)
 	public JSONObject queryOverdueTask(
-			/*@ApiParam(name = "taskId", value = "任务编号", required = true,defaultValue = "1") @RequestParam(required = true) Integer page,
-			@ApiParam(name = "taskName", value = "任务名称", required = true,defaultValue = "1") @RequestParam(required = true) Integer page,
-			@ApiParam(name = "priority", value = "优先级", required = true,defaultValue = "1") @RequestParam(required = true) Integer page,
-			@ApiParam(name = "page", value = "项目负责人", required = true,defaultValue = "1") @RequestParam(required = true) Integer page,
-			@ApiParam(name = "page", value = "状态", required = true,defaultValue = "1") @RequestParam(required = true) Integer page,
-			@ApiParam(name = "page", value = "项目", required = true,defaultValue = "1") @RequestParam(required = true) Integer page,*/
-			@ApiParam(name = "page", value = "页码", required = true,defaultValue = "1") @RequestParam(required = true) Integer page,
-			@ApiParam(name = "rows", value = "每页数量", required = true,defaultValue = "10") @RequestParam(required = true) Integer rows) {
+			@ApiIgnore Task task,
+			@RequestParam(required = true) Integer page,
+			@RequestParam(required = true) Integer rows) {
 		ExecuteResult<PageInfo<Map<String,Object>>> result = new ExecuteResult<PageInfo<Map<String,Object>>>();
 		try {
 			if (page == null && "".equals(page) || rows == null && "".equals(rows)) {
 
 				return ApiResponse.errorPara();
 			}
-			//查询所有逾期列表+pagerhelper分页
-			result = taskService.queryOverdueTask(page,rows);
+			//查询所有逾期列表+pagerhelper分页+模糊
+			result = taskService.queryOverdueTask(task,page,rows);
 			if (result.isSuccess()) {
 				return ApiResponse.success(result.getResult());
 			}
@@ -108,7 +111,7 @@ public class TaskOverdueController {
 	@ApiImplicitParams({
 		@ApiImplicitParam(name = "id", value = "任务Id", required = true, paramType = "form", dataType = "String"),
 			@ApiImplicitParam(name = "delayDescribe", value = "任务延期原因", required = true, paramType = "form", dataType = "String"),
-			@ApiImplicitParam(name = "estimateStartTime", value = "预计开始时间", required = true, paramType = "form", dataType = "Date") })
+			@ApiImplicitParam(name = "estimateStartTime", value = "预计开始时间格式yyyy/MM/dd", required = true, paramType = "form", dataType = "Date") })
 	public JSONObject insertOverduMeessage(@ApiIgnore Task task) {
 		ExecuteResult<String> result = new ExecuteResult<String>();
 		try {

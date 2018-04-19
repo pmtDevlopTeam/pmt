@@ -132,7 +132,7 @@ public interface TaskMapper {
      * @return List<Task>
      * @throws
      */
-    List<Map<String,Object>> queryOverdueTask();
+    List<Map<String,Object>> queryOverdueTask(Task task);
 
     /**
     * @author: gxl
