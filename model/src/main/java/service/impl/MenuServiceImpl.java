@@ -45,7 +45,7 @@ public class MenuServiceImpl implements MenuService {
      */
     @Override
     public boolean addMenu(Menu menu) {
-        return menuMapper.addMenu(menu)==1?true:false;
+        return menuMapper.addMenu(menu)=1?true:false;
     }
 
     /**
@@ -56,7 +56,7 @@ public class MenuServiceImpl implements MenuService {
      */
     @Override
     public boolean deleteMenuByMenuId(String menuId) {
-        return menuMapper.deleteMenuByMenuId(menuId)==1?true:false;
+        return menuMapper.deleteMenuByMenuId(menuId)=1?true:false;
     }
 
     /**
@@ -67,7 +67,7 @@ public class MenuServiceImpl implements MenuService {
      */
     @Override
     public boolean updateMenuByMenuId(Menu menu) {
-        return menuMapper.updateMenuByMenuId(menu)==1?true:false;
+        return menuMapper.updateMenuByMenuId(menu)=1?true:false;
     }
 
     /**

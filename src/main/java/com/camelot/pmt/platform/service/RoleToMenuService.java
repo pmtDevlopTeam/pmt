@@ -15,7 +15,7 @@ public interface RoleToMenuService {
      *            roleId, String menuIds, String createUserId, String modifyUserId
      * @return ExecuteResult<RoleToMenu>
      */
-    ExecuteResult<RoleToMenu> createRoleToMenu(RoleToMenu roleToMenu);
+    boolean createRoleToMenu(RoleToMenu roleToMenu);
 
     /**
      * 角色修改权限
@@ -24,7 +24,7 @@ public interface RoleToMenuService {
      *            roleId, String menuIds, String createUserId, String modifyUserId
      * @return ExecuteResult
      */
-    ExecuteResult updateRoleToMenu(RoleToMenu roleToMenu);
+    boolean updateRoleToMenu(RoleToMenu roleToMenu);
 
     /**
      * 根据角色id查询权限菜单
@@ -33,5 +33,5 @@ public interface RoleToMenuService {
      *            roleId
      * @return ExecuteResult<List<Menu>>
      */
-    ExecuteResult<List<Menu>> selectMenuByRoleId(RoleToMenu roleToMenu);
+    List<Menu> selectMenuByRoleId(RoleToMenu roleToMenu);
 }

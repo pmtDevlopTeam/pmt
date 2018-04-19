@@ -31,7 +31,6 @@
 			jdbcType="VARCHAR" />
 		<result column="reasonsejection" property="reasons_rejection"
 			jdbcType="VARCHAR" />
-
 		<result column="demand_desc" property="demandDesc" jdbcType="LONGVARCHAR" />
 		<result column="close_reason" property="closeReason" jdbcType="LONGVARCHAR" />
 	</resultMap>
@@ -46,21 +45,25 @@
 	</sql>
 	<sql id="dynamicWhere">
 		<where>
-			<if test="demand.id!=null"> AND id=#{demand.id} </if>
-			<if test="demand.pid!= null"> AND pid=#{demand.pid} </if>
-			<if test="demand.projectId!= null"> AND project_id=#{demand.projectId} </if>
-			<if test="demand.demandName!= null"> AND demand_name=#{demand.demandName} </if>
-			<if test="demand.demandNum!= null"> AND demand_num=#{demand.demandNum} </if>
-			<if test="demand.demandStatus!= null"> AND demand_status=#{demand.demandStatus} </if>
-			<if test="demand.demandLevel!= null"> AND demand_level=#{demand.demandLevel} </if>
-			<if test="demand.demandSource!= null"> AND demand_source=#{demand.demandSource} </if>
-			<if test="demand.sourceRemark!= null"> AND source_remark=#{demand.sourceRemark} </if>
-			<if test="demand.createUserId!= null"> AND create_user_id=#{demand.createUserId} </if>
-			<if test="demand.createTime!= null"> AND create_time=#{demand.createTime} </if>
-			<if test="demand.modifyUserId!= null"> AND modify_user_id=#{demand.modifyUserId} </if>
-			<if test="demand.modifyTime!= null"> AND modify_time=#{demand.modifyTime} </if>
-			<if test="demand.reviewedWith!= null"> AND find_in_set(${demand.reviewedWith},reviewed_with)>0
+			<if test="demand.id!=null">AND id=#{demand.id}</if>
+			<if test="demand.pid!= null">AND pid=#{demand.pid}</if>
+			<if test="demand.projectId!= null">AND project_id=#{demand.projectId}</if>
+			<if test="demand.demandName!= null">AND demand_name=#{demand.demandName}</if>
+			<if test="demand.demandNum!= null">AND demand_num=#{demand.demandNum}</if>
+			<if test="demand.demandStatus!= null">AND demand_status=#{demand.demandStatus}</if>
+			<if test="demand.demandLevel!= null">AND demand_level=#{demand.demandLevel}</if>
+			<if test="demand.demandSource!= null">AND demand_source=#{demand.demandSource}</if>
+			<if test="demand.sourceRemark!= null">AND source_remark=#{demand.sourceRemark}</if>
+			<if test="demand.createUserId!= null">AND create_user_id=#{demand.createUserId}</if>
+			<if test="demand.createTime!= null">AND create_time=#{demand.createTime}</if>
+			<if test="demand.modifyUserId!= null">AND modify_user_id=#{demand.modifyUserId}</if>
+			<if test="demand.modifyTime!= null">AND modify_time=#{demand.modifyTime}</if>
+			<if test="demand.reviewedWith!= null">AND find_in_set(${demand.reviewedWith},reviewed_with)>0
 			</if>
+			<if test="demand.demandNeed!= null">AND demand_need=#{demand.demandNeed}</if>
+			<if test="demand.reviewTime!= null">AND review_time=#{demand.reviewTime}</if>
+			<if test="demand.reviewResults!= null">AND review_results=#{reviewResults.reviewTime}</if>
+			<if test="demand.assignedTo!= null">AND assigned_to=#{assignedTo.reviewTime}</if>
 		</where>
 	</sql>
 	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
@@ -74,7 +77,8 @@
 		delete from demand
 		where id = #{id,jdbcType=BIGINT}
 	</delete>
-	<insert id="insert" parameterType="com.camelot.pmt.project.model.Demand">
+	<insert id="insert" parameterType="com.camelot.pmt.project.model.Demand"
+		useGeneratedKeys="true" keyProperty="id">
 		insert into demand (id, pid,
 		project_id,
 		demand_name, demand_num, demand_status,
@@ -82,19 +86,25 @@
 		demand_source, source_remark,
 		create_user_id, create_time,
 		modify_user_id,
-		modify_time, demand_desc, close_reason
+		modify_time,demand_desc,close_reason,demand_need,
+		review_time,review_results,assigned_to,reviewed_with,
+		review_remark,reasons_rejection
 		)
-		values
-		(#{id,jdbcType=BIGINT}, #{pid,jdbcType=BIGINT},
+		values (#{id,jdbcType=BIGINT},
+		#{pid,jdbcType=BIGINT},
 		#{projectId,jdbcType=BIGINT},
-		#{demandName,jdbcType=VARCHAR},
-		#{demandNum,jdbcType=VARCHAR}, #{demandStatus,jdbcType=CHAR},
-		#{demandLevel,jdbcType=CHAR}, #{demandSource,jdbcType=VARCHAR},
+		#{demandName,jdbcType=VARCHAR}, #{demandNum,jdbcType=VARCHAR},
+		#{demandStatus,jdbcType=CHAR},
+		#{demandLevel,jdbcType=CHAR},
+		#{demandSource,jdbcType=VARCHAR},
 		#{sourceRemark,jdbcType=VARCHAR},
-		#{createUserId,jdbcType=VARCHAR},
-		#{createTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=VARCHAR},
-		#{modifyTime,jdbcType=TIMESTAMP}, #{demandDesc,jdbcType=LONGVARCHAR},
-		#{closeReason,jdbcType=LONGVARCHAR}
+		#{createUserId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+		#{modifyUserId,jdbcType=VARCHAR},
+		#{modifyTime,jdbcType=TIMESTAMP},
+		#{demandDesc,jdbcType=LONGVARCHAR},
+		#{closeReason,jdbcType=LONGVARCHAR},
+		#{demandNeed,jdbcType=CHAR},#{reviewTime,jdbcType=TIMESTAMP},#{reviewResults,jdbcType=VARCHAR},#{assignedTo,jdbcType=VARCHAR},
+		#{reviewedWith,jdbcType=VARCHAR},#{reviewRemark,jdbcType=VARCHAR},#{reasonsRejection,jdbcType=VARCHAR}
 		)
 	</insert>
 	<insert id="insertSelective" parameterType="com.camelot.pmt.project.model.Demand">
@@ -239,13 +249,35 @@
 			<if test="closeReason != null">
 				close_reason = #{closeReason,jdbcType=LONGVARCHAR},
 			</if>
+			<if test="reviewTime != null">
+				review_time = #{reviewTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="reviewResults != null">
+				review_results = #{reviewResults,jdbcType=VARCHAR},
+			</if>
+			<if test="assignedTo != null">
+				assigned_to = #{assignedTo,jdbcType=VARCHAR},
+			</if>
+			<if test="reviewedWith != null">
+				reviewed_with = #{reviewedWith,jdbcType=VARCHAR},
+			</if>
+			<if test="reviewRemark != null">
+				review_remark = #{reviewRemark,jdbcType=VARCHAR},
+			</if>
+			<if test="reasonsRejection != null">
+				reasons_rejection = #{reasonsRejection,jdbcType=VARCHAR},
+			</if>
+			<if test="demandNeed != null">
+				demand_need = #{demandNeed,jdbcType=CHAR},
+			</if>
 		</set>
 		where id = #{id,jdbcType=BIGINT}
 	</update>
 	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.camelot.pmt.project.model.Demand">
 		update
 		demand
-		set pid = #{pid,jdbcType=BIGINT},
+		set
+		pid = #{pid,jdbcType=BIGINT},
 		project_id =
 		#{projectId,jdbcType=BIGINT},
 		demand_name =
@@ -307,24 +339,14 @@
 	<sql id="pagination_tail">
 		limit #{pager.pageOffset} , #{pager.rows}
 	</sql>
-	<select id="findAllByPage" resultMap="BaseResultMap"
+	<select id="queryByPage" resultMap="BaseResultMap"
 		parameterType="com.camelot.pmt.project.model.Demand">
 		select
 		<include refid="Base_Column_List" />
 		from demand
 		<include refid="dynamicWhere" />
-		<if test="pager!=null">
-			<include refid="pagination_tail" />
-		</if>
 	</select>
 
-	<select id="queryCount" parameterType="com.camelot.pmt.project.model.Demand"
-		resultType="java.lang.Long">
-		select
-		COUNT(1)
-		from demand
-		<include refid="dynamicWhere" />
-	</select>
 	<!-- 根据pid查询需求 -->
 	<select id="selectByPId" parameterType="long" resultMap="BaseResultMap">
 		select

@@ -6,7 +6,6 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
-import com.camelot.pmt.common.Pager;
 import com.camelot.pmt.project.model.Demand;
 
 public interface DemandMapper {
@@ -58,9 +57,9 @@ public interface DemandMapper {
      * @param demand
      * @return
      */
-    List<Demand> findAllByPage(@Param(value = "pager") Pager<?> pager, @Param(value = "demand") Demand demand);
+    List<Demand> queryByPage(@Param(value = "demand") Demand demand);
 
-    Long queryCount(@Param(value = "demand") Demand demand);
+    // Long queryCount(@Param(value = "demand") Demand demand);
 
     /**
      * 根据pid查询所有需求记录
@@ -104,7 +103,7 @@ public interface DemandMapper {
 
     /**
      * 关闭项目时，根据项目id修改需求状态
-     * 
+     *
      * @param projectId
      * @param demandStatus
      * @param closeReason
@@ -118,7 +117,7 @@ public interface DemandMapper {
 
     /**
      * 根据需求id查询影响需求变更的任务信息
-     * 
+     *
      * @param demandId
      * @return
      */
@@ -126,7 +125,7 @@ public interface DemandMapper {
 
     /**
      * 根据需求id查询影响需求变更的用例信息
-     * 
+     *
      * @param demandId
      * @return
      */
@@ -134,7 +133,7 @@ public interface DemandMapper {
 
     /**
      * 根据需求id查询影响变更需求的bug信息
-     * 
+     *
      * @param demandId
      * @return
      */

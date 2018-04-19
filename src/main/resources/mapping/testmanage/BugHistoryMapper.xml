@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.camelot.pmt.testmanage.bugmanage.mapper.BugHistoryMapper" >
+  <resultMap id="BaseResultMap" type="com.camelot.pmt.testmanage.bugmanage.model.BugHistory" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="num" property="num" jdbcType="VARCHAR" />
+    <result column="bug_id" property="bugId" jdbcType="BIGINT" />
+    <result column="operation_time" property="operationTime" jdbcType="TIMESTAMP" />
+    <result column="operation_id" property="operationId" jdbcType="VARCHAR" />
+    <result column="operation_function" property="operationFunction" jdbcType="VARCHAR" />
+    <result column="operation_record" property="operationRecord" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, num, bug_id, DATE_FORMAT(operation_time,'%Y-%m-%d %H:%i:%s') as operation_time, operation_id, operation_function, operation_record
+  </sql>
+  <select id="selectBugHistoryAll" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from bug_history
+    where bug_id=#{bugId}
+  </select>
+
+  <insert id="insertSelective" parameterType="com.camelot.pmt.testmanage.bugmanage.model.BugHistory" >
+    insert into bug_history
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="num != null" >
+        num,
+      </if>
+      <if test="bugId != null" >
+        bug_id,
+      </if>
+      <if test="operationTime != null" >
+        operation_time,
+      </if>
+      <if test="operationId != null" >
+        operation_id,
+      </if>
+      <if test="operationFunction != null" >
+        operation_function,
+      </if>
+      <if test="operationRecord != null" >
+        operation_record,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="num != null" >
+        #{num,jdbcType=VARCHAR},
+      </if>
+      <if test="bugId != null" >
+        #{bugId,jdbcType=BIGINT},
+      </if>
+      <if test="operationTime != null" >
+        #{operationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="operationId != null" >
+        #{operationId,jdbcType=VARCHAR},
+      </if>
+      <if test="operationFunction != null" >
+        #{operationFunction,jdbcType=VARCHAR},
+      </if>
+      <if test="operationRecord != null" >
+        #{operationRecord,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+ 
+  <select id="getBugHistoryByBugId" resultMap="BaseResultMap">
+  	select * from bug_history where bug_id=#{bugId} order by id desc limit 1
+  </select>
+ 
+</mapper>

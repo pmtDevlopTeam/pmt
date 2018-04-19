@@ -1,61 +1,36 @@
 package com.camelot.pmt.filemanage.model;
 
-import java.io.Serializable;
 import java.util.Date;
-
-import com.baomidou.mybatisplus.annotations.TableField;
-import com.baomidou.mybatisplus.annotations.TableId;
-import com.baomidou.mybatisplus.annotations.TableName;
-import com.baomidou.mybatisplus.enums.IdType;
-
-/**
- *
- * 文档分类表
- *
+/*
+张战1
  */
-@TableName("file_manage_group")
-public class FileManageGroup implements Serializable {
-
-    @TableField(exist = false)
-    private static final long serialVersionUID = 1L;
-
-    /** 主键ID */
-    @TableId(type = IdType.AUTO)
+public class FileManageGroup {
     private Long id;
 
-    /** 父级id */
-    @TableField(value = "parent_id")
     private Long parentId;
 
-    /** 项目ID */
-    @TableField(value = "project_id")
     private Long projectId;
 
-    /** 名称 */
     private String name;
+    private String fdescribe;
 
-    /** 创建者 */
-    @TableField(value = "create_id")
-    private Long createId;
+    private Long  createUserId;
 
-    /** 创建时间 */
-    @TableField(value = "create_time")
     private Date createTime;
 
-    /** 更新者 */
-    @TableField(value = "update_id")
-    private Long updateId;
+    private Long modifyUserId;
 
-    /** 更新时间 */
-    @TableField(value = "update_time")
-    private Date updateTime;
+    private Date modifyTime;
 
-    /** 删除标记 */
-    @TableField(value = "del_flag")
     private String delFlag;
 
+    private Integer isfile;
+    private int currentPage;
+    private int pageSize;
+    private int indexPage;
+
     public Long getId() {
-        return this.id;
+        return id;
     }
 
     public void setId(Long id) {
@@ -63,7 +38,7 @@ public class FileManageGroup implements Serializable {
     }
 
     public Long getParentId() {
-        return this.parentId;
+        return parentId;
     }
 
     public void setParentId(Long parentId) {
@@ -71,7 +46,7 @@ public class FileManageGroup implements Serializable {
     }
 
     public Long getProjectId() {
-        return this.projectId;
+        return projectId;
     }
 
     public void setProjectId(Long projectId) {
@@ -79,51 +54,110 @@ public class FileManageGroup implements Serializable {
     }
 
     public String getName() {
-        return this.name;
+        return name;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public Long getCreateId() {
-        return this.createId;
+    public String getFdescribe() {
+        return fdescribe;
     }
 
-    public void setCreateId(Long createId) {
-        this.createId = createId;
+    public void setFdescribe(String fdescribe) {
+        this.fdescribe = fdescribe;
+    }
+
+    public Long getCreateUserId() {
+        return createUserId;
+    }
+
+    public void setCreateUserId(Long createUserId) {
+        this.createUserId = createUserId;
     }
 
     public Date getCreateTime() {
-        return this.createTime;
+        return createTime;
     }
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 
-    public Long getUpdateId() {
-        return this.updateId;
+    public Long getModifyUserId() {
+        return modifyUserId;
     }
 
-    public void setUpdateId(Long updateId) {
-        this.updateId = updateId;
+    public void setModifyUserId(Long modifyUserId) {
+        this.modifyUserId = modifyUserId;
     }
 
-    public Date getUpdateTime() {
-        return this.updateTime;
+    public Date getModifyTime() {
+        return modifyTime;
     }
 
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
+    public void setModifyTime(Date modifyTime) {
+        this.modifyTime = modifyTime;
     }
 
     public String getDelFlag() {
-        return this.delFlag;
+        return delFlag;
     }
 
     public void setDelFlag(String delFlag) {
         this.delFlag = delFlag;
     }
 
+    public Integer getIsfile() {
+        return isfile;
+    }
+
+    public void setIsfile(Integer isfile) {
+        this.isfile = isfile;
+    }
+
+    public int getCurrentPage() {
+        return currentPage;
+    }
+
+    public void setCurrentPage(int currentPage) {
+        this.currentPage = currentPage;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
+    }
+
+    public int getIndexPage() {
+        return indexPage;
+    }
+
+    public void setIndexPage(int indexPage) {
+        this.indexPage = indexPage;
+    }
+
+    @Override
+    public String toString() {
+        return "FileManageGroup{" +
+                "id=" + id +
+                ", parentId=" + parentId +
+                ", projectId=" + projectId +
+                ", name='" + name + '\'' +
+                ", fdescribe='" + fdescribe + '\'' +
+                ", createUserId=" + createUserId +
+                ", createTime=" + createTime +
+                ", modifyUserId=" + modifyUserId +
+                ", modifyTime=" + modifyTime +
+                ", delFlag='" + delFlag + '\'' +
+                ", isfile=" + isfile +
+                ", currentPage=" + currentPage +
+                ", pageSize=" + pageSize +
+                ", indexPage=" + indexPage +
+                '}';
+    }
 }

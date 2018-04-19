@@ -18,7 +18,7 @@ public interface RoleService {
      *            parentId, String roleName, String state
      * @return ExecuteResult<Role>
      */
-    ExecuteResult<Role> createRole(Role role);
+    boolean addRole(Role role) throws Exception;
 
     /**
      * 删除角色
@@ -27,7 +27,7 @@ public interface RoleService {
      *            roleId
      * @return ExecuteResult<Role>
      */
-    ExecuteResult<Role> deleteRoleById(Role role);
+    boolean deleteRoleById(Role role);
 
     /**
      * 修改角色
@@ -36,14 +36,14 @@ public interface RoleService {
      *            roleId, String roleName, String state
      * @return ExecuteResult<Role>
      */
-    ExecuteResult<Role> modifyRoleById(Role role);
+    boolean updateRoleById(Role role);
 
     /**
      * 查询角色列表
      *
      * @return ExecuteResult<List<Role>>
      */
-    ExecuteResult<List<Tree<Role>>> queryAllRole();
+    List<Tree<Role>> queryAllRole();
 
     /**
      * 验证角色名称是否可用
@@ -52,5 +52,5 @@ public interface RoleService {
      *            roleName
      * @return ExecuteResult<Role>
      */
-    ExecuteResult getRoleNameVerification(Role role);
+    boolean getRoleNameVerification(Role role);
 }

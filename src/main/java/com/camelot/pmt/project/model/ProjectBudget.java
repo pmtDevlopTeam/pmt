@@ -5,6 +5,8 @@ import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class ProjectBudget implements Serializable{
     
     private static final long serialVersionUID = 1L;
@@ -43,6 +45,7 @@ public class ProjectBudget implements Serializable{
      * 创建时间
      */
     @DateTimeFormat(pattern = "yyyy-MM-ddHH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date createTime;
 
     /**
@@ -54,6 +57,7 @@ public class ProjectBudget implements Serializable{
      * 修改时间
      */
     @DateTimeFormat(pattern = "yyyy-MM-ddHH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date modifyTime;
 
     /**

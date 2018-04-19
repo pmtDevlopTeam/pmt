@@ -7,10 +7,10 @@ import com.baomidou.mybatisplus.annotations.TableId;
 import java.io.Serializable;
 
 /**
- * 权限菜单模型
- *
+ * 
  * @author gnerv
- * @since 2018-04-11
+ * @Description 权限菜单模型类
+ * @date 2018年4月18日
  */
 public class Menu implements Serializable {
 

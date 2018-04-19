@@ -90,7 +90,7 @@
             <if test="createUserId != null">
                 create_user_id = #{createUserId},
             </if>
-            <if test="modifyTime != null">
+            <if test="createTime != null">
                 modify_time = #{modifyTime},
             </if>
             <if test="modifyUserId != null">

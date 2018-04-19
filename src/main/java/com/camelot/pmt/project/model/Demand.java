@@ -91,11 +91,21 @@ public class Demand {
     /**
      * 拒绝原因
      */
-    private String reasonsejection;
+    private String reasonsRejection;
     /**
      * 需求层级
      */
     private String demandNeed;
+    /**
+     * 需求描述
+     */
+    private String demandDesc;
+
+    /**
+     * 关闭原因
+     */
+    private String closeReason;
+
 
     /**
      * 需求id
@@ -384,12 +394,12 @@ public class Demand {
         this.reviewRemark = reviewRemark;
     }
 
-    public String getReasonsejection() {
-        return reasonsejection;
+    public String getReasonsRejection() {
+        return reasonsRejection;
     }
 
-    public void setReasonsejection(String reasonsejection) {
-        this.reasonsejection = reasonsejection;
+    public void setReasonsRejection(String reasonsRejection) {
+        this.reasonsRejection = reasonsRejection;
     }
 
     public String getDemandNeed() {
@@ -399,16 +409,6 @@ public class Demand {
     public void setDemandNeed(String demandNeed) {
         this.demandNeed = demandNeed;
     }
-
-    /**
-     * 需求描述
-     */
-    private String demandDesc;
-
-    /**
-     * 关闭原因
-     */
-    private String closeReason;
 
     /**
      * 需求描述

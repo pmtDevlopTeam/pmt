@@ -30,6 +30,7 @@
         <id column="id" property="id"/>
         <result column="orgId" property="orgId"/>
         <result column="orgName" property="orgname"/>
+        <result column="parentId" property="parentId"/>
         <result column="orgCode" property="orgCode"/>
         <result column="states" property="state"/>
         <result column="orgParentName" property="orgParentName"/>
@@ -64,7 +65,8 @@
 				t.orgParentName,
 				pu.user_name AS username,
 			    t.states,
-			    t.createTime
+			    t.createTime,
+			    t.parentId
 			FROM
 				(
 					SELECT
@@ -73,13 +75,15 @@
 						o.org_name AS orgParentName,
 						p.org_id AS orgId,
 			            p.state AS states,
-			            p.create_time AS createTime
+			            p.create_time AS createTime,
+			            p.parent_id AS parentId
 					FROM
 						platform_org p
-					 JOIN platform_org o ON p.parent_id = o.org_id
+					 LEFT JOIN platform_org o ON p.parent_id = o.org_id
 				) t
-			 JOIN platform_user_org puo ON t.orgId = puo.org_id
-			JOIN platform_user pu ON pu.user_id = puo.user_id
+			 LEFT JOIN platform_user_org puo ON t.orgId = puo.org_id
+			LEFT JOIN platform_user pu ON pu.user_id = puo.user_id
+			
     </select>
     <select id="selectOrgsDetailByOrgId" resultMap="ResultMap"  >
 		SELECT			       
@@ -90,7 +94,8 @@
 				t.orgParentName,
 				pu.user_name AS username,
 			    t.states,
-			    t.createTime
+			    t.createTime,
+			    t.parentId
 			FROM
 				(
 					SELECT
@@ -99,13 +104,14 @@
 						o.org_name AS orgParentName,
 						p.org_id AS orgId,
 			            p.state AS states,
-			            p.create_time AS createTime
+			            p.create_time AS createTime,
+			            p.parent_id AS parentId
 					FROM
 						platform_org p
-					 JOIN platform_org o ON p.parent_id = o.org_id
+					 LEFT JOIN platform_org o ON p.parent_id = o.org_id
 				) t
-			 JOIN platform_user_org puo ON t.orgId = puo.org_id
-			JOIN platform_user pu ON pu.user_id = puo.user_id
+			 LEFT JOIN platform_user_org puo ON t.orgId = puo.org_id
+			LEFT JOIN platform_user pu ON pu.user_id = puo.user_id
 			where t.orgId=#{orgId}
     </select>
     

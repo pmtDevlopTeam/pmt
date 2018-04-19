@@ -45,6 +45,11 @@ public class VersionVo {
     private String remarks;
 
     /**
+     * 版本编号
+     */
+    private String version;
+
+    /**
      * id
      * 
      * @return id
@@ -156,5 +161,23 @@ public class VersionVo {
      */
     public void setRemarks(String remarks) {
         this.remarks = remarks == null ? null : remarks.trim();
+    }
+    /**
+     * 版本编号
+     *
+     * @return version 版本编号
+     */
+    public String getVersion() {
+        return version;
+    }
+
+    /**
+     * 版本编号
+     *
+     * @param version
+     *            版本编号
+     */
+    public void setVersion(String version) {
+        this.version = version == null ? null : version.trim();
     }
 }

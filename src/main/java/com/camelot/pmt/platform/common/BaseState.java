@@ -1,10 +1,10 @@
 package com.camelot.pmt.platform.common;
 
 /**
- * 通用状态类
  * 
  * @author gnerv
- *
+ * @Description 基础状态静态常量
+ * @date 2018年4月18日
  */
 public class BaseState {
     public final static String ZERO = "0"; // 激活

@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.IOException;
 
 /**
- * 登陆注销配置
  * 
  * @author gnerv
- *
+ * @Description 用户登录、退出
+ * @date 2018年4月18日
  */
 @ResponseBody
 @RestController
