@@ -279,7 +279,7 @@ public class OrgServiceImpl implements OrgService {
 				if (orgAndUser != null) {
 					orgMapper.deleteOrgByUserIdAndOrgId(ids,org.getOrgId());
 				}
-				User user = userMapper.selectUserById(ids);
+				User user = userMapper.queryUserByUserId(ids);
 				Org orgObj = orgMapper.queryOrgByOrgId(org.getOrgId());
 				if (user == null) {
 					return "传入的用户参数不正确";
@@ -311,7 +311,7 @@ public class OrgServiceImpl implements OrgService {
                 return usersList;
             }
 			for (OrgAndUser orgAndUser : OrgAndUserList) {
-				User user = userMapper.selectUserById(orgAndUser.getUserId());
+				User user = userMapper.queryUserByUserId(orgAndUser.getUserId());
 				if (user != null) {
 					usersList.add(user);
 				}
@@ -346,7 +346,7 @@ public class OrgServiceImpl implements OrgService {
 			List<String> userIds = Arrays.asList(org.getUserIds());
 			orgMapper.deleteOrgToUserByOrgId(org.getOrgId());
 			for (String ids : userIds) {
-				User user = userMapper.selectUserById(ids);
+				User user = userMapper.queryUserByUserId(ids);
 				Org orgObj = orgMapper.queryOrgByOrgId(org.getOrgId());
 				if (user == null) {
 					return "传入的用户参数不正确";
