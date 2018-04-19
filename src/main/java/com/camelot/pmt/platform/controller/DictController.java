@@ -13,11 +13,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
+import com.camelot.pmt.common.APIStatus;
 import com.camelot.pmt.common.ApiResponse;
 import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.platform.model.Dict;
 import com.camelot.pmt.platform.model.Menu;
+import com.camelot.pmt.platform.model.User;
 import com.camelot.pmt.platform.service.DictService;
+import com.camelot.pmt.platform.shiro.ShiroUtils;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -67,10 +70,11 @@ public class DictController {
 		ExecuteResult<String> result = new ExecuteResult<String>();
 		boolean flag = false;
 		try {
-			//if非空
-	    	if(dict == null){
-	    		return ApiResponse.errorPara();
-	    	}
+			User user = (User) ShiroUtils.getSessionAttribute("user");
+            if (StringUtils.isEmpty(user.getUserId())) {
+                ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
+            }
+            dict.setCreateUserId(user.getUserId());
 	    	if (StringUtils.isEmpty(dict.getDictCode())||StringUtils.isEmpty(dict.getDictName())||StringUtils.isEmpty(dict.getDictType())){
 	    		return ApiResponse.errorPara();
             }
@@ -146,6 +150,11 @@ public class DictController {
 		boolean flag = false;
 		ExecuteResult<String> result = new ExecuteResult<String>();
         try {
+			User user = (User) ShiroUtils.getSessionAttribute("user");
+            if (StringUtils.isEmpty(user.getUserId())) {
+                ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
+            }
+            dict.setModifyUserId(user.getUserId());
             if(StringUtils.isEmpty(dict.getDictCode())||StringUtils.isEmpty(dict.getDictType())
             ||StringUtils.isEmpty(dict.getDictName()) || StringUtils.isEmpty(dict.getDictId()) ){
             	return ApiResponse.errorPara();
@@ -208,39 +217,7 @@ public class DictController {
         
 	}
 	
-//    /**
-//     * 检查字典编码与字典名称是否存在
-//     * 
-//     * @param Dict dict
-//     * @return {"status":{"code":xxx,"message":"xxx"},"data":{xxx}
-//     */
-//  @ApiOperation(value="检查字典编码与字典名称是否存在", notes="检查字典编码与字典名称是否存在")
-//  @ApiImplicitParams({
-//          @ApiImplicitParam(
-//                  name="dictCode",value="字典编码",required=true,paramType="form",dataType="String"),
-//          @ApiImplicitParam(
-//                  name="dictName",value="字典名称",required=true,paramType="form",dataType="String"),
-//  })
-//  @RequestMapping(value = "/checkDictCodeOrDictNameIsExist",method = RequestMethod.POST)
-//  public JSONObject checkDictCodeOrDictNameIsExist(@ApiIgnore Dict dict) {
-//  	ExecuteResult<String> result = new ExecuteResult<String>();
-//		try {
-//  		//判断非空
-//	    	if(dict == null){
-//	    		return ApiResponse.errorPara();
-//	    	}
-//	    	//不为空调用接口查询
-//	    	 result = dictService.checkDictCodeOrDictNameIsExist(dict);
-//	    	//成功返回
-//	    	 if(result.isSuccess()) {
-//	    		 return ApiResponse.success(result.getResult());
-//	    	 }
-//	    	return ApiResponse.error();
-//  	} catch (Exception e) {
-//  		//异常
-//  		return ApiResponse.error();
-//		}
-//	}
+
 	
 
 	

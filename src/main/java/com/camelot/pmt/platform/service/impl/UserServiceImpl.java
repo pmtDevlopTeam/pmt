@@ -15,6 +15,7 @@ import com.camelot.pmt.platform.mapper.UserMapper;
 import com.camelot.pmt.platform.model.User;
 import com.camelot.pmt.platform.model.vo.UserVo;
 import com.camelot.pmt.platform.service.UserService;
+import com.camelot.pmt.platform.shiro.ShiroUtils;
 import com.camelot.pmt.util.UUIDUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -44,42 +45,45 @@ public class UserServiceImpl implements UserService{
      * @param User user
      * @return ExecuteResult<User>
      */
-    @Override
-    public String addUser(User user) {
-			//1.插入用户表
-			String userId = UUIDUtil.getUUID();
-			user.setUserId(userId);
-			String inputPassword = user.getPassword();
-			String encryptPassword = new Sha256Hash(inputPassword).toHex();
-			user.setPassword(encryptPassword);
-			user.setModifyUserId(user.getCreateUserId());
-			//2.插入用户信息表
-			  //检查用户名是否存在，不存在的话再插入用户表
-			User dbModel = userMapper.findUserByLoginCode(user.getLoginCode());
-			if(dbModel != null) {
-				return "该用户已经存在！";
+	@Override
+	public String addUser(User user) {
+
+		User loginUser = (User) ShiroUtils.getSessionAttribute("user");
+		// 1.插入用户表
+		String userId = UUIDUtil.getUUID();
+		user.setUserId(userId);
+		String inputPassword = user.getPassword();
+		String encryptPassword = new Sha256Hash(inputPassword).toHex();
+		user.setPassword(encryptPassword);
+		user.setCreateUserId(loginUser.getUserId());
+		user.setModifyUserId(loginUser.getUserId());
+		// 2.插入用户信息表
+		// 检查用户名是否存在，不存在的话再插入用户表
+		User dbModel = userMapper.queryUserIsExistByLoginCode(user.getLoginCode());
+		if (dbModel != null) {
+			return "该用户已经存在！";
+		}
+		long checkCount = userMapper.checkUserExistByUserJobNum(user.getUserJobNum());
+		if (checkCount == 1) {
+			return "该用员工号已经存在！";
+		}
+		userMapper.addUser(user);
+		userMapper.addUserInfo(user);
+		// 3.如果指定了部门，就插入用户组织表
+		if (!StringUtils.isEmpty(user.getOrgId())) {
+			userMapper.addUserOrg(user);
+		}
+		// 4.如果指定了角色，就插入用户角色表
+		if (user.getRoleIds() != null && user.getRoleIds().length != 0) {
+			String[] roleIds = user.getRoleIds();
+			for (String roleId : roleIds) {
+				user.setRoleId(roleId);
+				userMapper.addUserRole(user);
 			}
-			long checkCount = userMapper.checkUserExistByUserJobNum(user.getUserJobNum());
-			if(checkCount == 1) {
-				return "该用员工号已经存在！";
-			}
-			userMapper.addUser(user);
-			userMapper.addUserInfo(user);
-			//3.如果指定了部门，就插入用户组织表
-			if(!StringUtils.isEmpty(user.getOrgId())) {
-				userMapper.addUserOrg(user);
-			}
-			//4.如果指定了角色，就插入用户角色表
-			if(user.getRoleIds() != null && user.getRoleIds().length != 0) {
-				String[] roleIds = user.getRoleIds();
-				for (String roleId : roleIds) {
-					user.setRoleId(roleId);
-					userMapper.addUserRole(user);
-				}
-			}
-			//5.通过邮件发送新添加的用户信息
-			return "添加用户成功！";
-    }
+		}
+		// 5.通过邮件发送新添加的用户信息
+		return "添加用户成功！";
+	}
 
 
     /**
@@ -141,7 +145,7 @@ public class UserServiceImpl implements UserService{
 			// 1.获取用户输入的登录账号
 			String inputLoginCode = user.getLoginCode();
 			// 2.根据登录账号去库中获取用户信息,检查用户是否存在
-			User dbModel = userMapper.findUserByLoginCode(inputLoginCode);
+			User dbModel = userMapper.queryUserIsExistByLoginCode(inputLoginCode);
 			if (dbModel == null) {
 				return null;
 			}
@@ -161,7 +165,7 @@ public class UserServiceImpl implements UserService{
 
 	/**
 	  * 
-	  * Description:[列表展示用户]
+	  * Description:[列表展示用户用户详情]
 	  * @param UserVo userVo
 	  * @return PageInfo
 	  * @author [maple]
@@ -171,7 +175,7 @@ public class UserServiceImpl implements UserService{
 	public PageInfo queryUsersList(UserVo userVo,int pageNum,int pageSize) {
     		PageHelper.startPage(pageNum,pageSize);
     		//利用userVo做 条件查询，默认查询所有的
-    		List<UserVo> usersList = userMapper.selectUsersList(userVo);
+    		List<UserVo> usersList = userMapper.queryUsersList(userVo);
     		PageInfo pageResult = new PageInfo(usersList);
     		pageResult.setList(usersList);
     		return pageResult;
@@ -185,62 +189,67 @@ public class UserServiceImpl implements UserService{
 	 * @author [maple]
 	 */
 	@Override
-	public String modifyUserDetailsByUserId(User user) {
-			//1.判断用户表需要更新的字段
-			if(!StringUtils.isEmpty(user.getUsername()) || !StringUtils.isEmpty(user.getLoginCode()) || !StringUtils.isEmpty(user.getPassword()) || !StringUtils.isEmpty(user.getState()) || !StringUtils.isEmpty(user.getModifyUserId())){
-				if(!StringUtils.isEmpty(user.getPassword())) {
-					String encryptPassword = new Sha256Hash(user.getPassword()).toHex();
-					user.setPassword(encryptPassword);
-				}
-				int updateResult = userMapper.modifyUserByUserId(user);
-				if(updateResult == 0) {
+	public String updateUserDetailsByUserId(User user) {
+		
+		User loginUser = (User) ShiroUtils.getSessionAttribute("user");
+		user.setModifyUserId(loginUser.getUserId());
+		// 1.判断用户表需要更新的字段
+		if (!StringUtils.isEmpty(user.getUsername()) || !StringUtils.isEmpty(user.getLoginCode())
+				|| !StringUtils.isEmpty(user.getPassword()) || !StringUtils.isEmpty(user.getState())
+				|| !StringUtils.isEmpty(user.getModifyUserId())) {
+			if (!StringUtils.isEmpty(user.getPassword())) {
+				String encryptPassword = new Sha256Hash(user.getPassword()).toHex();
+				user.setPassword(encryptPassword);
+			}
+			int updateResult = userMapper.updateUserByUserId(user);
+			if (updateResult == 0) {
+				return "更新用户失败！";
+			}
+		}
+		// 2.判断用户信息表更新
+		if (!StringUtils.isEmpty(user.getUserPhone()) || !StringUtils.isEmpty(user.getUserMail())) {
+			int updateResult = userMapper.updateUserInfoByUserId(user);
+			if (updateResult == 0) {
+				return "更新用户失败！";
+			}
+		}
+		// 3.判断用户组织表
+		if (!StringUtils.isEmpty(user.getOrgId())) {
+			long checkResult = userMapper.checkUserOrgExistByUserId(user.getUserId());
+			if (checkResult == 0) {
+				user.setCreateUserId(user.getModifyUserId());
+				userMapper.addUserOrg(user);
+			} else {
+				int updateResult = userMapper.updateUserOrgByUserId(user);
+				if (updateResult == 0) {
 					return "更新用户失败！";
 				}
 			}
-			//2.判断用户信息表更新
-			if(!StringUtils.isEmpty(user.getUserPhone()) || !StringUtils.isEmpty(user.getUserMail()) ) {
-				int updateResult = userMapper.modifyUserInfoByUserId(user);
-				if(updateResult == 0) {
-					return "更新用户失败！";
-				}
-			}
-			//3.判断用户组织表
-			if (!StringUtils.isEmpty(user.getOrgId())) {
-				long checkResult = userMapper.checkUserOrgExistByUserId(user.getUserId());
-				if (checkResult == 0) {
-					user.setCreateUserId(user.getModifyUserId());
-					userMapper.addUserOrg(user);
-				}else {
-					int updateResult = userMapper.modifyUserOrgByUserId(user);
-					if (updateResult == 0) {
-						return "更新用户失败！";
-					}
-				}
 
-			}
-			//4.用户信角色表更新
-			if (user.getRoleIds() != null && user.getRoleIds().length != 0) {
-				String[] roleIds = user.getRoleIds();
-				// 检查用户角色表是否存在该用户
-				long checkCount = userMapper.checkUserRoleIsExistByUserId(user.getUserId());
-				if (checkCount <= 0) {
-					for (String roleId : roleIds) {
-						user.setRoleId(roleId);
-						user.setCreateUserId(user.getModifyUserId());
-						userMapper.addUserRole(user);
-					}
-				} else {
-					// 如果存在该用户，先删除后，再添加一遍
-					String userRoleCreateUserId = userMapper.queryUserRoleCreateUserByUserId(user.getUserId());
-					userMapper.deleteUserRoleByUserId(user.getUserId());
-					user.setCreateUserId(userRoleCreateUserId);
-					for (String roleId : roleIds) {
-						user.setRoleId(roleId);
-						userMapper.addUserRole(user);
-					}
+		}
+		// 4.用户信角色表更新
+		if (user.getRoleIds() != null && user.getRoleIds().length != 0) {
+			String[] roleIds = user.getRoleIds();
+			// 检查用户角色表是否存在该用户
+			long checkCount = userMapper.checkUserRoleIsExistByUserId(user.getUserId());
+			if (checkCount <= 0) {
+				for (String roleId : roleIds) {
+					user.setRoleId(roleId);
+					user.setCreateUserId(user.getModifyUserId());
+					userMapper.addUserRole(user);
+				}
+			} else {
+				// 如果存在该用户，先删除后，再添加一遍
+				String userRoleCreateUserId = userMapper.queryUserRoleCreateUserByUserId(user.getUserId());
+				userMapper.deleteUserRoleByUserId(user.getUserId());
+				user.setCreateUserId(userRoleCreateUserId);
+				for (String roleId : roleIds) {
+					user.setRoleId(roleId);
+					userMapper.addUserRole(user);
 				}
 			}
-			return "更新用户成功！";
+		}
+		return "更新用户成功！";
 	}
 
 	
@@ -266,13 +275,15 @@ public class UserServiceImpl implements UserService{
 	 * 2018年4月16日下午10:44:45
 	 */
 	@Override
-	public String resetUserPasswordByUserId(User user) {
+	public String updateResetUserPasswordByUserId(User user) {
+		User loginUser = (User) ShiroUtils.getSessionAttribute("user");
+		user.setModifyUserId(loginUser.getUserId());
 		if (StringUtils.isEmpty(user.getPassword())) {
 			String random = UUIDUtil.getUUID();
 			String generatePassword = random.substring(0, 6);
 			String encryptPassword = new Sha256Hash(generatePassword).toHex();
 			user.setPassword(encryptPassword);
-			int updateResult = userMapper.resetUserPasswordByUserId(user);
+			int updateResult = userMapper.updateResetUserPasswordByUserId(user);
 			if (updateResult <= 0) {
 				return "重置密码失败！";
 			}
@@ -281,7 +292,7 @@ public class UserServiceImpl implements UserService{
 		String inputPassword = user.getPassword();
 		String encryptPassword = new Sha256Hash(inputPassword).toHex();
 		user.setPassword(encryptPassword);
-		int updateResult = userMapper.resetUserPasswordByUserId(user);
+		int updateResult = userMapper.updateResetUserPasswordByUserId(user);
 		if (updateResult <= 0) {
 			return "重置密码失败！";
 		}

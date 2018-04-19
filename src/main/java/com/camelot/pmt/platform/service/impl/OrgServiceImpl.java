@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import com.camelot.pmt.platform.mapper.OrgMapper;
 import com.camelot.pmt.platform.mapper.UserMapper;
@@ -64,7 +65,6 @@ public class OrgServiceImpl implements OrgService {
 		} 
 		return list;
 	}
-
 	/**
 	 * 新增部门
 	 * 
@@ -74,6 +74,48 @@ public class OrgServiceImpl implements OrgService {
 	@Override
 	public String addOrg(Org org) {
 		String result = "";
+		int max = 0;
+		int maxNum = 0;
+		if ("0".equals(org.getParentId())) {
+			List<Org> list = orgMapper.queryOrgSubByParentId(org.getParentId());
+			if (CollectionUtils.isEmpty(list)) {
+				org.setOrgCode("01");
+			}else {
+				for (Org orgItem : list) {
+					int a = Integer.parseInt(orgItem.getOrgCode());
+						 if (a>max) {
+							max=a;
+					}
+				}
+				  if (max>0 && max<9) {
+					org.setOrgCode( "0"+ String.valueOf(++max));
+				}else {
+					org.setOrgCode(String.valueOf(++max));
+				}
+			}
+		}else {
+			List<Org> list = orgMapper.queryOrgSubByParentId(org.getParentId());
+			if (CollectionUtils.isEmpty(list)) {
+				Org orgObj = orgMapper.queryOrgByOrgId(org.getParentId());
+				org.setOrgCode(orgObj.getOrgCode()+".01");
+			}else{
+				for (Org orgItem : list) {
+					int b = Integer.parseInt(orgItem.getOrgCode().substring(orgItem.getOrgCode().length()-2));
+					if (b>maxNum) {
+						maxNum=b;
+					}
+					if (maxNum>0 && maxNum<9) {
+						maxNum++;
+						org.setOrgCode(orgItem.getOrgCode().substring(0,orgItem.getOrgCode().length()-2)+"0"+String.valueOf(maxNum));
+					}else {
+						maxNum++;
+						org.setOrgCode(orgItem.getOrgCode().substring(0,orgItem.getOrgCode().length()-2)+String.valueOf(maxNum));
+					}
+				}
+				
+			}
+			
+		}
 			int count = orgMapper.checkOrgCodeIsExist(org.getOrgCode());
 			if (count > 0) {
 				result="部门编号已存在请重新添加";

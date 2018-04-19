@@ -85,7 +85,7 @@ public interface UserService {
 	 * @return String
 	 * @author [maple]
 	 */
-	String modifyUserDetailsByUserId(User user);
+	String updateUserDetailsByUserId(User user);
 
 	/**
 	 * 
@@ -105,7 +105,7 @@ public interface UserService {
 	 * @author [maple]
 	 * 2018年4月16日下午10:44:45
 	 */
-	String resetUserPasswordByUserId(User user);
+	String updateResetUserPasswordByUserId(User user);
 	
 	/**
 	 * 

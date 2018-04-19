@@ -229,7 +229,7 @@
 
 	<!-- 查询逾期任务列表所有字段 -->
 	<sql id="TaskOverDue_ShowTasks_Column_List">
-	t.id,t.task_num,t.priority,t.task_name,p.project_name,
+	t.id,t.task_num,t.priority,t.task_name,t.assign_user_id,p.id as pid,p.project_name,
 	u1.user_name,t.assign_time,t.status,t.estimate_start_time,
 	t.estimate_end_time ,t.estimate_hour,DATEDIFF(CURDATE(),t.estimate_start_time)*8 elapsed_time,
 	t.estimate_hour - (DATEDIFF(CURDATE(),estimate_start_time)*8) remaining_work,t.task_speed
@@ -591,13 +591,26 @@
 
 
    <!--  查询逾期列表 -->
-    <select id="queryOverdueTask" resultMap="BaseResultMap">
+    <select id="queryOverdueTask" resultMap="BaseResultMap" parameterType="com.camelot.pmt.task.model.Task">
     	select
     	<include refid="TaskOverDue_ShowTasks_Column_List" />
     	from task t
     	LEFT JOIN project_main p on p.id =t.project_id
 		LEFT JOIN platform_user u1 on u1.user_id = t.assign_user_id
 		WHERE t.status = 3
+		<if test="taskNum != null and  taskNum != '' " >
+			and t.task_num LIKE  "%"#{taskNum,jdbcType=CHAR}"%"
+		</if>
+		<if test="taskName != null and  taskName != '' ">
+			and t.task_name LIKE  "%"#{taskName,jdbcType=CHAR}"%"
+		</if>
+		<if test="project != null and project.id !=null">
+			and p.id = #{project.id,jdbcType=CHAR}
+		</if>
+		<if test="priority != null and  priority != '' ">
+			and t.priority = #{priority,jdbcType=CHAR}
+		</if>
+		
 		ORDER BY t.priority ASC,t.estimate_start_time DESC
     </select>
     
@@ -615,16 +628,18 @@
 		t.status = 1 
 		where t.id = #{taskId}
     </update>
-    
-   <!--  查询逾期任务详情 -->
-    <select id="queryOverdueTaskDetailByTaskId" parameterType="String" resultType="map">
-    	SELECT
-		t.id, t.task_num, t.task_name, t.task_parent_id, t.project_id, t.demand_id, t.priority, t.assign_user_id,
+    <sql id="queryOverdueTaskDetailByTaskId_Sql_colnum">
+        t.id, t.task_num, t.task_name, t.task_parent_id, t.project_id, t.demand_id, t.priority, t.assign_user_id,
 		t.beassign_user_id, t.assign_time, t.estimate_start_time, t.estimate_end_time, t.actual_start_time,
 		t.actual_end_time, t.task_type, t.task_speed, t.status, t.node_lv, t.task_describe, t.demand_change,
 		t.delay_describe, t.estimate_hour, t.infact_hour, t.task_mileage, t.create_user_id, t.modify_user_id,
 		t.create_time, t.modify_time, a.id AS aid, a.user_id, a.user_name, b.id AS bid, b.user_id, b.user_name,
 		c.id AS cid, c.user_id, c.user_name, p.id AS pid, p.project_name, d.id AS did, d.demand_desc
+    </sql>
+   <!--  查询逾期任务详情 -->
+    <select id="queryOverdueTaskDetailByTaskId" parameterType="String" resultType="map">
+    	SELECT
+		<include refid="queryOverdueTaskDetailByTaskId_Sql_colnum"></include>
 		from task t LEFT JOIN platform_user a ON t.assign_user_id = a.user_id
 		LEFT JOIN platform_user b ON t.beassign_user_id = b.user_id
 		LEFT JOIN platform_user c on t.create_user_id = c.user_id
@@ -679,5 +694,16 @@
     <update id="updateRunningToAlready" parameterType="Long">
         UPDATE task SET status = 2 WHERE id = #{id}
     </update>
+    
+    <update id="updateInfact_hourAndActual_end_time" parameterType="com.camelot.pmt.task.model.Task">
+        UPDATE task SET actual_end_time = #{actualEndTime},infact_hour = #{infactHour} WHERE id = #{id}
+    </update>
+    
+    <insert id="addAttachment" parameterType="com.camelot.pmt.task.model.TaskFile">
+        INSERT INTO attachment (attachment_url,
+        attachment_tile,attachment_source,source_id,create_user_id,create_time,modify_user_id,modify_time)
+        VALUES (#{attachmentUrl},#{attachmentTile},#{attachmentSource},#{sourceId},#{createUserId},
+        #{createTime},#{modifyUserId},#{modifyTime})
+    </insert>
     <!--myp结束-->
 </mapper>

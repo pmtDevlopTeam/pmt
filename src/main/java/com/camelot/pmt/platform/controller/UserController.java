@@ -4,18 +4,15 @@ package com.camelot.pmt.platform.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.camelot.pmt.common.APIStatus;
 import com.camelot.pmt.common.ApiResponse;
-import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.platform.model.User;
 import com.camelot.pmt.platform.model.vo.UserVo;
 import com.camelot.pmt.platform.service.UserService;
 import com.github.pagehelper.PageInfo;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,11 +99,7 @@ public class UserController {
             @ApiImplicitParam(
                     name="userPhone",value="用户电话",required=true,paramType="form",dataType="String"),
             @ApiImplicitParam(
-                    name="userMail",value="用户邮箱",required=true,paramType="form",dataType="String"),
-            @ApiImplicitParam(
-                    name="createUserId",value="用户创建人ID",required=true,paramType="form",dataType="String"),
-            @ApiImplicitParam(
-                    name="modifyUserId",value="用户修改人ID",required=false,paramType="form",dataType="String")
+                    name="userMail",value="用户邮箱",required=true,paramType="form",dataType="String")
     })
     @RequestMapping(value = "user/addUser",method = RequestMethod.POST)
 	public JSONObject addUser(@ApiIgnore User userModel) {
@@ -146,17 +139,15 @@ public class UserController {
     		@ApiImplicitParam(
     				name="orgId",value="用户所属部门ID",required=false,paramType="form",dataType="String"),
     		@ApiImplicitParam(
-    				name="roleIds",value="用户角色ID",required=false,paramType="form",dataType="String"),
-            @ApiImplicitParam(
-                    name="modifyUserId",value="用户修改人ID",required=false,paramType="form",dataType="String")
+    				name="roleIds",value="用户角色ID",required=false,paramType="form",dataType="String")
     })
-    @RequestMapping(value = "user/modifyUserDetailsByUserId",method = RequestMethod.POST)
-    public JSONObject modifyUserDetailsByUserId(@ApiIgnore User userModel) {
+    @RequestMapping(value = "user/updateUserDetailsByUserId",method = RequestMethod.POST)
+    public JSONObject updateUserDetailsByUserId(@ApiIgnore User userModel) {
 		try {
 			if(StringUtils.isEmpty(userModel.getUserId())){
 	    		return ApiResponse.jsonData(APIStatus.ERROR_400);
 	    	}
-	    	String result = service.modifyUserDetailsByUserId(userModel);
+	    	String result = service.updateUserDetailsByUserId(userModel);
 	    	return ApiResponse.success(result);
     	} catch (Exception e) {
     		logger.error(e.getMessage());
@@ -278,13 +269,13 @@ public class UserController {
             @ApiImplicitParam(
                     name="password",value="用户password",required=false,paramType="form",dataType="String")
     })
-    @RequestMapping(value = "user/resetPasswordByUserId",method = RequestMethod.POST)
-    public JSONObject resetUserPasswordByUserId(@ApiIgnore User userModel){
+    @RequestMapping(value = "user/resetPassword",method = RequestMethod.POST)
+    public JSONObject updateResetUserPasswordByUserId(@ApiIgnore User userModel){
     	try {
     		if(StringUtils.isEmpty(userModel.getUserId())) {
     			return ApiResponse.jsonData(APIStatus.ERROR_400);
     		}
-    		String result = service.resetUserPasswordByUserId(userModel);
+    		String result = service.updateResetUserPasswordByUserId(userModel);
     		return ApiResponse.success(result);
     	} catch (Exception e) {
     		logger.error(e.getMessage());
