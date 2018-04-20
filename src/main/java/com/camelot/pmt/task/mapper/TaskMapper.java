@@ -55,6 +55,8 @@ public interface TaskMapper {
      * */
     Task selectTaskById(Long id);
 
+    Task queryTaskAllById(Long id);
+
     /**
      * @author: zlh
      * @param:
