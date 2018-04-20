@@ -56,9 +56,9 @@ public class compareBeanAttr {
                     System.out.println("属性【" + attrName + "】注解使用的name是默认值: " + xmlElement.name());
                 } else {
                     if (null == oldValue) {
-                        str += xmlElement.name() + ":" + "更改为" + newValue + "\n";
+                        str += xmlElement.name() + ":" + "    更改为     " + newValue + "\t\n";
                     } else {
-                        str += xmlElement.name() + ":" + "由" + oldValue + "更改为" + newValue + "\n";
+                        str += xmlElement.name() + ":" + "  由    " + oldValue + "    更改为      " + newValue + "\t\n";
                     }
 
                 }
