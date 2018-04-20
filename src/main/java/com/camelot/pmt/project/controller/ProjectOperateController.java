@@ -47,15 +47,15 @@ public class ProjectOperateController {
         logger.info("入参封装的数据为：createUserId={}", createUserId);
         try {
             if (StringUtils.isEmpty(createUserId)) {
-                return ApiResponse.errorPara();
+                return ApiResponse.errorPara("入参不能为空");
             }
             List<ProjectOperate> list = projectOperateService.queryByCreateUserId(createUserId);
             if (list.size() > 0) {
                 return ApiResponse.success(list);
             }
-            return ApiResponse.error();
+            return ApiResponse.error("按创建人id查询数据失败");
         } catch (Exception e) {
-            return ApiResponse.error();
+            return ApiResponse.error("按创建人id查询数据出现异常");
         }
     }
 
@@ -72,15 +72,15 @@ public class ProjectOperateController {
         logger.info("入参封装的数据为：projectId={}", projectId);
         try {
             if (projectId == null) {
-                return ApiResponse.errorPara();
+                return ApiResponse.errorPara("入参不能为空");
             }
             List<ProjectOperate> list = projectOperateService.queryByProjectId(projectId);
             if (list.size() > 0) {
                 return ApiResponse.success(list);
             }
-            return ApiResponse.error();
+            return ApiResponse.error("按项目id查询数据失败");
         } catch (Exception e) {
-            return ApiResponse.error();
+            return ApiResponse.error("按项目id查询数据出现异常");
         }
     }
 }
