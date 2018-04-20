@@ -70,14 +70,14 @@ public class ProjectMainController {
                     projectDesc, budgetaryHours);
             logger.debug("调用projectMainService的addProject接口返回的条数为：", projectMainNum);
             if (projectMainNum > 0) {
-                return ApiResponse.success();
+                return ApiResponse.success("新建项目成功");
             } else {
-                return ApiResponse.errorPara();
+                return ApiResponse.error("新建项目失败");
             }
         } catch (Exception e) {
             // 异常
             logger.error("调用addProject接口出现异常为：", e);
-            return ApiResponse.error();
+            return ApiResponse.error("新建项目出现异常");
         }
     }
 
