@@ -14,16 +14,14 @@ import io.swagger.annotations.ApiOperation;
 
 @RestController
 public class UseCaseDetailController {
-	
-	
-	@Autowired
-	UseCaseDetailService useCaseDetailService;
 
-	@ApiOperation(value = "根据用例执行id查询执行详情信息")
+    @Autowired
+    UseCaseDetailService useCaseDetailService;
+
+    @ApiOperation(value = "根据用例执行id查询执行详情信息")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "implementId", value = "测试执行id", required = true, paramType = "query", dataType = "Long")
-    })
-	 @RequestMapping(value = "useCaseProcedure/queryUseCaseProcedureImplementd", method = RequestMethod.GET)
+            @ApiImplicitParam(name = "implementId", value = "测试执行id", required = true, paramType = "query", dataType = "Long") })
+    @RequestMapping(value = "useCaseProcedure/queryUseCaseProcedureImplementd", method = RequestMethod.GET)
     public ActionBean queryUseCaseProcedureImplementd(Long implementId) {
         ActionBean actionBean = new ActionBean();
         try {

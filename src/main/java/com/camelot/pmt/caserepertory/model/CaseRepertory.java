@@ -59,7 +59,7 @@ public class CaseRepertory {
     private String num;
 
     private String createUserId;
-    private  Date createTime;
+    private Date createTime;
     private String modifyUserId;
     private Date modifyTime;
     /**

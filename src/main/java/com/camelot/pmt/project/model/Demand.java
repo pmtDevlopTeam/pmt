@@ -7,126 +7,126 @@ public class Demand {
     /**
      * 需求id
      */
-    @XmlElement(name="default")
+    @XmlElement(name = "default")
     private Long id;
 
     /**
      * 所属一级需求id
      */
-    @XmlElement(name="default")
+    @XmlElement(name = "default")
     private Long pid;
 
     /**
      * 项目id
      */
-    @XmlElement(name="default")
+    @XmlElement(name = "default")
     private Long projectId;
 
     /**
      * 需求名称
      */
-    @XmlElement(name="需求名称")
+    @XmlElement(name = "需求名称")
     private String demandName;
 
     /**
      * 需求编号
      */
-    @XmlElement(name="需求编号")
+    @XmlElement(name = "需求编号")
     private String demandNum;
 
     /**
      * 需求状态:01未激活/02已激活/03已关闭/04已变更
      */
-    @XmlElement(name="需求状态")
+    @XmlElement(name = "需求状态")
     private String demandStatus;
 
     /**
      * 优先级
      */
-    @XmlElement(name="优先级")
+    @XmlElement(name = "优先级")
     private String demandLevel;
 
     /**
      * 需求来源
      */
-    @XmlElement(name="需求来源")
+    @XmlElement(name = "需求来源")
     private String demandSource;
 
     /**
      * 需求来源备注
      */
-    @XmlElement(name="需求来源备注")
+    @XmlElement(name = "需求来源备注")
     private String sourceRemark;
 
     /**
      * 创建人id
      */
-    @XmlElement(name="default")
+    @XmlElement(name = "default")
     private String createUserId;
 
     /**
      * 创建时间
      */
-    @XmlElement(name="default")
+    @XmlElement(name = "default")
     private Date createTime;
     /**
      * 修改人id
      * 
      */
-    @XmlElement(name="default")
+    @XmlElement(name = "default")
     private String modifyUserId;
 
     /**
      * 修改时间
      */
-    @XmlElement(name="default")
+    @XmlElement(name = "default")
     private Date modifyTime;
     /**
      * 评审时间
      */
-    @XmlElement(name="default")
+    @XmlElement(name = "default")
     private Date reviewTime;
 
     /**
      * 评审结果
      */
-    @XmlElement(name="评审结果")
+    @XmlElement(name = "评审结果")
     private String reviewResults;
     /**
      * 指派给
      */
-    @XmlElement(name="default")
+    @XmlElement(name = "default")
     private String assignedTo;
     /**
      * 由谁评审
      */
-    @XmlElement(name="default")
+    @XmlElement(name = "default")
     private String reviewedWith;
     /**
      * 评审备注
      */
-    @XmlElement(name="评审备注")
+    @XmlElement(name = "评审备注")
     private String reviewRemark;
     /**
      * 拒绝原因
      */
-    @XmlElement(name="拒绝原因")
+    @XmlElement(name = "拒绝原因")
     private String reasonsRejection;
     /**
      * 需求层级
      */
-    @XmlElement(name="default")
+    @XmlElement(name = "default")
     private String demandNeed;
     /**
      * 需求描述
      */
-    @XmlElement(name="需求描述")
+    @XmlElement(name = "需求描述")
     private String demandDesc;
 
     /**
      * 关闭原因
      */
-    @XmlElement(name="关闭原因")
+    @XmlElement(name = "关闭原因")
     private String closeReason;
 
     /**

@@ -50,8 +50,8 @@ public class MenuController {
             boolean addMenu = menuService.addMenu(menu);
             if (addMenu) {
                 return ApiResponse.success();
-            }else {
-            	return ApiResponse.error();
+            } else {
+                return ApiResponse.error();
             }
         } catch (Exception e) {
             logger.error(e.getMessage());
@@ -66,8 +66,8 @@ public class MenuController {
             boolean addMenu = menuService.deleteMenuByMenuId(menuId);
             if (addMenu) {
                 return ApiResponse.success();
-            }else {
-            	return ApiResponse.error();
+            } else {
+                return ApiResponse.error();
             }
         } catch (Exception e) {
             logger.error(e.getMessage());
@@ -82,8 +82,8 @@ public class MenuController {
             boolean addMenu = menuService.updateMenuByMenuId(menu);
             if (addMenu) {
                 return ApiResponse.success();
-            }else {
-            	return ApiResponse.error();
+            } else {
+                return ApiResponse.error();
             }
         } catch (Exception e) {
             logger.error(e.getMessage());
@@ -98,8 +98,8 @@ public class MenuController {
             Menu queryMenuByMenuId = menuService.queryMenuByMenuId(menuId);
             if (queryMenuByMenuId != null) {
                 return ApiResponse.success(queryMenuByMenuId);
-            }else {
-            	return ApiResponse.error();
+            } else {
+                return ApiResponse.error();
             }
         } catch (Exception e) {
             logger.error(e.getMessage());
@@ -114,12 +114,12 @@ public class MenuController {
             List<Tree<Menu>> querySubMenuListByMenuId = menuService.querySubMenuListByMenuId(menuId);
             if (querySubMenuListByMenuId != null) {
                 return ApiResponse.success(querySubMenuListByMenuId);
-            }else {
-            	return ApiResponse.error();
+            } else {
+                return ApiResponse.error();
             }
         } catch (Exception e) {
             logger.error(e.getMessage());
-        	return ApiResponse.error();
+            return ApiResponse.error();
         }
     }
 
@@ -131,12 +131,12 @@ public class MenuController {
             List<Tree<Menu>> queryAllMenuList = menuService.queryAllMenuList();
             if (queryAllMenuList != null) {
                 return ApiResponse.success(queryAllMenuList);
-            }else {
-            	return ApiResponse.error();
+            } else {
+                return ApiResponse.error();
             }
         } catch (Exception e) {
             logger.error(e.getMessage());
-        	return ApiResponse.error();
+            return ApiResponse.error();
         }
     }
 

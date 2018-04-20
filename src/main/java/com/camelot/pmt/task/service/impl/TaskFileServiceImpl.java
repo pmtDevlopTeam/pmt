@@ -33,10 +33,10 @@ public class TaskFileServiceImpl implements TaskFileService {
         try {
             // check参数
             if (taskFile == null) {
-                /*返回参数错误*/
+                /* 返回参数错误 */
             }
             int insertResult = taskFileMapper.insert(taskFile);
-            return insertResult==1 ? true : false;
+            return insertResult == 1 ? true : false;
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
             throw new RuntimeException(e);

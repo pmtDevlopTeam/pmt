@@ -1,11 +1,10 @@
 package com.camelot.pmt.project.service;
 
-import com.alibaba.fastjson.JSONObject;
+import java.util.List;
+
 import com.camelot.pmt.project.model.Version;
 import com.camelot.pmt.project.model.VersionVo;
 import com.github.pagehelper.PageInfo;
-
-import java.util.List;
 
 /**
  * @Package: com.camelot.pmt.project.service
@@ -68,5 +67,5 @@ public interface VersionService {
      * @author: xueyj
      * @date: 2018/4/17 10:34
      */
-    PageInfo queryVerListByPageAndProId(int pageNum, int pageSize, Long projectId, VersionVo versionVo);
+    PageInfo<?> queryVerListByPageAndProId(int pageNum, int pageSize, Long projectId, VersionVo versionVo);
 }
