@@ -40,38 +40,38 @@ public class RoleToUserServiceImpl implements RoleToUserService {
      */
     @Override
     public boolean addUserByRole(RoleToUser roleToUser) {
-            boolean isContains = true;
-            List<String> roleId = Arrays.asList(roleToUser.getRoleIds());
-            for (int i = 0; i < roleId.size(); i++) {
-                List<Role> list = roleMapper.queryRoleByroleId(roleId.get(i));
-                for (int j = 0; j < list.size(); j++) {
-                    if (!list.get(j).getParentId().equals("0")) {
-                        isContains = Arrays.asList(roleToUser.getRoleIds()).contains(list.get(j).getParentId());
-                        if (isContains == true) {
-                            isContains = true;
-                        } else {
-                            isContains = false;
-                            break;
-                        }
+        boolean isContains = true;
+        List<String> roleId = Arrays.asList(roleToUser.getRoleIds());
+        for (int i = 0; i < roleId.size(); i++) {
+            List<Role> list = roleMapper.queryRoleByroleId(roleId.get(i));
+            for (int j = 0; j < list.size(); j++) {
+                if (!list.get(j).getParentId().equals("0")) {
+                    isContains = Arrays.asList(roleToUser.getRoleIds()).contains(list.get(j).getParentId());
+                    if (isContains == true) {
+                        isContains = true;
+                    } else {
+                        isContains = false;
+                        break;
                     }
-                }
-                if (isContains == false) {
-                    break;
                 }
             }
             if (isContains == false) {
-                return true;
+                break;
             }
-            for (String role : roleToUser.getRoleIds()) {
-                for (String user : roleToUser.getUserIds()) {
-                    roleToUser.setRoleId(role);
-                    roleToUser.setUserId(user);
-                    long date = new Date().getTime();
-                    roleToUser.setCreateTime(new Date(date));
-                    roleToUser.setModifyTime(new Date(date));
-                    roleToUserMapper.addUserByRole(roleToUser);
-                }
+        }
+        if (isContains == false) {
+            return true;
+        }
+        for (String role : roleToUser.getRoleIds()) {
+            for (String user : roleToUser.getUserIds()) {
+                roleToUser.setRoleId(role);
+                roleToUser.setUserId(user);
+                long date = new Date().getTime();
+                roleToUser.setCreateTime(new Date(date));
+                roleToUser.setModifyTime(new Date(date));
+                roleToUserMapper.addUserByRole(roleToUser);
             }
+        }
         return false;
     }
 
@@ -83,43 +83,43 @@ public class RoleToUserServiceImpl implements RoleToUserService {
      */
     @Override
     public boolean updateUserByRole(RoleToUser roleToUser) {
-            boolean isContains = true;
-            List<String> roleId = Arrays.asList(roleToUser.getRoleIds());
-            for (int i = 0; i < roleId.size(); i++) {
-                List<Role> list = roleMapper.queryRoleByroleId(roleId.get(i));
-                for (int j = 0; j < list.size(); j++) {
-                    if (!list.get(j).getParentId().equals("0")) {
-                        isContains = Arrays.asList(roleToUser.getRoleIds()).contains(list.get(j).getParentId());
-                        if (isContains == true) {
-                            isContains = true;
-                        } else {
-                            isContains = false;
-                            break;
-                        }
+        boolean isContains = true;
+        List<String> roleId = Arrays.asList(roleToUser.getRoleIds());
+        for (int i = 0; i < roleId.size(); i++) {
+            List<Role> list = roleMapper.queryRoleByroleId(roleId.get(i));
+            for (int j = 0; j < list.size(); j++) {
+                if (!list.get(j).getParentId().equals("0")) {
+                    isContains = Arrays.asList(roleToUser.getRoleIds()).contains(list.get(j).getParentId());
+                    if (isContains == true) {
+                        isContains = true;
+                    } else {
+                        isContains = false;
+                        break;
                     }
-                }
-                if (isContains == false) {
-                    break;
                 }
             }
             if (isContains == false) {
-                return true;
+                break;
             }
+        }
+        if (isContains == false) {
+            return true;
+        }
 
-            List<String> roleIds = Arrays.asList(roleToUser.getRoleIds());
-            for (String role : roleIds) {
-                roleToUserMapper.deleteUserByRoleId(role);
+        List<String> roleIds = Arrays.asList(roleToUser.getRoleIds());
+        for (String role : roleIds) {
+            roleToUserMapper.deleteUserByRoleId(role);
+        }
+        for (String role : roleToUser.getRoleIds()) {
+            for (String user : roleToUser.getUserIds()) {
+                roleToUser.setRoleId(role);
+                roleToUser.setUserId(user);
+                long date = new Date().getTime();
+                roleToUser.setCreateTime(new Date(date));
+                roleToUser.setModifyTime(new Date(date));
+                roleToUserMapper.addUserByRole(roleToUser);
             }
-            for (String role : roleToUser.getRoleIds()) {
-                for (String user : roleToUser.getUserIds()) {
-                    roleToUser.setRoleId(role);
-                    roleToUser.setUserId(user);
-                    long date = new Date().getTime();
-                    roleToUser.setCreateTime(new Date(date));
-                    roleToUser.setModifyTime(new Date(date));
-                    roleToUserMapper.addUserByRole(roleToUser);
-                }
-            }
+        }
         return false;
     }
 
@@ -131,18 +131,18 @@ public class RoleToUserServiceImpl implements RoleToUserService {
      */
     @Override
     public List<User> queryUserByRole(RoleToUser role) {
-            List<RoleToUser> list = roleToUserMapper.queryUserByRole(role);
-            if (CollectionUtils.isEmpty(list)) {
-                return null;
-            }
-            List<User> userModels = new ArrayList<User>();
-            for (RoleToUser roleToUser : list) {
-                User userModel = userMapper.queryUserByUserId(roleToUser.getUserId());
-                userModels.add(userModel);
-            }
-            if (CollectionUtils.isEmpty(userModels)) {
-                return null;
-            }
+        List<RoleToUser> list = roleToUserMapper.queryUserByRole(role);
+        if (CollectionUtils.isEmpty(list)) {
+            return null;
+        }
+        List<User> userModels = new ArrayList<User>();
+        for (RoleToUser roleToUser : list) {
+            User userModel = userMapper.queryUserByUserId(roleToUser.getUserId());
+            userModels.add(userModel);
+        }
+        if (CollectionUtils.isEmpty(userModels)) {
+            return null;
+        }
         return userModels;
     }
 }

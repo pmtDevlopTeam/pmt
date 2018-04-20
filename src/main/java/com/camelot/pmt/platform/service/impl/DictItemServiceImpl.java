@@ -14,6 +14,7 @@ import com.camelot.pmt.common.DataGrid;
 import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.common.Pager;
 import com.camelot.pmt.platform.mapper.DictItemMapper;
+import com.camelot.pmt.platform.model.Dict;
 import com.camelot.pmt.platform.model.DictItem;
 import com.camelot.pmt.platform.model.Menu;
 import com.camelot.pmt.platform.service.DictItemService;
@@ -34,80 +35,62 @@ public class DictItemServiceImpl implements DictItemService {
 	
 	@Override
 	public boolean addDictItem(DictItem dictItem) {
-		try{
 			String uuid = UUIDUtil.getUUID();
 			dictItem.setDictItemId(uuid);
             long date = new Date().getTime();
             dictItem.setCreateTime(new Date(date));
             return (dictItemMapper.addDictItem(dictItem)==1)?true:false;
-		}catch(Exception e){
-			throw new RuntimeException(e);
-		}
-
 	}
 
 	@Override
 	public boolean deleteDictItemByDictItemId(String dictItemId) {
 		boolean flag = false;
-    	try {
     		int i= dictItemMapper.deleteDictItemByDictItemId(dictItemId);
     		if(i == 1) {
     			flag = true;
     		}
-    	} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
     	return flag;
-    	
-    	
 	}
 
 	@Override
 	public boolean updateDictItemByDictItemId(DictItem dictItem) {
-	       try {
 				if(StringUtils.isEmpty(dictItem.getDictItemId()) ){
 					return false;
 				}
 	            long date = new Date().getTime();
 	            dictItem.setModifyTime(new Date(date));
 	            return (dictItemMapper.updateDictItemByDictItemId(dictItem)==1)?true:false;
-	        } catch (Exception e){
-	            throw new RuntimeException(e);
-	        }
-
+	}
+	
+	@Override
+	public boolean updateDictItemByDictItemIdAndState(DictItem dictItem) {
+		if(StringUtils.isEmpty(dictItem.getDictItemId()) ){
+			return false;
+		}
+        long date = new Date().getTime();
+        dictItem.setModifyTime(new Date(date));
+        return (dictItemMapper.updateDictItemByDictItemIdAndState(dictItem)==1)?true:false;
 	}
 
 
 	@Override
 	public DictItem queryDictItemByDictItemId(String dictItemId) {
-		try {
 			  DictItem dictItem = dictItemMapper.queryDictItemByDictItemId(dictItemId);
 			  return dictItem;
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
 	}
 
 	@Override
-	public List<DictItem> selectDictItemListByDictId(String dictId,Integer pageSize,Integer currentPage) {
-		   try {
+	public List<DictItem> queryDictItemListByDictId(String dictId,Integer pageSize,Integer currentPage) {
 			   PageHelper.startPage(currentPage,pageSize);
-			   List<DictItem> list = dictItemMapper.selectDictItemListByDictId(dictId);
+			   List<DictItem> list = dictItemMapper.queryDictItemListByDictId(dictId);
 		       return list;
-		   } catch (Exception e) {
-			   throw new RuntimeException(e);
-		   }
 	}
 
 	@Override
-	public List<DictItem> selectDictItemListAll(Integer pageSize,Integer currentPage) {
-    	try {
+	public List<DictItem> queryDictItemListAll(Integer pageSize,Integer currentPage) {
             PageHelper.startPage(currentPage,pageSize);
-            List<DictItem> list = dictItemMapper.selectDictItemListAll();
+            List<DictItem> list = dictItemMapper.queryDictItemListAll();
             return list;
-    	} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
 	}
 
 //	@Override

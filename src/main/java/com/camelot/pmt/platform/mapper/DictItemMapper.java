@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.camelot.pmt.common.Pager;
+import com.camelot.pmt.platform.model.Dict;
 import com.camelot.pmt.platform.model.DictItem;
 
 /**
@@ -39,12 +40,12 @@ public interface DictItemMapper {
 	 */
 	int updateDictItemByDictItemId(DictItem dictItem);
 	/**
-	 * 根据字典dictId 修改字典项
-	 * 
+	 *  根据字典dictItemId state 修改一个字典状态
 	 * @param DictItem dictItem
 	 * @return int	1：成功；非1：失败
-	 */
-	int updateDictItemByDictId(DictItem dictItem);
+	 * 
+	 **/
+	int updateDictItemByDictItemIdAndState(DictItem dictItem);
     /**
      * 根据字典项dictItemId 查询一个字典项
      * 
@@ -58,14 +59,14 @@ public interface DictItemMapper {
      * @param String dictId
      * @return List<DictItem>
      */
-    List<DictItem> selectDictItemListByDictId(String dictId);
+    List<DictItem> queryDictItemListByDictId(String dictId);
     /**
      * 查询全部字典项  不分页
      * 
      * @param 
      * @return List<DictItem>
      */
-    List<DictItem> selectDictItemListAll();
+    List<DictItem> queryDictItemListAll();
     /**
      * 根据字典dictId 查询字典项 分页 
      * 

@@ -33,7 +33,8 @@ public class UseCaseImplementServiceImpl implements UseCaseImplementService {
     /**
      * 增加用例执行和用例执行详细信息
      *
-     * @param useCaseImplement 用例执行
+     * @param useCaseImplement
+     *            用例执行
      */
     @Override
     @Transactional
@@ -64,7 +65,8 @@ public class UseCaseImplementServiceImpl implements UseCaseImplementService {
                 break;
             }
         }
-        if (useCaseImplement.getImplementResult() == null) useCaseImplement.setImplementResult("通过");
+        if (useCaseImplement.getImplementResult() == null)
+            useCaseImplement.setImplementResult("通过");
         useCaseImplementMapper.insertSelective(useCaseImplement);
 
         // mybatis返回主键
@@ -79,13 +81,15 @@ public class UseCaseImplementServiceImpl implements UseCaseImplementService {
         useCaseProcedureImplementMapper.insertBatch(list);
 
         // 更新测试用例的执行人和执行时间
-        if (useCase != null) useCaseMapper.updateByPrimaryKeySelective(useCase);
+        if (useCase != null)
+            useCaseMapper.updateByPrimaryKeySelective(useCase);
     }
 
     /**
      * 根据测试用例ID查询测试用例执行信息
      *
-     * @param useCaseId 测试用例ID
+     * @param useCaseId
+     *            测试用例ID
      */
     @Override
     public List<UseCaseImplement> queryUseCaseImplementByUseCaseId(Long useCaseId) {

@@ -27,11 +27,11 @@ import java.util.Map;
 
 /**
  * 
-* @ClassName: TaskPendingServiceImpl
-* @Description: TODO(任务-我的待办业务类)
-* @author gxl
-* @date 2018年4月9日 下午5:31:16
-*
+ * @ClassName: TaskPendingServiceImpl
+ * @Description: TODO(任务-我的待办业务类)
+ * @author gxl
+ * @date 2018年4月9日 下午5:31:16
+ *
  */
 @Service
 public class TaskPendingServiceImpl implements TaskPendingService{
@@ -475,7 +475,6 @@ public class TaskPendingServiceImpl implements TaskPendingService{
 	 */
 	@Override
 	public ExecuteResult<String> deletePendingTaskTreeById(Long id,String taskStatus){
-
 		ExecuteResult<String> result = new ExecuteResult<String>();
 		
 		try{

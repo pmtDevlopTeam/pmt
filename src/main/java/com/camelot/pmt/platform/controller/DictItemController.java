@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,6 +20,7 @@ import com.camelot.pmt.common.ApiResponse;
 import com.camelot.pmt.common.DataGrid;
 import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.common.Pager;
+import com.camelot.pmt.platform.model.Dict;
 import com.camelot.pmt.platform.model.DictItem;
 import com.camelot.pmt.platform.model.Menu;
 import com.camelot.pmt.platform.model.User;
@@ -83,6 +85,7 @@ public class DictItemController {
                 ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
             }
             dictItem.setCreateUserId(user.getUserId());
+            dictItem.setModifyUserId(user.getUserId());
 	    	if (StringUtils.isEmpty(dictItem.getDictId())||StringUtils.isEmpty(dictItem.getDictItemName())
 	    		||StringUtils.isEmpty(dictItem.getDictItemCode())||StringUtils.isEmpty(dictItem.getDictItemValue()) )
 	    	{
@@ -185,6 +188,40 @@ public class DictItemController {
         }
 	}
 	
+    /** 修改字典项的状态
+	 * @param dictItemId state
+	 * @return JSONObject  {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
+	 * 
+	 **/
+    @ApiOperation(value = "修改字典项状态接口", notes = "修改字典项状态接口")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "dictItemId", value = "字典项id", required = true, paramType = "form", dataType = "string"),
+            @ApiImplicitParam(name = "state", value = "字典项状态  0（默认）启用 1 停用 2 锁定", required = false, paramType = "form", dataType = "string")
+    })
+    @RequestMapping(value="/updateDictItemByDictItemIdAndState", method=RequestMethod.POST)
+    public JSONObject updateDictItemByDictItemIdAndState(@ApiIgnore DictItem dictItem){
+    	boolean flag = false;
+    	try {
+    		User user = (User) ShiroUtils.getSessionAttribute("user");
+            if (StringUtils.isEmpty(user.getUserId())) {
+                ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
+            }
+            dictItem.setModifyUserId(user.getUserId());
+    		if (StringUtils.isEmpty(dictItem.getDictItemId()) || StringUtils.isEmpty(dictItem.getState())) {
+                return ApiResponse.jsonData(APIStatus.ERROR_400);
+            }
+    		flag = dictItemService.updateDictItemByDictItemIdAndState(dictItem);
+	         if(flag){
+	        	 return ApiResponse.success();
+	         }
+	          	 return ApiResponse.error("修改字典项状态异常");
+    	}catch (Exception e) {
+    		logger.error(e.getMessage());
+    		return ApiResponse.error();
+    	}
+
+    }
+    
     /**
      * 根据一个字典项dictItemId  查询一个字典项
      * 
@@ -218,14 +255,13 @@ public class DictItemController {
         @ApiImplicitParam(name = "currentPage", value = "页码", required = true, paramType = "query", dataType = "int"),
         @ApiImplicitParam(name = "pageSize", value = "每页数量", required = true, paramType = "query", dataType = "int"),
 	})
-	@RequestMapping(value="/selectDictItemListByDictId", method=RequestMethod.POST)
-	public JSONObject selectDictItemListByDictId(@ApiIgnore @RequestParam(required = true)String dictId,@ApiIgnore DictItem dictItem,@RequestParam(defaultValue = "1") Integer pageSize,@RequestParam(defaultValue = "10") Integer currentPage) {
-		
+	@RequestMapping(value="/queryDictItemListByDictId", method=RequestMethod.POST)
+	public JSONObject queryDictItemListByDictId(@ApiIgnore @RequestParam(required = true)String dictId,@ApiIgnore DictItem dictItem,@RequestParam(defaultValue = "1") Integer pageSize,@RequestParam(defaultValue = "10") Integer currentPage) {
 		try {
             if(StringUtils.isEmpty(dictId)){
             	return ApiResponse.errorPara();
             }
-            List<DictItem> list = dictItemService.selectDictItemListByDictId(dictId,pageSize,currentPage);
+            List<DictItem> list = dictItemService.queryDictItemListByDictId(dictId,pageSize,currentPage);
             PageInfo<DictItem> result = new PageInfo<DictItem>(list);
             return ApiResponse.success(result);
         }catch (Exception e) {
@@ -246,11 +282,10 @@ public class DictItemController {
         @ApiImplicitParam(name = "currentPage", value = "页码", required = true, paramType = "query", dataType = "int"),
         @ApiImplicitParam(name = "pageSize", value = "每页数量", required = true, paramType = "query", dataType = "int"),
 	})
-	@RequestMapping(value="/selectDictItemListAll", method=RequestMethod.POST)
-	public JSONObject selectDictItemListAll(@ApiIgnore DictItem dictItem,@RequestParam(defaultValue = "1") Integer pageSize,@RequestParam(defaultValue = "10") Integer currentPage) {
-		
+	@RequestMapping(value="/queryDictItemListAll", method=RequestMethod.POST)
+	public JSONObject queryDictItemListAll(@ApiIgnore DictItem dictItem,@RequestParam(defaultValue = "1") Integer pageSize,@RequestParam(defaultValue = "10") Integer currentPage) {
         try {
-        	List<DictItem> list = dictItemService.selectDictItemListAll(pageSize,currentPage);
+        	List<DictItem> list = dictItemService.queryDictItemListAll(pageSize,currentPage);
         	PageInfo<DictItem> result = new PageInfo<DictItem>(list);
             return ApiResponse.success(result);
         }catch (Exception e) {

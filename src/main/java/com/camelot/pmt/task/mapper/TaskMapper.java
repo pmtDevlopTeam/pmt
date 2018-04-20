@@ -49,6 +49,8 @@ public interface TaskMapper {
      * */
     List<Task> queryByPId(Long pid);
 
+    Task queryTaskAllById(Long id);
+
     /**
      * 根据id查询任务明细
      * myp
@@ -391,5 +393,43 @@ public interface TaskMapper {
      * @return int
      * @throws
      */
+    int updateTaskToTest(@Param("id") Long id,@Param("beassignUserId")String beassignUserId);
+
+    /**
+     * 根据任务Id查询需求ID
+     * @Title: updateTaskOverdueStatus
+     * @Description: TODO
+     * @param @param taskId
+     * @param @return
+     * @return int
+     * @throws
+     */
+    Long queryTaskByTaskId(Long id);
+
+    /**
+     * 根据需求Id查询当前需求的测试人员ID
+     * @Title: updateTaskOverdueStatus
+     * @Description: TODO
+     * @param @param taskId
+     * @param @return
+     * @return int
+     * @throws
+     */
+    String queryTaskToTestByDemandId(Long demandId);
     int updateTaskToTest(Long id);
+
+    /**
+     * 项目关闭时，更新任务状态
+     *
+     * @param projectId
+     * @param status
+     * @param actualEndTime
+     * @param modifyUserId
+     * @param modifyTime
+     * @return
+     */
+    int updateByProjectId(@Param("projectId") Long projectId, @Param("status") String status,
+            @Param("actualEndTime") Date actualEndTime, @Param("modifyUserId") String modifyUserId,
+            @Param("modifyTime") Date modifyTime);
+
 }

@@ -99,6 +99,24 @@
         </set>
     where dict_id = #{dictId}
   </update>
+  
+  <!-- 根据字典dictId state 修改一个字典状态 -->
+  <update id="updateDictByDictIdAndState">
+        UPDATE platform_dict
+        <set>
+        	<if test="modifyTime != null">
+                modify_time = #{modifyTime},
+            </if>
+            <if test="modifyUserId != null">
+                modify_user_id = #{modifyUserId},
+            </if>
+            <if test="state != null">
+                state = #{state}
+            </if>
+        </set>
+        WHERE dict_id = #{dictId}
+  </update>
+  
   <!-- 根据字典dictId 查询一个字典 -->
   <select id="queryDictByDictId" resultMap="BaseResultMap"  >
     select 
@@ -109,7 +127,7 @@
 
   
    <!-- 根据字典all -->
-  <select id="selectDictListAll" resultMap="BaseResultMap" >
+  <select id="queryDictListAll" resultMap="BaseResultMap" >
     select 
     <include refid="Base_Column_List" />
     from platform_dict
