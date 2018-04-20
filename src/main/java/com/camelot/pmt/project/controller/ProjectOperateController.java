@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
 import com.camelot.pmt.common.ApiResponse;
-import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.project.model.ProjectOperate;
 import com.camelot.pmt.project.service.ProjectOperateService;
 
@@ -46,14 +45,13 @@ public class ProjectOperateController {
     public JSONObject queryByCreateUserId(
             @ApiParam(value = "创建人id", required = true) @RequestParam String createUserId) {
         logger.info("入参封装的数据为：createUserId={}", createUserId);
-        ExecuteResult<List<ProjectOperate>> result = new ExecuteResult<>();
         try {
             if (StringUtils.isEmpty(createUserId)) {
                 return ApiResponse.errorPara();
             }
-            result = projectOperateService.queryByCreateUserId(createUserId);
-            if (result.isSuccess()) {
-                return ApiResponse.success(result.getResult());
+            List<ProjectOperate> list = projectOperateService.queryByCreateUserId(createUserId);
+            if (list.size() > 0) {
+                return ApiResponse.success(list);
             }
             return ApiResponse.error();
         } catch (Exception e) {
@@ -64,7 +62,7 @@ public class ProjectOperateController {
     /**
      * 按项目id查询
      * 
-     * @param createUserId
+     * @param projectId
      * @return
      */
     @ApiOperation(value = "按项目id查询", notes = "按项目id查询")
@@ -72,14 +70,13 @@ public class ProjectOperateController {
     public JSONObject queryByProjectId(@ApiParam(value = "项目id", required = true) @RequestParam Long projectId) {
 
         logger.info("入参封装的数据为：projectId={}", projectId);
-        ExecuteResult<List<ProjectOperate>> result = new ExecuteResult<>();
         try {
             if (projectId == null) {
                 return ApiResponse.errorPara();
             }
-            result = projectOperateService.queryByProjectId(projectId);
-            if (result.isSuccess()) {
-                return ApiResponse.success(result.getResult());
+            List<ProjectOperate> list = projectOperateService.queryByProjectId(projectId);
+            if (list.size() > 0) {
+                return ApiResponse.success(list);
             }
             return ApiResponse.error();
         } catch (Exception e) {

@@ -38,6 +38,7 @@ public class compareBeanAttr {
          * 判断newBean: 1.newBean对应的get方法的得到的属性值是否为空（null或""）
          * 2.比较newBean和oldBean对应get方法得到的属性值是否相同
          */
+
         for (Method getMethod : getMethods) {
             Object newValue = getMethod.invoke(newBean);
             Object oldValue = getMethod.invoke(oldBean);

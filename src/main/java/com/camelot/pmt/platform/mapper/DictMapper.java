@@ -5,7 +5,6 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.camelot.pmt.platform.model.Dict;
-import com.camelot.pmt.platform.model.DictItem;
 
 /**
  * 字典管理Mapper数据层接口

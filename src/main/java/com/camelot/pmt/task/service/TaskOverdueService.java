@@ -4,7 +4,6 @@ import java.util.Map;
 
 import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.task.model.Task;
-import com.camelot.pmt.task.model.TaskDetail;
 import com.github.pagehelper.PageInfo;
 
 /**

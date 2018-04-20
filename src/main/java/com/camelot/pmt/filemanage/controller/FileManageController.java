@@ -1,21 +1,5 @@
 package com.camelot.pmt.filemanage.controller;
 
-import com.alibaba.fastjson.JSONObject;
-import com.camelot.pmt.filemanage.model.FileManage;
-import com.camelot.pmt.filemanage.model.FileManageGroup;
-import com.camelot.pmt.filemanage.service.FileManageService;
-import com.camelot.pmt.common.APIStatus;
-import com.camelot.pmt.common.ApiResponse;
-import com.camelot.pmt.common.ExecuteResult;
-import com.camelot.pmt.caserepertory.PageBean;
-import com.camelot.pmt.platform.model.Menu;
-import com.github.pagehelper.PageInfo;
-import io.swagger.annotations.Api;
-
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
-
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +9,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.List;
+import com.alibaba.fastjson.JSONObject;
+import com.camelot.pmt.common.APIStatus;
+import com.camelot.pmt.common.ApiResponse;
+import com.camelot.pmt.filemanage.model.FileManage;
+import com.camelot.pmt.filemanage.model.FileManageGroup;
+import com.camelot.pmt.filemanage.service.FileManageService;
+import com.github.pagehelper.PageInfo;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 
 /**
  *

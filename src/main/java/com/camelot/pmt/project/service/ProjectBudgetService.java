@@ -1,6 +1,5 @@
 package com.camelot.pmt.project.service;
 
-import java.util.List;
 import java.util.Map;
 
 import com.camelot.pmt.common.ExecuteResult;
@@ -49,5 +48,13 @@ public interface ProjectBudgetService {
      * @return ExecuteResult<ProjectBudget>
      */
     ProjectBudget queryBudgeByProjectId(Long projectId);
+
+    /**
+     * 统计查询项目结项
+     * 
+     * @param Long
+     *            projectId
+     */
+    Map<String, Object> queryProjectEndById(Long projectId);
 
 }

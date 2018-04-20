@@ -1,25 +1,24 @@
 package com.camelot.pmt.filemanage.service.impl;
 
-import com.camelot.pmt.filemanage.mapper.FileManageGroupMapper;
-import com.camelot.pmt.filemanage.mapper.FileManageMapper;
-import com.camelot.pmt.filemanage.model.FileManage;
-import com.camelot.pmt.filemanage.model.FileManageGroup;
-import com.camelot.pmt.filemanage.service.FileManageService;
-import com.camelot.pmt.common.ExecuteResult;
-import com.camelot.pmt.platform.model.User;
-import com.camelot.pmt.platform.shiro.ShiroUtils;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
+import java.util.Date;
+import java.util.List;
+
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
-import java.util.Date;
-import java.util.List;
+import com.camelot.pmt.filemanage.mapper.FileManageGroupMapper;
+import com.camelot.pmt.filemanage.mapper.FileManageMapper;
+import com.camelot.pmt.filemanage.model.FileManage;
+import com.camelot.pmt.filemanage.model.FileManageGroup;
+import com.camelot.pmt.filemanage.service.FileManageService;
+import com.camelot.pmt.platform.model.User;
+import com.camelot.pmt.platform.shiro.ShiroUtils;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 
 /**
  *
