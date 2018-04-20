@@ -59,7 +59,7 @@ public interface DemandMapper {
      */
     List<Demand> queryByPage(@Param(value = "demand") Demand demand);
 
-    //Long queryCount(@Param(value = "demand") Demand demand);
+    // Long queryCount(@Param(value = "demand") Demand demand);
 
     /**
      * 根据pid查询所有需求记录
@@ -114,7 +114,6 @@ public interface DemandMapper {
     int updateByProjectId(@Param("projectId") Long projectId, @Param("demandStatus") String demandStatus,
             @Param("closeReason") String closeReason, @Param("modifyUserId") String modifyUserId,
             @Param("modifyTime") Date modifyTime);
-
 
     /**
      * 根据需求id查询影响需求变更的任务信息

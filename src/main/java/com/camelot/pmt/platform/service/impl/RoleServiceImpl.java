@@ -38,23 +38,23 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public List<Tree<Role>> queryAllRole() {
         List<Tree<Role>> trees = new ArrayList<Tree<Role>>();
-            List<Role> list = roleMapper.queryAllRole();
-            if (CollectionUtils.isEmpty(list)) {
-                return null;
-            }
-            for (Role role : list) {
-                Tree<Role> tree = new Tree<Role>();
-                tree.setId(role.getRoleId());
-                tree.setParentId(role.getParentId());
-                tree.setText(role.getRoleName());
-                Map<String, Object> attributes = new HashMap<>(16);
-                attributes.put("state", role.getState());
-                attributes.put("createTime", role.getCreateTime());
-                attributes.put("modifyTime", role.getModifyTime());
-                tree.setAttributes(attributes);
-                trees.add(tree);
-            }
-            List<Tree<Role>> treeList = BuildTree.buildList(trees, "0");
+        List<Role> list = roleMapper.queryAllRole();
+        if (CollectionUtils.isEmpty(list)) {
+            return null;
+        }
+        for (Role role : list) {
+            Tree<Role> tree = new Tree<Role>();
+            tree.setId(role.getRoleId());
+            tree.setParentId(role.getParentId());
+            tree.setText(role.getRoleName());
+            Map<String, Object> attributes = new HashMap<>(16);
+            attributes.put("state", role.getState());
+            attributes.put("createTime", role.getCreateTime());
+            attributes.put("modifyTime", role.getModifyTime());
+            tree.setAttributes(attributes);
+            trees.add(tree);
+        }
+        List<Tree<Role>> treeList = BuildTree.buildList(trees, "0");
         return treeList;
     }
 
@@ -66,8 +66,8 @@ public class RoleServiceImpl implements RoleService {
      */
     @Override
     public boolean addRole(Role role) throws Exception {
-            role = setRoleModel(role);
-        return roleMapper.addRole(role) == 1 ? true:false;
+        role = setRoleModel(role);
+        return roleMapper.addRole(role) == 1 ? true : false;
     }
 
     /**
@@ -84,7 +84,7 @@ public class RoleServiceImpl implements RoleService {
         int state = roleMapper.updateRoleById(role);
         Role r = new Role();
         r = list.get(0);
-        if (state == 1){
+        if (state == 1) {
             logAspect.insertUpdateLog(role, r, Modular.ROLE, role.getModifyUserId());
             return true;
         }
@@ -100,16 +100,16 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public boolean deleteRoleById(Role role) {
 
-       List<Role> list = roleMapper.queryRoleByroleId(role.getRoleId());
-       if(CollectionUtils.isEmpty(list)){
-           return false;
-       }
-       int state =  roleMapper.deleteRoleById(role);
-           if(state == 1){
-               //添加日志
-               logAspect.insertDeleteLog(Modular.ROLE,role.getModifyUserId(), list.get(0).getRoleName());
+        List<Role> list = roleMapper.queryRoleByroleId(role.getRoleId());
+        if (CollectionUtils.isEmpty(list)) {
+            return false;
+        }
+        int state = roleMapper.deleteRoleById(role);
+        if (state == 1) {
+            // 添加日志
+            logAspect.insertDeleteLog(Modular.ROLE, role.getModifyUserId(), list.get(0).getRoleName());
             return true;
-           }
+        }
         return false;
     }
 
@@ -121,10 +121,10 @@ public class RoleServiceImpl implements RoleService {
      */
     @Override
     public boolean getRoleNameVerification(Role role) {
-            List<Role> list = roleMapper.getRoleNameVerification(role);
-            if (CollectionUtils.isEmpty(list)) {
-                return true;
-            }
+        List<Role> list = roleMapper.getRoleNameVerification(role);
+        if (CollectionUtils.isEmpty(list)) {
+            return true;
+        }
         return false;
     }
 

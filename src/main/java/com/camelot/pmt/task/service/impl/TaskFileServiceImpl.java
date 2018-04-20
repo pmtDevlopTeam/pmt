@@ -31,7 +31,8 @@ public class TaskFileServiceImpl implements TaskFileService {
     /**
      * 插入需求类型任务的附件元信息
      *
-     * @param taskFile 参数
+     * @param taskFile
+     *            参数
      * @return boolean
      * @author zlh
      * @date 10:21 2018/4/17
@@ -54,7 +55,8 @@ public class TaskFileServiceImpl implements TaskFileService {
     /**
      * 根据附件来源和来源id查询附件元信息
      *
-     * @param taskFile 查询需要的参数
+     * @param taskFile
+     *            查询需要的参数
      * @return TaskFile
      * @author zlh
      * @date 17:03 2018/4/17
@@ -76,7 +78,8 @@ public class TaskFileServiceImpl implements TaskFileService {
     /**
      * 附件下载
      *
-     * @param taskFile 参数
+     * @param taskFile
+     *            参数
      * @return TaskFile
      * @author zlh
      * @date 17:03 2018/4/17

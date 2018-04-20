@@ -31,12 +31,15 @@ public class UseCaseImplementController {
     /**
      * 新增执行信息
      *
-     * @param request          request
-     * @param useCaseImplement 用例执行
+     * @param request
+     *            request
+     * @param useCaseImplement
+     *            用例执行
      */
     @ApiOperation(value = "新增执行信息")
     @PostMapping
-    public JSONObject addUseCaseImplement(HttpServletRequest request, @RequestBody @ApiParam(value = "useCaseImplement", required = true) UseCaseImplement useCaseImplement) {
+    public JSONObject addUseCaseImplement(HttpServletRequest request,
+            @RequestBody @ApiParam(value = "useCaseImplement", required = true) UseCaseImplement useCaseImplement) {
         try {
             User user = (User) request.getSession().getAttribute("user");
             useCaseImplementService.addUseCaseImplement(user, useCaseImplement);
@@ -48,8 +51,7 @@ public class UseCaseImplementController {
 
     @ApiOperation(value = "根据测试用例ID查询执行信息")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "useCaseId", value = "测试用例ID", required = true, paramType = "query", dataType = "Long")
-    })
+            @ApiImplicitParam(name = "useCaseId", value = "测试用例ID", required = true, paramType = "query", dataType = "Long") })
     @GetMapping
     public JSONObject queryUseCaseImplementByUseCaseId(Long useCaseId) {
         try {

@@ -27,7 +27,8 @@ public class ProjectBudgetServiceImpl implements ProjectBudgetService {
     /**
      * 添加项目预算信息
      *
-     * @param  ProjectBudget projectBudget
+     * @param ProjectBudget
+     *            projectBudget
      * @return ExecuteResult<String>
      */
     @Override
@@ -37,7 +38,7 @@ public class ProjectBudgetServiceImpl implements ProjectBudgetService {
         try {
             projectBudget.setCreateTime(currentDate);
             projectBudget.setModifyTime(currentDate);
-            flag =proBuggetMapper.insertSelective(projectBudget)==1?true:false;
+            flag = proBuggetMapper.insertSelective(projectBudget) == 1 ? true : false;
         } catch (Exception e) {
             flag = false;
             throw new RuntimeException(e);
@@ -48,7 +49,8 @@ public class ProjectBudgetServiceImpl implements ProjectBudgetService {
     /**
      * 查询单个项目预算信息
      *
-     * @param  Long projectId
+     * @param Long
+     *            projectId
      * @return ExecuteResult<ProjectBudget>
      */
     @Override
@@ -63,7 +65,8 @@ public class ProjectBudgetServiceImpl implements ProjectBudgetService {
     /**
      * 修改项目预算信息
      *
-     * @param  ProjectBudget projectBudget
+     * @param ProjectBudget
+     *            projectBudget
      * @return ExecuteResult<String>
      */
     @Override
@@ -73,19 +76,20 @@ public class ProjectBudgetServiceImpl implements ProjectBudgetService {
         try {
             projectBudget.setCreateTime(currentDate);
             projectBudget.setModifyTime(currentDate);
-            flag =proBuggetMapper.updateByPrimaryKeySelective(projectBudget)==1?true:false;
+            flag = proBuggetMapper.updateByPrimaryKeySelective(projectBudget) == 1 ? true : false;
         } catch (Exception e) {
             flag = false;
             throw new RuntimeException(e);
         }
         return flag;
-        
+
     }
 
     /**
      * 查询项目统计预算信息
      *
-     * @param  Long proId
+     * @param Long
+     *            proId
      * @return ExecuteResult<Map<String, Object>>
      */
     @Override

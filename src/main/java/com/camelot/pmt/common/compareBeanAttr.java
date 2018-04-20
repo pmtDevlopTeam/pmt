@@ -52,9 +52,9 @@ public class compareBeanAttr {
             if (annotation != null && newValue != null) {
                 XmlElement xmlElement = (XmlElement) annotation;
                 if (xmlElement.name().equals("default")) {
-                    System.out.println("属性【" + attrName     + "】注解使用的name是默认值: " + xmlElement.name());
+                    System.out.println("属性【" + attrName + "】注解使用的name是默认值: " + xmlElement.name());
                 } else {
-                    if(oldValue.equals(newValue)){
+                    if (oldValue.equals(newValue)) {
                         continue;
                     }
                     if (null == oldValue) {

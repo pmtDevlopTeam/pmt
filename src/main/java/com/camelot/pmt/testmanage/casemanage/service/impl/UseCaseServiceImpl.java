@@ -22,129 +22,126 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
 @Service
-public class UseCaseServiceImpl implements UseCaseService{
-	
-	private static final Logger LOGGER = LoggerFactory.getLogger(UseCaseServiceImpl.class);
+public class UseCaseServiceImpl implements UseCaseService {
 
-	@Autowired
-	private UseCaseProcedureMapper useCaseProcedureMapper;
-	
-	
-	@Autowired
-	UseCaseMapper useCaseMapper;
-	
-	
-	
-	
-	/**
-	 * 
-	 * 新增用例
-	 */
-	@Override
-	@Transactional
-	public boolean addUseCase(User userModel, UseCase useCase) {
+    private static final Logger LOGGER = LoggerFactory.getLogger(UseCaseServiceImpl.class);
 
-		// 设置创建人和创建时间
-		if (userModel != null) {
-			useCase.setCreateUserId(userModel.getUserId());
-			useCase.setCreateTime(new Date());
-		}
+    @Autowired
+    private UseCaseProcedureMapper useCaseProcedureMapper;
 
-		// 插入
-		useCaseMapper.insertSelective(useCase);
+    @Autowired
+    UseCaseMapper useCaseMapper;
 
-		// 返回主键
-		Long id = useCase.getId();
-		List<UseCaseProcedure> list = useCase.getProcedure();
-		for (UseCaseProcedure useCaseProcedure : list) {
-			useCaseProcedure.setUseCaseId(id);
-		}
+    /**
+     * 
+     * 新增用例
+     */
+    @Override
+    @Transactional
+    public boolean addUseCase(User userModel, UseCase useCase) {
 
-		// 批量插入
-		return useCaseProcedureMapper.insertBatch(list)==1?true:false;
-	}
-	
-	/**
-	 * 
-	 * 批量新增
-	 */
-	@Override
-	public boolean addBatchUseCase(User userModel, List<UseCase> list) {
+        // 设置创建人和创建时间
+        if (userModel != null) {
+            useCase.setCreateUserId(userModel.getUserId());
+            useCase.setCreateTime(new Date());
+        }
 
-		// 设置创建人和时间
-		String id = null;
-		Date date = new Date();
-		if (userModel != null) id = userModel.getUserId();
-		for (UseCase useCase : list) {
-			useCase.setCreateUserId(id);
-			useCase.setCreateTime(date);
-		}
+        // 插入
+        useCaseMapper.insertSelective(useCase);
 
-		// 批量插入
-		return useCaseMapper.insertBatch(list)==1?true:false;
-	}
-	
-	
-	/**
-	 * 
-	 * 获取用例信息
-	 */
-	public  UseCase queryUseCaseByUseCaseId (Long id){
-		
-		 	UseCase useCase=useCaseMapper.selectByPrimaryKey(id);
-			//获取步骤
-			List<UseCaseProcedure> useCaseProcedureList=useCaseProcedureMapper.selectByUseCaseId(useCase.getId());
-			if(useCaseProcedureList!=null){
-				useCase.setProcedure(useCaseProcedureList);
-			}
-			return useCase;
-	}
-	
-	public boolean updateUserCaseDelFlag(Long id){
-		
-	      return useCaseMapper.updateUserCaseDelFlag(id)==1?true:false;
-	}
-	
-	
-	@Override
-	@Transactional
-	public boolean updateUserCase(User userModel, UseCase useCase) {
-		boolean flag=true;		// 设置修改人和修改时间时间
-			if (userModel != null) {
-				useCase.setModifyUserId(userModel.getUserId());
-				useCase.setModifyTime(new Date());
-			}
+        // 返回主键
+        Long id = useCase.getId();
+        List<UseCaseProcedure> list = useCase.getProcedure();
+        for (UseCaseProcedure useCaseProcedure : list) {
+            useCaseProcedure.setUseCaseId(id);
+        }
 
-			// 修改
-			flag=useCaseMapper.updateByPrimaryKeySelective(useCase)==1?true:false;
+        // 批量插入
+        return useCaseProcedureMapper.insertBatch(list) == 1 ? true : false;
+    }
 
-			List<UseCaseProcedure> list = useCase.getProcedure();
-			for (UseCaseProcedure useCaseProcedure : list) {
-				if(useCase.getId()!=null){
-					useCaseProcedure.setUseCaseId(useCase.getId());
-				}
-				//批量修改
-				if(useCaseProcedure.getId()==null){
-					//为空为添加
-					flag=useCaseProcedureMapper.insertSelective(useCaseProcedure)==1?true:false;;
-				}else{
-					//为空为修改
-					flag=useCaseProcedureMapper.updateByPrimaryKeySelective(useCaseProcedure)==1?true:false;;
-				}
-			}
-			
-			return flag;
-	}
+    /**
+     * 
+     * 批量新增
+     */
+    @Override
+    public boolean addBatchUseCase(User userModel, List<UseCase> list) {
 
-	/**
-	 * 用例分页查询
-	 */
-	@Transactional
-	public  List<UseCase> queryAllUserCaseList(Integer pageSize,Integer currentPage,Map<String,Object> map){
-        
-            PageHelper.startPage(currentPage, pageSize);
-            List<UseCase> docs = useCaseMapper.queryAllUserCaseList(map);
-	      return docs;
-	}
-	
+        // 设置创建人和时间
+        String id = null;
+        Date date = new Date();
+        if (userModel != null)
+            id = userModel.getUserId();
+        for (UseCase useCase : list) {
+            useCase.setCreateUserId(id);
+            useCase.setCreateTime(date);
+        }
+
+        // 批量插入
+        return useCaseMapper.insertBatch(list) == 1 ? true : false;
+    }
+
+    /**
+     * 
+     * 获取用例信息
+     */
+    public UseCase queryUseCaseByUseCaseId(Long id) {
+
+        UseCase useCase = useCaseMapper.selectByPrimaryKey(id);
+        // 获取步骤
+        List<UseCaseProcedure> useCaseProcedureList = useCaseProcedureMapper.selectByUseCaseId(useCase.getId());
+        if (useCaseProcedureList != null) {
+            useCase.setProcedure(useCaseProcedureList);
+        }
+        return useCase;
+    }
+
+    public boolean updateUserCaseDelFlag(Long id) {
+
+        return useCaseMapper.updateUserCaseDelFlag(id) == 1 ? true : false;
+    }
+
+    @Override
+    @Transactional
+    public boolean updateUserCase(User userModel, UseCase useCase) {
+        boolean flag = true; // 设置修改人和修改时间时间
+        if (userModel != null) {
+            useCase.setModifyUserId(userModel.getUserId());
+            useCase.setModifyTime(new Date());
+        }
+
+        // 修改
+        flag = useCaseMapper.updateByPrimaryKeySelective(useCase) == 1 ? true : false;
+
+        List<UseCaseProcedure> list = useCase.getProcedure();
+        for (UseCaseProcedure useCaseProcedure : list) {
+            if (useCase.getId() != null) {
+                useCaseProcedure.setUseCaseId(useCase.getId());
+            }
+            // 批量修改
+            if (useCaseProcedure.getId() == null) {
+                // 为空为添加
+                flag = useCaseProcedureMapper.insertSelective(useCaseProcedure) == 1 ? true : false;
+                ;
+            } else {
+                // 为空为修改
+                flag = useCaseProcedureMapper.updateByPrimaryKeySelective(useCaseProcedure) == 1 ? true : false;
+                ;
+            }
+        }
+
+        return flag;
+    }
+
+    /**
+     * 用例分页查询
+     */
+    @Transactional
+    public List<UseCase> queryAllUserCaseList(Integer pageSize, Integer currentPage, Map<String, Object> map) {
+
+        PageHelper.startPage(currentPage, pageSize);
+        List<UseCase> docs = useCaseMapper.queryAllUserCaseList(map);
+        return docs;
+    }
+
 }

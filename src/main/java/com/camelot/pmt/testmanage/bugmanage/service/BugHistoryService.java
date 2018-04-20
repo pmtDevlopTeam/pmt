@@ -7,7 +7,7 @@ import com.camelot.pmt.testmanage.bugmanage.model.BugHistory;
 
 public interface BugHistoryService {
 
-	 /**
+    /**
      * 
      * <p>
      * Description:[查询bug历史]
@@ -16,5 +16,5 @@ public interface BugHistoryService {
      * @return List<UserModel>
      * @author [maple]
      */
-	List<BugHistory> queryBugHistoryAll(Long bugId);
+    List<BugHistory> queryBugHistoryAll(Long bugId);
 }

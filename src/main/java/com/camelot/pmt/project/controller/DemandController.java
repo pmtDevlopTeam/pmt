@@ -53,7 +53,7 @@ public class DemandController {
     @ApiOperation(value = "新增需求", notes = "新增需求")
     @PostMapping(value = "/demand/addDemand")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "pid", value = "所属一级需求id", required = false, paramType = "query", dataType = "Long",defaultValue="0"),
+            @ApiImplicitParam(name = "pid", value = "所属一级需求id", required = false, paramType = "query", dataType = "Long", defaultValue = "0"),
             @ApiImplicitParam(name = "projectId", value = "项目id", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "demandName", value = "需求名称", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "demandNum", value = "需求编号", required = true, paramType = "query", dataType = "String"),
@@ -62,15 +62,15 @@ public class DemandController {
             @ApiImplicitParam(name = "demandNeed", value = "需求层级", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "sourceRemark", value = "需求来源备注", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "assignedTo", value = "指派给", required = true, paramType = "query", dataType = "String"),
-            @ApiImplicitParam(name = "demandNeed", value = "需求层级(默认一级)", required = true, paramType = "query", dataType = "String",defaultValue="1"),
+            @ApiImplicitParam(name = "demandNeed", value = "需求层级(默认一级)", required = true, paramType = "query", dataType = "String", defaultValue = "1"),
             @ApiImplicitParam(name = "reviewedWith", value = "由谁评审(人员user_id用逗号拼接)", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "demandDesc", value = "需求描述", required = false, paramType = "query", dataType = "String") })
     public JSONObject addDemand(@ApiIgnore Demand demand) {
         boolean flag = false;
         try {
-            //获取当前登录人
+            // 获取当前登录人
             User user = (User) ShiroUtils.getSessionAttribute("user");
-            if(null==user) {
+            if (null == user) {
                 return ApiResponse.jsonData(APIStatus.INVALIDSESSION_LOGINOUTTIME);
             }
             Date currentDate = new Date();
@@ -80,8 +80,8 @@ public class DemandController {
             demand.setModifyTime(currentDate);
             // 设置新增需求状态01:未开始
             demand.setDemandStatus("01");
-            flag = demandService.save(demand,user);
-            if(flag){
+            flag = demandService.save(demand, user);
+            if (flag) {
                 return ApiResponse.success("添加成功");
             }
             return ApiResponse.error();
@@ -90,10 +90,11 @@ public class DemandController {
             return ApiResponse.error();
         }
     }
+
     /**
      * 根据id删除
      *
-     * @param  id
+     * @param id
      * @return
      */
     @ApiOperation(value = "删除需求", notes = "根据id删除需求")
@@ -115,9 +116,7 @@ public class DemandController {
     }
 
     /**
-     * 变更、关闭、编辑功能 demandNeed 需求层级，传递本级需求层级前台根据父级的该字段进行传参
-     * reviewedWith
-     * 由谁评审字段用“,”拼接
+     * 变更、关闭、编辑功能 demandNeed 需求层级，传递本级需求层级前台根据父级的该字段进行传参 reviewedWith 由谁评审字段用“,”拼接
      *
      * @param demand
      * @return
@@ -133,18 +132,18 @@ public class DemandController {
             @ApiImplicitParam(name = "demandStatus", value = "需求状态", required = false, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "closeReason", value = "关闭原因", required = false, paramType = "query", dataType = "String") })
     public JSONObject updateById(@ApiIgnore Demand demand) {
-        boolean flag=false;
+        boolean flag = false;
         try {
-            //获取当前登录人
+            // 获取当前登录人
             User user = (User) ShiroUtils.getSessionAttribute("user");
-            if(null==user) {
+            if (null == user) {
                 return ApiResponse.jsonData(APIStatus.INVALIDSESSION_LOGINOUTTIME);
             }
             Date currentDate = new Date();
             demand.setModifyTime(currentDate);
             demand.setModifyUserId(user.getUserId());
-            flag=demandService.updateByDemand(demand,user);
-            if(flag){
+            flag = demandService.updateByDemand(demand, user);
+            if (flag) {
                 return ApiResponse.success();
             }
             return ApiResponse.error();
@@ -153,6 +152,7 @@ public class DemandController {
             return ApiResponse.error();
         }
     }
+
     /**
      * 需求评审
      */
@@ -167,25 +167,23 @@ public class DemandController {
             @ApiImplicitParam(name = "assignedTo", value = "指派给", required = true, paramType = "query", dataType = "String") })
     @PutMapping(value = "/demand/review")
     public JSONObject updateByReview(@ApiIgnore Demand demand) {
-        boolean flag=false;
+        boolean flag = false;
         try {
-            //获取当前登录人
+            // 获取当前登录人
             User user = (User) ShiroUtils.getSessionAttribute("user");
-            if(null==user) {
+            if (null == user) {
                 return ApiResponse.jsonData(APIStatus.INVALIDSESSION_LOGINOUTTIME);
             }
             Date currentDate = new Date();
             demand.setModifyTime(currentDate);
             demand.setModifyUserId(user.getUserId());
-            flag=demandService.updateByReview(demand,user);
+            flag = demandService.updateByReview(demand, user);
             return ApiResponse.success();
         } catch (Exception e) {
             logger.error("------需求评审-------" + e.getMessage());
             return ApiResponse.error();
         }
     }
-
-
 
     /**
      * 分页查询需求列表
@@ -205,10 +203,10 @@ public class DemandController {
             @ApiImplicitParam(name = "pageSize", value = "页码", required = true, paramType = "query", dataType = "int"),
             @ApiImplicitParam(name = "currentPage", value = "显示行数", required = true, paramType = "query", dataType = "int"),
             @ApiImplicitParam(name = "demandName", value = "需求名称", required = false, paramType = "query", dataType = "String") })
-    public JSONObject queryByPage(@ApiIgnore Demand demand,@RequestParam(defaultValue = "1")Integer pageSize,
-                                     @RequestParam(defaultValue = "10")Integer currentPage) {
+    public JSONObject queryByPage(@ApiIgnore Demand demand, @RequestParam(defaultValue = "1") Integer pageSize,
+            @RequestParam(defaultValue = "10") Integer currentPage) {
         try {
-            List<Demand> list= demandService.queryByPage(demand,pageSize,currentPage);
+            List<Demand> list = demandService.queryByPage(demand, pageSize, currentPage);
             PageInfo<Demand> result = new PageInfo<>(list);
             return ApiResponse.success(result);
         } catch (Exception e) {
@@ -251,10 +249,12 @@ public class DemandController {
             @ApiImplicitParam(name = "currentPage", value = "页码", required = true, paramType = "query", dataType = "int"),
             @ApiImplicitParam(name = "pageSize", value = "显示行数", required = true, paramType = "query", dataType = "int"),
             @ApiImplicitParam(name = "demandId", value = "需求id", required = true, paramType = "query", dataType = "Long") })
-    public JSONObject findOperateByPage(@ApiIgnore DemandOperate demandOperate,@RequestParam(defaultValue = "1")Integer pageSize,@RequestParam(defaultValue = "10")Integer currentPage) {
-        try{
-            List<DemandOperate> list=demandService.queryOperateByPage(demandOperate,pageSize,currentPage);
-            PageInfo<DemandOperate>result = new PageInfo<>(list);
+    public JSONObject findOperateByPage(@ApiIgnore DemandOperate demandOperate,
+            @RequestParam(defaultValue = "1") Integer pageSize,
+            @RequestParam(defaultValue = "10") Integer currentPage) {
+        try {
+            List<DemandOperate> list = demandService.queryOperateByPage(demandOperate, pageSize, currentPage);
+            PageInfo<DemandOperate> result = new PageInfo<>(list);
             return ApiResponse.success(result);
         } catch (Exception e) {
             logger.error("------查询需求操作历史记录------" + e.getMessage());
@@ -264,8 +264,9 @@ public class DemandController {
 
     /**
      * 根据需求id查询需求变更影响的任务信息
-     *@param   demandId
-     *@return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
+     * 
+     * @param demandId
+     * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
     @ApiOperation(value = "根据需求id查询需求变更影响的任务", notes = "查询需求变更影响的任务信息")
     @GetMapping(value = "/queryDemandTaskQuoteById")
@@ -285,8 +286,9 @@ public class DemandController {
 
     /**
      * 查询需求变更影响的任务信息
-     *@param   demandId
-     *@return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
+     * 
+     * @param demandId
+     * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
     @ApiOperation(value = "根据需求id查询需求变更影响的用例信息", notes = "查询需求变更影响的任务信息")
     @GetMapping(value = "/queryDemandUseCaseQuoteById")
@@ -306,12 +308,13 @@ public class DemandController {
 
     /**
      * 查询需求变更影响的bug信息
-     *@param   demandId
-     *@return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
+     * 
+     * @param demandId
+     * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
     @ApiOperation(value = "根据需求id查询需求变更影响的bug信息", notes = "查询需求变更影响的bug信息")
     @GetMapping(value = "/queryDemandBugQuoteById")
-    public JSONObject queryDemandBug(@RequestParam(value = "demandId",required = true) Long demandId) {
+    public JSONObject queryDemandBug(@RequestParam(value = "demandId", required = true) Long demandId) {
         ExecuteResult<List<Map<String, Object>>> result = new ExecuteResult<>();
         try {
             result = demandService.queryDemandBugQuoteById(demandId);

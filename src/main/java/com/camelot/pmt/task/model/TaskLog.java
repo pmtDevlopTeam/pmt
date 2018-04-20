@@ -3,10 +3,10 @@ package com.camelot.pmt.task.model;
 import java.io.Serializable;
 import java.util.Date;
 
-public class TaskLog implements Serializable{
-	/**
-	 * 任务日志标识号（主键）
-	 */
+public class TaskLog implements Serializable {
+    /**
+     * 任务日志标识号（主键）
+     */
     private Long id;
     /**
      * 任务ID

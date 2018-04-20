@@ -26,8 +26,9 @@ public class ShiroUserRealm extends AuthorizingRealm {
     @Autowired
     private UserService userService;
 
-/*    @Autowired
-    private MenuService menuService;*/
+    /*
+     * @Autowired private MenuService menuService;
+     */
 
     /**
      * 授权(验证权限时调用)

@@ -14,6 +14,7 @@ public class LogServiceImpl implements LogService {
 
     /**
      * 添加删除日志
+     * 
      * @param log
      */
     @Override

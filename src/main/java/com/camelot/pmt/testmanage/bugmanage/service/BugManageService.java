@@ -15,82 +15,86 @@ import com.github.pagehelper.PageInfo;
  *
  */
 public interface BugManageService {
-	
-	/**
+
+    /**
      * 添加 bug
      *
-     * @param Menu menu
+     * @param Menu
+     *            menu
      * @return ExecuteResult<Menu>
      */
     boolean addBugManage(BugManage bugManage);
-	
-   /**
-    * 修改bug
-    * @param
-    * @return
-    */
-   boolean updateBugManage(BugManage bugManage);
-   
-   /**
-    * 撤销bug
-    * @param
-    * @return
-    */
-   boolean updateBugStatusRevoke(BugManage bugManage);
-  
-   /**
-    * 关闭bug
-    * @param
-    * @return
-    */
-   boolean updateBugStatusClose(BugManage bugManage);
-   
-   /**
-    * 确认bug
-    * @param
-    * @return
-    */
-   boolean updateBugStatusYes(BugManage bugManage);
-   
-   /**
-    * 指派bug
-    * @param
-    * @return
-    */
-   boolean updateBugAssign(BugManage bugManage);
-  
-   /**
-    * 解决bug
-    * @param
-    * @return
-    */
-   boolean updateBugSolve(BugManage bugManage);
-   
-   /**
-    * 根据id查询bug
-    * @param id
-    * @return
-    */
-   BugManage queryBugById(Long id);
-	/**
-     * bug列表
+
+    /**
+     * 修改bug
+     * 
      * @param
      * @return
      */
-    List<SelectBugManage> queryBugManageCondition(Map<String,Object> map);
-   
+    boolean updateBugManage(BugManage bugManage);
+
+    /**
+     * 撤销bug
+     * 
+     * @param
+     * @return
+     */
+    boolean updateBugStatusRevoke(BugManage bugManage);
+
+    /**
+     * 关闭bug
+     * 
+     * @param
+     * @return
+     */
+    boolean updateBugStatusClose(BugManage bugManage);
+
+    /**
+     * 确认bug
+     * 
+     * @param
+     * @return
+     */
+    boolean updateBugStatusYes(BugManage bugManage);
+
+    /**
+     * 指派bug
+     * 
+     * @param
+     * @return
+     */
+    boolean updateBugAssign(BugManage bugManage);
+
+    /**
+     * 解决bug
+     * 
+     * @param
+     * @return
+     */
+    boolean updateBugSolve(BugManage bugManage);
+
+    /**
+     * 根据id查询bug
+     * 
+     * @param id
+     * @return
+     */
+    BugManage queryBugById(Long id);
+
+    /**
+     * bug列表
+     * 
+     * @param
+     * @return
+     */
+    List<SelectBugManage> queryBugManageCondition(Map<String, Object> map);
+
     /**
      * bug 通过项目id ,指派给,状态 条件查询
+     * 
      * @param map
      * @return
      */
-    Boolean queryByPUS(Map<String,Object> map);
-	
-   
-  
-   
-   
-   
- 
+    Boolean queryByPUS(Map<String, Object> map);
 
 }
