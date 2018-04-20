@@ -2,7 +2,6 @@ package com.camelot.pmt.platform.service;
 
 import java.util.List;
 
-import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.platform.model.User;
 import com.camelot.pmt.platform.model.vo.UserVo;
 import com.github.pagehelper.PageInfo;
@@ -77,7 +76,7 @@ public interface UserService {
      * @return ExecuteResult<List<UserVo>>
      * @author [maple] 2018年4月13日下午3:15:16
      */
-    PageInfo queryUsersList(UserVo userVo, int pageNum, int pageSize);
+    PageInfo<?> queryUsersList(UserVo userVo, int pageNum, int pageSize);
 
     /**
      * 

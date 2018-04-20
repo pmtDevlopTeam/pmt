@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.camelot.pmt.project.mapper.ProjectMainMapper">
+	<!--挂起时，只有开始的项目才可以被挂起 -->
+	<update id="updateByIdSuspension">
+		update project_main
+		<trim prefix="set" suffixOverrides=",">
+			<if test="projectStatus != null">
+				project_status = #{projectStatus,jdbcType=CHAR},
+			</if>
+			<if test="modifyUserId != null">
+				modify_user_id = #{modifyUserId,jdbcType=VARCHAR},
+			</if>
+			<if test="modifyTime != null">
+				modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
 	<!--关闭项目时，按主键id更新数据 -->
 	<update id="updateById">
 		update project_main
@@ -235,6 +251,7 @@
 	</update>
 	<!--获取表中最大的项目编号 -->
 	<select id="getMaxProjectNum" resultType="String">
-		select max(p.project_num) from project_main p
+		select
+		max(p.project_num) from project_main p
 	</select>
 </mapper>

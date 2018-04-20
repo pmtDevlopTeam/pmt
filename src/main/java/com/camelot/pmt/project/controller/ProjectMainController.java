@@ -54,14 +54,16 @@ public class ProjectMainController {
             @ApiParam(value = "项目状态", required = true) @RequestParam String projectStatus, //
             @ApiParam(value = "开始时间", required = true) @RequestParam @DateTimeFormat(iso = ISO.DATE) Date startTime, //
             @ApiParam(value = "结束时间", required = true) @RequestParam @DateTimeFormat(iso = ISO.DATE) Date endTime, //
-            @ApiParam(value = "项目描述", required = true) @RequestParam String projectDesc) {
+            @ApiParam(value = "项目描述", required = true) @RequestParam String projectDesc, //
+            @ApiParam(value = "预计工时", required = true) @RequestParam Integer budgetaryHours) {
 
-        logger.info("入参封装的数据为：userId={},projectName={},projectStatus={},startTime={},endTime={},projectDesc={}", userId,
-                projectName, projectStatus, startTime, endTime, projectDesc);
+        logger.info(
+                "入参封装的数据为：userId={},projectName={},projectStatus={},startTime={},endTime={},projectDesc={},budgetaryHours={}",
+                userId, projectName, projectStatus, startTime, endTime, projectDesc, budgetaryHours);
         try {
             // 调用addProject方法保存数据
             int projectMainNum = projectMainService.addProject(userId, projectName, projectStatus, startTime, endTime,
-                    projectDesc);
+                    projectDesc, budgetaryHours);
             logger.debug("调用projectMainService的addProject接口返回的条数为：", projectMainNum);
             if (projectMainNum > 0) {
                 return ApiResponse.success();
@@ -306,7 +308,7 @@ public class ProjectMainController {
      * @return
      */
     @ApiOperation(value = "关闭项目时,更新相关数据", notes = "关闭项目时,更新相关数据")
-    @PutMapping(value = "/close/updateByProjectById")
+    @PutMapping(value = "/updateByProjectById/close")
     public JSONObject closeProjectById(//
             @ApiParam(value = "id", required = true) @RequestParam Long id, //
             @ApiParam(value = "项目状态", required = true) @RequestParam String projectStatus, //
@@ -335,4 +337,32 @@ public class ProjectMainController {
             return ApiResponse.error();
         }
     }
+
+    /**
+     * 挂起项目 只有开始的项目才可以挂起
+     * 
+     * @param id
+     * @param projectStatus
+     * @return
+     */
+    @ApiOperation(value = "挂起项目 只有开始的项目才可以挂起", notes = "挂起项目 只有开始的项目才可以挂起")
+    @PutMapping(value = "/updateById/suspension")
+    public JSONObject updateByIdSuspension(@ApiParam(value = "id", required = true) @RequestParam Long id, //
+            @ApiParam(value = "项目状态", required = true) @RequestParam String projectStatus) {
+
+        logger.info("入参封装的数据为：id={},projectStatus={}", id, projectStatus);
+        try {
+            if (id == null || StringUtils.isEmpty(projectStatus)) {
+                return ApiResponse.errorPara();
+            }
+            int projectMainNum = projectMainService.updateByIdSuspension(id, projectStatus);
+            if (projectMainNum > 0) {
+                return ApiResponse.success();
+            }
+            return ApiResponse.error();
+        } catch (Exception e) {
+            return ApiResponse.error();
+        }
+    }
+
 }

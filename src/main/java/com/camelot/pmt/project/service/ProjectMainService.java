@@ -25,13 +25,14 @@ public interface ProjectMainService {
      * @param userId
      * @param projectName
      * @param projectStatus
-     * @param projectDesc
      * @param startTime
      * @param endTime
+     * @param projectDesc
+     * @param budgetaryHours
      * @return
      */
     int addProject(String userId, String projectName, String projectStatus, Date startTime, Date endTime,
-            String projectDesc);
+            String projectDesc, Integer budgetaryHours);
 
     /**
      * 分页查询
@@ -88,6 +89,15 @@ public interface ProjectMainService {
      */
     int updateByPrimaryKeySelective(Long id, String userId, String projectName, String projectStatus,
             String projectDesc, Date startTime, Date endTime);
+
+    /**
+     * 挂起项目 只有开始的项目才可以挂起
+     * 
+     * @param id
+     * @param projectStatus
+     * @return
+     */
+    int updateByIdSuspension(Long id, String projectStatus);
 
     /**
      * 根据id删除项目

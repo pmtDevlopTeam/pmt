@@ -112,4 +112,16 @@ public interface ProjectMainMapper {
      * @return
      */
     String getMaxProjectNum();
+
+    /**
+     * 挂起项目，只有开始的项目才可以挂起
+     * 
+     * @param id
+     * @param modifyUserId
+     * @param modifyTime
+     * @param projectStatus
+     * @return
+     */
+    int updateByIdSuspension(@Param("id") Long id, @Param("modifyUserId") String modifyUserId,
+            @Param("modifyTime") Date modifyTime, @Param("projectStatus") String projectStatus);
 }

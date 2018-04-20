@@ -31,7 +31,7 @@ public interface VersionService {
      * @author: xueyj
      * @date: 2018/4/13 19:14
      */
-    boolean updateVersionByIdAndParms(String versionStatus,String userId, Long versionId);
+    boolean updateVersionByIdAndParms(String versionStatus, String userId, Long versionId);
 
     /**
      * @Description: 根据versionid查询version信息

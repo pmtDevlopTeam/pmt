@@ -2,10 +2,6 @@ package com.camelot.pmt.platform.service;
 
 import java.util.List;
 
-import com.alibaba.fastjson.JSONObject;
-import com.camelot.pmt.common.DataGrid;
-import com.camelot.pmt.common.ExecuteResult;
-import com.camelot.pmt.common.Pager;
 import com.camelot.pmt.platform.model.Org;
 import com.camelot.pmt.platform.model.OrgToUser;
 import com.camelot.pmt.platform.model.User;
@@ -57,7 +53,7 @@ public interface OrgService {
      * @param org
      * @return
      */
-    PageInfo queryOrgsByPage(int pageNum, int pageSize);
+    PageInfo<?> queryOrgsByPage(int pageNum, int pageSize);
 
     /**
      * 查询多个子部门
@@ -102,7 +98,7 @@ public interface OrgService {
      * @param orgId,orgCode,orgname
      * @return List<Org>
      **/
-    PageInfo queryOrgInfo(Org org, int pageNum, int pageSize);
+    PageInfo<?> queryOrgInfo(Org org, int pageNum, int pageSize);
 
     /**
      * 修改组织机构的状态

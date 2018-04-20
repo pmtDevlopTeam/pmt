@@ -1,10 +1,9 @@
 package com.camelot.pmt.platform.service;
 
-import com.camelot.pmt.common.ExecuteResult;
+import java.util.List;
+
 import com.camelot.pmt.platform.model.Role;
 import com.camelot.pmt.util.Tree;
-
-import java.util.List;
 
 /**
  * 角色接口层

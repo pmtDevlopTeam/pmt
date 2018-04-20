@@ -16,7 +16,6 @@ import com.camelot.pmt.common.APIStatus;
 import com.camelot.pmt.common.ApiResponse;
 import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.platform.model.Dict;
-import com.camelot.pmt.platform.model.Menu;
 import com.camelot.pmt.platform.model.User;
 import com.camelot.pmt.platform.service.DictService;
 import com.camelot.pmt.platform.shiro.ShiroUtils;
