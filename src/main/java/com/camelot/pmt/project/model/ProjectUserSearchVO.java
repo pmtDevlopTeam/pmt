@@ -9,8 +9,19 @@ public class ProjectUserSearchVO {
     private String roleId;
     private Integer page;
     private Integer size;
+    private String userProNum;
+    
+    
 
-    public Integer getPage() {
+    public String getUserProNum() {
+		return userProNum;
+	}
+
+	public void setUserProNum(String userProNum) {
+		this.userProNum = userProNum;
+	}
+
+	public Integer getPage() {
         return page;
     }
 
