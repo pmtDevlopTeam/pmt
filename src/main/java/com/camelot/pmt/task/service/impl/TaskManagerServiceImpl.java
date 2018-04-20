@@ -8,7 +8,9 @@ import com.camelot.pmt.platform.shiro.ShiroUtils;
 import com.camelot.pmt.task.mapper.TaskMapper;
 import com.camelot.pmt.task.model.Task;
 import com.camelot.pmt.task.model.TaskFile;
+import com.camelot.pmt.task.model.TaskLog;
 import com.camelot.pmt.task.service.TaskFileService;
+import com.camelot.pmt.task.service.TaskLogService;
 import com.camelot.pmt.task.service.TaskManagerService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -22,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
@@ -34,6 +37,7 @@ import java.util.Map;
  * @date 2018/4/9 16:27
  */
 @Service
+@Transactional
 public class TaskManagerServiceImpl implements TaskManagerService {
 
     // 日志
@@ -51,14 +55,17 @@ public class TaskManagerServiceImpl implements TaskManagerService {
     @Autowired
     private RoleToUserService roleToUserService;
 
+    @Autowired
+    private TaskLogService taskLogService;
+
     /**
      * 新增任务
      *
-     * @author zlh
      * @param task
      * @param file
-     * @date 9:10 2018/4/12
      * @return boolean
+     * @author zlh
+     * @date 9:10 2018/4/12
      */
     @Override
     public boolean insertTask(Task task, MultipartFile file) {
@@ -80,10 +87,10 @@ public class TaskManagerServiceImpl implements TaskManagerService {
                 byte[] bytes = file.getBytes();
                 String filePath = "D:/upload/";
                 File targetFile = new File(filePath);
-                if(!targetFile.exists()){
+                if (!targetFile.exists()) {
                     targetFile.mkdirs();
                 }
-                FileOutputStream out = new FileOutputStream(filePath+fileName);
+                FileOutputStream out = new FileOutputStream(filePath + fileName);
                 out.write(bytes);
                 out.flush();
                 out.close();
@@ -101,7 +108,7 @@ public class TaskManagerServiceImpl implements TaskManagerService {
                 boolean insertTaskFileResult = taskFileService.insert(taskFile);
                 return (insertTaskFileResult && insertTaskResult == 1) ? true : false;
             }
-            return (insertTaskResult==1) ? true : false;
+            return (insertTaskResult == 1) ? true : false;
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
             throw new RuntimeException(e);
@@ -111,10 +118,10 @@ public class TaskManagerServiceImpl implements TaskManagerService {
     /**
      * 根据id删除任务
      *
-     * @author zlh
      * @param id 需要删除的任务的id，isDeleteAll 是否删除子任务
-     * @date 17:24 2018/4/12
      * @return boolean
+     * @author zlh
+     * @date 17:24 2018/4/12
      */
     @Override
     public boolean deleteTaskById(Long id) {
@@ -153,8 +160,8 @@ public class TaskManagerServiceImpl implements TaskManagerService {
     /**
      * 编辑任务
      *
+     * @param task 任务修改内容
      * @author zlh
-     * @param  task 任务修改内容
      * @date 17:05 2018/4/13
      */
     @Override
@@ -172,7 +179,7 @@ public class TaskManagerServiceImpl implements TaskManagerService {
                 throw new RuntimeException("没有权限");
             }
             int updateTaskByIdResult = taskMapper.updateTaskById(task);
-            return  (updateTaskByIdResult==1) ? true : false;
+            return (updateTaskByIdResult == 1) ? true : false;
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
             throw new RuntimeException(e);
@@ -182,8 +189,8 @@ public class TaskManagerServiceImpl implements TaskManagerService {
     /**
      * 编辑需求是否变更
      *
-     * @author zlh
      * @param task 任务修改内容
+     * @author zlh
      * @date 17:37 2018/4/13
      */
     @Override
@@ -204,10 +211,10 @@ public class TaskManagerServiceImpl implements TaskManagerService {
     /**
      * 任务延期
      *
-     * @author zlh
      * @param task 需要修改的任务数据
-     * @date 10:18 2018/4/12
      * @return boolean
+     * @author zlh
+     * @date 10:18 2018/4/12
      */
     @Override
     public boolean updateEstimateStartTimeById(Task task) {
@@ -239,11 +246,11 @@ public class TaskManagerServiceImpl implements TaskManagerService {
     /**
      * 指派
      *
-     * @author zlh
-     * @param  id 需要修改的任务id
+     * @param id     需要修改的任务id
      * @param userId 负责人的id
-     * @date 11:36 2018/4/12
      * @return boolean
+     * @author zlh
+     * @date 11:36 2018/4/12
      */
     @Override
     public boolean updateBeAssignUserById(Long id, String userId) {
@@ -258,8 +265,7 @@ public class TaskManagerServiceImpl implements TaskManagerService {
             String createUserName = task.getCreateUser().getUsername();
             String beAssignUsername = task.getBeassignUser().getUsername();
             User user = (User) ShiroUtils.getSessionAttribute("user");
-            if (!user.getUsername().equals(createUserName) && !user.getUsername().equals(beAssignUsername)
-                    && !"获取当前登录用户的角色".equals("项目经理")) {
+            if (!user.getUsername().equals(createUserName) && !user.getUsername().equals(beAssignUsername)) {
                 throw new RuntimeException("没有权限");
             }
 
@@ -273,11 +279,40 @@ public class TaskManagerServiceImpl implements TaskManagerService {
     }
 
     /**
+     * 指派（验证是否有项目经理角色权限）
+     *
+     * @param id     需要修改的任务id
+     * @param userId 负责人的id
+     * @return boolean
+     * @author zlh
+     * @date 11:36 2018/4/12
+     */
+    @Override
+    public boolean updateBeAssignUserByIdCheckPower(HttpSession session) {
+        try {
+            Long id = (Long) session.getAttribute("id");
+            String userId = (String) session.getAttribute("userId");
+            // check参数
+            if (id == null && userId == null || "".equals(userId)) {
+                throw new RuntimeException("参数错误");
+            }
+
+            Task task = taskMapper.queryTaskById(id);
+            task.getBeassignUser().setUserId(userId);
+            int updateTaskByIdResult = taskMapper.updateTaskById(task);
+            return updateTaskByIdResult == 1 ? true : false;
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
      * 根据任务id查询任务详情
      *
-     * @author zlh
      * @param id 任务id
-     * @return ExecuteResult<Map<String, Object>> String:数据的类型 Task（任务信息）和TaskFile（附件信息）
+     * @return ExecuteResult<Map   <   String   ,       Object>> String:数据的类型 Task（任务信息）和TaskFile（附件信息）
+     * @author zlh
      * @date 17:08 2018/4/12
      */
     @Override
@@ -289,20 +324,22 @@ public class TaskManagerServiceImpl implements TaskManagerService {
             if (id == null) {
                 throw new RuntimeException("参数错误");
             }
-            Task task = taskMapper.queryTaskById(id);
-            // 如果类型是需求的会有附件
-            if ("需求".equals(task.getTaskType())) {
-                TaskFile taskFile = new TaskFile();
-                // 来源id
-                taskFile.setSourceId(id);
-                // 任务来源
-                taskFile.setAttachmentSource("任务");
-
-                // 添加附件信息到map
-                map.put("TaskFile", taskFileService.queryByTaskFile(taskFile));
-            }
             // 添加任务信息到map
+            Task task = taskMapper.queryTaskById(id);
             map.put("Task", task);
+
+            // 附件
+            TaskFile taskFile = new TaskFile();
+            taskFile.setSourceId(id);
+            taskFile.setAttachmentSource("任务");
+            // 添加附件信息到map
+            map.put("TaskFile", taskFileService.queryByTaskFile(taskFile));
+            ExecuteResult<List<TaskLog>> logList = taskLogService.queryTaskLogList(id);
+
+            // 添加日志信息到map
+            List<TaskLog> logs = logList.getResult();
+            map.put("log", logs);
+
             return map;
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
@@ -313,11 +350,11 @@ public class TaskManagerServiceImpl implements TaskManagerService {
     /**
      * 查询所有任务列表
      *
-     * @author zlh
-     * @param page  当前页
-     * @param rows  一页有几行
-     * @date 16:54 2018/4/9
+     * @param page 当前页
+     * @param rows 一页有几行
      * @return PageInfo<Task>
+     * @author zlh
+     * @date 16:54 2018/4/9
      */
     @Override
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
@@ -336,11 +373,11 @@ public class TaskManagerServiceImpl implements TaskManagerService {
     /**
      * 根据条件查询任务
      *
-     * @author zlh
      * @param task 模糊查询的条件
-     * @param page  当前页
-     * @param rows  一页有几行
+     * @param page 当前页
+     * @param rows 一页有几行
      * @return PageInfo<Task>
+     * @author zlh
      */
     @Override
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
@@ -356,7 +393,7 @@ public class TaskManagerServiceImpl implements TaskManagerService {
                 List<User> users = userService.queryUsersByUserName(task.getBeassignUser().getUsername());
                 // 赋值给string数组传给DAO层
                 ids = new String[users.size()];
-                for (int i = 0;i<users.size();i++) {
+                for (int i = 0; i < users.size(); i++) {
                     ids[i] = users.get(i).getUserId();
                 }
             }
