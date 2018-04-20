@@ -46,7 +46,7 @@ public class TaskRunningController {
      * 查询所有正在进行的任务
      *
      * @param
-     *      int page， int rows
+     *      page， int rows
      * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
     @ApiOperation(value = "查询所有正在进行的任务", notes = "查询所有正在进行的任务")
@@ -76,20 +76,16 @@ public class TaskRunningController {
     /**
      * 根据id查询单个任务明细
      *
-     * @param Long id
+     * @param id
      * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
     @ApiOperation(value = "根据id查询单个任务明细", notes = "根据id查询单个任务明细")
     @RequestMapping(value = "user/queryTaskById", method = RequestMethod.POST)
     public JSONObject queryTaskById(
             @ApiParam(name = "id", value = "任务id", required = true) @RequestParam(required = true) Long id) {
-        ExecuteResult<Map<String, Object>> result = new ExecuteResult<Map<String, Object>>();
         try {
-            result = taskManagerService.queryTaskById(id);
-            if (result.isSuccess()) {
-                return ApiResponse.success(result.getResult());
-            }
-            return ApiResponse.error();
+            Map<String, Object> result = taskManagerService.queryTaskById(id);
+            return ApiResponse.success(result);
         } catch (Exception e) {
             return ApiResponse.error();
         }
@@ -98,7 +94,7 @@ public class TaskRunningController {
     /**
      * 我的任务转为关闭
      *
-     * @param Long id
+     * @param id
      * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
     @ApiOperation(value = "我的任务转为关闭", notes = "我的任务转为关闭")
@@ -129,7 +125,7 @@ public class TaskRunningController {
     /**
      * 我的正在进行任务转为已完成、实现完成功能
      *
-     * @param Long id
+     * @param id
      * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
     @ApiOperation(value = "我的正在进行任务转为已完成、实现完成功能", notes = "我的正在进行任务转为已完成、实现完成功能")

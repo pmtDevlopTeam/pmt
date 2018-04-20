@@ -5,14 +5,9 @@ import com.camelot.pmt.common.ApiResponse;
 import com.camelot.pmt.platform.model.Menu;
 import com.camelot.pmt.platform.service.MenuService;
 import com.camelot.pmt.util.Tree;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-
-import java.util.List;
-
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.junit.runners.Parameterized.Parameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +15,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  *

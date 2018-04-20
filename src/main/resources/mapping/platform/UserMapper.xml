@@ -189,7 +189,7 @@
     
     <!-- 用户更新				开始 -->
     <!-- 用户表更新 -->
-	<update id="modifyUserByUserId" parameterType="com.camelot.pmt.platform.model.User">
+	<update id="updateUserByUserId" parameterType="com.camelot.pmt.platform.model.User">
 		update platform_user
 		    <set>
 				<if test = "username != null ">
@@ -212,7 +212,7 @@
 	</update> 
 	
 	<!-- 用户信息表更新 -->
-	<update id="modifyUserInfoByUserId" parameterType="com.camelot.pmt.platform.model.User">
+	<update id="updateUserInfoByUserId" parameterType="com.camelot.pmt.platform.model.User">
 		update platform_user_info
 		    <set>
 				<if test = "userPhone != null ">
@@ -229,7 +229,7 @@
 	</update>
 	
 	<!-- 用户部门表更新 -->
-	<update id="modifyUserOrgByUserId" parameterType="com.camelot.pmt.platform.model.User">
+	<update id="updateUserOrgByUserId" parameterType="com.camelot.pmt.platform.model.User">
 		update platform_user_org
 		    <set>
 				<if test = "orgId != null ">
@@ -243,7 +243,7 @@
 	</update>
 	
 	<!-- 用户角色表更新 -->
-	<update id="modifyUserRoleByUserId" parameterType="com.camelot.pmt.platform.model.User">
+	<update id="updateUserRoleByUserId" parameterType="com.camelot.pmt.platform.model.User">
 		update platform_user_role
 		    <set>
 				<if test = "roleId != null ">
@@ -259,18 +259,21 @@
 	<!-- 用户更新				结束 -->
 	
 	<!-- 重置密码 -->
-	<update id="resetUserPasswordByUserId" parameterType="com.camelot.pmt.platform.model.User" >
+	<update id="updateResetUserPasswordByUserId" parameterType="com.camelot.pmt.platform.model.User" >
 		update platform_user
 		    <set>
 				<if test = "password != null ">
-					password = #{password}
+					password = #{password},
+				</if>
+				<if test = "modifyUserId != null ">
+					modify_user_id = #{modifyUserId}
 				</if>
 			</set>
 		where user_id = #{userId} 
 	</update>
 	
 	<!-- 检查用户表登录账号是否存在 -->
-	 <select id="findUserByLoginCode" resultMap="userModel" parameterType="java.lang.String" >
+	 <select id="queryUserIsExistByLoginCode" resultMap="userModel" parameterType="java.lang.String" >
         select <include refid="userColumns"/> from platform_user where login_code = #{loginCode}
     </select>
 
@@ -361,7 +364,7 @@
     </delete>
 
 	<!-- 用户列表展示，多表关联结果集 -->
-	<select id="selectUsersList" resultMap="userVoResultMap" parameterType="com.camelot.pmt.platform.model.vo.UserVo">
+	<select id="queryUsersList" resultMap="userVoResultMap" parameterType="com.camelot.pmt.platform.model.vo.UserVo">
 	SELECT
 	m.userIds userId,
 	m.userJobNums userJobNum,
