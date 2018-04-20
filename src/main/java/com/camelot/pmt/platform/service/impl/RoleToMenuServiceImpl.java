@@ -1,10 +1,15 @@
 package com.camelot.pmt.platform.service.impl;
 
 import com.camelot.pmt.common.ExecuteResult;
+import com.camelot.pmt.platform.common.Modular;
+import com.camelot.pmt.platform.log.LogAspect;
 import com.camelot.pmt.platform.mapper.MenuMapper;
+import com.camelot.pmt.platform.mapper.RoleMapper;
 import com.camelot.pmt.platform.mapper.RoleToMenuMapper;
 import com.camelot.pmt.platform.model.Menu;
+import com.camelot.pmt.platform.model.Role;
 import com.camelot.pmt.platform.model.RoleToMenu;
+import com.camelot.pmt.platform.service.RoleService;
 import com.camelot.pmt.platform.service.RoleToMenuService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +32,12 @@ public class RoleToMenuServiceImpl implements RoleToMenuService {
     @Autowired
     private MenuMapper menuMapper;
 
+    @Autowired
+    private LogAspect logAspect;
+
+    @Autowired
+    private RoleMapper roleMapper;
+
     /**
      * 角色绑定权限
      *
@@ -36,9 +47,12 @@ public class RoleToMenuServiceImpl implements RoleToMenuService {
     @Override
     public boolean createRoleToMenu(RoleToMenu roleToMenu) {
             boolean isContains = true;
+            String stringBuffer = "";
+            List<Role> roleList =  roleMapper.queryRoleByroleId(roleToMenu.getRoleId());
             List<String> roleId = Arrays.asList(roleToMenu.getMenuIds());
             for (int i = 0; i < roleId.size(); i++) {
                 Menu menu = menuMapper.queryMenuByMenuId(roleId.get(i));
+                stringBuffer += menu.getMenuName()+"、";
                 if (!menu.getParentId().equals("0")) {
                     isContains = Arrays.asList(roleToMenu.getMenuIds()).contains(menu.getParentId());
                     if (isContains == true) {
@@ -59,6 +73,7 @@ public class RoleToMenuServiceImpl implements RoleToMenuService {
                 roleToMenu.setMenuId(ids);
                 roleToMenuMapper.createRoleToMenu(roleToMenu);
             }
+            logAspect.insertBindingLog(stringBuffer, roleList.get(0).getRoleName(), Modular.ROLETOMENU,roleToMenu.getCreateUserId());
         return false;
     }
 
@@ -71,9 +86,12 @@ public class RoleToMenuServiceImpl implements RoleToMenuService {
     @Override
     public boolean updateRoleToMenu(RoleToMenu roleToMenu) {
             boolean isContains = true;
+            String stringBuffer = "";
+            List<Role> roleList = roleMapper.queryRoleByroleId(roleToMenu.getRoleId());
             List<String> roleId = Arrays.asList(roleToMenu.getMenuIds());
             for (int i = 0; i < roleId.size(); i++) {
                 Menu menu = menuMapper.queryMenuByMenuId(roleId.get(i));
+                stringBuffer += menu.getMenuName()+"、";
                 if (!menu.getParentId().equals("0")) {
                     isContains = Arrays.asList(roleToMenu.getMenuIds()).contains(menu.getParentId());
                     if (isContains == true) {
@@ -91,10 +109,12 @@ public class RoleToMenuServiceImpl implements RoleToMenuService {
                 return true;
             }
             roleToMenuMapper.deleteRoleToMenu(roleToMenu);
+
             for (String ids : roleToMenu.getMenuIds()) {
                 roleToMenu.setMenuId(ids);
                 roleToMenuMapper.createRoleToMenu(roleToMenu);
             }
+            logAspect.insertBindingLog(stringBuffer, roleList.get(0).getRoleName(), Modular.ROLETOMENU,roleToMenu.getCreateUserId());
         return false;
     }
 

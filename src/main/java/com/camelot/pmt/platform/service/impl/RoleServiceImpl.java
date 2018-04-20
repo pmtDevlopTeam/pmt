@@ -67,7 +67,12 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public boolean addRole(Role role) throws Exception {
             role = setRoleModel(role);
-        return roleMapper.addRole(role) == 1 ? true:false;
+            int state = roleMapper.addRole(role);
+            if(state == 1){
+                logAspect.insertAddLog(role, Modular.ROLE, role.getCreateUserId());
+                return true;
+            }
+        return false;
     }
 
     /**
