@@ -381,5 +381,27 @@ public interface TaskMapper {
      * @return int
      * @throws
      */
-    int updateTaskToTest(Long id);
+    int updateTaskToTest(@Param("id") Long id,@Param("beassignUserId")String beassignUserId);
+
+    /**
+     * 根据任务Id查询需求ID
+     * @Title: updateTaskOverdueStatus
+     * @Description: TODO
+     * @param @param taskId
+     * @param @return
+     * @return int
+     * @throws
+     */
+    Long queryTaskByTaskId(Long id);
+
+    /**
+     * 根据需求Id查询当前需求的测试人员ID
+     * @Title: updateTaskOverdueStatus
+     * @Description: TODO
+     * @param @param taskId
+     * @param @return
+     * @return int
+     * @throws
+     */
+    String queryTaskToTestByDemandId(Long demandId);
 }

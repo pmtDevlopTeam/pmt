@@ -534,10 +534,19 @@
   <!-- gxl end -->
 
 
-
+    <!--zsf-->
+    <!--根据任务Id查询任务-->
+    <select id="queryTaskByTaskId" resultType="java.lang.Long"  parameterType="java.lang.Long">
+        select demand_id as demandId FROM task where id = #{id}
+    </select>
+    <!--zsf-->
+    <!--根据任务Id查询任务-->
+    <select id="queryTaskToTestByDemandId"  parameterType="java.lang.Long" resultType="String">
+         SELECT  DISTINCT(beassign_user_id) FROM  task WHERE demand_id = #{demandId} AND  task_type = 2
+    </select>
   <!--zsf-->
   <!--根据项目Id 和 userId 查询出任务个数-->
-  <select id="queryUnfinishedTask"  resultType="int">
+  <select id="queryUnfinishedTask"  resultType="java.lang.Integer">
       select count(*) from task where status in ( 0 , 1 , 3)
       <if test="projectId!=null">
           and project_id = #{projectId}
@@ -548,7 +557,7 @@
   </select>
     <!--zsf-->
     <!--根据需求Id 查询出任务列表-->
-    <select id="queryTaskByDemandId" resultMap="BaseResultMap" parameterType="long">
+    <select id="queryTaskByDemandId" resultMap="BaseResultMap" parameterType="java.lang.Long">
         select
         <include refid="ShowAllTasks_Column_List" />
         from
@@ -584,8 +593,8 @@
     </update>
     <!-- zsf-->
     <!--提测-->
-    <update id="updateTaskToTest" parameterType="long">
-        UPDATE task SET status = 5 WHERE id = #{id}
+    <update id="updateTaskToTest" >
+        UPDATE task SET status = 0 , task_type = 2 ,beassign_user_id = #{beassignUserId} WHERE id = #{id}
     </update>
 
 
