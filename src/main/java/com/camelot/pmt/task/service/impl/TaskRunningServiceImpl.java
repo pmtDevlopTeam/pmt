@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -108,9 +109,11 @@ public class TaskRunningServiceImpl implements TaskRunningService{
             }
             taskMapper.updateRunningToClose(list);
             result.setResult("任务关闭成功");
+            for (Long taskid : list) {
+                addTaskLog(taskid,"关闭");
+            }
         }catch (Exception e){
             throw new RuntimeException(e);
-
         }
         return result;
     }
@@ -156,7 +159,6 @@ public class TaskRunningServiceImpl implements TaskRunningService{
                 }
                 //查询出该节点下的所有任务
                 List<Task> list1 = taskMapper.queryRunningToAlready(list);
-
                 List<String> booleans = new ArrayList<String>();
                 for (Task taskalready : list1) {
                     //判断该节点下的所有子任务的状态是否都已完成或者关闭
@@ -169,6 +171,7 @@ public class TaskRunningServiceImpl implements TaskRunningService{
                     result.setResult("任务完成");
                     taskMapper.updateInfact_hourAndActual_end_time(ptask);
                     taskMapper.addAttachment(taskFile);
+                    addTaskLog(ptask.getId(), "完成");
                 }else{
                     result.setResult("还有子任务未完成！");
                 }
@@ -178,11 +181,26 @@ public class TaskRunningServiceImpl implements TaskRunningService{
                 result.setResult("任务完成");
                 taskMapper.updateInfact_hourAndActual_end_time(ptask);
                 taskMapper.addAttachment(taskFile);
+                addTaskLog(ptask.getId(),"完成");
             }
         }catch (Exception e){
             throw new RuntimeException(e);
         }
         return result;
+    }
+
+    //操作成功后添加操作记录
+    private void addTaskLog(Long id, String peration){
+        Task taskAll = taskMapper.queryTaskAllById(id);
+        TaskLog taskLog = new TaskLog();
+        Date date = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat();
+        taskLog.setTaskId(taskAll.getId());
+        taskLog.setUserId(taskAll.getBeassignUser().getUserId());
+        taskLog.setOperationButton(peration);
+        taskLog.setOperationTime(date);
+        taskLog.setOperationDescribe(dateFormat.format(date)+"\t"+taskAll.getBeassignUser().getUsername()+"\t"+peration);
+        taskLogMapper.insertTaskLog(taskLog);
     }
 
 

@@ -109,4 +109,9 @@
    SELECT t.*,p.user_name FROM task_log t,platform_user p WHERE t.user_id = p.user_id AND  t.task_id = #{id,jdbcType=BIGINT}
   </select>
 
+  <insert id="insertTaskLog" parameterType="com.camelot.pmt.task.model.TaskLog">
+    INSERT INTO task_log(task_id, user_id, operation_time, operation_button, operation_describe)
+    VALUES (#{taskId}, #{userId}, #{operationTime}, #{operationButton}, #{operationDescribe})
+  </insert>
+
 </mapper>
