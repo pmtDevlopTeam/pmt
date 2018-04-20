@@ -1,31 +1,31 @@
 package com.camelot.pmt.project.controller;
 
-import java.util.List;
-
-import javax.annotation.Resource;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.alibaba.fastjson.JSONObject;
 import com.camelot.pmt.common.APIStatus;
 import com.camelot.pmt.common.ApiResponse;
 import com.camelot.pmt.common.Pager;
 import com.camelot.pmt.platform.model.User;
 import com.camelot.pmt.platform.shiro.ShiroUtils;
+import com.camelot.pmt.project.mapper.ProjectMainMapper;
+import com.camelot.pmt.project.model.ProjectMain;
 import com.camelot.pmt.project.model.Version;
 import com.camelot.pmt.project.model.VersionVo;
 import com.camelot.pmt.project.service.VersionService;
 import com.github.pagehelper.PageInfo;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @Package: com.camelot.pmt.project.controller
@@ -40,6 +40,8 @@ import springfox.documentation.annotations.ApiIgnore;
 public class VersionController {
     @Resource
     VersionService versionService;
+    @Autowired
+    private ProjectMainMapper projectMainMapper;
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     /**
@@ -64,11 +66,16 @@ public class VersionController {
         try {
             User user = (User) ShiroUtils.getSessionAttribute("user");
             if (user != null) {
-                boolean flag = versionService.addVersion(projectId, user.getUserId(), versionVo);
-                if (flag) {
-                    return ApiResponse.success();
+                ProjectMain projectMain = projectMainMapper.queryByPrimaryKey(projectId);
+                if (projectMain != null) {
+                    boolean flag = versionService.addVersion(projectId, user.getUserId(), versionVo);
+                    if (flag) {
+                        return ApiResponse.success();
+                    }
+                    return ApiResponse.error("添加异常");
+                }else {
+                    return ApiResponse.error("项目不存在！");
                 }
-                return ApiResponse.error("添加异常");
             } else {
                 return ApiResponse.error("用户未登录，请登录！");
             }
@@ -94,7 +101,7 @@ public class VersionController {
         try {
             User user = (User) ShiroUtils.getSessionAttribute("user");
             if (user != null) {
-                boolean flag = versionService.deleteVersionById(user.getUserId(), versionId);
+                boolean flag = versionService.updateVersionByIdAndParms(null,user.getUserId(), versionId);
                 if (flag) {
                     return ApiResponse.success();
                 }
@@ -167,7 +174,36 @@ public class VersionController {
             return ApiResponse.jsonData(APIStatus.ERROR_500);
         }
     }
-
+    /**
+     * @Description: 根据id激活/关闭版本信息
+     * @param: userId
+     * @param: versionId
+     * @return:
+     * @author: xueyj
+     * @date: 2018/4/13 19:22
+     */
+    @ApiOperation(value = "", notes = "激活/关闭版本接口")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "versionStatus", value = "版本状态", required = true, paramType = "form", dataType = "String"),
+            @ApiImplicitParam(name = "versionId", value = "版本id", required = true, paramType = "form", dataType = "Long") })
+    @RequestMapping(value = "/updateVersionByIdAndParms", method = RequestMethod.POST)
+    public JSONObject updateVersonByIdAndParms(String versionStatus,Long versionId) {
+        try {
+            User user = (User) ShiroUtils.getSessionAttribute("user");
+            if (user != null) {
+                boolean flag = versionService.updateVersionByIdAndParms(versionStatus,user.getUserId(), versionId);
+                if (flag) {
+                    return ApiResponse.success();
+                }
+                return ApiResponse.error("操作失败");
+            } else {
+                return ApiResponse.error("用户未登录，请登录！");
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ApiResponse.jsonData(APIStatus.ERROR_500);
+        }
+    }
     /**
      * @Description: 根据项目id查询versionList
      * @param:
@@ -218,7 +254,7 @@ public class VersionController {
         try {
             User user = (User) ShiroUtils.getSessionAttribute("user");
             if (user != null) {
-                PageInfo<?> pageInfo = versionService.queryVerListByPageAndProId(page.getPage(), page.getRows(),
+                PageInfo pageInfo = versionService.queryVerListByPageAndProId(page.getPage(), page.getRows(),
                         projectId, versionVo);
                 return ApiResponse.success(pageInfo);
             } else {

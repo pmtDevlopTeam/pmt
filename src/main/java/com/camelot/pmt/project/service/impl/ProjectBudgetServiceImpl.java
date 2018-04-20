@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.camelot.pmt.common.ExecuteResult;
+import com.camelot.pmt.filemanage.model.FileManageGroup;
+import com.camelot.pmt.filemanage.service.FileManageGroupService;
 import com.camelot.pmt.project.mapper.ProjectBudgetMapper;
 import com.camelot.pmt.project.model.ProjectBudget;
 import com.camelot.pmt.project.service.ProjectBudgetService;
@@ -25,6 +27,8 @@ public class ProjectBudgetServiceImpl implements ProjectBudgetService {
 
     @Autowired
     ProjectBudgetMapper proBuggetMapper;
+    @Autowired
+    private FileManageGroupService fileManageGroupService;
 
     /**
      * 添加项目预算信息
@@ -122,27 +126,32 @@ public class ProjectBudgetServiceImpl implements ProjectBudgetService {
     }
 
     /**
-     * 查询统计项目结项 param Long projectId return Map<String,Object>
+     * 查询统计项目结项 
+     * param Long projectId 
+     * return Map<String,Object>
      */
     @Override
     public Map<String, Object> queryProjectEndById(Long projectId) {
-        // 查询此项目下所有文件分组
-        List<Map<String, Object>> fileGroupList = proBuggetMapper.queryFileGroup(projectId);
         List<Map<String, Object>> file = new ArrayList<Map<String, Object>>();
+        
+        FileManageGroup fileManageGroup = new FileManageGroup();
+        fileManageGroup.setProjectId(projectId);
+        List<FileManageGroup> treeList = fileManageGroupService.queryTree(fileManageGroup);//得到项目所有字节点
+        if(treeList.size()>0){
+            for (FileManageGroup fileManageGroup2 : treeList) {
+                Map<String,Object> fileGroupMap = new HashMap<>();
+                Long gid = fileManageGroup2.getId();
+                List<Map<String, Object>> fileList = proBuggetMapper.queryFile(gid);
+                fileGroupMap.put("fileList", fileList);
+                fileGroupMap.put("fileCount", fileList.size());
+                fileGroupMap.put("fileGroup", fileManageGroup2);
+                file.add(fileGroupMap);
+            }
+        }
         // 查询任务表中所有已完成任务的实际工时
         Long totalActualHours = proBuggetMapper.queryTotalActualHours(projectId);
         Map<String, Object> fileMap = new HashMap<>();
         fileMap.put("totalActualHours", totalActualHours);
-        if ((null != fileGroupList) && (fileGroupList.size() > 0)) {
-            for (Map<String, Object> map : fileGroupList) {
-                Long groupId = (Long) map.get("id");
-                // 根据分组id查询该组下所有文件
-                List<Map<String, Object>> fileList = proBuggetMapper.queryFile(groupId);
-                map.put("fileList", fileList);
-                map.put("fileCount", fileList.size());
-                file.add(map);
-            }
-        }
         fileMap.put("fileList", file);
         return fileMap;
     }

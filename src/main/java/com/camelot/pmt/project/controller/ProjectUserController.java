@@ -62,7 +62,9 @@ public class ProjectUserController {
             @ApiImplicitParam(paramType = "query", name = "preJoinTime", dataType = "Date", value = "预计进项目时间", required = true),
             @ApiImplicitParam(paramType = "query", name = "preOutTime", dataType = "Date", value = "预计出项目时间", required = true),
             @ApiImplicitParam(paramType = "query", name = "userProRole", dataType = "String", value = "角色id（在项目角色）", required = true),
-            @ApiImplicitParam(paramType = "query", name = "preManHour", dataType = "int", value = "预计工时", required = true) })
+            @ApiImplicitParam(paramType = "query", name = "preManHour", dataType = "int", value = "预计工时", required = true),
+            @ApiImplicitParam(paramType = "query", name = "userProRole", dataType = "String", value = "成员项目工号", required = true)
+    })
     public JSONObject addUser(ProjectUser pu) {
         String loginUser = projectUserService.getLoginUser();
         if (loginUser == null || "".equals(loginUser)) {

@@ -26,8 +26,22 @@ public class ProjectUserShow {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date realOutTime;
     private List<String> userRoleNames = new ArrayList<>();
+    /**
+     * 成员项目工号
+     */
+    private String userProNum;
+    
+    
 
-    public Long getId() {
+    public String getUserProNum() {
+		return userProNum;
+	}
+
+	public void setUserProNum(String userProNum) {
+		this.userProNum = userProNum;
+	}
+
+	public Long getId() {
         return id;
     }
 

@@ -44,7 +44,7 @@
 	<!-- base_column_list -->
 	<sql id="Base_Column_List">
 		id, project_id, user_id, pre_join_time, real_join_time,
-		pre_out_time,
+		pre_out_time, user_pro_num,
 		real_out_time,
 		pre_man_hour, user_status, user_pro_role,
 		create_user_id, create_time,
@@ -89,6 +89,9 @@
 			<if test="id != null">
 				id,
 			</if>
+			<if test="userProNum != null">
+				userProNum,
+			</if>
 			<if test="projectId != null">
 				project_id,
 			</if>
@@ -132,6 +135,9 @@
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
 			<if test="id != null">
 				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="userProNum != null">
+				#{userProNum, jdbcType=VARCHAR},
 			</if>
 			<if test="projectId != null">
 				#{projectId,jdbcType=BIGINT},
@@ -307,10 +313,11 @@
 		<result column="real_out_time" property="realOutTime" jdbcType="TIMESTAMP" />
 		<result column="pre_man_hour" property="preManHour" jdbcType="INTEGER" />
 		<result column="user_status" property="userStatus" jdbcType="CHAR" />
-		<result column="user_job_num" property="userJobNum" jdbcType="VARCHAR" />
+		<result column="user_job_num" property="userProNum" jdbcType="VARCHAR" />
 		<result column="user_pro_role" property="userProRole" jdbcType="VARCHAR" />
 		<result column="pro_role_name" property="userProRoleName"
 			jdbcType="VARCHAR" />
+		<result column="user_pro_num" property="userProRole" jdbcType="VARCHAR" />
 		<collection property="userRoleNames" ofType="java.lang.String">
 			<result column="user_role_names" property="userRoleName" />
 		</collection>
@@ -319,7 +326,7 @@
 	<!-- 通过项目id查询所有成员 -->
 	<select id="searchUserByProjectId" parameterType="java.lang.Long"
 		resultMap="projectUserMap">
-		SELECT project_user.id, project_user.project_id,
+		SELECT project_user.id, project_user.project_id, user_pro_num,
 		project_user.user_id, platform_user_info.user_job_num,
 		project_user.user_pro_role,
 		platform_user.user_name,
@@ -350,7 +357,7 @@
 	<select id="searchUserByCondition" parameterType="com.camelot.pmt.project.model.ProjectUserSearchVO"
 		resultMap="projectUserMap">
 		SELECT project_user.id, project_user.project_id, project_user.user_id,
-		platform_user_info.user_job_num,
+		platform_user_info.user_job_num, project_user.user_pro_num,
 		project_user.user_pro_role,
 		platform_user.user_name, project_user.pre_join_time,
 		project_user.real_join_time, project_user.pre_out_time,
