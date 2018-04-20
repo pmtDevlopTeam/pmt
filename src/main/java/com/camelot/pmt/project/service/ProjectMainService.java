@@ -25,13 +25,14 @@ public interface ProjectMainService {
      * @param userId
      * @param projectName
      * @param projectStatus
-     * @param projectDesc
      * @param startTime
      * @param endTime
+     * @param projectDesc
+     * @param budgetaryHours
      * @return
      */
     int addProject(String userId, String projectName, String projectStatus, Date startTime, Date endTime,
-            String projectDesc);
+            String projectDesc, Integer budgetaryHours);
 
     /**
      * 分页查询
