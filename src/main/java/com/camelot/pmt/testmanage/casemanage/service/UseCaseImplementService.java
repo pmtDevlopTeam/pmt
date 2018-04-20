@@ -15,14 +15,16 @@ public interface UseCaseImplementService {
     /**
      * 增加用例执行和用例执行详细信息
      *
-     * @param useCaseImplement 用例执行
+     * @param useCaseImplement
+     *            用例执行
      */
     void addUseCaseImplement(User userModel, UseCaseImplement useCaseImplement);
 
     /**
      * 根据测试用例ID查询测试用例执行信息
      *
-     * @param useCaseId 测试用例ID
+     * @param useCaseId
+     *            测试用例ID
      */
     List<UseCaseImplement> queryUseCaseImplementByUseCaseId(Long useCaseId);
 

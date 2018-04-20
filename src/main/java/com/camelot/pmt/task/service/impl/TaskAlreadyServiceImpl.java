@@ -30,22 +30,23 @@ public class TaskAlreadyServiceImpl implements TaskAlreadyService {
     /**
      * TODO重做(我的任务状态转为正在进行)
      *
-     * @param Long id
+     * @param Long
+     *            id
      * @return ExecuteResult<String>
      */
 
     @Override
     public ExecuteResult<String> updateTaskAlreadyToRunning(Long id) {
-        ExecuteResult<String> result=new ExecuteResult<>();
-        try{
-            if(id==null){
+        ExecuteResult<String> result = new ExecuteResult<>();
+        try {
+            if (id == null) {
                 result.setResult("该任务不存在!");
                 return result;
             }
-            //遍历此任务下是否有引用--->查询所有任务父id为id的记录
+            // 遍历此任务下是否有引用--->查询所有任务父id为id的记录
             List<Task> taskList = taskMapper.queryByPId(id);
             List<Long> list = new ArrayList<Long>();
-            if(taskList.size()>0){
+            if (taskList.size() > 0) {
                 for (Task task : taskList) {
                     List<Task> tempList = taskMapper.queryByPId(task.getId());
                     if(tempList.size()>0){

@@ -1,18 +1,7 @@
 package com.camelot.pmt.platform.controller;
 
-import com.alibaba.fastjson.JSONObject;
-import com.camelot.pmt.common.APIStatus;
-import com.camelot.pmt.common.ApiResponse;
-import com.camelot.pmt.common.ExecuteResult;
-import com.camelot.pmt.platform.model.Menu;
-import com.camelot.pmt.platform.model.RoleToMenu;
-import com.camelot.pmt.platform.model.User;
-import com.camelot.pmt.platform.service.RoleToMenuService;
-import com.camelot.pmt.platform.shiro.ShiroUtils;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +10,21 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import springfox.documentation.annotations.ApiIgnore;
 
-import java.util.List;
+import com.alibaba.fastjson.JSONObject;
+import com.camelot.pmt.common.APIStatus;
+import com.camelot.pmt.common.ApiResponse;
+import com.camelot.pmt.platform.model.Menu;
+import com.camelot.pmt.platform.model.RoleToMenu;
+import com.camelot.pmt.platform.model.User;
+import com.camelot.pmt.platform.service.RoleToMenuService;
+import com.camelot.pmt.platform.shiro.ShiroUtils;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * 角色绑定权限控制层

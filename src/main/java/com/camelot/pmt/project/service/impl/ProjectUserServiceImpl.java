@@ -22,9 +22,9 @@ public class ProjectUserServiceImpl implements ProjectUserService {
 
     @Override
     public void addUserSelective(ProjectUser pu) {
-    	projectUserMapper.addUserSelective(pu);
+        projectUserMapper.addUserSelective(pu);
     }
-    
+
     @Override
     public void confirmUser(ProjectUser pu) {
         projectUserMapper.confirmUser(pu);
@@ -32,13 +32,13 @@ public class ProjectUserServiceImpl implements ProjectUserService {
 
     @Override
     public int clearUser(Long projectId, String userId, String userStatus) {
-    	return projectUserMapper.clearUserAll(projectId, userId, userStatus);
+        return projectUserMapper.clearUserAll(projectId, userId, userStatus);
     }
-    
+
     @Override
     public void clearUser(Map<String, Object> map) {
-    	projectUserMapper.clearUser(map);
-    	
+        projectUserMapper.clearUser(map);
+
     }
 
     @Override
@@ -55,15 +55,13 @@ public class ProjectUserServiceImpl implements ProjectUserService {
     public int count(ProjectUserSearchVO vo) {
         return projectUserMapper.count(vo);
     }
-    
 
-	public String getLoginUser() {
-		User user = (User) ShiroUtils.getSessionAttribute("user");
-		if (user != null) {
-			return user.getUserId();
-		}
-		return "";
-	}
-
+    public String getLoginUser() {
+        User user = (User) ShiroUtils.getSessionAttribute("user");
+        if (user != null) {
+            return user.getUserId();
+        }
+        return "";
+    }
 
 }

@@ -1,13 +1,17 @@
 package com.camelot.pmt.project.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import com.camelot.pmt.common.ExecuteResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.camelot.pmt.common.ExecuteResult;
+import com.camelot.pmt.filemanage.model.FileManageGroup;
+import com.camelot.pmt.filemanage.service.FileManageGroupService;
 import com.camelot.pmt.project.mapper.ProjectBudgetMapper;
 import com.camelot.pmt.project.model.ProjectBudget;
 import com.camelot.pmt.project.service.ProjectBudgetService;
@@ -23,11 +27,14 @@ public class ProjectBudgetServiceImpl implements ProjectBudgetService {
 
     @Autowired
     ProjectBudgetMapper proBuggetMapper;
+    @Autowired
+    private FileManageGroupService fileManageGroupService;
 
     /**
      * 添加项目预算信息
      *
-     * @param  ProjectBudget projectBudget
+     * @param ProjectBudget
+     *            projectBudget
      * @return ExecuteResult<String>
      */
     @Override
@@ -37,7 +44,7 @@ public class ProjectBudgetServiceImpl implements ProjectBudgetService {
         try {
             projectBudget.setCreateTime(currentDate);
             projectBudget.setModifyTime(currentDate);
-            flag =proBuggetMapper.insertSelective(projectBudget)==1?true:false;
+            flag = proBuggetMapper.insertSelective(projectBudget) == 1 ? true : false;
         } catch (Exception e) {
             flag = false;
             throw new RuntimeException(e);
@@ -48,7 +55,8 @@ public class ProjectBudgetServiceImpl implements ProjectBudgetService {
     /**
      * 查询单个项目预算信息
      *
-     * @param  Long projectId
+     * @param Long
+     *            projectId
      * @return ExecuteResult<ProjectBudget>
      */
     @Override
@@ -63,7 +71,8 @@ public class ProjectBudgetServiceImpl implements ProjectBudgetService {
     /**
      * 修改项目预算信息
      *
-     * @param  ProjectBudget projectBudget
+     * @param ProjectBudget
+     *            projectBudget
      * @return ExecuteResult<String>
      */
     @Override
@@ -73,19 +82,20 @@ public class ProjectBudgetServiceImpl implements ProjectBudgetService {
         try {
             projectBudget.setCreateTime(currentDate);
             projectBudget.setModifyTime(currentDate);
-            flag =proBuggetMapper.updateByPrimaryKeySelective(projectBudget)==1?true:false;
+            flag = proBuggetMapper.updateByPrimaryKeySelective(projectBudget) == 1 ? true : false;
         } catch (Exception e) {
             flag = false;
             throw new RuntimeException(e);
         }
         return flag;
-        
+
     }
 
     /**
      * 查询项目统计预算信息
      *
-     * @param  Long proId
+     * @param Long
+     *            proId
      * @return ExecuteResult<Map<String, Object>>
      */
     @Override
@@ -97,14 +107,11 @@ public class ProjectBudgetServiceImpl implements ProjectBudgetService {
             if (!"".equals(proId)) {
                 ProjectBudget proBudget = proBuggetMapper.selectProjectBudgetByProId(proId);
                 if (null == proBudget) {
-                    result.setResultMessage("查询项目预计工时失败--不存在此项目预计工时！");
+                    result.addErrorMessage("查询项目预计工时失败--不存在此项目预计工时！");
                     return result;
                 }
                 // 查询任务表中所有已完成任务的实际工时
                 Long totalActualHours = proBuggetMapper.queryTotalActualHours(proId);
-                /**
-                 * 总消耗工时来源于已完成任务工时的累加和 等待与任务组对接===========================
-                 */
                 map.put("budgetaryHours", proBudget.getBudgetaryHours());// 项目预计时间
                 map.put("otherbudget", proBudget.getOther());// 其他预算
                 map.put("totalHours", totalActualHours);// 项目实际消耗时间
@@ -116,6 +123,35 @@ public class ProjectBudgetServiceImpl implements ProjectBudgetService {
             throw new RuntimeException(e);
         }
         return result;
+    }
+
+    /**
+     * 查询统计项目结项 param Long projectId return Map<String,Object>
+     */
+    @Override
+    public Map<String, Object> queryProjectEndById(Long projectId) {
+        List<Map<String, Object>> file = new ArrayList<Map<String, Object>>();
+        Map<String, Object> fileMap = new HashMap<>();
+        Map<String,Object> fileGroupMap = null;
+        FileManageGroup fileManageGroup = new FileManageGroup();
+        fileManageGroup.setProjectId(projectId);
+        List<FileManageGroup> treeList = fileManageGroupService.queryTree(fileManageGroup);// 得到项目所有字节点
+        if (treeList.size() > 0) {
+            for (FileManageGroup fileManageGroup2 : treeList) {
+                fileGroupMap = new HashMap<>();
+                Long gid = fileManageGroup2.getId();
+                List<Map<String, Object>> fileList = proBuggetMapper.queryFile(gid);
+                fileGroupMap.put("fileList", fileList);
+                fileGroupMap.put("fileCount", fileList.size());
+                fileGroupMap.put("fileGroup", fileManageGroup2);
+                file.add(fileGroupMap);
+            }
+        }
+        // 查询任务表中所有已完成任务的实际工时
+        Long totalActualHours = proBuggetMapper.queryTotalActualHours(projectId);
+        fileMap.put("totalActualHours", totalActualHours);
+        fileMap.put("fileList", file);
+        return fileMap;
     }
 
 }

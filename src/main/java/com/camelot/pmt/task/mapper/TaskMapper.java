@@ -404,4 +404,20 @@ public interface TaskMapper {
      * @throws
      */
     String queryTaskToTestByDemandId(Long demandId);
+    int updateTaskToTest(Long id);
+
+    /**
+     * 项目关闭时，更新任务状态
+     *
+     * @param projectId
+     * @param status
+     * @param actualEndTime
+     * @param modifyUserId
+     * @param modifyTime
+     * @return
+     */
+    int updateByProjectId(@Param("projectId") Long projectId, @Param("status") String status,
+            @Param("actualEndTime") Date actualEndTime, @Param("modifyUserId") String modifyUserId,
+            @Param("modifyTime") Date modifyTime);
+
 }

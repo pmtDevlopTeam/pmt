@@ -4,6 +4,10 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class OrgAndUser implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
     private Long id;
     /**
      * 用户32位id

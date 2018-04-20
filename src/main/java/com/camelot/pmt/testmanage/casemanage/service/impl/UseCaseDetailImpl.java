@@ -10,14 +10,15 @@ import com.camelot.pmt.testmanage.casemanage.model.UseCaseDetail;
 import com.camelot.pmt.testmanage.casemanage.service.UseCaseDetailService;
 
 @Service
-public class UseCaseDetailImpl implements UseCaseDetailService{
-	
-	@Autowired
-	UseCaseDetailMapper useCaseProcedureImplementMapper;
-	@Override
-	public List<UseCaseDetail> queryUseCaseProcedureImplementd(Long implementId) {
-		
-		return useCaseProcedureImplementMapper.queryUseCaseProcedureImplementd(implementId);
-	}
+public class UseCaseDetailImpl implements UseCaseDetailService {
+
+    @Autowired
+    UseCaseDetailMapper useCaseProcedureImplementMapper;
+
+    @Override
+    public List<UseCaseDetail> queryUseCaseProcedureImplementd(Long implementId) {
+
+        return useCaseProcedureImplementMapper.queryUseCaseProcedureImplementd(implementId);
+    }
 
 }

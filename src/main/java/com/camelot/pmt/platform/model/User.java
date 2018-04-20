@@ -2,7 +2,6 @@ package com.camelot.pmt.platform.model;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 public class User implements Serializable {
 
