@@ -288,12 +288,12 @@ public class VersionController {
             @ApiImplicitParam(name = "versionType", value = "版本类型", required = false, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "projectId", value = "项目id", required = true, paramType = "query", dataType = "Long") })
     @RequestMapping(value = "/queryVerListByPageAndProIdAndParm", method = RequestMethod.GET)
-    public JSONObject queryVerListByPageAndProIdAndParm(@ApiIgnore Pager<?> page, Long projectId,
+    public JSONObject queryVerListByPageAndProIdAndParm(int page,int rows, Long projectId,
             @ApiIgnore VersionVo versionVo) {
         try {
             User user = (User) ShiroUtils.getSessionAttribute("user");
             if (user != null) {
-                PageInfo pageInfo = versionService.queryVerListByPageAndProId(page.getPage(), page.getRows(), projectId,
+                PageInfo pageInfo = versionService.queryVerListByPageAndProId(page, rows, projectId,
                         versionVo);
                 return ApiResponse.success(pageInfo);
             } else {
