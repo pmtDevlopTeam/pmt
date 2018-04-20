@@ -221,10 +221,10 @@
     <!--zlh-->
     <!--任务管理模块列表展示所用字段-->
     <sql id="TaskManager_ShowTasks_Column_List" >
-        t.id, t.task_num, t.task_name, b.id AS bid, b.user_id, b.user_name, t.estimate_start_time, t.estimate_end_time,
+        t.id, t.task_num, t.task_name, b.id AS bid, b.user_id AS buser_id, b.user_name AS buser_name, t.estimate_start_time, t.estimate_end_time,
         t.actual_start_time, t.actual_end_time, t.task_speed, t.status,
-        t.task_type, t.task_mileage, t.priority, c.id AS cid, c.user_id, c.user_name,
-        a.id AS aid, a.user_id, a.user_name, t.assign_time, p.id pid, p.project_name
+        t.task_type, t.task_mileage, t.priority, c.id AS cid, c.user_id AS cuser_id, c.user_name AS cuser_name,
+        a.id AS aid, a.user_id AS auser_id, a.user_name AS auser_name, t.assign_time, p.id pid, p.project_name
     </sql>
 
 	<!-- 查询逾期任务列表所有字段 -->

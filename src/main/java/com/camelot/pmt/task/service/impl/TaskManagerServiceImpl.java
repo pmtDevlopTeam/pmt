@@ -12,9 +12,9 @@ import com.camelot.pmt.task.model.TaskLog;
 import com.camelot.pmt.task.service.TaskFileService;
 import com.camelot.pmt.task.service.TaskLogService;
 import com.camelot.pmt.task.service.TaskManagerService;
+import com.camelot.pmt.task.utils.FileUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,29 +75,20 @@ public class TaskManagerServiceImpl implements TaskManagerService {
             }
             // 默认状态下任务状态为未开始 0为未开始的状态码
             task.setStatus("0");
-            User user = new User();
-            /*这个是根据当前登录用户查询的用户userid*/
-            String userId = "2";
+            User user = (User)ShiroUtils.getSessionAttribute("user");
+            // 这个是根据当前登录用户查询的用户userid
+            String userId = user.getUserId();
             user.setUserId(userId);
             task.setCreateUser(user);
             int insertTaskResult = taskMapper.insertTask(task);
             // 如果任务有附件，上传附件
             if (file != null) {
-                String fileName = file.getOriginalFilename();
-                byte[] bytes = file.getBytes();
                 String filePath = "D:/upload/";
-                File targetFile = new File(filePath);
-                if (!targetFile.exists()) {
-                    targetFile.mkdirs();
-                }
-                FileOutputStream out = new FileOutputStream(filePath + fileName);
-                out.write(bytes);
-                out.flush();
-                out.close();
+                FileUtils.uploadFile(file, filePath);
 
                 TaskFile taskFile = new TaskFile();
                 // 附件名称
-                taskFile.setAttachmentTile(fileName);
+                taskFile.setAttachmentTile(file.getOriginalFilename());
                 // 附件路径
                 taskFile.setAttachmentUrl(filePath);
                 // 附件来源
@@ -391,6 +382,9 @@ public class TaskManagerServiceImpl implements TaskManagerService {
             if (task.getBeassignUser() != null) {
                 // 如果负责人条件非空，则根据username查询userId
                 List<User> users = userService.queryUsersByUserName(task.getBeassignUser().getUsername());
+                if (users.isEmpty()) {
+                    return null;
+                }
                 // 赋值给string数组传给DAO层
                 ids = new String[users.size()];
                 for (int i = 0; i < users.size(); i++) {

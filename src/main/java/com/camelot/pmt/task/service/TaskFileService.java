@@ -38,7 +38,7 @@ public interface TaskFileService {
      * @author zlh
      * @param taskFile 参数
      * @date 17:03 2018/4/17
-     * @return TaskFile
+     * @return boolean
      */
     boolean download(TaskFile taskFile, HttpServletResponse response);
 }

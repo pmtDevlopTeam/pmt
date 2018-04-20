@@ -5,6 +5,7 @@ import com.camelot.pmt.common.APIStatus;
 import com.camelot.pmt.common.ApiResponse;
 import com.camelot.pmt.task.model.Task;
 import com.camelot.pmt.task.service.TaskManagerService;
+import com.camelot.pmt.task.service.TaskRunningService;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -238,7 +239,6 @@ public class TaskManagerController {
             return ApiResponse.jsonData(APIStatus.ERROR_500);
         }
     }
-
 
     /**
      * 根据id查看任务详情接口（查询）
