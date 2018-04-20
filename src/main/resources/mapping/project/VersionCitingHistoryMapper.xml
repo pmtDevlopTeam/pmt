@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.camelot.pmt.project.mapper.VersionCitingHistoryMapper" >
+  <resultMap id="BaseResultMap" type="com.camelot.pmt.project.model.VersionCitingHistory" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="version_id" property="versionId" jdbcType="BIGINT" />
+    <result column="project_id" property="projectId" jdbcType="BIGINT" />
+    <result column="demand_id" property="demandId" jdbcType="BIGINT" />
+    <result column="task_id" property="taskId" jdbcType="BIGINT" />
+    <result column="bug_id" property="bugId" jdbcType="BIGINT" />
+    <result column="test_case_id" property="testCaseId" jdbcType="BIGINT" />
+    <result column="create_user_id" property="createUserId" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_user_id" property="modifyUserId" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, version_id, project_id, demand_id, task_id, bug_id, test_case_id, create_user_id,
+    create_time, modify_user_id, modify_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select
+    <include refid="Base_Column_List" />
+    from version_citing_history
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from version_citing_history
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.camelot.pmt.project.model.VersionCitingHistory" >
+    insert into version_citing_history (id, version_id, project_id,
+    demand_id, task_id, bug_id,
+    test_case_id, create_user_id, create_time,
+    modify_user_id, modify_time)
+    values (#{id,jdbcType=BIGINT}, #{versionId,jdbcType=BIGINT}, #{projectId,jdbcType=BIGINT},
+    #{demandId,jdbcType=BIGINT}, #{taskId,jdbcType=BIGINT}, #{bugId,jdbcType=BIGINT},
+    #{testCaseId,jdbcType=BIGINT}, #{createUserId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+    #{modifyUserId,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.camelot.pmt.project.model.VersionCitingHistory" >
+    insert into version_citing_history
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="versionId != null" >
+        version_id,
+      </if>
+      <if test="projectId != null" >
+        project_id,
+      </if>
+      <if test="demandId != null" >
+        demand_id,
+      </if>
+      <if test="taskId != null" >
+        task_id,
+      </if>
+      <if test="bugId != null" >
+        bug_id,
+      </if>
+      <if test="testCaseId != null" >
+        test_case_id,
+      </if>
+      <if test="createUserId != null" >
+        create_user_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="modifyUserId != null" >
+        modify_user_id,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="versionId != null" >
+        #{versionId,jdbcType=BIGINT},
+      </if>
+      <if test="projectId != null" >
+        #{projectId,jdbcType=BIGINT},
+      </if>
+      <if test="demandId != null" >
+        #{demandId,jdbcType=BIGINT},
+      </if>
+      <if test="taskId != null" >
+        #{taskId,jdbcType=BIGINT},
+      </if>
+      <if test="bugId != null" >
+        #{bugId,jdbcType=BIGINT},
+      </if>
+      <if test="testCaseId != null" >
+        #{testCaseId,jdbcType=BIGINT},
+      </if>
+      <if test="createUserId != null" >
+        #{createUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyUserId != null" >
+        #{modifyUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.camelot.pmt.project.model.VersionCitingHistory" >
+    update version_citing_history
+    <set >
+      <if test="versionId != null" >
+        version_id = #{versionId,jdbcType=BIGINT},
+      </if>
+      <if test="projectId != null" >
+        project_id = #{projectId,jdbcType=BIGINT},
+      </if>
+      <if test="demandId != null" >
+        demand_id = #{demandId,jdbcType=BIGINT},
+      </if>
+      <if test="taskId != null" >
+        task_id = #{taskId,jdbcType=BIGINT},
+      </if>
+      <if test="bugId != null" >
+        bug_id = #{bugId,jdbcType=BIGINT},
+      </if>
+      <if test="testCaseId != null" >
+        test_case_id = #{testCaseId,jdbcType=BIGINT},
+      </if>
+      <if test="createUserId != null" >
+        create_user_id = #{createUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyUserId != null" >
+        modify_user_id = #{modifyUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.camelot.pmt.project.model.VersionCitingHistory" >
+    update version_citing_history
+    set version_id = #{versionId,jdbcType=BIGINT},
+      project_id = #{projectId,jdbcType=BIGINT},
+      demand_id = #{demandId,jdbcType=BIGINT},
+      task_id = #{taskId,jdbcType=BIGINT},
+      bug_id = #{bugId,jdbcType=BIGINT},
+      test_case_id = #{testCaseId,jdbcType=BIGINT},
+      create_user_id = #{createUserId,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modify_user_id = #{modifyUserId,jdbcType=VARCHAR},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="queryVersionCitingHistoryByParms" resultMap="BaseResultMap" parameterType="object">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM version_citing_history
+    WHERE 1=1
+    <if test="versionCitingHistory.versionId != null">
+      and version_id = #{versionCitingHistory.versionId}
+    </if>
+    <if test="versionCitingHistory.projectId != null">
+      and project_id = #{versionCitingHistory.projectId}
+    </if>
+    <if test="versionCitingHistory.demandId != null">
+      and demand_id = #{versionCitingHistory.demandId}
+    </if>
+    <if test="versionCitingHistory.taskId != null">
+      and task_id = #{versionCitingHistory.taskId}
+    </if>
+    <if test="versionCitingHistory.bugId != null">
+      and bug_id = #{versionCitingHistory.bugId}
+    </if>
+    <if test="versionCitingHistory.testCaseId != null">
+      and test_case_id = #{versionCitingHistory.testCaseId}
+    </if>
+     ORDER BY create_time DESC
+  </select>
+</mapper>

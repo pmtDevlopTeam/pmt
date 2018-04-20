@@ -26,6 +26,7 @@ import springfox.documentation.annotations.ApiIgnore;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Package: com.camelot.pmt.project.controller
@@ -56,10 +57,14 @@ public class VersionController {
     @ApiOperation(value = "添加版本接口", notes = "添加单个版本")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "projectId", value = "项目id", required = true, paramType = "form", dataType = "Long"),
-            @ApiImplicitParam(name = "versionName", value = "版本名称", required = true, paramType = "form", dataType = "String"),
             @ApiImplicitParam(name = "versionType", value = "版本类型", required = true, paramType = "form", dataType = "String"),
+            @ApiImplicitParam(name = "versionCode", value = "版本编号", required = true, paramType = "form", dataType = "String"),
+            @ApiImplicitParam(name = "versionName", value = "版本名称", required = true, paramType = "form", dataType = "String"),
             @ApiImplicitParam(name = "startTime", value = "开始时间", required = true, paramType = "form", dataType = "String"),
             @ApiImplicitParam(name = "endTime", value = "结束时间", required = true, paramType = "form", dataType = "String"),
+            @ApiImplicitParam(name = "versionRepositoryUrl", value = "版本仓库URL", required = false, paramType = "form", dataType = "String"),
+            @ApiImplicitParam(name = "versionRepositoryBranch", value = "版本仓库分支", required = false, paramType = "form", dataType = "String"),
+            @ApiImplicitParam(name = "versionRepositoryId", value = "版本仓库id", required = false, paramType = "form", dataType = "String"),
             @ApiImplicitParam(name = "remarks", value = "备注", required = true, paramType = "form", dataType = "String") })
     @RequestMapping(value = "/addVersion", method = RequestMethod.POST)
     public JSONObject addVersion(Long projectId, @ApiIgnore VersionVo versionVo) {
@@ -68,11 +73,15 @@ public class VersionController {
             if (user != null) {
                 ProjectMain projectMain = projectMainMapper.queryByPrimaryKey(projectId);
                 if (projectMain != null) {
-                    boolean flag = versionService.addVersion(projectId, user.getUserId(), versionVo);
-                    if (flag) {
-                        return ApiResponse.success();
+                    boolean flag  = versionService.queryVerListByProIdAndVerCode(projectId, versionVo.getVersion());
+                    if(!flag){
+                        versionService.addVersion(projectId, user.getUserId(), versionVo);
+                        if (flag) {
+                            return ApiResponse.success();
+                        }
+                        return ApiResponse.error("添加异常");
                     }
-                    return ApiResponse.error("添加异常");
+                    return ApiResponse.error("该版本信息已存在，请重新添加版本信息");
                 }else {
                     return ApiResponse.error("项目不存在！");
                 }
@@ -152,9 +161,11 @@ public class VersionController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "版本id", required = true, paramType = "form", dataType = "Long"),
             @ApiImplicitParam(name = "versionName", value = "版本名称", required = true, paramType = "form", dataType = "String"),
-            @ApiImplicitParam(name = "versionType", value = "版本类型", required = true, paramType = "form", dataType = "String"),
             @ApiImplicitParam(name = "startTime", value = "开始时间", required = true, paramType = "form", dataType = "String"),
             @ApiImplicitParam(name = "endTime", value = "结束时间", required = true, paramType = "form", dataType = "String"),
+            @ApiImplicitParam(name = "versionRepositoryUrl", value = "版本仓库URL", required = false, paramType = "form", dataType = "String"),
+            @ApiImplicitParam(name = "versionRepositoryBranch", value = "版本仓库分支", required = false, paramType = "form", dataType = "String"),
+            @ApiImplicitParam(name = "versionRepositoryId", value = "版本仓库id", required = false, paramType = "form", dataType = "String"),
             @ApiImplicitParam(name = "remarks", value = "备注", required = true, paramType = "form", dataType = "String") })
     @RequestMapping(value = "/updateVersion", method = RequestMethod.POST)
     public JSONObject updateVersonInfo(@ApiIgnore Version version) {
@@ -205,6 +216,32 @@ public class VersionController {
         }
     }
     /**
+     * @Description: 根据项目id，查询下一版本编号接口
+     * @param: projectId
+     * @return: JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
+     * @author: xueyj
+     * @date: 2018/4/13 18:31
+     */
+    @ApiOperation(value = "根据项目id，查询下一版本编号接口", notes = "根据项目id，查询下一版本编号接口")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "projectId", value = "项目id", required = true, paramType = "query", dataType = "String")
+    })
+    @RequestMapping(value = "/addVersion", method = RequestMethod.GET)
+    public JSONObject addVersion(Long projectId) {
+        try {
+            User user = (User) ShiroUtils.getSessionAttribute("user");
+            if (user != null) {
+                Map<String, String> versionMap = versionService.queryVerCodeByPorIdAndVerType(projectId);
+                return ApiResponse.success(versionMap);
+            } else {
+                return ApiResponse.error("用户未登录，请登录！");
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ApiResponse.jsonData(APIStatus.ERROR_500);
+        }
+    }
+    /**
      * @Description: 根据项目id查询versionList
      * @param:
      * @return:
@@ -217,12 +254,12 @@ public class VersionController {
             @ApiImplicitParam(name = "versionName", value = "版本名称", required = false, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "versionType", value = "版本类型", required = false, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "projectId", value = "项目id", required = true, paramType = "query", dataType = "Long") })
-    @RequestMapping(value = "/queryVerListByProId", method = RequestMethod.GET)
-    public JSONObject queryVerListByProId(Long projectId, @ApiIgnore VersionVo versionVo) {
+    @RequestMapping(value = "/queryVerListByProIdAndParms", method = RequestMethod.GET)
+    public JSONObject queryVerListByProIdAndParms(Long projectId, @ApiIgnore VersionVo versionVo) {
         try {
             User user = (User) ShiroUtils.getSessionAttribute("user");
             if (user != null) {
-                List<VersionVo> versionVoList = versionService.queryVerListByProId(projectId, versionVo);
+                List<VersionVo> versionVoList = versionService.queryVerListByProIdAndParms(projectId, versionVo);
                 return ApiResponse.success(versionVoList);
             } else {
                 return ApiResponse.error("用户未登录，请登录！");
