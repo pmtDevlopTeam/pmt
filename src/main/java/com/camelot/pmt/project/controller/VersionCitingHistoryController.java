@@ -30,7 +30,7 @@ import javax.annotation.Resource;
  */
 @RestController
 @RequestMapping(value = "/platform/versionCitingHistory")
-@Api(value = "基础平台-版本控制接口", description = "基础平台-版本控制接口")
+@Api(value = "基础平台-关联版本控制操作接口", description = "基础平台-关联版本控制操作接口")
 public class VersionCitingHistoryController {
     @Resource
     VersionCitingHistoryService versionCitingHistoryService;
@@ -38,9 +38,9 @@ public class VersionCitingHistoryController {
 
     /**
      * @Description: 添加版本关联记录接口
+     * @param: versionId
      * @param: projectId
-     * @param: userId
-     * @param: versionVo
+     * @param: versionCitingHistory
      * @return: JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      * @author: xueyj
      * @date: 2018/4/13 18:31
@@ -88,13 +88,13 @@ public class VersionCitingHistoryController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "page", value = "页码", required = true, paramType = "query", dataType = "int"),
             @ApiImplicitParam(name = "rows", value = "每页数量", required = true, paramType = "query", dataType = "int"),
-            @ApiImplicitParam(name = "versionId", value = "版本id", required = false, paramType = "form", dataType = "Long"),
-            @ApiImplicitParam(name = "projectId", value = "项目id", required = true, paramType = "form", dataType = "Long"),
-            @ApiImplicitParam(name = "demandId", value = "需求id", required = false, paramType = "form", dataType = "Long"),
-            @ApiImplicitParam(name = "taskId", value = "任务id", required = false, paramType = "form", dataType = "Long"),
-            @ApiImplicitParam(name = "bugId", value = "bugid", required = false, paramType = "form", dataType = "Long"),
-            @ApiImplicitParam(name = "testCaseId", value = "测试用例id", required = false, paramType = "form", dataType = "Long") })
-    @RequestMapping(value = "/queryVersionCitingHistory", method = RequestMethod.POST)
+            @ApiImplicitParam(name = "versionId", value = "版本id", required = false, paramType = "query", dataType = "Long"),
+            @ApiImplicitParam(name = "projectId", value = "项目id", required = true, paramType = "query", dataType = "Long"),
+            @ApiImplicitParam(name = "demandId", value = "需求id", required = false, paramType = "query", dataType = "Long"),
+            @ApiImplicitParam(name = "taskId", value = "任务id", required = false, paramType = "query", dataType = "Long"),
+            @ApiImplicitParam(name = "bugId", value = "bugid", required = false, paramType = "query", dataType = "Long"),
+            @ApiImplicitParam(name = "testCaseId", value = "测试用例id", required = false, paramType = "query", dataType = "Long") })
+    @RequestMapping(value = "/queryVersionCitingHistory", method = RequestMethod.GET)
     public JSONObject queryVersionCitingHistory(int page,int rows,@ApiIgnore VersionCitingHistory versionCitingHistory) {
         try {
             User user = (User) ShiroUtils.getSessionAttribute("user");
