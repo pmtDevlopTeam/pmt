@@ -1,11 +1,14 @@
 package com.camelot.pmt.task.service.impl;
 
+import com.baomidou.mybatisplus.plugins.pagination.PageHelper;
+import com.camelot.pmt.common.ApiResponse;
 import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.task.mapper.TaskMapper;
 import com.camelot.pmt.task.model.Task;
 import com.camelot.pmt.task.service.TaskPendingService;
 import com.camelot.pmt.task.utils.Constant.TaskStatus;
 import com.camelot.pmt.task.utils.Constant.TaskType;
+import com.github.pagehelper.PageInfo;
 import com.camelot.pmt.task.utils.RRException;
 
 import org.apache.commons.lang3.StringUtils;
@@ -17,6 +20,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 
@@ -156,23 +160,46 @@ public class TaskPendingServiceImpl implements TaskPendingService{
 	* @throws
 	 */
 	@Override
-	public ExecuteResult<List<Task>> queryAllTaskList(Task task){
-		ExecuteResult<List<Task>> result = new ExecuteResult<List<Task>>();
+	public ExecuteResult<PageInfo<Task>> queryAllTaskList(Task task,Integer page, Integer rows){
+		ExecuteResult<PageInfo<Task>> result = new ExecuteResult<PageInfo<Task>>();
 		try{
+			if (page == null || rows == null) {
+				result.addErrorMessage("行和列不能为空!");
+			}
+			//分页初始化
+        	PageHelper.startPage(page,rows);
 			//查询所有的Task任务列表
-			//List<Task> resultList = new ArrayList<Task>();
 			List<Task> allTaskList = taskMapper.queryAllTaskList(task);
-			/*if(allTaskList != null && allTaskList.size()>0){
-				for(Task t:allTaskList){
-					if(TaskType.DEVELOPMENTTASK.getValue().equals(t.getTaskType())){
-						if(TaskStatus.CHECKINTEST.getValue().equals(t.getStatus())){
-							
-						}
-						resultList.add(t);
-					}
-				}
-			}*/
-			result.setResult(allTaskList);
+			PageInfo<Task> pageInfo = new PageInfo<Task>(allTaskList);
+			result.setResult(pageInfo);
+		}catch (Exception e) {
+			LOGGER.error(e.getMessage());
+            throw new RRException(e.getMessage(),e);
+		}
+		return result;
+	}
+	
+	/**
+	 * 
+	* @Title: queryMyPendingTaskList 
+	* @Description: TODO(查询我的待办Task任务列表) 
+	* @param @return    设定文件 
+	* @return ExecuteResult<List<Task>>    返回类型 
+	* @throws
+	 */
+	@Override
+	public ExecuteResult<PageInfo<Task>> queryMyPendingTaskList(Task task,Integer page, Integer rows){
+		ExecuteResult<PageInfo<Task>> result = new ExecuteResult<PageInfo<Task>>();
+		try{
+			if (page == null || rows == null) {
+				result.addErrorMessage("行和列不能为空!");
+			}
+			//分页初始化
+        	PageHelper.startPage(page,rows);
+			//查询所有的Task任务列表
+			List<Task> allTaskList = taskMapper.queryMyPendingTaskList(task);
+			PageInfo<Task> pageInfo = new PageInfo<Task>(allTaskList);
+			result.setResult(pageInfo);
 		}catch (Exception e) {
 			LOGGER.error(e.getMessage());
             throw new RRException(e.getMessage(),e);
@@ -397,22 +424,22 @@ public class TaskPendingServiceImpl implements TaskPendingService{
 				return result;
 			}
 			//查询taskId节点
-			Task taskObj = taskMapper.queryTaskNodeById(id); 
-			taskStatus = taskObj.getStatus();
+			//Task taskObj = taskMapper.queryTaskNodeById(id); 
+			//taskStatus = taskObj.getStatus();
 			//判断状态是否为待办，如果是待办更新为正在进行
-			if(taskObj != null && TaskStatus.PENDINHG.getValue().equals(taskStatus)){
+			//if(taskObj != null && TaskStatus.PENDINHG.getValue().equals(taskStatus)){
 				//根据id更新任务状态为正在进行
 				taskMapper.updateTaskPendingToRunning(id,TaskStatus.RUNING.getValue());
-				if(taskObj.getTaskParentId() != null){
+				//if(taskObj.getTaskParentId() != null){
 					//查询taskId下的所有子节点
-					Task parentTaskNodes = taskMapper.queryParentTaskNodeById(taskObj.getTaskParentId());
+					//Task parentTaskNodes = taskMapper.queryParentTaskNodeById(taskObj.getTaskParentId());
 					//判断是否有父节点
-					if(parentTaskNodes!=null){
+					//if(parentTaskNodes!=null){
 						//递归
-						return updateTaskPendingToRunning(parentTaskNodes.getId(),parentTaskNodes.getStatus());
-					}
-				}
-			}
+						//return updateTaskPendingToRunning(parentTaskNodes.getId(),parentTaskNodes.getStatus());
+					//}
+				//}
+			//}
 			result.setResult("修改任务状态成功！");
 		}
 		catch (Exception e) {
@@ -440,25 +467,25 @@ public class TaskPendingServiceImpl implements TaskPendingService{
 				return result;
 			}
 			//查询taskId节点
-			Task taskObj = taskMapper.queryTaskNodeById(id); 
-			taskStatus = taskObj.getStatus();
+			//Task taskObj = taskMapper.queryTaskNodeById(id); 
+			//taskStatus = taskObj.getStatus();
 			//判断状态是否为待办
-			if(TaskStatus.PENDINHG.getValue().equals(taskStatus)){
+			//if(TaskStatus.PENDINHG.getValue().equals(taskStatus)){
 				//格式化日期格式为yyyy-mm-dd,根据id更新待办任务状态为延期
-				if(!TaskStatus.CLOSE.getValue().equals(taskStatus)){
+				//if(!TaskStatus.CLOSE.getValue().equals(taskStatus)){
 					taskMapper.updateTaskPendingToDelay(id,TaskStatus.OVERDUE.getValue(),delayDescribe,estimateStartTime);
-				}
+				//}
 				//查询taskId下的所有子节点
-				List<Task> childTaskNodes = taskMapper.queryTaskListNodeByParentId(id,null); 
+				//List<Task> childTaskNodes = taskMapper.queryTaskListNodeByParentId(id,null); 
 				//遍历子节点
-				if(childTaskNodes!=null && childTaskNodes.size()>0){
+				/*if(childTaskNodes!=null && childTaskNodes.size()>0){
 					for(Task child : childTaskNodes){
 						//递归
 						//非关闭需要改为延期
 						updateTaskPendingToDelay(child.getId(),taskStatus,delayDescribe,estimateStartTime);
 					}
-				}
-			}
+				}*/
+			//}
 			result.setResult("修改任务状态成功！");
 		}
 		catch (Exception e) {

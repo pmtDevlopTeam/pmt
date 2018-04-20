@@ -67,7 +67,7 @@ public interface UserMapper {
      * @return User
      * @author [maple]
      */
-    User findUserByLoginCode(String loginCode);
+    User queryUserIsExistByLoginCode(String loginCode);
     
     /**
      * 
@@ -119,7 +119,7 @@ public interface UserMapper {
      * @author [maple]
      * 2018年4月13日下午3:06:37
      */
-    List<UserVo> selectUsersList(UserVo userVo);
+    List<UserVo> queryUsersList(UserVo userVo);
     
     
     /**
@@ -129,7 +129,7 @@ public interface UserMapper {
 	 * @return int
 	 * @author [maple]
 	 */
-    int modifyUserByUserId(User userModel);
+    int updateUserByUserId(User userModel);
     
     /**
 	 * 
@@ -138,7 +138,7 @@ public interface UserMapper {
 	 * @return int
 	 * @author [maple]
 	 */
-    int modifyUserInfoByUserId(User userModel);
+    int updateUserInfoByUserId(User userModel);
     
     /**
 	 * 
@@ -147,7 +147,7 @@ public interface UserMapper {
 	 * @return int
 	 * @author [maple]
 	 */
-    int modifyUserOrgByUserId(User userModel);
+    int updateUserOrgByUserId(User userModel);
     
     /**
    	 * 
@@ -156,7 +156,7 @@ public interface UserMapper {
    	 * @return int
    	 * @author [maple]
    	 */
-    int modifyUserRoleByUserId(User userModel);
+    int updateUserRoleByUserId(User userModel);
     
     /**
      * 
@@ -177,15 +177,36 @@ public interface UserMapper {
      */
     User queryUserInfoById(String userId);
     
+    
     /**
      * 
-     * Description:[根据userId 删除用户角色中间表记录]
-     * @param 
-     * @return 
+     * Description:[根据userId 删除用户部门表记录]
+     * @param String userId
+     * @return int
      * @author [maple]
      * 2018年4月16日下午4:05:53
      */
-    void deleteUserRoleByUserId(String userId);
+    int deleteUserInfoByUserId(String userId);
+    
+    /**
+     * 
+     * Description:[根据userId 删除用户部门表记录]
+     * @param String userId
+     * @return int
+     * @author [maple]
+     * 2018年4月16日下午4:05:53
+     */
+    int deleteUserOrgByUserId(String userId);
+    
+    /**
+     * 
+     * Description:[根据userId 删除用户角色中间表记录]
+     * @param String userId
+     * @return int
+     * @author [maple]
+     * 2018年4月16日下午4:05:53
+     */
+    int deleteUserRoleByUserId(String userId);
     
     /**
      * 
@@ -205,7 +226,7 @@ public interface UserMapper {
      * @author [maple]
      * 2018年4月16日下午10:42:35
      */
-    int resetUserPasswordByUserId(User userModel);
+    int updateResetUserPasswordByUserId(User userModel);
     
     /**
      * 

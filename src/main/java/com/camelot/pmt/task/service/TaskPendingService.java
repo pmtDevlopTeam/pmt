@@ -2,6 +2,7 @@ package com.camelot.pmt.task.service;
 
 import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.task.model.Task;
+import com.github.pagehelper.PageInfo;
 
 import java.util.Date;
 import java.util.List;
@@ -63,10 +64,20 @@ public interface TaskPendingService {
 	* @Title: queryAllTaskList 
 	* @Description: TODO(查询所有的Task任务列表) 
 	* @param @return    设定文件 
-	* @return ExecuteResult<List<Task>>    返回类型 
+	* @return ExecuteResult<PageInfo<Task>>    返回类型 
 	* @throws
 	 */
-	ExecuteResult<List<Task>> queryAllTaskList(Task task);
+	ExecuteResult<PageInfo<Task>> queryAllTaskList(Task task,Integer page, Integer rows);
+	
+	/**
+	 * 
+	* @Title: queryMyPendingTaskList 
+	* @Description: TODO(查询我的待办Task任务列表) 
+	* @param @return    设定文件 
+	* @return ExecuteResult<PageInfo<Task>>    返回类型 
+	* @throws
+	 */
+	ExecuteResult<PageInfo<Task>> queryMyPendingTaskList(Task task,Integer page, Integer rows);
 	
 	/**
 	 * 

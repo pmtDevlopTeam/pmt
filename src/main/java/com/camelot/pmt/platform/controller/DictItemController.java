@@ -21,7 +21,9 @@ import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.common.Pager;
 import com.camelot.pmt.platform.model.DictItem;
 import com.camelot.pmt.platform.model.Menu;
+import com.camelot.pmt.platform.model.User;
 import com.camelot.pmt.platform.service.DictItemService;
+import com.camelot.pmt.platform.shiro.ShiroUtils;
 import com.github.pagehelper.PageInfo;
 
 import io.swagger.annotations.Api;
@@ -76,10 +78,11 @@ public class DictItemController {
 		ExecuteResult<String> result = new ExecuteResult<String>();
 		boolean flag = false;
 		try {
-			//if非空
-	    	if(dictItem.equals(null)){
-	    		return ApiResponse.errorPara();
-	    	}
+			User user = (User) ShiroUtils.getSessionAttribute("user");
+            if (StringUtils.isEmpty(user.getUserId())) {
+                ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
+            }
+            dictItem.setCreateUserId(user.getUserId());
 	    	if (StringUtils.isEmpty(dictItem.getDictId())||StringUtils.isEmpty(dictItem.getDictItemName())
 	    		||StringUtils.isEmpty(dictItem.getDictItemCode())||StringUtils.isEmpty(dictItem.getDictItemValue()) )
 	    	{
@@ -157,6 +160,11 @@ public class DictItemController {
 		ExecuteResult<String> result = new ExecuteResult<String>();
 		boolean flag = false;
         try {
+			User user = (User) ShiroUtils.getSessionAttribute("user");
+            if (StringUtils.isEmpty(user.getUserId())) {
+                ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
+            }
+            dictItem.setModifyUserId(user.getUserId());
 	    	if(StringUtils.isEmpty(dictItem.getDictItemId())){
 	    		return ApiResponse.errorPara();
 	        }
@@ -253,38 +261,7 @@ public class DictItemController {
 	}
 	
 
-//    /**
-//     * 检查字典项编码与字典项名称是否存在
-//     * 
-//     * @param DictItem dictItem
-//     * @return {"status":{"code":xxx,"message":"xxx"},"data":{xxx}
-//     */
-//  @ApiOperation(value="检查字典项编码与字典项名称是否存在", notes="检查字典项编码与字典项名称是否存在")
-//  @ApiImplicitParams({
-//          @ApiImplicitParam(
-//                  name="dictItemCode",value="字典项编码",required=true,paramType="form",dataType="String"),
-//          @ApiImplicitParam(
-//                  name="dictItemName",value="字典项名称",required=true,paramType="form",dataType="String"),
-//  })
-//  @RequestMapping(value = "/checkDictItemCodeOrDictItemNameIsExist",method = RequestMethod.POST)
-//  public JSONObject checkDictItemCodeOrDictItemNameIsExist(@ApiIgnore DictItem dictItem) {
-//	  boolean flag = false;
-//		try {
-//  		//判断非空
-//	    	if(dictItem == null){
-//	    		return ApiResponse.errorPara();
-//	    	}
-//	    	//不为空调用接口查询
-//	    	flag = dictItemService.checkDictItemCodeOrDictItemNameIsExist(dictItem);
-//	    	 if(flag) {
-//	    		 return ApiResponse.success();
-//	    	 }
-//	    	return ApiResponse.error();
-//		} catch (Exception e) {
-//			logger.error(e.getMessage());
-//			return ApiResponse.error();
-//		}
-//	}
+
 	
     
 }
