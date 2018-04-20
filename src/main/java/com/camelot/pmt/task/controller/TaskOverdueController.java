@@ -48,8 +48,8 @@ public class TaskOverdueController {
 	@ApiImplicitParams({
         @ApiImplicitParam(name = "taskNum", value = "任务编号", required = false, paramType = "form", dataType = "String"),
         @ApiImplicitParam(name = "taskName", value = "任务名称", required = false, paramType = "form", dataType = "String"),
-        @ApiImplicitParam(name = "project.id", value = "项目标识号", required = false, paramType = "form", dataType = "String"),
-        @ApiImplicitParam(name = "priority", value = "优先级", required = false, paramType = "form", dataType = "String"),
+        @ApiImplicitParam(name = "beassignUser.username", value = "负责人", required = false, paramType = "form", dataType = "String"),
+        @ApiImplicitParam(name = "taskType", value = "任务类型", required = false, paramType = "form", dataType = "String"),
         @ApiImplicitParam(dataType = "Integer", defaultValue = "1",name = "page", paramType = "query", value = "页码", required = true),
         @ApiImplicitParam(dataType = "Integer", defaultValue = "10",name = "rows", paramType = "query", value = "每页数量", required = true)
         })

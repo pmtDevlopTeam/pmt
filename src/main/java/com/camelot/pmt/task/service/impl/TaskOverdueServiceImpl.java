@@ -93,9 +93,15 @@ public class TaskOverdueServiceImpl implements TaskOverdueService {
 				Map<String, Object> queryOverdueTaskDetailByTaskId = taskMapper.queryOverdueTaskDetailByTaskId(taskId);
 				// 根据taskId查询历史记录
 				List<TaskLog> logList = logMapper.queryTaskLogList(Long.valueOf(taskId));
+				//根据来源id,来源查询附件
+				TaskFile taskFile = new TaskFile();
+				taskFile.setSourceId(Long.parseLong(taskId));
+				taskFile.setAttachmentSource("任务");
+				TaskFile taskFile1 = fileMapper.queryByTaskFile(taskFile);
 				// 查询结果放入返回对象中
 				map.put("queryOverdueTaskDetailByTaskId", queryOverdueTaskDetailByTaskId);
 				map.put("logList", logList);
+				map.put("taskFile",taskFile1);
 				// 结果装入返回值
 				result.setResult(map);
 				return result;
