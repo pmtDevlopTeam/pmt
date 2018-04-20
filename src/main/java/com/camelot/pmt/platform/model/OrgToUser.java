@@ -6,10 +6,6 @@ import java.util.List;
 
 public class OrgToUser implements Serializable {
     /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
-    /**
      * id
      */
     private Long id;

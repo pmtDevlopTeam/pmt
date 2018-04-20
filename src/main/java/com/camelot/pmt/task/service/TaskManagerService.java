@@ -1,12 +1,11 @@
 package com.camelot.pmt.task.service;
 
-import java.util.Map;
-
-import org.springframework.web.multipart.MultipartFile;
-
-import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.task.model.Task;
 import com.github.pagehelper.PageInfo;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpSession;
+import java.util.Map;
 
 /**
  * 任务管理模块接口类
@@ -21,7 +20,9 @@ public interface TaskManagerService {
      *
      * @author zlh
      * @param task
+     *            插入的数据
      * @param file
+     *            上传的附件
      * @date 9:10 2018/4/12
      * @return boolean
      */
@@ -41,81 +42,97 @@ public interface TaskManagerService {
     /**
      * 编辑任务
      *
-     * @author: zlh
-     * @param: taskManager
-     *             任务修改内容
-     * @description:
-     * @date: 17:05 2018/4/13
+     * @author zlh
+     * @param task
+     *            任务修改内容
+     * @date 17:05 2018/4/13
+     * @return boolean
      */
-    ExecuteResult<String> updateTaskByTask(Task task);
+    boolean updateTaskByTask(Task task);
 
     /**
      * 编辑需求是否变更
      *
-     * @author: zlh
-     * @param: taskManager
-     *             任务修改内容
-     * @description:
-     * @date: 17:37 2018/4/13
+     * @author zlh
+     * @param task
+     *            任务修改内容
+     * @date 17:37 2018/4/13
+     * @return boolean
      */
-    ExecuteResult<String> updateDemandChangeByTask(Task task);
+    boolean updateDemandChangeByTask(Task task);
 
     /**
      * 任务延期
      *
-     * @author: zlh
-     * @param: task
-     *             需要修改的任务数据
-     * @date: 10:18 2018/4/12
+     * @author zlh
+     * @param task
+     *            需要修改的任务数据
+     * @date 10:18 2018/4/12
+     * @return boolean
      */
-    ExecuteResult<String> updateEstimateStartTimeById(Task task);
+    boolean updateEstimateStartTimeById(Task task);
 
     /**
-     * 指派
+     * 指派(验证是否有创建人、负责人权限)
      *
-     * @author: zlh
-     * @param: taskManager
-     *             需要修改的任务数据
-     * @date: 11:36 2018/4/12
+     * @author zlh
+     * @param id
+     *            需要修改的任务id
+     * @param userId
+     *            负责人的id
+     * @date 11:36 2018/4/12
+     * @return boolean
      */
-    ExecuteResult<String> updateBeAssignUserById(Long id, String userId, boolean isAssignAll);
+    boolean updateBeAssignUserById(Long id, String userId);
+
+    /**
+     * 指派（验证是否有项目经理角色权限）
+     *
+     * @author zlh
+     * @param session
+     *            session
+     * @date 11:36 2018/4/12
+     * @return boolean
+     */
+    boolean updateBeAssignUserByIdCheckPower(HttpSession session);
 
     /**
      * 根据任务id查询任务详情
      *
-     * @author: zlh
-     * @param: id
-     *             任务id
+     * @author zlh
+     * @param id
+     *            任务id
      * @return ExecuteResult<Map<String, Object>> String:数据的类型
-     *         Task（任务信息）和TaskFile（附件信息） Object：对应的数据
-     * @date: 17:08 2018/4/12
+     *         Task（任务信息）和TaskFile（附件信息）
+     * @date 17:08 2018/4/12
      */
-    ExecuteResult<Map<String, Object>> queryTaskById(Long id);
+    Map<String, Object> queryTaskById(Long id);
 
     /**
      * 查询所有任务列表
      *
-     * @author: zlh
-     * @param: page
-     *             当前页
-     * @param: rows
-     *             一页有几行
-     * @date: 16:54 2018/4/9
+     * @author zlh
+     * @param page
+     *            当前页
+     * @param rows
+     *            一页有几行
+     * @date 16:54 2018/4/9
+     * @return PageInfo<Task>
      */
-    ExecuteResult<PageInfo<Task>> queryAllTask(Integer page, Integer rows);
+    PageInfo<Task> queryAllTask(Integer page, Integer rows);
 
     /**
      * 根据条件查询任务
      *
-     * @author: zlh
+     * @author zlh
      * @param task
      *            模糊查询的条件
-     * @param: page
-     *             当前页
-     * @param: rows
-     *             一页有几行
-     * @return
+     * @param page
+     *            当前页
+     * @param rows
+     *            一页有几行
+     * @return PageInfo<Task>
      */
-    ExecuteResult<PageInfo<Task>> queryTaskByTask(Task task, Integer page, Integer rows);
+    PageInfo<Task> queryTaskByTask(Task task, Integer page, Integer rows);
 
 }

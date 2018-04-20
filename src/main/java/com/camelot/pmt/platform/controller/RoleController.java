@@ -90,6 +90,11 @@ public class RoleController {
     public JSONObject deleteRoleById(@ApiIgnore Role role) {
         boolean flag = false;
         try {
+            User user = (User) ShiroUtils.getSessionAttribute("user");
+            if (StringUtils.isEmpty(user.getUserId())) {
+                ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
+            }
+            role.setModifyUserId(user.getUserId());
             if (StringUtils.isEmpty(role.getRoleId())) {
                 ApiResponse.jsonData(APIStatus.ERROR_400);
             }

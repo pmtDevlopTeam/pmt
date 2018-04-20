@@ -14,6 +14,7 @@ import com.camelot.pmt.platform.mapper.UserMapper;
 import com.camelot.pmt.platform.model.User;
 import com.camelot.pmt.platform.model.vo.UserVo;
 import com.camelot.pmt.platform.service.UserService;
+import com.camelot.pmt.platform.shiro.ShiroUtils;
 import com.camelot.pmt.util.UUIDUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -47,16 +48,19 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public String addUser(User user) {
+
+        User loginUser = (User) ShiroUtils.getSessionAttribute("user");
         // 1.插入用户表
         String userId = UUIDUtil.getUUID();
         user.setUserId(userId);
         String inputPassword = user.getPassword();
         String encryptPassword = new Sha256Hash(inputPassword).toHex();
         user.setPassword(encryptPassword);
-        user.setModifyUserId(user.getCreateUserId());
+        user.setCreateUserId(loginUser.getUserId());
+        user.setModifyUserId(loginUser.getUserId());
         // 2.插入用户信息表
         // 检查用户名是否存在，不存在的话再插入用户表
-        User dbModel = userMapper.findUserByLoginCode(user.getLoginCode());
+        User dbModel = userMapper.queryUserIsExistByLoginCode(user.getLoginCode());
         if (dbModel != null) {
             return "该用户已经存在！";
         }
@@ -149,7 +153,7 @@ public class UserServiceImpl implements UserService {
         // 1.获取用户输入的登录账号
         String inputLoginCode = user.getLoginCode();
         // 2.根据登录账号去库中获取用户信息,检查用户是否存在
-        User dbModel = userMapper.findUserByLoginCode(inputLoginCode);
+        User dbModel = userMapper.queryUserIsExistByLoginCode(inputLoginCode);
         if (dbModel == null) {
             return null;
         }
@@ -167,7 +171,7 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 
-     * Description:[列表展示用户]
+     * Description:[列表展示用户用户详情]
      * 
      * @param UserVo
      *            userVo
@@ -178,7 +182,7 @@ public class UserServiceImpl implements UserService {
     public PageInfo queryUsersList(UserVo userVo, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
         // 利用userVo做 条件查询，默认查询所有的
-        List<UserVo> usersList = userMapper.selectUsersList(userVo);
+        List<UserVo> usersList = userMapper.queryUsersList(userVo);
         PageInfo pageResult = new PageInfo(usersList);
         pageResult.setList(usersList);
         return pageResult;
@@ -193,7 +197,10 @@ public class UserServiceImpl implements UserService {
      * @author [maple]
      */
     @Override
-    public String modifyUserDetailsByUserId(User user) {
+    public String updateUserDetailsByUserId(User user) {
+
+        User loginUser = (User) ShiroUtils.getSessionAttribute("user");
+        user.setModifyUserId(loginUser.getUserId());
         // 1.判断用户表需要更新的字段
         if (!StringUtils.isEmpty(user.getUsername()) || !StringUtils.isEmpty(user.getLoginCode())
                 || !StringUtils.isEmpty(user.getPassword()) || !StringUtils.isEmpty(user.getState())
@@ -202,14 +209,14 @@ public class UserServiceImpl implements UserService {
                 String encryptPassword = new Sha256Hash(user.getPassword()).toHex();
                 user.setPassword(encryptPassword);
             }
-            int updateResult = userMapper.modifyUserByUserId(user);
+            int updateResult = userMapper.updateUserByUserId(user);
             if (updateResult == 0) {
                 return "更新用户失败！";
             }
         }
         // 2.判断用户信息表更新
         if (!StringUtils.isEmpty(user.getUserPhone()) || !StringUtils.isEmpty(user.getUserMail())) {
-            int updateResult = userMapper.modifyUserInfoByUserId(user);
+            int updateResult = userMapper.updateUserInfoByUserId(user);
             if (updateResult == 0) {
                 return "更新用户失败！";
             }
@@ -221,7 +228,7 @@ public class UserServiceImpl implements UserService {
                 user.setCreateUserId(user.getModifyUserId());
                 userMapper.addUserOrg(user);
             } else {
-                int updateResult = userMapper.modifyUserOrgByUserId(user);
+                int updateResult = userMapper.updateUserOrgByUserId(user);
                 if (updateResult == 0) {
                     return "更新用户失败！";
                 }
@@ -277,13 +284,15 @@ public class UserServiceImpl implements UserService {
      * @author [maple] 2018年4月16日下午10:44:45
      */
     @Override
-    public String resetUserPasswordByUserId(User user) {
+    public String updateResetUserPasswordByUserId(User user) {
+        User loginUser = (User) ShiroUtils.getSessionAttribute("user");
+        user.setModifyUserId(loginUser.getUserId());
         if (StringUtils.isEmpty(user.getPassword())) {
             String random = UUIDUtil.getUUID();
             String generatePassword = random.substring(0, 6);
             String encryptPassword = new Sha256Hash(generatePassword).toHex();
             user.setPassword(encryptPassword);
-            int updateResult = userMapper.resetUserPasswordByUserId(user);
+            int updateResult = userMapper.updateResetUserPasswordByUserId(user);
             if (updateResult <= 0) {
                 return "重置密码失败！";
             }
@@ -292,7 +301,7 @@ public class UserServiceImpl implements UserService {
         String inputPassword = user.getPassword();
         String encryptPassword = new Sha256Hash(inputPassword).toHex();
         user.setPassword(encryptPassword);
-        int updateResult = userMapper.resetUserPasswordByUserId(user);
+        int updateResult = userMapper.updateResetUserPasswordByUserId(user);
         if (updateResult <= 0) {
             return "重置密码失败！";
         }

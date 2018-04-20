@@ -1,26 +1,34 @@
 package com.camelot.pmt.task.service.impl;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.baomidou.mybatisplus.plugins.pagination.PageHelper;
+import com.baomidou.mybatisplus.toolkit.StringUtils;
+import com.camelot.pmt.common.DataGrid;
+import com.camelot.pmt.common.ExecuteResult;
+import com.camelot.pmt.common.Pager;
+import com.camelot.pmt.platform.model.User;
+import com.camelot.pmt.platform.shiro.ShiroUtils;
+import com.camelot.pmt.task.mapper.TaskFileMapper;
+import com.camelot.pmt.task.mapper.TaskLogMapper;
+import com.camelot.pmt.task.mapper.TaskMapper;
+import com.camelot.pmt.task.model.Task;
+import com.camelot.pmt.task.model.TaskDetail;
+import com.camelot.pmt.task.model.TaskFile;
+import com.camelot.pmt.task.model.TaskLog;
+import com.camelot.pmt.task.service.TaskOverdueService;
+import com.camelot.pmt.task.utils.DateUtils;
+import com.github.pagehelper.PageInfo;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import com.baomidou.mybatisplus.plugins.pagination.PageHelper;
-import com.baomidou.mybatisplus.toolkit.StringUtils;
-import com.camelot.pmt.common.ExecuteResult;
-import com.camelot.pmt.task.mapper.TaskFileMapper;
-import com.camelot.pmt.task.mapper.TaskLogMapper;
-import com.camelot.pmt.task.mapper.TaskMapper;
-import com.camelot.pmt.task.model.Task;
-import com.camelot.pmt.task.model.TaskLog;
-import com.camelot.pmt.task.service.TaskOverdueService;
-import com.github.pagehelper.PageInfo;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 
@@ -31,6 +39,7 @@ import com.github.pagehelper.PageInfo;
  *
  */
 @Service
+@Transactional
 public class TaskOverdueServiceImpl implements TaskOverdueService {
 
     @Autowired
@@ -45,7 +54,7 @@ public class TaskOverdueServiceImpl implements TaskOverdueService {
     private static final Logger LOGGER = LoggerFactory.getLogger(TaskOverdueServiceImpl.class);
 
     /**
-     * 查询所有逾期任务+分页
+     * 查询所有逾期任务+分页 +组合查询
      */
     @Override
     public ExecuteResult<PageInfo<Map<String, Object>>> queryOverdueTask(Task task, Integer page, Integer rows) {
@@ -53,15 +62,17 @@ public class TaskOverdueServiceImpl implements TaskOverdueService {
         try {
             // 分页初始化
             PageHelper.startPage(page, rows);
+            // 查询延期任务列表
             List<Map<String, Object>> list = taskMapper.queryOverdueTask(task);
-
             // 如果没有查询到数据，不继续进行
             if (CollectionUtils.isEmpty(list)) {
                 PageInfo<Map<String, Object>> pageInfo = new PageInfo<>();
                 result.setResult(pageInfo);
                 return result;
             }
+            // pagerhelper分页
             PageInfo<Map<String, Object>> pageInfo = new PageInfo<>(list);
+            // 结果装入返回结果
             result.setResult(pageInfo);
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -82,10 +93,16 @@ public class TaskOverdueServiceImpl implements TaskOverdueService {
                 Map<String, Object> queryOverdueTaskDetailByTaskId = taskMapper.queryOverdueTaskDetailByTaskId(taskId);
                 // 根据taskId查询历史记录
                 List<TaskLog> logList = logMapper.queryTaskLogList(Long.valueOf(taskId));
+                // 根据来源id,来源查询附件
+                TaskFile taskFile = new TaskFile();
+                taskFile.setSourceId(Long.parseLong(taskId));
+                taskFile.setAttachmentSource("任务");
+                TaskFile taskFile1 = fileMapper.queryByTaskFile(taskFile);
                 // 查询结果放入返回对象中
                 map.put("queryOverdueTaskDetailByTaskId", queryOverdueTaskDetailByTaskId);
                 map.put("logList", logList);
-
+                map.put("taskFile", taskFile1);
+                // 结果装入返回值
                 result.setResult(map);
                 return result;
             }
@@ -104,16 +121,27 @@ public class TaskOverdueServiceImpl implements TaskOverdueService {
     public ExecuteResult<String> insertOverduMessage(Task task) {
         ExecuteResult<String> result = new ExecuteResult<String>();
         try {
+            // 判断对象是否存在
             if (task.getId() == 0 || task.getId() == null) {
                 result.setResult("该任务不存在!");
                 return result;
             }
             // 进行任务的更改(根据id去更改,修改延期描述,修改)
             int count = taskMapper.insertOverduMessage(task);
+            // 判断是否成功
             if (count == 0) {
                 result.setResult("更新任务失败!");
                 return result;
             }
+            // 添加日志
+            TaskLog taskLog = new TaskLog();
+            taskLog.setTaskId(Long.valueOf(task.getId()));
+            // User user = (User)ShiroUtils.getSessionAttribute("user");
+            taskLog.setUserId("cbec73cb98be4e9e8f3e2aab25a0a7bc");
+            taskLog.setOperationButton("添加延期原因");
+            taskLog.setOperationDescribe("任务延期添加延期原因");
+            taskLog.setOperationTime(new Date());
+            int insert = logMapper.insert(taskLog);
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
             throw new RuntimeException(e);
@@ -135,11 +163,12 @@ public class TaskOverdueServiceImpl implements TaskOverdueService {
             }
             // 进行任务的状态更改(根据id去更改任务的状态)
             int count = taskMapper.updateTaskOverdueStatus(taskId);
+            // 添加日志
             TaskLog taskLog = new TaskLog();
             taskLog.setTaskId(Long.valueOf(taskId));
             // User user = (User)ShiroUtils.getSessionAttribute("user");
             taskLog.setUserId("cbec73cb98be4e9e8f3e2aab25a0a7bc");
-            taskLog.setOperationButton("开始");
+            taskLog.setOperationButton("开始任务");
             taskLog.setOperationDescribe("由延期状态修改成开始状态");
             taskLog.setOperationTime(new Date());
             int insert = logMapper.insert(taskLog);

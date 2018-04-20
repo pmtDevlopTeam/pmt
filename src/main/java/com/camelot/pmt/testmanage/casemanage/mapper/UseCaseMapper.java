@@ -4,9 +4,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Mapper;
 
 import com.camelot.pmt.testmanage.casemanage.model.UseCase;
+import com.github.pagehelper.Page;
+import org.apache.ibatis.annotations.Param;
 
 public interface UseCaseMapper {
     int deleteByPrimaryKey(Long id);
@@ -37,5 +39,5 @@ public interface UseCaseMapper {
      * @return
      */
     int updateByProjectId(@Param("projectId") Long projectId, @Param("caseStatus") String caseStatus,
-            @Param("modifyUserId") String modifyUserId, @Param("modifyTime") Date modifyTime);
+                          @Param("modifyUserId") String modifyUserId, @Param("modifyTime") Date modifyTime);
 }

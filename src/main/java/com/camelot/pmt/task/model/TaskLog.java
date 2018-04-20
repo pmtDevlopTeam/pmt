@@ -5,10 +5,6 @@ import java.util.Date;
 
 public class TaskLog implements Serializable {
     /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
-    /**
      * 任务日志标识号（主键）
      */
     private Long id;

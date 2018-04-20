@@ -2,6 +2,8 @@ package com.camelot.pmt.task.service.impl;
 
 import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.task.mapper.TaskLogMapper;
+import com.camelot.pmt.task.mapper.TaskMapper;
+import com.camelot.pmt.task.model.Task;
 import com.camelot.pmt.task.model.TaskLog;
 import com.camelot.pmt.task.service.TaskLogService;
 import org.slf4j.Logger;
@@ -9,6 +11,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -27,6 +31,9 @@ public class TaskLogServiceImpl implements TaskLogService {
 
     @Autowired
     private TaskLogMapper taskLogMapper;
+
+    @Autowired
+    private TaskMapper taskMapper;
 
     /**
      * 添加日志记录
@@ -68,6 +75,27 @@ public class TaskLogServiceImpl implements TaskLogService {
             throw new RuntimeException(e);
         }
         return result;
+    }
+
+    @Override
+    public void queryTaskLogList(Long id, String peration) {
+        ExecuteResult<List<TaskLog>> result = new ExecuteResult<List<TaskLog>>();
+        try {
+            Task taskAll = taskMapper.queryTaskAllById(id);
+            TaskLog taskLog = new TaskLog();
+            Date date = new Date();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            taskLog.setTaskId(taskAll.getId());
+            taskLog.setUserId(taskAll.getBeassignUser().getUserId());
+            taskLog.setOperationButton(peration);
+            taskLog.setOperationTime(date);
+            taskLog.setOperationDescribe(
+                    dateFormat.format(date) + "\t" + taskAll.getBeassignUser().getUsername() + "\t" + peration);
+            taskLogMapper.insertTaskLog(taskLog);
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
     }
 
 }

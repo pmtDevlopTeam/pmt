@@ -1,26 +1,24 @@
 package com.camelot.pmt.task.controller;
 
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
 import com.camelot.pmt.common.ApiResponse;
 import com.camelot.pmt.common.ExecuteResult;
+import com.camelot.pmt.task.mapper.TaskLogMapper;
 import com.camelot.pmt.task.model.Task;
+import com.camelot.pmt.task.model.TaskDetail;
 import com.camelot.pmt.task.service.TaskOverdueService;
 import com.github.pagehelper.PageInfo;
+import io.swagger.annotations.*;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
 /**
@@ -48,8 +46,8 @@ public class TaskOverdueController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "taskNum", value = "任务编号", required = false, paramType = "form", dataType = "String"),
             @ApiImplicitParam(name = "taskName", value = "任务名称", required = false, paramType = "form", dataType = "String"),
-            @ApiImplicitParam(name = "project.id", value = "项目标识号", required = false, paramType = "form", dataType = "String"),
-            @ApiImplicitParam(name = "priority", value = "优先级", required = false, paramType = "form", dataType = "String"),
+            @ApiImplicitParam(name = "beassignUser.username", value = "负责人", required = false, paramType = "form", dataType = "String"),
+            @ApiImplicitParam(name = "taskType", value = "任务类型", required = false, paramType = "form", dataType = "String"),
             @ApiImplicitParam(dataType = "Integer", defaultValue = "1", name = "page", paramType = "query", value = "页码", required = true),
             @ApiImplicitParam(dataType = "Integer", defaultValue = "10", name = "rows", paramType = "query", value = "每页数量", required = true) })
     @RequestMapping(value = "/queryOverdueTask", method = RequestMethod.POST)
