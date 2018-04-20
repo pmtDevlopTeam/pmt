@@ -1,21 +1,19 @@
 package com.camelot.pmt.task.service.impl;
 
+import java.util.Date;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.task.mapper.TaskMapper;
 import com.camelot.pmt.task.model.Task;
 import com.camelot.pmt.task.service.TaskPendingService;
 import com.camelot.pmt.task.utils.Constant.TaskStatus;
-import com.camelot.pmt.task.utils.DateUtils;
 import com.camelot.pmt.task.utils.RRException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 /**
  * 
@@ -153,6 +151,26 @@ public class TaskPendingServiceImpl implements TaskPendingService {
 
     /**
      * 
+     * @Title: queryMyPendingTaskList @Description:
+     *         TODO(查询我的待办Task任务列表) @param @return 设定文件 @return
+     *         ExecuteResult<List<Task>> 返回类型 @throws
+     */
+    @Override
+    public ExecuteResult<List<Task>> queryMyPendingTaskList(Task task) {
+        ExecuteResult<List<Task>> result = new ExecuteResult<List<Task>>();
+        try {
+            // 查询所有的Task任务列表
+            List<Task> allTaskList = taskMapper.queryMyPendingTaskList(task);
+            result.setResult(allTaskList);
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
+            throw new RRException(e.getMessage(), e);
+        }
+        return result;
+    }
+
+    /**
+     * 
      * @Title: queryMyTaskListNodeByParentId @Description:
      *         TODO(查询taskId下的一级子节点) @param @param taskId @param @return
      *         设定文件 @return ExecuteResult<List<Task>> 返回类型 @throws
@@ -214,11 +232,12 @@ public class TaskPendingServiceImpl implements TaskPendingService {
                 result.addErrorMessage("删除任务时，taskId不能为空!");
                 return result;
             }
-            if ("0".equals(taskStatus)) {
+            // 查询taskId节点
+            if (TaskStatus.PENDINHG.equals(taskStatus)) {
                 // 根据taskId删除当前对象
                 taskMapper.deleteTaskNodeById(id);
                 // 递归查询taskId下的所有子节点
-                List<Task> childTaskNodes = taskMapper.queryTaskListNodeByParentId(id, taskStatus);
+                List<Task> childTaskNodes = taskMapper.queryTaskListNodeByParentId(id, null);// 业务有问题，此接口暂时不用
                 // 遍历子节点
                 if (childTaskNodes != null && childTaskNodes.size() > 0) {
                     for (Task child : childTaskNodes) {
@@ -255,11 +274,6 @@ public class TaskPendingServiceImpl implements TaskPendingService {
                 if (childTaskNodes != null && childTaskNodes.size() > 0) {
                     for (Task child : childTaskNodes) {
                         // 递归
-                        // sql需要修改
-                        // <if test="taskStatus != null" > and t.task_type =
-                        // #{taskStatus,jdbcType=BIGINT} </if>
-                        // <if test="beassignUserId != null" > and t.beassign_user_id =
-                        // #{beassignUserId,jdbcType=BIGINT} </if>
                         result = queryTaskTreeByTaskId(child.getId(), taskStatus, beassignUserId);
                         taskNode.getChildren().add(result.getResult());
                     }
@@ -285,11 +299,11 @@ public class TaskPendingServiceImpl implements TaskPendingService {
      * TODO(通过递归获取Task任务树) @param @param taskId @param @return 设定文件 @return Task
      * 返回类型 @throws
      */
-    public ExecuteResult<List<Task>> queryTopAllTaskTreeByTaskId(Long taskParentId) {
+    public ExecuteResult<List<Task>> queryTopAllTaskTreeByTaskId(Long taskParentId, List<Task> list) {
         ExecuteResult<List<Task>> result = new ExecuteResult<List<Task>>();
         try {
             Task taskNode = new Task();
-            List<Task> topAllTaskList = new ArrayList<Task>();
+            List<Task> topAllTaskList = list;
             // 判断删除的任务Id是否存在
             if (taskParentId == null) {
                 result.addErrorMessage("任务id为空");
@@ -297,12 +311,14 @@ public class TaskPendingServiceImpl implements TaskPendingService {
             }
             // 根据taskId获取节点对象
             taskNode = taskMapper.queryParentTaskNodeById(taskParentId);
-            // 遍历子节点
-            if (taskNode != null && taskNode.getTaskParentId() != null) {
+            if (taskNode != null) {
                 // 添加task对象
                 topAllTaskList.add(taskNode);
-                // 递归
-                queryTopAllTaskTreeByTaskId(taskNode.getTaskParentId());
+                // 判断是否有父节点
+                if (taskNode.getTaskParentId() != null) {
+                    // 递归
+                    queryTopAllTaskTreeByTaskId(taskNode.getTaskParentId(), topAllTaskList);
+                }
             }
             result.setResult(topAllTaskList);
         } catch (Exception e) {
@@ -321,11 +337,6 @@ public class TaskPendingServiceImpl implements TaskPendingService {
         ExecuteResult<List<Task>> result = new ExecuteResult<List<Task>>();
         try {
             // 根据当前用户Id和任务类型，查询我的顶级待办任务
-            // select t.id,t.task_parent_id,t.task_name from task t where 1=1
-            // <if test="taskStatus != null" > and t.task_type =
-            // #{taskStatus,jdbcType=BIGINT} </if>
-            // <if test="beassignUserId != null" > and t.beassign_user_id =
-            // #{beassignUserId,jdbcType=BIGINT} </if>
             List<Task> allTaskList = taskMapper.queryTopTaskNameList(taskStatus, beassignUserId);
             result.setResult(allTaskList);
         } catch (Exception e) {
@@ -349,20 +360,24 @@ public class TaskPendingServiceImpl implements TaskPendingService {
                 result.addErrorMessage("传入的任务Id有误!");
                 return result;
             }
+            // 查询taskId节点
+            Task taskObj = taskMapper.queryTaskNodeById(id);
+            taskStatus = taskObj.getStatus();
             // 判断状态是否为待办，如果是待办更新为正在进行
-            if ("0".equals(taskStatus)) {
+            if (taskObj != null && TaskStatus.PENDINHG.getValue().equals(taskStatus)) {
                 // 根据id更新任务状态为正在进行
-                // sql:update task set t.status = #{taskStatus,jdbcType=VARCHAR} where t.id =
-                // #{id,jdbcType=BIGINT}
-                taskMapper.updateTaskPendingToRunning(id, taskStatus);
+                taskMapper.updateTaskPendingToRunning(id, TaskStatus.RUNING.getValue());
+                // if(taskObj.getTaskParentId() != null){
                 // 查询taskId下的所有子节点
-                // select * from task t where t.task_parent_id = #{id}
-                Task parentTaskNodes = taskMapper.queryParentTaskNodeById(id);
+                // Task parentTaskNodes =
+                // taskMapper.queryParentTaskNodeById(taskObj.getTaskParentId());
                 // 判断是否有父节点
-                if (parentTaskNodes != null) {
-                    // 递归
-                    return updateTaskPendingToRunning(parentTaskNodes.getId(), parentTaskNodes.getStatus());
-                }
+                // if(parentTaskNodes!=null){
+                // 递归
+                // return
+                // updateTaskPendingToRunning(parentTaskNodes.getId(),parentTaskNodes.getStatus());
+                // }
+                // }
             }
             result.setResult("修改任务状态成功！");
         } catch (Exception e) {
@@ -383,39 +398,29 @@ public class TaskPendingServiceImpl implements TaskPendingService {
             Date estimateStartTime) {
         ExecuteResult<String> result = new ExecuteResult<String>();
         try {
-            if (id == null || StringUtils.isEmpty(delayDescribe) || estimateStartTime == null) {
+            if (id == null || estimateStartTime == null) {
                 result.addErrorMessage("传入的参数有误!");
                 return result;
             }
-            // 判断状态是否为待办，如果是待办更新为正在进行
+            // 查询taskId节点
+            Task taskObj = taskMapper.queryTaskNodeById(id);
+            taskStatus = taskObj.getStatus();
+            // 判断状态是否为待办
             if (TaskStatus.PENDINHG.getValue().equals(taskStatus)) {
-                // 格式化日期格式为yyyy-mm-dd HH:mm:ss,根据id更新待办任务状态为延期
-                // sql:update task set t.status =
-                // #{taskStatus,jdbcType=VARCHAR},t.delay_describe =
-                // #{delayDescribe,jdbcType=VARCHAR},t.estimate_start_time =
-                // #{estimateStartTime,jdbcType=TIMESTAMP} where t.id = #{id,jdbcType=BIGINT}
+                // 格式化日期格式为yyyy-mm-dd,根据id更新待办任务状态为延期
                 if (!TaskStatus.CLOSE.getValue().equals(taskStatus)) {
-                    taskMapper.updateTaskPendingToDelay(id, taskStatus, delayDescribe,
-                            DateUtils.format(estimateStartTime, DateUtils.DATE_TIME_PATTERN));
+                    taskMapper.updateTaskPendingToDelay(id, TaskStatus.OVERDUE.getValue(), delayDescribe,
+                            estimateStartTime);
                 }
                 // 查询taskId下的所有子节点
-                // select * from task t where <if test="id != null" >t.task_parent_id =
-                // #{id}</if> <if test="taskStatus != null" > and t.task_type =
-                // #{taskStatus,jdbcType=BIGINT} </if>
-                List<Task> childTaskNodes = taskMapper.queryTaskListNodeByParentId(id, null);
+                // List<Task> childTaskNodes = taskMapper.queryTaskListNodeByParentId(id,null);
                 // 遍历子节点
-                if (childTaskNodes != null && childTaskNodes.size() > 0) {
-                    for (Task child : childTaskNodes) {
-                        // 递归
-                        // sql需要修改
-                        // <if test="taskStatus != null" > and t.task_type =
-                        // #{taskStatus,jdbcType=BIGINT} </if>
-                        // <if test="beassignUserId != null" > and t.beassign_user_id =
-                        // #{beassignUserId,jdbcType=BIGINT} </if>
-                        // 非关闭需要改为延期
-                        updateTaskPendingToDelay(child.getId(), taskStatus, delayDescribe, estimateStartTime);
-                    }
-                }
+                /*
+                 * if(childTaskNodes!=null && childTaskNodes.size()>0){ for(Task child :
+                 * childTaskNodes){ //递归 //非关闭需要改为延期
+                 * updateTaskPendingToDelay(child.getId(),taskStatus,delayDescribe,
+                 * estimateStartTime); } }
+                 */
             }
             result.setResult("修改任务状态成功！");
         } catch (Exception e) {
@@ -440,9 +445,6 @@ public class TaskPendingServiceImpl implements TaskPendingService {
                 result.addErrorMessage("传入的taskd或assignUserId或beassignUserId有误!");
                 return result;
             }
-            // sql:update task set t.assign_user_id =
-            // #{assignUserId,jdbcType=BIGINT},t.beassign_user_id=
-            // #{beassignUserId,jdbcType=BIGINT} where t.id = #{id,jdbcType=BIGINT}
             taskMapper.updateTaskToAssign(id, assignUserId, beassignUserId);
             result.setResult("修改任务状态成功！");
         } catch (Exception e) {

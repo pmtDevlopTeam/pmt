@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.camelot.pmt.common.GetDutys;
+import com.camelot.pmt.common.IncrementNumber;
 import com.camelot.pmt.platform.model.User;
 import com.camelot.pmt.platform.shiro.ShiroUtils;
 import com.camelot.pmt.project.mapper.DemandMapper;
@@ -75,14 +76,18 @@ public class ProjectMainServiceImpl implements ProjectMainService {
                 projectMain.setModifyUserId(user.getUserId());
                 projectMain.setCreateTime(new Date());
                 projectMain.setModifyTime(new Date());
-                projectMain.setProjectNum("0000000001");// 编码需要确定
+                // 查询数据库最大的项目编号
+                String maxProjectNum = projectMainMapper.getMaxProjectNum();
+                String generProjectNum = IncrementNumber.getIncreNum(maxProjectNum);
+                projectMain.setProjectNum(generProjectNum);
                 projectMainNum = projectMainMapper.addProject(projectMain);
                 // 保存projectOperate
                 ProjectOperate projectOperate = new ProjectOperate();
                 projectOperate.setCreateUserId(user.getUserId());
                 projectOperate.setProjectId(projectMain.getId());
                 projectOperate.setCreateTime(new Date());
-                projectOperate.setOperateDesc(user.getUsername() + "     新增项目");
+                projectOperate.setOperateDesc(new Date() + "    " + user.getUsername() + "     新增项目，增加的项目编号projectNum："
+                        + projectMain.getProjectNum() + "，项目名称为projectName：" + projectName);
                 projectOperateNum = projectOperateMapper.addProjectOperate(projectOperate);
                 // 保存projectBudget
                 ProjectBudget projectBudget = new ProjectBudget();
@@ -193,12 +198,15 @@ public class ProjectMainServiceImpl implements ProjectMainService {
             User user = (User) ShiroUtils.getSessionAttribute("user");
             if (user != null && user.getUserId() != null) {
                 projectMainNum = projectMainMapper.updateByPrimaryKeySelective(id, userId, user.getUserId(), new Date(),
-                        "0000000009", projectName, projectStatus, projectDesc, startTime, endTime);
+                        projectName, projectStatus, projectDesc, startTime, endTime);
                 ProjectOperate projectOperate = new ProjectOperate();
                 projectOperate.setCreateTime(new Date());
                 projectOperate.setProjectId(id);
                 projectOperate.setCreateUserId(user.getUserId());
-                projectOperate.setOperateDesc(user.getUsername() + "    更新项目");
+                projectOperate.setOperateDesc(new Date() + "    " + user.getUsername() + "    更新项目，更新后：userId:" + userId
+                        + "modifyUserId:" + user.getUserId() + "modifyTime:" + new Date() + "projectName:" + projectName
+                        + "projectStatus:" + projectStatus + "projectDesc:" + projectDesc + "startTime:" + startTime
+                        + "endTime:" + endTime);
                 projectOperateNum = projectOperateMapper.addProjectOperate(projectOperate);
                 if (projectMainNum > 0 && projectOperateNum > 0) {
                     return 1;
@@ -231,7 +239,9 @@ public class ProjectMainServiceImpl implements ProjectMainService {
                     projectOperate.setCreateTime(new Date());
                     projectOperate.setProjectId(id);
                     projectOperate.setCreateUserId(user.getUserId());
-                    projectOperate.setOperateDesc(user.getUsername() + "    删除项目");
+                    projectOperate.setOperateDesc(new Date() + "    " + user.getUsername() + "    删除项目，项目编号projectNum为："
+                            + projectMainSelect.getProjectNum() + "，项目名称projectName为："
+                            + projectMainSelect.getProjectName());
                     projectOperateNum = projectOperateMapper.addProjectOperate(projectOperate);
                     if (projectMainNum > 0 && projectOperateNum > 0) {
                         return 1;
@@ -289,7 +299,9 @@ public class ProjectMainServiceImpl implements ProjectMainService {
                 projectOperate.setCreateTime(new Date());
                 projectOperate.setProjectId(id);
                 projectOperate.setCreateUserId(user.getUserId());
-                projectOperate.setOperateDesc(user.getUsername() + "    关闭项目时，更新相关表");
+                projectOperate.setOperateDesc(user.getUsername() + "    关闭项目时，更新相关表数据如下：projectStatus:" + projectStatus
+                        + "modifyUserId:" + user.getUserId() + "modifyTime:" + new Date() + "userStatus:" + userStatus
+                        + "demandStatus:" + demandStatus + "status:" + status + "caseStatus:" + caseStatus);
                 projectOperateNum = projectOperateMapper.addProjectOperate(projectOperate);
                 // demand需求表更改状态
                 demandNum = demandMapper.updateByProjectId(id, demandStatus, closeReason, user.getUserId(), new Date());

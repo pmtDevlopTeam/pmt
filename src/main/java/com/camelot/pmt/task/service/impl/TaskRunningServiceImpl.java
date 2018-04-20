@@ -1,29 +1,21 @@
 package com.camelot.pmt.task.service.impl;
 
-import com.baomidou.mybatisplus.plugins.pagination.PageHelper;
-import com.camelot.pmt.common.DataGrid;
-import com.camelot.pmt.common.ExecuteResult;
-import com.camelot.pmt.common.Pager;
-import com.camelot.pmt.task.mapper.TaskLogMapper;
-import com.camelot.pmt.task.mapper.TaskMapper;
-import com.camelot.pmt.task.model.Task;
-import com.camelot.pmt.task.model.TaskLog;
-import com.camelot.pmt.task.service.TaskRunningService;
-import com.camelot.pmt.task.utils.Constant;
-import com.camelot.pmt.task.utils.DateUtils;
-import com.camelot.pmt.task.utils.RRException;
-import com.github.pagehelper.PageInfo;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import com.baomidou.mybatisplus.plugins.pagination.PageHelper;
+import com.camelot.pmt.common.ExecuteResult;
+import com.camelot.pmt.task.mapper.TaskLogMapper;
+import com.camelot.pmt.task.mapper.TaskMapper;
+import com.camelot.pmt.task.model.Task;
+import com.camelot.pmt.task.model.TaskFile;
+import com.camelot.pmt.task.service.TaskRunningService;
+import com.github.pagehelper.PageInfo;
 
 /**
  * @author muyuanpei
@@ -122,11 +114,13 @@ public class TaskRunningServiceImpl implements TaskRunningService {
      * @auth myp
      */
     @Override
-    public ExecuteResult<String> updateRunningToAlready(Long id) {
+    public ExecuteResult<String> updateRunningToAlready(Task ptask, TaskFile taskFile) {
         ExecuteResult<String> result = new ExecuteResult<>();
         try {
+            taskFile.setSourceId(ptask.getId());
+            taskFile.setAttachmentSource("任务");
             // 遍历此任务下是否有引用--->查询所有任务父id为id的记录
-            List<Task> taskList = taskMapper.queryByPId(id);
+            List<Task> taskList = taskMapper.queryByPId(ptask.getId());
             List<Long> list = new ArrayList<Long>();
             if (taskList.size() > 0) {
                 for (Task task : taskList) {
@@ -162,15 +156,19 @@ public class TaskRunningServiceImpl implements TaskRunningService {
                     }
                 }
                 if (list1.size() == booleans.size()) {
-                    taskMapper.updateRunningToAlready(id);
+                    taskMapper.updateRunningToAlready(ptask.getId());
                     result.setResult("任务完成");
+                    taskMapper.updateInfact_hourAndActual_end_time(ptask);
+                    taskMapper.addAttachment(taskFile);
                 } else {
                     result.setResult("还有子任务未完成！");
                 }
             } else {
                 // 说明没有子任务,直接修改此任务的状态即可
-                taskMapper.updateRunningToAlready(id);
+                taskMapper.updateRunningToAlready(ptask.getId());
                 result.setResult("任务完成");
+                taskMapper.updateInfact_hourAndActual_end_time(ptask);
+                taskMapper.addAttachment(taskFile);
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -202,23 +200,4 @@ public class TaskRunningServiceImpl implements TaskRunningService {
         return result;
     }
 
-    /**
-     * @Title: runningtoclose
-     * @Description: TODO(添加历史记录)
-     * @param id
-     * @return JSONObject 返回类型
-     * @auth myp
-     */
-    @Override
-    public ExecuteResult<Long> saveHistoryLog(TaskLog taskLog) {
-        ExecuteResult<Long> result = new ExecuteResult<Long>();
-        try {
-            Long updateStatusResult = taskMapper.saveHistoryLog(taskLog);
-            result.setResult(updateStatusResult);
-            return result;
-        } catch (Exception e) {
-            LOGGER.error(e.getMessage());
-            throw new RuntimeException(e);
-        }
-    }
 }

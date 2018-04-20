@@ -8,6 +8,7 @@
     <result column="operation_time" property="operationTime" jdbcType="TIMESTAMP" />
     <result column="operation_button" property="operationButton" jdbcType="VARCHAR" />
     <result column="operation_describe" property="operationDescribe" jdbcType="VARCHAR" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, task_id, user_id, operation_time, operation_button, operation_describe
@@ -104,8 +105,8 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
   <!--zsf-->
-  <select id="queryTaskLogList" resultType="com.camelot.pmt.task.model.TaskLog" parameterType="java.lang.Long" >
-   SELECT t.*,p.user_name AS username FROM task_log t,platform_user p WHERE t.user_id = p.user_id AND  t.task_id = #{id,jdbcType=BIGINT}
+  <select id="queryTaskLogList" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+   SELECT t.*,p.user_name FROM task_log t,platform_user p WHERE t.user_id = p.user_id AND  t.task_id = #{id,jdbcType=BIGINT}
   </select>
 
 </mapper>

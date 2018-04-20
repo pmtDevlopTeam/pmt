@@ -13,14 +13,14 @@
   <sql id="Base_Column_List" >
     id, num, bug_id, DATE_FORMAT(operation_time,'%Y-%m-%d %H:%i:%s') as operation_time, operation_id, operation_function, operation_record
   </sql>
-  <select id="selectBugHistoryAll" resultMap="BaseResultMap">
+  <select id="queryBugHistoryAll" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from bug_history
     where bug_id=#{bugId}
   </select>
 
-  <insert id="insertSelective" parameterType="com.camelot.pmt.testmanage.bugmanage.model.BugHistory" >
+  <insert id="addBugHistory" parameterType="com.camelot.pmt.testmanage.bugmanage.model.BugHistory" >
     insert into bug_history
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -70,7 +70,7 @@
     </trim>
   </insert>
  
-  <select id="getBugHistoryByBugId" resultMap="BaseResultMap">
+  <select id="queryBugHistoryByBugId" resultMap="BaseResultMap">
   	select * from bug_history where bug_id=#{bugId} order by id desc limit 1
   </select>
  

@@ -1,5 +1,7 @@
 package com.camelot.pmt.testmanage.casemanage.controller;
 
+import com.alibaba.fastjson.JSONObject;
+import com.camelot.pmt.common.ApiResponse;
 import com.camelot.pmt.platform.model.User;
 import com.camelot.pmt.testmanage.casemanage.model.UseCaseImplement;
 import com.camelot.pmt.testmanage.casemanage.service.UseCaseImplementService;
@@ -26,39 +28,36 @@ public class UseCaseImplementController {
     @Autowired
     private UseCaseImplementService useCaseImplementService;
 
+    /**
+     * 新增执行信息
+     *
+     * @param request
+     *            request
+     * @param useCaseImplement
+     *            用例执行
+     */
     @ApiOperation(value = "新增执行信息")
     @PostMapping
-    public ActionBean add(HttpServletRequest request,
+    public JSONObject addUseCaseImplement(HttpServletRequest request,
             @RequestBody @ApiParam(value = "useCaseImplement", required = true) UseCaseImplement useCaseImplement) {
-        ActionBean actionBean = new ActionBean();
         try {
             User user = (User) request.getSession().getAttribute("user");
-            useCaseImplementService.add(user, useCaseImplement);
-            actionBean.setCode(200);
-            actionBean.setResult(true);
+            useCaseImplementService.addUseCaseImplement(user, useCaseImplement);
+            return ApiResponse.success();
         } catch (Exception e) {
-            actionBean.setCode(500);
-            actionBean.setResult(false);
-            actionBean.setErrorMessage(e.getMessage());
+            return ApiResponse.error(e.getMessage());
         }
-        return actionBean;
     }
 
     @ApiOperation(value = "根据测试用例ID查询执行信息")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "useCaseId", value = "测试用例ID", required = true, paramType = "query", dataType = "Long") })
     @GetMapping
-    public ActionBean findByUseCaseId(Long useCaseId) {
-        ActionBean actionBean = new ActionBean();
+    public JSONObject queryUseCaseImplementByUseCaseId(Long useCaseId) {
         try {
-            actionBean.setCode(200);
-            actionBean.setResult(true);
-            actionBean.setResponse(useCaseImplementService.findByUseCaseId(useCaseId));
+            return ApiResponse.success(useCaseImplementService.queryUseCaseImplementByUseCaseId(useCaseId));
         } catch (Exception e) {
-            actionBean.setCode(500);
-            actionBean.setResult(false);
-            actionBean.setErrorMessage(e.getMessage());
+            return ApiResponse.error(e.getMessage());
         }
-        return actionBean;
     }
 }

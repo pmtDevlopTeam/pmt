@@ -1,5 +1,12 @@
 package com.camelot.pmt.project.service.impl;
 
+import java.util.Date;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.camelot.pmt.project.mapper.VersionMapper;
 import com.camelot.pmt.project.model.Version;
 import com.camelot.pmt.project.model.VersionVo;
@@ -7,12 +14,7 @@ import com.camelot.pmt.project.service.VersionService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Date;
-import java.util.List;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @Package: com.camelot.pmt.project.service.impl
@@ -70,15 +72,21 @@ public class VersionServiceImpl implements VersionService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean deleteVersionById(String userId, Long versionId) {
+    public boolean updateVersionByIdAndParms(String versionStatus,String userId, Long versionId) {
         Version version = versionMapper.selectByPrimaryKey(versionId);
         Date dateTime = new Date();
         // 设置版本修改人信息
         version.setModifyUserId(userId);
         version.setModifyTime(dateTime);
-        // 设置版本状态
-        version.setVersionStatus(-1);
-        return versionMapper.updateByPrimaryKey(version) == 1 ? true : false;
+        // 设置版本状态(-1：已删除；0：未使用；1：被激活；2被关闭）
+        if (StringUtils.isBlank(versionStatus)) {
+            version.setVersionStatus(-1);
+        }else if("version_activation".equals(versionStatus)){
+            version.setVersionStatus(1);
+        }else if ("version_closure".equals(versionStatus)) {
+            version.setVersionStatus(2);
+        }
+        return versionMapper.updateByPrimaryKeySelective(version) == 1 ? true : false;
     }
 
     /**

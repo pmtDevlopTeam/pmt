@@ -117,7 +117,6 @@ public class MenuServiceImpl implements MenuService {
     }
 
     private Menu updateMenuModel(Menu menu) {
-        menu.setMenuId(UUIDUtil.getUUID());
         if (menu.getState() != null) {
         } else {
             menu.setState(BaseState.ZERO);

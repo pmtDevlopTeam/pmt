@@ -14,6 +14,9 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,6 +35,8 @@ import java.util.List;
 @Api(value = "用户管理接口", description = "用户管理接口")
 public class UserController {
 
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @Autowired
     private UserService service;
 
@@ -48,17 +53,18 @@ public class UserController {
     @RequestMapping(value = "user/queryUserById", method = RequestMethod.POST)
     public JSONObject queryUserByUserId(
             @ApiParam(name = "userId", value = "用户useId", required = true) @RequestParam(required = true) String userId) {
-        ExecuteResult<User> result = new ExecuteResult<User>();
         try {
             if (StringUtils.isEmpty(userId)) {
                 return ApiResponse.jsonData(APIStatus.ERROR_400);
             }
-            result = service.findUserByUserId(userId);
-            if (result.getResult() == null) {
-                return ApiResponse.success(result.getResultMessage());
+            User result = service.queryUserByUserId(userId);
+            if (result != null) {
+                return ApiResponse.success(result);
+            } else {
+                return ApiResponse.success("该用户不存在！");
             }
-            return ApiResponse.success(result.getResult());
         } catch (Exception e) {
+            logger.error(e.getMessage());
             return ApiResponse.error();
         }
     }
@@ -73,14 +79,11 @@ public class UserController {
     @ApiOperation(value = "查询所有用户", notes = "查询所有用户")
     @RequestMapping(value = "user/queryAllUsers", method = RequestMethod.POST)
     public JSONObject queryUserAll() {
-        ExecuteResult<List<User>> result = new ExecuteResult<List<User>>();
         try {
-            result = service.queryAllUsers();
-            if (result.isSuccess()) {
-                return ApiResponse.success(result.getResult());
-            }
-            return ApiResponse.error();
+            List<User> allUsers = service.queryAllUsers();
+            return ApiResponse.success(allUsers);
         } catch (Exception e) {
+            logger.error(e.getMessage());
             return ApiResponse.error();
         }
     }
@@ -107,15 +110,15 @@ public class UserController {
             @ApiImplicitParam(name = "createUserId", value = "用户创建人ID", required = true, paramType = "form", dataType = "String"),
             @ApiImplicitParam(name = "modifyUserId", value = "用户修改人ID", required = false, paramType = "form", dataType = "String") })
     @RequestMapping(value = "user/addUser", method = RequestMethod.POST)
-    public JSONObject createUser(@ApiIgnore User userModel) {
-        ExecuteResult<String> result = new ExecuteResult<String>();
+    public JSONObject addUser(@ApiIgnore User userModel) {
         try {
             if (StringUtils.isEmpty(userModel.getUserJobNum())) {
                 return ApiResponse.jsonData(APIStatus.ERROR_400);
             }
-            result = service.createUser(userModel);
-            return ApiResponse.success(result.getResult());
+            String result = service.addUser(userModel);
+            return ApiResponse.success(result);
         } catch (Exception e) {
+            logger.error(e.getMessage());
             return ApiResponse.error();
         }
     }
@@ -143,17 +146,14 @@ public class UserController {
             @ApiImplicitParam(name = "modifyUserId", value = "用户修改人ID", required = false, paramType = "form", dataType = "String") })
     @RequestMapping(value = "user/modifyUserDetailsByUserId", method = RequestMethod.POST)
     public JSONObject modifyUserDetailsByUserId(@ApiIgnore User userModel) {
-        ExecuteResult<String> result = new ExecuteResult<String>();
         try {
             if (StringUtils.isEmpty(userModel.getUserId())) {
                 return ApiResponse.jsonData(APIStatus.ERROR_400);
             }
-            result = service.modifyUserDetailsByUserId(userModel);
-            if (!StringUtils.isEmpty(result.getResult())) {
-                return ApiResponse.success(result.getResult());
-            }
-            return ApiResponse.error(result.getResultMessage());
+            String result = service.modifyUserDetailsByUserId(userModel);
+            return ApiResponse.success(result);
         } catch (Exception e) {
+            logger.error(e.getMessage());
             return ApiResponse.error();
         }
     }
@@ -173,17 +173,18 @@ public class UserController {
     @RequestMapping(value = "user/deleteUserByUserId", method = RequestMethod.POST)
     public JSONObject deleteUserByUserId(
             @ApiParam(name = "userId", value = "用户useId", required = true) @RequestParam(required = true) String userId) {
-        ExecuteResult<String> result = new ExecuteResult<String>();
         try {
             if (StringUtils.isEmpty(userId)) {
                 return ApiResponse.jsonData(APIStatus.ERROR_400);
             }
-            result = service.deleteUserByUserId(userId);
-            if (result.isSuccess()) {
-                return ApiResponse.success(result.getResult());
+            boolean deleteResult = service.deleteUserByUserId(userId);
+            if (deleteResult) {
+                return ApiResponse.success("删除用户成功！");
+            } else {
+                return ApiResponse.error();
             }
-            return ApiResponse.error();
         } catch (Exception e) {
+            logger.error(e.getMessage());
             return ApiResponse.error();
         }
     }
@@ -203,17 +204,14 @@ public class UserController {
             @ApiImplicitParam(name = "password", value = "密码", required = true, paramType = "form", dataType = "String") })
     @RequestMapping(value = "user/checkUser", method = RequestMethod.POST)
     public JSONObject checkUser(@ApiIgnore User userModel) {
-        ExecuteResult<User> result = new ExecuteResult<User>();
         try {
             if (StringUtils.isEmpty(userModel.getLoginCode()) || StringUtils.isEmpty(userModel.getPassword())) {
                 return ApiResponse.jsonData(APIStatus.ERROR_400);
             }
-            result = service.queryLoginCodeAndPassword(userModel);
-            if (result.getResult() == null) {
-                return ApiResponse.success(result.getResultMessage());
-            }
-            return ApiResponse.success(result.getResult());
+            User result = service.queryLoginCodeAndPassword(userModel);
+            return ApiResponse.success(result);
         } catch (Exception e) {
+            logger.error(e.getMessage());
             return ApiResponse.error();
         }
     }
@@ -236,11 +234,11 @@ public class UserController {
             @ApiImplicitParam(name = "pageSize", value = "每页数量", defaultValue = "10", required = true, paramType = "query", dataType = "int") })
     @RequestMapping(value = "user/queryUsersList", method = RequestMethod.POST)
     public JSONObject queryUsersList(@ApiIgnore UserVo userVo, @RequestParam int pageNum, @RequestParam int pageSize) {
-        ExecuteResult<PageInfo> result = new ExecuteResult<PageInfo>();
         try {
-            result = service.queryUsersList(userVo, pageNum, pageSize);
-            return ApiResponse.success(result.getResult());
+            PageInfo result = service.queryUsersList(userVo, pageNum, pageSize);
+            return ApiResponse.success(result);
         } catch (Exception e) {
+            logger.error(e.getMessage());
             return ApiResponse.error();
         }
     }
@@ -258,17 +256,18 @@ public class UserController {
     @RequestMapping(value = "user/queryUserInfoById", method = RequestMethod.POST)
     public JSONObject queryUserInfoById(
             @ApiParam(name = "userId", value = "用户useId", required = true) @RequestParam(required = true) String userId) {
-        ExecuteResult<User> result = new ExecuteResult<User>();
         try {
             if (StringUtils.isEmpty(userId)) {
                 return ApiResponse.jsonData(APIStatus.ERROR_400);
             }
-            result = service.queryUserInfoById(userId);
-            if (result.getResult() == null) {
-                return ApiResponse.success(result.getResultMessage());
+            User result = service.queryUserInfoById(userId);
+            if (result != null) {
+                return ApiResponse.success(result);
+            } else {
+                return ApiResponse.success("此用户不存在！");
             }
-            return ApiResponse.success(result.getResult());
         } catch (Exception e) {
+            logger.error(e.getMessage());
             return ApiResponse.error();
         }
     }
@@ -279,17 +278,14 @@ public class UserController {
             @ApiImplicitParam(name = "password", value = "用户password", required = false, paramType = "form", dataType = "String") })
     @RequestMapping(value = "user/resetPasswordByUserId", method = RequestMethod.POST)
     public JSONObject resetUserPasswordByUserId(@ApiIgnore User userModel) {
-        ExecuteResult<String> result = new ExecuteResult<String>();
         try {
             if (StringUtils.isEmpty(userModel.getUserId())) {
                 return ApiResponse.jsonData(APIStatus.ERROR_400);
             }
-            result = service.resetUserPasswordByUserId(userModel);
-            if (result.isSuccess()) {
-                return ApiResponse.success(result.getResult());
-            }
-            return ApiResponse.error();
+            String result = service.resetUserPasswordByUserId(userModel);
+            return ApiResponse.success(result);
         } catch (Exception e) {
+            logger.error(e.getMessage());
             return ApiResponse.error();
         }
     }
@@ -298,14 +294,14 @@ public class UserController {
     @RequestMapping(value = "user/queryUsersByUserName", method = RequestMethod.POST)
     public JSONObject queryUsersByUserName(
             @ApiParam(name = "username", value = "用户名称", required = true) @RequestParam(required = true) String username) {
-        ExecuteResult<List<User>> result = new ExecuteResult<List<User>>();
         try {
             if (StringUtils.isEmpty(username)) {
                 return ApiResponse.jsonData(APIStatus.ERROR_400);
             }
-            result = service.queryUsersByUserName(username);
-            return ApiResponse.success(result.getResult());
+            List<User> result = service.queryUsersByUserName(username);
+            return ApiResponse.success(result);
         } catch (Exception e) {
+            logger.error(e.getMessage());
             return ApiResponse.error();
         }
     }

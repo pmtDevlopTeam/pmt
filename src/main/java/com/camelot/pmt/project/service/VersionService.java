@@ -1,11 +1,10 @@
 package com.camelot.pmt.project.service;
 
-import com.alibaba.fastjson.JSONObject;
+import java.util.List;
+
 import com.camelot.pmt.project.model.Version;
 import com.camelot.pmt.project.model.VersionVo;
 import com.github.pagehelper.PageInfo;
-
-import java.util.List;
 
 /**
  * @Package: com.camelot.pmt.project.service
@@ -32,7 +31,7 @@ public interface VersionService {
      * @author: xueyj
      * @date: 2018/4/13 19:14
      */
-    boolean deleteVersionById(String userId, Long versionId);
+    boolean updateVersionByIdAndParms(String versionStatus,String userId, Long versionId);
 
     /**
      * @Description: 根据versionid查询version信息

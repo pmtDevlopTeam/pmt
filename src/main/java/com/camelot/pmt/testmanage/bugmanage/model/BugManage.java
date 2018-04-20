@@ -12,8 +12,8 @@ public class BugManage {
     private Long demandId;
     // 相关任务ID
     private Long taskId;
-    // 所属一级任务模块
-    private Long task1Id;
+    // 一级需求ID
+    private Long demand1Id;
     // 指派人
     private String designatedId;
     // 影响版本ID
@@ -303,18 +303,18 @@ public class BugManage {
         this.bugNo = bugNo;
     }
 
-    public Long getTask1Id() {
-        return task1Id;
+    public Long getDemand1Id() {
+        return demand1Id;
     }
 
-    public void setTask1Id(Long task1Id) {
-        this.task1Id = task1Id;
+    public void setDemand1Id(Long demand1Id) {
+        this.demand1Id = demand1Id;
     }
 
     @Override
     public String toString() {
         return "BugManage [id=" + id + ", bugNo=" + bugNo + ", bugTitle=" + bugTitle + ", projectId=" + projectId
-                + ", demandId=" + demandId + ", taskId=" + taskId + ", task1Id=" + task1Id + ", designatedId="
+                + ", demandId=" + demandId + ", taskId=" + taskId + ", demand1Id=" + demand1Id + ", designatedId="
                 + designatedId + ", versionId=" + versionId + ", bugType=" + bugType + ", caseTerminal=" + caseTerminal
                 + ", caseEnvironment=" + caseEnvironment + ", bugLevel=" + bugLevel + ", bugStatus=" + bugStatus
                 + ", createUserId=" + createUserId + ", createTime=" + createTime + ", endTime=" + endTime

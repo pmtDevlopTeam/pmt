@@ -67,11 +67,6 @@
 		where
 		project_status=#{project_status}
 	</select>
-	<!-- 查询所有数量 -->
-	<select id="queryAll" resultType="long">
-		select count(1) from
-		project_main
-	</select>
 	<!-- 分页查询所有 -->
 	<select id="queryAllByPage" resultMap="ResultMapWithBLOBs">
 		select
@@ -81,10 +76,6 @@
 		from
 		project_main
 	</select>
-	<!-- 分页公共sql -->
-	<sql id="pagination_tail">
-		limit #{page.pageOffset} , #{page.rows}
-	</sql>
 	<resultMap id="BaseResultMap" type="ProjectMain">
 		<id column="id" property="id" jdbcType="BIGINT" />
 		<result column="user_id" property="userId" jdbcType="VARCHAR" />
@@ -218,9 +209,6 @@
 			<if test="userId != null">
 				user_id = #{userId,jdbcType=VARCHAR},
 			</if>
-			<if test="projectNum != null">
-				project_num = #{projectNum,jdbcType=CHAR},
-			</if>
 			<if test="projectName != null">
 				project_name = #{projectName,jdbcType=VARCHAR},
 			</if>
@@ -245,4 +233,8 @@
 		</trim>
 		where id = #{id,jdbcType=BIGINT}
 	</update>
+	<!--获取表中最大的项目编号 -->
+	<select id="getMaxProjectNum" resultType="String">
+		select max(p.project_num) from project_main p
+	</select>
 </mapper>

@@ -25,26 +25,27 @@ public interface UserService {
      * @return ExecuteResult<String>
      * @author [maple]
      */
-    ExecuteResult<String> createUser(User user);
+    String addUser(User user);
 
     /**
      * 
-     * Description:[删除用户]
+     * Description:[根据用户userId删除一个用户]
      * 
-     * @param User
-     * @author [maple]
-     * @return
+     * @param String
+     *            userId
+     * @return boolean
+     * @author [maple] 2018年4月19日上午12:02:32
      */
-    ExecuteResult<String> deleteUserByUserId(String userId);
+    boolean deleteUserByUserId(String userId);
 
     /**
      * 
      * Description:[查询用户]
      * 
-     * @return ExecuteResult<List<User>>
+     * @return List<User>
      * @author [maple]
      */
-    ExecuteResult<List<User>> queryAllUsers();
+    List<User> queryAllUsers();
 
     /**
      * 
@@ -52,21 +53,20 @@ public interface UserService {
      * 
      * @param String
      *            userId
-     * @return ExecuteResult<User>
+     * @return User
      * @author [maple] 2018年4月13日下午3:13:54
      */
-    ExecuteResult<User> findUserByUserId(String userId);
+    User queryUserByUserId(String userId);
 
     /**
      * 
      * Description:[检查登录账号和密码]
      * 
      * @param User
-     *            user
      * @return ExecuteResult<User>
      * @author [maple] 2018年4月13日下午3:14:20
      */
-    ExecuteResult<User> queryLoginCodeAndPassword(User user);
+    User queryLoginCodeAndPassword(User user);
 
     /**
      * 
@@ -77,17 +77,17 @@ public interface UserService {
      * @return ExecuteResult<List<UserVo>>
      * @author [maple] 2018年4月13日下午3:15:16
      */
-    ExecuteResult<PageInfo> queryUsersList(UserVo userVo, int pageNum, int pageSize);
+    PageInfo queryUsersList(UserVo userVo, int pageNum, int pageSize);
 
     /**
      * 
      * Description:[根据用户ID更新一个用户详情]
      * 
      * @param User
-     * @return ExecuteResult<String>
+     * @return String
      * @author [maple]
      */
-    ExecuteResult<String> modifyUserDetailsByUserId(User user);
+    String modifyUserDetailsByUserId(User user);
 
     /**
      * 
@@ -95,10 +95,10 @@ public interface UserService {
      * 
      * @param String
      *            userId
-     * @return ExecuteResult<User>
+     * @return User
      * @author [maple] 2018年4月16日上午10:34:21
      */
-    ExecuteResult<User> queryUserInfoById(String userId);
+    User queryUserInfoById(String userId);
 
     /**
      * 
@@ -106,19 +106,20 @@ public interface UserService {
      * 
      * @param User
      *            user
-     * @return ExecuteResult<String>
+     * @return String
      * @author [maple] 2018年4月16日下午10:44:45
      */
-    ExecuteResult<String> resetUserPasswordByUserId(User user);
+    String resetUserPasswordByUserId(User user);
 
     /**
      * 
      * Description:[根据用户名模糊查询获取user对象]
      * 
-     * @param
-     * @return
+     * @param String
+     *            username
+     * @return List<User>
      * @author [maple] 2018年4月18日下午3:49:33
      */
-    ExecuteResult<List<User>> queryUsersByUserName(String username);
+    List<User> queryUsersByUserName(String username);
 
 }

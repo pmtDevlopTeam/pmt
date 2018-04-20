@@ -11,6 +11,8 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,60 +35,54 @@ import java.util.List;
 
 @RequestMapping(value = "/file/manager/group")
 public class FileManageGroupController {
+    // 日志
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
     private FileManageGroupService fileManageGroupService;
 
     @ApiOperation(value = "添加文件夹功能", notes = "添加文件夹功能")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "currentPage", value = "页码", required = true, paramType = "query", dataType = "int"),
-            @ApiImplicitParam(name = "pageSize", value = "每页数量", required = true, paramType = "query", dataType = "int"),
             @ApiImplicitParam(name = "parentId", value = "父级id", required = false, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "projectId", value = "项目id", required = false, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "name", value = "文件夹名称", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "fdescribe", value = "文件夹描述", required = true, paramType = "query", dataType = "String"), })
-    @RequestMapping(value = "/addfilegroup", method = RequestMethod.POST)
+    @RequestMapping(value = "/addFileManagerGroup", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject addFileManagerGroup(HttpServletRequest request, FileManageGroup fileManageGroup) {
-        ExecuteResult<String> result = new ExecuteResult<String>();
+    public JSONObject addFileManagerGroup(HttpServletRequest request, FileManageGroup fileManageGroup) {// 添加文件夹
+        Boolean b = null;
         try {
-            // 判断非空
-            if (fileManageGroup == null) {
-                return ApiResponse.error();
+            b = fileManageGroupService.addFileManagerGroup(request, fileManageGroup);// 添加文件夹
+            if (b) {
+                return ApiResponse.success();
             }
-            // 不为空调用接口添加
-            result = fileManageGroupService.addFileManagerGroup(request, fileManageGroup);// 添加文件夹
-            // 成功返回
-            return ApiResponse.success(result.getResult());
+            return ApiResponse.error("添加异常");
         } catch (Exception e) {
-            // 异常
-            return ApiResponse.error();
+            logger.error(e.getMessage());
+            return ApiResponse.jsonData(APIStatus.ERROR_500);
         }
-
     }
 
     @ApiOperation(value = "删除文件夹功能", notes = "删除文件夹功能")
-    @ApiImplicitParams({
+    @ApiImplicitParams({ // 删除文件夹
             @ApiImplicitParam(name = "id", value = "文件夹id", required = true, paramType = "query", dataType = "String") })
-    @RequestMapping(value = "/deletefilegroup", method = RequestMethod.POST)
+    @RequestMapping(value = "/deleteFileGroup", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject deleteFileGroup(FileManageGroup fileManageGroup) {
-        ExecuteResult<String> result = new ExecuteResult<String>();
+        Boolean b = null;
         try {
-            if (fileManageGroup == null) {
-                return ApiResponse.jsonData(APIStatus.ERROR_400);
+            b = fileManageGroupService.deleteFileGroup(fileManageGroup);// 删除文件夹
+            if (b) {
+                return ApiResponse.success();
             }
-            result = fileManageGroupService.deleteFileGroup(fileManageGroup);// 删除文件夹
-            if (result.isSuccess()) {
-                return ApiResponse.success(result.getResult());
-            }
-            return ApiResponse.error();
+            return ApiResponse.error("删除异常");
         } catch (Exception e) {
-            return ApiResponse.error();
+            logger.error(e.getMessage());
+            return ApiResponse.jsonData(APIStatus.ERROR_500);
         }
     }
 
     @ApiOperation(value = "根据条件修改文件夹功能", notes = "根据条件修改文件夹功能")
-    @ApiImplicitParams({
+    @ApiImplicitParams({ // 修改文件夹
             @ApiImplicitParam(name = "isFile", value = "是否是文件", required = false, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "createUserId", value = "创建人id", required = false, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "parentId", value = "父级id", required = false, paramType = "query", dataType = "String"),
@@ -94,63 +90,52 @@ public class FileManageGroupController {
             @ApiImplicitParam(name = "name", value = "文件夹名称", required = false, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "fdescribe", value = "文件夹描述", required = false, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "id", value = "文件夹id", required = true, paramType = "query", dataType = "String") })
-    @RequestMapping(value = "/updatefilegroup", method = RequestMethod.POST)
+    @RequestMapping(value = "/updateFileGroupById", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject updateFileGroupById(HttpServletRequest request, FileManageGroup fileManageGroup) {
-        ExecuteResult<String> result = new ExecuteResult<String>();
+        Boolean b = null;
         try {
-            if (fileManageGroup == null) {
-                return ApiResponse.errorPara();
+            b = fileManageGroupService.updateFileGroupById(request, fileManageGroup);// 修改文件夹
+            if (b) {
+                return ApiResponse.success();
             }
-            result = fileManageGroupService.updateFileGroupById(request, fileManageGroup);// 修改文件夹
-            return ApiResponse.success(result.getResult());
+            return ApiResponse.error("修改异常");
         } catch (Exception e) {
-            return ApiResponse.error();
+            logger.error(e.getMessage());
+            return ApiResponse.jsonData(APIStatus.ERROR_500);
         }
     }
 
     @ApiOperation(value = "根据条件查询文件夹功能", notes = "根据条件查询文件夹功能")
-    @ApiImplicitParams({
+    @ApiImplicitParams({ // 根据条件查询文件夹
             @ApiImplicitParam(name = "parentId", value = "父级id", required = false, paramType = "query", dataType = "String"),
-            @ApiImplicitParam(name = "projectId", value = "项目id", required = false, paramType = "query", dataType = "String"),
-            @ApiImplicitParam(name = "id", value = "文件夹id", required = false, paramType = "query", dataType = "String") })
-    @RequestMapping(value = "/selectFileGroup", method = RequestMethod.GET)
+            @ApiImplicitParam(name = "projectId", value = "项目id", required = false, paramType = "query", dataType = "String")
+
+    })
+    @RequestMapping(value = "/querytFileGroup", method = RequestMethod.GET)
     @ResponseBody
-    public JSONObject selectFileGroupByParentID(FileManageGroup fileManageGroup) {// 根据parentId查询根据projectId查询
-        ExecuteResult<List<FileManageGroup>> result = new ExecuteResult<List<FileManageGroup>>();
+    public JSONObject querytFileGroup(FileManageGroup fileManageGroup) {// 根据parentId查询根据projectId查询
         try {
-            result = fileManageGroupService.selectFileGroup(fileManageGroup);// 根据条件查询文件夹
-            if (result.isSuccess()) {
-                return ApiResponse.success(result.getResult());
-            }
-            return ApiResponse.error();
+            List<FileManageGroup> groupList = fileManageGroupService.querytFileGroup(fileManageGroup);// 根据条件查询文件夹
+            return ApiResponse.success(groupList);
         } catch (Exception e) {
-            return ApiResponse.error();
+            logger.error(e.getMessage());
+            return ApiResponse.jsonData(APIStatus.ERROR_500);
         }
     }
-    /*
-     * @RequestMapping("/batechDeleteFileGroupByIds") public JSONObject
-     * batechDeleteFileGroupByIds(List<Long> ids){ ExecuteResult<String> result =
-     * new ExecuteResult<String>(); try{ FileManageGroup group = new
-     * FileManageGroup(); for (Long id: ids) { group.setId(id); result=
-     * fileManageGroupService.deleteFileGroup(group); } if (result.isSuccess()) {
-     * return ApiResponse.success(result.getResult()); } return ApiResponse.error();
-     * }catch (Exception e){ return ApiResponse.error(); }
-     * 
-     * 
-     * 
-     * 
-     * 
-     * }
-     */
-    /*
-     * @ApiOperation(value = "根据条件查询文件夹功能", notes = "根据条件查询文件夹功能")
-     * 
-     * @RequestMapping(value = "/selectTree",method = RequestMethod.GET)
-     * 
-     * @ResponseBody public JSONObject selectTree(FileManageGroup fileManageGroup){
-     * List <FileManageGroup>
-     * treeList=fileManageGroupService.selectTree(fileManageGroup); return null; }
-     */
 
+    @ApiOperation(value = "根据项目id查询子节点数据", notes = "根据项目id查询子节点数据")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "projectId", value = "项目id", required = true, paramType = "query", dataType = "String"), })
+    @RequestMapping(value = "/queryTree", method = RequestMethod.GET)
+    @ResponseBody
+    public JSONObject queryTree(FileManageGroup fileManageGroup) {// 根据项目id查询子节点
+        try {
+            List<FileManageGroup> treeList = fileManageGroupService.queryTree(fileManageGroup);// 根据项目id查询子节点
+            return ApiResponse.success(treeList);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return ApiResponse.jsonData(APIStatus.ERROR_500);
+        }
+    }
 }

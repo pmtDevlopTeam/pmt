@@ -3,10 +3,10 @@ package com.camelot.pmt.testmanage.casemanage.service.impl;
 import com.camelot.pmt.platform.model.User;
 import com.camelot.pmt.testmanage.casemanage.mapper.UseCaseImplementMapper;
 import com.camelot.pmt.testmanage.casemanage.mapper.UseCaseMapper;
-import com.camelot.pmt.testmanage.casemanage.mapper.UseCaseProcedureImplementMapper;
+import com.camelot.pmt.testmanage.casemanage.mapper.UseCaseDetailMapper;
 import com.camelot.pmt.testmanage.casemanage.model.UseCase;
+import com.camelot.pmt.testmanage.casemanage.model.UseCaseDetail;
 import com.camelot.pmt.testmanage.casemanage.model.UseCaseImplement;
-import com.camelot.pmt.testmanage.casemanage.model.UseCaseProcedureImplement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,14 +25,20 @@ public class UseCaseImplementServiceImpl implements UseCaseImplementService {
     private UseCaseImplementMapper useCaseImplementMapper;
 
     @Autowired
-    private UseCaseProcedureImplementMapper useCaseProcedureImplementMapper;
+    private UseCaseDetailMapper useCaseProcedureImplementMapper;
 
     @Autowired
     private UseCaseMapper useCaseMapper;
 
+    /**
+     * 增加用例执行和用例执行详细信息
+     *
+     * @param useCaseImplement
+     *            用例执行
+     */
     @Override
     @Transactional
-    public void add(User userModel, UseCaseImplement useCaseImplement) {
+    public void addUseCaseImplement(User userModel, UseCaseImplement useCaseImplement) {
 
         UseCase useCase = null;
 
@@ -51,8 +57,8 @@ public class UseCaseImplementServiceImpl implements UseCaseImplementService {
         }
 
         // 若执行过程有1步失败或者阻塞,则当前执行信息为失败或阻塞
-        List<UseCaseProcedureImplement> list = useCaseImplement.getDetail();
-        for (UseCaseProcedureImplement useCaseProcedureImplement : list) {
+        List<UseCaseDetail> list = useCaseImplement.getDetail();
+        for (UseCaseDetail useCaseProcedureImplement : list) {
             String testResult = useCaseProcedureImplement.getTestResult();
             if ("阻塞".equals(testResult) || "失败".equals(testResult)) {
                 useCaseImplement.setImplementResult(testResult);
@@ -67,7 +73,7 @@ public class UseCaseImplementServiceImpl implements UseCaseImplementService {
         Long id = useCaseImplement.getId();
 
         // 设置外键
-        for (UseCaseProcedureImplement useCaseProcedureImplement : list) {
+        for (UseCaseDetail useCaseProcedureImplement : list) {
             useCaseProcedureImplement.setImplementId(id);
         }
 
@@ -79,8 +85,14 @@ public class UseCaseImplementServiceImpl implements UseCaseImplementService {
             useCaseMapper.updateByPrimaryKeySelective(useCase);
     }
 
+    /**
+     * 根据测试用例ID查询测试用例执行信息
+     *
+     * @param useCaseId
+     *            测试用例ID
+     */
     @Override
-    public List<UseCaseImplement> findByUseCaseId(Long useCaseId) {
+    public List<UseCaseImplement> queryUseCaseImplementByUseCaseId(Long useCaseId) {
         Map<String, Object> param = new HashMap<>();
         param.put("useCaseId", useCaseId);
         return useCaseImplementMapper.find(param);

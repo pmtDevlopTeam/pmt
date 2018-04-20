@@ -137,7 +137,7 @@ public class RoleToUserServiceImpl implements RoleToUserService {
         }
         List<User> userModels = new ArrayList<User>();
         for (RoleToUser roleToUser : list) {
-            User userModel = userMapper.selectUserById(roleToUser.getUserId());
+            User userModel = userMapper.queryUserByUserId(roleToUser.getUserId());
             userModels.add(userModel);
         }
         if (CollectionUtils.isEmpty(userModels)) {

@@ -23,7 +23,7 @@ public interface UserMapper {
      *            userModel
      * @author [maple]
      */
-    void insertUser(User userModel);
+    void addUser(User userModel);
 
     /**
      * 
@@ -33,7 +33,7 @@ public interface UserMapper {
      *            userModel
      * @author [maple]
      */
-    void insertUserInfo(User userModel);
+    void addUserInfo(User userModel);
 
     /**
      * 
@@ -43,7 +43,7 @@ public interface UserMapper {
      *            userModel
      * @author [maple]
      */
-    void insertUserOrg(User userModel);
+    void addUserOrg(User userModel);
 
     /**
      * 
@@ -53,7 +53,7 @@ public interface UserMapper {
      *            userModel
      * @author [maple]
      */
-    void insertUserRole(User userModel);
+    void addUserRole(User userModel);
 
     /**
      * 
@@ -63,7 +63,7 @@ public interface UserMapper {
      *            void
      * @author [name]
      */
-    void deleteUserByUserId(String userId);
+    int deleteUserByUserId(String userId);
 
     /**
      * 
@@ -106,7 +106,7 @@ public interface UserMapper {
      * @return UserModel
      * @author [maple]
      */
-    User selectUserById(String userId);
+    User queryUserByUserId(String userId);
 
     /**
      * Description:[查询用户不分页]
@@ -196,13 +196,36 @@ public interface UserMapper {
 
     /**
      * 
-     * Description:[根据userId 删除用户角色中间表记录]
+     * Description:[根据userId 删除用户部门表记录]
      * 
-     * @param
-     * @return
+     * @param String
+     *            userId
+     * @return int
      * @author [maple] 2018年4月16日下午4:05:53
      */
-    void deleteUserRoleByUserId(String userId);
+    int deleteUserInfoByUserId(String userId);
+
+    /**
+     * 
+     * Description:[根据userId 删除用户部门表记录]
+     * 
+     * @param String
+     *            userId
+     * @return int
+     * @author [maple] 2018年4月16日下午4:05:53
+     */
+    int deleteUserOrgByUserId(String userId);
+
+    /**
+     * 
+     * Description:[根据userId 删除用户角色中间表记录]
+     * 
+     * @param String
+     *            userId
+     * @return int
+     * @author [maple] 2018年4月16日下午4:05:53
+     */
+    int deleteUserRoleByUserId(String userId);
 
     /**
      * 

@@ -4,7 +4,6 @@ import java.util.Map;
 
 import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.task.model.Task;
-import com.camelot.pmt.task.model.TaskDetail;
 import com.github.pagehelper.PageInfo;
 
 /**
@@ -45,6 +44,6 @@ public interface TaskOverdueService {
      *         page @param @return @return
      *         ExecuteResult<DataGrid<UserModel>> @throws
      */
-    ExecuteResult<PageInfo<Map<String, Object>>> queryOverdueTask(Integer page, Integer rows);
+    ExecuteResult<PageInfo<Map<String, Object>>> queryOverdueTask(Task task, Integer page, Integer rows);
 
 }

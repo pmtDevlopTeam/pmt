@@ -25,11 +25,10 @@ public interface FileManageMapper {
 
     int updateByPrimaryKey(FileManage record);// 根据id修改
 
-    List<FileManage> selectFileByGroupID(FileManageGroup fileManageGroup);// 根据组id查询
+    List<FileManage> queryFileByGroupId(FileManageGroup fileManageGroup);// 根据组id查询
 
     List selectFileManagerByGroupId(Long id);// 根据组id查询
 
-    void deleteBatchFileById(List fileManagerIds);// 根据id进行批量删除
+    int deleteBatchFileById(List fileManagerIds);// 根据id进行批量删除
 
-    List<FileManage> selectAllFile();
 }

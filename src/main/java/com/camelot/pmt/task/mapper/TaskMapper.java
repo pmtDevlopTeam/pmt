@@ -7,26 +7,9 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Param;
 
 import com.camelot.pmt.task.model.Task;
-import com.camelot.pmt.task.model.TaskLog;
+import com.camelot.pmt.task.model.TaskFile;
 
 public interface TaskMapper {
-    int deleteByPrimaryKey(Long id);
-
-    Task selectByPrimaryKey(Long id);
-
-    /**
-     * 项目关闭时，更新任务状态
-     * 
-     * @param projectId
-     * @param status
-     * @param actualEndTime
-     * @param modifyUserId
-     * @param modifyTime
-     * @return
-     */
-    int updateByProjectId(@Param("projectId") Long projectId, @Param("status") String status,
-            @Param("actualEndTime") Date actualEndTime, @Param("modifyUserId") String modifyUserId,
-            @Param("modifyTime") Date modifyTime);
 
     /**
      * 查询正在进行的任务，根据时间和优先级进行排序 myp
@@ -36,14 +19,24 @@ public interface TaskMapper {
     /**
      * 将任务进行关闭操作 myp
      */
-    void updateRunningToClose(List list);
+    int updateRunningToClose(List<?> list);
 
     /**
      * 将正在进行的任务进行完成操作 myp
      */
     void updateRunningToAlready(Long id);
 
-    List<Task> queryRunningToAlready(List list);
+    List<Task> queryRunningToAlready(List<?> list);
+
+    /**
+     * 点击完成时，修改实际完成时间和实际工时 myp
+     */
+    int updateInfact_hourAndActual_end_time(Task task);
+
+    /**
+     * 点击完成时，添加附件 myp
+     */
+    int addAttachment(TaskFile taskFile);
 
     /**
      * 根据任务id查询所有的次id的子任务 myp
@@ -54,12 +47,6 @@ public interface TaskMapper {
      * 根据id查询任务明细 myp
      */
     Task selectTaskById(Long id);
-
-    /**
-     * 添加历史记录 @Title: queryCount @Description: TODO @param @return @return
-     * Long @throws myp
-     */
-    Long saveHistoryLog(TaskLog taskLog);
 
     /**
      * @author: zlh
@@ -81,13 +68,7 @@ public interface TaskMapper {
     /**
      * 查询已完成的任务，根据时间和优先级进行排序 myp
      */
-    List<Map<String, Object>> listTaskAlready(String id);
-
-    /**
-     * 查询已完成任务总个数 @Title: queryCount @Description: TODO @param @return @return
-     * Long @throws myp
-     */
-    Long queryAlreadyCount();
+    List<Task> listTaskAlready(String id);
 
     /**
      * @author: zlh
@@ -119,15 +100,6 @@ public interface TaskMapper {
     /**
      * @author: zlh
      * @param: id
-     *             父id
-     * @description: 根据父id查询所有的子任务id
-     * @date: 16:04 2018/4/12
-     */
-    List<Long> querySubTaskIdByParantId(Long id);
-
-    /**
-     * @author: zlh
-     * @param: id
      *             需要删除的任务的id
      * @description: 根据任务删除id
      * @date: 17:22 2018/4/12
@@ -144,7 +116,7 @@ public interface TaskMapper {
      * 查询延期任务列表+分页+排序+时间正序+优先级倒序 @Title: queryOverdueTask @Description:
      * TODO @param @param page @param @return @return List<Task> @throws
      */
-    List<Map<String, Object>> queryOverdueTask();
+    List<Map<String, Object>> queryOverdueTask(Task task);
 
     /**
      * @author: gxl @Title: insertTaskNodeId @Description: TODO(新增任务) @param @param
@@ -193,10 +165,18 @@ public interface TaskMapper {
     List<Task> queryAllTaskList(Task task);
 
     /**
+     *
+     * @Title: queryMyPendingTaskList @Description:
+     *         TODO(查询我的待办Task任务列表) @param @param task @param @return 设定文件 @return
+     *         List<Task> 返回类型 @throws
+     */
+    List<Task> queryMyPendingTaskList(Task task);
+
+    /**
      * @author: gxl @Title: queryTopTaskNameList @Description:
      *          TODO(查询顶级我的待办任务) @param @return 设定文件 @return List<Task> 返回类型 @throws
      */
-    List<Task> queryTopTaskNameList(@Param("status") String status, @Param("beassignUserId") Long beassignUserId);
+    List<Task> queryTopTaskNameList(@Param("status") String status, @Param("userId") Long userId);
 
     /**
      * @author: gxl @Title: updateTaskPendingToDelay @Description:
@@ -204,7 +184,7 @@ public interface TaskMapper {
      *          taskType @param @return 设定文件 @return JSONObject 返回类型 @throws
      */
     void updateTaskPendingToDelay(@Param("id") Long id, @Param("status") String status,
-            @Param("delayDescribe") String delayDescribe, @Param("estimateStartTime") String estimateStartTime);
+            @Param("delayDescribe") String delayDescribe, @Param("estimateStartTime") Date estimateStartTime);
 
     /**
      * @author: gxl @Title: updateTaskPendingToRuning @Description:
@@ -212,6 +192,13 @@ public interface TaskMapper {
      *          设定文件 @return int 返回类型 @throws
      */
     void updateTaskPendingToRunning(@Param("id") Long id, @Param("status") String status);
+
+    /**
+     * @author: gxl @Title: taskParentId @Description:
+     *          TODO(设置父Id为null) @param @param id @param @return 设定文件 @return int
+     *          返回类型 @throws
+     */
+    void updateTaskParentIdIsNull(@Param("id") Long id);
 
     /**
      * @author: gxl @Title: updateTaskToAssign @Description:
@@ -267,7 +254,7 @@ public interface TaskMapper {
      * 根据userId,project 查询出未完成任务的个数 @Title: queryUnfinishedTask @Description:
      * TODO @param @param projectId,userId @param @return @return int @throws
      */
-    int queryUnfinishedTask(@Param("projectId") long projectId, @Param("userId") String userId);
+    int queryUnfinishedTask(@Param("projectId") Long projectId, @Param("userId") String userId);
 
     /**
      * 根据demandId 查询任务 @Title: queryUnfinishedTask @Description: TODO @param @param
@@ -280,5 +267,25 @@ public interface TaskMapper {
      * taskId @param @return @return int @throws
      */
     int updateTaskOverdueStatus(String taskId);
+
+    /**
+     * 根据任务Id修改状态 @Title: updateTaskOverdueStatus @Description: TODO @param @param
+     * taskId @param @return @return int @throws
+     */
+    int updateTaskToTest(Long id);
+
+    /**
+     * 项目关闭时，更新任务状态
+     *
+     * @param projectId
+     * @param status
+     * @param actualEndTime
+     * @param modifyUserId
+     * @param modifyTime
+     * @return
+     */
+    int updateByProjectId(@Param("projectId") Long projectId, @Param("status") String status,
+            @Param("actualEndTime") Date actualEndTime, @Param("modifyUserId") String modifyUserId,
+            @Param("modifyTime") Date modifyTime);
 
 }

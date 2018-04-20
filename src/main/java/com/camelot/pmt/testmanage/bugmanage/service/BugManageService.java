@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.camelot.pmt.common.ExecuteResult;
+import com.camelot.pmt.platform.model.Menu;
 import com.camelot.pmt.testmanage.bugmanage.model.BugManage;
 import com.camelot.pmt.testmanage.bugmanage.model.SelectBugManage;
 import com.github.pagehelper.PageInfo;
@@ -16,36 +17,13 @@ import com.github.pagehelper.PageInfo;
 public interface BugManageService {
 
     /**
-     * bug列表
-     * 
-     * @param
-     * @return
-     */
-    ExecuteResult<PageInfo> selectCondition(Map<String, Object> map);
-
-    /**
-     * bug 通过项目id ,指派给,状态 条件查询
-     * 
-     * @param map
-     * @return
-     */
-    Boolean selectByPUS(Map<String, Object> map);
-
-    /**
      * 添加 bug
-     * 
-     * @param bugManage
-     * @return
+     *
+     * @param Menu
+     *            menu
+     * @return ExecuteResult<Menu>
      */
-    ExecuteResult<String> save(BugManage bugManage);
-
-    /**
-     * 根据id查询bug
-     * 
-     * @param id
-     * @return
-     */
-    ExecuteResult<BugManage> getBugById(Long id);
+    boolean addBugManage(BugManage bugManage);
 
     /**
      * 修改bug
@@ -53,7 +31,7 @@ public interface BugManageService {
      * @param
      * @return
      */
-    ExecuteResult<String> edit(BugManage bugManage);
+    boolean updateBugManage(BugManage bugManage);
 
     /**
      * 撤销bug
@@ -61,7 +39,7 @@ public interface BugManageService {
      * @param
      * @return
      */
-    ExecuteResult<String> updateBugStatusRevoke(BugManage bugManage);
+    boolean updateBugStatusRevoke(BugManage bugManage);
 
     /**
      * 关闭bug
@@ -69,7 +47,7 @@ public interface BugManageService {
      * @param
      * @return
      */
-    ExecuteResult<String> updateBugStatusClose(BugManage bugManage);
+    boolean updateBugStatusClose(BugManage bugManage);
 
     /**
      * 确认bug
@@ -77,7 +55,7 @@ public interface BugManageService {
      * @param
      * @return
      */
-    ExecuteResult<String> updateBugStatusYes(BugManage bugManage);
+    boolean updateBugStatusYes(BugManage bugManage);
 
     /**
      * 指派bug
@@ -85,7 +63,7 @@ public interface BugManageService {
      * @param
      * @return
      */
-    ExecuteResult<String> updateBugAssign(BugManage bugManage);
+    boolean updateBugAssign(BugManage bugManage);
 
     /**
      * 解决bug
@@ -93,6 +71,30 @@ public interface BugManageService {
      * @param
      * @return
      */
-    ExecuteResult<String> updateBugSolve(BugManage bugManage);
+    boolean updateBugSolve(BugManage bugManage);
+
+    /**
+     * 根据id查询bug
+     * 
+     * @param id
+     * @return
+     */
+    BugManage queryBugById(Long id);
+
+    /**
+     * bug列表
+     * 
+     * @param
+     * @return
+     */
+    List<SelectBugManage> queryBugManageCondition(Map<String, Object> map);
+
+    /**
+     * bug 通过项目id ,指派给,状态 条件查询
+     * 
+     * @param map
+     * @return
+     */
+    Boolean queryByPUS(Map<String, Object> map);
 
 }

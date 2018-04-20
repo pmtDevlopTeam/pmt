@@ -1,24 +1,32 @@
 package com.camelot.pmt.task.controller;
 
-import com.alibaba.fastjson.JSONObject;
-import com.camelot.pmt.common.*;
-import com.camelot.pmt.common.ApiResponse;
-import com.camelot.pmt.task.model.Task;
-import com.camelot.pmt.task.model.TaskLog;
-import com.camelot.pmt.task.service.TaskRunningService;
-import com.camelot.pmt.task.utils.Constant;
-import com.github.pagehelper.PageInfo;
-import io.swagger.annotations.*;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import springfox.documentation.annotations.ApiIgnore;
 
-import java.util.Date;
-import java.util.Map;
+import com.alibaba.fastjson.JSONObject;
+import com.camelot.pmt.common.APIStatus;
+import com.camelot.pmt.common.ApiResponse;
+import com.camelot.pmt.common.ExecuteResult;
+import com.camelot.pmt.platform.model.User;
+import com.camelot.pmt.platform.shiro.ShiroUtils;
+import com.camelot.pmt.task.model.Task;
+import com.camelot.pmt.task.model.TaskFile;
+import com.camelot.pmt.task.service.TaskManagerService;
+import com.camelot.pmt.task.service.TaskRunningService;
+import com.github.pagehelper.PageInfo;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * @author myp
@@ -34,6 +42,9 @@ public class TaskRunningController {
     @Autowired
     private TaskRunningService taskRunningService;
 
+    @Autowired
+    private TaskManagerService taskManagerService;
+
     /**
      * 查询所有正在进行的任务
      *
@@ -47,10 +58,14 @@ public class TaskRunningController {
             @ApiImplicitParam(name = "page", value = "页码", required = true, paramType = "query", dataType = "int"),
             @ApiImplicitParam(name = "rows", value = "每页数量", required = true, paramType = "query", dataType = "int") })
     public JSONObject queryTaskRunning(int page, int rows) {
-        String userLoginId = String.valueOf(1);
         ExecuteResult<PageInfo<Task>> result = new ExecuteResult<PageInfo<Task>>();
         try {
-            result = taskRunningService.queryTaskRunning(page, rows, "2");
+            // 获取当前登录人
+            User user = (User) ShiroUtils.getSessionAttribute("user");
+            if (null == user) {
+                return ApiResponse.jsonData(APIStatus.INVALIDSESSION_LOGINOUTTIME);
+            }
+            result = taskRunningService.queryTaskRunning(page, rows, user.getUserId());
             if (result.isSuccess()) {
                 return ApiResponse.success(result.getResult());
             }
@@ -71,9 +86,9 @@ public class TaskRunningController {
     @RequestMapping(value = "user/queryTaskById", method = RequestMethod.POST)
     public JSONObject queryTaskById(
             @ApiParam(name = "id", value = "任务id", required = true) @RequestParam(required = true) Long id) {
-        ExecuteResult<Task> result = new ExecuteResult<Task>();
+        ExecuteResult<Map<String, Object>> result = new ExecuteResult<Map<String, Object>>();
         try {
-            result = taskRunningService.queryTaskById(id);
+            result = taskManagerService.queryTaskById(id);
             if (result.isSuccess()) {
                 return ApiResponse.success(result.getResult());
             }
@@ -123,12 +138,17 @@ public class TaskRunningController {
      */
     @ApiOperation(value = "我的正在进行任务转为已完成、实现完成功能", notes = "我的正在进行任务转为已完成、实现完成功能")
     @RequestMapping(value = "/updateTaskRunningToAlready", method = RequestMethod.POST)
-    public JSONObject updateTaskRunningToAlready(
-            @ApiParam(name = "id", value = "任务标识号", required = true) @RequestParam(required = true) Long id) {
+    @ApiImplicitParams({
+            @ApiImplicitParam(dataType = "Long", name = "id", paramType = "form", value = "任务id", required = true),
+            @ApiImplicitParam(dataType = "Long", name = "infactHour", paramType = "form", value = "任务实际工时", required = true),
+            @ApiImplicitParam(dataType = "date", name = "actualEndTime", paramType = "form", value = " 实际完成时间yyyy/MM/dd hh:MM:ss", required = true),
+            @ApiImplicitParam(dataType = "String", name = "attachmentUrl", paramType = "form", value = "附件的路径url", required = true),
+            @ApiImplicitParam(dataType = "String", name = "attachmentTile", paramType = "form", value = "附件名称", required = true) })
+    public JSONObject updateTaskRunningToAlready(@ApiIgnore Task task, @ApiIgnore TaskFile taskFile) {
         ExecuteResult<String> result = new ExecuteResult<String>();
         try {
             // 更新我的正在进行任务为完成
-            result = taskRunningService.updateRunningToAlready(id);
+            result = taskRunningService.updateRunningToAlready(task, taskFile);
             // 判断是否成功
             if (result.isSuccess()) {
                 return ApiResponse.jsonData(APIStatus.OK_200, result.getResult());

@@ -16,5 +16,5 @@ public interface BugHistoryService {
      * @return List<UserModel>
      * @author [maple]
      */
-    ExecuteResult<List<BugHistory>> selectBugHistoryAll(Long bugId);
+    List<BugHistory> queryBugHistoryAll(Long bugId);
 }

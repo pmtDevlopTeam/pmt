@@ -9,18 +9,6 @@ import org.apache.ibatis.annotations.Param;
 import com.camelot.pmt.testmanage.casemanage.model.UseCase;
 
 public interface UseCaseMapper {
-    /**
-     * 项目关闭时，更新用例状态
-     * 
-     * @param projectId
-     * @param caseStatus
-     * @param modifyUserId
-     * @param modifyTime
-     * @return
-     */
-    int updateByProjectId(@Param("projectId") Long projectId, @Param("caseStatus") String caseStatus,
-            @Param("modifyUserId") String modifyUserId, @Param("modifyTime") Date modifyTime);
-
     int deleteByPrimaryKey(Long id);
 
     int insert(UseCase record);
@@ -33,9 +21,21 @@ public interface UseCaseMapper {
 
     int updateByPrimaryKey(UseCase record);
 
-    List<UseCase> selectUseCase(Map<String, Object> condition);
-
     int updateUserCaseDelFlag(Long id);
 
     int insertBatch(List<UseCase> list);
+
+    List<UseCase> queryAllUserCaseList(Map<String, Object> condition);
+
+    /**
+     * 项目关闭时，更新用例状态
+     *
+     * @param projectId
+     * @param caseStatus
+     * @param modifyUserId
+     * @param modifyTime
+     * @return
+     */
+    int updateByProjectId(@Param("projectId") Long projectId, @Param("caseStatus") String caseStatus,
+            @Param("modifyUserId") String modifyUserId, @Param("modifyTime") Date modifyTime);
 }

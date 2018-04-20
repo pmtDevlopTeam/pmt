@@ -238,7 +238,7 @@
       del_flag = 1
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <select id="selectUseCase" resultType="com.camelot.pmt.testmanage.casemanage.model.UseCase"  >
+  <select id="queryAllUserCaseList" resultType="com.camelot.pmt.testmanage.casemanage.model.UseCase"  >
     select 
     <include refid="Base_Column_List" />
     from use_case where del_flag=0

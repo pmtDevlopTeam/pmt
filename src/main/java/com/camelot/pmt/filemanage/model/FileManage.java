@@ -6,26 +6,25 @@ import java.util.Date;
 张战
  */
 public class FileManage {
-    private Long id;
+    private Long id;// 文件id
 
-    private Long groupId;
+    private Long groupId;// 组id
 
-    private String fileTitle;
+    private String fileTitle;// 文件标题
 
-    private String fileAddress;
+    private String fileAddress;// 文件路径
 
-    private Long createUserId;
+    private String createUserId;// 创建人id
 
-    private Date createTime;
+    private Date createTime;// 创建时间
 
-    private Long modifyUserId;
+    private String modifyUserId;// 修改人id
 
-    private Date modifyTime;
+    private Date modifyTime;// 修改时间
 
-    private String delFlag;
-    private int currentPage;
-    private int pageSize;
-    private int indexPage;
+    private String delFlag;// 删除状态（0未删除，1删除）
+    private int currentPage;// 当前页
+    private int pageSize;// 每页显示数量
 
     public Long getId() {
         return id;
@@ -59,11 +58,11 @@ public class FileManage {
         this.fileAddress = fileAddress;
     }
 
-    public Long getCreateUserId() {
+    public String getCreateUserId() {
         return createUserId;
     }
 
-    public void setCreateUserId(Long createUserId) {
+    public void setCreateUserId(String createUserId) {
         this.createUserId = createUserId;
     }
 
@@ -75,11 +74,11 @@ public class FileManage {
         this.createTime = createTime;
     }
 
-    public Long getModifyUserId() {
+    public String getModifyUserId() {
         return modifyUserId;
     }
 
-    public void setModifyUserId(Long modifyUserId) {
+    public void setModifyUserId(String modifyUserId) {
         this.modifyUserId = modifyUserId;
     }
 
@@ -115,19 +114,11 @@ public class FileManage {
         this.pageSize = pageSize;
     }
 
-    public int getIndexPage() {
-        return indexPage;
-    }
-
-    public void setIndexPage(int indexPage) {
-        this.indexPage = indexPage;
-    }
-
     @Override
     public String toString() {
         return "FileManage{" + "id=" + id + ", groupId=" + groupId + ", fileTitle='" + fileTitle + '\''
-                + ", fileAddress='" + fileAddress + '\'' + ", createUserId=" + createUserId + ", createTime="
-                + createTime + ", modifyUserId=" + modifyUserId + ", modifyTime=" + modifyTime + ", delFlag='" + delFlag
-                + '\'' + ", currentPage=" + currentPage + ", pageSize=" + pageSize + ", indexPage=" + indexPage + '}';
+                + ", fileAddress='" + fileAddress + '\'' + ", createUserId='" + createUserId + '\'' + ", createTime="
+                + createTime + ", modifyUserId='" + modifyUserId + '\'' + ", modifyTime=" + modifyTime + ", delFlag='"
+                + delFlag + '\'' + ", currentPage=" + currentPage + ", pageSize=" + pageSize + '}';
     }
 }

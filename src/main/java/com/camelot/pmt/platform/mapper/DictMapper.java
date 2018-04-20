@@ -8,11 +8,9 @@ import com.camelot.pmt.platform.model.Dict;
 import com.camelot.pmt.platform.model.DictItem;
 
 /**
- * <p>
- * 字典Mapper类
- * </p>
+ * 字典管理Mapper数据层接口
  *
- * @author sqw
+ * @author pmt
  * @since 2018-04-08
  */
 @Mapper
@@ -23,35 +21,35 @@ public interface DictMapper {
      * 
      * @param Dict
      *            dict
-     * @return
+     * @return int 1：成功；非1：失败
      */
-    void createDict(Dict dict);
+    int addDict(Dict dict);
 
     /**
      * 根据字典dictId 删除一个字典
      * 
      * @param String
      *            dictId
-     * @return
+     * @return int 1：成功；非1：失败
      */
-    void deleteDictByDictId(String dictId);
+    int deleteDictByDictId(String dictId);
 
     /**
      * 根据字典dictId 删除字典项
      * 
      * @param dictId
-     * @return
+     * @return int 1：成功；非1：失败
      */
-    void deleteDictItemByDictId(String dictId);
+    int deleteDictItemByDictId(String dictId);
 
     /**
      * 根据字典dictId 修改一个字典
      * 
      * @param Dict
      *            dict
-     * @return
+     * @return int 1：成功；非1：失败
      */
-    void modifyDictByDictId(Dict dict);
+    int updateDictByDictId(Dict dict);
 
     /**
      * 根据字典dictId 查询一个字典
@@ -68,7 +66,7 @@ public interface DictMapper {
      * @param
      * @return List<Dict>
      */
-    List<Dict> queryAllDict();
+    List<Dict> selectDictListAll();
 
     /**
      * 查询字典总数量

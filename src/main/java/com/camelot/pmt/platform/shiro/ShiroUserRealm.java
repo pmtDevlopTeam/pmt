@@ -61,12 +61,10 @@ public class ShiroUserRealm extends AuthorizingRealm {
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
         String logincode = (String) token.getPrincipal();
         String password = new String((char[]) token.getCredentials());
-        System.out.println(logincode + "---" + password);
         User userModel = new User();
         userModel.setLoginCode(logincode);
         userModel.setPassword(password);
-        ExecuteResult<User> queryLoginCodeAndPassword = userService.queryLoginCodeAndPassword(userModel);
-        User user = queryLoginCodeAndPassword.getResult();
+        User user = userService.queryLoginCodeAndPassword(userModel);
 
         // 账号不存在
         if (user == null) {

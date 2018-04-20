@@ -8,7 +8,10 @@ import com.baomidou.mybatisplus.enums.IdType;
 
 public class Dict implements Serializable {
     /**
-     * 
+     * @Description:字典表
+     *
+     * @author pmt
+     * @since 2018-04-11
      */
     private static final long serialVersionUID = 1L;
 
