@@ -73,7 +73,7 @@ public class VersionController {
                         return ApiResponse.success();
                     }
                     return ApiResponse.error("添加异常");
-                }else {
+                } else {
                     return ApiResponse.error("项目不存在！");
                 }
             } else {
@@ -101,7 +101,7 @@ public class VersionController {
         try {
             User user = (User) ShiroUtils.getSessionAttribute("user");
             if (user != null) {
-                boolean flag = versionService.updateVersionByIdAndParms(null,user.getUserId(), versionId);
+                boolean flag = versionService.updateVersionByIdAndParms(null, user.getUserId(), versionId);
                 if (flag) {
                     return ApiResponse.success();
                 }
@@ -174,6 +174,7 @@ public class VersionController {
             return ApiResponse.jsonData(APIStatus.ERROR_500);
         }
     }
+
     /**
      * @Description: 根据id激活/关闭版本信息
      * @param: userId
@@ -187,11 +188,11 @@ public class VersionController {
             @ApiImplicitParam(name = "versionStatus", value = "版本状态", required = true, paramType = "form", dataType = "String"),
             @ApiImplicitParam(name = "versionId", value = "版本id", required = true, paramType = "form", dataType = "Long") })
     @RequestMapping(value = "/updateVersionByIdAndParms", method = RequestMethod.POST)
-    public JSONObject updateVersonByIdAndParms(String versionStatus,Long versionId) {
+    public JSONObject updateVersonByIdAndParms(String versionStatus, Long versionId) {
         try {
             User user = (User) ShiroUtils.getSessionAttribute("user");
             if (user != null) {
-                boolean flag = versionService.updateVersionByIdAndParms(versionStatus,user.getUserId(), versionId);
+                boolean flag = versionService.updateVersionByIdAndParms(versionStatus, user.getUserId(), versionId);
                 if (flag) {
                     return ApiResponse.success();
                 }
@@ -204,6 +205,7 @@ public class VersionController {
             return ApiResponse.jsonData(APIStatus.ERROR_500);
         }
     }
+
     /**
      * @Description: 根据项目id查询versionList
      * @param:
@@ -254,8 +256,8 @@ public class VersionController {
         try {
             User user = (User) ShiroUtils.getSessionAttribute("user");
             if (user != null) {
-                PageInfo pageInfo = versionService.queryVerListByPageAndProId(page.getPage(), page.getRows(),
-                        projectId, versionVo);
+                PageInfo pageInfo = versionService.queryVerListByPageAndProId(page.getPage(), page.getRows(), projectId,
+                        versionVo);
                 return ApiResponse.success(pageInfo);
             } else {
                 return ApiResponse.error("用户未登录，请登录！");

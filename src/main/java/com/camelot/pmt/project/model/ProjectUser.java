@@ -14,12 +14,12 @@ public class ProjectUser {
     public static final String STATUS_OUT = "03";
     /** 暂离 */
     public static final String STATUS_AFK = "04";
-    
+
     /**
      * 成员项目工号
      */
     private String userProNum;
-    
+
     /**
      * id
      */
@@ -364,15 +364,15 @@ public class ProjectUser {
 
     /**
      * 成员项目工号
+     * 
      * @return
      */
-	public String getUserProNum() {
-		return userProNum;
-	}
+    public String getUserProNum() {
+        return userProNum;
+    }
 
-	public void setUserProNum(String userProNum) {
-		this.userProNum = userProNum;
-	}
-    
-    
+    public void setUserProNum(String userProNum) {
+        this.userProNum = userProNum;
+    }
+
 }

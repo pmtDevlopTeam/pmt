@@ -126,20 +126,18 @@ public class ProjectBudgetServiceImpl implements ProjectBudgetService {
     }
 
     /**
-     * 查询统计项目结项 
-     * param Long projectId 
-     * return Map<String,Object>
+     * 查询统计项目结项 param Long projectId return Map<String,Object>
      */
     @Override
     public Map<String, Object> queryProjectEndById(Long projectId) {
         List<Map<String, Object>> file = new ArrayList<Map<String, Object>>();
-        
+
         FileManageGroup fileManageGroup = new FileManageGroup();
         fileManageGroup.setProjectId(projectId);
-        List<FileManageGroup> treeList = fileManageGroupService.queryTree(fileManageGroup);//得到项目所有字节点
-        if(treeList.size()>0){
+        List<FileManageGroup> treeList = fileManageGroupService.queryTree(fileManageGroup);// 得到项目所有字节点
+        if (treeList.size() > 0) {
             for (FileManageGroup fileManageGroup2 : treeList) {
-                Map<String,Object> fileGroupMap = new HashMap<>();
+                Map<String, Object> fileGroupMap = new HashMap<>();
                 Long gid = fileManageGroup2.getId();
                 List<Map<String, Object>> fileList = proBuggetMapper.queryFile(gid);
                 fileGroupMap.put("fileList", fileList);

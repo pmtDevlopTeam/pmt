@@ -30,18 +30,16 @@ public class ProjectUserShow {
      * 成员项目工号
      */
     private String userProNum;
-    
-    
 
     public String getUserProNum() {
-		return userProNum;
-	}
+        return userProNum;
+    }
 
-	public void setUserProNum(String userProNum) {
-		this.userProNum = userProNum;
-	}
+    public void setUserProNum(String userProNum) {
+        this.userProNum = userProNum;
+    }
 
-	public Long getId() {
+    public Long getId() {
         return id;
     }
 

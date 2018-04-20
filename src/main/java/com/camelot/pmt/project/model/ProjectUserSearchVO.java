@@ -10,18 +10,16 @@ public class ProjectUserSearchVO {
     private Integer page;
     private Integer size;
     private String userProNum;
-    
-    
 
     public String getUserProNum() {
-		return userProNum;
-	}
+        return userProNum;
+    }
 
-	public void setUserProNum(String userProNum) {
-		this.userProNum = userProNum;
-	}
+    public void setUserProNum(String userProNum) {
+        this.userProNum = userProNum;
+    }
 
-	public Integer getPage() {
+    public Integer getPage() {
         return page;
     }
 
