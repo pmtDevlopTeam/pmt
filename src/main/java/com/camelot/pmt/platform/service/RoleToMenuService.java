@@ -1,10 +1,9 @@
 package com.camelot.pmt.platform.service;
 
-import com.camelot.pmt.common.ExecuteResult;
+import java.util.List;
+
 import com.camelot.pmt.platform.model.Menu;
 import com.camelot.pmt.platform.model.RoleToMenu;
-
-import java.util.List;
 
 public interface RoleToMenuService {
 

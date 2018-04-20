@@ -1,9 +1,14 @@
 package com.camelot.pmt.platform.shiro;
 
-import com.camelot.pmt.common.ExecuteResult;
-import com.camelot.pmt.platform.model.User;
-import com.camelot.pmt.platform.service.UserService;
-import org.apache.shiro.authc.*;
+import java.util.HashSet;
+import java.util.Set;
+
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.AuthenticationInfo;
+import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.authc.LockedAccountException;
+import org.apache.shiro.authc.SimpleAuthenticationInfo;
+import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
@@ -11,8 +16,8 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.HashSet;
-import java.util.Set;
+import com.camelot.pmt.platform.model.User;
+import com.camelot.pmt.platform.service.UserService;
 
 /**
  *
@@ -26,8 +31,9 @@ public class ShiroUserRealm extends AuthorizingRealm {
     @Autowired
     private UserService userService;
 
-/*    @Autowired
-    private MenuService menuService;*/
+    /*
+     * @Autowired private MenuService menuService;
+     */
 
     /**
      * 授权(验证权限时调用)

@@ -2,7 +2,6 @@ package com.camelot.pmt.project.mapper;
 
 import java.util.List;
 
-import com.camelot.pmt.common.Pager;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -56,7 +55,8 @@ public interface VersionMapper {
     List<Version> queryListByProIdAndVerType(@Param("projectId") Long projectId,
             @Param("versionType") String versionType);
 
-    List<Version> selectVersionListByProIdAndPram(@Param(value = "projectId")Long projectId,@Param(value = "versionVo")VersionVo versionVo);
+    List<Version> selectVersionListByProIdAndPram(@Param(value = "projectId") Long projectId,
+            @Param(value = "versionVo") VersionVo versionVo);
 
     List<Version> selectList();
 }

@@ -1,10 +1,10 @@
 package com.camelot.pmt.project.service;
 
-import java.util.List;
 import java.util.Map;
 
 import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.project.model.ProjectBudget;
+
 /**
  * 
  * @author lixk
@@ -16,33 +16,45 @@ public interface ProjectBudgetService {
     /**
      * 查询项目预算
      * 
-     *@param  Long proId
-     *@return ExecuteResult<Map<String, Object>>
+     * @param Long
+     *            proId
+     * @return ExecuteResult<Map<String, Object>>
      */
     ExecuteResult<Map<String, Object>> queryBudget(Long proId);
 
     /**
      * 添加项目预算
      * 
-     *@param  ProjectBudget projectBudget
-     *@return ExecuteResult<String>
+     * @param ProjectBudget
+     *            projectBudget
+     * @return ExecuteResult<String>
      */
     boolean addBudget(ProjectBudget projectBudget);
 
     /**
      * 修改项目预算
      * 
-     *@param  ProjectBudget projectBudget
-     *@return ExecuteResult<String>
+     * @param ProjectBudget
+     *            projectBudget
+     * @return ExecuteResult<String>
      */
     boolean updateBudget(ProjectBudget projectBudget);
 
     /**
      * 根据项目id查询项目预算
      * 
-     *@param  Long projectId
-     *@return ExecuteResult<ProjectBudget>
+     * @param Long
+     *            projectId
+     * @return ExecuteResult<ProjectBudget>
      */
     ProjectBudget queryBudgeByProjectId(Long projectId);
+
+    /**
+     * 统计查询项目结项
+     * 
+     * @param Long
+     *            projectId
+     */
+    Map<String, Object> queryProjectEndById(Long projectId);
 
 }

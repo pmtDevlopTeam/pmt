@@ -1,29 +1,30 @@
 package com.camelot.pmt.filemanage.model;
 
 import java.util.Date;
+
 /*
 张战
  */
 public class FileManage {
-    private Long id;//文件id
+    private Long id;// 文件id
 
-    private Long groupId;//组id
+    private Long groupId;// 组id
 
-    private String fileTitle;//文件标题
+    private String fileTitle;// 文件标题
 
-    private String fileAddress;//文件路径
+    private String fileAddress;// 文件路径
 
-    private String  createUserId;//创建人id
+    private String createUserId;// 创建人id
 
-    private Date createTime;//创建时间
+    private Date createTime;// 创建时间
 
-    private String   modifyUserId;//修改人id
+    private String modifyUserId;// 修改人id
 
-    private Date modifyTime;//修改时间
+    private Date modifyTime;// 修改时间
 
-    private String delFlag;//删除状态（0未删除，1删除）
-    private int currentPage;//当前页
-    private int pageSize;//每页显示数量
+    private String delFlag;// 删除状态（0未删除，1删除）
+    private int currentPage;// 当前页
+    private int pageSize;// 每页显示数量
 
     public Long getId() {
         return id;
@@ -115,18 +116,9 @@ public class FileManage {
 
     @Override
     public String toString() {
-        return "FileManage{" +
-                "id=" + id +
-                ", groupId=" + groupId +
-                ", fileTitle='" + fileTitle + '\'' +
-                ", fileAddress='" + fileAddress + '\'' +
-                ", createUserId='" + createUserId + '\'' +
-                ", createTime=" + createTime +
-                ", modifyUserId='" + modifyUserId + '\'' +
-                ", modifyTime=" + modifyTime +
-                ", delFlag='" + delFlag + '\'' +
-                ", currentPage=" + currentPage +
-                ", pageSize=" + pageSize +
-                '}';
+        return "FileManage{" + "id=" + id + ", groupId=" + groupId + ", fileTitle='" + fileTitle + '\''
+                + ", fileAddress='" + fileAddress + '\'' + ", createUserId='" + createUserId + '\'' + ", createTime="
+                + createTime + ", modifyUserId='" + modifyUserId + '\'' + ", modifyTime=" + modifyTime + ", delFlag='"
+                + delFlag + '\'' + ", currentPage=" + currentPage + ", pageSize=" + pageSize + '}';
     }
 }

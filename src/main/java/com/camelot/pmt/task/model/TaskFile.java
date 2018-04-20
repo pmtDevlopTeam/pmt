@@ -3,7 +3,7 @@ package com.camelot.pmt.task.model;
 import java.io.Serializable;
 import java.util.Date;
 
-public class TaskFile implements Serializable{
+public class TaskFile implements Serializable {
     private Long id;
 
     private String attachmentUrl;
@@ -96,16 +96,9 @@ public class TaskFile implements Serializable{
 
     @Override
     public String toString() {
-        return "TaskFile{" +
-                "id=" + id +
-                ", attachmentUrl='" + attachmentUrl + '\'' +
-                ", attachmentTile='" + attachmentTile + '\'' +
-                ", attachmentSource='" + attachmentSource + '\'' +
-                ", sourceId=" + sourceId +
-                ", createUserId=" + createUserId +
-                ", createTime=" + createTime +
-                ", modifyUserId=" + modifyUserId +
-                ", modifyTime=" + modifyTime +
-                '}';
+        return "TaskFile{" + "id=" + id + ", attachmentUrl='" + attachmentUrl + '\'' + ", attachmentTile='"
+                + attachmentTile + '\'' + ", attachmentSource='" + attachmentSource + '\'' + ", sourceId=" + sourceId
+                + ", createUserId=" + createUserId + ", createTime=" + createTime + ", modifyUserId=" + modifyUserId
+                + ", modifyTime=" + modifyTime + '}';
     }
 }

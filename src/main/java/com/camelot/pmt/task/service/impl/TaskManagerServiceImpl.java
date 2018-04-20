@@ -302,7 +302,6 @@ public class TaskManagerServiceImpl implements TaskManagerService {
      * 根据任务id查询任务详情
      *
      * @param id 任务id
-     * @return ExecuteResult<Map   <   String   ,       Object>> String:数据的类型 Task（任务信息）和TaskFile（附件信息）
      * @author zlh
      * @date 17:08 2018/4/12
      */

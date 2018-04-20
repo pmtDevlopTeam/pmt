@@ -10,6 +10,7 @@ import org.springframework.util.StringUtils;
 import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.platform.mapper.DictMapper;
 import com.camelot.pmt.platform.model.Dict;
+import com.camelot.pmt.platform.model.Org;
 import com.camelot.pmt.platform.service.DictService;
 import com.camelot.pmt.util.UUIDUtil;
 
@@ -27,70 +28,56 @@ public class DictServiceImpl implements DictService {
 
 	@Override
 	public boolean addDict(Dict dict) {
-		try{
 			String uuid = UUIDUtil.getUUID();
 			dict.setDictId(uuid);
             long date = new Date().getTime();
             dict.setCreateTime(new Date(date));
             return (dictMapper.addDict(dict)==1)?true:false;
-		}catch(Exception e){
-			throw new RuntimeException(e);
-		}
-
 	}
 
 	@Override
 	public boolean deleteDictByDictId(String dictId) {
 		boolean flag = false;
-    	try {
     		int i= dictMapper.deleteDictByDictId(dictId);
     		dictMapper.deleteDictItemByDictId(dictId);
     		if(i == 1) {
     			flag = true;
     		}
-    	} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
     	return flag;
-
 	}
 		
 
 	@Override
 	public boolean updateDictByDictId(Dict dict) {
-	       try {
 				if(StringUtils.isEmpty(dict.getDictId()) ){
 					return false;
 				}
 	            long date = new Date().getTime();
 	            dict.setModifyTime(new Date(date));
 	            return (dictMapper.updateDictByDictId(dict)==1)?true:false;
-	        } catch (Exception e){
-	            throw new RuntimeException(e);
-	        }
-	       
+	}
+	
+	@Override
+	public boolean updateDictByDictIdAndState(Dict dict) {
+		if(StringUtils.isEmpty(dict.getDictId()) ){
+			return false;
+		}
+        long date = new Date().getTime();
+        dict.setModifyTime(new Date(date));
+        return (dictMapper.updateDictByDictIdAndState(dict)==1)?true:false;
 	}
 
 	@Override
 	public Dict queryDictByDictId(String dictId) {
-		try {
 			Dict dict = dictMapper.queryDictByDictId(dictId);
 			return dict;
-		}catch (Exception e) {
-            throw new RuntimeException(e);
-
-		}
 	}
 	
 
 	@Override
-	public List<Dict> selectDictListAll() {
-    		try {
-    			List<Dict> list = dictMapper.selectDictListAll();
+	public List<Dict> queryDictListAll() {
+    			List<Dict> list = dictMapper.queryDictListAll();
         		return list;
-    		}catch (Exception e) {
-                throw new RuntimeException(e);
-    		}
 	}
 
 //	@Override

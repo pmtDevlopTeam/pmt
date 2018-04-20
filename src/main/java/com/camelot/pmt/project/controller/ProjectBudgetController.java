@@ -1,14 +1,5 @@
 package com.camelot.pmt.project.controller;
 
-import com.camelot.pmt.common.APIStatus;
-import com.camelot.pmt.common.ApiResponse;
-import com.camelot.pmt.common.ExecuteResult;
-
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
-
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -22,11 +13,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
+import com.camelot.pmt.common.APIStatus;
+import com.camelot.pmt.common.ApiResponse;
+import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.platform.model.User;
 import com.camelot.pmt.platform.shiro.ShiroUtils;
 import com.camelot.pmt.project.model.ProjectBudget;
 import com.camelot.pmt.project.service.ProjectBudgetService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import springfox.documentation.annotations.ApiIgnore;
 
 /**
@@ -40,7 +38,7 @@ import springfox.documentation.annotations.ApiIgnore;
 @RequestMapping(value = "/project/pojectbudget")
 public class ProjectBudgetController {
 
-    //日志
+    // 日志
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
@@ -48,8 +46,10 @@ public class ProjectBudgetController {
 
     /**
      * 添加项目预算信息
-     *@param  ProjectBudget projectBudget 
-     *@return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
+     * 
+     * @param ProjectBudget
+     *            projectBudget
+     * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
     @ApiOperation(value = "添加项目预算", notes = "添加预算")
     @ApiImplicitParams({
@@ -62,7 +62,7 @@ public class ProjectBudgetController {
     @PostMapping("/addBudget")
     public JSONObject addBudget(@ApiIgnore ProjectBudget projectBudget) {
         try {
-            if(null == projectBudget){
+            if (null == projectBudget) {
                 return ApiResponse.errorPara("请求参数异常");
             }
             User user = (User) ShiroUtils.getSessionAttribute("user");
@@ -81,11 +81,13 @@ public class ProjectBudgetController {
             return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
         }
     }
-    
+
     /**
      * 修改项目预算
-     *@param  ProjectBudget projectBudget
-     *@return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
+     * 
+     * @param ProjectBudget
+     *            projectBudget
+     * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
     @ApiOperation(value = "修改项目预算", notes = "修改项目预算")
     @ApiImplicitParams({
@@ -98,7 +100,7 @@ public class ProjectBudgetController {
     @PostMapping("/updateBudget")
     public JSONObject updateBudget(@ApiIgnore ProjectBudget projectBudget) {
         try {
-            if(null == projectBudget){
+            if (null == projectBudget) {
                 return ApiResponse.errorPara("请求参数异常");
             }
             User user = (User) ShiroUtils.getSessionAttribute("user");
@@ -119,14 +121,16 @@ public class ProjectBudgetController {
 
     /**
      * 查询项目预算接口(get)
-     *@param  Long projectId
-     *@return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
+     * 
+     * @param Long
+     *            projectId
+     * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
     @ApiOperation(value = "根据projectId查询单个项目预算", notes = "查询单个项目预算")
     @GetMapping(value = "/queryBudgetByProjectId")
     public JSONObject queryUserByUserId(@RequestParam(value = "projectId", required = true) Long projectId) {
         try {
-            if((null == projectId) || (0 == projectId)){
+            if ((null == projectId) || (0 == projectId)) {
                 return ApiResponse.errorPara("请求参数异常");
             }
             ProjectBudget projectBudget = projectBudgetService.queryBudgeByProjectId(projectId);
@@ -139,8 +143,10 @@ public class ProjectBudgetController {
 
     /**
      * 查询项目预算
-     *@param  Long projectId
-     *@return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
+     * 
+     * @param Long
+     *            projectId
+     * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
     @ApiOperation(value = "根据项目id查询项目预算", notes = "查询单个项目预算")
     @GetMapping("/queryBudget")
@@ -159,33 +165,25 @@ public class ProjectBudgetController {
     }
 
     /**
-     *查询项目结项
-     *@param  Long projectId
-     *@return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
+     * 查询项目结项
+     * 
+     * @param Long
+     *            projectId
+     * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
     @ApiOperation(value = "根据项目id查询项目结项", notes = "查询单个项目结项")
     @GetMapping("/queryProjectEndById")
     public JSONObject queryProjectEnd(@RequestParam(value = "projectId", required = true) Long projectId) {
-        ExecuteResult<Map<String, Object>> result = new ExecuteResult<>();
         try {
-            if ("".equals(projectId)) {
+            if (("".equals(projectId)) || (0 == projectId)) {
                 return ApiResponse.errorPara("项目id为空");
             }
-            /**
-             * 调用产出物模块service统计发包信息
-             */
-            result = projectBudgetService.queryBudget(projectId);
-            /**
-             * 调用产出物service统计文档中心文档类型下文档的个数，携带文档名称；
-             */
-            if (result.isSuccess()) {
-                return ApiResponse.success(result.getResult());
-            }
+            Map<String, Object> fileList = projectBudgetService.queryProjectEndById(projectId);
+            return ApiResponse.success(fileList);
         } catch (Exception e) {
             logger.error(e.getMessage());
             return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
         }
-        return ApiResponse.error();
     }
 
 }
