@@ -60,6 +60,10 @@ public class ProjectMainController {
         logger.info(
                 "入参封装的数据为：userId={},projectName={},projectStatus={},startTime={},endTime={},projectDesc={},budgetaryHours={}",
                 userId, projectName, projectStatus, startTime, endTime, projectDesc, budgetaryHours);
+        if (StringUtils.isEmpty(userId) || StringUtils.isEmpty(projectName) || StringUtils.isEmpty(projectStatus)
+                || startTime == null || endTime == null || StringUtils.isEmpty(projectDesc) || budgetaryHours == null) {
+            return ApiResponse.errorPara("入参不能为空");
+        }
         try {
             // 调用addProject方法保存数据
             int projectMainNum = projectMainService.addProject(userId, projectName, projectStatus, startTime, endTime,
@@ -90,23 +94,22 @@ public class ProjectMainController {
             @ApiParam(value = "当前页数", required = true) @RequestParam Integer currentPage, //
             @ApiParam(value = "每页数量", required = true) @RequestParam Integer pageSize) {
         logger.info("入参封装的数据为：currentPage={},pageSize={}", currentPage, pageSize);
+        if (currentPage == null || pageSize == null) {
+            return ApiResponse.errorPara("入参不能为空");
+        }
         try {
-
-            if (currentPage == null || pageSize == null) {
-                return ApiResponse.errorPara();
-            }
             List<ProjectMain> list = projectMainService.queryAllByPage(currentPage, pageSize);
             if (list.size() > 0) {
                 return ApiResponse.success(list);
             }
-            return ApiResponse.error();
+            return ApiResponse.error("分页查询数据失败");
         } catch (Exception e) {
-            return ApiResponse.error();
+            return ApiResponse.error("分页查询数据出现异常");
         }
     }
 
     /**
-     * 按状态分类查询
+     * 按项目状态分类查询
      * 
      * @param projectStatus
      * @return
@@ -116,17 +119,17 @@ public class ProjectMainController {
     public JSONObject queryByProjectStatus(
             @ApiParam(value = "项目状态", required = true) @RequestParam String projectStatus) {
         logger.info("入参封装的数据为：projectStatus={}", projectStatus);
+        if (StringUtils.isEmpty(projectStatus)) {
+            return ApiResponse.errorPara("入参不能为空");
+        }
         try {
-            if (StringUtils.isEmpty(projectStatus)) {
-                return ApiResponse.errorPara();
-            }
             List<ProjectMain> projectMainList = projectMainService.queryByProjectStatus(projectStatus);
             if (projectMainList.size() > 0) {
                 return ApiResponse.success(projectMainList);
             }
-            return ApiResponse.error();
+            return ApiResponse.error("按项目状态分类查询失败");
         } catch (Exception e) {
-            return ApiResponse.error();
+            return ApiResponse.error("按项目状态分类查询出现异常");
         }
     }
 
@@ -140,17 +143,17 @@ public class ProjectMainController {
     @GetMapping(value = "/queryByUserId")
     public JSONObject queryByUserId(@ApiParam(value = "负责人Id", required = true) @RequestParam String userId) {
         logger.info("入参封装的数据为：userId={}", userId);
+        if (StringUtils.isEmpty(userId)) {
+            return ApiResponse.errorPara("入参不能为空");
+        }
         try {
-            if (StringUtils.isEmpty(userId)) {
-                return ApiResponse.errorPara();
-            }
             List<ProjectMain> projectMainList = projectMainService.queryByUserId(userId);
             if (projectMainList.size() > 0) {
                 return ApiResponse.success(projectMainList);
             }
-            return ApiResponse.error();
+            return ApiResponse.error("按负责人id查询数据失败");
         } catch (Exception e) {
-            return ApiResponse.error();
+            return ApiResponse.error("按负责人id查询数据出现异常");
         }
     }
 
@@ -165,17 +168,17 @@ public class ProjectMainController {
     public JSONObject queryByCreateUserId(
             @ApiParam(value = "创建人id", required = true) @RequestParam String createUserId) {
         logger.info("入参封装的数据为：createUserId={}", createUserId);
+        if (StringUtils.isEmpty(createUserId)) {
+            return ApiResponse.errorPara("入参不能为空");
+        }
         try {
-            if (StringUtils.isEmpty(createUserId)) {
-                return ApiResponse.errorPara();
-            }
             List<ProjectMain> projectMainList = projectMainService.queryByCreateUserId(createUserId);
             if (projectMainList.size() > 0) {
                 return ApiResponse.success(projectMainList);
             }
-            return ApiResponse.error();
+            return ApiResponse.error("按创建人id查询数据失败");
         } catch (Exception e) {
-            return ApiResponse.error();
+            return ApiResponse.error("按创建人id查询数据出现异常");
         }
     }
 
@@ -190,17 +193,17 @@ public class ProjectMainController {
     public JSONObject queryByModifyUserId(
             @ApiParam(value = "修改人id", required = true) @RequestParam String modifyUserId) {
         logger.info("入参封装的数据为：modifyUserId={}", modifyUserId);
+        if (StringUtils.isEmpty(modifyUserId)) {
+            return ApiResponse.errorPara("入参不能为空");
+        }
         try {
-            if (StringUtils.isEmpty(modifyUserId)) {
-                return ApiResponse.errorPara();
-            }
             List<ProjectMain> projectMainList = projectMainService.queryByModifyUserId(modifyUserId);
             if (projectMainList.size() > 0) {
                 return ApiResponse.success(projectMainList);
             }
-            return ApiResponse.error();
+            return ApiResponse.error("按修改人id查询数据失败");
         } catch (Exception e) {
-            return ApiResponse.error();
+            return ApiResponse.error("按修改人id查询数据出现异常");
         }
     }
 
@@ -228,20 +231,20 @@ public class ProjectMainController {
 
         logger.info("入参封装的数据为：id={},userId={},projectName={},projectStatus={},startTime={},endTime={},projectDesc={}",
                 id, userId, projectName, projectStatus, startTime, endTime, projectDesc);
+        if (id == null || StringUtils.isEmpty(userId) || StringUtils.isEmpty(projectName)
+                || StringUtils.isEmpty(projectStatus) || startTime == null || endTime == null
+                || StringUtils.isEmpty(projectDesc)) {
+            return ApiResponse.errorPara("入参不能为空");
+        }
         try {
-            if (id == null || StringUtils.isEmpty(userId) || StringUtils.isEmpty(projectName)
-                    || StringUtils.isEmpty(projectStatus) || startTime == null || endTime == null
-                    || StringUtils.isEmpty(projectDesc)) {
-                return ApiResponse.errorPara();
-            }
             int projectMainNum = projectMainService.updateByPrimaryKeySelective(id, userId, projectName, projectStatus,
                     projectDesc, startTime, endTime);
             if (projectMainNum > 0) {
-                return ApiResponse.success();
+                return ApiResponse.success("按主键id更新数据成功");
             }
-            return ApiResponse.error();
+            return ApiResponse.error("按主键id更新数据失败");
         } catch (Exception e) {
-            return ApiResponse.error();
+            return ApiResponse.error("按主键id更新数据出现异常");
         }
     }
 
@@ -256,17 +259,17 @@ public class ProjectMainController {
     public JSONObject deleteByPrimaryKey(@ApiParam(value = "id", required = true) @RequestParam Long id) {
 
         logger.info("入参封装的数据为：id={}", id);
+        if (id == null) {
+            return ApiResponse.errorPara("入参不能为空");
+        }
         try {
-            if (id == null) {
-                return ApiResponse.errorPara();
-            }
             int projectMainNum = projectMainService.deleteByPrimaryKey(id);
             if (projectMainNum > 0) {
-                return ApiResponse.success();
+                return ApiResponse.success("根据id删除项目数据成功");
             }
-            return ApiResponse.error();
+            return ApiResponse.error("根据id删除项目数据失败");
         } catch (Exception e) {
-            return ApiResponse.error();
+            return ApiResponse.error("根据id删除项目数据出现异常");
         }
     }
 
@@ -281,17 +284,17 @@ public class ProjectMainController {
     public JSONObject selectByPrimaryKey(@ApiParam(value = "项目id", required = true) @RequestParam Long id) {
 
         logger.info("入参封装的数据为：id={}", id);
+        if (id == null) {
+            return ApiResponse.errorPara("入参不能为空");
+        }
         try {
-            if (id == null) {
-                return ApiResponse.errorPara();
-            }
             ProjectMain projectMain = projectMainService.queryByPrimaryKey(id);
             if (projectMain != null) {
                 return ApiResponse.success(projectMain);
             }
-            return ApiResponse.error();
+            return ApiResponse.error("按项目id查询数据失败");
         } catch (Exception e) {
-            return ApiResponse.error();
+            return ApiResponse.error("按项目id查询数据出现异常");
         }
     }
 
@@ -321,20 +324,20 @@ public class ProjectMainController {
         logger.info(
                 "入参封装的数据为：id={},projectStatus={},userStatus={},demandStatus={},closeReason={},status={},caseStatus={}",
                 id, projectStatus, userStatus, demandStatus, closeReason, status, caseStatus);
+        if (id == null || StringUtils.isEmpty(projectStatus) || StringUtils.isEmpty(userStatus)
+                || StringUtils.isEmpty(demandStatus) || StringUtils.isEmpty(closeReason) || StringUtils.isEmpty(status)
+                || StringUtils.isEmpty(caseStatus)) {
+            return ApiResponse.errorPara("入参不能为空");
+        }
         try {
-            if (id == null || StringUtils.isEmpty(projectStatus) || StringUtils.isEmpty(userStatus)
-                    || StringUtils.isEmpty(demandStatus) || StringUtils.isEmpty(closeReason)
-                    || StringUtils.isEmpty(status) || StringUtils.isEmpty(caseStatus)) {
-                return ApiResponse.errorPara();
-            }
             int projectMainNum = projectMainService.updateByProjectById(id, projectStatus, userStatus, demandStatus,
                     closeReason, status, caseStatus);
             if (projectMainNum > 0) {
-                return ApiResponse.success();
+                return ApiResponse.success("关闭项目时,更新相关数据成功");
             }
-            return ApiResponse.error();
+            return ApiResponse.error("关闭项目时,更新相关数据失败");
         } catch (Exception e) {
-            return ApiResponse.error();
+            return ApiResponse.error("关闭项目时,更新相关数据出现异常");
         }
     }
 
@@ -351,17 +354,17 @@ public class ProjectMainController {
             @ApiParam(value = "项目状态", required = true) @RequestParam String projectStatus) {
 
         logger.info("入参封装的数据为：id={},projectStatus={}", id, projectStatus);
+        if (id == null || StringUtils.isEmpty(projectStatus)) {
+            return ApiResponse.errorPara("入参不能为空");
+        }
         try {
-            if (id == null || StringUtils.isEmpty(projectStatus)) {
-                return ApiResponse.errorPara();
-            }
             int projectMainNum = projectMainService.updateByIdSuspension(id, projectStatus);
             if (projectMainNum > 0) {
-                return ApiResponse.success();
+                return ApiResponse.success("挂起项目成功");
             }
-            return ApiResponse.error();
+            return ApiResponse.error("挂起项目失败");
         } catch (Exception e) {
-            return ApiResponse.error();
+            return ApiResponse.error("挂起项目出现异常");
         }
     }
 
