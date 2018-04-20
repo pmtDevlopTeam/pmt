@@ -5,13 +5,12 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
-import com.camelot.pmt.common.Pager;
 import com.camelot.pmt.project.model.ProjectMain;
 
 public interface ProjectMainMapper {
 
     /**
-     * 关闭时，按主键id更新数据
+     * 关闭项目时，更新相关表
      * 
      * @param id
      * @param projectStatus
@@ -25,7 +24,7 @@ public interface ProjectMainMapper {
     /**
      * 按修改人Id查询
      * 
-     * @param userId
+     * @param modifyUserId
      * @return
      */
     List<ProjectMain> queryByModifyUserId(String modifyUserId);
@@ -33,7 +32,7 @@ public interface ProjectMainMapper {
     /**
      * 按创建人Id查询
      * 
-     * @param userId
+     * @param createUserId
      * @return
      */
     List<ProjectMain> queryByCreateUserId(String createUserId);
@@ -57,10 +56,10 @@ public interface ProjectMainMapper {
     /**
      * 分页查询
      * 
-     * @param projectStatus
+     * @param projectMain
      * @return
      */
-    List<ProjectMain> queryAllByPage(@Param(value = "page") Pager<?> page);
+    List<ProjectMain> queryAllByPage();
 
     /**
      * 根据id 删除项目
@@ -103,14 +102,26 @@ public interface ProjectMainMapper {
      */
     int updateByPrimaryKeySelective(@Param("id") Long id, @Param("userId") String userId,
             @Param("modifyUserId") String modifyUserId, @Param("modifyTime") Date modifyTime,
-            @Param("projectNum") String projectNum, @Param("projectName") String projectName,
-            @Param("projectStatus") String projectStatus, @Param("projectDesc") String projectDesc,
-            @Param("startTime") Date startTime, @Param("endTime") Date endTime);
+            @Param("projectName") String projectName, @Param("projectStatus") String projectStatus,
+            @Param("projectDesc") String projectDesc, @Param("startTime") Date startTime,
+            @Param("endTime") Date endTime);
 
     /**
-     * 查询所有数量
+     * 获取数据库项目编号最大值
      * 
      * @return
      */
-    Long queryAll();
+    String getMaxProjectNum();
+
+    /**
+     * 挂起项目，只有开始的项目才可以挂起
+     * 
+     * @param id
+     * @param modifyUserId
+     * @param modifyTime
+     * @param projectStatus
+     * @return
+     */
+    int updateByIdSuspension(@Param("id") Long id, @Param("modifyUserId") String modifyUserId,
+            @Param("modifyTime") Date modifyTime, @Param("projectStatus") String projectStatus);
 }

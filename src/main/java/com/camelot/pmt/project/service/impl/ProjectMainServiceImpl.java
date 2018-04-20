@@ -1,5 +1,6 @@
 package com.camelot.pmt.project.service.impl;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -8,22 +9,26 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 
-import com.camelot.pmt.common.DataGrid;
-import com.camelot.pmt.common.ExecuteResult;
-import com.camelot.pmt.common.Pager;
+import com.alibaba.fastjson.JSON;
+import com.camelot.pmt.common.BussinessException;
+import com.camelot.pmt.common.ComEntity;
+import com.camelot.pmt.common.GetJsonFormat;
+import com.camelot.pmt.common.IncrementNumber;
+import com.camelot.pmt.platform.model.User;
+import com.camelot.pmt.platform.shiro.ShiroUtils;
 import com.camelot.pmt.project.mapper.DemandMapper;
 import com.camelot.pmt.project.mapper.ProjectBudgetMapper;
 import com.camelot.pmt.project.mapper.ProjectMainMapper;
 import com.camelot.pmt.project.mapper.ProjectOperateMapper;
 import com.camelot.pmt.project.mapper.ProjectUserMapper;
-import com.camelot.pmt.project.mapper.WarningMapper;
 import com.camelot.pmt.project.model.ProjectBudget;
 import com.camelot.pmt.project.model.ProjectMain;
 import com.camelot.pmt.project.model.ProjectOperate;
-import com.camelot.pmt.project.model.Warning;
 import com.camelot.pmt.project.service.ProjectMainService;
+import com.camelot.pmt.task.mapper.TaskMapper;
+import com.camelot.pmt.testmanage.casemanage.mapper.UseCaseMapper;
+import com.github.pagehelper.PageHelper;
 
 /**
  * 
@@ -41,149 +46,147 @@ public class ProjectMainServiceImpl implements ProjectMainService {
     @Autowired
     private ProjectOperateMapper projectOperateMapper;
     @Autowired
-    private WarningMapper warningMapper;
-    @Autowired
     private DemandMapper demandMapper;
     @Autowired
     private ProjectUserMapper projectUserMapper;
+    @Autowired
+    private TaskMapper taskMapper;
+    @Autowired
+    private UseCaseMapper useCaseMapper;
 
     /**
-     * 保存立项表的方法
+     * 保存项目表以及相关表的方法
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public ExecuteResult<String> addProject(ProjectMain projectMain, ProjectOperate projectOperate,
-            ProjectBudget projectBudget, Warning warning) {
-
-        ExecuteResult<String> result = new ExecuteResult<String>();
+    public int addProject(String userId, String projectName, String projectStatus, Date startTime, Date endTime,
+            String projectDesc, Integer budgetaryHours) {
+        int projectMainNum = 0;
+        int projectOperateNum = 0;
+        int projectBudgetNum = 0;
         try {
             // 保存projectMain
-            projectMain.setCreateTime(new Date());
-            projectMain.setModifyTime(new Date());
-            projectMainMapper.addProject(projectMain);
-            // 保存projectOperate
-            projectOperate.setProjectId(projectMain.getId());
-            projectOperate.setCreateTime(new Date());
-            projectOperateMapper.addProjectOperate(projectOperate);
-            // 保存projectBudget
-            projectBudget.setProjectId(projectMain.getId());
-            projectBudget.setCreateTime(new Date());
-            projectBudget.setModifyTime(new Date());
-            projectBudgetMapper.insert(projectBudget);
-            // 保存warning
-            warning.setProId(projectMain.getId());
-            warning.setCreateTime(new Date());
-            warning.setModifyTime(new Date());
-            warningMapper.insert(warning);
-            result.setResult("添加数据成功!");
-        } catch (Exception e) {
-            logger.error(e.getMessage());
-            throw new RuntimeException(e);
-        }
-        return result;
-    }
-
-    /**
-     * 分页查询
-     */
-    @Override
-    public ExecuteResult<DataGrid<ProjectMain>> queryAllByPage(Pager<?> page) {
-        ExecuteResult<DataGrid<ProjectMain>> result = new ExecuteResult<DataGrid<ProjectMain>>();
-        try {
-            List<ProjectMain> list = projectMainMapper.queryAllByPage(page);
-            // 查询出数据为空的话，直接返回
-            if (CollectionUtils.isEmpty(list)) {
-                DataGrid<ProjectMain> dg = new DataGrid<ProjectMain>();
-                result.setResult(dg);
-                return result;
+            User user = (User) ShiroUtils.getSessionAttribute("user");
+            if (user != null && user.getUserId() != null) {
+                ProjectMain projectMain = new ProjectMain();
+                projectMain.setUserId(userId);
+                projectMain.setProjectName(projectName);
+                projectMain.setProjectStatus(projectStatus);
+                projectMain.setStartTime(startTime);
+                projectMain.setEndTime(endTime);
+                projectMain.setProjectDesc(projectDesc);
+                projectMain.setCreateUserId(user.getUserId());
+                projectMain.setModifyUserId(user.getUserId());
+                projectMain.setCreateTime(new Date());
+                projectMain.setModifyTime(new Date());
+                // 查询数据库最大的项目编号
+                String maxProjectNum = projectMainMapper.getMaxProjectNum();
+                String generProjectNum = IncrementNumber.getIncreNum(maxProjectNum);
+                projectMain.setProjectNum(generProjectNum);
+                projectMainNum = projectMainMapper.addProject(projectMain);
+                // 保存projectOperate
+                ProjectOperate projectOperate = new ProjectOperate();
+                projectOperate.setCreateUserId(user.getUserId());
+                projectOperate.setProjectId(projectMain.getId());
+                projectOperate.setCreateTime(new Date());
+                ComEntity<ProjectMain> CompareEntity = new ComEntity<>();
+                List<String> compareT = CompareEntity.compareT(new ProjectMain(), projectMain, ProjectMain.class);
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                projectOperate.setOperateDesc(sdf.format(new Date()) + "    新增：    "
+                        + GetJsonFormat.getJsonFormat(JSON.toJSON(compareT).toString()));
+                projectOperateNum = projectOperateMapper.addProjectOperate(projectOperate);
+                // 保存projectBudget
+                ProjectBudget projectBudget = new ProjectBudget();
+                projectBudget.setProjectId(projectMain.getId());
+                projectBudget.setCreateUserId(user.getUserId());
+                projectBudget.setModifyUserId(user.getUserId());
+                projectBudget.setCreateTime(new Date());
+                projectBudget.setModifyTime(new Date());
+                projectBudget.setBudgetaryHours(budgetaryHours);
+                projectBudgetNum = projectBudgetMapper.addProjectBudget(projectBudget);
+                if (projectMainNum > 0 && projectOperateNum > 0 && projectBudgetNum > 0) {
+                    return 1;
+                }
+                throw new BussinessException("新增项目失败");
             }
-            DataGrid<ProjectMain> dg = new DataGrid<ProjectMain>();
-            dg.setRows(list);
-            // 查询总条数
-            Long total = projectMainMapper.queryAll();
-            dg.setTotal(total);
-            result.setResult(dg);
         } catch (Exception e) {
             logger.error(e.getMessage());
             throw new RuntimeException(e);
         }
-        return result;
+        return 0;
     }
 
     /**
      * 按项目状态分类查询
      */
     @Override
-    public ExecuteResult<List<ProjectMain>> queryByProjectStatus(String projectStatus) {
-        ExecuteResult<List<ProjectMain>> result = new ExecuteResult<List<ProjectMain>>();
+    public List<ProjectMain> queryByProjectStatus(String projectStatus) {
+        List<ProjectMain> list = null;
         try {
-            List<ProjectMain> list = projectMainMapper.queryByProjectStatus(projectStatus);
+            list = projectMainMapper.queryByProjectStatus(projectStatus);
             if (list.size() <= 0) {
-                return result;
+
+                return null;
             }
-            result.setResult(list);
         } catch (Exception e) {
             logger.error(e.getMessage());
             throw new RuntimeException(e);
         }
-        return result;
+        return list;
     }
 
     /**
      * 按负责人id查询
      */
     @Override
-    public ExecuteResult<List<ProjectMain>> queryByUserId(String userId) {
-        ExecuteResult<List<ProjectMain>> result = new ExecuteResult<List<ProjectMain>>();
+    public List<ProjectMain> queryByUserId(String userId) {
+        List<ProjectMain> list = null;
         try {
-            List<ProjectMain> list = projectMainMapper.queryByUserId(userId);
+            list = projectMainMapper.queryByUserId(userId);
             if (list.size() <= 0) {
-                return result;
+                return null;
             }
-            result.setResult(list);
         } catch (Exception e) {
             logger.error(e.getMessage());
             throw new RuntimeException(e);
         }
-        return result;
+        return list;
     }
 
     /**
      * 按创建人id查询
      */
     @Override
-    public ExecuteResult<List<ProjectMain>> queryByCreateUserId(String createUserId) {
-        ExecuteResult<List<ProjectMain>> result = new ExecuteResult<List<ProjectMain>>();
+    public List<ProjectMain> queryByCreateUserId(String createUserId) {
+        List<ProjectMain> list = null;
         try {
-            List<ProjectMain> list = projectMainMapper.queryByCreateUserId(createUserId);
+            list = projectMainMapper.queryByCreateUserId(createUserId);
             if (list.size() <= 0) {
-                return result;
+                return null;
             }
-            result.setResult(list);
         } catch (Exception e) {
             logger.error(e.getMessage());
             throw new RuntimeException(e);
         }
-        return result;
+        return list;
     }
 
     /**
      * 按修改人id查询
      */
     @Override
-    public ExecuteResult<List<ProjectMain>> queryByModifyUserId(String modifyUserId) {
-        ExecuteResult<List<ProjectMain>> result = new ExecuteResult<List<ProjectMain>>();
+    public List<ProjectMain> queryByModifyUserId(String modifyUserId) {
+        List<ProjectMain> list = null;
         try {
-            List<ProjectMain> list = projectMainMapper.queryByModifyUserId(modifyUserId);
+            list = projectMainMapper.queryByModifyUserId(modifyUserId);
             if (list.size() <= 0) {
-                return result;
+                return null;
             }
-            result.setResult(list);
         } catch (Exception e) {
             logger.error(e.getMessage());
             throw new RuntimeException(e);
         }
-        return result;
+        return list;
     }
 
     /**
@@ -191,111 +194,214 @@ public class ProjectMainServiceImpl implements ProjectMainService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public ExecuteResult<String> updateByPrimaryKeySelective(Long id, String userId, String modifyUserId,
-            String projectNum, String projectName, String projectStatus, String projectDesc, Date startTime,
-            Date endTime, String createUserId, String operateDesc) {
-        ExecuteResult<String> result = new ExecuteResult<>();
+    public int updateByPrimaryKeySelective(Long id, String userId, String projectName, String projectStatus,
+            String projectDesc, Date startTime, Date endTime) {
+        int projectMainNum = 0;
+        int projectOperateNum = 0;
         try {
-            projectMainMapper.updateByPrimaryKeySelective(id, userId, modifyUserId, new Date(), projectNum, projectName,
-                    projectStatus, projectDesc, startTime, endTime);
-
-            ProjectOperate projectOperate = new ProjectOperate();
-            projectOperate.setCreateTime(new Date());
-            projectOperate.setProjectId(id);
-            projectOperate.setCreateUserId(createUserId);
-            projectOperate.setOperateDesc(operateDesc);
-
-            projectOperateMapper.addProjectOperate(projectOperate);
-            result.setResult("更新数据成功!");
-
-        } catch (Exception e) {
-            logger.error(e.getMessage());
-            throw new RuntimeException(e);
-        }
-        return result;
-    }
-
-    /**
-     * 删除项目 项目成员表
-     */
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public ExecuteResult<String> deleteByPrimaryKey(Long id, String createUserId, String operateDesc) {
-        ExecuteResult<String> result = new ExecuteResult<>();
-        try {
-            ProjectMain projectMainSelect = projectMainMapper.queryByPrimaryKey(id);
-            if (projectMainSelect != null && "01".equals(projectMainSelect.getProjectStatus())) {
-                projectMainMapper.deleteByPrimaryKey(id);
-
+            User user = (User) ShiroUtils.getSessionAttribute("user");
+            if (user != null && user.getUserId() != null) {
+                // 更新前的数据
+                ProjectMain projectMain = projectMainMapper.queryByPrimaryKey(id);
+                projectMainNum = projectMainMapper.updateByPrimaryKeySelective(id, userId, user.getUserId(), new Date(),
+                        projectName, projectStatus, projectDesc, startTime, endTime);
                 ProjectOperate projectOperate = new ProjectOperate();
                 projectOperate.setCreateTime(new Date());
                 projectOperate.setProjectId(id);
-                projectOperate.setCreateUserId(createUserId);
-                projectOperate.setOperateDesc(operateDesc);
-
-                projectOperateMapper.addProjectOperate(projectOperate);
-                result.setResult("删除数据成功！");
-            } else {
-                result.setResult("项目进行中，不允许删除！");
+                projectOperate.setCreateUserId(user.getUserId());
+                // 更新后的数据
+                ProjectMain projectMain2 = projectMainMapper.queryByPrimaryKey(id);
+                ComEntity<ProjectMain> CompareEntity = new ComEntity<>();
+                List<String> compareT = CompareEntity.compareT(projectMain, projectMain2, ProjectMain.class);
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                projectOperate.setOperateDesc(sdf.format(new Date()) + "    根据id进行更新：    "
+                        + GetJsonFormat.getJsonFormat(JSON.toJSON(compareT).toString()));
+                projectOperateNum = projectOperateMapper.addProjectOperate(projectOperate);
+                if (projectMainNum > 0 && projectOperateNum > 0) {
+                    return 1;
+                }
+                throw new BussinessException("根据id更新失败");
             }
         } catch (Exception e) {
             logger.error(e.getMessage());
             throw new RuntimeException(e);
         }
-        return result;
+        return 0;
+    }
+
+    /**
+     * 删除项目 只有未开始的项目才可以删除
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public int deleteByPrimaryKey(Long id) {
+        int projectMainNum = 0;
+        int projectOperateNum = 0;
+        try {
+
+            User user = (User) ShiroUtils.getSessionAttribute("user");
+            if (user != null && user.getUserId() != null) {
+                ProjectMain projectMainSelect = projectMainMapper.queryByPrimaryKey(id);
+                if (projectMainSelect != null && "01".equals(projectMainSelect.getProjectStatus())) {
+                    projectMainNum = projectMainMapper.deleteByPrimaryKey(id);
+
+                    ProjectOperate projectOperate = new ProjectOperate();
+                    projectOperate.setCreateTime(new Date());
+                    projectOperate.setProjectId(id);
+                    projectOperate.setCreateUserId(user.getUserId());
+
+                    ComEntity<ProjectMain> CompareEntity = new ComEntity<>();
+                    List<String> compareT = CompareEntity.compareT(projectMainSelect, new ProjectMain(),
+                            ProjectMain.class);
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    projectOperate.setOperateDesc(sdf.format(new Date()) + "    未开始的项目进行删除：    "
+                            + GetJsonFormat.getJsonFormat(JSON.toJSON(compareT).toString()));
+                    projectOperateNum = projectOperateMapper.addProjectOperate(projectOperate);
+                    if (projectMainNum > 0 && projectOperateNum > 0) {
+                        return 1;
+                    }
+                    throw new BussinessException("未开始的项目删除失败");
+                }
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+        return 0;
     }
 
     /**
      * 根据项目主键查询
      */
     @Override
-    public ExecuteResult<ProjectMain> queryByPrimaryKey(Long id) {
-        ExecuteResult<ProjectMain> result = new ExecuteResult<ProjectMain>();
+    public ProjectMain queryByPrimaryKey(Long id) {
+        ProjectMain projectMain = null;
         try {
-            ProjectMain projectMain = projectMainMapper.queryByPrimaryKey(id);
+            projectMain = projectMainMapper.queryByPrimaryKey(id);
             if (projectMain == null) {
-                return result;
+                return null;
             }
-            result.setResult(projectMain);
         } catch (Exception e) {
             logger.error(e.getMessage());
             throw new RuntimeException(e);
         }
-        return result;
+        return projectMain;
     }
 
     /**
-     * 关闭时，更新相关数据
+     * 关闭项目时，更新相关表
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public ExecuteResult<String> updateByProjectById(Long id, String createUserId, String modifyUserId,
-            String projectStatus, String operateDesc, String userStatus, String demandStatus, String closeReason,
-            String status, String caseStatus) {
-        ExecuteResult<String> result = new ExecuteResult<>();
+    public int updateByProjectById(Long id, String projectStatus, String userStatus, String demandStatus,
+            String closeReason, String status, String caseStatus) {
+        int projectMainNum = 0;
+        int projectUserNum = 0;
+        int projectOperateNum = 0;
+        int demandNum = 0;
+        int taskNum = 0;
+        int useCaseNum = 0;
         try {
-            // projectMain中项目id 修改人 修改时间 项目状态修改
-            projectMainMapper.updateById(id, projectStatus, modifyUserId, new Date());
-            // ProjectUser项目成员表成员状态修改
-            projectUserMapper.updateUserStatusByProjectId(id, new Date(), userStatus, modifyUserId, new Date());
-            // 项目操作表存数据
-            ProjectOperate projectOperate = new ProjectOperate();
-            projectOperate.setCreateTime(new Date());
-            projectOperate.setProjectId(id);
-            projectOperate.setCreateUserId(createUserId);
-            projectOperate.setOperateDesc(operateDesc);
-            projectOperateMapper.addProjectOperate(projectOperate);
-            // demand需求表更改状态
-            demandMapper.updateByProjectId(id, demandStatus, closeReason, modifyUserId, new Date());
-            // task任务表更改状态
+            User user = (User) ShiroUtils.getSessionAttribute("user");
+            if (user != null && user.getUserId() != null) {
+                // projectMain中项目id 修改人 修改时间 项目状态修改
+                // 更新前数据
+                ProjectMain projectMain = projectMainMapper.queryByPrimaryKey(id);
+                projectMainNum = projectMainMapper.updateById(id, projectStatus, user.getUserId(), new Date());
+                // 更新后的数据
+                ProjectMain projectMain2 = projectMainMapper.queryByPrimaryKey(id);
+                // ProjectUser项目成员表成员状态修改
+                projectUserNum = projectUserMapper.updateUserStatusByProjectId(id, new Date(), userStatus,
+                        user.getUserId(), new Date());
+                // projectOperate项目操作表存数据
+                ProjectOperate projectOperate = new ProjectOperate();
+                projectOperate.setCreateTime(new Date());
+                projectOperate.setProjectId(id);
+                projectOperate.setCreateUserId(user.getUserId());
 
-            // userCase用例状态修改
-
+                ComEntity<ProjectMain> CompareEntity = new ComEntity<>();
+                List<String> compareT = CompareEntity.compareT(projectMain, projectMain2, ProjectMain.class);
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                projectOperate.setOperateDesc(sdf.format(new Date()) + "    关闭项目时，更新相关表数据：    "
+                        + GetJsonFormat.getJsonFormat(JSON.toJSON(compareT).toString()));
+                projectOperateNum = projectOperateMapper.addProjectOperate(projectOperate);
+                // demand需求表更改状态
+                demandNum = demandMapper.updateByProjectId(id, demandStatus, closeReason, user.getUserId(), new Date());
+                // task任务表更改状态
+                taskNum = taskMapper.updateByProjectId(id, status, new Date(), user.getUserId(), new Date());
+                // userCase用例状态修改
+                useCaseNum = useCaseMapper.updateByProjectId(id, caseStatus, user.getUserId(), new Date());
+                if (projectMainNum > 0 && projectOperateNum > 0 && projectUserNum > 0 && demandNum > 0 && taskNum > 0
+                        && useCaseNum > 0) {
+                    return 1;
+                }
+                throw new BussinessException("关闭项目时，更新相关表数据失败");
+            }
         } catch (Exception e) {
             logger.error(e.getMessage());
             throw new RuntimeException(e);
         }
-        return result;
+        return 0;
     }
 
+    /**
+     * 分页查询
+     */
+    @Override
+    public List<ProjectMain> queryAllByPage(Integer currentPage, Integer pageSize) {
+        PageHelper.startPage(currentPage, pageSize);
+        try {
+            List<ProjectMain> list = projectMainMapper.queryAllByPage();
+            if (list.size() > 0) {
+                return list;
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
+
+    /**
+     * 挂起项目 只有开始的项目才可以挂起
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public int updateByIdSuspension(Long id, String projectStatus) {
+        int projectMainNum = 0;
+        int projectOperateNum = 0;
+        try {
+            User user = (User) ShiroUtils.getSessionAttribute("user");
+            if (user != null && user.getUserId() != null) {
+                // 更新前数据
+                ProjectMain projectMain = projectMainMapper.queryByPrimaryKey(id);
+                if (!"01".equals(projectMain.getProjectStatus())) {
+
+                    projectMainNum = projectMainMapper.updateByIdSuspension(id, user.getUserId(), new Date(),
+                            projectStatus);
+                    // 更新后数据
+                    ProjectMain projectMain2 = projectMainMapper.queryByPrimaryKey(id);
+                    ProjectOperate projectOperate = new ProjectOperate();
+                    projectOperate.setCreateTime(new Date());
+                    projectOperate.setProjectId(id);
+                    projectOperate.setCreateUserId(user.getUserId());
+
+                    ComEntity<ProjectMain> CompareEntity = new ComEntity<>();
+                    List<String> compareT = CompareEntity.compareT(projectMain, projectMain2, ProjectMain.class);
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    projectOperate.setOperateDesc(sdf.format(new Date()) + "    挂起项目，更新项目状态：    "
+                            + GetJsonFormat.getJsonFormat(JSON.toJSON(compareT).toString()));
+                    projectOperateNum = projectOperateMapper.addProjectOperate(projectOperate);
+                    if (projectMainNum > 0 && projectOperateNum > 0) {
+                        return 1;
+                    }
+                    throw new BussinessException("挂起项目时，更新项目状态失败");
+                }
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+        return 0;
+    }
 }

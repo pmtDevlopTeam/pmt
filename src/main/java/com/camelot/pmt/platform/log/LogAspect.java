@@ -80,11 +80,11 @@ public class LogAspect<T> {
 			logService.insertLog(log);
 			System.err.println(stringBuffer);
 
-		} catch (JsonProcessingException e) {
-			e.printStackTrace();
-		}
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
 
-	}
+    }
 
 
 	/**
@@ -130,5 +130,5 @@ public class LogAspect<T> {
 		log.setLogOperationTime(new Date(date));
 		logService.insertLog(log);
 	}
-	
+
 }

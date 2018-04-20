@@ -11,7 +11,8 @@ public interface TaskAlreadyService {
     /**
      * TODO重做(我的任务状态转为正在进行)
      *
-     * @param Long id
+     * @param Long
+     *            id
      * @return ExecuteResult<String>
      */
 
@@ -20,7 +21,8 @@ public interface TaskAlreadyService {
     /**
      * 根据任务ID 提测
      *
-     * @param Long id
+     * @param Long
+     *            id
      * @return ExecuteResult<String>
      */
 
@@ -29,16 +31,18 @@ public interface TaskAlreadyService {
     /**
      * 查询我的已办任务列表
      *
-     * @param Long id
+     * @param Long
+     *            id
      * @return ExecuteResult<PageInfo<Task>>
      */
 
-    ExecuteResult<PageInfo<Task>> queryTaskAlready(Integer page , Integer rows, String id);
+    ExecuteResult<PageInfo<Task>> queryTaskAlready(Integer page, Integer rows, String id);
 
     /**
      * 查询未完成任务的个数
      *
-     * @param Long projectId, String userId
+     * @param Long
+     *            projectId, String userId
      * @return int
      */
 
@@ -47,11 +51,11 @@ public interface TaskAlreadyService {
     /**
      * 根据需求ID 查询任务列表
      *
-     * @param long demandId
+     * @param long
+     *            demandId
      * @return ExecuteResult<List<Task>>
      */
 
     ExecuteResult<List<Task>> queryTaskByDemandId(Long demandId);
-
 
 }

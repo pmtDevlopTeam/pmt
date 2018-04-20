@@ -27,6 +27,7 @@ public interface ProjectUserMapper {
 
     /**
      * 通过主键删除
+     * 
      * @param id
      * @return
      */
@@ -34,13 +35,15 @@ public interface ProjectUserMapper {
 
     /**
      * 插入数据
+     * 
      * @param record
      * @return
      */
     int insert(ProjectUser record);
 
     /**
-     *  项目添加成员
+     * 项目添加成员
+     * 
      * @param record
      * @return
      */
@@ -48,6 +51,7 @@ public interface ProjectUserMapper {
 
     /**
      * 通过主键查询
+     * 
      * @param id
      * @return
      */
@@ -55,6 +59,7 @@ public interface ProjectUserMapper {
 
     /**
      * 修改，可选择性修改
+     * 
      * @param record
      * @return
      */
@@ -92,6 +97,7 @@ public interface ProjectUserMapper {
 
     /**
      * 查询成员数量
+     * 
      * @param vo
      * @return
      */
@@ -99,6 +105,7 @@ public interface ProjectUserMapper {
 
     /**
      * 项目关闭清除所有成员，暂时不用
+     * 
      * @param projectId
      * @param userId
      * @param userStatus
@@ -113,8 +120,6 @@ public interface ProjectUserMapper {
      * @param map
      */
     void clearUser(Map<String, Object> map);
-    
-    
 
     // ----------------------附加-------------------
     // 关于将成员移出项目

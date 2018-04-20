@@ -41,11 +41,10 @@ public class TaskFileController {
     @ApiOperation(value = "附件下载接口", notes = "附件下载接口")
     @ApiImplicitParams({
             @ApiImplicitParam(dataType = "String", name = "attachmentUrl", paramType = "query", value = "附件地址url", required = true),
-            @ApiImplicitParam(dataType = "String", name = "attachmentTile", paramType = "query", value = "附件名称", required = true)
-    })
+            @ApiImplicitParam(dataType = "String", name = "attachmentTile", paramType = "query", value = "附件名称", required = true) })
     public JSONObject download(@ApiIgnore TaskFile taskFile, HttpServletResponse response) {
         try {
-            System.out.println(taskFile.getAttachmentTile()+taskFile.getAttachmentUrl());
+            System.out.println(taskFile.getAttachmentTile() + taskFile.getAttachmentUrl());
             boolean result = taskFileService.download(taskFile, response);
             if (result) {
                 return ApiResponse.success();

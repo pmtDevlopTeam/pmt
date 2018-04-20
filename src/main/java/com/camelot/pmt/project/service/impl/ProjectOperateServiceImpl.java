@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.project.mapper.ProjectOperateMapper;
 import com.camelot.pmt.project.model.ProjectOperate;
 import com.camelot.pmt.project.service.ProjectOperateService;
@@ -27,38 +26,35 @@ public class ProjectOperateServiceImpl implements ProjectOperateService {
      * 按创建人id查询查询对应的操作表数据
      */
     @Override
-    public ExecuteResult<List<ProjectOperate>> queryByCreateUserId(String createUserId) {
-
-        ExecuteResult<List<ProjectOperate>> result = new ExecuteResult<>();
+    public List<ProjectOperate> queryByCreateUserId(String createUserId) {
+        List<ProjectOperate> list = null;
         try {
-            List<ProjectOperate> list = projectOperateMapper.queryByCreateUserId(createUserId);
+            list = projectOperateMapper.queryByCreateUserId(createUserId);
             if (list.size() <= 0) {
-                return result;
+                return null;
             }
-            result.setResult(list);
         } catch (Exception e) {
             logger.error(e.getMessage());
             throw new RuntimeException(e);
         }
-        return result;
+        return list;
     }
 
     /**
      * 按项目id查询对应的操作表数据
      */
     @Override
-    public ExecuteResult<List<ProjectOperate>> queryByProjectId(Long projectId) {
-        ExecuteResult<List<ProjectOperate>> result = new ExecuteResult<>();
+    public List<ProjectOperate> queryByProjectId(Long projectId) {
+        List<ProjectOperate> list = null;
         try {
-            List<ProjectOperate> list = projectOperateMapper.queryByProjectId(projectId);
+            list = projectOperateMapper.queryByProjectId(projectId);
             if (list.size() <= 0) {
-                return result;
+                return null;
             }
-            result.setResult(list);
         } catch (Exception e) {
             logger.error(e.getMessage());
             throw new RuntimeException(e);
         }
-        return result;
+        return list;
     }
 }

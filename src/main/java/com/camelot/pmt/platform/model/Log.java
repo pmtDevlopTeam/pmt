@@ -4,7 +4,6 @@ import java.util.Date;
 
 public class Log {
 
-
     private Long id;
     private String logType;
     private String logOperationType;

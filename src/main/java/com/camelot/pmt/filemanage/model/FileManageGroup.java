@@ -7,30 +7,29 @@ import java.util.List;
 张战1
  */
 public class FileManageGroup {
-    private Long id;//文件夹id
+    private Long id;// 文件夹id
 
-    private Long parentId;//父级id
+    private Long parentId;// 父级id
 
-    private Long projectId;//项目id
+    private Long projectId;// 项目id
 
-    private String name;//文件夹名称
-    private String fdescribe;//文件夹描述
+    private String name;// 文件夹名称
+    private String fdescribe;// 文件夹描述
 
-    private String  createUserId;//创建人id
+    private String createUserId;// 创建人id
 
-    private Date createTime;//创建时间
+    private Date createTime;// 创建时间
 
-    private String modifyUserId;//修改人id
+    private String modifyUserId;// 修改人id
 
-    private Date modifyTime;//修改时间
+    private Date modifyTime;// 修改时间
 
-    private String delFlag;//删除状态（0未删除，1已删除）
+    private String delFlag;// 删除状态（0未删除，1已删除）
 
-    private Integer isfile;//判断是否是文件
-    private int currentPage;//当前页
-    private int pageSize;//每页显示条数
-    private List<FileManageGroup> listGroup;//文件夹集合
-
+    private Integer isfile;// 判断是否是文件
+    private int currentPage;// 当前页
+    private int pageSize;// 每页显示条数
+    private List<FileManageGroup> listGroup;// 文件夹集合
 
     public Long getId() {
         return id;
@@ -146,21 +145,10 @@ public class FileManageGroup {
 
     @Override
     public String toString() {
-        return "FileManageGroup{" +
-                "id=" + id +
-                ", parentId=" + parentId +
-                ", projectId=" + projectId +
-                ", name='" + name + '\'' +
-                ", fdescribe='" + fdescribe + '\'' +
-                ", createUserId='" + createUserId + '\'' +
-                ", createTime=" + createTime +
-                ", modifyUserId='" + modifyUserId + '\'' +
-                ", modifyTime=" + modifyTime +
-                ", delFlag='" + delFlag + '\'' +
-                ", isfile=" + isfile +
-                ", currentPage=" + currentPage +
-                ", pageSize=" + pageSize +
-                ", listGroup=" + listGroup +
-                '}';
+        return "FileManageGroup{" + "id=" + id + ", parentId=" + parentId + ", projectId=" + projectId + ", name='"
+                + name + '\'' + ", fdescribe='" + fdescribe + '\'' + ", createUserId='" + createUserId + '\''
+                + ", createTime=" + createTime + ", modifyUserId='" + modifyUserId + '\'' + ", modifyTime=" + modifyTime
+                + ", delFlag='" + delFlag + '\'' + ", isfile=" + isfile + ", currentPage=" + currentPage + ", pageSize="
+                + pageSize + ", listGroup=" + listGroup + '}';
     }
 }

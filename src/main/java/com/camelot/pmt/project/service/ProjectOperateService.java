@@ -2,7 +2,6 @@ package com.camelot.pmt.project.service;
 
 import java.util.List;
 
-import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.project.model.ProjectOperate;
 
 /**
@@ -17,14 +16,14 @@ public interface ProjectOperateService {
      * @param createUserId
      * @return
      */
-    ExecuteResult<List<ProjectOperate>> queryByCreateUserId(String createUserId);
+    List<ProjectOperate> queryByCreateUserId(String createUserId);
 
     /**
      * 根据项目id进行查询
      * 
-     * @param createUserId
+     * @param projectId
      * @return
      */
-    ExecuteResult<List<ProjectOperate>> queryByProjectId(Long projectId);
+    List<ProjectOperate> queryByProjectId(Long projectId);
 
 }

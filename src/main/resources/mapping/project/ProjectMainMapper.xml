@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.camelot.pmt.project.mapper.ProjectMainMapper">
+	<!--挂起时，只有开始的项目才可以被挂起 -->
+	<update id="updateByIdSuspension">
+		update project_main
+		<trim prefix="set" suffixOverrides=",">
+			<if test="projectStatus != null">
+				project_status = #{projectStatus,jdbcType=CHAR},
+			</if>
+			<if test="modifyUserId != null">
+				modify_user_id = #{modifyUserId,jdbcType=VARCHAR},
+			</if>
+			<if test="modifyTime != null">
+				modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
 	<!--关闭项目时，按主键id更新数据 -->
 	<update id="updateById">
 		update project_main
@@ -67,11 +83,6 @@
 		where
 		project_status=#{project_status}
 	</select>
-	<!-- 查询所有数量 -->
-	<select id="queryAll" resultType="long">
-		select count(1) from
-		project_main
-	</select>
 	<!-- 分页查询所有 -->
 	<select id="queryAllByPage" resultMap="ResultMapWithBLOBs">
 		select
@@ -80,14 +91,7 @@
 		<include refid="Blob_Column_List" />
 		from
 		project_main
-		<if test="page!=null">
-			<include refid="pagination_tail" />
-		</if>
 	</select>
-	<!-- 分页公共sql -->
-	<sql id="pagination_tail">
-		limit #{page.pageOffset} , #{page.rows}
-	</sql>
 	<resultMap id="BaseResultMap" type="ProjectMain">
 		<id column="id" property="id" jdbcType="BIGINT" />
 		<result column="user_id" property="userId" jdbcType="VARCHAR" />
@@ -221,9 +225,6 @@
 			<if test="userId != null">
 				user_id = #{userId,jdbcType=VARCHAR},
 			</if>
-			<if test="projectNum != null">
-				project_num = #{projectNum,jdbcType=CHAR},
-			</if>
 			<if test="projectName != null">
 				project_name = #{projectName,jdbcType=VARCHAR},
 			</if>
@@ -248,4 +249,9 @@
 		</trim>
 		where id = #{id,jdbcType=BIGINT}
 	</update>
+	<!--获取表中最大的项目编号 -->
+	<select id="getMaxProjectNum" resultType="String">
+		select
+		max(p.project_num) from project_main p
+	</select>
 </mapper>

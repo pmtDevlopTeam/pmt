@@ -89,7 +89,7 @@ public class RoleServiceImpl implements RoleService {
         int state = roleMapper.updateRoleById(role);
         Role r = new Role();
         r = list.get(0);
-        if (state == 1){
+        if (state == 1) {
             logAspect.insertUpdateLog(role, r, Modular.ROLE, role.getModifyUserId());
             return true;
         }
@@ -105,16 +105,16 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public boolean deleteRoleById(Role role) {
 
-       List<Role> list = roleMapper.queryRoleByroleId(role.getRoleId());
-       if(CollectionUtils.isEmpty(list)){
-           return false;
-       }
-       int state =  roleMapper.deleteRoleById(role);
-           if(state == 1){
-               //添加日志
-               logAspect.insertDeleteLog(Modular.ROLE,role.getModifyUserId(), list.get(0).getRoleName());
+        List<Role> list = roleMapper.queryRoleByroleId(role.getRoleId());
+        if (CollectionUtils.isEmpty(list)) {
+            return false;
+        }
+        int state = roleMapper.deleteRoleById(role);
+        if (state == 1) {
+            // 添加日志
+            logAspect.insertDeleteLog(Modular.ROLE, role.getModifyUserId(), list.get(0).getRoleName());
             return true;
-           }
+        }
         return false;
     }
 
@@ -126,10 +126,10 @@ public class RoleServiceImpl implements RoleService {
      */
     @Override
     public boolean getRoleNameVerification(Role role) {
-            List<Role> list = roleMapper.getRoleNameVerification(role);
-            if (CollectionUtils.isEmpty(list)) {
-                return true;
-            }
+        List<Role> list = roleMapper.getRoleNameVerification(role);
+        if (CollectionUtils.isEmpty(list)) {
+            return true;
+        }
         return false;
     }
 

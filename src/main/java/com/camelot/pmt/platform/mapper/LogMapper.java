@@ -6,6 +6,7 @@ public interface LogMapper {
 
     /**
      * 添加删除日志
+     * 
      * @param log
      */
     void insertLog(Log log);

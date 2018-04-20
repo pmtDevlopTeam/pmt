@@ -13,15 +13,15 @@ import com.camelot.pmt.testmanage.bugmanage.model.BugHistory;
 import com.camelot.pmt.testmanage.bugmanage.service.BugHistoryService;
 
 @Service
-public class BugHistoryServiceImpl implements BugHistoryService{
-	
-	@Autowired
-	private BugHistoryMapper bugHistoryMapper;
-	
-	@Override
-	public List<BugHistory> queryBugHistoryAll(Long bugId) {
-	     List<BugHistory> list = bugHistoryMapper.queryBugHistoryAll(bugId);
-	     return list;
-	}
+public class BugHistoryServiceImpl implements BugHistoryService {
+
+    @Autowired
+    private BugHistoryMapper bugHistoryMapper;
+
+    @Override
+    public List<BugHistory> queryBugHistoryAll(Long bugId) {
+        List<BugHistory> list = bugHistoryMapper.queryBugHistoryAll(bugId);
+        return list;
+    }
 
 }

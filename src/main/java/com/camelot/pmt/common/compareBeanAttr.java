@@ -38,6 +38,7 @@ public class compareBeanAttr {
          * 判断newBean: 1.newBean对应的get方法的得到的属性值是否为空（null或""）
          * 2.比较newBean和oldBean对应get方法得到的属性值是否相同
          */
+
         for (Method getMethod : getMethods) {
             Object newValue = getMethod.invoke(newBean);
             Object oldValue = getMethod.invoke(oldBean);
@@ -52,9 +53,9 @@ public class compareBeanAttr {
             if (annotation != null && newValue != null) {
                 XmlElement xmlElement = (XmlElement) annotation;
                 if (xmlElement.name().equals("default")) {
-                    System.out.println("属性【" + attrName     + "】注解使用的name是默认值: " + xmlElement.name());
+                    System.out.println("属性【" + attrName + "】注解使用的name是默认值: " + xmlElement.name());
                 } else {
-                    if(oldValue.equals(newValue)){
+                    if (oldValue.equals(newValue)) {
                         continue;
                     }
                     if (null == oldValue) {
