@@ -133,13 +133,14 @@ public class ProjectBudgetServiceImpl implements ProjectBudgetService {
     @Override
     public Map<String, Object> queryProjectEndById(Long projectId) {
         List<Map<String, Object>> file = new ArrayList<Map<String, Object>>();
-        
+        Map<String, Object> fileMap = new HashMap<>();
+        Map<String,Object> fileGroupMap = null;
         FileManageGroup fileManageGroup = new FileManageGroup();
         fileManageGroup.setProjectId(projectId);
         List<FileManageGroup> treeList = fileManageGroupService.queryTree(fileManageGroup);//得到项目所有字节点
         if(treeList.size()>0){
             for (FileManageGroup fileManageGroup2 : treeList) {
-                Map<String,Object> fileGroupMap = new HashMap<>();
+                fileGroupMap = new HashMap<>();
                 Long gid = fileManageGroup2.getId();
                 List<Map<String, Object>> fileList = proBuggetMapper.queryFile(gid);
                 fileGroupMap.put("fileList", fileList);
@@ -150,7 +151,6 @@ public class ProjectBudgetServiceImpl implements ProjectBudgetService {
         }
         // 查询任务表中所有已完成任务的实际工时
         Long totalActualHours = proBuggetMapper.queryTotalActualHours(projectId);
-        Map<String, Object> fileMap = new HashMap<>();
         fileMap.put("totalActualHours", totalActualHours);
         fileMap.put("fileList", file);
         return fileMap;

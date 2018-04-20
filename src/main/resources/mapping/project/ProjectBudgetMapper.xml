@@ -152,12 +152,13 @@
   </select>
   <!-- 查询项目下所有文件组 -->
   <select id="queryFileGroup" parameterType="long" resultType="map">
-  	select id,parent_id,project_id,name,fdescribe,del_flag,isfile
+  	select ifnull(id,'') as id,ifnull(parent_id,'') as parentId,ifnull(project_id,'') as projectId,ifnull(name,'') as name,ifnull(fdescribe,'') as fdescribe,
+  	ifnull(del_flag,'') as delFlag,ifnull(isfile,'') as isfile
   	from file_manage_group where project_id = #{projectId,jdbcType=BIGINT} and isfile = 0
   </select>
   <!-- 查询文件组下所有文件 -->
   <select id="queryFile" parameterType="long" resultType="map">
-  	select file_title,file_address,modify_time from file_manage where group_id = #{groupId,jdbcType=BIGINT}
+  	select ifnull(file_title,'') as fileTitle,ifnull(file_address,'') as fileAddress,ifnull(modify_time,'') as modifyTime from file_manage where group_id = #{groupId,jdbcType=BIGINT}
   </select>
   <!--创建项目时，增加预算表信息 -->
 	<insert id="addProjectBudget" parameterType="com.camelot.pmt.project.model.ProjectBudget">
