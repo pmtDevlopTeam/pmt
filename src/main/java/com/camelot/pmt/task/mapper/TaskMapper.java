@@ -49,6 +49,8 @@ public interface TaskMapper {
      * */
     List<Task> queryByPId(Long pid);
 
+    Task queryTaskAllById(Long id);
+
     /**
      * 根据id查询任务明细
      * myp

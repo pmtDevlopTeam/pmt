@@ -78,7 +78,7 @@ public class TaskLogServiceImpl implements TaskLogService {
     }
 
     @Override
-    public void queryTaskLogList(Long id, String peration) {
+    public void addTaskLogList(Long id, String peration) {
         ExecuteResult<List<TaskLog>> result = new ExecuteResult<List<TaskLog>>();
         try {
             Task taskAll = taskMapper.queryTaskAllById(id);
@@ -89,8 +89,7 @@ public class TaskLogServiceImpl implements TaskLogService {
             taskLog.setUserId(taskAll.getBeassignUser().getUserId());
             taskLog.setOperationButton(peration);
             taskLog.setOperationTime(date);
-            taskLog.setOperationDescribe(
-                    dateFormat.format(date) + "\t" + taskAll.getBeassignUser().getUsername() + "\t" + peration);
+            taskLog.setOperationDescribe(dateFormat.format(date) + "\t" + taskAll.getBeassignUser().getUsername() + "\t" + peration);
             taskLogMapper.insertTaskLog(taskLog);
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
