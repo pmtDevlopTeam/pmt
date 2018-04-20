@@ -1,11 +1,11 @@
 package com.camelot.pmt.caserepertory.mapper;
 
-import java.util.List;
-import java.util.Map;
-
+import com.camelot.pmt.caserepertory.model.CaseRepertory;
+import com.camelot.pmt.testmanage.bugmanage.model.SelectBugManage;
 import org.apache.ibatis.annotations.Mapper;
 
-import com.camelot.pmt.caserepertory.model.CaseRepertory;
+import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface CaseRepertoryMapper {
