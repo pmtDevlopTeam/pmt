@@ -75,7 +75,7 @@ public class TaskAlreadyServiceImpl implements TaskAlreadyService {
                 list.add(id);
             }
             taskMapper.updateTaskAlreadyToRunning(list);
-            result.setResult("任务关闭成功");
+            result.setResult("任务重做成功");
         }catch (Exception e){
             throw new RuntimeException(e);
 
