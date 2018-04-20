@@ -194,7 +194,7 @@ public class TaskRunningServiceImpl implements TaskRunningService{
         Task taskAll = taskMapper.queryTaskAllById(id);
         TaskLog taskLog = new TaskLog();
         Date date = new Date();
-        SimpleDateFormat dateFormat = new SimpleDateFormat();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         taskLog.setTaskId(taskAll.getId());
         taskLog.setUserId(taskAll.getBeassignUser().getUserId());
         taskLog.setOperationButton(peration);

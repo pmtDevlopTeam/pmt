@@ -35,4 +35,15 @@ public interface TaskLogService {
 	 * @throws
 	 */
     ExecuteResult<List<TaskLog>> queryTaskLogList(Long id);
+
+
+	/**
+	 * 添加操作日志日志，需要传任务的id，操作名称
+	 * @Title: queryTaskLogList
+	 * @Description: TODO
+	 * @param @param tasklog
+	 * @return ExecuteResult<String>
+	 * @throws
+	 */
+	void queryTaskLogList(Long id, String peration);
 }
