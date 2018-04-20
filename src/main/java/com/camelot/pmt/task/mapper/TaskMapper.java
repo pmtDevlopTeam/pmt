@@ -272,6 +272,16 @@ public interface TaskMapper {
      * @throws
      */
     void updateTaskToAssign(@Param("id") Long id, @Param("assignUserId") Long assignUserId, @Param("beassignUserId") Long beassignUserId);
+    
+    /**
+	* @Title: updateTaskPending 
+	* @Description: TODO(修改待办任务) 
+	* @param @param task
+	* @param @return    设定文件 
+	* @return JSONObject    返回类型 
+	* @throws
+	 */
+    void updateTaskPending(@Param("id") Long id,@Param("taskDescribe") String taskDescribe);
 
     /**
      * @author: gxl

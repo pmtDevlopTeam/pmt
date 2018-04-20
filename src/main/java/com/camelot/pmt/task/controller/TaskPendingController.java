@@ -5,12 +5,17 @@ import com.camelot.pmt.common.APIStatus;
 import com.camelot.pmt.common.ApiResponse;
 import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.platform.model.User;
+import com.camelot.pmt.platform.shiro.ShiroUtils;
 import com.camelot.pmt.task.model.Task;
 import com.camelot.pmt.task.service.TaskPendingService;
 import com.camelot.pmt.task.utils.Constant.TaskStatus;
 import com.github.pagehelper.PageInfo;
 
-import io.swagger.annotations.*;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiImplicitParams;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,11 +25,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 
@@ -68,15 +76,15 @@ public class TaskPendingController {
 			@ApiParam(name = "rows", value = "每页数量", required = true) @RequestParam(required = true) Integer rows){
 		ExecuteResult<PageInfo<Task>> result = new ExecuteResult<PageInfo<Task>>();
 		try {
-			Long userLoginId = Long.valueOf(1);
+			User user = (User) ShiroUtils.getSessionAttribute("user");
 			//检查用户是否登录，需要去session中获取用户登录信息
-			if(StringUtils.isEmpty(userLoginId)){
+			if(user==null){
 				return ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
             }
 			//设置被指派人+待办限制
-			User user = new User();
-			user.setUserId(userLoginId.toString());
-			task.setBeassignUser(user);
+			User userL = new User();
+			userL.setUserId(user.getUserId());
+			task.setBeassignUser(userL);
 			result = taskPendingService.queryAllTaskList(task,page,rows);
 			//判断是否成功
 			if(result.isSuccess()){
@@ -111,17 +119,50 @@ public class TaskPendingController {
 			@ApiParam(name = "rows", value = "每页数量", required = true) @RequestParam(required = true) Integer rows){
 		ExecuteResult<PageInfo<Task>> result = new ExecuteResult<PageInfo<Task>>();
 		try {
-			Long userLoginId = Long.valueOf(1);
+			User user = (User) ShiroUtils.getSessionAttribute("user");
 			//检查用户是否登录，需要去session中获取用户登录信息
-			if(StringUtils.isEmpty(userLoginId)){
+			if(user==null){
 				return ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
             }
 			//设置被指派人+待办限制
-			User user = new User();
-			user.setUserId(userLoginId.toString());
-			task.setBeassignUser(user);
+			User userL = new User();
+			userL.setUserId(user.getUserId());
+			task.setBeassignUser(userL);
 			task.setStatus(TaskStatus.PENDINHG.getValue());
 			result = taskPendingService.queryMyPendingTaskList(task,page,rows);
+			//判断是否成功
+			if(result.isSuccess()){
+				return ApiResponse.jsonData(APIStatus.OK_200,result.getResult());
+			}
+			return ApiResponse.jsonData(APIStatus.ERROR_500, result.getResult());
+		}catch (Exception e) {
+			logger.error(e.getMessage());
+			//异常
+			return ApiResponse.jsonData(APIStatus.ERROR_500,e.getMessage());
+		}
+	}
+	
+	/**
+	 * 
+	* @Title: queryTaskByTaskId 
+	* @Description: TODO(查询taskId下的所有子节点) 
+	* @param @param taskId
+	* @param @return    设定文件 
+	* @return JSONObject    返回类型 
+	* @throws
+	 */
+	@ApiOperation(value = "查询任务详情", notes = "查询任务详情")
+	@RequestMapping(value = "/queryTaskNodeById", method = RequestMethod.POST)
+	public JSONObject queryTaskNodeById(
+			@ApiParam(name = "id", value = "任务标识号", required = true) @RequestParam(required = true) String id){
+		ExecuteResult<Map<String, Object>> result = new ExecuteResult<Map<String, Object>>();
+		try {
+			User user = (User) ShiroUtils.getSessionAttribute("user");
+			//检查用户是否登录，需要去session中获取用户登录信息
+			if(user==null){
+				return ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
+            }
+			result = taskPendingService.queryTaskNodeById(Long.valueOf(id));
 			//判断是否成功
 			if(result.isSuccess()){
 				return ApiResponse.jsonData(APIStatus.OK_200,result.getResult());
@@ -149,9 +190,9 @@ public class TaskPendingController {
 			@ApiParam(name = "id", value = "任务标识号", required = true) @RequestParam(required = true) Long id){
 		ExecuteResult<String> result = new ExecuteResult<String>();
 		try {
-		    Long userLoginId = Long.valueOf(1);
+			User user = (User) ShiroUtils.getSessionAttribute("user");
 			//检查用户是否登录，需要去session中获取用户登录信息
-			if(StringUtils.isEmpty(userLoginId)){
+			if(user==null){
 				return ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
             }
 			//更新我的待办任务为正在进行中
@@ -175,6 +216,7 @@ public class TaskPendingController {
 	 * @param estimateStartTime
 	 * @return
 	 */
+	@Deprecated
 	@ApiOperation(value = "我的待办任务转为延期", notes = "我的待办任务转为延期")
 	@RequestMapping(value = "/updateTaskPendingToDelay", method = RequestMethod.POST)
 	public JSONObject updateTaskPendingToDelay(
@@ -183,9 +225,9 @@ public class TaskPendingController {
 			@ApiParam(name = "estimateStartTime", value = "任务预计开始时间", required = true) @RequestParam(required = true) Date estimateStartTime){
 		ExecuteResult<String> result = new ExecuteResult<String>();
 		try {
-		    Long userLoginId = Long.valueOf(1);
+			User user = (User) ShiroUtils.getSessionAttribute("user");
 			//检查用户是否登录，需要去session中获取用户登录信息
-			if(StringUtils.isEmpty(userLoginId)){
+			if(user==null){
 				return ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
             }
 			//更新我的待办任务为正在进行中
@@ -212,6 +254,7 @@ public class TaskPendingController {
 	* @return JSONObject    返回类型 
 	* @throws
 	 */
+	@Deprecated
 	@ApiOperation(value = "指派任务-更新指派人和被指派人标识号", notes = "指派任务-更新指派人和被指派人标识号")
 	@RequestMapping(value = "/updateTaskToAssign", method = RequestMethod.POST)
 	public JSONObject updateTaskToAssign(
@@ -220,12 +263,48 @@ public class TaskPendingController {
 			@ApiParam(name = "beassignUserId", value = "被指派人标识号", required = true) @RequestParam(required = true) Long beassignUserId) {
 		ExecuteResult<String> result = new ExecuteResult<String>();
 		try {
-			Long userLoginId = Long.valueOf(1);
+			User user = (User) ShiroUtils.getSessionAttribute("user");
 			//检查用户是否登录，需要去session中获取用户登录信息
-			if(StringUtils.isEmpty(userLoginId)){
+			if(user==null){
 				return ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
             }
 			result = taskPendingService.updateTaskToAssign(id,assignUserId,beassignUserId);
+			//判断是否成功
+			if (result.isSuccess()) {
+				return ApiResponse.jsonData(APIStatus.OK_200, result.getResult());
+			}
+			return ApiResponse.jsonData(APIStatus.ERROR_500, result.getResult());
+		}catch (Exception e) {
+			logger.error(e.getMessage());
+			//异常错误
+			return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
+		}
+	}
+	
+	/**
+	* @Title: updateTaskPending 
+	* @Description: TODO(修改待办任务) 
+	* @param @param task
+	* @param @return    设定文件 
+	* @return JSONObject    返回类型 
+	* @throws
+	 */
+	@Deprecated
+	@ApiOperation(value = "修改待办任务", notes = "修改待办任务")
+	@RequestMapping(value = "/updateTaskPending", method = RequestMethod.POST)
+	public JSONObject updateTaskPending(
+			@ApiParam(name = "id", value = "任务标识号", required = true) @RequestParam(required = true) Long id,
+			@ApiParam(name = "taskDescribe", value = "任务描述", required = false) @RequestParam(required = true) String taskDescribe,
+			MultipartFile file) {
+		ExecuteResult<String> result = new ExecuteResult<String>();
+		try {
+			User user = (User) ShiroUtils.getSessionAttribute("user");
+			//检查用户是否登录，需要去session中获取用户登录信息
+			if(user==null){
+				return ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
+            }
+			//修改任务
+			result = taskPendingService.updateTaskPending(id,taskDescribe,file);
 			//判断是否成功
 			if (result.isSuccess()) {
 				return ApiResponse.jsonData(APIStatus.OK_200, result.getResult());
@@ -247,6 +326,7 @@ public class TaskPendingController {
 	* @return JSONObject    返回类型 
 	* @throws
 	 */
+	@Deprecated
 	@ApiOperation(value = "勿调用，一期无用接口，查询taskId下的所有一级子节点", notes = "勿调用，一期无用接口，查询taskId下的所有一级子节点")
 	@RequestMapping(value = "/queryTaskListNodeByParentId", method = RequestMethod.POST)
 	public JSONObject queryTaskListNodeByParentId(
@@ -279,6 +359,7 @@ public class TaskPendingController {
 	* @return JSONObject    返回类型 
 	* @throws
 	 */
+	@Deprecated
 	@ApiOperation(value = "勿调用，一期无用接口，查询我的顶级待办任务", notes = "勿调用，一期无用接口，查询我的顶级待办任务")
 	@RequestMapping(value = "/queryTopTaskNameList", method = RequestMethod.GET)
 	public JSONObject queryTopTaskNameList(){
@@ -312,6 +393,7 @@ public class TaskPendingController {
 	* @return JSONObject    返回类型 
 	* @throws
 	 */
+	@Deprecated
 	@ApiOperation(value = "勿调用，一期无用接口，查询该任务的父级节点以及祖宗节点", notes = "勿调用，一期无用接口，查询该任务的父级节点以及祖宗节点，list中包含本身")
 	@RequestMapping(value = "/queryTopAllTaskTreeByTaskId", method = RequestMethod.POST)
 	public JSONObject queryTopAllTaskTreeByTaskId(
@@ -347,6 +429,7 @@ public class TaskPendingController {
 	* @return JSONObject    返回类型 
 	* @throws
 	 */
+	@Deprecated
 	@ApiOperation(value = "勿调用，一期无用接口，查询我的待办任务taskId下的所有一级子节点", notes = "勿调用，一期无用接口,查询我的待办任务taskId下的所有一级子节点")
 	@RequestMapping(value = "/queryMyTaskListNodeByParentId", method = RequestMethod.POST)
 	public JSONObject queryMyTaskListNodeByParentId(
@@ -380,6 +463,7 @@ public class TaskPendingController {
 	* @return JSONObject    返回类型 
 	* @throws
 	 */
+	@Deprecated
 	@ApiOperation(value = "勿调用，一期无用接口，添加子任务", notes = "勿调用，一期无用接口，添加子任务")
 	@ApiImplicitParams({
         @ApiImplicitParam(name = "taskNum", value = "任务编号", required = true, paramType = "form", dataType = "String"),
@@ -427,6 +511,7 @@ public class TaskPendingController {
 	* @return JSONObject    返回类型 
 	* @throws
 	 */
+	@Deprecated
 	@ApiOperation(value = "勿调用，一期无用接口，修改任务单元", notes = "勿调用，一期无用接口，修改任务单元")
 	@ApiImplicitParams({
 		@ApiImplicitParam(name = "id", value = "任务标识号", required = true, paramType = "form", dataType = "String"),
@@ -475,6 +560,7 @@ public class TaskPendingController {
 	* @return JSONObject    返回类型 
 	* @throws
 	 */
+	@Deprecated
 	@ApiOperation(value = "勿调用，一期无用接口，删除单个任务单元", notes = "勿调用，一期无用接口，删除单个任务单元")
     @RequestMapping(value = "/deleteTask", method = RequestMethod.POST)
 	public JSONObject deleteTask(
@@ -508,6 +594,7 @@ public class TaskPendingController {
 	* @return JSONObject    返回类型 
 	* @throws
 	 */
+	@Deprecated
 	@ApiOperation(value = "勿调用，一期无用接口，删除待办任务", notes = "勿调用，一期无用接口，删除待办任务")
 	@RequestMapping(value = "/deletePendingTaskTreeById", method = RequestMethod.POST)
 	public JSONObject deletePendingTaskTreeById(
@@ -541,6 +628,7 @@ public class TaskPendingController {
 	* @return JSONObject    返回类型 
 	* @throws
 	 */
+	@Deprecated
 	@ApiOperation(value = "勿调用，一期无用接口，添加或更新任务单元", notes = "勿调用，一期无用接口，添加或更新任务单元")
 	@ApiImplicitParams({
         @ApiImplicitParam(name = "id", value = "任务标识号", required = true, paramType = "form", dataType = "String"),
@@ -604,6 +692,7 @@ public class TaskPendingController {
 	* @return JSONObject    返回类型 
 	* @throws
 	 */
+	@Deprecated
 	@ApiOperation(value = "勿调用，一期无用接口，查询taskId下的所有子节点", notes = "勿调用，一期无用接口，查询taskId下的所有子节点")
 	@RequestMapping(value = "/queryTaskTreeByTaskId", method = RequestMethod.POST)
 	public JSONObject queryTaskTreeByTaskId(

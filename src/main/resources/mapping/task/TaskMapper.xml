@@ -384,6 +384,7 @@
 		      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
 		    where id = #{id,jdbcType=BIGINT}
     </update>
+    <!-- 查询顶级任务列表 -->
     <select id="queryTopTaskNameList" resultMap="BaseResultMap">
     	 select
 			t.id,t.task_name
@@ -529,6 +530,12 @@
 	<update id="updateTaskParentIdIsNull" parameterType="com.camelot.pmt.task.model.Task">
 		update task t set 
 		t.task_parent_id = null
+		where t.id = #{id,jdbcType=BIGINT}
+	</update>
+	<!-- 修改任务描述 -->
+	<update id="updateTaskPending" parameterType="com.camelot.pmt.task.model.Task">
+		update task t set 
+		t.task_describe = #{taskDescribe,jdbcType=VARCHAR}
 		where t.id = #{id,jdbcType=BIGINT}
 	</update>
   <!-- gxl end -->

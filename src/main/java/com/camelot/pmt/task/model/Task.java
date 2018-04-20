@@ -3,7 +3,6 @@ package com.camelot.pmt.task.model;
 import com.camelot.pmt.platform.model.User;
 import com.camelot.pmt.project.model.Demand;
 import com.camelot.pmt.project.model.ProjectMain;
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.io.Serializable;
 import java.util.ArrayList;
