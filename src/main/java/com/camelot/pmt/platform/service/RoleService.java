@@ -3,6 +3,7 @@ package com.camelot.pmt.platform.service;
 import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.platform.model.Role;
 import com.camelot.pmt.util.Tree;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import java.util.List;
 
@@ -36,7 +37,7 @@ public interface RoleService {
      *            roleId, String roleName, String state
      * @return ExecuteResult<Role>
      */
-    boolean updateRoleById(Role role);
+    boolean updateRoleById(Role role) throws JsonProcessingException;
 
     /**
      * 查询角色列表

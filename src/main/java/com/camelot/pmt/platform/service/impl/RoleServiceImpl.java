@@ -1,12 +1,14 @@
 package com.camelot.pmt.platform.service.impl;
 
-import com.camelot.pmt.common.ExecuteResult;
+import com.camelot.pmt.platform.common.Modular;
+import com.camelot.pmt.platform.log.LogAspect;
 import com.camelot.pmt.platform.mapper.RoleMapper;
 import com.camelot.pmt.platform.model.Role;
 import com.camelot.pmt.platform.service.RoleService;
 import com.camelot.pmt.util.BuildTree;
 import com.camelot.pmt.util.Tree;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,9 @@ public class RoleServiceImpl implements RoleService {
 
     @Autowired
     private RoleMapper roleMapper;
+
+    @Autowired
+    private LogAspect logAspect;
 
     /**
      * 查询角色集合
@@ -73,9 +78,17 @@ public class RoleServiceImpl implements RoleService {
      */
     @Override
     public boolean updateRoleById(Role role) {
-            long date = new Date().getTime();
-            role.setModifyTime(new Date(date));
-        return roleMapper.updateRoleById(role) == 1 ? true:false;
+        List<Role> list = roleMapper.queryRoleByroleId(role.getRoleId());
+        long date = new Date().getTime();
+        role.setModifyTime(new Date(date));
+        int state = roleMapper.updateRoleById(role);
+        Role r = new Role();
+        r = list.get(0);
+        if (state == 1){
+            logAspect.insertUpdateLog(role, r, Modular.ROLE, role.getModifyUserId());
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -86,7 +99,18 @@ public class RoleServiceImpl implements RoleService {
      */
     @Override
     public boolean deleteRoleById(Role role) {
-        return roleMapper.deleteRoleById(role) == 1 ? true:false;
+
+       List<Role> list = roleMapper.queryRoleByroleId(role.getRoleId());
+       if(CollectionUtils.isEmpty(list)){
+           return false;
+       }
+       int state =  roleMapper.deleteRoleById(role);
+           if(state == 1){
+               //添加日志
+               logAspect.insertDeleteLog(Modular.ROLE,role.getModifyUserId(), list.get(0).getRoleName());
+            return true;
+           }
+        return false;
     }
 
     /**
