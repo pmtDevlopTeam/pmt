@@ -52,11 +52,13 @@ public interface VersionMapper {
      */
     int updateByPrimaryKey(Version record);
 
-    List<Version> queryListByProIdAndVerType(@Param("projectId") Long projectId,
+    List<String> queryListByProIdAndVerType(@Param("projectId") Long projectId,
             @Param("versionType") String versionType);
 
     List<Version> selectVersionListByProIdAndPram(@Param(value = "projectId") Long projectId,
             @Param(value = "versionVo") VersionVo versionVo);
 
     List<Version> selectList();
+
+    List<Long> selectVerListByProIdAndVerCode(@Param(value = "projectId")Long projectId,@Param(value = "versionCode") String versionCode);
 }
