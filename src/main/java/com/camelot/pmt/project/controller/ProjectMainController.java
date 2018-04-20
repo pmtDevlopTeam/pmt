@@ -306,7 +306,7 @@ public class ProjectMainController {
      * @return
      */
     @ApiOperation(value = "关闭项目时,更新相关数据", notes = "关闭项目时,更新相关数据")
-    @PutMapping(value = "/close/updateByProjectById")
+    @PutMapping(value = "/updateByProjectById/close")
     public JSONObject closeProjectById(//
             @ApiParam(value = "id", required = true) @RequestParam Long id, //
             @ApiParam(value = "项目状态", required = true) @RequestParam String projectStatus, //
@@ -335,4 +335,32 @@ public class ProjectMainController {
             return ApiResponse.error();
         }
     }
+
+    /**
+     * 挂起项目 只有开始的项目才可以挂起
+     * 
+     * @param id
+     * @param projectStatus
+     * @return
+     */
+    @ApiOperation(value = "挂起项目 只有开始的项目才可以挂起", notes = "挂起项目 只有开始的项目才可以挂起")
+    @PutMapping(value = "/updateById/suspension")
+    public JSONObject updateByIdSuspension(@ApiParam(value = "id", required = true) @RequestParam Long id, //
+            @ApiParam(value = "项目状态", required = true) @RequestParam String projectStatus) {
+
+        logger.info("入参封装的数据为：id={},projectStatus={}", id, projectStatus);
+        try {
+            if (id == null || StringUtils.isEmpty(projectStatus)) {
+                return ApiResponse.errorPara();
+            }
+            int projectMainNum = projectMainService.updateByIdSuspension(id, projectStatus);
+            if (projectMainNum > 0) {
+                return ApiResponse.success();
+            }
+            return ApiResponse.error();
+        } catch (Exception e) {
+            return ApiResponse.error();
+        }
+    }
+
 }

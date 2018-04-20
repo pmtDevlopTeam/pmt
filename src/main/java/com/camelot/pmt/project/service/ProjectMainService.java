@@ -90,6 +90,15 @@ public interface ProjectMainService {
             String projectDesc, Date startTime, Date endTime);
 
     /**
+     * 挂起项目 只有开始的项目才可以挂起
+     * 
+     * @param id
+     * @param projectStatus
+     * @return
+     */
+    int updateByIdSuspension(Long id, String projectStatus);
+
+    /**
      * 根据id删除项目
      * 
      * @param id

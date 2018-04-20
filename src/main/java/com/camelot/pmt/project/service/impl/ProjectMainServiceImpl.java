@@ -220,7 +220,7 @@ public class ProjectMainServiceImpl implements ProjectMainService {
     }
 
     /**
-     * 删除项目 项目成员表
+     * 删除项目 只有未开始的项目才可以删除
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -337,5 +337,42 @@ public class ProjectMainServiceImpl implements ProjectMainService {
             throw new RuntimeException(e);
         }
         return null;
+    }
+
+    /**
+     * 挂起项目 只有开始的项目才可以挂起
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public int updateByIdSuspension(Long id, String projectStatus) {
+        int projectMainNum = 0;
+        int projectOperateNum = 0;
+        try {
+            User user = (User) ShiroUtils.getSessionAttribute("user");
+            if (user != null && user.getUserId() != null) {
+
+                ProjectMain projectMain = projectMainMapper.queryByPrimaryKey(id);
+                if (!"01".equals(projectMain.getProjectStatus())) {
+
+                    projectMainNum = projectMainMapper.updateByIdSuspension(id, user.getUserId(), new Date(),
+                            projectStatus);
+                    ProjectOperate projectOperate = new ProjectOperate();
+                    projectOperate.setCreateTime(new Date());
+                    projectOperate.setProjectId(id);
+                    projectOperate.setCreateUserId(user.getUserId());
+                    projectOperate
+                            .setOperateDesc(new Date() + "    " + user.getUsername() + "    更新项目，更新后：" + "modifyUserId:"
+                                    + user.getUserId() + "modifyTime:" + new Date() + "projectStatus:" + projectStatus);
+                    projectOperateNum = projectOperateMapper.addProjectOperate(projectOperate);
+                    if (projectMainNum > 0 && projectOperateNum > 0) {
+                        return 1;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+        return 0;
     }
 }
