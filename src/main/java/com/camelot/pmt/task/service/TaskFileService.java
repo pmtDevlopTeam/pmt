@@ -10,18 +10,22 @@ import com.camelot.pmt.task.model.TaskFile;
 public interface TaskFileService {
 
     /**
-     * @author: zlh
-     * @param:  taskFile 参数
-     * @description: 插入需求类型任务的附件元信息
-     * @date: 10:21 2018/4/17
+     * 插入需求类型任务的附件元信息
+     *
+     * @author zlh
+     * @param  taskFile 参数
+     * @date 10:21 2018/4/17
+     * @return boolean
      */
     boolean insert(TaskFile taskFile);
 
     /**
-     * @author: zlh
-     * @param: taskFile
-     * @description: 根据附件来源和来源id查询附件元信息
-     * @date: 17:03 2018/4/17
+     * 根据附件来源和来源id查询附件元信息
+     *
+     * @author zlh
+     * @param taskFile 查询需要的参数
+     * @date 17:03 2018/4/17
+     * @return TaskFile
      */
-    ExecuteResult<TaskFile> queryByTaskFile(TaskFile taskFile);
+    TaskFile queryByTaskFile(TaskFile taskFile);
 }

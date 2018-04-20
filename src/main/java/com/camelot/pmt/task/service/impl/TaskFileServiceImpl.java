@@ -22,20 +22,22 @@ public class TaskFileServiceImpl implements TaskFileService {
     private TaskFileMapper taskFileMapper;
 
     /**
-     * @author: zlh
-     * @param:  taskFile 参数
-     * @description: 插入需求类型任务的附件元信息
-     * @date: 10:21 2018/4/17
+     * 插入需求类型任务的附件元信息
+     *
+     * @author zlh
+     * @param  taskFile 参数
+     * @date 10:21 2018/4/17
+     * @return boolean
      */
     @Override
     public boolean insert(TaskFile taskFile) {
         try {
             // check参数
             if (taskFile == null) {
-                /*返回参数错误*/
+                throw new RuntimeException("参数错误");
             }
             int insertResult = taskFileMapper.insert(taskFile);
-            return insertResult==1 ? true : false;
+            return insertResult == 1 ? true : false;
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
             throw new RuntimeException(e);
@@ -43,26 +45,24 @@ public class TaskFileServiceImpl implements TaskFileService {
     }
 
     /**
-     * @author: zlh
-     * @param: taskFile
-     * @description: 根据附件来源和来源id查询附件元信息
-     * @date: 17:03 2018/4/17
+     * 根据附件来源和来源id查询附件元信息
+     *
+     * @author zlh
+     * @param taskFile 查询需要的参数
+     * @date 17:03 2018/4/17
+     * @return TaskFile
      */
     @Override
-    public ExecuteResult<TaskFile> queryByTaskFile(TaskFile taskFile) {
-        ExecuteResult<TaskFile> result = new ExecuteResult<TaskFile>();
+    public TaskFile queryByTaskFile(TaskFile taskFile) {
         try {
             // check参数
             if (taskFile == null) {
-                result.addErrorMessage("传入信息有误");
-                return result;
+                throw new RuntimeException("参数错误");
             }
-
-            result.setResult(taskFileMapper.queryByTaskFile(taskFile));
+            return taskFileMapper.queryByTaskFile(taskFile);
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
             throw new RuntimeException(e);
         }
-        return result;
     }
 }
