@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.camelot.pmt.caserepertory.mapper.CaseRepertoryMapper">
+    <resultMap id="BaseResultMap" type="com.camelot.pmt.caserepertory.model.CaseRepertory">
+        <id column="id"  property="id"/>
+        <result column="case_title"  property="caseTitle"/>
+        <result column="case_type"  property="caseType"/>
+        <result column="description" property="description"/>
+        <result column="apply_phase"  property="applyPhase"/>
+        <result column="precondition"  property="precondition"/>
+        <result column="num"  property="num"/>
+        <result column="create_user_id" property="createUserId"/>
+        <result column="create_time" property="createTime"/>
+        <result column="modify_user_id" property="modifyUserId"/>
+        <result column="modify_time" property="modifyTime"/>
+    </resultMap>
+    <resultMap id="findMap" type="com.camelot.pmt.caserepertory.model.CaseRepertory" extends="BaseResultMap">
+        <collection property="detail" column="id" select="com.camelot.pmt.caserepertory.mapper.CaseRepertoryStepMapper.findByUseCaseId"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, case_title, case_type, description, apply_phase, num, precondition
+    </sql>
+    <sql id="Base_Column_List1">
+         id,case_title,case_type,description,apply_phase,precondition,num,create_user_id,create_time,modify_user_id,modify_time
+    </sql>
+    <!--增加-->
+    <!-- 复制用例到用例库 -->
+    <insert id="addCaseRepertoryByCaseid" parameterType="com.camelot.pmt.caserepertory.model.CaseRepertory"
+            useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        insert into
+        case_repertory(case_title,case_type,description,apply_phase,num,precondition,create_user_id,create_time,modify_user_id,modify_time)
+        select
+        uc.case_title,uc.case_type,uc.description,uc.apply_phase,#{num},uc.precondition,#{createUserId},#{createTime},#{modifyUserId},#{modifyTime}
+        from use_case uc
+        <where>
+            and uc.id=#{id}
+        </where>
+    </insert>
+    <insert id="addCaseRepertoryStepByCaseid">
+        insert into case_repertory_step(step,expect,use_case_id,num)
+        select uc.step,uc.expect,${result1},uc.num from use_case_procedure uc
+        <where>
+            and uc.use_case_id=#{param1}
+        </where>
+    </insert>
+    <!-- 复制用例库到用例 -->
+    <insert id="addUserCaseByCaseRepertoryid" parameterType="com.camelot.pmt.caserepertory.model.CaseRepertory"
+            useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        insert into
+        use_case (case_title,case_type,description,apply_phase,num,precondition,case_status,create_user_id,create_time,modify_user_id,modify_time)
+        select
+        uc.case_title,uc.case_type,uc.description,uc.apply_phase,uc.num,uc.precondition,'不正常',#{createUserId},#{createTime},#{modifyUserId},#{modifyTime}
+        from case_repertory uc
+        <where>
+            and uc.id=#{id}
+        </where>
+    </insert>
+    <insert id="addUserCaseStepByCaseRepertoryid">
+        insert into use_case_procedure(step,expect,use_case_id,num)
+        select uc.step,uc.expect,${result1},uc.num from case_repertory_step uc
+        <where>
+            and uc.use_case_id=#{param1}
+        </where>
+    </insert>
+    <insert id="insert" parameterType="com.camelot.pmt.caserepertory.model.CaseRepertory">
+        insert into case_repertory (id, case_title, case_type,
+        description, apply_phase, num,
+        precondition)
+        values (#{id,jdbcType=BIGINT}, #{caseTitle,jdbcType=VARCHAR}, #{caseType,jdbcType=VARCHAR},
+        #{description,jdbcType=VARCHAR}, #{applyPhase,jdbcType=VARCHAR}, #{num,jdbcType=VARCHAR},
+        #{precondition,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="com.camelot.pmt.caserepertory.model.CaseRepertory" useGeneratedKeys="true" keyProperty="id">
+        insert into case_repertory
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="caseTitle != null">
+                case_title,
+            </if>
+            <if test="caseType != null">
+                case_type,
+            </if>
+            <if test="description != null">
+                description,
+            </if>
+            <if test="applyPhase != null">
+                apply_phase,
+            </if>
+            <if test="num != null">
+                num,
+            </if>
+            <if test="precondition != null">
+                precondition,
+            </if>
+            create_user_id,create_time,modify_user_id,modify_time
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="caseTitle != null">
+                #{caseTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="caseType != null">
+                #{caseType,jdbcType=VARCHAR},
+            </if>
+            <if test="description != null">
+                #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="applyPhase != null">
+                #{applyPhase,jdbcType=VARCHAR},
+            </if>
+            <if test="num != null">
+                #{num,jdbcType=VARCHAR},
+            </if>
+            <if test="precondition != null">
+                #{precondition,jdbcType=VARCHAR},
+            </if>
+            #{createUserId,jdbcType=VARCHAR},#{createTime},#{modifyUserId,jdbcType=VARCHAR},#{modifyTime}
+        </trim>
+    </insert>
+    <insert id="insertBatch" parameterType="java.util.List">
+        insert into case_repertory (case_title, case_type, description, apply_phase, num, precondition)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.caseTitle}, #{item.caseType}, #{item.description}, #{item.applyPhase}, #{item.num}, #{item.precondition})
+        </foreach>
+    </insert>
+
+    <!--删除 -->
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete from case_repertory
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+    <delete id="remove" parameterType="java.util.Map">
+        delete from case_repertory
+        <where>
+            <if test="ids != null">
+                <foreach collection="ids" item="item" open="and id in(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </delete>
+
+    <!--修改-->
+    <update id="updateByPrimaryKeySelective" parameterType="com.camelot.pmt.caserepertory.model.CaseRepertory">
+        update case_repertory
+        <set>
+            <if test="caseTitle != null">
+                case_title = #{caseTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="caseType != null">
+                case_type = #{caseType,jdbcType=VARCHAR},
+            </if>
+            <if test="description != null">
+                description = #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="applyPhase != null">
+                apply_phase = #{applyPhase,jdbcType=VARCHAR},
+            </if>
+            <if test="num != null">
+                num = #{num,jdbcType=VARCHAR},
+            </if>
+            <if test="precondition != null">
+                precondition = #{precondition,jdbcType=VARCHAR},
+            </if>
+            create_user_id=#{createUserId,jdbcType=VARCHAR},create_time=#{createTime},
+            modify_user_id=#{modifyUserId,jdbcType=VARCHAR},modify_time=#{modifyTime}
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.camelot.pmt.caserepertory.model.CaseRepertory">
+        update case_repertory
+        set case_title = #{caseTitle,jdbcType=VARCHAR},
+        case_type = #{caseType,jdbcType=VARCHAR},
+        description = #{description,jdbcType=VARCHAR},
+        apply_phase = #{applyPhase,jdbcType=VARCHAR},
+        num = #{num,jdbcType=VARCHAR},
+        precondition = #{precondition,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <!--查询-->
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from case_repertory
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="find" parameterType="java.util.Map" resultMap="findMap">
+        select
+        <include refid="Base_Column_List"/>
+        from case_repertory
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+        </where>
+    </select>
+    <select id="selectCondition" resultType="com.camelot.pmt.caserepertory.model.CaseRepertory">
+        select <include refid="Base_Column_List1" />
+        from
+        case_repertory where 1=1
+            <if test="caseType!=null and caseType!=''">
+                AND case_type=#{caseType}
+            </if>
+            <if test="caseTitle!=null and caseTitle!=''">
+                AND case_title=#{caseTitle}
+            </if>
+            <if test="applyPhase!=null and applyPhase!=''">
+                AND apply_phase=#{applyPhase}
+            </if>
+    </select>
+    <select id="querySequence" resultType="integer">
+       select _nextval('seq_no') from dual
+    </select>
+</mapper>
