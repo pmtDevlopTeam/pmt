@@ -4,6 +4,7 @@ import com.camelot.pmt.task.model.Task;
 import com.github.pagehelper.PageInfo;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpSession;
 import java.util.Map;
 
 /**
@@ -66,7 +67,7 @@ public interface TaskManagerService {
     boolean updateEstimateStartTimeById(Task task);
 
     /**
-     * 指派
+     * 指派(验证是否有创建人、负责人权限)
      *
      * @author zlh
      * @param  id 需要修改的任务id
@@ -75,6 +76,16 @@ public interface TaskManagerService {
      * @return boolean
      */
     boolean updateBeAssignUserById(Long id, String userId);
+
+    /**
+     * 指派（验证是否有项目经理角色权限）
+     *
+     * @author zlh
+     * @param session session
+     * @date 11:36 2018/4/12
+     * @return boolean
+     */
+    boolean updateBeAssignUserByIdCheckPower(HttpSession session);
 
     /**
      * 根据任务id查询任务详情

@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
 
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.Map;
 
 /**
@@ -176,7 +178,7 @@ public class TaskManagerController {
     }
 
     /**
-     * 修改任务指派接口（修改）
+     * 修改任务指派接口-验证是否有普通权限（任务的创建人、负责人）（修改）
      *
      * @param id 任务id
      * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
@@ -187,18 +189,56 @@ public class TaskManagerController {
             @ApiImplicitParam(dataType = "Long", name = "id", paramType = "form", value = "任务id", required = true),
             @ApiImplicitParam(dataType = "String", name = "userId", paramType = "form", value = "被指派人id", required = true)
     })
-    public JSONObject updateBeAssignUserById(Long id, String userId) {
+    public JSONObject updateBeAssignUserById(Long id, String userId, HttpServletResponse response, HttpSession session) {
         try {
             boolean result = taskManagerService.updateBeAssignUserById(id, userId);
             if (result) {
                 return ApiResponse.success();
             }
+            /**
+             * 因为指派的权限要求 创建人和负责人 和项目经理角色可以操作
+             * 正常逻辑是无法通过
+             */
+            session.setAttribute("id", id);
+            session.setAttribute("userId", userId);
+            response.sendRedirect("/task/taskManager/updateBeAssignUserByIdCheckPower");
             return ApiResponse.error("修改异常");
         } catch (Exception e) {
             logger.error(e.getMessage());
             return ApiResponse.jsonData(APIStatus.ERROR_500);
         }
     }
+
+    /**
+     * 修改任务指派接口-验证是否有项目经理权限（修改）
+     *
+     * @param session session
+     * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
+     */
+    @PostMapping(value = "/updateBeAssignUserByIdCheckPower")
+    @ApiOperation(value = "修改任务接口-指派", notes = "给任务添加负责人")
+    @ApiImplicitParams({
+            @ApiImplicitParam(dataType = "Long", name = "id", paramType = "form", value = "任务id", required = true),
+            @ApiImplicitParam(dataType = "String", name = "userId", paramType = "form", value = "被指派人id", required = true)
+    })
+    public JSONObject updateBeAssignUserByIdCheckPower(HttpSession session) {
+        try {
+
+            boolean result = taskManagerService.updateBeAssignUserByIdCheckPower(session);
+            /**
+             * 因为指派的权限要求 创建人和负责人 和项目经理角色可以操作
+             * 正常逻辑是无法通过
+             */
+            if (result) {
+                return ApiResponse.success();
+            }
+            return ApiResponse.error();
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return ApiResponse.jsonData(APIStatus.ERROR_500);
+        }
+    }
+
 
     /**
      * 根据id查看任务详情接口（查询）

@@ -2,6 +2,9 @@ package com.camelot.pmt.task.service;
 
 import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.task.model.TaskFile;
+import com.sun.deploy.net.HttpResponse;
+
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author zlh
@@ -28,4 +31,14 @@ public interface TaskFileService {
      * @return TaskFile
      */
     TaskFile queryByTaskFile(TaskFile taskFile);
+
+    /**
+     * 附件下载
+     *
+     * @author zlh
+     * @param taskFile 参数
+     * @date 17:03 2018/4/17
+     * @return TaskFile
+     */
+    boolean download(TaskFile taskFile, HttpServletResponse response);
 }
