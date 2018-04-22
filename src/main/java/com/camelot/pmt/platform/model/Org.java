@@ -28,6 +28,10 @@ public class Org implements Serializable {
      */
     private String orgname;
     /**
+     * 上级部门名称
+     */
+    private String parentOrgname;
+    /**
      * 部门状态
      */
     private String state;
@@ -179,5 +183,13 @@ public class Org implements Serializable {
     public void setOrgList(List<Org> orgList) {
         this.orgList = orgList;
     }
+
+	public String getParentOrgname() {
+		return parentOrgname;
+	}
+
+	public void setParentOrgname(String parentOrgname) {
+		this.parentOrgname = parentOrgname;
+	}
 
 }

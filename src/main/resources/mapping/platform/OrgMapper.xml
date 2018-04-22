@@ -15,6 +15,7 @@
         <result column="modify_time" property="modifyTime"/>
         <result column="create_user_id" property="creatUserId"/>
         <result column="modify_user_id" property="modifyUserId"/>
+        <result column="parentOrgname" property="parentOrgname"/>
     </resultMap>
     <resultMap id="OrgAndUserresultMap" type="com.camelot.pmt.platform.model.OrgToUser" >
         <id column="id" property="id"/>
@@ -103,33 +104,60 @@
     
  
     <select id="queryAllOrg" resultMap="BaseResultMap"  >
-       SELECT 
-       <include refid="Base_Column_List" />
-	   FROM platform_org
+		SELECT
+			p.org_id,
+			p.org_name,
+			p.org_code,
+			p.state,
+			p.parent_id,
+			p.sort_num,
+			p.create_time,
+			p.modify_time,
+			p.create_user_id,
+			p.modify_user_id,
+			o.org_name AS parentOrgname
+		FROM
+			platform_org p
+		LEFT JOIN platform_org o ON p.parent_id = o.org_id
     </select>
     
     <select id="queryOrgByParameters" parameterType="Org" resultMap="BaseResultMap"  >
-       SELECT 
-       <include refid="Base_Column_List" />
-	   FROM platform_org 
+       SELECT
+			p.org_id,
+			p.org_name,
+			p.org_code,
+			p.state,
+			p.parent_id,
+			p.sort_num,
+			p.create_time,
+			p.modify_time,
+			p.create_user_id,
+			p.modify_user_id,
+			o.org_name AS parentOrgname
+		FROM
+			platform_org p
+		LEFT JOIN platform_org o ON p.parent_id = o.org_id
 	   <where>
 	   	<if test="orgname != '' and orgname != null">
-	   	 and orgname LIKE CONCAT('%',#{username},'%') 
+	   	 and p.org_name LIKE CONCAT('%',#{orgname},'%') 
 	   	</if>
 	   	<if test="parentId != '' and parentId != null">
-	   	  and org_code LIKE CONCAT('%',#{parentId},'%') 
+	   	  and p.org_code LIKE CONCAT('%',#{parentId},'%') 
 	   	</if>
 	   	<if test="state != '' and state != null">
-	   	  and state LIKE CONCAT('%',#{state},'%') 
+	   	  and p.state LIKE CONCAT('%',#{state},'%') 
 	   	</if>
 	   	<if test="sortNum != '' and sortNum != null">
-	   	  and sort_num LIKE CONCAT('%',#{sortNum},'%') 
+	   	  and p.sort_num LIKE CONCAT('%',#{sortNum},'%') 
 	   	</if>
 	   	<if test="orgCode != '' and orgCode != null">
-	   	  and org_code LIKE CONCAT('%',#{orgCode},'%') 
+	   	  and p.org_code LIKE CONCAT('%',#{orgCode},'%') 
 	   	</if>
 	   	<if test="createTime != '' and createTime != null">
-	   	  and create_time LIKE CONCAT('%',#{createTime},'%') 
+	   	  and p.create_time LIKE CONCAT('%',#{createTime},'%') 
+	   	</if>
+	   	<if test="parentOrgname != '' and parentOrgname != null">
+	   	  and  parentOrgname LIKE CONCAT('%',#{parentOrgname},'%') 
 	   	</if>
 	   </where> 
 	   order by parent_id asc,sort_num desc
@@ -137,10 +165,22 @@
     
     
     <select id="queryOrgByOrgId" resultMap="BaseResultMap"  >
-       SELECT 
-       <include refid="Base_Column_List" />
-	   FROM platform_org
-	   WHERE org_id = #{orgId}
+       SELECT
+			p.org_id,
+			p.org_name,
+			p.org_code,
+			p.state,
+			p.parent_id,
+			p.sort_num,
+			p.create_time,
+			p.modify_time,
+			p.create_user_id,
+			p.modify_user_id,
+			o.org_name AS parentOrgname
+		FROM
+			platform_org p
+		LEFT JOIN platform_org o ON p.parent_id = o.org_id
+	        WHERE p.org_id = #{orgId}
     </select>
     
     <delete id="deleteOrgByUserIdAndOrgId" parameterType="String">
@@ -217,9 +257,21 @@
 	
     <!-- 分页查询所有部门列表 -->
     <select id="queryOrgsByPage" resultMap="BaseResultMap" >
-        SELECT 
-       <include refid="Base_Column_List" />
-	   FROM platform_org
+        SELECT
+			p.org_id,
+			p.org_name,
+			p.org_code,
+			p.state,
+			p.parent_id,
+			p.sort_num,
+			p.create_time,
+			p.modify_time,
+			p.create_user_id,
+			p.modify_user_id,
+			o.org_name AS parentOrgname
+		FROM
+			platform_org p
+		LEFT JOIN platform_org o ON p.parent_id = o.org_id
     </select>
     
     <select id="queryOrgByOrgParentId" resultMap="BaseResultMap"  >

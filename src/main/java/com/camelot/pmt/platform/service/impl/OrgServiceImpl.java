@@ -54,6 +54,8 @@ public class OrgServiceImpl implements OrgService {
 				attributes.put("state", org.getState());
 				attributes.put("sortNum", org.getSortNum());
 				attributes.put("orgCode", org.getOrgCode());
+				attributes.put("parentOrgname", org.getParentOrgname());
+				attributes.put("creatUserId", org.getCreatUserId());
 				tree.setAttributes(attributes);
 				trees.add(tree);
 			}
@@ -156,19 +158,16 @@ public class OrgServiceImpl implements OrgService {
 	public String updateOrgByOrgId(Org org) {
 		Org orgBefore= orgMapper.queryOrgByOrgId(org.getOrgId());
 			if (org.getParentId().equals(orgBefore.getParentId())) {
-				int num = orgMapper.updateOrgByOrgId(orgBefore);
+				int num = orgMapper.updateOrgByOrgId(org);
 				if (num>0) {
-					return "修改部门成功";
-				}else{
-					return "修改部门失败";
+					return updateState(org);
 				}
-				
 			}else{
 				org.setOrgCode(createCode(org));
 				orgMapper.updateOrgByOrgId(org);
 				updateCode(org);
 			}
-			return "修改部门成功";
+			return updateState(org);
 	}
 	
 	/**
@@ -192,6 +191,26 @@ public class OrgServiceImpl implements OrgService {
 				updateCode(org2Item);
 			}
 		}
+	}
+	
+	
+	/**
+	 * 父级部门的状态被修改，自己部门的状态递归出来一并修改
+	 * @param org
+	 */
+	private String updateState(Org org){
+		List<Org> OrgList = orgMapper.queryOrgSubByParentId(org.getOrgId());
+		if (CollectionUtils.isEmpty(OrgList)) {
+			return "部门的状态修改成功";
+		}else{
+			for (Org orgItem : OrgList) {
+				orgItem.setState(org.getState());
+				orgMapper.updateOrgByOrgId(orgItem);
+				updateState(orgItem);
+			}
+			return "部门的状态修改成功";
+		}
+		
 	}
 	
 	/**
@@ -263,6 +282,8 @@ public class OrgServiceImpl implements OrgService {
 						attributes.put("state", org.getState());
 						attributes.put("sortNum", org.getSortNum());
 						attributes.put("orgCode", org.getOrgCode());
+						attributes.put("parentOrgname", org.getParentOrgname());
+						attributes.put("creatUserId", org.getCreatUserId());
 						tree.setAttributes(attributes);
 						trees.add(tree);
 					}
@@ -286,6 +307,9 @@ public class OrgServiceImpl implements OrgService {
 		}
 		return orgListItem;
 	}
+	
+	
+	
 	/**
 	 * 删除多个子部门机构  递归删除
 	 */
@@ -321,6 +345,8 @@ public class OrgServiceImpl implements OrgService {
 					long date = new Date().getTime();
 					o.setCreateTime(new Date(date));
 		            o.setModifyTime(new Date(date));
+		            o.setCreatUserId(org.getCreatUserId());
+		            o.setModifyUserId(org.getModifyUserId());
 					count=orgMapper.updateOrgToUser(o);
 				}
 			}
@@ -361,12 +387,8 @@ public class OrgServiceImpl implements OrgService {
 	}
 	@Override
 	public String updateOrgByOrgIdAndState(Org org) {
-		int count = orgMapper.updateOrgByOrgIdAndState(org);
-		if (count>0) {
-			return "状态修改成功";
-		}else{
-			return "状态修改失败";
-		}
+		orgMapper.updateOrgByOrgIdAndState(org);
+		return updateState(org);
 	}
 
 	@Override
@@ -387,6 +409,9 @@ public class OrgServiceImpl implements OrgService {
 					o.setOrgId(org.getOrgId());
 					long date = new Date().getTime();
 		            o.setModifyTime(new Date(date));
+		            o.setCreateTime(new Date(date));
+		            o.setCreatUserId(org.getCreatUserId());
+		            o.setModifyUserId(org.getModifyUserId());
 					count=orgMapper.updateOrgToUser(o);
 				}
 			}
