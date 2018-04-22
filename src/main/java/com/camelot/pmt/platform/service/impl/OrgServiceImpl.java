@@ -166,7 +166,7 @@ public class OrgServiceImpl implements OrgService {
 			}else{
 				org.setOrgCode(createCode(org));
 				orgMapper.updateOrgByOrgId(org);
-				digui(org);
+				updateCode(org);
 			}
 			return "修改部门成功";
 	}
@@ -175,7 +175,7 @@ public class OrgServiceImpl implements OrgService {
 	 * 子部递归门生成部门编号
 	 * @param org
 	 */
-	private void digui(Org org){
+	private void updateCode(Org org){
 		List<Org> OrgList = orgMapper.queryOrgSubByParentId(org.getOrgId());
 		if (!CollectionUtils.isEmpty(OrgList)) {
 			int intCode = 1;
@@ -189,7 +189,7 @@ public class OrgServiceImpl implements OrgService {
 				org2Item.setOrgCode(code);
 				intCode++;
 				orgMapper.updateOrgByOrgId(org2Item);
-				digui(org2Item);
+				updateCode(org2Item);
 			}
 		}
 	}
