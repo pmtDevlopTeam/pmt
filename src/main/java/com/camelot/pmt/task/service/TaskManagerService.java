@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -21,12 +22,10 @@ public interface TaskManagerService {
      * @author zlh
      * @param task
      *            插入的数据
-     * @param file
-     *            上传的附件
      * @date 9:10 2018/4/12
      * @return boolean
      */
-    boolean insertTask(Task task, MultipartFile file);
+    boolean insertTask(Task task);
 
     /**
      * 根据id删除任务
@@ -112,14 +111,10 @@ public interface TaskManagerService {
      * 查询所有任务列表
      *
      * @author zlh
-     * @param page
-     *            当前页
-     * @param rows
-     *            一页有几行
      * @date 16:54 2018/4/9
      * @return PageInfo<Task>
      */
-    PageInfo<Task> queryAllTask(Integer page, Integer rows);
+    Map<String, List<Task>> queryAllTask();
 
     /**
      * 根据条件查询任务
@@ -127,12 +122,8 @@ public interface TaskManagerService {
      * @author zlh
      * @param task
      *            模糊查询的条件
-     * @param page
-     *            当前页
-     * @param rows
-     *            一页有几行
      * @return PageInfo<Task>
      */
-    PageInfo<Task> queryTaskByTask(Task task, Integer page, Integer rows);
+    Map<String, List<Task>> queryTaskByTask(Task task);
 
 }

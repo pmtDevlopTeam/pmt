@@ -23,6 +23,7 @@ import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -55,16 +56,13 @@ public class TaskManagerController {
     @PostMapping(value = "/addTask")
     @ApiOperation(value = "新增任务接口", notes = "新增任务")
     @ApiImplicitParams({
-            @ApiImplicitParam(dataType = "User", name = "beassignUser.userId", paramType = "form", value = "负责人", required = true),
-            @ApiImplicitParam(dataType = "Long", name = "demand.id", paramType = "form", value = "相关需求"),
             @ApiImplicitParam(dataType = "String", name = "taskType", paramType = "form", value = "任务类型", required = true),
             @ApiImplicitParam(dataType = "String", name = "taskName", paramType = "form", value = "任务名称", required = true),
-            @ApiImplicitParam(dataType = "date", name = "estimateStartTime", paramType = "form", value = " 预计开始时间格式yyyy/MM/dd", required = true),
-            @ApiImplicitParam(dataType = "date", name = "estimateEndTime", paramType = "form", value = "预计结束时间格式yyyy/MM/dd", required = true),
+            @ApiImplicitParam(dataType = "String", name = "beassignUser.userId", paramType = "form", value = "负责人id"),
             @ApiImplicitParam(dataType = "String", name = "taskDescribe", paramType = "form", value = "任务描述") })
-    public JSONObject addTask(@ApiIgnore Task task, MultipartFile file) {
+    public JSONObject addTask(@ApiIgnore Task task) {
         try {
-            boolean result = taskManagerService.insertTask(task, file);
+            boolean result = taskManagerService.insertTask(task);
             if (result) {
                 return ApiResponse.success();
             }
@@ -100,19 +98,22 @@ public class TaskManagerController {
     }
 
     /**
-     * 编辑任务接口（修改）
+     * 评估任务接口（修改）
      *
      * @param task
      *            修改得数据
      * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
     @PostMapping(value = "/updateTask")
-    @ApiOperation(value = "编辑任务接口", notes = "编辑任务接口")
+    @ApiOperation(value = "评估任务接口", notes = "编辑任务接口")
     @ApiImplicitParams({
             @ApiImplicitParam(dataType = "Long", name = "id", paramType = "form", value = "任务id", required = true),
-            @ApiImplicitParam(dataType = "String", name = "taskName", paramType = "form", value = "任务名称"),
-            @ApiImplicitParam(dataType = "date", name = "estimateStartTime", paramType = "form", value = " 预计开始时间格式yyyy/MM/dd"),
-            @ApiImplicitParam(dataType = "date", name = "estimateEndTime", paramType = "form", value = "预计结束时间格式yyyy/MM/dd"),
+            @ApiImplicitParam(dataType = "Long", name = "demand.id", paramType = "form", value = "需求id", required = true),
+            @ApiImplicitParam(dataType = "Long", name = "estimateHour", paramType = "form", value = "任务预计工时", required = true),
+            @ApiImplicitParam(dataType = "String", name = "priority", paramType = "form", value = "任务优先级", required = true),
+            @ApiImplicitParam(dataType = "date", name = "estimateStartTime", paramType = "form", value = " 预计开始时间格式yyyy/MM/dd", required = true),
+            @ApiImplicitParam(dataType = "date", name = "estimateEndTime", paramType = "form", value = "预计结束时间格式yyyy/MM/dd", required = true),
+            @ApiImplicitParam(dataType = "String", name = "beassignUser.userId", paramType = "form", value = "负责人id", required = true),
             @ApiImplicitParam(dataType = "String", name = "taskDescribe", paramType = "form", value = "任务描述") })
     public JSONObject updateTask(@ApiIgnore Task task) {
         try {
@@ -271,12 +272,9 @@ public class TaskManagerController {
      */
     @GetMapping(value = "/queryAllTask")
     @ApiOperation(value = "查询所有任务列表接口", notes = "查询所有任务列表")
-    @ApiImplicitParams({
-            @ApiImplicitParam(dataType = "Integer", name = "page", paramType = "query", value = "当前页", required = true),
-            @ApiImplicitParam(dataType = "Integer", name = "rows", paramType = "query", value = "每页有几行", required = true) })
-    public JSONObject queryAllTask(Integer page, Integer rows) {
+    public JSONObject queryAllTask() {
         try {
-            PageInfo<Task> result = taskManagerService.queryAllTask(page, rows);
+            Map<String, List<Task>> result = taskManagerService.queryAllTask();
             return ApiResponse.success(result);
         } catch (Exception e) {
             logger.error(e.getMessage());
@@ -297,13 +295,11 @@ public class TaskManagerController {
             @ApiImplicitParam(dataType = "date", name = "actualEndTime", paramType = "query", value = "截止日期格式yyyy/MM/dd"),
             @ApiImplicitParam(dataType = "String", name = "taskName", paramType = "query", value = "任务名称"),
             @ApiImplicitParam(dataType = "String", name = "status", paramType = "query", value = "任务状态"),
-            @ApiImplicitParam(dataType = "User", name = "beassignUser.username", paramType = "query", value = "负责人"),
-            @ApiImplicitParam(dataType = "Integer", name = "page", paramType = "query", value = "当前页", required = true),
-            @ApiImplicitParam(dataType = "Integer", name = "rows", paramType = "query", value = "每页有几行", required = true) })
-    public JSONObject queryTaskByTask(@ApiIgnore Task task, Integer page, Integer rows) {
+            @ApiImplicitParam(dataType = "User", name = "beassignUser.username", paramType = "query", value = "负责人") })
+    public JSONObject queryTaskByTask(@ApiIgnore Task task) {
         System.out.println(task);
         try {
-            PageInfo<Task> result = taskManagerService.queryTaskByTask(task, page, rows);
+            Map<String, List<Task>> result = taskManagerService.queryTaskByTask(task);
             return ApiResponse.success(result);
         } catch (Exception e) {
             logger.error(e.getMessage());
