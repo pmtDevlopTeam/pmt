@@ -850,20 +850,27 @@
 			<if test="projectId!=null">
 				AND project_id=#{projectId}
 			</if>
+			
 			<if test="status==1">
-				AND designated_id=#{userId}
+				AND bug_status=0
 			</if>
 			<if test="status==2">
-				AND create_user_id=#{userId}
+				AND bug_status=1
 			</if>
 			<if test="status==3">
-				AND solve_id=#{userId}
+				AND bug_status=4
 			</if>
 			<if test="status==4">
-				AND designated_id is null
+				AND solve_id is not null
 			</if>
 			<if test="status==5">
 				AND solve_id is null
+			</if>
+			<if test="status==6">
+				AND close_id is not null
+			</if>
+			<if test="status==7">
+				AND close_id is null
 			</if>
 			<if test="qStartTime!=null"> 
 		        AND create_time >=#{qStartTime}
@@ -876,7 +883,7 @@
 			 </if> 
 			 <if test="bugStatus!=null and bugStatus!=''">
 				AND bug_status=#{bugStatus}
-			  </if> 
+			 </if> 
 			 <if test="bugTitle!=null and bugTitle!=''">
 				<bind name="bugTitleLike" value="'%' +bugTitle+ '%'"/>
 				AND bug_title like #{bugTitleLike}
