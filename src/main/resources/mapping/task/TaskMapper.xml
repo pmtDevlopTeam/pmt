@@ -660,28 +660,43 @@
     </sql>
 
     <!--查询正在进行的任务-->
-    <select id="queryTaskRunning" resultMap="BaseResultMap" parameterType="String">
+    <select id="queryTaskRunning" resultMap="BaseResultMap" parameterType="com.camelot.pmt.task.model.Task">
         SELECT
-        <include refid="selectAllRunningTaskByUserId" />
-        FROM task ta
-        LEFT JOIN demand de ON ta.demand_id = de.id
-        LEFT JOIN project_main pro ON ta.project_id = pro.id
-        LEFT JOIN platform_user pl ON ta.assign_user_id = pl.user_id
-        LEFT JOIN platform_user pl2 ON ta.beassign_user_id = pl2.user_id
-        WHERE ta.status = 1 AND ta.beassign_user_id = #{id}
-        ORDER BY ta.create_time DESC, ta.priority DESC
+        <include refid="ShowAllTasks_Column_List" />
+        FROM task t
+        LEFT JOIN platform_user a ON t.assign_user_id = a.user_id
+        LEFT JOIN platform_user b ON t.beassign_user_id = b.user_id
+        LEFT JOIN platform_user c on t.create_user_id = c.user_id
+        LEFT JOIN project_main p ON t.project_id = p.id
+        LEFT JOIN demand d ON t.demand_id = d.id
+        WHERE t.status = 1 AND t.beassign_user_id = #{beassignUser.userId}
+        <if test="taskNum != null and  taskNum != '' " >
+            and t.task_num LIKE  "%"#{taskNum,jdbcType=CHAR}"%"
+        </if>
+        <if test="taskName != null and  taskName != '' ">
+            and t.task_name LIKE  "%"#{taskName,jdbcType=CHAR}"%"
+        </if>
+        <if test="project != null and project.id !=null">
+            and t.project_id = #{project.id,jdbcType=CHAR}
+        </if>
+        <if test="demand != null and demand.id !=null">
+            and t.demand_id = #{demand.id,jdbcType=CHAR}
+        </if>
+        ORDER BY t.create_time DESC, t.priority DESC
     </select>
-
     <!--根据父级id查询所有的子任务-->
     <select id="queryByPId" parameterType="Long" resultType="com.camelot.pmt.task.model.Task">
         SELECT * FROM task WHERE task_parent_id = #{pid}
     </select>
     <!--根据任务id关闭任务-->
-    <update id="updateRunningToClose" parameterType="java.util.List">
+    <!--<update id="updateRunningToClose" parameterType="java.util.List">
         UPDATE task SET status = 3 WHERE
         <foreach collection="list" item="aid" open="(" close=")" separator="or">
             id = #{aid}
         </foreach>
+    </update>-->
+    <update id="updateRunningToClose" parameterType="Long">
+        UPDATE task SET status = 3 WHERE id = #{id}
     </update>
     <!--完成任务-->
     <select id="queryRunningToAlready" parameterType="java.util.List" resultType="com.camelot.pmt.task.model.Task">
@@ -694,17 +709,29 @@
     <update id="updateRunningToAlready" parameterType="Long">
         UPDATE task SET status = 2 WHERE id = #{id}
     </update>
-    
+
     <update id="updateInfact_hourAndActual_end_time" parameterType="com.camelot.pmt.task.model.Task">
         UPDATE task SET actual_end_time = #{actualEndTime},infact_hour = #{infactHour} WHERE id = #{id}
     </update>
-    
+
     <insert id="addAttachment" parameterType="com.camelot.pmt.task.model.TaskFile">
         INSERT INTO attachment (attachment_url,
         attachment_tile,attachment_source,source_id,create_user_id,create_time,modify_user_id,modify_time)
         VALUES (#{attachmentUrl},#{attachmentTile},#{attachmentSource},#{sourceId},#{createUserId},
         #{createTime},#{modifyUserId},#{modifyTime})
     </insert>
+
+    <select id="queryTaskAllById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        SELECT
+        <include refid="ShowAllTasks_Column_List" />
+        FROM task t
+        LEFT JOIN platform_user a ON t.assign_user_id = a.user_id
+        LEFT JOIN platform_user b ON t.beassign_user_id = b.user_id
+        LEFT JOIN platform_user c on t.create_user_id = c.user_id
+        LEFT JOIN project_main p ON t.project_id = p.id
+        LEFT JOIN demand d ON t.demand_id = d.id
+        WHERE t.id = #{id}
+    </select>
     <!--myp结束-->
     
    <!--  超时提前列表 -->
