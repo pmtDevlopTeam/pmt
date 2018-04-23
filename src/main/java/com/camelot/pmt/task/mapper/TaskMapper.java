@@ -14,14 +14,15 @@ public interface TaskMapper {
      * 查询正在进行的任务，根据时间和优先级进行排序
      * myp
      * */
-    List<Task> queryTaskRunning(String id);
+    List<Task> queryTaskRunning(Task task);
 
 
     /**
      *将任务进行关闭操作
      * myp
      * */
-    int updateRunningToClose(List list);
+    //int updateRunningToClose(List list);
+    int updateRunningToClose(Long id);
 
 
     /**
@@ -29,7 +30,7 @@ public interface TaskMapper {
      * myp
      * */
     void updateRunningToAlready(Long id);
-    List<Task> queryRunningToAlready(List list);
+    //List<Task> queryRunningToAlready(List list);
 
     /**
      *点击完成时，修改实际完成时间和实际工时
@@ -242,14 +243,14 @@ public interface TaskMapper {
 
     /**
      * @author: gxl
-     * @Title: updateTaskPendingToRuning
-     * @Description: TODO(我的待办任务转为正在进行)
+     * @Title: updateTaskStatus
+     * @Description: TODO(修改任务状态)
      * @param @param taskId status
      * @param @return    设定文件
      * @return int    返回类型
      * @throws
      */
-    void updateTaskPendingToRunning(@Param("id") Long id, @Param("status") String status);
+    void updateTaskStatus(@Param("id") Long id, @Param("status") String status);
     
     /**
      * @author: gxl
@@ -418,6 +419,31 @@ public interface TaskMapper {
     String queryTaskToTestByDemandId(Long demandId);
     int updateTaskToTest(Long id);
 
+
+   /**
+    * 查询超时提前列表
+   * @Title: queryleaddeferredTaskRemindersList
+   * @Description: TODO
+   * @param @param leadtime
+   * @param @return
+   * @return List<Map<String,Object>> 
+   * @throws
+    */
+	List<Map<String, Object>> queryleaddeferredTaskRemindersList(Integer leadtime);
+
+	/**
+	 * 查询超时延后列表
+	* @Title: querydelaytimedeferredTaskRemindersList
+	* @Description: TODO
+	* @param @param delaytime
+	* @param @return
+	* @return List<Map<String,Object>> 
+	* @throws
+	 */
+   List<Map<String, Object>> querydelaytimedeferredTaskRemindersList(Integer delaytime);
+
+
+
     /**
      * 项目关闭时，更新任务状态
      *
@@ -431,5 +457,6 @@ public interface TaskMapper {
     int updateByProjectId(@Param("projectId") Long projectId, @Param("status") String status,
             @Param("actualEndTime") Date actualEndTime, @Param("modifyUserId") String modifyUserId,
             @Param("modifyTime") Date modifyTime);
+
 
 }
