@@ -52,16 +52,16 @@ public class TaskRunningServiceImpl implements TaskRunningService {
      * @auth myp
      */
     @Override
-    public ExecuteResult<PageInfo<Task>> queryTaskRunning(int page, int rows, String id) {
-        ExecuteResult<PageInfo<Task>> result = new ExecuteResult<PageInfo<Task>>();
+    public ExecuteResult<List<Task>> queryTaskRunning(Task task) {
+        ExecuteResult<List<Task>> result = new ExecuteResult<List<Task>>();
         // 利用PageHelper进行分页
-        PageHelper.startPage(page, rows);
+        //PageHelper.startPage(page, rows);
         // 根据用户id查询全部的正在进行的任务
-        List<Task> list = taskMapper.queryTaskRunning(id);
+        List<Task> list = taskMapper.queryTaskRunning(task);
         // 分页之后的结果集
-        PageInfo<Task> clist = new PageInfo<Task>(list);
+        //PageInfo<Task> clist = new PageInfo<Task>(list);
         // 返回结果集
-        result.setResult(clist);
+        result.setResult(list);
         return result;
     }
 
@@ -73,6 +73,18 @@ public class TaskRunningServiceImpl implements TaskRunningService {
      * @auth myp
      */
     @Override
+    public ExecuteResult<String> updateRunningToClose(Long id) {
+        ExecuteResult<String> result = new ExecuteResult<>();
+        try {
+            taskMapper.updateRunningToClose(id);
+            result.setResult("任务关闭成功");
+            addTaskLog(id, "关闭");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return result;
+    }
+    /*@Override
     public ExecuteResult<String> updateRunningToClose(Long id) {
         ExecuteResult<String> result = new ExecuteResult<>();
         try {
@@ -116,7 +128,7 @@ public class TaskRunningServiceImpl implements TaskRunningService {
             throw new RuntimeException(e);
         }
         return result;
-    }
+    }*/
 
     /**
      * @Title: runningtoclose
@@ -126,6 +138,22 @@ public class TaskRunningServiceImpl implements TaskRunningService {
      * @auth myp
      */
     @Override
+    public ExecuteResult<String> updateRunningToAlready(Task ptask, TaskFile taskFile) {
+        ExecuteResult<String> result = new ExecuteResult<>();
+        try {
+            taskFile.setSourceId(ptask.getId());
+            taskFile.setAttachmentSource("任务");
+            taskMapper.updateRunningToAlready(ptask.getId());
+            result.setResult("任务完成");
+            taskMapper.updateInfact_hourAndActual_end_time(ptask);
+            taskMapper.addAttachment(taskFile);
+            addTaskLog(ptask.getId(), "完成");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return result;
+    }
+    /*@Override
     public ExecuteResult<String> updateRunningToAlready(Task ptask, TaskFile taskFile) {
         ExecuteResult<String> result = new ExecuteResult<>();
         try {
@@ -187,7 +215,7 @@ public class TaskRunningServiceImpl implements TaskRunningService {
             throw new RuntimeException(e);
         }
         return result;
-    }
+    }*/
 
     // 操作成功后添加操作记录
     private void addTaskLog(Long id, String peration) {

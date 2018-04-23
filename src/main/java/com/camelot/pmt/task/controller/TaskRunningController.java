@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -52,17 +53,20 @@ public class TaskRunningController {
     @ApiOperation(value = "查询所有正在进行的任务", notes = "查询所有正在进行的任务")
     @RequestMapping(value = "/queryTaskRunning", method = RequestMethod.GET)
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "page", value = "页码", required = true, paramType = "query", dataType = "int"),
-            @ApiImplicitParam(name = "rows", value = "每页数量", required = true, paramType = "query", dataType = "int") })
-    public JSONObject queryTaskRunning(int page, int rows) {
-        ExecuteResult<PageInfo<Task>> result = new ExecuteResult<PageInfo<Task>>();
+            @ApiImplicitParam(dataType = "ProjectMain", name = "project.id", paramType = "query", value = "项目编号"),
+            @ApiImplicitParam(dataType = "String", name = "taskName", paramType = "query", value = "任务名称"),
+            @ApiImplicitParam(dataType = "String", name = "taskNum", paramType = "query", value = "任务编号"),
+            @ApiImplicitParam(dataType = "Demand", name = "demand.id", paramType = "query", value = "需求编号")})
+    public JSONObject queryTaskRunning(@ApiIgnore Task task) {
+        ExecuteResult<List<Task>> result = new ExecuteResult<List<Task>>();
         try {
             // 获取当前登录人
             User user = (User) ShiroUtils.getSessionAttribute("user");
             if (null == user) {
                 return ApiResponse.jsonData(APIStatus.INVALIDSESSION_LOGINOUTTIME);
             }
-            result = taskRunningService.queryTaskRunning(page, rows, user.getUserId());
+            task.setBeassignUser(user);
+            result = taskRunningService.queryTaskRunning(task);
             if (result.isSuccess()) {
                 return ApiResponse.success(result.getResult());
             }

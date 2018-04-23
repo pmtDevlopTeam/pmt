@@ -14,14 +14,15 @@ public interface TaskMapper {
      * 查询正在进行的任务，根据时间和优先级进行排序
      * myp
      * */
-    List<Task> queryTaskRunning(String id);
+    List<Task> queryTaskRunning(Task task);
 
 
     /**
      *将任务进行关闭操作
      * myp
      * */
-    int updateRunningToClose(List list);
+    //int updateRunningToClose(List list);
+    int updateRunningToClose(Long id);
 
 
     /**
@@ -29,7 +30,7 @@ public interface TaskMapper {
      * myp
      * */
     void updateRunningToAlready(Long id);
-    List<Task> queryRunningToAlready(List list);
+    //List<Task> queryRunningToAlready(List list);
 
     /**
      *点击完成时，修改实际完成时间和实际工时
