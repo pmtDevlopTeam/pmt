@@ -73,7 +73,7 @@ public class VersionController {
             if (user != null) {
                 ProjectMain projectMain = projectMainMapper.queryByPrimaryKey(projectId);
                 if (projectMain != null) {
-                    boolean flag  = versionService.queryVerListByProIdAndVerCode(projectId, versionVo.getVersion());
+                    boolean flag  = versionService.queryVerListByProIdAndVerCode(projectId, versionVo.getVersionCode());
                     if(!flag){
                         flag = versionService.addVersion(projectId, user.getUserId(), versionVo);
                         if (flag) {
@@ -291,7 +291,7 @@ public class VersionController {
     public JSONObject queryVerListByPageAndProIdAndParm(int page,int rows, Long projectId,
             @ApiIgnore VersionVo versionVo) {
         try {
-            User user = (User) ShiroUtils.getSessionAttribute("user");
+           User user = (User) ShiroUtils.getSessionAttribute("user");
             if (user != null) {
                 PageInfo pageInfo = versionService.queryVerListByPageAndProId(page, rows, projectId,
                         versionVo);

@@ -4,29 +4,33 @@
   <resultMap id="BaseResultMap" type="com.camelot.pmt.project.model.Version" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="project_id" property="projectId" jdbcType="BIGINT" />
-    <result column="version" property="version" jdbcType="VARCHAR" />
+    <result column="version_type" property="versionType" jdbcType="VARCHAR" />
+    <result column="version_name" property="versionName" jdbcType="VARCHAR" />
+    <result column="version_code" property="versionCode" jdbcType="VARCHAR" />
+    <result column="version_status" property="versionStatus" jdbcType="INTEGER" />
+    <result column="version_repository_url" property="versionRepositoryUrl" jdbcType="VARCHAR" />
+    <result column="version_repository_branch" property="versionRepositoryBranch" jdbcType="VARCHAR" />
+    <result column="version_repository_id" property="versionRepositoryId" jdbcType="VARCHAR" />
     <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
     <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
-    <result column="version_name" property="versionName" jdbcType="VARCHAR" />
-    <result column="version_type" property="versionType" jdbcType="CHAR" />
     <result column="create_user_id" property="createUserId" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="modify_user_id" property="modifyUserId" jdbcType="VARCHAR" />
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
-    <result column="version_status" property="versionStatus" jdbcType="INTEGER" />
   </resultMap>
   <resultMap id="ResultMapWithBLOBs" type="com.camelot.pmt.project.model.Version" extends="BaseResultMap" >
     <result column="remarks" property="remarks" jdbcType="LONGVARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, project_id, version, start_time, end_time, version_name, version_type, create_user_id, 
-    create_time, modify_user_id, modify_time, version_status
+    id, project_id, version_type, version_name, version_code, version_status, version_repository_url,
+    version_repository_branch, version_repository_id, start_time, end_time, create_user_id,
+    create_time, modify_user_id, modify_time
   </sql>
   <sql id="Blob_Column_List" >
     remarks
   </sql>
   <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
-    select 
+    select
     <include refid="Base_Column_List" />
     ,
     <include refid="Blob_Column_List" />
@@ -37,17 +41,19 @@
     delete from version
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.camelot.pmt.project.model.Version" useGeneratedKeys="true" keyProperty="id">
-    insert into version (id, project_id, version, 
-      start_time, end_time, version_name, 
-      version_type, create_user_id, create_time, 
-      modify_user_id, modify_time, version_status, 
-      remarks)
-    values (#{id,jdbcType=BIGINT}, #{projectId,jdbcType=BIGINT}, #{version,jdbcType=VARCHAR}, 
-      #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, #{versionName,jdbcType=VARCHAR}, 
-      #{versionType,jdbcType=CHAR}, #{createUserId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
-      #{modifyUserId,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP}, #{versionStatus,jdbcType=INTEGER},
-      #{remarks,jdbcType=LONGVARCHAR})
+  <insert id="insert" parameterType="com.camelot.pmt.project.model.Version" >
+    insert into version (id, project_id, version_type,
+    version_name, version_code, version_status,
+    version_repository_url, version_repository_branch,
+    version_repository_id, start_time, end_time,
+    create_user_id, create_time, modify_user_id,
+    modify_time, remarks)
+    values (#{id,jdbcType=BIGINT}, #{projectId,jdbcType=BIGINT}, #{versionType,jdbcType=VARCHAR},
+    #{versionName,jdbcType=VARCHAR}, #{versionCode,jdbcType=VARCHAR}, #{versionStatus,jdbcType=INTEGER},
+    #{versionRepositoryUrl,jdbcType=VARCHAR}, #{versionRepositoryBranch,jdbcType=VARCHAR},
+    #{versionRepositoryId,jdbcType=VARCHAR}, #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP},
+    #{createUserId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=VARCHAR},
+    #{modifyTime,jdbcType=TIMESTAMP}, #{remarks,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.camelot.pmt.project.model.Version" >
     insert into version
@@ -58,20 +64,32 @@
       <if test="projectId != null" >
         project_id,
       </if>
-      <if test="version != null" >
-        version,
+      <if test="versionType != null" >
+        version_type,
+      </if>
+      <if test="versionName != null" >
+        version_name,
+      </if>
+      <if test="versionCode != null" >
+        version_code,
+      </if>
+      <if test="versionStatus != null" >
+        version_status,
+      </if>
+      <if test="versionRepositoryUrl != null" >
+        version_repository_url,
+      </if>
+      <if test="versionRepositoryBranch != null" >
+        version_repository_branch,
+      </if>
+      <if test="versionRepositoryId != null" >
+        version_repository_id,
       </if>
       <if test="startTime != null" >
         start_time,
       </if>
       <if test="endTime != null" >
         end_time,
-      </if>
-      <if test="versionName != null" >
-        version_name,
-      </if>
-      <if test="versionType != null" >
-        version_type,
       </if>
       <if test="createUserId != null" >
         create_user_id,
@@ -85,9 +103,6 @@
       <if test="modifyTime != null" >
         modify_time,
       </if>
-      <if test="versionStatus != null" >
-        version_status,
-      </if>
       <if test="remarks != null" >
         remarks,
       </if>
@@ -99,20 +114,32 @@
       <if test="projectId != null" >
         #{projectId,jdbcType=BIGINT},
       </if>
-      <if test="version != null" >
-        #{version,jdbcType=VARCHAR},
+      <if test="versionType != null" >
+        #{versionType,jdbcType=VARCHAR},
+      </if>
+      <if test="versionName != null" >
+        #{versionName,jdbcType=VARCHAR},
+      </if>
+      <if test="versionCode != null" >
+        #{versionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="versionStatus != null" >
+        #{versionStatus,jdbcType=INTEGER},
+      </if>
+      <if test="versionRepositoryUrl != null" >
+        #{versionRepositoryUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="versionRepositoryBranch != null" >
+        #{versionRepositoryBranch,jdbcType=VARCHAR},
+      </if>
+      <if test="versionRepositoryId != null" >
+        #{versionRepositoryId,jdbcType=VARCHAR},
       </if>
       <if test="startTime != null" >
         #{startTime,jdbcType=TIMESTAMP},
       </if>
       <if test="endTime != null" >
         #{endTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="versionName != null" >
-        #{versionName,jdbcType=VARCHAR},
-      </if>
-      <if test="versionType != null" >
-        #{versionType,jdbcType=CHAR},
       </if>
       <if test="createUserId != null" >
         #{createUserId,jdbcType=VARCHAR},
@@ -126,9 +153,6 @@
       <if test="modifyTime != null" >
         #{modifyTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="versionStatus != null" >
-        #{versionStatus,jdbcType=INTEGER},
-      </if>
       <if test="remarks != null" >
         #{remarks,jdbcType=LONGVARCHAR},
       </if>
@@ -140,20 +164,32 @@
       <if test="projectId != null" >
         project_id = #{projectId,jdbcType=BIGINT},
       </if>
-      <if test="version != null" >
-        version = #{version,jdbcType=VARCHAR},
+      <if test="versionType != null" >
+        version_type = #{versionType,jdbcType=VARCHAR},
+      </if>
+      <if test="versionName != null" >
+        version_name = #{versionName,jdbcType=VARCHAR},
+      </if>
+      <if test="versionCode != null" >
+        version_code = #{versionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="versionStatus != null" >
+        version_status = #{versionStatus,jdbcType=INTEGER},
+      </if>
+      <if test="versionRepositoryUrl != null" >
+        version_repository_url = #{versionRepositoryUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="versionRepositoryBranch != null" >
+        version_repository_branch = #{versionRepositoryBranch,jdbcType=VARCHAR},
+      </if>
+      <if test="versionRepositoryId != null" >
+        version_repository_id = #{versionRepositoryId,jdbcType=VARCHAR},
       </if>
       <if test="startTime != null" >
         start_time = #{startTime,jdbcType=TIMESTAMP},
       </if>
       <if test="endTime != null" >
         end_time = #{endTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="versionName != null" >
-        version_name = #{versionName,jdbcType=VARCHAR},
-      </if>
-      <if test="versionType != null" >
-        version_type = #{versionType,jdbcType=CHAR},
       </if>
       <if test="createUserId != null" >
         create_user_id = #{createUserId,jdbcType=VARCHAR},
@@ -167,9 +203,6 @@
       <if test="modifyTime != null" >
         modify_time = #{modifyTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="versionStatus != null" >
-        version_status = #{versionStatus,jdbcType=INTEGER},
-      </if>
       <if test="remarks != null" >
         remarks = #{remarks,jdbcType=LONGVARCHAR},
       </if>
@@ -179,32 +212,38 @@
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.camelot.pmt.project.model.Version" >
     update version
     set project_id = #{projectId,jdbcType=BIGINT},
-      version = #{version,jdbcType=VARCHAR},
-      start_time = #{startTime,jdbcType=TIMESTAMP},
-      end_time = #{endTime,jdbcType=TIMESTAMP},
-      version_name = #{versionName,jdbcType=VARCHAR},
-      version_type = #{versionType,jdbcType=CHAR},
-      create_user_id = #{createUserId,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      modify_user_id = #{modifyUserId,jdbcType=VARCHAR},
-      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
-      version_status = #{versionStatus,jdbcType=INTEGER},
-      remarks = #{remarks,jdbcType=LONGVARCHAR}
+    version_type = #{versionType,jdbcType=VARCHAR},
+    version_name = #{versionName,jdbcType=VARCHAR},
+    version_code = #{versionCode,jdbcType=VARCHAR},
+    version_status = #{versionStatus,jdbcType=INTEGER},
+    version_repository_url = #{versionRepositoryUrl,jdbcType=VARCHAR},
+    version_repository_branch = #{versionRepositoryBranch,jdbcType=VARCHAR},
+    version_repository_id = #{versionRepositoryId,jdbcType=VARCHAR},
+    start_time = #{startTime,jdbcType=TIMESTAMP},
+    end_time = #{endTime,jdbcType=TIMESTAMP},
+    create_user_id = #{createUserId,jdbcType=VARCHAR},
+    create_time = #{createTime,jdbcType=TIMESTAMP},
+    modify_user_id = #{modifyUserId,jdbcType=VARCHAR},
+    modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+    remarks = #{remarks,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.camelot.pmt.project.model.Version" >
     update version
     set project_id = #{projectId,jdbcType=BIGINT},
-      version = #{version,jdbcType=VARCHAR},
+      version_type = #{versionType,jdbcType=VARCHAR},
+      version_name = #{versionName,jdbcType=VARCHAR},
+      version_code = #{versionCode,jdbcType=VARCHAR},
+      version_status = #{versionStatus,jdbcType=INTEGER},
+      version_repository_url = #{versionRepositoryUrl,jdbcType=VARCHAR},
+      version_repository_branch = #{versionRepositoryBranch,jdbcType=VARCHAR},
+      version_repository_id = #{versionRepositoryId,jdbcType=VARCHAR},
       start_time = #{startTime,jdbcType=TIMESTAMP},
       end_time = #{endTime,jdbcType=TIMESTAMP},
-      version_name = #{versionName,jdbcType=VARCHAR},
-      version_type = #{versionType,jdbcType=CHAR},
       create_user_id = #{createUserId,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       modify_user_id = #{modifyUserId,jdbcType=VARCHAR},
-      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
-      version_status = #{versionStatus,jdbcType=INTEGER}
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
   <select id="selectVersionListByProIdAndPram" resultMap="BaseResultMap" parameterType="map">
@@ -215,8 +254,8 @@
     <if test="versionVo.versionName != null">
       and version_name like #{versionVo.versionName}
     </if>
-    <if test="versionVo.version != null">
-      and version = #{versionVo.version}
+    <if test="versionVo.versionCode != null">
+      and version = #{versionVo.versionCode}
     </if>
     <if test="versionVo.versionType != null">
       and version_type = #{versionVo.versionType}
