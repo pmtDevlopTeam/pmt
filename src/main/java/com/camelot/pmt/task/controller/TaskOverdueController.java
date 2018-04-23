@@ -121,7 +121,7 @@ public class TaskOverdueController {
 	}
 	
 	/**
-	 * 查询延时任务列表
+	 * 查询延期任务列表
 	* @Title: delayedTaskReminderList
 	* @Description: TODO
 	* @param @param leadtime
@@ -130,7 +130,7 @@ public class TaskOverdueController {
 	* @return JSONObject 
 	* @throws
 	 */
-	@ApiOperation(value = "查询延时任务列表", notes = "查询延时任务列表")
+	@ApiOperation(value = "查询延期任务列表", notes = "查询延时任务列表")
 	@ApiImplicitParams({
         @ApiImplicitParam(dataType = "Integer",name = "leadtime", paramType = "query", value = "提前提醒天数", required = true),
         @ApiImplicitParam(dataType = "Integer",name = "delaytime", paramType = "query", value = "延后提醒天数", required = true)
@@ -157,7 +157,7 @@ public class TaskOverdueController {
 	}
 	
 	/**
-	 * 查询延期任务列表
+	 * 查询延时任务列表
 	* @Title: deferredTaskRemindersList
 	* @Description: TODO
 	* @param @param leadtime
@@ -166,7 +166,7 @@ public class TaskOverdueController {
 	* @return JSONObject 
 	* @throws
 	 */
-	@ApiOperation(value = "查询延期任务列表", notes = "查询延期任务列表")
+	@ApiOperation(value = "查询延时任务列表", notes = "查询延期任务列表")
 	@ApiImplicitParams({
         @ApiImplicitParam(dataType = "Integer",name = "leadtime", paramType = "query", value = "提前提醒天数", required = true),
         @ApiImplicitParam(dataType = "Integer",name = "delaytime", paramType = "query", value = "延后提醒天数", required = true)

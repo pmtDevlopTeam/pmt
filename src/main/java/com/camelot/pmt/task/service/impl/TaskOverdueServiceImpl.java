@@ -185,13 +185,12 @@ public class TaskOverdueServiceImpl implements TaskOverdueService {
 		return result;
 	}
 	/**
-	 * 延期任务列表
+	 * 延时任务列表
 	 */
 	@Override
 	public ExecuteResult<Map<String,Object>> deferredTaskRemindersList(Integer leadtime, Integer delaytime) {
 		ExecuteResult<Map<String,Object>> result = new ExecuteResult<Map<String,Object>>();
 		try {
-			if (!leadtime.equals("") && leadtime != null && delaytime.equals("") && delaytime != null) {
 				//查询超时提前列表
 				leadtime=leadtime*(-1);
 				List<Map<String, Object>> leaddeferredTaskRemindersList = taskMapper.queryleaddeferredTaskRemindersList(leadtime);
@@ -201,36 +200,38 @@ public class TaskOverdueServiceImpl implements TaskOverdueService {
 				map.put("leaddeferredTaskRemindersList", leaddeferredTaskRemindersList);
 				map.put("deferredTaskRemindersList", deferredTaskRemindersList);
 				result.setResult(map);
-				return result;
-			}
-			result.addErrorMessage("查询失败！");
+				return result;			
+			
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
 			throw new RuntimeException(e);
 		}
-		return result;
-		
 		
 	}
 	
 	/**
-	 * 延时任务列表
+	 * 延期任务列表
 	 */
 	@Override
 	public ExecuteResult<Map<String,Object>> delayedTaskReminderList(Integer leadtime, Integer delaytime) {
-		ExecuteResult<List<Map<String, Object>>> result = new ExecuteResult<List<Map<String, Object>>>();
+		ExecuteResult<Map<String,Object>> result = new ExecuteResult<Map<String,Object>>();
 		try {
-			if (!leadtime.equals("") && leadtime != null && delaytime.equals("") && delaytime != null) {
-			/*	List<Map<String, Object>> delayedTaskReminderList = taskMapper.querydelayedTaskReminderList(leadtime,delaytime);
-				result.setResult(delayedTaskReminderList);
-				return result;*/
-			}
-			result.addErrorMessage("查询失败！");
+			//查询延期提前列表
+			leadtime=leadtime*(-1);
+			List<Map<String, Object>> leaddelayedTaskReminderList = taskMapper.queryleaddelayedTaskReminderList(leadtime);
+			//查询延期延后列表
+			List<Map<String, Object>> delaydelayedTaskReminderList = taskMapper.querydelaydelayedTaskReminderList(delaytime);
+			HashMap<String, Object> map = new HashMap<String,Object>();
+			map.put("leaddelayedTaskReminderList", leaddelayedTaskReminderList);
+			map.put("delaydelayedTaskReminderList", delaydelayedTaskReminderList);
+			result.setResult(map);
+			return result;	
+			
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
 			throw new RuntimeException(e);
 		}
-		return null;
+		
 	}
 
   
