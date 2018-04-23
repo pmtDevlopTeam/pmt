@@ -336,4 +336,25 @@ public interface TaskMapper {
      */
     List<Map<String, Object>> querydelaydelayedTaskReminderList(Integer delaytime);
 
+    /**
+     * 查询出我的任务
+     * @Title: queryMyAllTask
+     * @Description: TODO
+     * @param @param taskNum,taskName,projectId,demandId,id
+     * @param @return
+     * @return List<Task>
+     * @throws
+     */
+    List<Task> queryMyAllTask(Task task);
+
+    /**
+     * 查询出我的任务 -- 流转到测试的开发任务
+     * @Title: queryMyAlreadyTask
+     * @Description: TODO
+     * @param @param taskNum,taskName,projectId,demandId,id
+     * @param @return
+     * @return List<Task>
+     * @throws
+     */
+    List<Task> queryMyAlreadyTask(Task task);
 }

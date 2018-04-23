@@ -535,20 +535,30 @@
 
 
 
-  <!--zsf-->
-  <!--根据项目Id 和 userId 查询出任务个数-->
-  <select id="queryUnfinishedTask"  resultType="int">
-      select count(*) from task where status in ( 0 , 1 , 3)
-      <if test="projectId!=null">
-          and project_id = #{projectId}
-      </if>
-      <if test="userId!=null">
-          and beassign_user_id = #{userId}
-      </if>
-  </select>
+    <!--zsf-->
+    <!--根据任务Id查询需求ID-->
+    <select id="queryTaskByTaskId" resultType="java.lang.Long"  parameterType="java.lang.Long">
+        select demand_id as demandId FROM task where id = #{id}
+    </select>
+    <!--zsf-->
+    <!--根据需求Id查询需求测试负责人-->
+    <select id="queryTaskToTestByDemandId"  parameterType="java.lang.Long" resultType="String">
+        SELECT  DISTINCT(beassign_user_id) FROM  task WHERE demand_id = #{demandId} AND  task_type = 2
+    </select>
+    <!--zsf-->
+    <!--根据项目Id 和 userId 查询出任务个数-->
+    <select id="queryUnfinishedTask"  resultType="java.lang.Integer">
+        select count(*) from task where status in ( 0 , 1 )
+        <if test="projectId!=null">
+            and project_id = #{projectId}
+        </if>
+        <if test="userId!=null">
+            and beassign_user_id = #{userId}
+        </if>
+    </select>
     <!--zsf-->
     <!--根据需求Id 查询出任务列表-->
-    <select id="queryTaskByDemandId" resultMap="BaseResultMap" parameterType="long">
+    <select id="queryTaskByDemandId" resultMap="BaseResultMap" parameterType="java.lang.Long">
         select
         <include refid="ShowAllTasks_Column_List" />
         from
@@ -556,7 +566,7 @@
         INNER JOIN platform_user a ON a.user_id = t.assign_user_id
         INNER JOIN platform_user b ON b.user_id = t.beassign_user_id
         INNER JOIN platform_user c ON c.user_id = t.create_user_id
-        where t.beassign_user_id = #{beassignUserId,jdbcType=VARCHAR}
+        where 1 = 1
         <if test="demandId != null">
             and t.demand_id = #{demandId,jdbcType=BIGINT}
         </if>
@@ -571,7 +581,7 @@
         LEFT JOIN project_main pro ON ta.project_id = pro.id
         LEFT JOIN platform_user pl ON ta.assign_user_id = pl.user_id
         LEFT JOIN platform_user pl2 ON ta.beassign_user_id = pl2.user_id
-        WHERE ta.status in ( 2, 4 ,5 ) AND ta.beassign_user_id = #{id}
+        WHERE ta.status = 2 AND ta.beassign_user_id = #{id}
         ORDER BY ta.create_time DESC, ta.priority DESC
     </select>
     <!-- zsf-->
@@ -584,9 +594,64 @@
     </update>
     <!-- zsf-->
     <!--提测-->
-    <update id="updateTaskToTest" parameterType="long">
-        UPDATE task SET status = 5 WHERE id = #{id}
+    <update id="updateTaskToTest" >
+        UPDATE task SET status = 0 , task_type = 2 ,beassign_user_id = #{beassignUserId} WHERE id = #{id}
     </update>
+    <!--zsf-->
+    <!--查询我的任务-->
+    <select id="queryMyAllTask" resultMap="BaseResultMap" parameterType="com.camelot.pmt.task.model.Task">
+        SELECT
+        <include refid="ShowAllTasks_Column_List" />
+        FROM task t
+        LEFT JOIN platform_user a ON t.assign_user_id = a.user_id
+        LEFT JOIN platform_user b ON t.beassign_user_id = b.user_id
+        LEFT JOIN platform_user c on t.create_user_id = c.user_id
+        LEFT JOIN project_main p ON t.project_id = p.id
+        LEFT JOIN demand d ON t.demand_id = d.id
+        WHERE t.beassign_user_id = #{ beassignUser.userId,jdbcType=CHAR}
+        <if test="taskNum != null and  taskNum != '' " >
+            and t.task_num = #{taskNum,jdbcType=CHAR}
+        </if>
+        <if test="taskName != null and  taskName != '' ">
+            and t.task_name LIKE  "%"#{taskName,jdbcType=CHAR}"%"
+        </if>
+        <if test="project != null and project.id !=null">
+            and t.project_id = #{project.id,jdbcType=CHAR}
+        </if>
+        <if test="demand != null and demand.id !=null">
+            and t.demand_id = #{demand.id,jdbcType=CHAR}
+        </if>
+        ORDER BY t.create_time DESC, t.priority DESC
+    </select>
+    <!--zsf-->
+    <!--查询我的测试任务、已完成-->
+    <select id="queryMyAlreadyTask" resultMap="BaseResultMap" >
+        SELECT
+        <include refid="ShowAllTasks_Column_List" />
+        FROM task t
+        INNER JOIN task_log l ON t.id = l.task_id
+        INNER JOIN platform_user a ON a.user_id = t.assign_user_id
+        INNER JOIN platform_user b ON b.user_id = t.beassign_user_id
+        INNER JOIN platform_user c ON c.user_id = t.create_user_id
+        LEFT JOIN project_main p ON t.project_id = p.id
+        LEFT JOIN demand d ON t.demand_id = d.id
+        WHERE  t.task_type='2' AND l.operation_button = '提测'
+        AND l.user_id = #{ beassignUser.userId,jdbcType=CHAR}
+        <if test="taskNum != null and  taskNum != '' " >
+            and t.task_num = #{taskNum,jdbcType=CHAR}
+        </if>
+        <if test="taskName != null and  taskName != '' ">
+            and t.task_name LIKE  "%"#{taskName,jdbcType=CHAR}"%"
+        </if>
+        <if test="project != null and project.id !=null">
+            and t.project_id = #{project.id,jdbcType=CHAR}
+        </if>
+        <if test="demand != null and demand.id !=null">
+            and t.demand_id = #{demand.id,jdbcType=CHAR}
+        </if>
+        GROUP BY t.id
+    </select>
+    <!--zsf结束-->
 
    <!--  查询逾期列表 -->
     <select id="queryOverdueTask" resultType="map" parameterType="com.camelot.pmt.task.model.Task">

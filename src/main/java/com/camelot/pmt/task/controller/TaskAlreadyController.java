@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.camelot.pmt.common.APIStatus;
 import com.camelot.pmt.common.ApiResponse;
 import com.camelot.pmt.common.ExecuteResult;
+import com.camelot.pmt.platform.model.User;
+import com.camelot.pmt.platform.shiro.ShiroUtils;
 import com.camelot.pmt.task.model.Task;
 import com.camelot.pmt.task.model.TaskLog;
 import com.camelot.pmt.task.service.TaskAlreadyService;
@@ -11,6 +13,8 @@ import com.camelot.pmt.task.service.TaskLogService;
 import com.camelot.pmt.task.service.TaskManagerService;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +30,10 @@ import java.util.Map;
 @RequestMapping("/task/taskAlready")
 @Api(value = "我的工作台-我的已办-接口", description = "我的工作台-我的已办-接口")
 public class TaskAlreadyController {
+
+
+    //日志
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private TaskAlreadyService taskAlreadyService;
@@ -196,6 +204,37 @@ public class TaskAlreadyController {
             return ApiResponse.error();
         } catch (Exception e) {
             return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
+        }
+    }
+
+
+    /**
+     * 查询所有的任务 queryTaskAlready
+     *
+     * @param
+     * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
+     */
+    @ApiOperation(value = "查询所有的任务", notes = "查询所有的任务")
+    @RequestMapping(value = "/queryMyAllTask", method = RequestMethod.GET)
+    @ApiImplicitParams({
+            @ApiImplicitParam(dataType = "ProjectMain", name = "project.id", paramType = "query", value = "项目编号"),
+            @ApiImplicitParam(dataType = "String", name = "taskName", paramType = "query", value = "任务名称"),
+            @ApiImplicitParam(dataType = "String", name = "taskNum", paramType = "query", value = "任务编号"),
+            @ApiImplicitParam(dataType = "Demand", name = "demand.id", paramType = "query", value = "需求编号")})
+    public JSONObject queryMyAllTask(@ApiIgnore Task task) {
+        String userLoginId = String.valueOf(1);
+        try {
+            // 获取当前登录人
+            User user = (User) ShiroUtils.getSessionAttribute("user");
+            if (null == user) {
+                return ApiResponse.jsonData(APIStatus.INVALIDSESSION_LOGINOUTTIME);
+            }
+            task.setBeassignUser(user);
+            Map<String , Object> result = taskAlreadyService.queryMyAllTask(task);
+            return ApiResponse.success(result);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return ApiResponse.jsonData(APIStatus.ERROR_500);
         }
     }
 
