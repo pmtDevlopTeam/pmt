@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.camelot.pmt.project.mapper.VersionCitingHistoryMapper" >
-  <resultMap id="BaseResultMap" type="com.camelot.pmt.project.model.VersionCitingHistory" >
+<mapper namespace="com.camelot.pmt.project.mapper.VersionOperationLogMapper" >
+  <resultMap id="BaseResultMap" type="com.camelot.pmt.project.model.VersionOperationLog" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="version_id" property="versionId" jdbcType="BIGINT" />
     <result column="project_id" property="projectId" jdbcType="BIGINT" />
@@ -21,25 +21,25 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select
     <include refid="Base_Column_List" />
-    from version_citing_history
+    from version_operation_log
     where id = #{id,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
-    delete from version_citing_history
+    delete from version_operation_log
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.camelot.pmt.project.model.VersionCitingHistory" >
-    insert into version_citing_history (id, version_id, project_id,
-    demand_id, task_id, bug_id,
-    test_case_id, create_user_id, create_time,
-    modify_user_id, modify_time)
+  <insert id="insert" parameterType="com.camelot.pmt.project.model.VersionOperationLog" >
+    insert into version_operation_log (id, version_id, project_id,
+      demand_id, task_id, bug_id,
+      test_case_id, create_user_id, create_time,
+      modify_user_id, modify_time)
     values (#{id,jdbcType=BIGINT}, #{versionId,jdbcType=BIGINT}, #{projectId,jdbcType=BIGINT},
-    #{demandId,jdbcType=BIGINT}, #{taskId,jdbcType=BIGINT}, #{bugId,jdbcType=BIGINT},
-    #{testCaseId,jdbcType=BIGINT}, #{createUserId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
-    #{modifyUserId,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP})
+      #{demandId,jdbcType=BIGINT}, #{taskId,jdbcType=BIGINT}, #{bugId,jdbcType=BIGINT},
+      #{testCaseId,jdbcType=BIGINT}, #{createUserId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+      #{modifyUserId,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.camelot.pmt.project.model.VersionCitingHistory" >
-    insert into version_citing_history
+  <insert id="insertSelective" parameterType="com.camelot.pmt.project.model.VersionOperationLog" >
+    insert into version_operation_log
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         id,
@@ -111,8 +111,8 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.camelot.pmt.project.model.VersionCitingHistory" >
-    update version_citing_history
+  <update id="updateByPrimaryKeySelective" parameterType="com.camelot.pmt.project.model.VersionOperationLog" >
+    update version_operation_log
     <set >
       <if test="versionId != null" >
         version_id = #{versionId,jdbcType=BIGINT},
@@ -147,8 +147,8 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.camelot.pmt.project.model.VersionCitingHistory" >
-    update version_citing_history
+  <update id="updateByPrimaryKey" parameterType="com.camelot.pmt.project.model.VersionOperationLog" >
+    update version_operation_log
     set version_id = #{versionId,jdbcType=BIGINT},
       project_id = #{projectId,jdbcType=BIGINT},
       demand_id = #{demandId,jdbcType=BIGINT},
@@ -161,29 +161,29 @@
       modify_time = #{modifyTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <select id="queryVersionCitingHistoryByParms" resultMap="BaseResultMap" parameterType="object">
+  <select id="queryversionOperationLogByParms" resultMap="BaseResultMap" parameterType="object">
     SELECT
     <include refid="Base_Column_List" />
-    FROM version_citing_history
+    FROM version_operation_log
     WHERE 1=1
-    <if test="versionCitingHistory.versionId != null">
-      and version_id = #{versionCitingHistory.versionId}
+    <if test="versionOperationLog.versionId != null">
+      and version_id = #{versionOperationLog.versionId}
     </if>
-    <if test="versionCitingHistory.projectId != null">
-      and project_id = #{versionCitingHistory.projectId}
+    <if test="versionOperationLog.projectId != null">
+      and project_id = #{versionOperationLog.projectId}
     </if>
-    <if test="versionCitingHistory.demandId != null">
-      and demand_id = #{versionCitingHistory.demandId}
+    <if test="versionOperationLog.demandId != null">
+      and demand_id = #{versionOperationLog.demandId}
     </if>
-    <if test="versionCitingHistory.taskId != null">
-      and task_id = #{versionCitingHistory.taskId}
+    <if test="versionOperationLog.taskId != null">
+      and task_id = #{versionOperationLog.taskId}
     </if>
-    <if test="versionCitingHistory.bugId != null">
-      and bug_id = #{versionCitingHistory.bugId}
+    <if test="versionOperationLog.bugId != null">
+      and bug_id = #{versionOperationLog.bugId}
     </if>
-    <if test="versionCitingHistory.testCaseId != null">
-      and test_case_id = #{versionCitingHistory.testCaseId}
+    <if test="versionOperationLog.testCaseId != null">
+      and test_case_id = #{versionOperationLog.testCaseId}
     </if>
-     ORDER BY create_time DESC
+    ORDER BY create_time DESC
   </select>
 </mapper>

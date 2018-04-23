@@ -4,12 +4,12 @@ import java.util.Date;
 
 /**
  * @Package: com.camelot.pmt.project.model
- * @ClassName: VersionCitingHistory
- * @Description: 关联版本记录表
+ * @ClassName: VersionOperationLog
+ * @Description: TODO
  * @author: xueyj
- * @date: 2018-04-20 15:09
+ * @date: 2018-04-23 11:05
  */
-public class VersionCitingHistory {
+public class VersionOperationLog {
     private Long id;
 
     private Long versionId;

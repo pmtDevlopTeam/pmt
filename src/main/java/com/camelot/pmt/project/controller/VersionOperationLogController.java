@@ -5,8 +5,8 @@ import com.camelot.pmt.common.APIStatus;
 import com.camelot.pmt.common.ApiResponse;
 import com.camelot.pmt.platform.model.User;
 import com.camelot.pmt.platform.shiro.ShiroUtils;
-import com.camelot.pmt.project.model.VersionCitingHistory;
-import com.camelot.pmt.project.service.VersionCitingHistoryService;
+import com.camelot.pmt.project.model.VersionOperationLog;
+import com.camelot.pmt.project.service.VersionOperationLogService;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -23,24 +23,24 @@ import javax.annotation.Resource;
 
 /**
  * @Package: com.camelot.pmt.project.controller
- * @ClassName: VersionCitingHistoryController
+ * @ClassName: versionOperationLogController
  * @Description: TODO
  * @author: xueyj
  * @date: 2018-04-20 15:54
  */
 @RestController
-@RequestMapping(value = "/platform/versionCitingHistory")
+@RequestMapping(value = "/platform/versionOperationLog")
 @Api(value = "基础平台-关联版本控制操作接口", description = "基础平台-关联版本控制操作接口")
-public class VersionCitingHistoryController {
+public class VersionOperationLogController {
     @Resource
-    VersionCitingHistoryService versionCitingHistoryService;
+    VersionOperationLogService versionOperationLogService;
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     /**
      * @Description: 添加版本关联记录接口
      * @param: versionId
      * @param: projectId
-     * @param: versionCitingHistory
+     * @param: versionOperationLog
      * @return: JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      * @author: xueyj
      * @date: 2018/4/13 18:31
@@ -53,16 +53,16 @@ public class VersionCitingHistoryController {
             @ApiImplicitParam(name = "taskId", value = "任务id", required = false, paramType = "form", dataType = "Long"),
             @ApiImplicitParam(name = "bugId", value = "bugid", required = false, paramType = "form", dataType = "Long"),
             @ApiImplicitParam(name = "testCaseId", value = "测试用例id", required = false, paramType = "form", dataType = "Long") })
-    @RequestMapping(value = "/addVersionCitingHistory", method = RequestMethod.POST)
-    public JSONObject addVersionCitingHistory(@ApiIgnore VersionCitingHistory versionCitingHistory) {
+    @RequestMapping(value = "/addversionOperationLog", method = RequestMethod.POST)
+    public JSONObject addversionOperationLog(@ApiIgnore VersionOperationLog versionOperationLog) {
         try {
             User user = (User) ShiroUtils.getSessionAttribute("user");
             if (user != null) {
-                boolean flag = versionCitingHistoryService.queryVersionCitingHistoryByParms(versionCitingHistory).size()>0;
+                boolean flag = versionOperationLogService.queryversionOperationLogByParms(versionOperationLog).size()>0;
                 if (flag){
                     return ApiResponse.error("该信息已存在，无法再次添加");
                 }
-                flag = versionCitingHistoryService.addVersionCitingHistoryByParms(user.getUserId(),versionCitingHistory);
+                flag = versionOperationLogService.addversionOperationLogByParms(user.getUserId(),versionOperationLog);
                 if (flag) {
                     return ApiResponse.success();
                 }
@@ -78,7 +78,7 @@ public class VersionCitingHistoryController {
 
     /**
      * @Description: 分页查询版本关联记录接口
-     * @param: versionCitingHistory
+     * @param: versionOperationLog
      * @param: rows
      * @return: JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      * @author: xueyj
@@ -94,12 +94,12 @@ public class VersionCitingHistoryController {
             @ApiImplicitParam(name = "taskId", value = "任务id", required = false, paramType = "query", dataType = "Long"),
             @ApiImplicitParam(name = "bugId", value = "bugid", required = false, paramType = "query", dataType = "Long"),
             @ApiImplicitParam(name = "testCaseId", value = "测试用例id", required = false, paramType = "query", dataType = "Long") })
-    @RequestMapping(value = "/queryVersionCitingHistory", method = RequestMethod.GET)
-    public JSONObject queryVersionCitingHistory(int page,int rows,@ApiIgnore VersionCitingHistory versionCitingHistory) {
+    @RequestMapping(value = "/queryversionOperationLog", method = RequestMethod.GET)
+    public JSONObject queryversionOperationLog(int page,int rows,@ApiIgnore VersionOperationLog versionOperationLog) {
         try {
             User user = (User) ShiroUtils.getSessionAttribute("user");
             if (user != null) {
-                PageInfo pageInfo = versionCitingHistoryService.queryVersionCitingHistoryByPageAndParms(page, rows, versionCitingHistory);
+                PageInfo pageInfo = versionOperationLogService.queryversionOperationLogByPageAndParms(page, rows, versionOperationLog);
                 return ApiResponse.success(pageInfo);
             } else {
                 return ApiResponse.error("用户未登录，请登录！");
