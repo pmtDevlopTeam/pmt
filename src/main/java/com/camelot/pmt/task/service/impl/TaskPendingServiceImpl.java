@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -56,12 +57,11 @@ public class TaskPendingServiceImpl implements TaskPendingService{
 	* @throws
 	 */
 	@Override
-	public ExecuteResult<List<Task>> queryAllTaskList(Task task){
-		ExecuteResult<List<Task>> result = new ExecuteResult<List<Task>>();
+	public List<Task> queryAllTaskList(Task task){
+		List<Task> result = new ArrayList<Task>();
 		try{
 			//查询所有的Task任务列表
-			List<Task> allTaskList = taskMapper.queryAllTaskList(task);
-			result.setResult(allTaskList);
+			result = taskMapper.queryAllTaskList(task);
 		}catch (Exception e) {
 			LOGGER.error(e.getMessage());
             throw new RRException(e.getMessage(),e);
@@ -78,12 +78,11 @@ public class TaskPendingServiceImpl implements TaskPendingService{
 	* @throws
 	 */
 	@Override
-	public ExecuteResult<List<Task>> queryMyPendingTaskList(Task task){
-		ExecuteResult<List<Task>> result = new ExecuteResult<List<Task>>();
+	public List<Task> queryMyPendingTaskList(Task task){
+		List<Task> result = new ArrayList<Task>();
 		try{
 			//查询所有的Task任务列表
-			List<Task> allTaskList = taskMapper.queryMyPendingTaskList(task);
-			result.setResult(allTaskList);
+			result = taskMapper.queryMyPendingTaskList(task);
 		}catch (Exception e) {
 			LOGGER.error(e.getMessage());
             throw new RRException(e.getMessage(),e);
@@ -101,15 +100,10 @@ public class TaskPendingServiceImpl implements TaskPendingService{
 	* @throws
 	 */
 	@Override
-	public ExecuteResult<Map<String, Object>> queryTaskNodeById(Long id) {
-		ExecuteResult<Map<String, Object>> result = new ExecuteResult<Map<String, Object>>();
-        Map<String, Object> map = new HashMap<String, Object>();
+	public Map<String, Object> queryTaskNodeById(Long id) {
+		Map<String, Object> result = new HashMap<String, Object>();
         try {
             // check参数
-            if (id == null) {
-            	result.addErrorMessage("传入的任务Id有误!");
-				return result;
-            }
             Task task = taskMapper.queryTaskNodeById(id);
             //TaskFile taskFile = new TaskFile();
             // 来源id
@@ -119,8 +113,7 @@ public class TaskPendingServiceImpl implements TaskPendingService{
             // 添加附件信息到map
             //map.put("TaskFile", taskFileService.queryByTaskFile(taskFile));
             // 添加任务信息到map
-            map.put("Task", task);
-            result.setResult(map);
+            result.put("Task", task);
             return result;
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
@@ -139,11 +132,11 @@ public class TaskPendingServiceImpl implements TaskPendingService{
 	 */
 	@Override
 	@Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-	public ExecuteResult<String> updateTaskPendingToStatus(Long id,String taskStatus) {
-		ExecuteResult<String> result = new ExecuteResult<String>();
+	public String updateTaskPendingToStatus(Long id,String taskStatus) {
+		String result = new String();
 		try{
 			if(id==null){
-				result.addErrorMessage("传入的参数有误!");
+				result="传入的参数有误!";
 				return result;
 			}
 			//此处判断是为了防止接口误调用导致数据错误的接口的一层保护
@@ -152,11 +145,13 @@ public class TaskPendingServiceImpl implements TaskPendingService{
 				taskMapper.updateTaskStatus(id,TaskStatus.RUNING.getValue());
 				//日志记录
 				taskLogService.insertTaskLog(id,"开始任务","修改任务状态由：“待办”转换为“正在进行”");
+				result="修改任务状态为正在进行成功!";
 			}else if(TaskStatus.CLOSE.getValue().equals(taskStatus)){
 				//根据id更新待办任务状态为关闭
 				taskMapper.updateTaskStatus(id,TaskStatus.CLOSE.getValue());
 				//日志记录
 				taskLogService.insertTaskLog(id,"关闭任务","修改任务状态由：“待办”转换为“关闭”");
+				result="修改任务状态为关闭成功!";
 			}
 		}
 		catch (Exception e) {

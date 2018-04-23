@@ -66,17 +66,17 @@ public interface TaskPendingService {
 	* @return ExecuteResult<List<Task>>    返回类型 
 	* @throws
 	 */
-	ExecuteResult<List<Task>> queryAllTaskList(Task task);
+	List<Task> queryAllTaskList(Task task);
 	
 	/**
 	 * 
 	* @Title: queryMyPendingTaskList 
 	* @Description: TODO(查询我的待办Task任务列表) 
 	* @param @return    设定文件 
-	* @return ExecuteResult<List<Task>>    返回类型 
+	* @return List<Task>    返回类型 
 	* @throws
 	 */
-	ExecuteResult<List<Task>> queryMyPendingTaskList(Task task);
+	List<Task> queryMyPendingTaskList(Task task);
 	
 	/**
 	 * 
@@ -87,7 +87,7 @@ public interface TaskPendingService {
 	* @return Map<String,Object>    返回类型 
 	* @throws
 	 */
-	ExecuteResult<Map<String, Object>> queryTaskNodeById(Long id);
+	Map<String, Object> queryTaskNodeById(Long id);
 	
 	/**
 	 * 
@@ -173,10 +173,10 @@ public interface TaskPendingService {
 	* @param @param id
 	* @param @param taskStatus
 	* @param @return    设定文件 
-	* @return ExecuteResult<String>    返回类型 
+	* @return String    返回类型 
 	* @throws
 	 */
-	ExecuteResult<String> updateTaskPendingToStatus(Long id, String taskStatus);
+	String updateTaskPendingToStatus(Long id, String taskStatus);
 	
 	/**
 	 * 
