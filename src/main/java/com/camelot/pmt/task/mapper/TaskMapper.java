@@ -242,14 +242,14 @@ public interface TaskMapper {
 
     /**
      * @author: gxl
-     * @Title: updateTaskPendingToRuning
-     * @Description: TODO(我的待办任务转为正在进行)
+     * @Title: updateTaskStatus
+     * @Description: TODO(修改任务状态)
      * @param @param taskId status
      * @param @return    设定文件
      * @return int    返回类型
      * @throws
      */
-    void updateTaskPendingToRunning(@Param("id") Long id, @Param("status") String status);
+    void updateTaskStatus(@Param("id") Long id, @Param("status") String status);
     
     /**
      * @author: gxl

@@ -63,20 +63,20 @@ public interface TaskPendingService {
 	* @Title: queryAllTaskList 
 	* @Description: TODO(查询所有的Task任务列表) 
 	* @param @return    设定文件 
-	* @return ExecuteResult<PageInfo<Task>>    返回类型 
+	* @return ExecuteResult<List<Task>>    返回类型 
 	* @throws
 	 */
-	ExecuteResult<PageInfo<Task>> queryAllTaskList(Task task,Integer page, Integer rows);
+	ExecuteResult<List<Task>> queryAllTaskList(Task task);
 	
 	/**
 	 * 
 	* @Title: queryMyPendingTaskList 
 	* @Description: TODO(查询我的待办Task任务列表) 
 	* @param @return    设定文件 
-	* @return ExecuteResult<PageInfo<Task>>    返回类型 
+	* @return ExecuteResult<List<Task>>    返回类型 
 	* @throws
 	 */
-	ExecuteResult<PageInfo<Task>> queryMyPendingTaskList(Task task,Integer page, Integer rows);
+	ExecuteResult<List<Task>> queryMyPendingTaskList(Task task);
 	
 	/**
 	 * 
@@ -159,12 +159,24 @@ public interface TaskPendingService {
 	* @Title: updateTaskPendingToRuning 
 	* @Description: TODO(我的待办任务状态转为正在进行) 
 	* @param @param id
-	* @param @param taskType
+	* @param @param taskStatus
 	* @param @return    设定文件 
 	* @return ExecuteResult<String>    返回类型 
 	* @throws
 	 */
 	ExecuteResult<String> updateTaskPendingToRunning(Long id, String taskStatus);
+	
+	/**
+	 * 
+	* @Title: updateTaskPendingToStatus 
+	* @Description: TODO(我的待办任务状态转为正在进行或者关闭) 
+	* @param @param id
+	* @param @param taskStatus
+	* @param @return    设定文件 
+	* @return ExecuteResult<String>    返回类型 
+	* @throws
+	 */
+	ExecuteResult<String> updateTaskPendingToStatus(Long id, String taskStatus);
 	
 	/**
 	 * 

@@ -514,13 +514,13 @@
 		t.status = #{status,jdbcType=CHAR},t.delay_describe = #{delayDescribe,jdbcType=VARCHAR},t.estimate_start_time = #{estimateStartTime,jdbcType=TIMESTAMP} 
 		where t.id = #{id,jdbcType=BIGINT}
 	</update>
-	<!-- 我的待办任务转为正在进行 -->
-	<update id="updateTaskPendingToRunning" parameterType="com.camelot.pmt.task.model.Task">
+	<!-- 修改任务状态 -->
+	<update id="updateTaskStatus" parameterType="com.camelot.pmt.task.model.Task">
 		update task t set 
 		t.status = #{status,jdbcType=CHAR} 
 		where t.id = #{id,jdbcType=BIGINT}
 	</update>
-	<!-- 我的待办任务转为正在进行 -->
+	<!-- 我的待办任务被指派 -->
 	<update id="updateTaskToAssign" parameterType="com.camelot.pmt.task.model.Task">
 		update task t set 
 		t.assign_user_id = #{assignUserId,jdbcType=VARCHAR},

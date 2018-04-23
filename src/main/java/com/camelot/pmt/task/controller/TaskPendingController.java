@@ -70,11 +70,8 @@ public class TaskPendingController {
         @ApiImplicitParam(name = "assignUser.userId", value = "指派人标识号", required = false, paramType = "form", dataType = "String"),
         @ApiImplicitParam(name = "status", value = "任务状态", required = false, paramType = "form", dataType = "String") })
 	@RequestMapping(value = "/queryAllTaskList", method = RequestMethod.POST)
-	public JSONObject queryAllTaskList(
-			@ApiIgnore Task task,
-			@ApiParam(name = "page", value = "页码", required = true) @RequestParam(required = true) Integer page,
-			@ApiParam(name = "rows", value = "每页数量", required = true) @RequestParam(required = true) Integer rows){
-		ExecuteResult<PageInfo<Task>> result = new ExecuteResult<PageInfo<Task>>();
+	public JSONObject queryAllTaskList(@ApiIgnore Task task){
+		ExecuteResult<List<Task>> result = new ExecuteResult<List<Task>>();
 		try {
 			User user = (User) ShiroUtils.getSessionAttribute("user");
 			//检查用户是否登录，需要去session中获取用户登录信息
@@ -85,7 +82,7 @@ public class TaskPendingController {
 			User userL = new User();
 			userL.setUserId(user.getUserId());
 			task.setBeassignUser(userL);
-			result = taskPendingService.queryAllTaskList(task,page,rows);
+			result = taskPendingService.queryAllTaskList(task);
 			//判断是否成功
 			if(result.isSuccess()){
 				return ApiResponse.jsonData(APIStatus.OK_200,result.getResult());
@@ -113,11 +110,8 @@ public class TaskPendingController {
         @ApiImplicitParam(name = "priority", value = "优先级", required = false, paramType = "form", dataType = "String"),
         @ApiImplicitParam(name = "assignUser.userId", value = "指派人标识号", required = false, paramType = "form", dataType = "String") })
 	@RequestMapping(value = "/queryMyPendingTaskList", method = RequestMethod.POST)
-	public JSONObject queryMyPendingTaskList(
-			@ApiIgnore Task task,
-			@ApiParam(name = "page", value = "页码", required = true) @RequestParam(required = true) Integer page,
-			@ApiParam(name = "rows", value = "每页数量", required = true) @RequestParam(required = true) Integer rows){
-		ExecuteResult<PageInfo<Task>> result = new ExecuteResult<PageInfo<Task>>();
+	public JSONObject queryMyPendingTaskList(@ApiIgnore Task task){
+		ExecuteResult<List<Task>> result = new ExecuteResult<List<Task>>();
 		try {
 			User user = (User) ShiroUtils.getSessionAttribute("user");
 			//检查用户是否登录，需要去session中获取用户登录信息
@@ -129,40 +123,7 @@ public class TaskPendingController {
 			userL.setUserId(user.getUserId());
 			task.setBeassignUser(userL);
 			task.setStatus(TaskStatus.PENDINHG.getValue());
-			result = taskPendingService.queryMyPendingTaskList(task,page,rows);
-			//判断是否成功
-			if(result.isSuccess()){
-				return ApiResponse.jsonData(APIStatus.OK_200,result.getResult());
-			}
-			return ApiResponse.jsonData(APIStatus.ERROR_500, result.getResult());
-		}catch (Exception e) {
-			logger.error(e.getMessage());
-			//异常
-			return ApiResponse.jsonData(APIStatus.ERROR_500,e.getMessage());
-		}
-	}
-	
-	/**
-	 * 
-	* @Title: queryTaskByTaskId 
-	* @Description: TODO(查询taskId下的所有子节点) 
-	* @param @param taskId
-	* @param @return    设定文件 
-	* @return JSONObject    返回类型 
-	* @throws
-	 */
-	@ApiOperation(value = "查询任务详情", notes = "查询任务详情")
-	@RequestMapping(value = "/queryTaskNodeById", method = RequestMethod.POST)
-	public JSONObject queryTaskNodeById(
-			@ApiParam(name = "id", value = "任务标识号", required = true) @RequestParam(required = true) String id){
-		ExecuteResult<Map<String, Object>> result = new ExecuteResult<Map<String, Object>>();
-		try {
-			User user = (User) ShiroUtils.getSessionAttribute("user");
-			//检查用户是否登录，需要去session中获取用户登录信息
-			if(user==null){
-				return ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
-            }
-			result = taskPendingService.queryTaskNodeById(Long.valueOf(id));
+			result = taskPendingService.queryMyPendingTaskList(task);
 			//判断是否成功
 			if(result.isSuccess()){
 				return ApiResponse.jsonData(APIStatus.OK_200,result.getResult());
@@ -196,7 +157,39 @@ public class TaskPendingController {
 				return ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
             }
 			//更新我的待办任务为正在进行中
-			result = taskPendingService.updateTaskPendingToRunning(id,TaskStatus.PENDINHG.getValue());
+			result = taskPendingService.updateTaskPendingToStatus(id,TaskStatus.RUNING.getValue());
+			//判断是否成功
+			if(result.isSuccess()){
+				return ApiResponse.jsonData(APIStatus.OK_200,result.getResult());
+			}
+			return ApiResponse.jsonData(APIStatus.ERROR_500, result.getResult());
+		}catch (Exception e) {
+			logger.error(e.getMessage());
+			//异常
+			return ApiResponse.jsonData(APIStatus.ERROR_500,e.getMessage());
+		}
+	}
+	
+	/**
+	 * 我的待办任务转为关闭
+	 * @param taskId
+	 * @param delayDescribe
+	 * @param estimateStartTime
+	 * @return
+	 */
+	@ApiOperation(value = "我的待办任务转为关闭", notes = "我的待办任务转为关闭")
+	@RequestMapping(value = "/updateTaskPendingToClose", method = RequestMethod.POST)
+	public JSONObject updateTaskPendingToClose(
+			@ApiParam(name = "id", value = "任务标识号", required = true) @RequestParam(required = true) Long id){
+		ExecuteResult<String> result = new ExecuteResult<String>();
+		try {
+			User user = (User) ShiroUtils.getSessionAttribute("user");
+			//检查用户是否登录，需要去session中获取用户登录信息
+			if(user==null){
+				return ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
+            }
+			//更新我的待办任务为正在进行中
+			result = taskPendingService.updateTaskPendingToStatus(id,TaskStatus.CLOSE.getValue());
 			//判断是否成功
 			if(result.isSuccess()){
 				return ApiResponse.jsonData(APIStatus.OK_200,result.getResult());
@@ -278,6 +271,40 @@ public class TaskPendingController {
 			logger.error(e.getMessage());
 			//异常错误
 			return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
+		}
+	}
+	
+	/**
+	 * 
+	* @Title: queryTaskByTaskId 
+	* @Description: TODO(查询taskId下的所有子节点) 
+	* @param @param taskId
+	* @param @return    设定文件 
+	* @return JSONObject    返回类型 
+	* @throws
+	 */
+	@Deprecated
+	@ApiOperation(value = "查询任务详情", notes = "查询任务详情")
+	@RequestMapping(value = "/queryTaskNodeById", method = RequestMethod.POST)
+	public JSONObject queryTaskNodeById(
+			@ApiParam(name = "id", value = "任务标识号", required = true) @RequestParam(required = true) String id){
+		ExecuteResult<Map<String, Object>> result = new ExecuteResult<Map<String, Object>>();
+		try {
+			User user = (User) ShiroUtils.getSessionAttribute("user");
+			//检查用户是否登录，需要去session中获取用户登录信息
+			if(user==null){
+				return ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
+            }
+			result = taskPendingService.queryTaskNodeById(Long.valueOf(id));
+			//判断是否成功
+			if(result.isSuccess()){
+				return ApiResponse.jsonData(APIStatus.OK_200,result.getResult());
+			}
+			return ApiResponse.jsonData(APIStatus.ERROR_500, result.getResult());
+		}catch (Exception e) {
+			logger.error(e.getMessage());
+			//异常
+			return ApiResponse.jsonData(APIStatus.ERROR_500,e.getMessage());
 		}
 	}
 	
