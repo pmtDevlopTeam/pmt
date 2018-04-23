@@ -10,6 +10,7 @@ import com.camelot.pmt.project.mapper.ProjectMainMapper;
 import com.camelot.pmt.project.model.ProjectMain;
 import com.camelot.pmt.project.model.Version;
 import com.camelot.pmt.project.model.VersionVo;
+import com.camelot.pmt.project.service.VersionOperationLogService;
 import com.camelot.pmt.project.service.VersionService;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
@@ -43,6 +44,8 @@ public class VersionController {
     VersionService versionService;
     @Autowired
     private ProjectMainMapper projectMainMapper;
+    @Resource
+    VersionOperationLogService versionOperationLogService;
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     /**
@@ -54,7 +57,7 @@ public class VersionController {
      * @author: xueyj
      * @date: 2018/4/13 18:31
      */
-    @ApiOperation(value = "添加版本接口", notes = "添加单个版本")
+    @ApiOperation(value = "添加版本接口", notes = "添加版本接口")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "projectId", value = "项目id", required = true, paramType = "form", dataType = "Long"),
             @ApiImplicitParam(name = "versionType", value = "版本类型", required = true, paramType = "form", dataType = "String"),
@@ -74,7 +77,7 @@ public class VersionController {
                 ProjectMain projectMain = projectMainMapper.queryByPrimaryKey(projectId);
                 if (projectMain != null) {
                     boolean flag  = versionService.queryVerListByProIdAndVerCode(projectId, versionVo.getVersionCode());
-                    if(!flag){
+                    if(flag){
                         flag = versionService.addVersion(projectId, user.getUserId(), versionVo);
                         if (flag) {
                             return ApiResponse.success();
@@ -110,11 +113,15 @@ public class VersionController {
         try {
             User user = (User) ShiroUtils.getSessionAttribute("user");
             if (user != null) {
-                boolean flag = versionService.updateVersionByIdAndParms(null, user.getUserId(), versionId);
+               boolean flag =versionOperationLogService.queryVersionLogByVersionId(versionId);
                 if (flag) {
-                    return ApiResponse.success();
+                    flag = versionService.updateVersionByIdAndParms(null, user.getUserId(), versionId);
+                    if (flag) {
+                        return ApiResponse.success();
+                    }
+                    return ApiResponse.error("删除异常");
                 }
-                return ApiResponse.error("删除异常");
+                return ApiResponse.error("该版本信息已被引用，无法删除！");
             } else {
                 return ApiResponse.error("用户未登录，请登录！");
             }
@@ -139,8 +146,8 @@ public class VersionController {
         try {
             User user = (User) ShiroUtils.getSessionAttribute("user");
             if (user != null) {
-                VersionVo versionVo = versionService.queryVersionInfoById(versionId);
-                return ApiResponse.success(versionVo);
+                 VersionVo versionVo = versionService.queryVersionInfoById(versionId);
+                 return ApiResponse.success(versionVo);
             } else {
                 return ApiResponse.error("用户未登录，请登录！");
             }
@@ -194,7 +201,7 @@ public class VersionController {
      * @author: xueyj
      * @date: 2018/4/13 19:22
      */
-    @ApiOperation(value = "", notes = "激活/关闭版本接口")
+    @ApiOperation(value = "激活/关闭版本接口", notes = "激活/关闭版本接口")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "versionStatus", value = "版本状态", required = true, paramType = "form", dataType = "String"),
             @ApiImplicitParam(name = "versionId", value = "版本id", required = true, paramType = "form", dataType = "Long") })
@@ -228,7 +235,7 @@ public class VersionController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "projectId", value = "项目id", required = true, paramType = "query", dataType = "String")
     })
-    @RequestMapping(value = "/addVersion", method = RequestMethod.GET)
+    @RequestMapping(value = "/queryVersionCode", method = RequestMethod.GET)
     public JSONObject addVersion(Long projectId) {
         try {
             User user = (User) ShiroUtils.getSessionAttribute("user");

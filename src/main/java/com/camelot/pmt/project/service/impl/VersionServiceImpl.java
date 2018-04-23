@@ -1,13 +1,16 @@
 package com.camelot.pmt.project.service.impl;
 
 import com.camelot.pmt.project.mapper.VersionMapper;
+import com.camelot.pmt.project.mapper.VersionOperationLogMapper;
 import com.camelot.pmt.project.model.Version;
+import com.camelot.pmt.project.model.VersionOperationLog;
 import com.camelot.pmt.project.model.VersionVo;
 import com.camelot.pmt.project.service.VersionService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.sun.org.apache.bcel.internal.generic.NEW;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,7 +31,8 @@ import java.util.Map;
 public class VersionServiceImpl implements VersionService {
     @Autowired
     private VersionMapper versionMapper;
-
+    @Autowired
+    private VersionOperationLogMapper versionOperationLogMapper;
     /**
      * @Description: 添加版本信息
      * @param: version
@@ -89,7 +93,6 @@ public class VersionServiceImpl implements VersionService {
         }
         return versionMapper.updateByPrimaryKeySelective(version) == 1 ? true : false;
     }
-
     /**
      * @Description: 根据指定id查询版本信息
      * @param: version
@@ -189,10 +192,18 @@ public class VersionServiceImpl implements VersionService {
         pageResult.setList(versionVoList);
         return pageResult;
     }
+    /**
+     * @Description: 根据项目id,版本编号查询版本信息--用于新增时是否允许添加
+     * @param:
+     * @return:
+     * @author: xueyj
+     * @date: 2018/4/17 10:34
+     */
+    @Override
     public boolean queryVerListByProIdAndVerCode(Long projectId,String versionCode){
        boolean flag = true;
-        List<Long> longs = versionMapper.selectVerListByProIdAndVerCode(projectId, versionCode);
-        if(longs.size() > 0){
+        List<Version> versionList = versionMapper.selectVerListByProIdAndVerCode(projectId, versionCode);
+        if(versionList.size() > 0){
             flag=false;
         }
         return flag;
@@ -207,10 +218,10 @@ public class VersionServiceImpl implements VersionService {
         // 初始化版本编号位null；
         String versionCode = null;
         // 根据项目id，版本类型查询对应版本编号
-        List<String> versionList = versionMapper.queryListByProIdAndVerType(projectId, versionType);
+        List<Version> versionList = versionMapper.queryListByProIdAndVerType(projectId, versionType);
         if (versionList.size() > 0) {
             // 获取最后添加版本信息的版本编号
-            versionCode = versionList.get(0);
+            versionCode = versionList.get(0).getVersionCode();
             if (("type01".equals(versionType))) {
                 versionCode = generateVersionCode(versionCode);
             }else if (("type02".equals(versionType))){

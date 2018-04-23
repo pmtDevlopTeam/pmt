@@ -52,7 +52,7 @@ public interface VersionMapper {
      */
     int updateByPrimaryKey(Version record);
 
-    List<String> queryListByProIdAndVerType(@Param("projectId") Long projectId,
+    List<Version> queryListByProIdAndVerType(@Param("projectId") Long projectId,
             @Param("versionType") String versionType);
 
     List<Version> selectVersionListByProIdAndPram(@Param(value = "projectId") Long projectId,
@@ -60,5 +60,5 @@ public interface VersionMapper {
 
     List<Version> selectList();
 
-    List<Long> selectVerListByProIdAndVerCode(@Param(value = "projectId")Long projectId,@Param(value = "versionCode") String versionCode);
+    List<Version> selectVerListByProIdAndVerCode(@Param(value = "projectId")Long projectId,@Param(value = "versionCode") String versionCode);
 }
