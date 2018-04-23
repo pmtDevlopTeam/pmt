@@ -83,7 +83,7 @@ public class DemandController {
             }
             // 设置新增需求状态01:未开始
             demand.setDemandStatus("01");
-            flag = demandService.save(demand, user);
+            flag = demandService.addDemand(demand, user);
             if (flag) {
                 return ApiResponse.success("添加成功");
             }

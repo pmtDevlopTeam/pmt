@@ -37,7 +37,7 @@ public class DemandServiceImpl implements DemandService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean save(Demand demand, User user) {
+    public boolean addDemand(Demand demand, User user) {
         boolean flag = false;
         try {
             String demandNum = queryDemandNum(demand);
