@@ -20,7 +20,7 @@
   
   <select id="selectByUseCaseId" resultType="com.camelot.pmt.testmanage.casemanage.model.UseCaseProcedure" parameterType="java.lang.Long" >
     select 
-    <include refid="Base_Column_List" />
+    id, step, expect, num, use_case_id as useCaseId
     from use_case_procedure
     where use_case_id = #{id,jdbcType=BIGINT}
   </select>
