@@ -1,6 +1,8 @@
 package com.camelot.pmt.platform.model;
 
 import com.baomidou.mybatisplus.enums.IdType;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 import com.baomidou.mybatisplus.annotations.TableId;

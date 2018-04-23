@@ -514,7 +514,7 @@
 		where t.id = #{id,jdbcType=BIGINT}
 	</update>
 	<!-- 我的待办任务转为正在进行 -->
-	<update id="updateTaskPendingToRunning" parameterType="com.camelot.pmt.task.model.Task">
+	<update id="updateTaskStatus" parameterType="com.camelot.pmt.task.model.Task">
 		update task t set 
 		t.status = #{status,jdbcType=CHAR} 
 		where t.id = #{id,jdbcType=BIGINT}
@@ -660,7 +660,7 @@
     </sql>
 
     <!--查询正在进行的任务-->
-    <select id="queryTaskRunning" resultMap="BaseResultMap" parameterType="String">
+    <select id="queryTaskRunning" resultMap="BaseResultMap" parameterType="com.camelot.pmt.task.model.Task">
         SELECT
         <include refid="ShowAllTasks_Column_List" />
         FROM task t
@@ -669,28 +669,34 @@
         LEFT JOIN platform_user c on t.create_user_id = c.user_id
         LEFT JOIN project_main p ON t.project_id = p.id
         LEFT JOIN demand d ON t.demand_id = d.id
-        WHERE t.status = 1 AND t.beassign_user_id = #{id}
+        WHERE t.status = 1 AND t.beassign_user_id = #{beassignUser.userId}
+        <if test="taskNum != null and  taskNum != '' " >
+            and t.task_num LIKE  "%"#{taskNum,jdbcType=CHAR}"%"
+        </if>
+        <if test="taskName != null and  taskName != '' ">
+            and t.task_name LIKE  "%"#{taskName,jdbcType=CHAR}"%"
+        </if>
+        <if test="project != null and project.id !=null">
+            and t.project_id = #{project.id,jdbcType=CHAR}
+        </if>
+        <if test="demand != null and demand.id !=null">
+            and t.demand_id = #{demand.id,jdbcType=CHAR}
+        </if>
         ORDER BY t.create_time DESC, t.priority DESC
     </select>
-<!--
-     SELECT
-        <include refid="selectAllRunningTaskByUserId" />
-        FROM task ta
-        LEFT JOIN demand de ON ta.demand_id = de.id
-        LEFT JOIN project_main pro ON ta.project_id = pro.id
-        LEFT JOIN platform_user pl ON ta.assign_user_id = pl.user_id
-        LEFT JOIN platform_user pl2 ON ta.beassign_user_id = pl2.user_id
--->
     <!--根据父级id查询所有的子任务-->
     <select id="queryByPId" parameterType="Long" resultType="com.camelot.pmt.task.model.Task">
         SELECT * FROM task WHERE task_parent_id = #{pid}
     </select>
     <!--根据任务id关闭任务-->
-    <update id="updateRunningToClose" parameterType="java.util.List">
+    <!--<update id="updateRunningToClose" parameterType="java.util.List">
         UPDATE task SET status = 3 WHERE
         <foreach collection="list" item="aid" open="(" close=")" separator="or">
             id = #{aid}
         </foreach>
+    </update>-->
+    <update id="updateRunningToClose" parameterType="Long">
+        UPDATE task SET status = 3 WHERE id = #{id}
     </update>
     <!--完成任务-->
     <select id="queryRunningToAlready" parameterType="java.util.List" resultType="com.camelot.pmt.task.model.Task">
@@ -703,11 +709,11 @@
     <update id="updateRunningToAlready" parameterType="Long">
         UPDATE task SET status = 2 WHERE id = #{id}
     </update>
-    
+
     <update id="updateInfact_hourAndActual_end_time" parameterType="com.camelot.pmt.task.model.Task">
         UPDATE task SET actual_end_time = #{actualEndTime},infact_hour = #{infactHour} WHERE id = #{id}
     </update>
-    
+
     <insert id="addAttachment" parameterType="com.camelot.pmt.task.model.TaskFile">
         INSERT INTO attachment (attachment_url,
         attachment_tile,attachment_source,source_id,create_user_id,create_time,modify_user_id,modify_time)
@@ -727,23 +733,53 @@
         WHERE t.id = #{id}
     </select>
     <!--myp结束-->
-    <!-- 项目关闭时，更新任务状态 -->
-    <update id="updateByProjectId">
-		update task
-		<trim prefix="set" suffixOverrides=",">
-			<if test="status != null">
-				status = #{status,jdbcType=CHAR},
-			</if>
-			<if test="actualEndTime != null">
-				actual_end_time = #{actualEndTime,jdbcType=TIMESTAMP},
-			</if>
-			<if test="modifyUserId != null">
-				modify_user_id = #{modifyUserId,jdbcType=VARCHAR},
-			</if>
-			<if test="modifyTime != null">
-				modify_time = #{modifyTime,jdbcType=TIMESTAMP}
-			</if>
-		</trim>
-		where project_id =#{projectId,jdbcType=BIGINT}
-	</update>
+    
+   <!--  超时提前列表 -->
+    <select id="queryleaddeferredTaskRemindersList" parameterType="int" resultType="map">
+		select * from (
+		select t.id,t.task_num,t.priority,t.task_name,t.assign_user_id,t.task_type,p.id as pid,p.project_name,
+			u1.user_name,t.assign_time,t.status,t.estimate_start_time,
+			t.estimate_end_time ,t.estimate_hour,DATEDIFF(CURDATE(),t.estimate_start_time) elapsed_time
+		from task t
+		    LEFT JOIN project_main p on p.id =t.project_id
+				LEFT JOIN platform_user u1 on u1.user_id = t.beassign_user_id 
+		) f where elapsed_time <![CDATA[ >=  ]]> #{leadtime} and elapsed_time <![CDATA[ <= ]]> 0 and status = 0
+    </select>
+    
+    <!--  超时延后列表 -->
+    <select id="querydelaytimedeferredTaskRemindersList" parameterType="int" resultType="map">
+	    select * from (
+		select t.id,t.task_num,t.priority,t.task_name,t.assign_user_id,t.task_type,p.id as pid,p.project_name,
+			u1.user_name,t.assign_time,t.status,t.estimate_start_time,
+			t.estimate_end_time ,t.estimate_hour,DATEDIFF(CURDATE(),t.estimate_start_time) elapsed_time
+		from task t
+		    LEFT JOIN project_main p on p.id =t.project_id
+				LEFT JOIN platform_user u1 on u1.user_id = t.beassign_user_id 
+		) f where elapsed_time <![CDATA[ >= ]]> #{delaytime}  and status = 0
+    </select>
+
+
+	 <!--  延期提前列表 -->
+    <select id="queryleaddelayedTaskReminderList" parameterType="int" resultType="map">
+		select * from (
+		select t.id,t.task_num,t.priority,t.task_name,t.assign_user_id,t.task_type,p.id as pid,p.project_name,
+			u1.user_name,t.assign_time,t.status,t.estimate_start_time,
+			t.estimate_end_time ,t.estimate_hour,DATEDIFF(CURDATE(),t.estimate_end_time) elapsed_time
+		from task t
+		    LEFT JOIN project_main p on p.id =t.project_id
+				LEFT JOIN platform_user u1 on u1.user_id = t.beassign_user_id 
+		) f where elapsed_time <![CDATA[ >= ]]> #{leadtime} and elapsed_time <![CDATA[ <= ]]> 0 and status = 1
+    </select>
+    
+    <!--  延期延后列表 -->
+    <select id="querydelaydelayedTaskReminderList" parameterType="int" resultType="map">
+	    select * from (
+		select t.id,t.task_num,t.priority,t.task_name,t.assign_user_id,t.task_type,p.id as pid,p.project_name,
+			u1.user_name,t.assign_time,t.status,t.estimate_start_time,
+			t.estimate_end_time ,t.estimate_hour,DATEDIFF(CURDATE(),t.estimate_end_time) elapsed_time
+		from task t
+		    LEFT JOIN project_main p on p.id =t.project_id
+				LEFT JOIN platform_user u1 on u1.user_id = t.beassign_user_id 
+		) f where elapsed_time <![CDATA[ >= ]]> #{delaytime}  and status = 1
+    </select>
 </mapper>

@@ -2,63 +2,39 @@ package com.camelot.pmt.platform.model;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 public class OrgToUser implements Serializable {
-    /**
-     * id
-     */
     private Long id;
     /**
-     * 部门唯一32位id
+     * 用户32位id
+     */
+    private String userId;
+    /**
+     * 部门32位id
      */
     private String orgId;
     /**
-     * 部门名称
+     * 创建时间
      */
-    private String orgname;
+    private Date createTime;
+    /**
+     * 修改时间
+     */
+    private Date modifyTime;
 
     /**
-     * 上级部门id
+     * 创建人ID
      */
-    private String parentId;
+    private String createUserId;
 
     /**
-     * 上级部门名称
+     * 修改人ID
      */
-    private String orgParentName;
+    private String modifyUserId;
     /**
-     * 部门编号
+     * 用户id集合
      */
-    private String orgCode;
-    /**
-     * 状态
-     */
-    private String state;
-    /**
-     * 用户信息集合
-     */
-    private List<User> userList;
-    /**
-     * 用户对象信息
-     */
-    private User user;
-
-    public String getParentId() {
-        return parentId;
-    }
-
-    public void setParentId(String parentId) {
-        this.parentId = parentId;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
+    private String[] userIds;
 
     public Long getId() {
         return id;
@@ -66,6 +42,14 @@ public class OrgToUser implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getOrgId() {
@@ -76,46 +60,6 @@ public class OrgToUser implements Serializable {
         this.orgId = orgId;
     }
 
-    public String getOrgname() {
-        return orgname;
-    }
-
-    public void setOrgname(String orgname) {
-        this.orgname = orgname;
-    }
-
-    public String getOrgParentName() {
-        return orgParentName;
-    }
-
-    public void setOrgParentName(String orgParentName) {
-        this.orgParentName = orgParentName;
-    }
-
-    public String getOrgCode() {
-        return orgCode;
-    }
-
-    public void setOrgCode(String orgCode) {
-        this.orgCode = orgCode;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }
-
-    public List<User> getUserList() {
-        return userList;
-    }
-
-    public void setUserList(List<User> userList) {
-        this.userList = userList;
-    }
-
     public Date getCreateTime() {
         return createTime;
     }
@@ -124,8 +68,36 @@ public class OrgToUser implements Serializable {
         this.createTime = createTime;
     }
 
-    /**
-     * 创建时间
-     */
-    private Date createTime;
+    public Date getModifyTime() {
+        return modifyTime;
+    }
+
+    public void setModifyTime(Date modifyTime) {
+        this.modifyTime = modifyTime;
+    }
+
+    public String getCreateUserId() {
+        return createUserId;
+    }
+
+    public void setCreateUserId(String createUserId) {
+        this.createUserId = createUserId;
+    }
+
+    public String getModifyUserId() {
+        return modifyUserId;
+    }
+
+    public void setModifyUserId(String modifyUserId) {
+        this.modifyUserId = modifyUserId;
+    }
+
+    public String[] getUserIds() {
+        return userIds;
+    }
+
+    public void setUserIds(String[] userIds) {
+        this.userIds = userIds;
+    }
+
 }

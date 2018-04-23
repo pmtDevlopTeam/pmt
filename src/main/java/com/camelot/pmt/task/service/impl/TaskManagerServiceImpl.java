@@ -12,9 +12,9 @@ import com.camelot.pmt.task.model.TaskLog;
 import com.camelot.pmt.task.service.TaskFileService;
 import com.camelot.pmt.task.service.TaskLogService;
 import com.camelot.pmt.task.service.TaskManagerService;
+import com.camelot.pmt.task.utils.FileUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,29 +75,20 @@ public class TaskManagerServiceImpl implements TaskManagerService {
             }
             // 默认状态下任务状态为未开始 0为未开始的状态码
             task.setStatus("0");
-            User user = new User();
-            /* 这个是根据当前登录用户查询的用户userid */
-            String userId = "2";
+            User user = (User)ShiroUtils.getSessionAttribute("user");
+            // 这个是根据当前登录用户查询的用户userid
+            String userId = user.getUserId();
             user.setUserId(userId);
             task.setCreateUser(user);
             int insertTaskResult = taskMapper.insertTask(task);
             // 如果任务有附件，上传附件
             if (file != null) {
-                String fileName = file.getOriginalFilename();
-                byte[] bytes = file.getBytes();
                 String filePath = "D:/upload/";
-                File targetFile = new File(filePath);
-                if (!targetFile.exists()) {
-                    targetFile.mkdirs();
-                }
-                FileOutputStream out = new FileOutputStream(filePath + fileName);
-                out.write(bytes);
-                out.flush();
-                out.close();
+                FileUtils.uploadFile(file, filePath);
 
                 TaskFile taskFile = new TaskFile();
                 // 附件名称
-                taskFile.setAttachmentTile(fileName);
+                taskFile.setAttachmentTile(file.getOriginalFilename());
                 // 附件路径
                 taskFile.setAttachmentUrl(filePath);
                 // 附件来源
@@ -118,8 +109,7 @@ public class TaskManagerServiceImpl implements TaskManagerService {
     /**
      * 根据id删除任务
      *
-     * @param id
-     *            需要删除的任务的id，isDeleteAll 是否删除子任务
+     * @param id 需要删除的任务的id，isDeleteAll 是否删除子任务
      * @return boolean
      * @author zlh
      * @date 17:24 2018/4/12
@@ -161,8 +151,7 @@ public class TaskManagerServiceImpl implements TaskManagerService {
     /**
      * 编辑任务
      *
-     * @param task
-     *            任务修改内容
+     * @param task 任务修改内容
      * @author zlh
      * @date 17:05 2018/4/13
      */
@@ -191,8 +180,7 @@ public class TaskManagerServiceImpl implements TaskManagerService {
     /**
      * 编辑需求是否变更
      *
-     * @param task
-     *            任务修改内容
+     * @param task 任务修改内容
      * @author zlh
      * @date 17:37 2018/4/13
      */
@@ -214,8 +202,7 @@ public class TaskManagerServiceImpl implements TaskManagerService {
     /**
      * 任务延期
      *
-     * @param task
-     *            需要修改的任务数据
+     * @param task 需要修改的任务数据
      * @return boolean
      * @author zlh
      * @date 10:18 2018/4/12
@@ -228,12 +215,13 @@ public class TaskManagerServiceImpl implements TaskManagerService {
                 throw new RuntimeException("参数错误");
             }
 
-            // 检查权限
+            //检查权限
             Task task2 = taskMapper.queryTaskById(task.getId());
             String createUserName = task2.getCreateUser().getUsername();
             String beAssignUserName = task2.getBeassignUser().getUsername();
             User user = (User) ShiroUtils.getSessionAttribute("user");
-            if (!user.getUsername().equals(createUserName) && !user.getUsername().equals(beAssignUserName)) {
+            if (!user.getUsername().equals(createUserName)
+                    && !user.getUsername().equals(beAssignUserName)) {
                 throw new RuntimeException("没有权限");
             }
 
@@ -249,10 +237,8 @@ public class TaskManagerServiceImpl implements TaskManagerService {
     /**
      * 指派
      *
-     * @param id
-     *            需要修改的任务id
-     * @param userId
-     *            负责人的id
+     * @param id     需要修改的任务id
+     * @param userId 负责人的id
      * @return boolean
      * @author zlh
      * @date 11:36 2018/4/12
@@ -286,10 +272,8 @@ public class TaskManagerServiceImpl implements TaskManagerService {
     /**
      * 指派（验证是否有项目经理角色权限）
      *
-     * @param id
-     *            需要修改的任务id
-     * @param userId
-     *            负责人的id
+     * @param id     需要修改的任务id
+     * @param userId 负责人的id
      * @return boolean
      * @author zlh
      * @date 11:36 2018/4/12
@@ -317,10 +301,7 @@ public class TaskManagerServiceImpl implements TaskManagerService {
     /**
      * 根据任务id查询任务详情
      *
-     * @param id
-     *            任务id
-     * @return ExecuteResult<Map < String , Object>> String:数据的类型
-     *         Task（任务信息）和TaskFile（附件信息）
+     * @param id 任务id
      * @author zlh
      * @date 17:08 2018/4/12
      */
@@ -359,10 +340,8 @@ public class TaskManagerServiceImpl implements TaskManagerService {
     /**
      * 查询所有任务列表
      *
-     * @param page
-     *            当前页
-     * @param rows
-     *            一页有几行
+     * @param page 当前页
+     * @param rows 一页有几行
      * @return PageInfo<Task>
      * @author zlh
      * @date 16:54 2018/4/9
@@ -384,12 +363,9 @@ public class TaskManagerServiceImpl implements TaskManagerService {
     /**
      * 根据条件查询任务
      *
-     * @param task
-     *            模糊查询的条件
-     * @param page
-     *            当前页
-     * @param rows
-     *            一页有几行
+     * @param task 模糊查询的条件
+     * @param page 当前页
+     * @param rows 一页有几行
      * @return PageInfo<Task>
      * @author zlh
      */
@@ -405,13 +381,16 @@ public class TaskManagerServiceImpl implements TaskManagerService {
             if (task.getBeassignUser() != null) {
                 // 如果负责人条件非空，则根据username查询userId
                 List<User> users = userService.queryUsersByUserName(task.getBeassignUser().getUsername());
+                if (users.isEmpty()) {
+                    return null;
+                }
                 // 赋值给string数组传给DAO层
                 ids = new String[users.size()];
                 for (int i = 0; i < users.size(); i++) {
                     ids[i] = users.get(i).getUserId();
                 }
             }
-            // PageHelper.startPage(page, rows);(分页加上会报错，不知道为什么)
+//            PageHelper.startPage(page, rows);(分页加上会报错，不知道为什么)
             List<Task> tasks = taskMapper.queryTaskByTask(task, ids);
             PageInfo<Task> pageInfo = new PageInfo<>(tasks);
             return pageInfo;
