@@ -65,11 +65,13 @@ public class BugManageServiceImpl implements BugManageService {
 		bugManage.setBugNo(bugNo);
 		//创建时间
         bugManage.setCreateTime(DateUtils.format(new Date(),DateUtils.DATE_TIME_PATTERN));
+        bugManage.setModifyTime(DateUtils.format(new Date(),DateUtils.DATE_TIME_PATTERN));
         //bug默认状态 未确认
         bugManage.setBugStatus("0");
         //创建人*
         User user = (User) shiroUtils.getSessionAttribute("user");
         bugManage.setCreateUserId(user.getUserId());
+        bugManage.setModifyUserId(user.getUserId());
 		return bugManage;
 	}
 	
