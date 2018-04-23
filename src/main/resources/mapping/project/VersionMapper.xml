@@ -275,4 +275,11 @@
     FROM version
     ORDER BY id ASC
   </select>
+  <select id="selectVerListByProIdAndVerCode" resultMap="BaseResultMap" parameterType="map">
+    SELECT
+    <include refid="Base_Column_List"/>
+    FROM version
+    WHERE project_id = #{projectId}
+    AND version_code=#{versionCode} and version_status=0 ORDER BY create_time DESC
+  </select>
 </mapper>
