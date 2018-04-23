@@ -56,20 +56,12 @@ public class TaskPendingServiceImpl implements TaskPendingService{
 	* @throws
 	 */
 	@Override
-	public ExecuteResult<PageInfo<Task>> queryAllTaskList(Task task,Integer page, Integer rows){
-		ExecuteResult<PageInfo<Task>> result = new ExecuteResult<PageInfo<Task>>();
+	public ExecuteResult<List<Task>> queryAllTaskList(Task task){
+		ExecuteResult<List<Task>> result = new ExecuteResult<List<Task>>();
 		try{
-			if (page == null || rows == null) {
-				result.addErrorMessage("行和列不能为空!");
-			}
-			//分页初始化
-        	PageHelper.startPage(page,rows);
 			//查询所有的Task任务列表
 			List<Task> allTaskList = taskMapper.queryAllTaskList(task);
-			PageInfo<Task> pageInfo = new PageInfo<Task>(allTaskList);
-			//日志记录
-			//taskLogService.insertTaskLog(tasklog);
-			result.setResult(pageInfo);
+			result.setResult(allTaskList);
 		}catch (Exception e) {
 			LOGGER.error(e.getMessage());
             throw new RRException(e.getMessage(),e);
@@ -86,18 +78,12 @@ public class TaskPendingServiceImpl implements TaskPendingService{
 	* @throws
 	 */
 	@Override
-	public ExecuteResult<PageInfo<Task>> queryMyPendingTaskList(Task task,Integer page, Integer rows){
-		ExecuteResult<PageInfo<Task>> result = new ExecuteResult<PageInfo<Task>>();
+	public ExecuteResult<List<Task>> queryMyPendingTaskList(Task task){
+		ExecuteResult<List<Task>> result = new ExecuteResult<List<Task>>();
 		try{
-			if (page == null || rows == null) {
-				result.addErrorMessage("行和列不能为空!");
-			}
-			//分页初始化
-        	PageHelper.startPage(page,rows);
 			//查询所有的Task任务列表
 			List<Task> allTaskList = taskMapper.queryMyPendingTaskList(task);
-			PageInfo<Task> pageInfo = new PageInfo<Task>(allTaskList);
-			result.setResult(pageInfo);
+			result.setResult(allTaskList);
 		}catch (Exception e) {
 			LOGGER.error(e.getMessage());
             throw new RRException(e.getMessage(),e);
@@ -125,13 +111,13 @@ public class TaskPendingServiceImpl implements TaskPendingService{
 				return result;
             }
             Task task = taskMapper.queryTaskNodeById(id);
-            TaskFile taskFile = new TaskFile();
+            //TaskFile taskFile = new TaskFile();
             // 来源id
-            taskFile.setSourceId(task.getId());
+            //taskFile.setSourceId(task.getId());
             // 任务来源
-            taskFile.setAttachmentSource("任务");
+            //taskFile.setAttachmentSource("任务");
             // 添加附件信息到map
-            map.put("TaskFile", taskFileService.queryByTaskFile(taskFile));
+            //map.put("TaskFile", taskFileService.queryByTaskFile(taskFile));
             // 添加任务信息到map
             map.put("Task", task);
             result.setResult(map);
@@ -141,6 +127,44 @@ public class TaskPendingServiceImpl implements TaskPendingService{
             throw new RRException(e.getMessage(),e);
         }
     }
+	
+	/**
+	 * 
+	* @Title: updateTaskPendingToStatus
+	* @Description: TODO(我的待办任务转为正在进行或者关闭) 
+	* @param @param taskId taskStatus
+	* @param @return    设定文件 
+	* @return JSONObject    返回类型 
+	* @throws
+	 */
+	@Override
+	@Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
+	public ExecuteResult<String> updateTaskPendingToStatus(Long id,String taskStatus) {
+		ExecuteResult<String> result = new ExecuteResult<String>();
+		try{
+			if(id==null){
+				result.addErrorMessage("传入的参数有误!");
+				return result;
+			}
+			//此处判断是为了防止接口误调用导致数据错误的接口的一层保护
+			if(TaskStatus.RUNING.getValue().equals(taskStatus)){
+				//根据id更新待办任务状态为正在进行
+				taskMapper.updateTaskStatus(id,TaskStatus.RUNING.getValue());
+				//日志记录
+				taskLogService.insertTaskLog(id,"开始任务","修改任务状态由：“待办”转换为“正在进行”");
+			}else if(TaskStatus.CLOSE.getValue().equals(taskStatus)){
+				//根据id更新待办任务状态为关闭
+				taskMapper.updateTaskStatus(id,TaskStatus.CLOSE.getValue());
+				//日志记录
+				taskLogService.insertTaskLog(id,"关闭任务","修改任务状态由：“待办”转换为“关闭”");
+			}
+		}
+		catch (Exception e) {
+			LOGGER.error(e.getMessage());
+            throw new RRException(e.getMessage(),e);
+		}
+		return result;
+	}
 	
 	/**
 	 * 
@@ -166,7 +190,7 @@ public class TaskPendingServiceImpl implements TaskPendingService{
 			//判断状态是否为待办，如果是待办更新为正在进行
 			if(taskObj != null && TaskStatus.PENDINHG.getValue().equals(taskStatus)){
 				//根据id更新任务状态为正在进行
-				taskMapper.updateTaskPendingToRunning(id,TaskStatus.RUNING.getValue());
+				taskMapper.updateTaskStatus(id,TaskStatus.RUNING.getValue());
 				if(taskObj.getTaskParentId() != null){
 					//查询taskId下的所有子节点
 					Task parentTaskNodes = taskMapper.queryParentTaskNodeById(taskObj.getTaskParentId());
@@ -203,9 +227,6 @@ public class TaskPendingServiceImpl implements TaskPendingService{
 				result.addErrorMessage("传入的参数有误!");
 				return result;
 			}
-			//查询taskId节点
-			Task taskObj = taskMapper.queryTaskNodeById(id); 
-			taskStatus = taskObj.getStatus();
 			//判断状态是否为待办
 			if(TaskStatus.PENDINHG.getValue().equals(taskStatus)){
 				//格式化日期格式为yyyy-mm-dd,根据id更新待办任务状态为延期
@@ -219,7 +240,7 @@ public class TaskPendingServiceImpl implements TaskPendingService{
 					for(Task child : childTaskNodes){
 						//递归
 						//非关闭需要改为延期
-						updateTaskPendingToDelay(child.getId(),taskStatus,delayDescribe,estimateStartTime);
+						updateTaskPendingToDelay(child.getId(),child.getStatus(),delayDescribe,estimateStartTime);
 					}
 				}
 			}
