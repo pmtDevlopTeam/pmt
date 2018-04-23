@@ -58,17 +58,17 @@ public class VersionOperationLogController {
         try {
             User user = (User) ShiroUtils.getSessionAttribute("user");
             if (user != null) {
-                boolean flag = versionOperationLogService.queryversionOperationLogByParms(versionOperationLog).size()>0;
+                boolean flag = (versionOperationLogService.queryVersionOperationLogByParms(versionOperationLog)).size()>0;
                 if (flag){
                     return ApiResponse.error("该信息已存在，无法再次添加");
                 }
-                flag = versionOperationLogService.addversionOperationLogByParms(user.getUserId(),versionOperationLog);
+                flag = versionOperationLogService.addversionOperationLogByParms("33333",versionOperationLog);
                 if (flag) {
                     return ApiResponse.success();
                 }
                 return ApiResponse.error("添加异常");
-            } else {
-                return ApiResponse.error("用户未登录，请登录！");
+                } else {
+                    return ApiResponse.error("用户未登录，请登录！");
             }
         } catch (Exception e) {
             log.error(e.getMessage());

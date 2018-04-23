@@ -161,28 +161,28 @@
       modify_time = #{modifyTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <select id="queryversionOperationLogByParms" resultMap="BaseResultMap" parameterType="object">
+  <select id="queryVersionOperationLogByParms" resultMap="BaseResultMap" parameterType="com.camelot.pmt.project.model.VersionOperationLog">
     SELECT
     <include refid="Base_Column_List" />
     FROM version_operation_log
     WHERE 1=1
-    <if test="versionOperationLog.versionId != null">
-      and version_id = #{versionOperationLog.versionId}
+    <if test="versionId != null" >
+      AND version_id = #{versionId,jdbcType=BIGINT}
     </if>
-    <if test="versionOperationLog.projectId != null">
-      and project_id = #{versionOperationLog.projectId}
+    <if test="projectId != null" >
+      AND project_id = #{projectId,jdbcType=BIGINT}
     </if>
-    <if test="versionOperationLog.demandId != null">
-      and demand_id = #{versionOperationLog.demandId}
+    <if test="demandId != null" >
+      AND demand_id = #{demandId,jdbcType=BIGINT}
     </if>
-    <if test="versionOperationLog.taskId != null">
-      and task_id = #{versionOperationLog.taskId}
+    <if test="taskId != null" >
+      AND task_id = #{taskId,jdbcType=BIGINT}
     </if>
-    <if test="versionOperationLog.bugId != null">
-      and bug_id = #{versionOperationLog.bugId}
+    <if test="bugId != null" >
+      AND bug_id = #{bugId,jdbcType=BIGINT}
     </if>
-    <if test="versionOperationLog.testCaseId != null">
-      and test_case_id = #{versionOperationLog.testCaseId}
+    <if test="testCaseId != null" >
+      AND test_case_id = #{testCaseId,jdbcType=BIGINT}
     </if>
     ORDER BY create_time DESC
   </select>

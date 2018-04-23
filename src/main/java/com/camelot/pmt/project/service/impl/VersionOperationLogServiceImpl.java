@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * @Package: com.camelot.pmt.project.service.impl
  * @ClassName: versionOperationLogServiceImpl
- * @Description: TODO
+ * @Description: 添加/查看版本操作日志
  * @author: xueyj
  * @date: 2018-04-20 15:56
  */
@@ -30,6 +30,7 @@ public class VersionOperationLogServiceImpl implements VersionOperationLogServic
      * @author: xueyj
      * @date: 2018/4/20 16:25
      */
+    @Override
     public boolean addversionOperationLogByParms(String userId,VersionOperationLog versionOperationLog){
         Date dateTime = new Date();
         versionOperationLog.setCreateTime(dateTime);
@@ -45,8 +46,28 @@ public class VersionOperationLogServiceImpl implements VersionOperationLogServic
      * @author: xueyj
      * @date: 2018/4/20 16:21
      */
-    public List<VersionOperationLog> queryversionOperationLogByParms(VersionOperationLog versionOperationLog){
-        return versionOperationLogMapper.queryversionOperationLogByParms(versionOperationLog);
+    @Override
+    public List<VersionOperationLog> queryVersionOperationLogByParms(VersionOperationLog versionOperationLog){
+        List<VersionOperationLog> versionOperationLogs = versionOperationLogMapper.queryVersionOperationLogByParms(versionOperationLog);
+        return versionOperationLogs;
+    }
+
+    /**
+     * @Description: 根据versionid查询是否被引用
+     * @param:
+     * @return:
+     * @author: xueyj
+     * @date: 2018/4/13 19:16
+     */
+    @Override
+    public boolean queryVersionLogByVersionId(Long versionId) {
+        VersionOperationLog versionOperationLog = new VersionOperationLog();
+        versionOperationLog.setVersionId(versionId);
+        List<VersionOperationLog> versionOperationLogs = versionOperationLogMapper.queryVersionOperationLogByParms(versionOperationLog);
+        if (versionOperationLogs.size() > 0) {
+            return false;
+        }
+        return true;
     }
     /**
      * @Description: 分页查询引用记录信息
@@ -55,6 +76,7 @@ public class VersionOperationLogServiceImpl implements VersionOperationLogServic
      * @author: xueyj
      * @date: 2018/4/20 16:21
      */
+    @Override
     public PageInfo queryversionOperationLogByPageAndParms(int pageNum, int pageSize, VersionOperationLog versionOperationLog){
         /*
          * pageHelper使用三部曲 1.启动pageHelper分页 startPage -- start 2.填充自己的sql（查询逻辑）
@@ -63,7 +85,7 @@ public class VersionOperationLogServiceImpl implements VersionOperationLogServic
         // 初始化分页信息
         PageHelper.startPage(pageNum, pageSize);
         // 查询产品list
-        List<VersionOperationLog> versionOperationLogList = versionOperationLogMapper.queryversionOperationLogByParms(versionOperationLog);
+        List<VersionOperationLog> versionOperationLogList = versionOperationLogMapper.queryVersionOperationLogByParms(versionOperationLog);
         // pageHelper的收尾
         PageInfo pageResult = new PageInfo(versionOperationLogList);
         pageResult.setList(versionOperationLogList);

@@ -26,5 +26,5 @@ public interface VersionOperationLogMapper {
 
     int updateByPrimaryKey(VersionOperationLog record);
 
-    List<VersionOperationLog> queryversionOperationLogByParms(VersionOperationLog versionOperationLog);
+    List<VersionOperationLog> queryVersionOperationLogByParms(VersionOperationLog record);
 }

@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * @Package: com.camelot.pmt.project.service
  * @ClassName: versionOperationLogService
- * @Description: TODO
+ * @Description: 添加/查看版本操作日志
  * @author: xueyj
  * @date: 2018-04-20 15:56
  */
@@ -26,7 +26,16 @@ public interface VersionOperationLogService {
      * @param versionOperationLog
      * @return
      */
-    List<VersionOperationLog> queryversionOperationLogByParms(VersionOperationLog versionOperationLog);
+    List<VersionOperationLog> queryVersionOperationLogByParms(VersionOperationLog versionOperationLog);
+
+    /**
+     * @Description: 根据versionid查询是否被引用
+     * @param:
+     * @return:
+     * @author: xueyj
+     * @date: 2018/4/13 19:16
+     */
+    boolean queryVersionLogByVersionId(Long versionId);
 
     /**
      * 分页查询版本关联记录
