@@ -73,6 +73,9 @@ public class DemandController {
             if (null == user) {
                 return ApiResponse.jsonData(APIStatus.INVALIDSESSION_LOGINOUTTIME);
             }
+            if(null == demand){
+                return ApiResponse.errorPara("请求参数异常");
+            }
             Date currentDate = new Date();
             demand.setCreateTime(currentDate);
             demand.setCreateUserId(user.getUserId());
@@ -361,8 +364,8 @@ public class DemandController {
             if (null == user) {
                 return ApiResponse.jsonData(APIStatus.INVALIDSESSION_LOGINOUTTIME);
             }
-            if(null == demandVO){
-                return ApiResponse.errorPara("请求实体异常");
+            if((null == demandVO)||(null == demandVO.getDemand())){
+                return ApiResponse.errorPara("请求参数异常");
             }
             flag = demandService.addDemandList(demandVO, user);
             if (flag) {
@@ -371,7 +374,6 @@ public class DemandController {
             return ApiResponse.error();
         } catch (Exception e) {
             logger.error("------需求级联新增------" + e.getMessage());
-            e.printStackTrace();
             return ApiResponse.error();
         }
     }
