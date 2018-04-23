@@ -256,12 +256,11 @@ public class BugManageController {
 	    @ApiOperation(value = "分页获取bug列表", notes = "分页获取bug列表")
 	    @RequestMapping(value = "/queryUsersByPage", method = RequestMethod.GET)
 	    @ApiImplicitParams({
-	            @ApiImplicitParam(name = "currentPage", value = "页码", required = true, paramType = "query", dataType = "int"),
-	            @ApiImplicitParam(name = "pageSize", value = "每页数量", required = true, paramType = "query", dataType = "int"),
+	            @ApiImplicitParam(name = "currentPage", value = "页码", required = false, paramType = "query", dataType = "int"),
+	            @ApiImplicitParam(name = "pageSize", value = "每页数量", required = false, paramType = "query", dataType = "int"),
 	            @ApiImplicitParam(name = "projectId", value = "项目id", required = true, paramType = "query", dataType = "String"),
-	            @ApiImplicitParam(name = "status", value = "条件（1.由我负责 2.由我创建 3.由我解决 4.未指派 5.未解决）", required = false, paramType = "query", dataType = "String"),
+	            @ApiImplicitParam(name = "status", value = "条件（1.未确认 2.已确认 3.已撤销 4.已解决 5.未解决 6.已关闭 7.未关闭）", required = false, paramType = "query", dataType = "String"),
 	            @ApiImplicitParam(name = "bugNo", value = "bug编号", required = false, paramType = "query", dataType = "String"),
-	            @ApiImplicitParam(name = "bugStatus", value = "bug状态", required = false, paramType = "query", dataType = "String"),
 	            @ApiImplicitParam(name = "bugTitle", value = "bug名称", required = false, paramType = "query", dataType = "String"),
 	            @ApiImplicitParam(name = "qStartTime", value = "开始日期", required = false, paramType = "query", dataType = "String"),
 	            @ApiImplicitParam(name = "qEndTime", value = "结束日期", required = false, paramType = "query", dataType = "String")
