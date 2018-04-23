@@ -65,7 +65,7 @@ public class TaskLogServiceImpl implements TaskLogService {
      * 添加日志记录
      */
     @Override
-    public ExecuteResult<String> insertTaskLog(Long taskId,String peration) {
+    public ExecuteResult<String> insertTaskLog(Long taskId,String button,String peration) {
         ExecuteResult<String> result = new ExecuteResult<String>();
         try {
             if (taskId == null) {
@@ -79,7 +79,7 @@ public class TaskLogServiceImpl implements TaskLogService {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             taskLog.setTaskId(taskAll.getId());
             taskLog.setUserId(taskAll.getBeassignUser().getUserId());
-            taskLog.setOperationButton(peration);
+            taskLog.setOperationButton(button);
             taskLog.setOperationTime(date);
             taskLog.setOperationDescribe(
                     dateFormat.format(date) + "\t" + taskAll.getBeassignUser().getUsername() + "\t" + peration);

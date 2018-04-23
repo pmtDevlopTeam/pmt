@@ -24,7 +24,7 @@ public interface TaskLogService {
      * 添加日志 @Title: insertTaskLog @Description: TODO @param @param
      * tasklog @param @return @return ExecuteResult<String> @throws
      */
-    ExecuteResult<String> insertTaskLog(Long taskId,String peration);
+    ExecuteResult<String> insertTaskLog(Long taskId,String button,String peration);
 
     /**
      * 查询日志 @Title: queryTaskLogList @Description: TODO @param @param

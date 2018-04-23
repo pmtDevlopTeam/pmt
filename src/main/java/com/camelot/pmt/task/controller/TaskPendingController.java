@@ -55,40 +55,32 @@ public class TaskPendingController {
 	
 	/**
 	 * 
-	* @Title: queryAllTaskList 
-	* @Description: TODO(查询整个任务列表) 
+	* @Title: queryTaskByTaskId 
+	* @Description: TODO(查询taskId下的所有子节点) 
+	* @param @param taskId
 	* @param @return    设定文件 
 	* @return JSONObject    返回类型 
 	* @throws
 	 */
-	@ApiOperation(value = "查询我的全部的任务列表", notes = "查询我的全部的任务列表")
-	@ApiImplicitParams({
-        @ApiImplicitParam(name = "taskNum", value = "任务编号", required = false, paramType = "form", dataType = "String"),
-        @ApiImplicitParam(name = "taskName", value = "任务名称", required = false, paramType = "form", dataType = "String"),
-        @ApiImplicitParam(name = "project.id", value = "项目标识号", required = false, paramType = "form", dataType = "String"),
-        @ApiImplicitParam(name = "priority", value = "优先级", required = false, paramType = "form", dataType = "String"),
-        @ApiImplicitParam(name = "assignUser.userId", value = "指派人标识号", required = false, paramType = "form", dataType = "String"),
-        @ApiImplicitParam(name = "status", value = "任务状态", required = false, paramType = "form", dataType = "String") })
-	@RequestMapping(value = "/queryAllTaskList", method = RequestMethod.POST)
-	public JSONObject queryAllTaskList(@ApiIgnore Task task){
-		ExecuteResult<List<Task>> result = new ExecuteResult<List<Task>>();
+	@ApiOperation(value = "查询任务详情", notes = "查询任务详情")
+	@RequestMapping(value = "/queryTaskNodeById", method = RequestMethod.POST)
+	public JSONObject queryTaskNodeById(
+			@ApiParam(name = "id", value = "任务标识号", required = true) @RequestParam(required = true) String id){
+		ExecuteResult<Map<String, Object>> result = new ExecuteResult<Map<String, Object>>();
 		try {
 			User user = (User) ShiroUtils.getSessionAttribute("user");
 			//检查用户是否登录，需要去session中获取用户登录信息
 			if(user==null){
 				return ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
             }
-			//设置被指派人+待办限制
-			User userL = new User();
-			userL.setUserId(user.getUserId());
-			task.setBeassignUser(userL);
-			result = taskPendingService.queryAllTaskList(task);
+			result = taskPendingService.queryTaskNodeById(Long.valueOf(id));
 			//判断是否成功
 			if(result.isSuccess()){
 				return ApiResponse.jsonData(APIStatus.OK_200,result.getResult());
 			}
 			return ApiResponse.jsonData(APIStatus.ERROR_500, result.getResult());
 		}catch (Exception e) {
+			logger.error(e.getMessage());
 			//异常
 			return ApiResponse.jsonData(APIStatus.ERROR_500,e.getMessage());
 		}
@@ -201,6 +193,48 @@ public class TaskPendingController {
 			return ApiResponse.jsonData(APIStatus.ERROR_500,e.getMessage());
 		}
 	}
+	
+	/**
+	 * 
+	* @Title: queryAllTaskList 
+	* @Description: TODO(查询整个任务列表) 
+	* @param @return    设定文件 
+	* @return JSONObject    返回类型 
+	* @throws
+	 */
+	@Deprecated
+	@ApiOperation(value = "查询我的全部的任务列表", notes = "查询我的全部的任务列表")
+	@ApiImplicitParams({
+        @ApiImplicitParam(name = "taskNum", value = "任务编号", required = false, paramType = "form", dataType = "String"),
+        @ApiImplicitParam(name = "taskName", value = "任务名称", required = false, paramType = "form", dataType = "String"),
+        @ApiImplicitParam(name = "project.id", value = "项目标识号", required = false, paramType = "form", dataType = "String"),
+        @ApiImplicitParam(name = "priority", value = "优先级", required = false, paramType = "form", dataType = "String"),
+        @ApiImplicitParam(name = "assignUser.userId", value = "指派人标识号", required = false, paramType = "form", dataType = "String"),
+        @ApiImplicitParam(name = "status", value = "任务状态", required = false, paramType = "form", dataType = "String") })
+	@RequestMapping(value = "/queryAllTaskList", method = RequestMethod.POST)
+	public JSONObject queryAllTaskList(@ApiIgnore Task task){
+		ExecuteResult<List<Task>> result = new ExecuteResult<List<Task>>();
+		try {
+			User user = (User) ShiroUtils.getSessionAttribute("user");
+			//检查用户是否登录，需要去session中获取用户登录信息
+			if(user==null){
+				return ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
+            }
+			//设置被指派人+待办限制
+			User userL = new User();
+			userL.setUserId(user.getUserId());
+			task.setBeassignUser(userL);
+			result = taskPendingService.queryAllTaskList(task);
+			//判断是否成功
+			if(result.isSuccess()){
+				return ApiResponse.jsonData(APIStatus.OK_200,result.getResult());
+			}
+			return ApiResponse.jsonData(APIStatus.ERROR_500, result.getResult());
+		}catch (Exception e) {
+			//异常
+			return ApiResponse.jsonData(APIStatus.ERROR_500,e.getMessage());
+		}
+	}
 
 	/**
 	 * 我的待办任务转为延期
@@ -271,40 +305,6 @@ public class TaskPendingController {
 			logger.error(e.getMessage());
 			//异常错误
 			return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
-		}
-	}
-	
-	/**
-	 * 
-	* @Title: queryTaskByTaskId 
-	* @Description: TODO(查询taskId下的所有子节点) 
-	* @param @param taskId
-	* @param @return    设定文件 
-	* @return JSONObject    返回类型 
-	* @throws
-	 */
-	@Deprecated
-	@ApiOperation(value = "查询任务详情", notes = "查询任务详情")
-	@RequestMapping(value = "/queryTaskNodeById", method = RequestMethod.POST)
-	public JSONObject queryTaskNodeById(
-			@ApiParam(name = "id", value = "任务标识号", required = true) @RequestParam(required = true) String id){
-		ExecuteResult<Map<String, Object>> result = new ExecuteResult<Map<String, Object>>();
-		try {
-			User user = (User) ShiroUtils.getSessionAttribute("user");
-			//检查用户是否登录，需要去session中获取用户登录信息
-			if(user==null){
-				return ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
-            }
-			result = taskPendingService.queryTaskNodeById(Long.valueOf(id));
-			//判断是否成功
-			if(result.isSuccess()){
-				return ApiResponse.jsonData(APIStatus.OK_200,result.getResult());
-			}
-			return ApiResponse.jsonData(APIStatus.ERROR_500, result.getResult());
-		}catch (Exception e) {
-			logger.error(e.getMessage());
-			//异常
-			return ApiResponse.jsonData(APIStatus.ERROR_500,e.getMessage());
 		}
 	}
 	
@@ -490,7 +490,6 @@ public class TaskPendingController {
 	* @return JSONObject    返回类型 
 	* @throws
 	 */
-	@Deprecated
 	@ApiOperation(value = "勿调用，一期无用接口，添加子任务", notes = "勿调用，一期无用接口，添加子任务")
 	@ApiImplicitParams({
         @ApiImplicitParam(name = "taskNum", value = "任务编号", required = true, paramType = "form", dataType = "String"),

@@ -111,13 +111,13 @@ public class TaskPendingServiceImpl implements TaskPendingService{
 				return result;
             }
             Task task = taskMapper.queryTaskNodeById(id);
-            TaskFile taskFile = new TaskFile();
+            //TaskFile taskFile = new TaskFile();
             // 来源id
-            taskFile.setSourceId(task.getId());
+            //taskFile.setSourceId(task.getId());
             // 任务来源
-            taskFile.setAttachmentSource("任务");
+            //taskFile.setAttachmentSource("任务");
             // 添加附件信息到map
-            map.put("TaskFile", taskFileService.queryByTaskFile(taskFile));
+            //map.put("TaskFile", taskFileService.queryByTaskFile(taskFile));
             // 添加任务信息到map
             map.put("Task", task);
             result.setResult(map);
@@ -151,12 +151,12 @@ public class TaskPendingServiceImpl implements TaskPendingService{
 				//根据id更新待办任务状态为正在进行
 				taskMapper.updateTaskStatus(id,TaskStatus.RUNING.getValue());
 				//日志记录
-				taskLogService.insertTaskLog(id,"修改任务状态由：“待办”转换为“正在进行”");
+				taskLogService.insertTaskLog(id,"开始任务","修改任务状态由：“待办”转换为“正在进行”");
 			}else if(TaskStatus.CLOSE.getValue().equals(taskStatus)){
 				//根据id更新待办任务状态为关闭
 				taskMapper.updateTaskStatus(id,TaskStatus.CLOSE.getValue());
 				//日志记录
-				taskLogService.insertTaskLog(id,"修改任务状态由：“待办”转换为“关闭”");
+				taskLogService.insertTaskLog(id,"关闭任务","修改任务状态由：“待办”转换为“关闭”");
 			}
 		}
 		catch (Exception e) {
