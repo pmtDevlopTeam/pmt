@@ -18,11 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.alibaba.fastjson.JSONObject;
 import com.camelot.pmt.common.APIStatus;
 import com.camelot.pmt.common.ApiResponse;
-import com.camelot.pmt.common.DataGrid;
-import com.camelot.pmt.common.ExecuteResult;
-import com.camelot.pmt.common.Pager;
 import com.camelot.pmt.platform.model.Org;
-import com.camelot.pmt.platform.model.OrgToUser;
 import com.camelot.pmt.platform.model.User;
 import com.camelot.pmt.platform.service.OrgService;
 import com.camelot.pmt.platform.shiro.ShiroUtils;
@@ -124,12 +120,12 @@ public class OrgController {
 	public JSONObject addOrg(@ApiIgnore Org org) {
 		String result="";
 		try {
-			/*User user = (User) ShiroUtils.getSessionAttribute("user");
+			User user = (User) ShiroUtils.getSessionAttribute("user");
             if (StringUtils.isEmpty(user.getUserId())) {
                 ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
             }
             org.setCreatUserId(user.getUserId());
-            org.setModifyUserId(user.getUserId());*/
+            org.setModifyUserId(user.getUserId());
             if (StringUtils.isEmpty(org.getOrgId()) && StringUtils.isEmpty(org.getOrgCode()) && StringUtils.isEmpty(org.getOrgname()) && StringUtils.isEmpty(org.getSortNum()) && StringUtils.isEmpty(org.getState())) {
                 ApiResponse.jsonData(APIStatus.ERROR_400);
             }
@@ -164,7 +160,7 @@ public class OrgController {
 	/**
 	 * 删除多个子部门机构  递归删除
 	 */
-	@ApiOperation(value = "删除部门本身以及孩子部门", notes = "删除部门本身以及孩子部门")
+	@ApiOperation(value = "删除本部门本身以及子部门", notes = "删除本部门本身以及子部门")
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "orgId", value = "部门id", required = true, paramType = "query", dataType = "String") })
 	@RequestMapping(value = "/deleteOrgSubByOrgId", method = RequestMethod.POST)
@@ -194,9 +190,7 @@ public class OrgController {
 		@ApiImplicitParam(name = "parentId", value = "上级部门", required = false, paramType = "form", dataType = "String"),
 		@ApiImplicitParam(name = "orgId", value = "部门id", required = true, paramType = "form", dataType = "String"),
 		@ApiImplicitParam(name = "state", value = "部门状态", required = false, paramType = "form", dataType = "String"),
-		@ApiImplicitParam(name = "sortNum", value = "部门排序号", required = false, paramType = "form", dataType = "String"),
-		@ApiImplicitParam(name = "orgCode", value = "部门编号", required = false, paramType = "form", dataType = "String"),
-		@ApiImplicitParam(name = "modifyUserId", value = "修改人", required = false, paramType = "form", dataType = "String")
+		@ApiImplicitParam(name = "sortNum", value = "部门排序号", required = false, paramType = "form", dataType = "String")
 		})
 	@RequestMapping(value = "/updateOrgByOrgId", method = RequestMethod.POST)
 	@ResponseBody
@@ -242,24 +236,7 @@ public class OrgController {
     	}
     }
     
-	 /** 组织机构列表详情(关系到用户 )
-	 * @param OrgToUser
-	 * @return JSONObject
-	 * 
-	 **/
-    @ApiOperation(value="获取组织机构列表详情(关系到用户 )", notes="获取组织机构列表详情(关系到用户 )")
-    @RequestMapping(value = "/queryOrgsDetail",method = RequestMethod.POST)
-    
-    public JSONObject queryOrgsDetail(){
-    	List<OrgToUser> result = new ArrayList<OrgToUser>();
-    	try {
-    		result = orgService.queryOrgsDetail();
-    			return ApiResponse.success(result);
-    	}catch (Exception e) {
-    		logger.error(e.getMessage());
-    		return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
-    	}
-    }
+	 
     
     /** 添加组织机构与用户的绑定(关系到用户 )
 	 * @param orgId   userIds
@@ -374,15 +351,22 @@ public class OrgController {
     }
     
     
-    /** 组织机构  根据orgId,orgCode,orgname 多条件模糊查询所有部门信息
+    /** 组织机构   多条件模糊查询所有部门信息
 	 * @param orgId,orgCode,orgname
 	 * @return List<Org>
 	 * 
 	 **/
-    @ApiOperation(value = "组织机构  根据orgId,orgCode,orgname 多条件模糊查询所有部门信息", notes = "组织机构  根据orgId,orgCode,orgname 多条件模糊查询所有部门信息组织机构绑定用户  根据orgId查询所有用户")
+    @ApiOperation(value = "组织机构   多条件模糊查询所有部门信息", notes = "组织机构  多条件模糊查询所有部门信息组织机构绑定用户  ")
     @PostMapping(value = "/queryOrgByParameters")
     @ApiImplicitParams({
-        	@ApiImplicitParam(name = "Strings", value = "参数",required = true, paramType = "query", dataType = "String")
+    	@ApiImplicitParam(name = "orgname", value = "部门名称", required = false, paramType = "form", dataType = "String"),
+		@ApiImplicitParam(name = "parentId", value = "上级部门", required = false, paramType = "form", dataType = "String"),
+		@ApiImplicitParam(name = "state", value = "部门状态", required = false, paramType = "form", dataType = "String"),
+		@ApiImplicitParam(name = "sortNum", value = "部门排序号", required = false, paramType = "form", dataType = "String"),
+		@ApiImplicitParam(name = "orgCode", value = "部门编号", required = false, paramType = "form", dataType = "String"),
+		@ApiImplicitParam(name = "createTime", value = "部门创建时间", required = false, paramType = "form", dataType = "String"),
+		@ApiImplicitParam(name = "pageNum", value = "页码", defaultValue = "1" ,required = true, paramType = "query", dataType = "int"),
+    	@ApiImplicitParam(name = "pageSize", value = "每页数量", defaultValue = "10" ,required = true, paramType = "query", dataType = "int")
             })
     
     public JSONObject queryOrgInfo(@ApiIgnore Org org ,int pageNum,int pageSize){
@@ -394,21 +378,5 @@ public class OrgController {
     		return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
     	}
     }
-    /** 组织机构   根据orgId查看详情(关系到用户 )
-	 * @param OrgToUser
-	 * @return JSONObject
-	 **/
-    @ApiOperation(value="组织机构   根据orgId查看详情", notes="组织机构   根据orgId查看详情")
-    @RequestMapping(value = "/queryOrgsDetailByOrgId",method = RequestMethod.POST)
-    public JSONObject queryOrgsDetail(String orgId){
-    	try {
-    		if (StringUtils.isEmpty(orgId)) {
-                return ApiResponse.jsonData(APIStatus.ERROR_400);
-            }
-    			return ApiResponse.success(orgService.queryOrgsDetailByOrgId(orgId));
-    	}catch (Exception e) {
-    		logger.error(e.getMessage());
-    		return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
-    	}
-    }
+    
 }

@@ -34,6 +34,7 @@ public interface CaseRepertoryMapper {
     CaseRepertory selectByPrimaryKey(Long id);
     List<CaseRepertory> find(Map<String, Object> param);
     List<CaseRepertory> selectCondition(CaseRepertory caseRepertory);
+    int querySequence();
 
 
 }

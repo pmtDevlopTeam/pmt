@@ -6,26 +6,25 @@ import com.github.pagehelper.PageInfo;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 
-* @ClassName: TaskPendingService
-* @Description: TODO(任务-我的待办service)
-* @author gxl
-* @date 2018年4月9日 下午5:30:05
-*
+ * @ClassName: TaskPendingService
+ * @Description: TODO(任务-我的待办service)
+ * @author gxl
+ * @date 2018年4月9日 下午5:30:05
+ *
  */
 public interface TaskPendingService {
-	/**
-	 * 
-	* @Title: save 
-	* @Description: TODO(保存任务) 
-	* @param @param task
-	* @param @return    设定文件 
-	* @return ExecuteResult<String>    返回类型 
-	* @throws
-	 */
-	ExecuteResult<String> save(Task task);
+    /**
+     * 
+     * @Title: save @Description: TODO(保存任务) @param @param task @param @return
+     * 设定文件 @return ExecuteResult<String> 返回类型 @throws
+     */
+    ExecuteResult<String> save(Task task);
 
 	/**
 	 * 
@@ -64,20 +63,31 @@ public interface TaskPendingService {
 	* @Title: queryAllTaskList 
 	* @Description: TODO(查询所有的Task任务列表) 
 	* @param @return    设定文件 
-	* @return ExecuteResult<PageInfo<Task>>    返回类型 
+	* @return ExecuteResult<List<Task>>    返回类型 
 	* @throws
 	 */
-	ExecuteResult<PageInfo<Task>> queryAllTaskList(Task task,Integer page, Integer rows);
+	ExecuteResult<List<Task>> queryAllTaskList(Task task);
 	
 	/**
 	 * 
 	* @Title: queryMyPendingTaskList 
 	* @Description: TODO(查询我的待办Task任务列表) 
 	* @param @return    设定文件 
-	* @return ExecuteResult<PageInfo<Task>>    返回类型 
+	* @return ExecuteResult<List<Task>>    返回类型 
 	* @throws
 	 */
-	ExecuteResult<PageInfo<Task>> queryMyPendingTaskList(Task task,Integer page, Integer rows);
+	ExecuteResult<List<Task>> queryMyPendingTaskList(Task task);
+	
+	/**
+	 * 
+	* @Title: queryTaskNodeById 
+	* @Description: TODO(根据任务id查询任务详情) 
+	* @param @param id
+	* @param @return    设定文件 
+	* @return Map<String,Object>    返回类型 
+	* @throws
+	 */
+	ExecuteResult<Map<String, Object>> queryTaskNodeById(Long id);
 	
 	/**
 	 * 
@@ -149,12 +159,24 @@ public interface TaskPendingService {
 	* @Title: updateTaskPendingToRuning 
 	* @Description: TODO(我的待办任务状态转为正在进行) 
 	* @param @param id
-	* @param @param taskType
+	* @param @param taskStatus
 	* @param @return    设定文件 
 	* @return ExecuteResult<String>    返回类型 
 	* @throws
 	 */
 	ExecuteResult<String> updateTaskPendingToRunning(Long id, String taskStatus);
+	
+	/**
+	 * 
+	* @Title: updateTaskPendingToStatus 
+	* @Description: TODO(我的待办任务状态转为正在进行或者关闭) 
+	* @param @param id
+	* @param @param taskStatus
+	* @param @return    设定文件 
+	* @return ExecuteResult<String>    返回类型 
+	* @throws
+	 */
+	ExecuteResult<String> updateTaskPendingToStatus(Long id, String taskStatus);
 	
 	/**
 	 * 
@@ -182,5 +204,15 @@ public interface TaskPendingService {
 	* @throws
 	 */
 	ExecuteResult<String> updateTaskToAssign(Long id, Long assignUserId, Long beassignUserId);
+	
+	/**
+	* @Title: updateTaskPending 
+	* @Description: TODO(修改待办任务) 
+	* @param @param task
+	* @param @return    设定文件 
+	* @return JSONObject    返回类型 
+	* @throws
+	 */
+	ExecuteResult<String> updateTaskPending(Long id,String taskDescribe,MultipartFile file);
 	
 }

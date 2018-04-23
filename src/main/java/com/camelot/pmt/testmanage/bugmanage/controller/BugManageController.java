@@ -86,6 +86,7 @@ public class BugManageController {
 		            }
 		            return ApiResponse.error("添加bug异常");
 		        } catch (Exception e) {
+		        	e.printStackTrace();
 		        	 logger.error(e.getMessage());
 		             return ApiResponse.jsonData(APIStatus.ERROR_500);
 		        }

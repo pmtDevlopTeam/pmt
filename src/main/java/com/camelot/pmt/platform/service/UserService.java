@@ -109,6 +109,26 @@ public interface UserService {
 	
 	/**
 	 * 
+	 * Description:[用户修改密码]
+	 * @param User user
+	 * @return String
+	 * @author [maple]
+	 * 2018年4月16日下午10:44:45
+	 */
+	String updateUserPasswordByUserId(User user);
+	
+	/**
+	 * 
+	 * Description:[用户验证旧密码]
+	 * @param User user
+	 * @return boolean
+	 * @author [maple]
+	 * 2018年4月16日下午10:44:45
+	 */
+	boolean checkOldUserPassword(String password);
+	
+	/**
+	 * 
 	 * Description:[根据用户名模糊查询获取user对象]
 	 * @param String username
 	 * @return List<User>

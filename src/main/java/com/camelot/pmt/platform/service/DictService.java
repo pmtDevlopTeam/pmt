@@ -3,6 +3,7 @@ package com.camelot.pmt.platform.service;
 
 import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.platform.model.Dict;
+import com.camelot.pmt.platform.model.Org;
 
 import java.util.List;
 
@@ -35,6 +36,12 @@ public interface DictService {
 	 * @return boolean
 	 */
 	boolean updateDictByDictId(Dict dict);
+	/** 修改组织机构的状态
+	 * @param orgId state
+	 * @return JSONObject
+	 * 
+	 **/
+	boolean updateDictByDictIdAndState(Dict dict);
     /**
      * 根据字典dictId 查询一个字典
      * 
@@ -48,7 +55,7 @@ public interface DictService {
      * @param 
      * @return List<Dict>
      */
-	List<Dict> selectDictListAll();
+	List<Dict> queryDictListAll();
 //    /**
 //     *检查字典编码是否存在
 //     *

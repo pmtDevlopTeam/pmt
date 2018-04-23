@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.camelot.pmt.platform.model.Dict;
 import com.camelot.pmt.platform.model.DictItem;
+import com.camelot.pmt.platform.model.Org;
 
 /**
  * 字典管理Mapper数据层接口
@@ -43,6 +44,13 @@ public interface DictMapper {
 	 * @return int	1：成功；非1：失败
 	 */
 	int updateDictByDictId(Dict dict);
+	/**
+	 *  根据字典dictId state 修改一个字典状态
+	 * @param dictId state
+	 * @return int	1：成功；非1：失败
+	 * 
+	 **/
+	int updateDictByDictIdAndState(Dict dict);
     /**
      * 根据字典dictId 查询一个字典
      * @param String dictId
@@ -55,7 +63,7 @@ public interface DictMapper {
      * @param 
      * @return List<Dict>
      */
-    List<Dict> selectDictListAll();
+    List<Dict> queryDictListAll();
     /**
      *查询字典总数量
      *

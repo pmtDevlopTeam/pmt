@@ -78,6 +78,13 @@ public interface BugManageMapper {
       */
      List<SelectBugManage> queryByPUS(Map<String,Object> map);
      
+     /**
+      * 查询最后一条bug记录
+      * @param id
+      * @return
+      */
+     SelectBugManage queryBugLimit();
+     
     
      
     

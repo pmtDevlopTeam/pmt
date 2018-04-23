@@ -22,7 +22,6 @@ import springfox.documentation.annotations.ApiIgnore;
 import java.util.List;
 import java.util.Map;
 
-
 @RestController
 @RequestMapping("/task/taskAlready")
 @Api(value = "我的工作台-我的已办-接口", description = "我的工作台-我的已办-接口")
@@ -38,72 +37,71 @@ public class TaskAlreadyController {
     private TaskLogService taskLogService;
 
     /**
-     * (我的已完成任务转为正在进行)   重做功能
-     * updateTaskAlreadyToRunning
+     * (我的已完成任务转为正在进行) 重做功能 updateTaskAlreadyToRunning
      *
-     * @param Long id
+     * @param Long
+     *            id
      * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
 
     @ApiOperation(value = "我的已完成任务转为正在进行、重做功能", notes = "我的已完成任务转为正在进行、重做功能")
     @RequestMapping(value = "/updateTaskAlreadyToRunning", method = RequestMethod.POST)
     public JSONObject updateTaskAlreadyToRunning(
-            @ApiParam(name = "id", value = "任务ID", required = true) @RequestParam(required = true) Long id){
+            @ApiParam(name = "id", value = "任务ID", required = true) @RequestParam(required = true) Long id) {
         ExecuteResult<String> result = new ExecuteResult<String>();
         try {
             Long userLoginId = Long.valueOf(1);
-            //检查用户是否登录，需要去session中获取用户登录信息
-            if(StringUtils.isEmpty(userLoginId)){
+            // 检查用户是否登录，需要去session中获取用户登录信息
+            if (StringUtils.isEmpty(userLoginId)) {
                 return ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
             }
-            //更新我的任务为关闭
+            // 更新我的任务为关闭
             result = taskAlreadyService.updateTaskAlreadyToRunning(id);
-            //判断是否成功
-            if(result.isSuccess()){
-                return ApiResponse.jsonData(APIStatus.OK_200,result.getResult());
+            // 判断是否成功
+            if (result.isSuccess()) {
+                return ApiResponse.jsonData(APIStatus.OK_200, result.getResult());
             }
             return ApiResponse.jsonData(APIStatus.ERROR_500, result.getResult());
-        }catch (Exception e) {
-            //异常
-            return ApiResponse.jsonData(APIStatus.ERROR_500,e.getMessage());
+        } catch (Exception e) {
+            // 异常
+            return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
         }
     }
 
     /**
-     * 我的已办 提测功能
-     * updateTaskToTest
+     * 我的已办 提测功能 updateTaskToTest
      *
-     * @param Long id
+     * @param Long
+     *            id
      * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
 
     @ApiOperation(value = "提测功能", notes = "提测功能")
     @RequestMapping(value = "/updateTaskToTest", method = RequestMethod.POST)
     public JSONObject updateTaskToTest(
-            @ApiParam(name = "id", value = "任务ID", required = true) @RequestParam(required = true) Long id){
+            @ApiParam(name = "id", value = "任务ID", required = true) @RequestParam(required = true) Long id) {
         ExecuteResult<String> result = new ExecuteResult<String>();
         try {
             Long userLoginId = Long.valueOf(1);
-            //检查用户是否登录，需要去session中获取用户登录信息
-            if(StringUtils.isEmpty(userLoginId)){
+            // 检查用户是否登录，需要去session中获取用户登录信息
+            if (StringUtils.isEmpty(userLoginId)) {
                 return ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
             }
-            //更新我的任务为关闭
+            // 更新我的任务为关闭
             result = taskAlreadyService.updateTaskToTest(id);
-            //判断是否成功
-            if(result.isSuccess()){
-                return ApiResponse.jsonData(APIStatus.OK_200,result.getResult());
+            // 判断是否成功
+            if (result.isSuccess()) {
+                return ApiResponse.jsonData(APIStatus.OK_200, result.getResult());
             }
             return ApiResponse.jsonData(APIStatus.ERROR_500, result.getResult());
-        }catch (Exception e) {
-            //异常
-            return ApiResponse.jsonData(APIStatus.ERROR_500,e.getMessage());
+        } catch (Exception e) {
+            // 异常
+            return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
         }
     }
 
     /**
-     * 查询所有已完成的任务
-     * queryTaskAlready
+     * 查询所有已完成的任务 queryTaskAlready
      *
      * @param
      * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
@@ -118,8 +116,8 @@ public class TaskAlreadyController {
             @ApiImplicitParam(name = "project.projectName", value = "项目名称", required = true, paramType = "query", dataType = "ProjectMain"),
 
             @ApiImplicitParam(name = "page", value = "页码", required = true, paramType = "query", dataType = "Integer"),
-            @ApiImplicitParam(name = "rows", value = "每页数量", required = true, paramType = "query", dataType = "Integer")})
-    public JSONObject queryTaskAlready(@ApiIgnore Task task, Integer page , Integer rows) {
+            @ApiImplicitParam(name = "rows", value = "每页数量", required = true, paramType = "query", dataType = "Integer") })
+    public JSONObject queryTaskAlready(@ApiIgnore Task task, Integer page, Integer rows) {
         String userLoginId = String.valueOf(1);
         ExecuteResult<PageInfo<Task>> result = new ExecuteResult<PageInfo<Task>>();
         try {
@@ -134,10 +132,10 @@ public class TaskAlreadyController {
     }
 
     /**
-     * 查询单个任务明细
-     * queryTaskById
+     * 查询单个任务明细 queryTaskById
      *
-     * @param Long id
+     * @param Long
+     *            id
      * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
 
@@ -154,10 +152,10 @@ public class TaskAlreadyController {
     }
 
     /**
-     * 查询任务历史记录  重做页面
-     * queryTaskLogList
+     * 查询任务历史记录 重做页面 queryTaskLogList
      *
-     * @param Long id
+     * @param Long
+     *            id
      * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
 
@@ -178,10 +176,10 @@ public class TaskAlreadyController {
     }
 
     /**
-     * 查询任务历史记录  提测页面
-     * queryTaskLogList
+     * 查询任务历史记录 提测页面 queryTaskLogList
      *
-     * @param Long id
+     * @param Long
+     *            id
      * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
 

@@ -195,12 +195,8 @@ public class UserServiceImpl implements UserService{
 		user.setModifyUserId(loginUser.getUserId());
 		// 1.判断用户表需要更新的字段
 		if (!StringUtils.isEmpty(user.getUsername()) || !StringUtils.isEmpty(user.getLoginCode())
-				|| !StringUtils.isEmpty(user.getPassword()) || !StringUtils.isEmpty(user.getState())
+				|| !StringUtils.isEmpty(user.getState())
 				|| !StringUtils.isEmpty(user.getModifyUserId())) {
-			if (!StringUtils.isEmpty(user.getPassword())) {
-				String encryptPassword = new Sha256Hash(user.getPassword()).toHex();
-				user.setPassword(encryptPassword);
-			}
 			int updateResult = userMapper.updateUserByUserId(user);
 			if (updateResult == 0) {
 				return "更新用户失败！";
@@ -311,6 +307,51 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public List<User> queryUsersByUserName(String username) {
 		return userMapper.queryUsersByUserName(username);
+	}
+
+
+	/**
+	 * 
+	 * Description:[根据用户userId 修改用户密码]
+	 * @param User use
+	 * @return String
+	 * @author [maple]
+	 * 2018年4月18日下午3:49:33
+	 */
+	@Override
+	public String updateUserPasswordByUserId(User user) {
+		User loginUser = (User) ShiroUtils.getSessionAttribute("user");
+		user.setModifyUserId(loginUser.getUserId());
+		user.setUserId(loginUser.getUserId());
+		if (user.getNewPassword().equals(user.getSecondNewPassword())) {
+			String toDbPassword = new Sha256Hash(user.getNewPassword()).toHex();
+			user.setPassword(toDbPassword);
+			int updateResult = userMapper.updateUserByUserId(user);
+			if (updateResult == 0) {
+				return "修改密码失败！";
+			}
+		} else {
+			return "两次新密码输入不一致！";
+		}
+
+		return "修改密码成功！";
+	}
+
+	/**
+	 * 
+	 * Description:[验证用户旧密码]
+	 * @param String password
+	 * @return String
+	 * @author [maple]
+	 * 2018年4月18日下午3:49:33
+	 */
+	@Override
+	public boolean checkOldUserPassword(String password) {
+		User loginUser = (User) ShiroUtils.getSessionAttribute("user");
+		// 检查用户输入密码是否与库里的一致
+		String dbPassword = userMapper.findUserPasswordByLoginCode(loginUser.getLoginCode());
+		String encryptPassword = new Sha256Hash(password).toHex();
+		return encryptPassword.equals(dbPassword);
 	}
 
 }

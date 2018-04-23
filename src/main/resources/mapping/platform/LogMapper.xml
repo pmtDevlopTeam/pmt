@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.camelot.pmt.platform.mapper.LogMapper" >
+    <resultMap id="BaseResultMap" type="com.camelot.pmt.platform.model.Log" >
+        <id column="id" property="id"/>
+        <result column="log_type" property="logType"/>
+        <result column="log_operation_type" property="logOperationType"/>
+        <result column="log_operation_time" property="logOperationTime"/>
+        <result column="log_operation_user_id" property="logOperationUserId"/>
+        <result column="log_content" property="logContent"/>
+        <result column="log_key_word" property="logKeyWord"/>
+    </resultMap>
+    
+    <sql id="Base_Column_List" >
+        id,log_type,log_operation_type,log_operation_time,log_operation_user_id,log_content,log_key_word
+    </sql>
+    <sql id="add_Column_List" >
+        <trim suffixOverrides=",">
+            <if test="logType != null">log_type,</if>
+            <if test="logOperationType != null">log_operation_type,</if>
+            <if test="logOperationTime != null">log_operation_time,</if>
+            <if test="logOperationUserId != null">log_operation_user_id,</if>
+            <if test="logContent != null">log_content,</if>
+            <if test="logKeyWord != null">log_key_word,</if>
+        </trim>
+    </sql>
+
+    <sql id="sql_add_properties">
+        <trim suffixOverrides=",">
+            <if test="logType != null">#{logType},</if>
+            <if test="logOperationType != null">#{logOperationType},</if>
+            <if test="logOperationTime != null">#{logOperationTime},</if>
+            <if test="logOperationUserId != null">#{logOperationUserId},</if>
+            <if test="logContent != null">#{logContent},</if>
+            <if test="logKeyWord != null">#{logKeyWord},</if>
+        </trim>
+    </sql>
+
+
+    <!--添加删除日志-->
+    <insert id="insertLog" parameterType="Log">
+        INSERT INTO platform_log(
+            <include refid="add_Column_List"/>
+            ) VALUES (
+            <include refid="sql_add_properties"/>
+        )
+    </insert>
+
+
+</mapper>

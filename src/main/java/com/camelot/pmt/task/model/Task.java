@@ -3,19 +3,18 @@ package com.camelot.pmt.task.model;
 import com.camelot.pmt.platform.model.User;
 import com.camelot.pmt.project.model.Demand;
 import com.camelot.pmt.project.model.ProjectMain;
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class Task implements Serializable{
-	
-	private static final long serialVersionUID = 1L;
-	/**
-	 * 任务ID（主键）
-	 */
+public class Task implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+    /**
+     * 任务ID（主键）
+     */
     private Long id;
     /**
      * 任务编号
@@ -133,7 +132,7 @@ public class Task implements Serializable{
      * 已经消耗工时
      */
     private String elapsedTime;
-    
+
     /**
      * 剩余工时
      */
@@ -146,7 +145,12 @@ public class Task implements Serializable{
     public Task() {
     }
 
-    public Task(Long id, String taskNum, String taskName, Long taskParentId, ProjectMain project, Demand demand, String priority, User assignUser, User beassignUser, Date assignTime, Date estimateStartTime, Date estimateEndTime, Date actualStartTime, Date actualEndTime, String taskType, String taskSpeed, String status, String nodeLv, String taskDescribe, String demandChange, String delayDescribe, Long estimateHour, Long infactHour, String taskMileage, User createUser, String modifyUserId, Date createTime, Date modifyTime, List<Task> children) {
+    public Task(Long id, String taskNum, String taskName, Long taskParentId, ProjectMain project, Demand demand,
+            String priority, User assignUser, User beassignUser, Date assignTime, Date estimateStartTime,
+            Date estimateEndTime, Date actualStartTime, Date actualEndTime, String taskType, String taskSpeed,
+            String status, String nodeLv, String taskDescribe, String demandChange, String delayDescribe,
+            Long estimateHour, Long infactHour, String taskMileage, User createUser, String modifyUserId,
+            Date createTime, Date modifyTime, List<Task> children) {
         this.id = id;
         this.taskNum = taskNum;
         this.taskName = taskName;
@@ -410,46 +414,43 @@ public class Task implements Serializable{
     public void setChildren(List<Task> children) {
         this.children = children;
     }
-    
 
     public String getElapsedTime() {
-		return elapsedTime;
-	}
+        return elapsedTime;
+    }
 
-	public void setElapsedTime(String elapsedTime) {
-		this.elapsedTime = elapsedTime;
-	}
+    public void setElapsedTime(String elapsedTime) {
+        this.elapsedTime = elapsedTime;
+    }
 
-	public String getRemainingWork() {
-		return remainingWork;
-	}
+    public String getRemainingWork() {
+        return remainingWork;
+    }
 
-	public void setRemainingWork(String remainingWork) {
-		this.remainingWork = remainingWork;
-	}
-	
+    public void setRemainingWork(String remainingWork) {
+        this.remainingWork = remainingWork;
+    }
 
-	public List<TaskLog> getTaskLogList() {
-		return taskLogList;
-	}
+    public List<TaskLog> getTaskLogList() {
+        return taskLogList;
+    }
 
-	public void setTaskLogList(List<TaskLog> taskLogList) {
-		this.taskLogList = taskLogList;
-	}
+    public void setTaskLogList(List<TaskLog> taskLogList) {
+        this.taskLogList = taskLogList;
+    }
 
-	@Override
-	public String toString() {
-		return "Task [id=" + id + ", taskNum=" + taskNum + ", taskName=" + taskName + ", taskParentId=" + taskParentId
-				+ ", project=" + project + ", demand=" + demand + ", priority=" + priority + ", assignUser="
-				+ assignUser + ", beassignUser=" + beassignUser + ", assignTime=" + assignTime + ", estimateStartTime="
-				+ estimateStartTime + ", estimateEndTime=" + estimateEndTime + ", actualStartTime=" + actualStartTime
-				+ ", actualEndTime=" + actualEndTime + ", taskType=" + taskType + ", taskSpeed=" + taskSpeed
-				+ ", status=" + status + ", nodeLv=" + nodeLv + ", taskDescribe=" + taskDescribe + ", demandChange="
-				+ demandChange + ", delayDescribe=" + delayDescribe + ", estimateHour=" + estimateHour + ", infactHour="
-				+ infactHour + ", taskMileage=" + taskMileage + ", createUser=" + createUser + ", modifyUserId="
-				+ modifyUserId + ", createTime=" + createTime + ", modifyTime=" + modifyTime + ", children=" + children
-				+ ", elapsedTime=" + elapsedTime + ", remainingWork=" + remainingWork + "]";
-	}
-	
-	
+    @Override
+    public String toString() {
+        return "Task [id=" + id + ", taskNum=" + taskNum + ", taskName=" + taskName + ", taskParentId=" + taskParentId
+                + ", project=" + project + ", demand=" + demand + ", priority=" + priority + ", assignUser="
+                + assignUser + ", beassignUser=" + beassignUser + ", assignTime=" + assignTime + ", estimateStartTime="
+                + estimateStartTime + ", estimateEndTime=" + estimateEndTime + ", actualStartTime=" + actualStartTime
+                + ", actualEndTime=" + actualEndTime + ", taskType=" + taskType + ", taskSpeed=" + taskSpeed
+                + ", status=" + status + ", nodeLv=" + nodeLv + ", taskDescribe=" + taskDescribe + ", demandChange="
+                + demandChange + ", delayDescribe=" + delayDescribe + ", estimateHour=" + estimateHour + ", infactHour="
+                + infactHour + ", taskMileage=" + taskMileage + ", createUser=" + createUser + ", modifyUserId="
+                + modifyUserId + ", createTime=" + createTime + ", modifyTime=" + modifyTime + ", children=" + children
+                + ", elapsedTime=" + elapsedTime + ", remainingWork=" + remainingWork + "]";
+    }
+
 }

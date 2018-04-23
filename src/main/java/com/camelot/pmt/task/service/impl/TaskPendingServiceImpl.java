@@ -1,34 +1,37 @@
 package com.camelot.pmt.task.service.impl;
 
 import com.baomidou.mybatisplus.plugins.pagination.PageHelper;
-import com.camelot.pmt.common.ApiResponse;
 import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.task.mapper.TaskMapper;
 import com.camelot.pmt.task.model.Task;
+import com.camelot.pmt.task.model.TaskFile;
+import com.camelot.pmt.task.service.TaskFileService;
+import com.camelot.pmt.task.service.TaskLogService;
 import com.camelot.pmt.task.service.TaskPendingService;
 import com.camelot.pmt.task.utils.Constant.TaskStatus;
-import com.camelot.pmt.task.utils.Constant.TaskType;
 import com.github.pagehelper.PageInfo;
 import com.camelot.pmt.task.utils.RRException;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
  * 
-* @ClassName: TaskPendingServiceImpl
-* @Description: TODO(任务-我的待办业务类)
-* @author gxl
-* @date 2018年4月9日 下午5:31:16
-*
+ * @ClassName: TaskPendingServiceImpl
+ * @Description: TODO(任务-我的待办业务类)
+ * @author gxl
+ * @date 2018年4月9日 下午5:31:16
+ *
  */
 @Service
 public class TaskPendingServiceImpl implements TaskPendingService{
@@ -37,6 +40,283 @@ public class TaskPendingServiceImpl implements TaskPendingService{
 	
 	@Autowired
     private TaskMapper taskMapper;
+	
+	@Autowired
+    private TaskFileService taskFileService;
+	
+	@Autowired
+    private TaskLogService taskLogService; 
+	
+	/**
+	 * 
+	* @Title: queryAllTaskList 
+	* @Description: TODO(查询所有的Task任务列表) 
+	* @param @return    设定文件 
+	* @return ExecuteResult<List<Task>>    返回类型 
+	* @throws
+	 */
+	@Override
+	public ExecuteResult<List<Task>> queryAllTaskList(Task task){
+		ExecuteResult<List<Task>> result = new ExecuteResult<List<Task>>();
+		try{
+			//查询所有的Task任务列表
+			List<Task> allTaskList = taskMapper.queryAllTaskList(task);
+			result.setResult(allTaskList);
+		}catch (Exception e) {
+			LOGGER.error(e.getMessage());
+            throw new RRException(e.getMessage(),e);
+		}
+		return result;
+	}
+	
+	/**
+	 * 
+	* @Title: queryMyPendingTaskList 
+	* @Description: TODO(查询我的待办Task任务列表) 
+	* @param @return    设定文件 
+	* @return ExecuteResult<List<Task>>    返回类型 
+	* @throws
+	 */
+	@Override
+	public ExecuteResult<List<Task>> queryMyPendingTaskList(Task task){
+		ExecuteResult<List<Task>> result = new ExecuteResult<List<Task>>();
+		try{
+			//查询所有的Task任务列表
+			List<Task> allTaskList = taskMapper.queryMyPendingTaskList(task);
+			result.setResult(allTaskList);
+		}catch (Exception e) {
+			LOGGER.error(e.getMessage());
+            throw new RRException(e.getMessage(),e);
+		}
+		return result;
+	}
+	
+	/**
+	 * 
+	* @Title: queryTaskNodeById 
+	* @Description: TODO(根据任务id查询任务详情) 
+	* @param @param id
+	* @param @return    设定文件 
+	* @return Map<String,Object>    返回类型 
+	* @throws
+	 */
+	@Override
+	public ExecuteResult<Map<String, Object>> queryTaskNodeById(Long id) {
+		ExecuteResult<Map<String, Object>> result = new ExecuteResult<Map<String, Object>>();
+        Map<String, Object> map = new HashMap<String, Object>();
+        try {
+            // check参数
+            if (id == null) {
+            	result.addErrorMessage("传入的任务Id有误!");
+				return result;
+            }
+            Task task = taskMapper.queryTaskNodeById(id);
+            //TaskFile taskFile = new TaskFile();
+            // 来源id
+            //taskFile.setSourceId(task.getId());
+            // 任务来源
+            //taskFile.setAttachmentSource("任务");
+            // 添加附件信息到map
+            //map.put("TaskFile", taskFileService.queryByTaskFile(taskFile));
+            // 添加任务信息到map
+            map.put("Task", task);
+            result.setResult(map);
+            return result;
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
+            throw new RRException(e.getMessage(),e);
+        }
+    }
+	
+	/**
+	 * 
+	* @Title: updateTaskPendingToStatus
+	* @Description: TODO(我的待办任务转为正在进行或者关闭) 
+	* @param @param taskId taskStatus
+	* @param @return    设定文件 
+	* @return JSONObject    返回类型 
+	* @throws
+	 */
+	@Override
+	@Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
+	public ExecuteResult<String> updateTaskPendingToStatus(Long id,String taskStatus) {
+		ExecuteResult<String> result = new ExecuteResult<String>();
+		try{
+			if(id==null){
+				result.addErrorMessage("传入的参数有误!");
+				return result;
+			}
+			//此处判断是为了防止接口误调用导致数据错误的接口的一层保护
+			if(TaskStatus.RUNING.getValue().equals(taskStatus)){
+				//根据id更新待办任务状态为正在进行
+				taskMapper.updateTaskStatus(id,TaskStatus.RUNING.getValue());
+				//日志记录
+				taskLogService.insertTaskLog(id,"开始任务","修改任务状态由：“待办”转换为“正在进行”");
+			}else if(TaskStatus.CLOSE.getValue().equals(taskStatus)){
+				//根据id更新待办任务状态为关闭
+				taskMapper.updateTaskStatus(id,TaskStatus.CLOSE.getValue());
+				//日志记录
+				taskLogService.insertTaskLog(id,"关闭任务","修改任务状态由：“待办”转换为“关闭”");
+			}
+		}
+		catch (Exception e) {
+			LOGGER.error(e.getMessage());
+            throw new RRException(e.getMessage(),e);
+		}
+		return result;
+	}
+	
+	/**
+	 * 
+	* @Title: updateTaskPendingToRuning 
+	* @Description: TODO(我的待办任务转为正在进行) 
+	* @param @param taskId taskStatus
+	* @param @return    设定文件 
+	* @return JSONObject    返回类型 
+	* @throws
+	 */
+	@Override
+	@Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
+	public ExecuteResult<String> updateTaskPendingToRunning(Long id,String taskStatus) {
+		ExecuteResult<String> result = new ExecuteResult<String>();
+		try{
+			if(id==null){
+				result.addErrorMessage("传入的任务Id有误!");
+				return result;
+			}
+			//查询taskId节点
+			Task taskObj = taskMapper.queryTaskNodeById(id); 
+			taskStatus = taskObj.getStatus();
+			//判断状态是否为待办，如果是待办更新为正在进行
+			if(taskObj != null && TaskStatus.PENDINHG.getValue().equals(taskStatus)){
+				//根据id更新任务状态为正在进行
+				taskMapper.updateTaskStatus(id,TaskStatus.RUNING.getValue());
+				if(taskObj.getTaskParentId() != null){
+					//查询taskId下的所有子节点
+					Task parentTaskNodes = taskMapper.queryParentTaskNodeById(taskObj.getTaskParentId());
+					//判断是否有父节点
+					if(parentTaskNodes!=null){
+						//递归
+						return updateTaskPendingToRunning(parentTaskNodes.getId(),parentTaskNodes.getStatus());
+					}
+				}
+			}
+		}
+		catch (Exception e) {
+			LOGGER.error(e.getMessage());
+            throw new RRException(e.getMessage(),e);
+		}
+		return result;
+	}
+	
+	/**
+	 * 
+	* @Title: updateTaskPendingToDelay
+	* @Description: TODO(我的待办任务转为延期,会将该节点及节点下的所有子节点变为延期状态) 
+	* @param @param taskId taskStatus
+	* @param @return    设定文件 
+	* @return JSONObject    返回类型 
+	* @throws
+	 */
+	@Override
+	@Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
+	public ExecuteResult<String> updateTaskPendingToDelay(Long id,String taskStatus,String delayDescribe,Date estimateStartTime) {
+		ExecuteResult<String> result = new ExecuteResult<String>();
+		try{
+			if(id==null || estimateStartTime == null){
+				result.addErrorMessage("传入的参数有误!");
+				return result;
+			}
+			//判断状态是否为待办
+			if(TaskStatus.PENDINHG.getValue().equals(taskStatus)){
+				//格式化日期格式为yyyy-mm-dd,根据id更新待办任务状态为延期
+				if(!TaskStatus.CLOSE.getValue().equals(taskStatus)){
+					taskMapper.updateTaskPendingToDelay(id,TaskStatus.OVERDUE.getValue(),delayDescribe,estimateStartTime);
+				}
+				//查询taskId下的所有子节点
+				List<Task> childTaskNodes = taskMapper.queryTaskListNodeByParentId(id,null); 
+				//遍历子节点
+				if(childTaskNodes!=null && childTaskNodes.size()>0){
+					for(Task child : childTaskNodes){
+						//递归
+						//非关闭需要改为延期
+						updateTaskPendingToDelay(child.getId(),child.getStatus(),delayDescribe,estimateStartTime);
+					}
+				}
+			}
+		}
+		catch (Exception e) {
+			LOGGER.error(e.getMessage());
+            throw new RRException(e.getMessage(),e);
+		}
+		return result;
+	}
+
+	/**
+	 * 
+	* @Title: updateTaskToAssign 
+	* @Description: TODO(更新指派人和被指派人标识号) 
+	* @param @param assignUserId
+	* @param @param beassignUserId
+	* @param @return    设定文件 
+	* @return ExecuteResult<String>    返回类型 
+	* @throws
+	 */
+	@Override
+	@Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
+	public ExecuteResult<String> updateTaskToAssign(Long id,Long assignUserId,Long beassignUserId){
+		ExecuteResult<String> result = new ExecuteResult<String>();
+		try{
+			//检查是否为空
+	        if (id==null || assignUserId==null || beassignUserId==null) {
+	        	result.addErrorMessage("传入的taskd或assignUserId或beassignUserId有误!");
+				return result;
+	        }
+			taskMapper.updateTaskToAssign(id,assignUserId,beassignUserId);
+			result.setResult("修改任务状态成功！");
+		}catch (Exception e) {
+			LOGGER.error(e.getMessage());
+            throw new RRException(e.getMessage(),e);
+		}
+		return result;
+	}
+	
+	/**
+	* @Title: updateTaskPending 
+	* @Description: TODO(修改待办任务) 
+	* @param @param task
+	* @param @return    设定文件 
+	* @return JSONObject    返回类型 
+	* @throws
+	 */
+	@Override
+	@Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
+	public ExecuteResult<String> updateTaskPending(Long id,String taskDescribe,MultipartFile file){
+		ExecuteResult<String> result = new ExecuteResult<String>();
+		try{
+			//检查是否为空
+	        if (id==null || file == null ) {
+	        	result.addErrorMessage("传入的数据不能为空!");
+				return result;
+	        }
+			TaskFile taskFile = new TaskFile();
+			taskFile.setAttachmentSource("任务");
+			taskFile.setSourceId(id);
+			//修改文件
+			boolean bool = taskFileService.addOrupdate(id,taskFile, file);
+			if(bool){
+				//修改任务
+				taskMapper.updateTaskPending(id,taskDescribe);
+				result.setResult("修改待办任务成功！");
+			}else{
+				result.setResult("修改失败！");
+			}
+		}catch (Exception e) {
+			LOGGER.error(e.getMessage());
+            throw new RRException(e.getMessage(),e);
+		}
+		return result;
+	}
 	
 	/**
 	 * 
@@ -153,62 +433,6 @@ public class TaskPendingServiceImpl implements TaskPendingService{
 	
 	/**
 	 * 
-	* @Title: queryAllTaskList 
-	* @Description: TODO(查询所有的Task任务列表) 
-	* @param @return    设定文件 
-	* @return ExecuteResult<List<Task>>    返回类型 
-	* @throws
-	 */
-	@Override
-	public ExecuteResult<PageInfo<Task>> queryAllTaskList(Task task,Integer page, Integer rows){
-		ExecuteResult<PageInfo<Task>> result = new ExecuteResult<PageInfo<Task>>();
-		try{
-			if (page == null || rows == null) {
-				result.addErrorMessage("行和列不能为空!");
-			}
-			//分页初始化
-        	PageHelper.startPage(page,rows);
-			//查询所有的Task任务列表
-			List<Task> allTaskList = taskMapper.queryAllTaskList(task);
-			PageInfo<Task> pageInfo = new PageInfo<Task>(allTaskList);
-			result.setResult(pageInfo);
-		}catch (Exception e) {
-			LOGGER.error(e.getMessage());
-            throw new RRException(e.getMessage(),e);
-		}
-		return result;
-	}
-	
-	/**
-	 * 
-	* @Title: queryMyPendingTaskList 
-	* @Description: TODO(查询我的待办Task任务列表) 
-	* @param @return    设定文件 
-	* @return ExecuteResult<List<Task>>    返回类型 
-	* @throws
-	 */
-	@Override
-	public ExecuteResult<PageInfo<Task>> queryMyPendingTaskList(Task task,Integer page, Integer rows){
-		ExecuteResult<PageInfo<Task>> result = new ExecuteResult<PageInfo<Task>>();
-		try{
-			if (page == null || rows == null) {
-				result.addErrorMessage("行和列不能为空!");
-			}
-			//分页初始化
-        	PageHelper.startPage(page,rows);
-			//查询所有的Task任务列表
-			List<Task> allTaskList = taskMapper.queryMyPendingTaskList(task);
-			PageInfo<Task> pageInfo = new PageInfo<Task>(allTaskList);
-			result.setResult(pageInfo);
-		}catch (Exception e) {
-			LOGGER.error(e.getMessage());
-            throw new RRException(e.getMessage(),e);
-		}
-		return result;
-	}
-	
-	/**
-	 * 
 	* @Title: queryMyTaskListNodeByParentId 
 	* @Description: TODO(查询taskId下的一级子节点) 
 	* @param @param taskId
@@ -272,7 +496,6 @@ public class TaskPendingServiceImpl implements TaskPendingService{
 	 */
 	@Override
 	public ExecuteResult<String> deletePendingTaskTreeById(Long id,String taskStatus){
-
 		ExecuteResult<String> result = new ExecuteResult<String>();
 		
 		try{
@@ -295,7 +518,6 @@ public class TaskPendingServiceImpl implements TaskPendingService{
 					}
 				}
 			}
-			result.setResult("删除待办任务成功");
 		}catch (Exception e) {
 			LOGGER.error(e.getMessage());
             throw new RRException(e.getMessage(),e);
@@ -399,123 +621,6 @@ public class TaskPendingServiceImpl implements TaskPendingService{
 			//根据当前用户Id和任务类型，查询我的顶级待办任务
 			List<Task> allTaskList = taskMapper.queryTopTaskNameList(taskStatus,beassignUserId);
 			result.setResult(allTaskList);
-		}catch (Exception e) {
-			LOGGER.error(e.getMessage());
-            throw new RRException(e.getMessage(),e);
-		}
-		return result;
-	}
-	
-	/**
-	 * 
-	* @Title: updateTaskPendingToRuning 
-	* @Description: TODO(我的待办任务转为正在进行) 
-	* @param @param taskId taskStatus
-	* @param @return    设定文件 
-	* @return JSONObject    返回类型 
-	* @throws
-	 */
-	@Override
-	public ExecuteResult<String> updateTaskPendingToRunning(Long id,String taskStatus) {
-		ExecuteResult<String> result = new ExecuteResult<String>();
-		try{
-			if(id==null){
-				result.addErrorMessage("传入的任务Id有误!");
-				return result;
-			}
-			//查询taskId节点
-			//Task taskObj = taskMapper.queryTaskNodeById(id); 
-			//taskStatus = taskObj.getStatus();
-			//判断状态是否为待办，如果是待办更新为正在进行
-			//if(taskObj != null && TaskStatus.PENDINHG.getValue().equals(taskStatus)){
-				//根据id更新任务状态为正在进行
-				taskMapper.updateTaskPendingToRunning(id,TaskStatus.RUNING.getValue());
-				//if(taskObj.getTaskParentId() != null){
-					//查询taskId下的所有子节点
-					//Task parentTaskNodes = taskMapper.queryParentTaskNodeById(taskObj.getTaskParentId());
-					//判断是否有父节点
-					//if(parentTaskNodes!=null){
-						//递归
-						//return updateTaskPendingToRunning(parentTaskNodes.getId(),parentTaskNodes.getStatus());
-					//}
-				//}
-			//}
-			result.setResult("修改任务状态成功！");
-		}
-		catch (Exception e) {
-			LOGGER.error(e.getMessage());
-            throw new RRException(e.getMessage(),e);
-		}
-		return result;
-	}
-	
-	/**
-	 * 
-	* @Title: updateTaskPendingToDelay
-	* @Description: TODO(我的待办任务转为延期,会将该节点及节点下的所有子节点变为延期状态) 
-	* @param @param taskId taskStatus
-	* @param @return    设定文件 
-	* @return JSONObject    返回类型 
-	* @throws
-	 */
-	@Override
-	public ExecuteResult<String> updateTaskPendingToDelay(Long id,String taskStatus,String delayDescribe,Date estimateStartTime) {
-		ExecuteResult<String> result = new ExecuteResult<String>();
-		try{
-			if(id==null || estimateStartTime == null){
-				result.addErrorMessage("传入的参数有误!");
-				return result;
-			}
-			//查询taskId节点
-			//Task taskObj = taskMapper.queryTaskNodeById(id); 
-			//taskStatus = taskObj.getStatus();
-			//判断状态是否为待办
-			//if(TaskStatus.PENDINHG.getValue().equals(taskStatus)){
-				//格式化日期格式为yyyy-mm-dd,根据id更新待办任务状态为延期
-				//if(!TaskStatus.CLOSE.getValue().equals(taskStatus)){
-					taskMapper.updateTaskPendingToDelay(id,TaskStatus.OVERDUE.getValue(),delayDescribe,estimateStartTime);
-				//}
-				//查询taskId下的所有子节点
-				//List<Task> childTaskNodes = taskMapper.queryTaskListNodeByParentId(id,null); 
-				//遍历子节点
-				/*if(childTaskNodes!=null && childTaskNodes.size()>0){
-					for(Task child : childTaskNodes){
-						//递归
-						//非关闭需要改为延期
-						updateTaskPendingToDelay(child.getId(),taskStatus,delayDescribe,estimateStartTime);
-					}
-				}*/
-			//}
-			result.setResult("修改任务状态成功！");
-		}
-		catch (Exception e) {
-			LOGGER.error(e.getMessage());
-            throw new RRException(e.getMessage(),e);
-		}
-		return result;
-	}
-	
-	/**
-	 * 
-	* @Title: updateTaskToAssign 
-	* @Description: TODO(更新指派人和被指派人标识号) 
-	* @param @param assignUserId
-	* @param @param beassignUserId
-	* @param @return    设定文件 
-	* @return ExecuteResult<String>    返回类型 
-	* @throws
-	 */
-	@Override
-	public ExecuteResult<String> updateTaskToAssign(Long id,Long assignUserId,Long beassignUserId){
-		ExecuteResult<String> result = new ExecuteResult<String>();
-		try{
-			//检查是否为空
-	        if (id==null || assignUserId==null || beassignUserId==null) {
-	        	result.addErrorMessage("传入的taskd或assignUserId或beassignUserId有误!");
-				return result;
-	        }
-			taskMapper.updateTaskToAssign(id,assignUserId,beassignUserId);
-			result.setResult("修改任务状态成功！");
 		}catch (Exception e) {
 			LOGGER.error(e.getMessage());
             throw new RRException(e.getMessage(),e);

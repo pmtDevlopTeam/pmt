@@ -209,6 +209,9 @@
       <if test="delFlag != null" >
         del_flag = #{delFlag,jdbcType=VARCHAR},
       </if>
+       <if test="num != null" >
+        num = #{num,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -259,11 +262,27 @@
         case_title like "%"#{case_title}"%"
       </if>
   </select>
-  <insert id="insertBatch" parameterType="java.util.List">
+  <insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
     insert into use_case (project_id, demand_id, case_title, case_type, case_level, version_id)
     values
     <foreach collection="list" item="item" separator=",">
       (#{item.projectId}, #{item.demandId}, #{item.caseTitle}, #{item.caseType}, #{item.caseLevel}, #{item.versionId})
     </foreach>
   </insert>
+  <!--关闭项目时，更新项目状态  -->
+  <update id="updateByProjectId">
+		update use_case
+		<trim prefix="set" suffixOverrides=",">
+			<if test="caseStatus != null">
+				 case_status = #{caseStatus,jdbcType=VARCHAR},
+			</if>
+			<if test="modifyUserId != null">
+				modify_user_id = #{modifyUserId,jdbcType=VARCHAR},
+			</if>
+			<if test="modifyTime != null">
+				modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+			</if>
+		</trim>
+		where project_id =#{projectId,jdbcType=BIGINT}
+	</update>
 </mapper>

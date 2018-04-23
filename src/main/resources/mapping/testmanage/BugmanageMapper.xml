@@ -890,6 +890,12 @@
 		where project_id=#{projectId} and designated_id=#{userId} and bug_status in(0,1)
 	</select>
 	
+	<select id="queryBugLimit" resultMap="SelectBaseResultMap">
+		select id,bug_no,bug_title,serious_degree,create_user_id,designated_id,solve_id,bug_status,bug_level
+		from bug_manage  order by id desc limit 1
+	</select>
+	
+	
 	
 	
 

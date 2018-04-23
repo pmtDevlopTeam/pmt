@@ -2,12 +2,7 @@ package com.camelot.pmt.platform.service;
 
 import java.util.List;
 
-import com.alibaba.fastjson.JSONObject;
-import com.camelot.pmt.common.DataGrid;
-import com.camelot.pmt.common.ExecuteResult;
-import com.camelot.pmt.common.Pager;
 import com.camelot.pmt.platform.model.Org;
-import com.camelot.pmt.platform.model.OrgToUser;
 import com.camelot.pmt.platform.model.User;
 import com.camelot.pmt.util.Tree;
 import com.github.pagehelper.PageInfo;
@@ -59,15 +54,6 @@ public interface OrgService {
 	 * 删除多个子部门机构  递归删除
 	 */
 	String deleteOrgSubByOrgId(String orgId);
-	/**
-	 * 组织机构列表详情(关系到用户  即部门负责人)
-	 */
-	List<OrgToUser> queryOrgsDetail();
-	/**
-	 * 组织机构   根据orgId查看详情(关系到用户  即部门负责人)
-	 */
-	
-	List<OrgToUser> queryOrgsDetailByOrgId(String orgId);
 	/** 
 	 * 组织机构与用户的绑定(关系到用户 )
 	 **/

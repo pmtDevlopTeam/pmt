@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,6 +19,7 @@ import com.camelot.pmt.common.ApiResponse;
 import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.platform.model.Dict;
 import com.camelot.pmt.platform.model.Menu;
+import com.camelot.pmt.platform.model.Org;
 import com.camelot.pmt.platform.model.User;
 import com.camelot.pmt.platform.service.DictService;
 import com.camelot.pmt.platform.shiro.ShiroUtils;
@@ -75,6 +77,7 @@ public class DictController {
                 ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
             }
             dict.setCreateUserId(user.getUserId());
+            dict.setModifyUserId(user.getUserId());
 	    	if (StringUtils.isEmpty(dict.getDictCode())||StringUtils.isEmpty(dict.getDictName())||StringUtils.isEmpty(dict.getDictType())){
 	    		return ApiResponse.errorPara();
             }
@@ -176,6 +179,43 @@ public class DictController {
         	}
         
 	}
+	
+    /** 修改字典的状态
+	 * @param dictId state
+	 * @return JSONObject  {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
+	 * 
+	 **/
+    @ApiOperation(value = "修改字典状态接口", notes = "修改字典状态接口")
+    @ApiImplicitParams({
+    	@ApiImplicitParam(
+                name="dictId",value="字典dictId",required=true,paramType="form",dataType="String"),
+        @ApiImplicitParam(
+                name="state",value="字典状态",required=true,paramType="form",dataType="String"),
+    })
+    @RequestMapping(value="/updateDictByDictIdAndState", method=RequestMethod.POST)
+    public JSONObject updateDictByDictIdAndState(@ApiIgnore Dict dict){
+    	boolean flag = false;
+    	try {
+    		User user = (User) ShiroUtils.getSessionAttribute("user");
+            if (StringUtils.isEmpty(user.getUserId())) {
+                ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
+            }
+            dict.setModifyUserId(user.getUserId());
+    		if (StringUtils.isEmpty(dict.getDictId()) && StringUtils.isEmpty(dict.getState())) {
+                return ApiResponse.jsonData(APIStatus.ERROR_400);
+            }
+    		flag = dictService.updateDictByDictIdAndState(dict);
+	         if(flag){
+	        	 return ApiResponse.success();
+	         }
+	          	 return ApiResponse.error("修改字典状态异常");
+    	}catch (Exception e) {
+    		logger.error(e.getMessage());
+    		return ApiResponse.error();
+    	}
+
+    }
+	
 
     /**
      * 根据一个字典dictId  查询一个字典
@@ -205,10 +245,10 @@ public class DictController {
      * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
 	@ApiOperation(value="查询所有字典", notes="查询所有字典")
-	@RequestMapping(value="/selectDictListAll", method=RequestMethod.GET)
-	public JSONObject selectDictListAll() {
+	@RequestMapping(value="/queryDictListAll", method=RequestMethod.GET)
+	public JSONObject queryDictListAll() {
         try {
-        	List<Dict> list = dictService.selectDictListAll();
+        	List<Dict> list = dictService.queryDictListAll();
             return ApiResponse.success(list);
         }catch (Exception e) {
         	logger.error(e.getMessage());

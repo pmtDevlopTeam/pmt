@@ -1,18 +1,15 @@
 package com.camelot.pmt.task.service;
 
-import com.camelot.pmt.common.DataGrid;
 import com.camelot.pmt.common.ExecuteResult;
-import com.camelot.pmt.common.Pager;
 import com.camelot.pmt.task.model.Task;
 import com.camelot.pmt.task.model.TaskFile;
-import com.camelot.pmt.task.model.TaskLog;
 import com.github.pagehelper.PageInfo;
 
-import java.util.Map;
+import java.util.List;
 
 /**
  * @author muyuanpei
- * @date 2018/4/10    15:19
+ * @date 2018/4/10 15:19
  */
 public interface TaskRunningService {
 
@@ -22,7 +19,7 @@ public interface TaskRunningService {
      * @author myp
      * @since 2018-04-08
      */
-    ExecuteResult<PageInfo<Task>> queryTaskRunning(int page , int rows, String id);
+    ExecuteResult<List<Task>> queryTaskRunning(Task task);
 
     /**
      * 根据id查询任务

@@ -14,14 +14,15 @@ public interface TaskMapper {
      * 查询正在进行的任务，根据时间和优先级进行排序
      * myp
      * */
-    List<Task> queryTaskRunning(String id);
+    List<Task> queryTaskRunning(Task task);
 
 
     /**
      *将任务进行关闭操作
      * myp
      * */
-    int updateRunningToClose(List list);
+    //int updateRunningToClose(List list);
+    int updateRunningToClose(Long id);
 
 
     /**
@@ -29,7 +30,7 @@ public interface TaskMapper {
      * myp
      * */
     void updateRunningToAlready(Long id);
-    List<Task> queryRunningToAlready(List list);
+    //List<Task> queryRunningToAlready(List list);
 
     /**
      *点击完成时，修改实际完成时间和实际工时
@@ -48,6 +49,8 @@ public interface TaskMapper {
      * myp
      * */
     List<Task> queryByPId(Long pid);
+
+    Task queryTaskAllById(Long id);
 
     /**
      * 根据id查询任务明细
@@ -240,14 +243,14 @@ public interface TaskMapper {
 
     /**
      * @author: gxl
-     * @Title: updateTaskPendingToRuning
-     * @Description: TODO(我的待办任务转为正在进行)
+     * @Title: updateTaskStatus
+     * @Description: TODO(修改任务状态)
      * @param @param taskId status
      * @param @return    设定文件
      * @return int    返回类型
      * @throws
      */
-    void updateTaskPendingToRunning(@Param("id") Long id, @Param("status") String status);
+    void updateTaskStatus(@Param("id") Long id, @Param("status") String status);
     
     /**
      * @author: gxl
@@ -272,6 +275,16 @@ public interface TaskMapper {
      * @throws
      */
     void updateTaskToAssign(@Param("id") Long id, @Param("assignUserId") Long assignUserId, @Param("beassignUserId") Long beassignUserId);
+    
+    /**
+	* @Title: updateTaskPending 
+	* @Description: TODO(修改待办任务) 
+	* @param @param task
+	* @param @return    设定文件 
+	* @return JSONObject    返回类型 
+	* @throws
+	 */
+    void updateTaskPending(@Param("id") Long id,@Param("taskDescribe") String taskDescribe);
 
     /**
      * @author: gxl
@@ -381,7 +394,31 @@ public interface TaskMapper {
      * @return int
      * @throws
      */
+    int updateTaskToTest(@Param("id") Long id,@Param("beassignUserId")String beassignUserId);
+
+    /**
+     * 根据任务Id查询需求ID
+     * @Title: updateTaskOverdueStatus
+     * @Description: TODO
+     * @param @param taskId
+     * @param @return
+     * @return int
+     * @throws
+     */
+    Long queryTaskByTaskId(Long id);
+
+    /**
+     * 根据需求Id查询当前需求的测试人员ID
+     * @Title: updateTaskOverdueStatus
+     * @Description: TODO
+     * @param @param taskId
+     * @param @return
+     * @return int
+     * @throws
+     */
+    String queryTaskToTestByDemandId(Long demandId);
     int updateTaskToTest(Long id);
+
 
    /**
     * 查询超时提前列表
@@ -405,6 +442,21 @@ public interface TaskMapper {
 	 */
    List<Map<String, Object>> querydelaytimedeferredTaskRemindersList(Integer delaytime);
 
+
+
+    /**
+     * 项目关闭时，更新任务状态
+     *
+     * @param projectId
+     * @param status
+     * @param actualEndTime
+     * @param modifyUserId
+     * @param modifyTime
+     * @return
+     */
+    int updateByProjectId(@Param("projectId") Long projectId, @Param("status") String status,
+            @Param("actualEndTime") Date actualEndTime, @Param("modifyUserId") String modifyUserId,
+            @Param("modifyTime") Date modifyTime);
 
 
 }

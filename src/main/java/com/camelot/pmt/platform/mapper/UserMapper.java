@@ -230,6 +230,16 @@ public interface UserMapper {
     
     /**
      * 
+     * Description:[根据用户UserId修改用户密码]
+     * @param User userModel
+     * @return int
+     * @author [maple]
+     * 2018年4月16日下午10:42:35
+     */
+    int updateUserPasswordByUserId(User userModel);
+    
+    /**
+     * 
      * Description:[根据userJobNum判断用户是否存在]
      * @param String userJobNum
      * @return long

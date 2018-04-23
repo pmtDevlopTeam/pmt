@@ -1,9 +1,19 @@
 package com.camelot.pmt.platform.controller;
 
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.alibaba.fastjson.JSONObject;
 import com.camelot.pmt.common.APIStatus;
 import com.camelot.pmt.common.ApiResponse;
-import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.platform.model.Role;
 import com.camelot.pmt.platform.model.User;
 import com.camelot.pmt.platform.service.RoleService;
@@ -14,17 +24,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
-
-import java.util.List;
 
 /**
  * 角色控制层
@@ -39,11 +39,11 @@ public class RoleController {
     @Autowired
     private RoleService roleService;
 
-
     /**
      * 添加角色
      *
-     * @param String parentId, String state, String roleName
+     * @param String
+     *            parentId, String state, String roleName
      * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
     // @RequiresPermissions(value = "/platform/role/addRole")
@@ -52,7 +52,7 @@ public class RoleController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "parentId", value = "角色父id", required = false, paramType = "form", dataType = "string"),
             @ApiImplicitParam(name = "state", value = "角色状态", required = false, paramType = "form", dataType = "string"),
-            @ApiImplicitParam(name = "roleName", value = "角色名称", required = true, paramType = "form", dataType = "string"),})
+            @ApiImplicitParam(name = "roleName", value = "角色名称", required = true, paramType = "form", dataType = "string"), })
     public JSONObject addRole(@ApiIgnore Role role) {
         boolean flag = false;
         try {
@@ -76,25 +76,30 @@ public class RoleController {
         }
     }
 
-
     /**
      * 删除角色
      *
-     * @param Role role
+     * @param Role
+     *            role
      * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
     @ApiOperation(value = "删除角色", notes = "删除角色")
     @PostMapping(value = "/deleteRoleById")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "roleId", value = "角色32位id", required = true, paramType = "form", dataType = "string"),})
+            @ApiImplicitParam(name = "roleId", value = "角色32位id", required = true, paramType = "form", dataType = "string"), })
     public JSONObject deleteRoleById(@ApiIgnore Role role) {
         boolean flag = false;
         try {
+            User user = (User) ShiroUtils.getSessionAttribute("user");
+            if (StringUtils.isEmpty(user.getUserId())) {
+                ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
+            }
+            role.setModifyUserId(user.getUserId());
             if (StringUtils.isEmpty(role.getRoleId())) {
                 ApiResponse.jsonData(APIStatus.ERROR_400);
             }
             flag = roleService.deleteRoleById(role);
-            if (flag){
+            if (flag) {
                 return ApiResponse.success();
             }
             return ApiResponse.error("删除异常");
@@ -104,11 +109,11 @@ public class RoleController {
         }
     }
 
-
     /**
      * 编辑角色
      *
-     * @param String roleId, String state, String roleName
+     * @param String
+     *            roleId, String state, String roleName
      * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
     @ApiOperation(value = "编辑角色", notes = "编辑角色")
@@ -116,7 +121,7 @@ public class RoleController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "roleId", value = "角色id", required = true, paramType = "form", dataType = "string"),
             @ApiImplicitParam(name = "state", value = "角色状态", required = false, paramType = "form", dataType = "string"),
-            @ApiImplicitParam(name = "roleName", value = "角色名称", required = true, paramType = "form", dataType = "string"),})
+            @ApiImplicitParam(name = "roleName", value = "角色名称", required = true, paramType = "form", dataType = "string"), })
     public JSONObject updateRoleById(@ApiIgnore Role role) {
         boolean flag = false;
         try {
@@ -161,13 +166,14 @@ public class RoleController {
     /**
      * 验证角色名称是否存在
      *
-     * @param String roleName
+     * @param String
+     *            roleName
      * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
     @ApiOperation(value = "验证角色名称是否存在", notes = "验证角色名称是否存在")
     @GetMapping(value = "/checkRoleName")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "roleName", value = "角色名称", required = true, paramType = "query", dataType = "string"),})
+            @ApiImplicitParam(name = "roleName", value = "角色名称", required = true, paramType = "query", dataType = "string"), })
     public JSONObject checkRoleName(@ApiIgnore Role role) {
         boolean flag = false;
         try {
@@ -184,10 +190,5 @@ public class RoleController {
             return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
         }
     }
-
-
-
-
-
 
 }

@@ -6,7 +6,6 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.camelot.pmt.platform.model.Org;
-import com.camelot.pmt.platform.model.OrgAndUser;
 import com.camelot.pmt.platform.model.OrgToUser;
 
 
@@ -78,14 +77,7 @@ public interface OrgMapper {
      * @return
      */
 	void deleteOrgByOrgParentId(String parentId);
-	/**
-	 * 组织机构列表详情和查看(关系到用户  即部门负责人)
-	 */
-	List<OrgToUser> selectOrgsDetail();
-	/** 
-	 * 组织机构   根据orgId查看详情(关系到用户  即部门负责人)
-	 **/
-	List<OrgToUser> selectOrgsDetailByOrgId(String orgId);
+	
 	/** 
 	 * 组织机构与用户的绑定(关系到用户 )
 	 **/
@@ -98,12 +90,12 @@ public interface OrgMapper {
 	 * 查询组织机构与用户的已绑定(关系到用户 )
 	 * @return 
 	 **/
-	OrgAndUser queryOrgAndUserByOrgIdAndUserId(@Param("userId") String userId, @Param("orgId") String orgId);
+	OrgToUser queryOrgAndUserByOrgIdAndUserId(@Param("userId") String userId, @Param("orgId") String orgId);
 	 /** 组织机构与用户的绑定 根据orgId查询所有用户(关系到用户 )
 	  * @param orgId 
 	  * @return List<User>
 	 **/
-	List<OrgAndUser> queryOrgAndUserByOrgId(String orgId);
+	List<OrgToUser> queryOrgAndUserByOrgId(String orgId);
 	/** 组织机构  根据orgId,orgCode,orgname 多条件模糊查询所有部门信息
 	 * @param orgId,orgCode,orgname
 	 * @return List<Org>

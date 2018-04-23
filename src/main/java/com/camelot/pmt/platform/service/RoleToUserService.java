@@ -1,10 +1,9 @@
 package com.camelot.pmt.platform.service;
 
-import com.camelot.pmt.common.ExecuteResult;
+import java.util.List;
+
 import com.camelot.pmt.platform.model.RoleToUser;
 import com.camelot.pmt.platform.model.User;
-
-import java.util.List;
 
 public interface RoleToUserService {
 

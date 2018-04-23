@@ -129,8 +129,6 @@ public class UserController {
     		@ApiImplicitParam(
     				name="loginCode",value="登录账号",required=false,paramType="form",dataType="String"),
     		@ApiImplicitParam(
-    				name="password",value="密码",required=false,paramType="form",dataType="String"),
-    		@ApiImplicitParam(
     				name="state",value="用户状态",required=false,paramType="form",dataType="String"),
     		@ApiImplicitParam(
     				name="userPhone",value="用户电话",required=false,paramType="form",dataType="String"),
@@ -154,6 +152,54 @@ public class UserController {
     		return ApiResponse.error();
 		}
 	}
+    
+    /**
+     * <p>Description:[修改用户密码</p>
+     * @param  User userModel
+     * @return {"status": {"message": "请求处理成功.","code": 200}, "data": {更新用户成功!}]
+     */
+    @ApiOperation(value="更新用户密码", notes="更新用户密码")
+    @ApiImplicitParams({
+    		@ApiImplicitParam(
+    				name="password",value="旧密码",required=true,paramType="form",dataType="String"),
+    		@ApiImplicitParam(
+    				name="newPassword",value="新密码",required=true,paramType="form",dataType="String"),
+    		@ApiImplicitParam(
+    				name="secondNewPassword",value="二次新密码",required=true,paramType="form",dataType="String")
+    })
+    @RequestMapping(value = "user/updateUserPasswordByUserId",method = RequestMethod.POST)
+    public JSONObject updateUserPasswordByUserId(@ApiIgnore User userModel) {
+		try {
+	    	String result = service.updateUserPasswordByUserId(userModel);
+	    	return ApiResponse.success(result);
+    	} catch (Exception e) {
+    		logger.error(e.getMessage());
+    		return ApiResponse.error();
+		}
+	}
+    
+    /**
+     * Description:检查用户密码
+     * @param  User userModel
+     * @return {"status": {"message": "请求处理成功.","code": 200}, "data": {更新用户成功!}]
+     */
+    @ApiOperation(value="检查用户旧密码", notes="检查用户旧密码")
+    @RequestMapping(value = "user/checkoldUserPassword",method = RequestMethod.POST)
+    public JSONObject checkoldUserPassword(@ApiParam(name="password",value = "用户旧密码", required = true) @RequestParam(required = true) String password) {
+		try {
+	    	boolean result = service.checkOldUserPassword(password);
+	    	if(!result) {
+	    		return ApiResponse.success("旧密码不正确！");
+	    	}
+	    	return ApiResponse.success();
+    	} catch (Exception e) {
+    		logger.error(e.getMessage());
+    		return ApiResponse.error();
+		}
+	}
+    
+    
+
 
     /**
      * 
@@ -217,6 +263,7 @@ public class UserController {
      */
     @ApiOperation(value="用户详情列表展示", notes="用户详情列表展示")
     @ApiImplicitParams({
+    	@ApiImplicitParam(name = "userId", value = "员工userId", required = false, paramType = "query", dataType = "String"),
     	@ApiImplicitParam(name = "userJobNum", value = "员工号", required = false, paramType = "query", dataType = "String"),
     	@ApiImplicitParam(name = "userName", value = "用户名", required = false, paramType = "query", dataType = "String"),
     	@ApiImplicitParam(name = "roleId", value = "用户角色ID", required = false, paramType = "query", dataType = "String"),
