@@ -183,5 +183,52 @@ public class TaskOverdueServiceImpl implements TaskOverdueService {
 		result.setResult("修改任务状态成功!");
 		return result;
 	}
-
+	/**
+	 * 延期任务列表
+	 */
+	@Override
+	public ExecuteResult<Map<String,Object>> deferredTaskRemindersList(Integer leadtime, Integer delaytime) {
+		ExecuteResult<Map<String,Object>> result = new ExecuteResult<Map<String,Object>>();
+		try {
+			if (!leadtime.equals("") && leadtime != null && delaytime.equals("") && delaytime != null) {
+				//查询超时提前列表
+				leadtime=leadtime*(-1);
+				List<Map<String, Object>> leaddeferredTaskRemindersList = taskMapper.queryleaddeferredTaskRemindersList(leadtime);
+				//查询超时延后列表
+				List<Map<String, Object>> deferredTaskRemindersList = taskMapper.querydelaytimedeferredTaskRemindersList(delaytime);
+				HashMap<String, Object> map = new HashMap<String,Object>();
+				map.put("leaddeferredTaskRemindersList", leaddeferredTaskRemindersList);
+				map.put("deferredTaskRemindersList", deferredTaskRemindersList);
+				result.setResult(map);
+				return result;
+			}
+			result.addErrorMessage("查询失败！");
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage());
+			throw new RuntimeException(e);
+		}
+		return result;
+		
+		
+	}
+	
+	/**
+	 * 延时任务列表
+	 */
+	@Override
+	public ExecuteResult<Map<String,Object>> delayedTaskReminderList(Integer leadtime, Integer delaytime) {
+		ExecuteResult<List<Map<String, Object>>> result = new ExecuteResult<List<Map<String, Object>>>();
+		try {
+			if (!leadtime.equals("") && leadtime != null && delaytime.equals("") && delaytime != null) {
+			/*	List<Map<String, Object>> delayedTaskReminderList = taskMapper.querydelayedTaskReminderList(leadtime,delaytime);
+				result.setResult(delayedTaskReminderList);
+				return result;*/
+			}
+			result.addErrorMessage("查询失败！");
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage());
+			throw new RuntimeException(e);
+		}
+		return null;
+	}
 }

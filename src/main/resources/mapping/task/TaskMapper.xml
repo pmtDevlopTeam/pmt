@@ -706,4 +706,27 @@
         #{createTime},#{modifyUserId},#{modifyTime})
     </insert>
     <!--myp结束-->
+    
+   <!--  超时提前列表 -->
+    <select id="queryleaddeferredTaskRemindersList" parameterType="int" resultType="map">
+		select * from (
+		select t.id,t.task_num,t.priority,t.task_name,t.assign_user_id,t.task_type,p.id as pid,p.project_name,
+			u1.user_name,t.assign_time,t.status,t.estimate_start_time,
+			t.estimate_end_time ,t.estimate_hour,DATEDIFF(CURDATE(),t.estimate_start_time) elapsed_time
+		from task t
+		    LEFT JOIN project_main p on p.id =t.project_id
+				LEFT JOIN platform_user u1 on u1.user_id = t.beassign_user_id 
+		) f where elapsed_time <![CDATA[ <= ]]> #{leadtime} and elapsed_time <![CDATA[ <= ]]> 0 and status = 0
+    </select>
+    
+    <select id="querydelaytimedeferredTaskRemindersList" parameterType="int" resultType="map">
+	    select * from (
+		select t.id,t.task_num,t.priority,t.task_name,t.assign_user_id,t.task_type,p.id as pid,p.project_name,
+			u1.user_name,t.assign_time,t.status,t.estimate_start_time,
+			t.estimate_end_time ,t.estimate_hour,DATEDIFF(CURDATE(),t.estimate_start_time) elapsed_time
+		from task t
+		    LEFT JOIN project_main p on p.id =t.project_id
+				LEFT JOIN platform_user u1 on u1.user_id = t.beassign_user_id 
+		) f where elapsed_time <![CDATA[ >= ]]> #{delaytime}  and status = 0
+    </select>
 </mapper>

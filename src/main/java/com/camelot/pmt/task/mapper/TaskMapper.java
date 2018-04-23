@@ -382,4 +382,29 @@ public interface TaskMapper {
      * @throws
      */
     int updateTaskToTest(Long id);
+
+   /**
+    * 查询超时提前列表
+   * @Title: queryleaddeferredTaskRemindersList
+   * @Description: TODO
+   * @param @param leadtime
+   * @param @return
+   * @return List<Map<String,Object>> 
+   * @throws
+    */
+	List<Map<String, Object>> queryleaddeferredTaskRemindersList(Integer leadtime);
+
+	/**
+	 * 查询超时延后列表
+	* @Title: querydelaytimedeferredTaskRemindersList
+	* @Description: TODO
+	* @param @param delaytime
+	* @param @return
+	* @return List<Map<String,Object>> 
+	* @throws
+	 */
+   List<Map<String, Object>> querydelaytimedeferredTaskRemindersList(Integer delaytime);
+
+
+
 }

@@ -12,6 +12,7 @@ import com.camelot.pmt.task.service.TaskOverdueService;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.*;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -144,6 +145,78 @@ public class TaskOverdueController {
 		} catch (Exception e) {
 			// 异常
 			return ApiResponse.error();
+		}
+	}
+	
+	/**
+	 * 查询延时任务列表
+	* @Title: delayedTaskReminderList
+	* @Description: TODO
+	* @param @param leadtime
+	* @param @param delaytime
+	* @param @return
+	* @return JSONObject 
+	* @throws
+	 */
+	@ApiOperation(value = "查询延时任务列表", notes = "查询延时任务列表")
+	@ApiImplicitParams({
+        @ApiImplicitParam(dataType = "Integer",name = "leadtime", paramType = "query", value = "提前提醒天数", required = true),
+        @ApiImplicitParam(dataType = "Integer",name = "delaytime", paramType = "query", value = "延后提醒天数", required = true)
+        })
+	@RequestMapping(value = "/delayedTaskReminderList", method = RequestMethod.POST)
+	public JSONObject delayedTaskReminderList(
+			@RequestParam(required = true) Integer leadtime,
+			@RequestParam(required = true) Integer delaytime) {
+		ExecuteResult<Map<String,Object>> result = new ExecuteResult<Map<String,Object>>();
+		try {
+			if (leadtime == null && "".equals(leadtime) || delaytime == null && "".equals(delaytime)) {
+
+				return ApiResponse.errorPara();
+			}
+			result = taskService.delayedTaskReminderList(leadtime,delaytime);
+			if (result.isSuccess()) {
+				return ApiResponse.success(result.getResult());
+			}
+			return ApiResponse.error();
+		} catch (Exception e) {
+			return ApiResponse.error();
+
+		}
+	}
+	
+	/**
+	 * 查询延期任务列表
+	* @Title: deferredTaskRemindersList
+	* @Description: TODO
+	* @param @param leadtime
+	* @param @param delaytime
+	* @param @return
+	* @return JSONObject 
+	* @throws
+	 */
+	@ApiOperation(value = "查询延期任务列表", notes = "查询延期任务列表")
+	@ApiImplicitParams({
+        @ApiImplicitParam(dataType = "Integer",name = "leadtime", paramType = "query", value = "提前提醒天数", required = true),
+        @ApiImplicitParam(dataType = "Integer",name = "delaytime", paramType = "query", value = "延后提醒天数", required = true)
+        })
+	@RequestMapping(value = "/deferredTaskRemindersList", method = RequestMethod.POST)
+	public JSONObject deferredTaskRemindersList(
+			@RequestParam(required = true) Integer leadtime,
+			@RequestParam(required = true) Integer delaytime) {
+		ExecuteResult<Map<String,Object>> result = new ExecuteResult<Map<String,Object>>();
+		try {
+			if (leadtime == null && "".equals(leadtime) || delaytime == null && "".equals(delaytime)) {
+
+				return ApiResponse.errorPara();
+			}
+			result = taskService.deferredTaskRemindersList(leadtime,delaytime);
+			if (result.isSuccess()) {
+				return ApiResponse.success(result.getResult());
+			}
+			return ApiResponse.error();
+		} catch (Exception e) {
+			return ApiResponse.error();
+
 		}
 	}
 }
