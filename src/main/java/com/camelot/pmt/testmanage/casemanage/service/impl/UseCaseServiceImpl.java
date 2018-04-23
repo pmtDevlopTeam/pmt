@@ -54,6 +54,8 @@ public class UseCaseServiceImpl implements UseCaseService{
 		if (userModel != null) {
 			useCase.setCreateUserId(userModel.getUserId());
 			useCase.setCreateTime(new Date());
+			useCase.setModifyUserId(userModel.getUserId());
+			useCase.setModifyTime(new Date());
 			useCaseHistory.setOperationId(userModel.getUserId());
 		}
 
@@ -94,6 +96,8 @@ public class UseCaseServiceImpl implements UseCaseService{
 		for (UseCase useCase : list) {
 			useCase.setCreateUserId(id);
 			useCase.setCreateTime(date);
+			useCase.setModifyUserId(userModel.getUserId());
+			useCase.setModifyTime(date);
 		}
 		// 批量插入
 		boolean flag= useCaseMapper.insertBatch(list)==1?true:false;
