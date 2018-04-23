@@ -49,7 +49,7 @@ public interface TaskOverdueService {
 	ExecuteResult<PageInfo<Map<String,Object>>> queryOverdueTask(Task task,Integer page, Integer rows);
 	
 	/**
-	 * 查询延时任务列表
+	 * 查询延期任务列表
 	* @Title: delayedTaskReminderList
 	* @Description: TODO
 	* @param @param leadtime
@@ -61,7 +61,7 @@ public interface TaskOverdueService {
 	ExecuteResult<Map<String,Object>> delayedTaskReminderList(Integer leadtime, Integer delaytime);
 	
 	/**
-	 * 查询延期任务列表
+	 * 查询延时任务列表
 	* @Title: deferredTaskRemindersList
 	* @Description: TODO
 	* @param @param leadtime

@@ -200,8 +200,7 @@ public class TaskOverdueServiceImpl implements TaskOverdueService {
 				map.put("leaddeferredTaskRemindersList", leaddeferredTaskRemindersList);
 				map.put("deferredTaskRemindersList", deferredTaskRemindersList);
 				result.setResult(map);
-				return result;			
-			
+				return result;	
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
 			throw new RuntimeException(e);
