@@ -50,7 +50,7 @@ public class VersionServiceImpl implements VersionService {
         version.setEndTime(versionVo.getEndTime());
         version.setRemarks(versionVo.getRemarks());
         // 设置版本编号
-        version.setVersionCode(getVersionCode(projectId, versionType));
+        version.setVersionCode(versionVo.getVersionCode());
         // 项目id
         version.setProjectId(projectId);
         // 添加人id
