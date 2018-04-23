@@ -51,4 +51,11 @@ public interface DemandService {
     PageInfo<Map<String, Object>> queryDemandBugQuoteById(Long demandId, Integer pageSize, Integer currentPage);
 
     boolean updateByReview(Demand demand, User user);
+
+    /**
+     * 新增级联需求
+     *@param
+     *@return 
+     */
+    boolean addDemandList(DemandVO demandVO, User user);
 }

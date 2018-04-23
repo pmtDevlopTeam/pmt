@@ -1,5 +1,6 @@
 package com.camelot.pmt.project.model;
 
+import java.util.List;
 import java.util.Map;
 
 public class DemandVO {
@@ -13,6 +14,16 @@ public class DemandVO {
     private Integer size;
     private Map<String, Object> demandMap;
     private Demand demand;
+
+    private List<Demand> demandList;
+
+    public List<Demand> getDemandList() {
+        return demandList;
+    }
+
+    public void setDemandList(List<Demand> demandList) {
+        this.demandList = demandList;
+    }
 
     public Long getDemandId() {
         return demandId;

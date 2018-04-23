@@ -143,4 +143,11 @@ public interface DemandMapper {
 
     String queryParantDemandById(Long pid);
 
+    /**
+     * 批量插入需求
+     *@param
+     *@return 
+     */
+    int insertDemandList(List<Demand> demandList);
+
 }
