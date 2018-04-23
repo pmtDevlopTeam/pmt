@@ -29,4 +29,15 @@ public interface TaskFileMapper {
      * @date: 17:03 2018/4/17
      */
     TaskFile queryByTaskFile(TaskFile taskFile);
+    
+    /**
+     * 
+    * @Title: update 
+    * @Description: TODO(修改文件) 
+    * @param @param id
+    * @param @return    设定文件 
+    * @return TaskFile    返回类型 
+    * @throws
+     */
+    int update(TaskFile taskFile);
 }

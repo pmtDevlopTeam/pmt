@@ -221,10 +221,10 @@
     <!--zlh-->
     <!--任务管理模块列表展示所用字段-->
     <sql id="TaskManager_ShowTasks_Column_List" >
-        t.id, t.task_num, t.task_name, b.id AS bid, b.user_id, b.user_name, t.estimate_start_time, t.estimate_end_time,
+        t.id, t.task_num, t.task_name, b.id AS bid, b.user_id AS buser_id, b.user_name AS buser_name, t.estimate_start_time, t.estimate_end_time,
         t.actual_start_time, t.actual_end_time, t.task_speed, t.status,
-        t.task_type, t.task_mileage, t.priority, c.id AS cid, c.user_id, c.user_name,
-        a.id AS aid, a.user_id, a.user_name, t.assign_time, p.id pid, p.project_name
+        t.task_type, t.task_mileage, t.priority, c.id AS cid, c.user_id AS cuser_id, c.user_name AS cuser_name,
+        a.id AS aid, a.user_id AS auser_id, a.user_name AS auser_name, t.assign_time, p.id pid, p.project_name
     </sql>
 
 	<!-- 查询逾期任务列表所有字段 -->
@@ -384,6 +384,7 @@
 		      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
 		    where id = #{id,jdbcType=BIGINT}
     </update>
+    <!-- 查询顶级任务列表 -->
     <select id="queryTopTaskNameList" resultMap="BaseResultMap">
     	 select
 			t.id,t.task_name
@@ -513,13 +514,13 @@
 		t.status = #{status,jdbcType=CHAR},t.delay_describe = #{delayDescribe,jdbcType=VARCHAR},t.estimate_start_time = #{estimateStartTime,jdbcType=TIMESTAMP} 
 		where t.id = #{id,jdbcType=BIGINT}
 	</update>
-	<!-- 我的待办任务转为正在进行 -->
-	<update id="updateTaskPendingToRunning" parameterType="com.camelot.pmt.task.model.Task">
+	<!-- 修改任务状态 -->
+	<update id="updateTaskStatus" parameterType="com.camelot.pmt.task.model.Task">
 		update task t set 
 		t.status = #{status,jdbcType=CHAR} 
 		where t.id = #{id,jdbcType=BIGINT}
 	</update>
-	<!-- 我的待办任务转为正在进行 -->
+	<!-- 我的待办任务被指派 -->
 	<update id="updateTaskToAssign" parameterType="com.camelot.pmt.task.model.Task">
 		update task t set 
 		t.assign_user_id = #{assignUserId,jdbcType=VARCHAR},
@@ -529,6 +530,12 @@
 	<update id="updateTaskParentIdIsNull" parameterType="com.camelot.pmt.task.model.Task">
 		update task t set 
 		t.task_parent_id = null
+		where t.id = #{id,jdbcType=BIGINT}
+	</update>
+	<!-- 修改任务描述 -->
+	<update id="updateTaskPending" parameterType="com.camelot.pmt.task.model.Task">
+		update task t set 
+		t.task_describe = #{taskDescribe,jdbcType=VARCHAR}
 		where t.id = #{id,jdbcType=BIGINT}
 	</update>
   <!-- gxl end -->

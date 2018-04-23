@@ -62,6 +62,43 @@ public class TaskLogServiceImpl implements TaskLogService {
     }
 
     /**
+     * 添加日志记录
+     */
+    @Override
+    public ExecuteResult<String> insertTaskLog(Long taskId,String peration) {
+        ExecuteResult<String> result = new ExecuteResult<String>();
+        try {
+            if (taskId == null) {
+                result.addErrorMessage("数据参数不能为空!");
+                return result;
+            }
+
+            Task taskAll = taskMapper.queryTaskAllById(taskId);
+            TaskLog taskLog = new TaskLog();
+            Date date = new Date();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            taskLog.setTaskId(taskAll.getId());
+            taskLog.setUserId(taskAll.getBeassignUser().getUserId());
+            taskLog.setOperationButton(peration);
+            taskLog.setOperationTime(date);
+            taskLog.setOperationDescribe(
+                    dateFormat.format(date) + "\t" + taskAll.getBeassignUser().getUsername() + "\t" + peration);
+            int count = taskLogMapper.insertTaskLog(taskLog);
+            
+            if (count > 0) {
+                result.setResult("添加日志成功!");
+            } else {
+                result.setResult("添加日志失败!");
+            }
+
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+        return result;
+    }
+    
+    /**
      * 任务流转记录查询
      */
     @Override

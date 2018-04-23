@@ -15,8 +15,9 @@
         <result column="modify_time" property="modifyTime"/>
         <result column="create_user_id" property="creatUserId"/>
         <result column="modify_user_id" property="modifyUserId"/>
+        <result column="parentOrgname" property="parentOrgname"/>
     </resultMap>
-    <resultMap id="OrgAndUserresultMap" type="com.camelot.pmt.platform.model.OrgAndUser" >
+    <resultMap id="OrgAndUserresultMap" type="com.camelot.pmt.platform.model.OrgToUser" >
         <id column="id" property="id"/>
         <result column="user_id" property="userId"/>
         <result column="org_id" property="orgId"/>
@@ -26,94 +27,8 @@
         <result column="modify_user_id" property="modifyUserId"/>
     </resultMap>
     
-    <resultMap id="ResultMap" type="com.camelot.pmt.platform.model.OrgToUser" >
-        <id column="id" property="id"/>
-        <result column="orgId" property="orgId"/>
-        <result column="orgName" property="orgname"/>
-        <result column="parentId" property="parentId"/>
-        <result column="orgCode" property="orgCode"/>
-        <result column="states" property="state"/>
-        <result column="orgParentName" property="orgParentName"/>
-        <result column="creatTime" property="createTime"/>
-        <collection property="userList" ofType="com.camelot.pmt.platform.model.User">
-        	 <id column="id" property="id"/>
-        	 <result column="username" property="username"/>
-             <result column="userId" property="userId"/>
-        </collection>
-        
-    </resultMap>
-    <!-- <resultMap id="ResultMaps" type="com.camelot.pmt.platform.model.OrgToUser" >
-        <id column="id" property="id"/>
-        <result column="orgId" property="orgId"/>
-        <result column="orgName" property="orgname"/>
-        <result column="orgCode" property="orgCode"/>
-        <result column="states" property="state"/>
-        <result column="orgParentName" property="orgParentName"/>
-        <result column="creatTime" property="createTime"/>
-        <association property="user" javaType="com.camelot.pmt.platform.model.User">
-        	 <id column="id" property="id"/>
-        	 <result column="username" property="username"/>
-             <result column="userId" property="userId"/>
-        </association>
-    </resultMap> -->
-    <select id="selectOrgsDetail" resultMap="ResultMap"  >
-		SELECT			       
-				t.orgName,
-				t.orgCode,
-				puo.user_id AS userId,
-				t.orgId,
-				t.orgParentName,
-				pu.user_name AS username,
-			    t.states,
-			    t.createTime,
-			    t.parentId
-			FROM
-				(
-					SELECT
-						p.org_name AS orgName,
-						p.org_code AS orgCode,
-						o.org_name AS orgParentName,
-						p.org_id AS orgId,
-			            p.state AS states,
-			            p.create_time AS createTime,
-			            p.parent_id AS parentId
-					FROM
-						platform_org p
-					 LEFT JOIN platform_org o ON p.parent_id = o.org_id
-				) t
-			 LEFT JOIN platform_user_org puo ON t.orgId = puo.org_id
-			LEFT JOIN platform_user pu ON pu.user_id = puo.user_id
-			
-    </select>
-    <select id="selectOrgsDetailByOrgId" resultMap="ResultMap"  >
-		SELECT			       
-				t.orgName,
-				t.orgCode,
-				puo.user_id AS userId,
-				t.orgId,
-				t.orgParentName,
-				pu.user_name AS username,
-			    t.states,
-			    t.createTime,
-			    t.parentId
-			FROM
-				(
-					SELECT
-						p.org_name AS orgName,
-						p.org_code AS orgCode,
-						o.org_name AS orgParentName,
-						p.org_id AS orgId,
-			            p.state AS states,
-			            p.create_time AS createTime,
-			            p.parent_id AS parentId
-					FROM
-						platform_org p
-					 LEFT JOIN platform_org o ON p.parent_id = o.org_id
-				) t
-			 LEFT JOIN platform_user_org puo ON t.orgId = puo.org_id
-			LEFT JOIN platform_user pu ON pu.user_id = puo.user_id
-			where t.orgId=#{orgId}
-    </select>
+    
+    
     
     <sql id="Base_Column_List" >
         id,parent_id,org_id,org_name,state,create_time,modify_time,sort_num,org_code,create_user_id,modify_user_id
@@ -189,24 +104,60 @@
     
  
     <select id="queryAllOrg" resultMap="BaseResultMap"  >
-       SELECT 
-       <include refid="Base_Column_List" />
-	   FROM platform_org
+		SELECT
+			p.org_id,
+			p.org_name,
+			p.org_code,
+			p.state,
+			p.parent_id,
+			p.sort_num,
+			p.create_time,
+			p.modify_time,
+			p.create_user_id,
+			p.modify_user_id,
+			o.org_name AS parentOrgname
+		FROM
+			platform_org p
+		LEFT JOIN platform_org o ON p.parent_id = o.org_id
     </select>
     
     <select id="queryOrgByParameters" parameterType="Org" resultMap="BaseResultMap"  >
-       SELECT 
-       <include refid="Base_Column_List" />
-	   FROM platform_org 
+       SELECT
+			p.org_id,
+			p.org_name,
+			p.org_code,
+			p.state,
+			p.parent_id,
+			p.sort_num,
+			p.create_time,
+			p.modify_time,
+			p.create_user_id,
+			p.modify_user_id,
+			o.org_name AS parentOrgname
+		FROM
+			platform_org p
+		LEFT JOIN platform_org o ON p.parent_id = o.org_id
 	   <where>
-	   	<if test="orgId != '' and orgId != null">
-	   	 and org_id = #{orgId} 
+	   	<if test="orgname != '' and orgname != null">
+	   	 and p.org_name LIKE CONCAT('%',#{orgname},'%') 
+	   	</if>
+	   	<if test="parentId != '' and parentId != null">
+	   	  and p.org_code LIKE CONCAT('%',#{parentId},'%') 
+	   	</if>
+	   	<if test="state != '' and state != null">
+	   	  and p.state LIKE CONCAT('%',#{state},'%') 
+	   	</if>
+	   	<if test="sortNum != '' and sortNum != null">
+	   	  and p.sort_num LIKE CONCAT('%',#{sortNum},'%') 
 	   	</if>
 	   	<if test="orgCode != '' and orgCode != null">
-	   	  and org_code = #{orgCode} 
+	   	  and p.org_code LIKE CONCAT('%',#{orgCode},'%') 
 	   	</if>
-	   	<if test="orgname != '' and orgname != null">
-	   	  and org_name = #{orgname} 
+	   	<if test="createTime != '' and createTime != null">
+	   	  and p.create_time LIKE CONCAT('%',#{createTime},'%') 
+	   	</if>
+	   	<if test="parentOrgname != '' and parentOrgname != null">
+	   	  and  parentOrgname LIKE CONCAT('%',#{parentOrgname},'%') 
 	   	</if>
 	   </where> 
 	   order by parent_id asc,sort_num desc
@@ -214,10 +165,22 @@
     
     
     <select id="queryOrgByOrgId" resultMap="BaseResultMap"  >
-       SELECT 
-       <include refid="Base_Column_List" />
-	   FROM platform_org
-	   WHERE org_id = #{orgId}
+       SELECT
+			p.org_id,
+			p.org_name,
+			p.org_code,
+			p.state,
+			p.parent_id,
+			p.sort_num,
+			p.create_time,
+			p.modify_time,
+			p.create_user_id,
+			p.modify_user_id,
+			o.org_name AS parentOrgname
+		FROM
+			platform_org p
+		LEFT JOIN platform_org o ON p.parent_id = o.org_id
+	        WHERE p.org_id = #{orgId}
     </select>
     
     <delete id="deleteOrgByUserIdAndOrgId" parameterType="String">
@@ -294,9 +257,21 @@
 	
     <!-- 分页查询所有部门列表 -->
     <select id="queryOrgsByPage" resultMap="BaseResultMap" >
-        SELECT 
-       <include refid="Base_Column_List" />
-	   FROM platform_org
+        SELECT
+			p.org_id,
+			p.org_name,
+			p.org_code,
+			p.state,
+			p.parent_id,
+			p.sort_num,
+			p.create_time,
+			p.modify_time,
+			p.create_user_id,
+			p.modify_user_id,
+			o.org_name AS parentOrgname
+		FROM
+			platform_org p
+		LEFT JOIN platform_org o ON p.parent_id = o.org_id
     </select>
     
     <select id="queryOrgByOrgParentId" resultMap="BaseResultMap"  >

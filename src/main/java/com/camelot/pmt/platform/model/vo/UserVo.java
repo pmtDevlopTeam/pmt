@@ -29,6 +29,9 @@ public class UserVo implements Serializable {
 
     // 用户电话
     private String userPhone;
+    
+    // 用户邮箱
+    private String userMail;
 
     // 用户状态（0启用，1禁用）
     private String state;
@@ -36,93 +39,106 @@ public class UserVo implements Serializable {
     // 用户角色ID
     private String roleId;
 
-    public UserVo() {
-        super();
-    }
+	public UserVo() {
+		super();
+	}
 
-    public UserVo(String userId, String userJobNum, String userName, String loginCode, String orgName, String roleName,
-            String userPhone, String state) {
-        super();
-        this.userId = userId;
-        this.userJobNum = userJobNum;
-        this.userName = userName;
-        this.loginCode = loginCode;
-        this.orgName = orgName;
-        this.roleName = roleName;
-        this.userPhone = userPhone;
-        this.state = state;
-    }
+	public UserVo(String userId, String userJobNum, String userName, String loginCode, String orgName, String roleName,
+			String userPhone, String userMail, String state, String roleId) {
+		super();
+		this.userId = userId;
+		this.userJobNum = userJobNum;
+		this.userName = userName;
+		this.loginCode = loginCode;
+		this.orgName = orgName;
+		this.roleName = roleName;
+		this.userPhone = userPhone;
+		this.userMail = userMail;
+		this.state = state;
+		this.roleId = roleId;
+	}
 
-    public String getUserId() {
-        return userId;
-    }
+	public String getUserId() {
+		return userId;
+	}
 
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
 
-    public String getUserJobNum() {
-        return userJobNum;
-    }
+	public String getUserJobNum() {
+		return userJobNum;
+	}
 
-    public void setUserJobNum(String userJobNum) {
-        this.userJobNum = userJobNum;
-    }
+	public void setUserJobNum(String userJobNum) {
+		this.userJobNum = userJobNum;
+	}
 
-    public String getUserName() {
-        return userName;
-    }
+	public String getUserName() {
+		return userName;
+	}
 
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
 
-    public String getLoginCode() {
-        return loginCode;
-    }
+	public String getLoginCode() {
+		return loginCode;
+	}
 
-    public void setLoginCode(String loginCode) {
-        this.loginCode = loginCode;
-    }
+	public void setLoginCode(String loginCode) {
+		this.loginCode = loginCode;
+	}
 
-    public String getOrgName() {
-        return orgName;
-    }
+	public String getOrgName() {
+		return orgName;
+	}
 
-    public void setOrgName(String orgName) {
-        this.orgName = orgName;
-    }
+	public void setOrgName(String orgName) {
+		this.orgName = orgName;
+	}
 
-    public String getRoleName() {
-        return roleName;
-    }
+	public String getRoleName() {
+		return roleName;
+	}
 
-    public void setRoleName(String roleName) {
-        this.roleName = roleName;
-    }
+	public void setRoleName(String roleName) {
+		this.roleName = roleName;
+	}
 
-    public String getUserPhone() {
-        return userPhone;
-    }
+	public String getUserPhone() {
+		return userPhone;
+	}
 
-    public void setUserPhone(String userPhone) {
-        this.userPhone = userPhone;
-    }
+	public void setUserPhone(String userPhone) {
+		this.userPhone = userPhone;
+	}
 
-    public String getState() {
-        return state;
-    }
+	public String getUserMail() {
+		return userMail;
+	}
 
-    public void setState(String state) {
-        this.state = state;
-    }
+	public void setUserMail(String userMail) {
+		this.userMail = userMail;
+	}
 
-    public String getRoleId() {
-        return roleId;
-    }
+	public String getState() {
+		return state;
+	}
 
-    public void setRoleId(String roleId) {
-        this.roleId = roleId;
-    }
+	public void setState(String state) {
+		this.state = state;
+	}
+
+	public String getRoleId() {
+		return roleId;
+	}
+
+	public void setRoleId(String roleId) {
+		this.roleId = roleId;
+	}
+
+	
+    
 
 }

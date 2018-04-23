@@ -46,6 +46,20 @@
       #{createTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=BIGINT}, #{modifyTime,jdbcType=TIMESTAMP}
       )
   </insert>
+  <!-- gxl -->
+  <!-- 修改任务文件，不能修改数据源Id和数据源类型 -->
+  <update id="update" parameterType="com.camelot.pmt.task.model.TaskFile">
+        update attachment
+        <set>
+            <if test="attachmentUrl != null">
+                attachment_url = #{attachmentUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="attachmentTile != null">
+                attachment_tile = #{attachmentTile,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
     <insert id="insertSelective" parameterType="com.camelot.pmt.task.model.TaskFile">
         insert into attachment
         <trim prefix="(" suffix=")" suffixOverrides=",">
