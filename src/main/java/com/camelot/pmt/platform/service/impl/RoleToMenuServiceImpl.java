@@ -46,34 +46,35 @@ public class RoleToMenuServiceImpl implements RoleToMenuService {
      */
     @Override
     public boolean createRoleToMenu(RoleToMenu roleToMenu) {
-            boolean isContains = true;
-            String stringBuffer = "";
-            List<Role> roleList =  roleMapper.queryRoleByroleId(roleToMenu.getRoleId());
-            List<String> roleId = Arrays.asList(roleToMenu.getMenuIds());
-            for (int i = 0; i < roleId.size(); i++) {
-                Menu menu = menuMapper.queryMenuByMenuId(roleId.get(i));
-                stringBuffer += menu.getMenuName()+"、";
-                if (!menu.getParentId().equals("0")) {
-                    isContains = Arrays.asList(roleToMenu.getMenuIds()).contains(menu.getParentId());
-                    if (isContains == true) {
-                        isContains = true;
-                    } else {
-                        isContains = false;
-                        break;
-                    }
-                }
-                if (isContains == false) {
+        boolean isContains = true;
+        String stringBuffer = "";
+        List<Role> roleList = roleMapper.queryRoleByroleId(roleToMenu.getRoleId());
+        List<String> roleId = Arrays.asList(roleToMenu.getMenuIds());
+        for (int i = 0; i < roleId.size(); i++) {
+            Menu menu = menuMapper.queryMenuByMenuId(roleId.get(i));
+            stringBuffer += menu.getMenuName() + "、";
+            if (!menu.getParentId().equals("0")) {
+                isContains = Arrays.asList(roleToMenu.getMenuIds()).contains(menu.getParentId());
+                if (isContains == true) {
+                    isContains = true;
+                } else {
+                    isContains = false;
                     break;
                 }
             }
             if (isContains == false) {
-                return true;
+                break;
             }
-            for (String ids : roleToMenu.getMenuIds()) {
-                roleToMenu.setMenuId(ids);
-                roleToMenuMapper.createRoleToMenu(roleToMenu);
-            }
-            logAspect.insertBindingLog(stringBuffer, roleList.get(0).getRoleName(), Modular.ROLETOMENU,roleToMenu.getCreateUserId());
+        }
+        if (isContains == false) {
+            return true;
+        }
+        for (String ids : roleToMenu.getMenuIds()) {
+            roleToMenu.setMenuId(ids);
+            roleToMenuMapper.createRoleToMenu(roleToMenu);
+        }
+        logAspect.insertBindingLog(stringBuffer, roleList.get(0).getRoleName(), Modular.ROLETOMENU,
+                roleToMenu.getCreateUserId());
         return false;
     }
 
@@ -85,36 +86,37 @@ public class RoleToMenuServiceImpl implements RoleToMenuService {
      */
     @Override
     public boolean updateRoleToMenu(RoleToMenu roleToMenu) {
-            boolean isContains = true;
-            String stringBuffer = "";
-            List<Role> roleList = roleMapper.queryRoleByroleId(roleToMenu.getRoleId());
-            List<String> roleId = Arrays.asList(roleToMenu.getMenuIds());
-            for (int i = 0; i < roleId.size(); i++) {
-                Menu menu = menuMapper.queryMenuByMenuId(roleId.get(i));
-                stringBuffer += menu.getMenuName()+"、";
-                if (!menu.getParentId().equals("0")) {
-                    isContains = Arrays.asList(roleToMenu.getMenuIds()).contains(menu.getParentId());
-                    if (isContains == true) {
-                        isContains = true;
-                    } else {
-                        isContains = false;
-                        break;
-                    }
-                }
-                if (isContains == false) {
+        boolean isContains = true;
+        String stringBuffer = "";
+        List<Role> roleList = roleMapper.queryRoleByroleId(roleToMenu.getRoleId());
+        List<String> roleId = Arrays.asList(roleToMenu.getMenuIds());
+        for (int i = 0; i < roleId.size(); i++) {
+            Menu menu = menuMapper.queryMenuByMenuId(roleId.get(i));
+            stringBuffer += menu.getMenuName() + "、";
+            if (!menu.getParentId().equals("0")) {
+                isContains = Arrays.asList(roleToMenu.getMenuIds()).contains(menu.getParentId());
+                if (isContains == true) {
+                    isContains = true;
+                } else {
+                    isContains = false;
                     break;
                 }
             }
             if (isContains == false) {
-                return true;
+                break;
             }
-            roleToMenuMapper.deleteRoleToMenu(roleToMenu);
+        }
+        if (isContains == false) {
+            return true;
+        }
+        roleToMenuMapper.deleteRoleToMenu(roleToMenu);
 
-            for (String ids : roleToMenu.getMenuIds()) {
-                roleToMenu.setMenuId(ids);
-                roleToMenuMapper.createRoleToMenu(roleToMenu);
-            }
-            logAspect.insertBindingLog(stringBuffer, roleList.get(0).getRoleName(), Modular.ROLETOMENU,roleToMenu.getCreateUserId());
+        for (String ids : roleToMenu.getMenuIds()) {
+            roleToMenu.setMenuId(ids);
+            roleToMenuMapper.createRoleToMenu(roleToMenu);
+        }
+        logAspect.insertBindingLog(stringBuffer, roleList.get(0).getRoleName(), Modular.ROLETOMENU,
+                roleToMenu.getCreateUserId());
         return false;
     }
 
@@ -126,17 +128,17 @@ public class RoleToMenuServiceImpl implements RoleToMenuService {
      */
     @Override
     public List<Menu> selectMenuByRoleId(RoleToMenu roleToMenu) {
-            List<RoleToMenu> list = roleToMenuMapper.selectMenuByRoleId(roleToMenu);
-            if (CollectionUtils.isEmpty(list)) {
-                return null;
+        List<RoleToMenu> list = roleToMenuMapper.selectMenuByRoleId(roleToMenu);
+        if (CollectionUtils.isEmpty(list)) {
+            return null;
+        }
+        List<Menu> menuList = new ArrayList<Menu>();
+        for (RoleToMenu role : list) {
+            Menu menu = menuMapper.queryMenuByMenuId(role.getMenuId());
+            if (menu != null) {
+                menuList.add(menu);
             }
-            List<Menu> menuList = new ArrayList<Menu>();
-            for (RoleToMenu role : list) {
-                Menu menu = menuMapper.queryMenuByMenuId(role.getMenuId());
-                if (menu != null) {
-                    menuList.add(menu);
-                }
-            }
+        }
         return menuList;
     }
 }

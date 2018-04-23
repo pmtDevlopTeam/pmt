@@ -184,12 +184,12 @@ public class Org implements Serializable {
         this.orgList = orgList;
     }
 
-	public String getParentOrgname() {
-		return parentOrgname;
-	}
+    public String getParentOrgname() {
+        return parentOrgname;
+    }
 
-	public void setParentOrgname(String parentOrgname) {
-		this.parentOrgname = parentOrgname;
-	}
+    public void setParentOrgname(String parentOrgname) {
+        this.parentOrgname = parentOrgname;
+    }
 
 }

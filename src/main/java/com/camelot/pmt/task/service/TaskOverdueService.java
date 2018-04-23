@@ -46,34 +46,20 @@ public interface TaskOverdueService {
      *         ExecuteResult<DataGrid<UserModel>> @throws
      */
 
-	ExecuteResult<PageInfo<Map<String,Object>>> queryOverdueTask(Task task,Integer page, Integer rows);
-	
-	/**
-	 * 查询延期任务列表
-	* @Title: delayedTaskReminderList
-	* @Description: TODO
-	* @param @param leadtime
-	* @param @param delaytime
-	* @param @return
-	* @return ExecuteResult<PageInfo<Map<String,Object>>> 
-	* @throws
-	 */
-	ExecuteResult<Map<String,Object>> delayedTaskReminderList(Integer leadtime, Integer delaytime);
-	
-	/**
-	 * 查询延时任务列表
-	* @Title: deferredTaskRemindersList
-	* @Description: TODO
-	* @param @param leadtime
-	* @param @param delaytime
-	* @param @return
-	* @return ExecuteResult<PageInfo<Map<String,Object>>> 
-	* @throws
-	 */
-	ExecuteResult<Map<String,Object>> deferredTaskRemindersList(Integer leadtime, Integer delaytime);
-    
-    
-   
+    ExecuteResult<PageInfo<Map<String, Object>>> queryOverdueTask(Task task, Integer page, Integer rows);
 
+    /**
+     * 查询延期任务列表 @Title: delayedTaskReminderList @Description: TODO @param @param
+     * leadtime @param @param delaytime @param @return @return
+     * ExecuteResult<PageInfo<Map<String,Object>>> @throws
+     */
+    ExecuteResult<Map<String, Object>> delayedTaskReminderList(Integer leadtime, Integer delaytime);
+
+    /**
+     * 查询延时任务列表 @Title: deferredTaskRemindersList @Description: TODO @param @param
+     * leadtime @param @param delaytime @param @return @return
+     * ExecuteResult<PageInfo<Map<String,Object>>> @throws
+     */
+    ExecuteResult<Map<String, Object>> deferredTaskRemindersList(Integer leadtime, Integer delaytime);
 
 }

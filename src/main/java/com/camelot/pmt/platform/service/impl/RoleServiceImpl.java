@@ -38,23 +38,23 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public List<Tree<Role>> queryAllRole() {
         List<Tree<Role>> trees = new ArrayList<Tree<Role>>();
-            List<Role> list = roleMapper.queryAllRole();
-            if (CollectionUtils.isEmpty(list)) {
-                return null;
-            }
-            for (Role role : list) {
-                Tree<Role> tree = new Tree<Role>();
-                tree.setId(role.getRoleId());
-                tree.setParentId(role.getParentId());
-                tree.setText(role.getRoleName());
-                Map<String, Object> attributes = new HashMap<>(16);
-                attributes.put("state", role.getState());
-                attributes.put("createTime", role.getCreateTime());
-                attributes.put("modifyTime", role.getModifyTime());
-                tree.setAttributes(attributes);
-                trees.add(tree);
-            }
-            List<Tree<Role>> treeList = BuildTree.buildList(trees, "0");
+        List<Role> list = roleMapper.queryAllRole();
+        if (CollectionUtils.isEmpty(list)) {
+            return null;
+        }
+        for (Role role : list) {
+            Tree<Role> tree = new Tree<Role>();
+            tree.setId(role.getRoleId());
+            tree.setParentId(role.getParentId());
+            tree.setText(role.getRoleName());
+            Map<String, Object> attributes = new HashMap<>(16);
+            attributes.put("state", role.getState());
+            attributes.put("createTime", role.getCreateTime());
+            attributes.put("modifyTime", role.getModifyTime());
+            tree.setAttributes(attributes);
+            trees.add(tree);
+        }
+        List<Tree<Role>> treeList = BuildTree.buildList(trees, "0");
         return treeList;
     }
 
@@ -66,12 +66,12 @@ public class RoleServiceImpl implements RoleService {
      */
     @Override
     public boolean addRole(Role role) throws Exception {
-            role = setRoleModel(role);
-            int state = roleMapper.addRole(role);
-            if(state == 1){
-                logAspect.insertAddLog(role, Modular.ROLE, role.getCreateUserId());
-                return true;
-            }
+        role = setRoleModel(role);
+        int state = roleMapper.addRole(role);
+        if (state == 1) {
+            logAspect.insertAddLog(role, Modular.ROLE, role.getCreateUserId());
+            return true;
+        }
         return false;
     }
 

@@ -319,7 +319,7 @@ public class ProjectMain implements Serializable {
     }
 
     public void setProjectVisible(String projectVisible) {
-        this.projectVisible = projectVisible== null ? null : projectVisible.trim();
+        this.projectVisible = projectVisible == null ? null : projectVisible.trim();
     }
 
 }

@@ -39,5 +39,5 @@ public interface UseCaseMapper {
      * @return
      */
     int updateByProjectId(@Param("projectId") Long projectId, @Param("caseStatus") String caseStatus,
-                          @Param("modifyUserId") String modifyUserId, @Param("modifyTime") Date modifyTime);
+            @Param("modifyUserId") String modifyUserId, @Param("modifyTime") Date modifyTime);
 }
