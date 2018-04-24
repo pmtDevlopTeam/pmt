@@ -1,8 +1,6 @@
 package com.camelot.pmt.task.service;
 
-import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.task.model.Task;
-import com.github.pagehelper.PageInfo;
 
 import java.util.List;
 import java.util.Map;
@@ -12,7 +10,7 @@ public interface TaskAlreadyService {
     /**
      * TODO重做(我的任务状态转为正在进行)
      *
-     * @param Long
+     * @param
      *            id
      * @return boolean
      */
@@ -22,9 +20,9 @@ public interface TaskAlreadyService {
     /**
      * 根据任务ID 提测
      *
-     * @param Long
+     * @param
      *            id
-     * @return ExecuteResult<String>
+     * @return   boolean
      */
 
     boolean updateTaskToTest(Long id);
@@ -33,7 +31,7 @@ public interface TaskAlreadyService {
     /**
      * 查询未完成任务的个数
      *
-     * @param Long
+     * @param
      *            projectId, String userId
      * @return int
      */
@@ -43,9 +41,9 @@ public interface TaskAlreadyService {
     /**
      * 根据需求ID 查询任务列表
      *
-     * @param long
+     * @param
      *            demandId
-     * @return ExecuteResult<List<Task>>
+     * @return List<Task>
      */
 
     List<Task> queryTaskByDemandId(Long demandId);
@@ -54,9 +52,9 @@ public interface TaskAlreadyService {
     /**
      * 查询我的任务
      *
-     * @param Task task
+     * @param  task
      *
-     * @return ExecuteResult<Map<String,Object>>
+     * @return Map<String,Object>
      */
 
     Map<String,Object> queryMyAllTask(Task task);
