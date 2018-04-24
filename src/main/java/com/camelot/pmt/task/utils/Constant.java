@@ -17,10 +17,8 @@ public class Constant {
         RUNING("1"),
         /** 已办 */
         ALREADY("2"),
-        /** 延期 */
-        OVERDUE("3"),
         /** 关闭 */
-        CLOSE("4");
+        CLOSE("3");
         private String value;
 
         TaskStatus(String value) {
@@ -58,6 +56,35 @@ public class Constant {
         private String value;
 
         AttachmentSource(String value) {
+            this.value = value;
+        }
+
+        public String getValue() {
+            return value;
+        }
+    }
+    
+    /** 任务日志按钮类型 */
+    public enum TaskLogOperationButton {
+        /** 新建任务 */
+    	CREATETASK("新建任务"),
+    	/** 评估任务 */
+    	EVALUATION("评估任务"),
+    	/** 开始任务 */
+    	UPDATETASK("修改任务"),
+    	/** 修改任务 */
+    	DELETETASK("删除任务"),
+    	/** 开始任务 */
+        STARTTASK("开始任务"),
+        /** 完成任务 */
+        COMPLETETASK("完成任务"),
+        /** 关闭任务 */
+        CLOSETASK("关闭任务"),
+        /** 提测任务 */
+        MEASUREMENT("提测任务");
+        private String value;
+
+        TaskLogOperationButton(String value) {
             this.value = value;
         }
 

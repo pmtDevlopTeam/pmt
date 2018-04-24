@@ -130,7 +130,7 @@ public class TaskPendingController {
                 return ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
             }
             // 更新我的待办任务为正在进行中
-            String result = taskPendingService.updateTaskPendingToStatus(id, TaskStatus.RUNING.getValue());
+            String result = taskPendingService.updateTaskPendingToStatus(id, TaskStatus.RUNING.getValue(),user.getUserId());
             // 判断是否成功
             if (result != null) {
                 return ApiResponse.jsonData(APIStatus.OK_200, result);
@@ -162,7 +162,7 @@ public class TaskPendingController {
                 return ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
             }
             // 更新我的待办任务为正在进行中
-            String result = taskPendingService.updateTaskPendingToStatus(id, TaskStatus.CLOSE.getValue());
+            String result = taskPendingService.updateTaskPendingToStatus(id, TaskStatus.CLOSE.getValue(),user.getUserId());
             // 判断是否成功
             if (StringUtil.isNotEmpty(result)) {
                 return ApiResponse.jsonData(APIStatus.OK_200, result);
@@ -181,7 +181,7 @@ public class TaskPendingController {
      * 设定文件 @return JSONObject 返回类型 @throws
      */
     @Deprecated
-    @ApiOperation(value = "查询我的全部的任务列表", notes = "查询我的全部的任务列表")
+    @ApiOperation(value = "勿调用，查询我的全部的任务列表", notes = "勿调用，查询我的全部的任务列表")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "taskNum", value = "任务编号", required = false, paramType = "form", dataType = "String"),
             @ApiImplicitParam(name = "taskName", value = "任务名称", required = false, paramType = "form", dataType = "String"),
@@ -218,7 +218,7 @@ public class TaskPendingController {
      * @return
      */
     @Deprecated
-    @ApiOperation(value = "我的待办任务转为延期", notes = "我的待办任务转为延期")
+    @ApiOperation(value = "勿调用，我的待办任务转为延期", notes = "勿调用，我的待办任务转为延期")
     @RequestMapping(value = "/updateTaskPendingToDelay", method = RequestMethod.POST)
     public JSONObject updateTaskPendingToDelay(
             @ApiParam(name = "id", value = "任务标识号", required = true) @RequestParam(required = true) Long id,
@@ -284,7 +284,7 @@ public class TaskPendingController {
      * task @param @return 设定文件 @return JSONObject 返回类型 @throws
      */
     @Deprecated
-    @ApiOperation(value = "修改待办任务", notes = "修改待办任务")
+    @ApiOperation(value = "勿调用，修改待办任务", notes = "勿调用，修改待办任务")
     @RequestMapping(value = "/updateTaskPending", method = RequestMethod.POST)
     public JSONObject updateTaskPending(
             @ApiParam(name = "id", value = "任务标识号", required = true) @RequestParam(required = true) Long id,

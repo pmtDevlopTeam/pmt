@@ -14,10 +14,10 @@ public interface TaskAlreadyService {
      *
      * @param Long
      *            id
-     * @return ExecuteResult<String>
+     * @return boolean
      */
 
-    ExecuteResult<String> updateTaskAlreadyToRunning(Long id);
+    boolean updateTaskAlreadyToRunning(Long id);
 
     /**
      * 根据任务ID 提测
@@ -27,7 +27,7 @@ public interface TaskAlreadyService {
      * @return ExecuteResult<String>
      */
 
-    ExecuteResult<String> updateTaskToTest(Long id);
+    boolean updateTaskToTest(Long id);
 
 
     /**
@@ -48,7 +48,7 @@ public interface TaskAlreadyService {
      * @return ExecuteResult<List<Task>>
      */
 
-    ExecuteResult<List<Task>> queryTaskByDemandId(Long demandId);
+    List<Task> queryTaskByDemandId(Long demandId);
 
 
     /**
