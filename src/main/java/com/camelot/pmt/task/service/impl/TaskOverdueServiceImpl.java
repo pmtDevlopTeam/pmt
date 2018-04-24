@@ -150,90 +150,91 @@ public class TaskOverdueServiceImpl implements TaskOverdueService {
         return result;
     }
 
+    /**
+     * 根据任务Id修改状态
+     */
+    @Override
+    public ExecuteResult<String> updateTaskOverdueStatus(String taskId) {
+        ExecuteResult<String> result = new ExecuteResult<String>();
+        try {
+            if (StringUtils.isEmpty(taskId)) {
+                result.setResult("该任务不存在!");
+                return result;
+            }
+            // 进行任务的状态更改(根据id去更改任务的状态)
+            int count = taskMapper.updateTaskOverdueStatus(taskId);
+            // 添加日志
+            TaskLog taskLog = new TaskLog();
+            taskLog.setTaskId(Long.valueOf(taskId));
+            // User user = (User)ShiroUtils.getSessionAttribute("user");
+            taskLog.setUserId("cbec73cb98be4e9e8f3e2aab25a0a7bc");
+            taskLog.setOperationButton("开始任务");
+            taskLog.setOperationDescribe("由延期状态修改成开始状态");
+            taskLog.setOperationTime(new Date());
+            int insert = logMapper.insert(taskLog);
+            if ((count + insert) == 0) {
+                result.setResult("修改任务状态失败!");
+                return result;
+            }
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+        result.setResult("修改任务状态成功!");
+        return result;
+    }
 
-	/**
-	 * 根据任务Id修改状态
-	 */
-	@Override
-	public ExecuteResult<String> updateTaskOverdueStatus(String taskId) {
-		ExecuteResult<String> result = new ExecuteResult<String>();
-		try {
-			if (StringUtils.isEmpty(taskId)) {
-				result.setResult("该任务不存在!");
-				return result;
-			}
-			// 进行任务的状态更改(根据id去更改任务的状态)
-			int count = taskMapper.updateTaskOverdueStatus(taskId);
-			// 添加日志
-			TaskLog taskLog = new TaskLog();
-			taskLog.setTaskId(Long.valueOf(taskId));
-			// User user = (User)ShiroUtils.getSessionAttribute("user");
-			taskLog.setUserId("cbec73cb98be4e9e8f3e2aab25a0a7bc");
-			taskLog.setOperationButton("开始任务");
-			taskLog.setOperationDescribe("由延期状态修改成开始状态");
-			taskLog.setOperationTime(new Date());
-			int insert = logMapper.insert(taskLog);
-			if ((count + insert) == 0) {
-				result.setResult("修改任务状态失败!");
-				return result;
-			}
-		} catch (Exception e) {
-			LOGGER.error(e.getMessage());
-			throw new RuntimeException(e);
-		}
-		result.setResult("修改任务状态成功!");
-		return result;
-	}
-	/**
-	 * 延期任务列表
-	 */
-	@Override
-	public ExecuteResult<Map<String,Object>> deferredTaskRemindersList(Integer leadtime, Integer delaytime) {
-		ExecuteResult<Map<String,Object>> result = new ExecuteResult<Map<String,Object>>();
-		try {
-			if (!leadtime.equals("") && leadtime != null && delaytime.equals("") && delaytime != null) {
-				//查询超时提前列表
-				leadtime=leadtime*(-1);
-				List<Map<String, Object>> leaddeferredTaskRemindersList = taskMapper.queryleaddeferredTaskRemindersList(leadtime);
-				//查询超时延后列表
-				List<Map<String, Object>> deferredTaskRemindersList = taskMapper.querydelaytimedeferredTaskRemindersList(delaytime);
-				HashMap<String, Object> map = new HashMap<String,Object>();
-				map.put("leaddeferredTaskRemindersList", leaddeferredTaskRemindersList);
-				map.put("deferredTaskRemindersList", deferredTaskRemindersList);
-				result.setResult(map);
-				return result;
-			}
-			result.addErrorMessage("查询失败！");
-		} catch (Exception e) {
-			LOGGER.error(e.getMessage());
-			throw new RuntimeException(e);
-		}
-		return result;
-		
-		
-	}
-	
-	/**
-	 * 延时任务列表
-	 */
-	@Override
-	public ExecuteResult<Map<String,Object>> delayedTaskReminderList(Integer leadtime, Integer delaytime) {
-		ExecuteResult<List<Map<String, Object>>> result = new ExecuteResult<List<Map<String, Object>>>();
-		try {
-			if (!leadtime.equals("") && leadtime != null && delaytime.equals("") && delaytime != null) {
-			/*	List<Map<String, Object>> delayedTaskReminderList = taskMapper.querydelayedTaskReminderList(leadtime,delaytime);
-				result.setResult(delayedTaskReminderList);
-				return result;*/
-			}
-			result.addErrorMessage("查询失败！");
-		} catch (Exception e) {
-			LOGGER.error(e.getMessage());
-			throw new RuntimeException(e);
-		}
-		return null;
-	}
+    /**
+     * 延时任务列表
+     */
+    @Override
+    public ExecuteResult<Map<String, Object>> deferredTaskRemindersList(Integer leadtime, Integer delaytime) {
+        ExecuteResult<Map<String, Object>> result = new ExecuteResult<Map<String, Object>>();
+        try {
+            // 查询超时提前列表
+            leadtime = leadtime * (-1);
+            List<Map<String, Object>> leaddeferredTaskRemindersList = taskMapper
+                    .queryleaddeferredTaskRemindersList(leadtime);
+            // 查询超时延后列表
+            List<Map<String, Object>> deferredTaskRemindersList = taskMapper
+                    .querydelaytimedeferredTaskRemindersList(delaytime);
+            HashMap<String, Object> map = new HashMap<String, Object>();
+            map.put("leaddeferredTaskRemindersList", leaddeferredTaskRemindersList);
+            map.put("deferredTaskRemindersList", deferredTaskRemindersList);
+            result.setResult(map);
+            return result;
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
 
-  
+    }
 
+    /**
+     * 延期任务列表
+     */
+    @Override
+    public ExecuteResult<Map<String, Object>> delayedTaskReminderList(Integer leadtime, Integer delaytime) {
+        ExecuteResult<Map<String, Object>> result = new ExecuteResult<Map<String, Object>>();
+        try {
+            // 查询延期提前列表
+            leadtime = leadtime * (-1);
+            List<Map<String, Object>> leaddelayedTaskReminderList = taskMapper
+                    .queryleaddelayedTaskReminderList(leadtime);
+            // 查询延期延后列表
+            List<Map<String, Object>> delaydelayedTaskReminderList = taskMapper
+                    .querydelaydelayedTaskReminderList(delaytime);
+            HashMap<String, Object> map = new HashMap<String, Object>();
+            map.put("leaddelayedTaskReminderList", leaddelayedTaskReminderList);
+            map.put("delaydelayedTaskReminderList", delaydelayedTaskReminderList);
+            result.setResult(map);
+            return result;
+
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+
+    }
 
 }

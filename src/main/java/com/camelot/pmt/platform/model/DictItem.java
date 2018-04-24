@@ -63,7 +63,32 @@ public class DictItem implements Serializable {
      * 修改人
      */
     private String modifyUserId;
+    /**
+     * 用户对象信息
+     */
+    private User user;
+    /**
+     * 字典对象信息
+     */
+    private Dict dict;
     
+    
+	public Dict getDict() {
+		return dict;
+	}
+
+	public void setDict(Dict dict) {
+		this.dict = dict;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
 	public DictItem() {
 		super();
 		// TODO Auto-generated constructor stub

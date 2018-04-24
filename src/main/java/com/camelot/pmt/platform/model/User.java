@@ -40,7 +40,7 @@ public class User implements Serializable {
      */
     private String username;
     /**
-     * 用户状态 0（默认）启用 1 停用 
+     * 用户状态 0（默认）启用 1 停用
      */
     private String state;
     /**
@@ -92,180 +92,176 @@ public class User implements Serializable {
      */
     private String[] roleIds;
 
-	public User() {
-		super();
-	}
+    public User() {
+        super();
+    }
 
-	public User(Long id, String userId, String loginCode, String password, String newPassword, String secondNewPassword,
-			String username, String state, Date createTime, Date modifyTime, String createUserId, String modifyUserId,
-			String userJobNum, String userPhone, String userMail, String orgId, String roleId, String[] roleIds) {
-		super();
-		this.id = id;
-		this.userId = userId;
-		this.loginCode = loginCode;
-		this.password = password;
-		this.newPassword = newPassword;
-		this.secondNewPassword = secondNewPassword;
-		this.username = username;
-		this.state = state;
-		this.createTime = createTime;
-		this.modifyTime = modifyTime;
-		this.createUserId = createUserId;
-		this.modifyUserId = modifyUserId;
-		this.userJobNum = userJobNum;
-		this.userPhone = userPhone;
-		this.userMail = userMail;
-		this.orgId = orgId;
-		this.roleId = roleId;
-		this.roleIds = roleIds;
-	}
+    public User(Long id, String userId, String loginCode, String password, String newPassword, String secondNewPassword,
+            String username, String state, Date createTime, Date modifyTime, String createUserId, String modifyUserId,
+            String userJobNum, String userPhone, String userMail, String orgId, String roleId, String[] roleIds) {
+        super();
+        this.id = id;
+        this.userId = userId;
+        this.loginCode = loginCode;
+        this.password = password;
+        this.newPassword = newPassword;
+        this.secondNewPassword = secondNewPassword;
+        this.username = username;
+        this.state = state;
+        this.createTime = createTime;
+        this.modifyTime = modifyTime;
+        this.createUserId = createUserId;
+        this.modifyUserId = modifyUserId;
+        this.userJobNum = userJobNum;
+        this.userPhone = userPhone;
+        this.userMail = userMail;
+        this.orgId = orgId;
+        this.roleId = roleId;
+        this.roleIds = roleIds;
+    }
 
-	public Long getId() {
-		return id;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public String getUserId() {
-		return userId;
-	}
+    public String getUserId() {
+        return userId;
+    }
 
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
-	public String getLoginCode() {
-		return loginCode;
-	}
+    public String getLoginCode() {
+        return loginCode;
+    }
 
-	public void setLoginCode(String loginCode) {
-		this.loginCode = loginCode;
-	}
+    public void setLoginCode(String loginCode) {
+        this.loginCode = loginCode;
+    }
 
-	public String getPassword() {
-		return password;
-	}
+    public String getPassword() {
+        return password;
+    }
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-	public String getNewPassword() {
-		return newPassword;
-	}
+    public String getNewPassword() {
+        return newPassword;
+    }
 
-	public void setNewPassword(String newPassword) {
-		this.newPassword = newPassword;
-	}
+    public void setNewPassword(String newPassword) {
+        this.newPassword = newPassword;
+    }
 
-	public String getSecondNewPassword() {
-		return secondNewPassword;
-	}
+    public String getSecondNewPassword() {
+        return secondNewPassword;
+    }
 
-	public void setSecondNewPassword(String secondNewPassword) {
-		this.secondNewPassword = secondNewPassword;
-	}
+    public void setSecondNewPassword(String secondNewPassword) {
+        this.secondNewPassword = secondNewPassword;
+    }
 
-	public String getUsername() {
-		return username;
-	}
+    public String getUsername() {
+        return username;
+    }
 
-	public void setUsername(String username) {
-		this.username = username;
-	}
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
-	public String getState() {
-		return state;
-	}
+    public String getState() {
+        return state;
+    }
 
-	public void setState(String state) {
-		this.state = state;
-	}
+    public void setState(String state) {
+        this.state = state;
+    }
 
-	public Date getCreateTime() {
-		return createTime;
-	}
+    public Date getCreateTime() {
+        return createTime;
+    }
 
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
-	}
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
 
-	public Date getModifyTime() {
-		return modifyTime;
-	}
+    public Date getModifyTime() {
+        return modifyTime;
+    }
 
-	public void setModifyTime(Date modifyTime) {
-		this.modifyTime = modifyTime;
-	}
+    public void setModifyTime(Date modifyTime) {
+        this.modifyTime = modifyTime;
+    }
 
-	public String getCreateUserId() {
-		return createUserId;
-	}
+    public String getCreateUserId() {
+        return createUserId;
+    }
 
-	public void setCreateUserId(String createUserId) {
-		this.createUserId = createUserId;
-	}
+    public void setCreateUserId(String createUserId) {
+        this.createUserId = createUserId;
+    }
 
-	public String getModifyUserId() {
-		return modifyUserId;
-	}
+    public String getModifyUserId() {
+        return modifyUserId;
+    }
 
-	public void setModifyUserId(String modifyUserId) {
-		this.modifyUserId = modifyUserId;
-	}
+    public void setModifyUserId(String modifyUserId) {
+        this.modifyUserId = modifyUserId;
+    }
 
-	public String getUserJobNum() {
-		return userJobNum;
-	}
+    public String getUserJobNum() {
+        return userJobNum;
+    }
 
-	public void setUserJobNum(String userJobNum) {
-		this.userJobNum = userJobNum;
-	}
+    public void setUserJobNum(String userJobNum) {
+        this.userJobNum = userJobNum;
+    }
 
-	public String getUserPhone() {
-		return userPhone;
-	}
+    public String getUserPhone() {
+        return userPhone;
+    }
 
-	public void setUserPhone(String userPhone) {
-		this.userPhone = userPhone;
-	}
+    public void setUserPhone(String userPhone) {
+        this.userPhone = userPhone;
+    }
 
-	public String getUserMail() {
-		return userMail;
-	}
+    public String getUserMail() {
+        return userMail;
+    }
 
-	public void setUserMail(String userMail) {
-		this.userMail = userMail;
-	}
+    public void setUserMail(String userMail) {
+        this.userMail = userMail;
+    }
 
-	public String getOrgId() {
-		return orgId;
-	}
+    public String getOrgId() {
+        return orgId;
+    }
 
-	public void setOrgId(String orgId) {
-		this.orgId = orgId;
-	}
+    public void setOrgId(String orgId) {
+        this.orgId = orgId;
+    }
 
-	public String getRoleId() {
-		return roleId;
-	}
+    public String getRoleId() {
+        return roleId;
+    }
 
-	public void setRoleId(String roleId) {
-		this.roleId = roleId;
-	}
+    public void setRoleId(String roleId) {
+        this.roleId = roleId;
+    }
 
-	public String[] getRoleIds() {
-		return roleIds;
-	}
+    public String[] getRoleIds() {
+        return roleIds;
+    }
 
-	public void setRoleIds(String[] roleIds) {
-		this.roleIds = roleIds;
-	}
-
-	
-
-  
+    public void setRoleIds(String[] roleIds) {
+        this.roleIds = roleIds;
+    }
 
 }

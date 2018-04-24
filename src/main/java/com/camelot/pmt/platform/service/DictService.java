@@ -36,12 +36,20 @@ public interface DictService {
 	 * @return boolean
 	 */
 	boolean updateDictByDictId(Dict dict);
-	/** 修改组织机构的状态
-	 * @param orgId state
+	/** 
+	 * 修改字典的状态
+	 * @param Dict dict
 	 * @return JSONObject
 	 * 
 	 **/
 	boolean updateDictByDictIdAndState(Dict dict);
+	/** 
+	 * 修改字典的状态和字典项状态
+	 * @param Dict dict
+	 * @return JSONObject
+	 * 
+	 **/
+	boolean updateDictOrDictItemByDictIdAndState(Dict dict);
     /**
      * 根据字典dictId 查询一个字典
      * 

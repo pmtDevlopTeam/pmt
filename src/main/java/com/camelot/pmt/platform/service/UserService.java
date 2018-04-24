@@ -19,23 +19,41 @@ public interface UserService {
 	 * 
 	 * <p>
 	 * Description:[添加用户]
-	 * </p>
 	 * 
 	 * @param User
 	 * @return ExecuteResult<String>
 	 * @author [maple]
 	 */
 	String addUser(User user);
-
+	
 	/**
 	 * 
-	 * Description:[根据用户userId删除一个用户]
-	 * @param String userId
-	 * @return boolean
+	 * Description:[根据用户ID更新一个用户详情]
+	 * @param User
+	 * @return String
 	 * @author [maple]
-	 * 2018年4月19日上午12:02:32
 	 */
-	boolean deleteUserByUserId(String userId);
+	String updateUserDetailsByUserId(User user);
+	
+	/**
+	 * 
+	 * Description:[用户重置密码]
+	 * @param User user
+	 * @return String
+	 * @author [maple]
+	 * 2018年4月16日下午10:44:45
+	 */
+	String updateResetUserPasswordByUserId(User user);
+	
+	/**
+	 * 
+	 * Description:[用户修改密码]
+	 * @param User user
+	 * @return String
+	 * @author [maple]
+	 * 2018年4月16日下午10:44:45
+	 */
+	String updateUserPasswordByUserId(User user);
 
 	/**
 	 * 
@@ -79,16 +97,6 @@ public interface UserService {
 
 	/**
 	 * 
-	 * Description:[根据用户ID更新一个用户详情]
-	 * 
-	 * @param User
-	 * @return String
-	 * @author [maple]
-	 */
-	String updateUserDetailsByUserId(User user);
-
-	/**
-	 * 
 	 * Description:[根据用户ID查询一个用户详情信息]
 	 * @param String userId
 	 * @return User
@@ -99,23 +107,14 @@ public interface UserService {
 	
 	/**
 	 * 
-	 * Description:[用户重置密码]
-	 * @param User user
-	 * @return String
+	 * Description:[根据用户名模糊查询获取user对象]
+	 * @param String username
+	 * @return List<User>
 	 * @author [maple]
-	 * 2018年4月16日下午10:44:45
+	 * 2018年4月18日下午3:49:33
 	 */
-	String updateResetUserPasswordByUserId(User user);
+	List<User> queryUsersByUserName(String username);
 	
-	/**
-	 * 
-	 * Description:[用户修改密码]
-	 * @param User user
-	 * @return String
-	 * @author [maple]
-	 * 2018年4月16日下午10:44:45
-	 */
-	String updateUserPasswordByUserId(User user);
 	
 	/**
 	 * 
@@ -129,13 +128,22 @@ public interface UserService {
 	
 	/**
 	 * 
-	 * Description:[根据用户名模糊查询获取user对象]
-	 * @param String username
-	 * @return List<User>
+	 * Description:[根据用户ID激活一个用户]
+	 * 
+	 * @param User
+	 * @return boolean
 	 * @author [maple]
-	 * 2018年4月18日下午3:49:33
 	 */
-	List<User> queryUsersByUserName(String username);
-    
+	boolean activateUserStateByUserId(User user);
+	
+	/**
+	 * 
+	 * Description:[根据用户ID禁用一个用户]
+	 * 
+	 * @param User
+	 * @return boolean
+	 * @author [maple]
+	 */
+	boolean disableUserStateByUserId(User user);
 
 }

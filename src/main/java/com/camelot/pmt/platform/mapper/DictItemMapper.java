@@ -54,19 +54,26 @@ public interface DictItemMapper {
      */
     DictItem queryDictItemByDictItemId(String dictItemId);
     /**
-     * 根据字典dictId 查询字典项 不分页
+     * 根据字典dictId 查询字典项 
      * 
      * @param String dictId
      * @return List<DictItem>
      */
     List<DictItem> queryDictItemListByDictId(String dictId);
     /**
-     * 查询全部字典项  不分页
+     * 查询全部字典项  
      * 
      * @param 
      * @return List<DictItem>
      */
     List<DictItem> queryDictItemListAll();
+    /**
+     * 查询全部字典项  用户
+     * 
+     * @param 
+     * @return List<DictItem>
+     */
+    List<DictItem> queryDictItemOrUserListAll();
     /**
      * 根据字典dictId 查询字典项 分页 
      * 

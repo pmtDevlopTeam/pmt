@@ -67,13 +67,9 @@ public class TaskLogController {
     @RequestMapping(value = "/queryTaskLogList", method = RequestMethod.GET)
     public JSONObject queryTaskLogList(
             @ApiParam(name = "id", value = "任务id", required = true) @RequestParam(required = true) Long id) {
-        ExecuteResult<List<TaskLog>> result = null;
         try {
-            result = taskLogService.queryTaskLogList(id);
-            if (result.isSuccess()) {
-                return ApiResponse.success(result.getResult());
-            }
-            return ApiResponse.error();
+            List<TaskLog> result = taskLogService.queryTaskLogList(id);
+                return ApiResponse.success(result);
         } catch (Exception e) {
             return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
         }

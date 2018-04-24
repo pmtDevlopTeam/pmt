@@ -21,17 +21,13 @@ public interface TaskFileService {
      * @return boolean
      */
     boolean insert(TaskFile taskFile);
-    
+
     /**
      * 
-    * @Title: update 
-    * @Description: TODO(文件修改) 
-    * @param @param taskFile
-    * @param @return    设定文件 
-    * @return boolean    返回类型 
-    * @throws
+     * @Title: update @Description: TODO(文件修改) @param @param taskFile @param @return
+     * 设定文件 @return boolean 返回类型 @throws
      */
-    boolean addOrupdate(Long id,TaskFile taskFile,MultipartFile file);
+    boolean addOrupdate(Long id, TaskFile taskFile, MultipartFile file);
 
     /**
      * 根据附件来源和来源id查询附件元信息

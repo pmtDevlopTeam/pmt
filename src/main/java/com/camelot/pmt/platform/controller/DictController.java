@@ -215,6 +215,42 @@ public class DictController {
     	}
 
     }
+    
+    /** 修改字典的状态 连带修改字典项状态
+	 * @param dictId state
+	 * @return JSONObject  {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
+	 * 
+	 **/
+    @ApiOperation(value = "修改字典状态与字典项状态接口", notes = "修改字典状态与字典项状态接口")
+    @ApiImplicitParams({
+    	@ApiImplicitParam(
+                name="dictId",value="字典dictId",required=true,paramType="form",dataType="String"),
+        @ApiImplicitParam(
+                name="state",value="字典状态",required=true,paramType="form",dataType="String"),
+    })
+    @RequestMapping(value="/updateDictOrDictItemByDictIdAndState", method=RequestMethod.POST)
+    public JSONObject updateDictOrDictItemByDictIdAndState(@ApiIgnore Dict dict){
+    	boolean flag = false;
+    	try {
+    		User user = (User) ShiroUtils.getSessionAttribute("user");
+            if (StringUtils.isEmpty(user.getUserId())) {
+                ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
+            }
+            dict.setModifyUserId(user.getUserId());
+    		if (StringUtils.isEmpty(dict.getDictId()) && StringUtils.isEmpty(dict.getState())) {
+                return ApiResponse.jsonData(APIStatus.ERROR_400);
+            }
+    		flag = dictService.updateDictOrDictItemByDictIdAndState(dict);
+	         if(flag){
+	        	 return ApiResponse.success();
+	         }
+	          	 return ApiResponse.error("修改字典状态异常");
+    	}catch (Exception e) {
+    		logger.error(e.getMessage());
+    		return ApiResponse.error();
+    	}
+
+    }
 	
 
     /**

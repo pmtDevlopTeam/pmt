@@ -25,6 +25,7 @@ import com.camelot.pmt.platform.model.DictItem;
 import com.camelot.pmt.platform.model.Menu;
 import com.camelot.pmt.platform.model.User;
 import com.camelot.pmt.platform.service.DictItemService;
+import com.camelot.pmt.platform.service.DictService;
 import com.camelot.pmt.platform.shiro.ShiroUtils;
 import com.github.pagehelper.PageInfo;
 
@@ -53,6 +54,9 @@ public class DictItemController {
     
 	@Autowired
 	DictItemService dictItemService; 
+
+	@Autowired
+	DictService dictService; 
 	
     /**
      *  根据一个字典项对象  创建一个字典项
@@ -91,6 +95,12 @@ public class DictItemController {
 	    	{
 	    		return ApiResponse.errorPara();
             }
+	    	//检查字典是否存在
+	    	Dict dict = dictService.queryDictByDictId(dictItem.getDictId());
+	    	if(dict == null) {
+	    		result.setResult("字典不重复!");
+	    		return ApiResponse.success(result.getResult());	 
+	    	}
 	    	//检查字典项编码跟字典项名称是否唯一
 	    	 result = dictItemService.checkDictItemCodeOrDictItemNameIsExist(dictItem);
 	    	//如果字典项编码跟字典项名称唯一
@@ -286,6 +296,30 @@ public class DictItemController {
 	public JSONObject queryDictItemListAll(@ApiIgnore DictItem dictItem,@RequestParam(defaultValue = "1") Integer pageSize,@RequestParam(defaultValue = "10") Integer currentPage) {
         try {
         	List<DictItem> list = dictItemService.queryDictItemListAll(pageSize,currentPage);
+        	PageInfo<DictItem> result = new PageInfo<DictItem>(list);
+            return ApiResponse.success(result);
+        }catch (Exception e) {
+        	logger.error(e.getMessage());
+            return ApiResponse.error();
+        }
+        
+	}
+	
+    /**
+     * 查询全部字典项 用户
+     * 
+     * @param  
+     * @return {"status": {"code":xxx,"message":"xxx"}, "data": {xxx}]
+     */
+	@ApiOperation(value="查询全部字典项接口  用户", notes="查询全部字典项  用户")
+	@ApiImplicitParams({
+        @ApiImplicitParam(name = "currentPage", value = "页码", required = true, paramType = "query", dataType = "int"),
+        @ApiImplicitParam(name = "pageSize", value = "每页数量", required = true, paramType = "query", dataType = "int"),
+	})
+	@RequestMapping(value="/queryDictItemOrUserListAll", method=RequestMethod.POST)
+	public JSONObject queryDictItemOrUserListAll(@ApiIgnore DictItem dictItem,@RequestParam(defaultValue = "1") Integer pageSize,@RequestParam(defaultValue = "10") Integer currentPage) {
+        try {
+        	List<DictItem> list = dictItemService.queryDictItemOrUserListAll(pageSize,currentPage);
         	PageInfo<DictItem> result = new PageInfo<DictItem>(list);
             return ApiResponse.success(result);
         }catch (Exception e) {

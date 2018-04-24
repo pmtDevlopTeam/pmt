@@ -1,6 +1,5 @@
 package com.camelot.pmt.task.utils;
 
-
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
@@ -20,8 +19,10 @@ public final class FileUtils {
     /**
      * 上传.
      *
-     * @param file     上传的文件
-     * @param filePath 文件上传路径
+     * @param file
+     *            上传的文件
+     * @param filePath
+     *            文件上传路径
      * @author zlh
      * @date 15:13 2018/4/20
      */

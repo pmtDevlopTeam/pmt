@@ -92,6 +92,13 @@ public class DictItemServiceImpl implements DictItemService {
             List<DictItem> list = dictItemMapper.queryDictItemListAll();
             return list;
 	}
+	
+	@Override
+	public List<DictItem> queryDictItemOrUserListAll(Integer pageSize,Integer currentPage) {
+            PageHelper.startPage(currentPage,pageSize);
+            List<DictItem> list = dictItemMapper.queryDictItemOrUserListAll();
+            return list;
+	}
 
 //	@Override
 //	public ExecuteResult<DataGrid<DictItem>> queryListDictItemByDictIdPage(String dictId, Pager page) {

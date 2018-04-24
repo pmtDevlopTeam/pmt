@@ -66,6 +66,13 @@ public interface DictItemService {
      * @return List<DictItem>
      */
 	List<DictItem> queryDictItemListAll(Integer pageSize,Integer currentPage);
+    /**
+     * 查询全部字典项 用户
+     * 
+     * @param 
+     * @return List<DictItem>
+     */
+	List<DictItem> queryDictItemOrUserListAll(Integer pageSize,Integer currentPage);
 //	 /**
 //	  *根据字典dictId 查询字典项  分页
 //	  *

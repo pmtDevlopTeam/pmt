@@ -8,8 +8,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import com.camelot.pmt.common.ExecuteResult;
+import com.camelot.pmt.platform.mapper.DictItemMapper;
 import com.camelot.pmt.platform.mapper.DictMapper;
 import com.camelot.pmt.platform.model.Dict;
+import com.camelot.pmt.platform.model.DictItem;
 import com.camelot.pmt.platform.model.Org;
 import com.camelot.pmt.platform.service.DictService;
 import com.camelot.pmt.util.UUIDUtil;
@@ -25,6 +27,9 @@ public class DictServiceImpl implements DictService {
 	
 	@Autowired
 	DictMapper dictMapper; 
+	
+	@Autowired
+	DictItemMapper dictItemMapper; 
 
 	@Override
 	public boolean addDict(Dict dict) {
@@ -64,6 +69,24 @@ public class DictServiceImpl implements DictService {
 		}
         long date = new Date().getTime();
         dict.setModifyTime(new Date(date));
+        return (dictMapper.updateDictByDictIdAndState(dict)==1)?true:false;
+	}
+	
+	@Override
+	public boolean updateDictOrDictItemByDictIdAndState(Dict dict) {
+		if(StringUtils.isEmpty(dict.getDictId()) ){
+			return false;
+		}
+        long date = new Date().getTime();
+        dict.setModifyTime(new Date(date));
+        //查询字典项List
+        List<DictItem> dictItemList = dictItemMapper.queryDictItemListByDictId(dict.getDictId() );
+        for(DictItem dictItem : dictItemList) {
+        	dictItem.setState(dict.getState());
+        	dictItem.setModifyUserId(dict.getModifyUserId());
+        	dictItem.setModifyTime(new Date(date));
+        	dictItemMapper.updateDictItemByDictItemIdAndState(dictItem);
+        }
         return (dictMapper.updateDictByDictIdAndState(dict)==1)?true:false;
 	}
 

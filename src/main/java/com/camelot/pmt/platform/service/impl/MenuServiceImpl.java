@@ -66,6 +66,8 @@ public class MenuServiceImpl implements MenuService {
                 attributes.put("state", menu.getState());
                 attributes.put("sortNum", menu.getSortNum());
                 attributes.put("icon", menu.getMenuIcon());
+                attributes.put("createTime", menu.getCreateTime());
+                attributes.put("modifyTime", menu.getModifyTime());
                 tree.setAttributes(attributes);
                 trees.add(tree);
             }

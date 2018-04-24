@@ -65,7 +65,7 @@ public class TaskLogServiceImpl implements TaskLogService {
      * 添加日志记录
      */
     @Override
-    public ExecuteResult<String> insertTaskLog(Long taskId,String button,String peration) {
+    public ExecuteResult<String> insertTaskLog(Long taskId, String button, String peration) {
         ExecuteResult<String> result = new ExecuteResult<String>();
         try {
             if (taskId == null) {
@@ -84,7 +84,7 @@ public class TaskLogServiceImpl implements TaskLogService {
             taskLog.setOperationDescribe(
                     dateFormat.format(date) + "\t" + taskAll.getBeassignUser().getUsername() + "\t" + peration);
             int count = taskLogMapper.insertTaskLog(taskLog);
-            
+
             if (count > 0) {
                 result.setResult("添加日志成功!");
             } else {
@@ -97,21 +97,16 @@ public class TaskLogServiceImpl implements TaskLogService {
         }
         return result;
     }
-    
+
     /**
      * 任务流转记录查询
      */
     @Override
-    public ExecuteResult<List<TaskLog>> queryTaskLogList(Long id) {
-        ExecuteResult<List<TaskLog>> result = new ExecuteResult<List<TaskLog>>();
-        try {
-            List<TaskLog> tasklog = taskLogMapper.queryTaskLogList(id);
-            result.setResult(tasklog);
-        } catch (Exception e) {
-            LOGGER.error(e.getMessage());
-            throw new RuntimeException(e);
-        }
-        return result;
+    public List<TaskLog> queryTaskLogList(Long id) {
+
+        List<TaskLog> tasklog = taskLogMapper.queryTaskLogList(id);
+
+        return tasklog;
     }
 
     @Override
@@ -126,7 +121,8 @@ public class TaskLogServiceImpl implements TaskLogService {
             taskLog.setUserId(taskAll.getBeassignUser().getUserId());
             taskLog.setOperationButton(peration);
             taskLog.setOperationTime(date);
-            taskLog.setOperationDescribe(dateFormat.format(date) + "\t" + taskAll.getBeassignUser().getUsername() + "\t" + peration);
+            taskLog.setOperationDescribe(
+                    dateFormat.format(date) + "\t" + taskAll.getBeassignUser().getUsername() + "\t" + peration);
             taskLogMapper.insertTaskLog(taskLog);
         } catch (Exception e) {
             LOGGER.error(e.getMessage());

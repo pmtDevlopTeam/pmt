@@ -56,7 +56,7 @@ public class Dict implements Serializable {
      * 修改人
      */
     private String modifyUserId;
-    
+
 	public Long getId() {
 		return id;
 	}
