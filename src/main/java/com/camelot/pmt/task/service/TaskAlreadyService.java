@@ -29,15 +29,6 @@ public interface TaskAlreadyService {
 
     ExecuteResult<String> updateTaskToTest(Long id);
 
-    /**
-     * 查询我的已办任务列表
-     *
-     * @param Long
-     *            id
-     * @return ExecuteResult<PageInfo<Task>>
-     */
-
-    ExecuteResult<PageInfo<Task>> queryTaskAlready(Integer page, Integer rows, String id);
 
     /**
      * 查询未完成任务的个数

@@ -116,26 +116,6 @@ public class TaskAlreadyServiceImpl implements TaskAlreadyService {
         return result;
     }
 
-    /**
-     * 查询我的已办任务列表
-     *
-     * @param Long
-     *            id
-     * @return ExecuteResult<PageInfo<Task>>
-     */
-    public ExecuteResult<PageInfo<Task>> queryTaskAlready(Integer page, Integer rows, String id) {
-        ExecuteResult<PageInfo<Task>> result = new ExecuteResult<PageInfo<Task>>();
-        // 利用PageHelper进行分页
-        PageHelper.startPage(page, rows);
-        // 根据用户id查询全部的已完成的任务
-        List<Task> list = taskMapper.listTaskAlready(id);
-        System.out.println(list.size());
-        // 分页之后的结果集
-        PageInfo<Task> clist = new PageInfo<Task>(list);
-        // 返回结果集
-        result.setResult(clist);
-        return result;
-    }
 
     /**
      * 查询未完成任务的个数

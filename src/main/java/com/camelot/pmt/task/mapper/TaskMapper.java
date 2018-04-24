@@ -66,10 +66,6 @@ public interface TaskMapper {
      */
     List<Task> queryTaskByTask(@Param("task") Task task, @Param("ids") String[] ids);
 
-    /**
-     * 查询已完成的任务，根据时间和优先级进行排序 myp
-     */
-    List<Task> listTaskAlready(String id);
 
     /**
      * @author: zlh

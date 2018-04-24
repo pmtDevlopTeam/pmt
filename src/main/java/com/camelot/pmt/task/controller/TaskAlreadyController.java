@@ -108,36 +108,6 @@ public class TaskAlreadyController {
         }
     }
 
-    /**
-     * 查询所有已完成的任务 queryTaskAlready
-     *
-     * @param
-     * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
-     */
-    @ApiOperation(value = "查询所有已完成的任务", notes = "查询所有已完成的任务")
-    @RequestMapping(value = "/queryTaskAlready", method = RequestMethod.GET)
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "taskNum", value = "任务编号", required = true, paramType = "query", dataType = "String"),
-            @ApiImplicitParam(name = "taskName", value = "任务名称", required = true, paramType = "query", dataType = "String"),
-            @ApiImplicitParam(name = "priority", value = "优先级", required = true, paramType = "query", dataType = "String"),
-            @ApiImplicitParam(name = "projectId", value = "项目ID", required = true, paramType = "query", dataType = "Long"),
-            @ApiImplicitParam(name = "project.projectName", value = "项目名称", required = true, paramType = "query", dataType = "ProjectMain"),
-
-            @ApiImplicitParam(name = "page", value = "页码", required = true, paramType = "query", dataType = "Integer"),
-            @ApiImplicitParam(name = "rows", value = "每页数量", required = true, paramType = "query", dataType = "Integer") })
-    public JSONObject queryTaskAlready(@ApiIgnore Task task, Integer page, Integer rows) {
-        String userLoginId = String.valueOf(1);
-        ExecuteResult<PageInfo<Task>> result = new ExecuteResult<PageInfo<Task>>();
-        try {
-            result = taskAlreadyService.queryTaskAlready(page, rows, "2");
-            if (result.isSuccess()) {
-                return ApiResponse.success(result.getResult());
-            }
-            return ApiResponse.error();
-        } catch (Exception e) {
-            return ApiResponse.error();
-        }
-    }
 
     /**
      * 查询单个任务明细 queryTaskById
