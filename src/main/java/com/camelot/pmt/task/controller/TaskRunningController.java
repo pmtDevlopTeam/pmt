@@ -119,15 +119,11 @@ public class TaskRunningController {
     @ApiOperation(value = "我的正在进行任务转为已完成、实现完成功能", notes = "我的正在进行任务转为已完成、实现完成功能")
     @RequestMapping(value = "/updateTaskRunningToAlready", method = RequestMethod.POST)
     @ApiImplicitParams({
-            @ApiImplicitParam(dataType = "Long", name = "id", paramType = "form", value = "任务id", required = true),
-            @ApiImplicitParam(dataType = "Long", name = "infactHour", paramType = "form", value = "任务实际工时", required = true),
-            @ApiImplicitParam(dataType = "date", name = "actualEndTime", paramType = "form", value = " 实际完成时间yyyy/MM/dd hh:MM:ss", required = true),
-            @ApiImplicitParam(dataType = "String", name = "attachmentUrl", paramType = "form", value = "附件的路径url", required = true),
-            @ApiImplicitParam(dataType = "String", name = "attachmentTile", paramType = "form", value = "附件名称", required = true) })
-    public JSONObject updateTaskRunningToAlready(@ApiIgnore Task task, @ApiIgnore TaskFile taskFile) {
+            @ApiImplicitParam(dataType = "Long", name = "id", paramType = "form", value = "任务id", required = true) })
+    public JSONObject updateTaskRunningToAlready(@ApiIgnore Task task) {
         try {
             // 更新我的正在进行任务为完成
-            Boolean result = taskRunningService.updateRunningToAlready(task, taskFile);
+            Boolean result = taskRunningService.updateRunningToAlready(task);
             return ApiResponse.jsonData(APIStatus.OK_200, result);
         } catch (Exception e) {
             // 异常

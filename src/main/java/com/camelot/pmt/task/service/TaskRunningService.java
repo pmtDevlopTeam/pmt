@@ -36,5 +36,5 @@ public interface TaskRunningService {
      * @author myp
      * @since 2018-04-08
      */
-    Boolean updateRunningToAlready(Task ptask, TaskFile taskFile);
+    Boolean updateRunningToAlready(Task ptask);
 }

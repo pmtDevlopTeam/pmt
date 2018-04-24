@@ -11,7 +11,8 @@ import java.util.Map;
 public interface TaskMapper {
 
     /**
-     * 查询正在进行的任务，根据时间和优先级进行排序 myp
+     * 查询正在进行的任务，根据时间和优先级进行排序
+     * myp
      */
     List<Task> queryTaskRunning(Task task);
 
@@ -21,12 +22,14 @@ public interface TaskMapper {
     int updateRunningToClose(Long id);
 
     /**
-     * 将正在进行的任务进行完成操作 myp
+     * 将正在进行的任务进行完成操作
+     * myp
      */
     int updateRunningToAlready(Long id);
 
     /**
-     * 点击完成时，修改实际完成时间和实际工时 myp
+     * 点击完成时，修改实际完成时间和实际工时
+     * myp
      */
     int updateInfact_hourAndActual_end_time(Task task);
 
@@ -36,14 +39,16 @@ public interface TaskMapper {
     int addAttachment(TaskFile taskFile);
 
     /**
-     * 根据任务id查询所有的次id的子任务 myp
+     * 根据任务id查询所有的次id的子任务
+     * myp
      */
     List<Task> queryByPId(Long pid);
 
     Task queryTaskAllById(Long id);
 
     /**
-     * 根据id查询任务明细 myp
+     * 根据id查询任务明细
+     * myp
      */
     Task selectTaskById(Long id);
 
@@ -186,7 +191,7 @@ public interface TaskMapper {
      * TODO(修改任务状态) @param @param taskId status @param @return 设定文件 @return int
      * 返回类型 @throws
      */
-    void updateTaskStatus(@Param("id") Long id, @Param("status") String status);
+    void updateTaskStatus(@Param("id") Long id, @Param("status") String status,@Param("modifyUserId") String modifyUserId,@Param("modifyTime") Date modifyTime);
 
     /**
      * @author: gxl @Title: taskParentId @Description:

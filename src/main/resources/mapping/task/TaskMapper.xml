@@ -516,7 +516,7 @@
 	<!-- 我的待办任务转为正在进行 -->
 	<update id="updateTaskStatus" parameterType="com.camelot.pmt.task.model.Task">
 		update task t set 
-		t.status = #{status,jdbcType=CHAR} 
+		t.status = #{status,jdbcType=CHAR},t.modify_user_id = #{modifyUserId,jdbcType=VARCHAR},t.modify_time = #{modifyTime,jdbcType=TIMESTAMP}
 		where t.id = #{id,jdbcType=BIGINT}
 	</update>
 	<!-- 我的待办任务转为正在进行 -->
