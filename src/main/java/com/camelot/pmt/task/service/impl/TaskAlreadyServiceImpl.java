@@ -37,38 +37,7 @@ public class TaskAlreadyServiceImpl implements TaskAlreadyService {
     @Override
     public boolean updateTaskAlreadyToRunning(Long id) {
 
-            // 遍历此任务下是否有引用--->查询所有任务父id为id的记录
-            List<Task> taskList = taskMapper.queryByPId(id);
-            List<Long> list = new ArrayList<Long>();
-            if (taskList.size() > 0) {
-                for (Task task : taskList) {
-                    List<Task> tempList = taskMapper.queryByPId(task.getId());
-                    if (tempList.size() > 0) {
-                        System.out.println(tempList.size());
-                        for (Task task2 : tempList) {
-                            List<Task> tempList2 = taskMapper.queryByPId(task2.getId());
-                            if (tempList2.size() > 0) {
-                                for (Task task3 : tempList2) {
-                                    list.add(task3.getId());
-                                }
-                                list.add(task2.getId());
-                            } else {
-                                // 说明没有子任务
-                                list.add(task2.getId());
-                            }
-                        }
-                        list.add(task.getId());
-                    } else {
-                        // 说明没有子任务
-                        list.add(task.getId());
-                    }
-                }
-                list.add(id);
-            } else {
-                // 说明没有子任务
-                list.add(id);
-            }
-           return taskMapper.updateTaskAlreadyToRunning(list)>=1?true:false;
+           return taskMapper.updateTaskAlreadyToRunning(id)==1?true:false;
     }
 
     /**

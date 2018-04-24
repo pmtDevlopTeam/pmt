@@ -219,10 +219,10 @@ public interface TaskMapper {
     /**
      *
      * @Title: updateTaskAlreadyToRunning @Description:
-     * TODO(重做) @param @param taskId
+     * TODO(重做) @param id
      * status @param @return 设定文件 @return JSONObject 返回类型 @throws
      */
-    int updateTaskAlreadyToRunning(List<Long> list);
+    int updateTaskAlreadyToRunning(Long id);
 
     /**
      *

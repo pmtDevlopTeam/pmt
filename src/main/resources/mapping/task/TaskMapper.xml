@@ -573,11 +573,9 @@
     </select>
     <!-- zsf-->
     <!--重做-->
-    <update id="updateTaskAlreadyToRunning" parameterType="java.util.List">
+    <update id="updateTaskAlreadyToRunning" parameterType="java.lang.Long">
         UPDATE task SET status = 1 WHERE
-        <foreach collection="list" item="aid" open="(" close=")" separator="or">
-            id = #{aid}
-        </foreach> AND status = 2
+            id = #{id}
     </update>
     <!-- zsf-->
     <!--提测-->
