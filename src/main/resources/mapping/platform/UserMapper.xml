@@ -466,6 +466,64 @@
 				</if>
 			</where>
 	</select>
+	
+	<!-- 根据userId获取单个用户详情 -->
+	<select id="queryUserDetailsByUserId" resultMap="userVoResultMap" parameterType="java.lang.String">
+		SELECT
+		m.userIds userId,
+		m.userJobNums userJobNum,
+		m.userNames username,
+		m.loginCodes loginCode,
+		m.orgName orgName,
+		pr.role_name roleName,
+		m.userPhones userPhone,
+		m.userMails userMail,
+		m.stateses state,
+		pr.role_id roleId
+		FROM
+		(
+		SELECT
+		t.userName
+		userNames,
+		t.loginCode loginCodes,
+		t.userJobNum userJobNums,
+		t.states
+		stateses,
+		t.userPhone userPhones,
+		t.userMail userMails,
+		t.userId userIds,
+		po.org_name orgName
+		FROM
+		(
+		SELECT
+		u.user_name
+		userName,
+		u.login_code loginCode,
+		ui.user_job_num userJobNum,
+		u.state
+		states,
+		ui.user_phone userPhone,
+		ui.user_mail userMail,
+		u.user_id
+		userId
+		FROM
+		platform_user u
+		JOIN platform_user_info
+		ui ON u.user_id =
+		ui.user_id
+		) t
+		JOIN platform_user_org puo ON t.userId =
+		puo.user_id
+		JOIN
+		platform_org po ON puo.org_id = po.org_id
+		) m
+		JOIN
+		platform_user_role pur
+		ON m.userIds = pur.user_id
+		JOIN platform_role pr
+		ON pur.role_id =
+		pr.role_id where m.userIds = #{userId}
+	</select>
     
    
     
