@@ -192,7 +192,7 @@ public interface TaskMapper {
      * TODO(修改任务状态) @param @param taskId status @param @return 设定文件 @return int
      * 返回类型 @throws
      */
-    void updateTaskStatus(@Param("id") Long id, @Param("status") String status);
+    void updateTaskStatus(@Param("id") Long id, @Param("status") String status,@Param("modifyUserId") String modifyUserId,@Param("modifyTime") Date modifyTime);
 
     /**
      * @author: gxl @Title: taskParentId @Description:

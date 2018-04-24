@@ -128,7 +128,7 @@ public interface TaskPendingService {
      * TODO(我的待办任务状态转为正在进行或者关闭) @param @param id @param @param
      * taskStatus @param @return 设定文件 @return String 返回类型 @throws
      */
-    String updateTaskPendingToStatus(Long id, String taskStatus);
+    String updateTaskPendingToStatus(Long id, String taskStatus,String modifyUserId);
 
     /**
      * 
