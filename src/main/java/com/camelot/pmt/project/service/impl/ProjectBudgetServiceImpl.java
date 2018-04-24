@@ -132,7 +132,7 @@ public class ProjectBudgetServiceImpl implements ProjectBudgetService {
     public Map<String, Object> queryProjectEndById(Long projectId) {
         List<Map<String, Object>> file = new ArrayList<Map<String, Object>>();
         Map<String, Object> fileMap = new HashMap<>();
-        Map<String,Object> fileGroupMap = null;
+        Map<String, Object> fileGroupMap = null;
         FileManageGroup fileManageGroup = new FileManageGroup();
         fileManageGroup.setProjectId(projectId);
         List<FileManageGroup> treeList = fileManageGroupService.queryTree(fileManageGroup);// 得到项目所有字节点

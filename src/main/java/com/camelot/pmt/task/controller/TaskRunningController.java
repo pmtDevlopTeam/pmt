@@ -56,7 +56,7 @@ public class TaskRunningController {
             @ApiImplicitParam(dataType = "ProjectMain", name = "project.id", paramType = "query", value = "项目编号"),
             @ApiImplicitParam(dataType = "String", name = "taskName", paramType = "query", value = "任务名称"),
             @ApiImplicitParam(dataType = "String", name = "taskNum", paramType = "query", value = "任务编号"),
-            @ApiImplicitParam(dataType = "Demand", name = "demand.id", paramType = "query", value = "需求编号")})
+            @ApiImplicitParam(dataType = "Demand", name = "demand.id", paramType = "query", value = "需求编号") })
     public JSONObject queryTaskRunning(@ApiIgnore Task task) {
         ExecuteResult<List<Task>> result = new ExecuteResult<List<Task>>();
         try {

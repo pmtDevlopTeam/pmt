@@ -31,30 +31,30 @@ import java.util.List;
 /**
  *
  * FileManage 控制层
-
  *
+ * 
  */
 @Controller
 @Api(value = "文件数据接口", description = "文件数据接口")
 @RequestMapping(value = "/file/manager")
 public class FileManageController {
-    //日志
+    // 日志
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
     private FileManageService fileManageService;
+
     @ApiOperation(value = "添加文件功能", notes = "添加文件功能")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "fileTitle", value = "文件标题", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "fileAddress", value = "文件地址", required = false, paramType = "query", dataType = "String"),
-            @ApiImplicitParam(name = "parentId", value = "文件夹父级id", required = false, paramType = "query", dataType = "String")
-    })
-    @RequestMapping(value = "/addFileManager",method = RequestMethod.POST)
+            @ApiImplicitParam(name = "parentId", value = "文件夹父级id", required = false, paramType = "query", dataType = "String") })
+    @RequestMapping(value = "/addFileManager", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject addFileManager(HttpServletRequest request, @ApiIgnore FileManage fileManage, Long parentId){//添加文件
-        Boolean b=null;
+    public JSONObject addFileManager(HttpServletRequest request, @ApiIgnore FileManage fileManage, Long parentId) {// 添加文件
+        Boolean b = null;
         try {
-            b = fileManageService.addFileManager(request,fileManage,parentId);//添加文件夹
-            if(b){
+            b = fileManageService.addFileManager(request, fileManage, parentId);// 添加文件夹
+            if (b) {
                 return ApiResponse.success();
             }
             return ApiResponse.error("添加异常");
@@ -64,17 +64,16 @@ public class FileManageController {
         }
     }
 
-
     @ApiOperation(value = "删除文件功能", notes = "删除文件能")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "产出物id", required = true, paramType = "query", dataType = "String") })
-    @RequestMapping(value = "/deldeteFileById",method = RequestMethod.POST)
+    @RequestMapping(value = "/deldeteFileById", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject deldeteFileById(@ApiIgnore FileManage fileManage){//删除文件
-        Boolean b=null;
+    public JSONObject deldeteFileById(@ApiIgnore FileManage fileManage) {// 删除文件
+        Boolean b = null;
         try {
-            b = fileManageService.deleteFileById(fileManage);//删除文件
-            if(b){
+            b = fileManageService.deleteFileById(fileManage);// 删除文件
+            if (b) {
                 return ApiResponse.success();
             }
             return ApiResponse.error("删除异常");
@@ -83,20 +82,20 @@ public class FileManageController {
             return ApiResponse.jsonData(APIStatus.ERROR_500);
         }
     }
+
     @ApiOperation(value = "根据条件修改文件功能", notes = "根据条件修改文件功能")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "产出物id", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "groupId", value = "组id", required = false, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "fileTitle", value = "文件标题", required = false, paramType = "query", dataType = "String"),
-            @ApiImplicitParam(name = "fileAddress", value = "文件路径", required = false, paramType = "query", dataType = "String")
-    })
-    @RequestMapping(value = "/updateFileById",method = RequestMethod.POST)
+            @ApiImplicitParam(name = "fileAddress", value = "文件路径", required = false, paramType = "query", dataType = "String") })
+    @RequestMapping(value = "/updateFileById", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject updateFileById(HttpServletRequest request,@ApiIgnore FileManage fileManage){//文件修改
-        Boolean b=null;
+    public JSONObject updateFileById(HttpServletRequest request, @ApiIgnore FileManage fileManage) {// 文件修改
+        Boolean b = null;
         try {
-            b = fileManageService.updateFileById(request,fileManage);//文件修改
-            if(b){
+            b = fileManageService.updateFileById(request, fileManage);// 文件修改
+            if (b) {
                 return ApiResponse.success();
             }
             return ApiResponse.error("修改异常");
@@ -105,17 +104,17 @@ public class FileManageController {
             return ApiResponse.jsonData(APIStatus.ERROR_500);
         }
     }
+
     @ApiOperation(value = "根据条件查询文件功能", notes = "根据条件查询文件功能")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "组id", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "currentPage", value = "当前页", required = true, paramType = "query", dataType = "String"),
-            @ApiImplicitParam(name = "pageSize", value = "分页大小", required = true, paramType = "query", dataType = "String")
-    })
-    @RequestMapping(value = "/queryFileByGroupId",method = RequestMethod.GET)
+            @ApiImplicitParam(name = "pageSize", value = "分页大小", required = true, paramType = "query", dataType = "String") })
+    @RequestMapping(value = "/queryFileByGroupId", method = RequestMethod.GET)
     @ResponseBody
-    public JSONObject queryFileByGroupId(@ApiIgnore FileManageGroup fileManageGroup){//根据组id查询文件
+    public JSONObject queryFileByGroupId(@ApiIgnore FileManageGroup fileManageGroup) {// 根据组id查询文件
         try {
-            PageInfo<FileManage> fileManagePageInfo = fileManageService.queryFileByGroupId(fileManageGroup);//查询文件详细信息
+            PageInfo<FileManage> fileManagePageInfo = fileManageService.queryFileByGroupId(fileManageGroup);// 查询文件详细信息
             return ApiResponse.success(fileManagePageInfo);
         } catch (Exception e) {
             logger.error(e.getMessage());

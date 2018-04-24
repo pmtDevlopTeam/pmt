@@ -92,7 +92,8 @@ public class TaskManagerServiceImpl implements TaskManagerService {
     /**
      * 根据id删除任务
      *
-     * @param id 需要删除的任务的id，isDeleteAll 是否删除子任务
+     * @param id
+     *            需要删除的任务的id，isDeleteAll 是否删除子任务
      * @return boolean
      * @author zlh
      * @date 17:24 2018/4/12
@@ -130,7 +131,8 @@ public class TaskManagerServiceImpl implements TaskManagerService {
     /**
      * 编辑任务
      *
-     * @param task 任务修改内容
+     * @param task
+     *            任务修改内容
      * @author zlh
      * @date 17:05 2018/4/13
      */
@@ -153,7 +155,8 @@ public class TaskManagerServiceImpl implements TaskManagerService {
     /**
      * 编辑需求是否变更
      *
-     * @param task 任务修改内容
+     * @param task
+     *            任务修改内容
      * @author zlh
      * @date 17:37 2018/4/13
      */
@@ -175,7 +178,8 @@ public class TaskManagerServiceImpl implements TaskManagerService {
     /**
      * 任务延期
      *
-     * @param task 需要修改的任务数据
+     * @param task
+     *            需要修改的任务数据
      * @return boolean
      * @author zlh
      * @date 10:18 2018/4/12
@@ -188,13 +192,12 @@ public class TaskManagerServiceImpl implements TaskManagerService {
                 throw new RuntimeException("参数错误");
             }
 
-            //检查权限
+            // 检查权限
             Task task2 = taskMapper.queryTaskById(task.getId());
             String createUserName = task2.getCreateUser().getUsername();
             String beAssignUserName = task2.getBeassignUser().getUsername();
             User user = (User) ShiroUtils.getSessionAttribute("user");
-            if (!user.getUsername().equals(createUserName)
-                    && !user.getUsername().equals(beAssignUserName)) {
+            if (!user.getUsername().equals(createUserName) && !user.getUsername().equals(beAssignUserName)) {
                 throw new RuntimeException("没有权限");
             }
 
@@ -210,8 +213,10 @@ public class TaskManagerServiceImpl implements TaskManagerService {
     /**
      * 指派
      *
-     * @param id     需要修改的任务id
-     * @param userId 负责人的id
+     * @param id
+     *            需要修改的任务id
+     * @param userId
+     *            负责人的id
      * @return boolean
      * @author zlh
      * @date 11:36 2018/4/12
@@ -245,8 +250,10 @@ public class TaskManagerServiceImpl implements TaskManagerService {
     /**
      * 指派（验证是否有项目经理角色权限）
      *
-     * @param id     需要修改的任务id
-     * @param userId 负责人的id
+     * @param id
+     *            需要修改的任务id
+     * @param userId
+     *            负责人的id
      * @return boolean
      * @author zlh
      * @date 11:36 2018/4/12
@@ -274,7 +281,8 @@ public class TaskManagerServiceImpl implements TaskManagerService {
     /**
      * 根据任务id查询任务详情
      *
-     * @param id 任务id
+     * @param id
+     *            任务id
      * @author zlh
      * @date 17:08 2018/4/12
      */
@@ -312,8 +320,10 @@ public class TaskManagerServiceImpl implements TaskManagerService {
     /**
      * 查询所有任务列表
      *
-     * @param page 当前页
-     * @param rows 一页有几行
+     * @param page
+     *            当前页
+     * @param rows
+     *            一页有几行
      * @return PageInfo<Task>
      * @author zlh
      * @date 16:54 2018/4/9

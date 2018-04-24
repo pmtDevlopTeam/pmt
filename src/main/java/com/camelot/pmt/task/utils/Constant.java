@@ -6,9 +6,10 @@ package com.camelot.pmt.task.utils;
 public class Constant {
     /** 超级管理员ID */
     public static final int SUPER_ADMIN = 1;
-    /**文件上传路径,确认文件服务器具体地址后再修改*/
+    /** 文件上传路径,确认文件服务器具体地址后再修改 */
     public static final String localPath = "D:/file/upload" + "\\";
-    /** 任务状态  */
+
+    /** 任务状态 */
     public enum TaskStatus {
         /** 待办 */
         PENDINHG("0"),
@@ -16,10 +17,10 @@ public class Constant {
         RUNING("1"),
         /** 已办 */
         ALREADY("2"),
-        /**延期*/
-    	OVERDUE("3"),
-    	/**关闭*/
-    	CLOSE("4");
+        /** 延期 */
+        OVERDUE("3"),
+        /** 关闭 */
+        CLOSE("4");
         private String value;
 
         TaskStatus(String value) {
@@ -49,19 +50,20 @@ public class Constant {
             return value;
         }
     }
-    
+
     /** 文件数据源类型 */
     public enum AttachmentSource {
-    	/**任务类型、需求类型等等*/
-    	TASK("TASK"),
-    	DEMAND("DEMAND");
-    	private String value;
-    	AttachmentSource(String value) {
+        /** 任务类型、需求类型等等 */
+        TASK("TASK"), DEMAND("DEMAND");
+        private String value;
+
+        AttachmentSource(String value) {
             this.value = value;
         }
-		public String getValue() {
-			return value;
-		}
+
+        public String getValue() {
+            return value;
+        }
     }
 
 }

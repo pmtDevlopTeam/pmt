@@ -514,7 +514,7 @@
 		where t.id = #{id,jdbcType=BIGINT}
 	</update>
 	<!-- 我的待办任务转为正在进行 -->
-	<update id="updateTaskPendingToRunning" parameterType="com.camelot.pmt.task.model.Task">
+	<update id="updateTaskStatus" parameterType="com.camelot.pmt.task.model.Task">
 		update task t set 
 		t.status = #{status,jdbcType=CHAR} 
 		where t.id = #{id,jdbcType=BIGINT}

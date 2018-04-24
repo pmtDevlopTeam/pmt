@@ -35,7 +35,8 @@ public class TaskFileServiceImpl implements TaskFileService {
     /**
      * 插入需求类型任务的附件元信息
      *
-     * @param taskFile 参数
+     * @param taskFile
+     *            参数
      * @return boolean
      * @author zlh
      * @date 10:21 2018/4/17
@@ -59,7 +60,8 @@ public class TaskFileServiceImpl implements TaskFileService {
     /**
      * 根据附件来源和来源id查询附件元信息
      *
-     * @param taskFile 查询需要的参数
+     * @param taskFile
+     *            查询需要的参数
      * @return TaskFile
      * @author zlh
      * @date 17:03 2018/4/17
@@ -77,43 +79,39 @@ public class TaskFileServiceImpl implements TaskFileService {
             throw new RuntimeException(e);
         }
     }
-    
+
     /**
-	 * 
-	* @Title: update 
-	* @Description: TODO(修改附件上传)
-	* @param @param taskId
-	* @param @return    设定文件 
-	* @return JSONObject    返回类型 
-	* @throws
-	 */
+     * 
+     * @Title: update @Description: TODO(修改附件上传) @param @param taskId @param @return
+     * 设定文件 @return JSONObject 返回类型 @throws
+     */
     @Override
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public boolean addOrupdate(Long id,TaskFile taskFile,MultipartFile file) {
+    public boolean addOrupdate(Long id, TaskFile taskFile, MultipartFile file) {
         try {
             // check参数
-            if (id == null ||taskFile == null || file == null) {
+            if (id == null || taskFile == null || file == null) {
                 throw new RuntimeException("数据参数不能为空");
             }
             int result = 0;
             TaskFile taskObj = taskFileMapper.queryByTaskFile(taskFile);
-            //判断file是否存在
-            if(taskObj==null){
-            	taskFile.setAttachmentUrl(Constant.localPath);
-            	taskFile.setAttachmentSource(AttachmentSource.TASK.getValue());
-            	taskFile.setAttachmentTile(file.getOriginalFilename());
-            	taskFile.setSourceId(id);
-            	taskFileMapper.insert(taskFile);
-            }else{
-            	String oldPath = taskObj.getAttachmentUrl()+"\\"+taskObj.getAttachmentTile();
-            	//删除原文件
-            	UploadUtils.deleteFile(oldPath);
-            	taskObj.setAttachmentTile(file.getOriginalFilename());
-            	taskObj.setAttachmentUrl(Constant.localPath);
+            // 判断file是否存在
+            if (taskObj == null) {
+                taskFile.setAttachmentUrl(Constant.localPath);
+                taskFile.setAttachmentSource(AttachmentSource.TASK.getValue());
+                taskFile.setAttachmentTile(file.getOriginalFilename());
+                taskFile.setSourceId(id);
+                taskFileMapper.insert(taskFile);
+            } else {
+                String oldPath = taskObj.getAttachmentUrl() + "\\" + taskObj.getAttachmentTile();
+                // 删除原文件
+                UploadUtils.deleteFile(oldPath);
+                taskObj.setAttachmentTile(file.getOriginalFilename());
+                taskObj.setAttachmentUrl(Constant.localPath);
             }
-            //上传新文件
+            // 上传新文件
             String path = UploadUtils.uploadFile(file);
-            if(!StringUtils.isEmpty(path)){
+            if (!StringUtils.isEmpty(path)) {
                 result = taskFileMapper.update(taskObj);
             }
             return result == 1 ? true : false;
@@ -122,10 +120,12 @@ public class TaskFileServiceImpl implements TaskFileService {
             throw new RuntimeException(e);
         }
     }
+
     /**
      * 附件下载
      *
-     * @param taskFile 参数
+     * @param taskFile
+     *            参数
      * @author zlh
      * @date 17:03 2018/4/17
      */
