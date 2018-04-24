@@ -65,12 +65,11 @@ public class TaskLogServiceImpl implements TaskLogService {
      * 添加日志记录
      */
     @Override
-    public ExecuteResult<String> insertTaskLog(Long taskId, String button, String peration) {
-        ExecuteResult<String> result = new ExecuteResult<String>();
+    public Boolean insertTaskLog(Long taskId, String button, String peration) {
+    	Boolean flag = false;
         try {
             if (taskId == null) {
-                result.addErrorMessage("数据参数不能为空!");
-                return result;
+                return flag;
             }
 
             Task taskAll = taskMapper.queryTaskAllById(taskId);
@@ -86,16 +85,14 @@ public class TaskLogServiceImpl implements TaskLogService {
             int count = taskLogMapper.insertTaskLog(taskLog);
 
             if (count > 0) {
-                result.setResult("添加日志成功!");
-            } else {
-                result.setResult("添加日志失败!");
+            	flag=true;
             }
 
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
             throw new RuntimeException(e);
         }
-        return result;
+        return flag;
     }
 
     /**

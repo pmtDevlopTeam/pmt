@@ -294,14 +294,14 @@ public interface TaskMapper {
     int updateTaskToTest(Long id);
 
     /**
-     * 查询延时提前列表 @Title: queryleaddeferredTaskRemindersList @Description:
+     * 查询延期提前列表 @Title: queryleaddeferredTaskRemindersList @Description:
      * TODO @param @param leadtime @param @return @return
      * List<Map<String,Object>> @throws
      */
     List<Map<String, Object>> queryleaddeferredTaskRemindersList(Integer leadtime);
 
     /**
-     * 查询延时延后列表 @Title: querydelaytimedeferredTaskRemindersList @Description:
+     * 查询延期延后列表 @Title: querydelaytimedeferredTaskRemindersList @Description:
      * TODO @param @param delaytime @param @return @return
      * List<Map<String,Object>> @throws
      */
@@ -322,14 +322,14 @@ public interface TaskMapper {
             @Param("modifyTime") Date modifyTime);
 
     /**
-     * 延期提前列表 @Title: queryleaddelayedTaskReminderList @Description:
+     * 延时提前列表 @Title: queryleaddelayedTaskReminderList @Description:
      * TODO @param @param leadtime @param @return @return
      * List<Map<String,Object>> @throws
      */
     List<Map<String, Object>> queryleaddelayedTaskReminderList(Integer leadtime);
 
     /**
-     * 延期延后列表 @Title: querydelaydelayedTaskReminderList @Description:
+     * 延时延后列表 @Title: querydelaydelayedTaskReminderList @Description:
      * TODO @param @param delaytime @param @return @return
      * List<Map<String,Object>> @throws
      */
