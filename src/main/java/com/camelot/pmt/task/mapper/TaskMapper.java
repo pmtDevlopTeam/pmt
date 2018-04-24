@@ -18,14 +18,12 @@ public interface TaskMapper {
     /**
      * 将任务进行关闭操作 myp
      */
-    // int updateRunningToClose(List list);
     int updateRunningToClose(Long id);
 
     /**
      * 将正在进行的任务进行完成操作 myp
      */
-    void updateRunningToAlready(Long id);
-    // List<Task> queryRunningToAlready(List list);
+    int updateRunningToAlready(Long id);
 
     /**
      * 点击完成时，修改实际完成时间和实际工时 myp
