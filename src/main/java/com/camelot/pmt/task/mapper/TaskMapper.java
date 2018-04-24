@@ -218,11 +218,11 @@ public interface TaskMapper {
 
     /**
      *
-     * @Title: updateTaskPendingToDelay @Description:
-     * TODO(我的待办任务转为延期,会将该节点及节点下的所有子节点变为延期状态) @param @param taskId
+     * @Title: updateTaskAlreadyToRunning @Description:
+     * TODO(重做) @param @param taskId
      * status @param @return 设定文件 @return JSONObject 返回类型 @throws
      */
-    void updateTaskAlreadyToRunning(List<Long> list);
+    int updateTaskAlreadyToRunning(List<Long> list);
 
     /**
      *

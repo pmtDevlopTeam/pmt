@@ -56,23 +56,18 @@ public class TaskAlreadyController {
     @RequestMapping(value = "/updateTaskAlreadyToRunning", method = RequestMethod.POST)
     public JSONObject updateTaskAlreadyToRunning(
             @ApiParam(name = "id", value = "任务ID", required = true) @RequestParam(required = true) Long id) {
-        ExecuteResult<String> result = new ExecuteResult<String>();
+        boolean flag = false;
         try {
-            Long userLoginId = Long.valueOf(1);
-            // 检查用户是否登录，需要去session中获取用户登录信息
-            if (StringUtils.isEmpty(userLoginId)) {
-                return ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
-            }
             // 更新我的任务为关闭
-            result = taskAlreadyService.updateTaskAlreadyToRunning(id);
+            flag = taskAlreadyService.updateTaskAlreadyToRunning(id);
             // 判断是否成功
-            if (result.isSuccess()) {
-                return ApiResponse.jsonData(APIStatus.OK_200, result.getResult());
+            if(flag){
+                return ApiResponse.success();
             }
-            return ApiResponse.jsonData(APIStatus.ERROR_500, result.getResult());
+            return ApiResponse.error("添加异常");
         } catch (Exception e) {
-            // 异常
-            return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
+            logger.error(e.getMessage());
+            return ApiResponse.jsonData(APIStatus.ERROR_500);
         }
     }
 
@@ -88,23 +83,18 @@ public class TaskAlreadyController {
     @RequestMapping(value = "/updateTaskToTest", method = RequestMethod.POST)
     public JSONObject updateTaskToTest(
             @ApiParam(name = "id", value = "任务ID", required = true) @RequestParam(required = true) Long id) {
-        ExecuteResult<String> result = new ExecuteResult<String>();
+        boolean flag = false;
         try {
-            // 获取当前登录人
-            User user = (User) ShiroUtils.getSessionAttribute("user");
-            if (null == user) {
-                return ApiResponse.jsonData(APIStatus.INVALIDSESSION_LOGINOUTTIME);
-            }
             // 更新我的任务为关闭
-            result = taskAlreadyService.updateTaskToTest(id);
+            flag = taskAlreadyService.updateTaskToTest(id);
             // 判断是否成功
-            if (result.isSuccess()) {
-                return ApiResponse.jsonData(APIStatus.OK_200, result.getResult());
+            if(flag){
+                return ApiResponse.success();
             }
-            return ApiResponse.jsonData(APIStatus.ERROR_500, result.getResult());
+            return ApiResponse.error("添加异常");
         } catch (Exception e) {
-            // 异常
-            return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
+            logger.error(e.getMessage());
+            return ApiResponse.jsonData(APIStatus.ERROR_500);
         }
     }
 

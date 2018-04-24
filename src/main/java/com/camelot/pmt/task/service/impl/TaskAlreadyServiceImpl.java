@@ -35,13 +35,8 @@ public class TaskAlreadyServiceImpl implements TaskAlreadyService {
      */
 
     @Override
-    public ExecuteResult<String> updateTaskAlreadyToRunning(Long id) {
-        ExecuteResult<String> result = new ExecuteResult<>();
-        try {
-            if (id == null) {
-                result.setResult("该任务不存在!");
-                return result;
-            }
+    public boolean updateTaskAlreadyToRunning(Long id) {
+
             // 遍历此任务下是否有引用--->查询所有任务父id为id的记录
             List<Task> taskList = taskMapper.queryByPId(id);
             List<Long> list = new ArrayList<Long>();
@@ -73,13 +68,7 @@ public class TaskAlreadyServiceImpl implements TaskAlreadyService {
                 // 说明没有子任务
                 list.add(id);
             }
-            taskMapper.updateTaskAlreadyToRunning(list);
-            result.setResult("任务重做成功");
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-
-        }
-        return result;
+           return taskMapper.updateTaskAlreadyToRunning(list)>=1?true:false;
     }
 
     /**
@@ -91,29 +80,15 @@ public class TaskAlreadyServiceImpl implements TaskAlreadyService {
      */
 
     @Override
-    public ExecuteResult<String> updateTaskToTest(Long id) {
-        ExecuteResult<String> result = new ExecuteResult<String>();
-        try {
-            if (id == null) {
-                result.setResult("该任务不存在!");
-                return result;
-            }
-            // 根据ID去查需求ID
+    public boolean updateTaskToTest(Long id) {
+
+            // 根据任务ID去查需求ID
             Long demandId = taskMapper.queryTaskByTaskId(id);
             // 根据需求ID查出当前需求下的测试人员ID
             String beassignUserId = taskMapper.queryTaskToTestByDemandId(demandId);
             // 进行任务的状态更改(根据id去更改任务的状态)
-            int count = taskMapper.updateTaskToTest(id, beassignUserId);
-            if (count == 0) {
-                result.setResult("提测失败!");
-                return result;
-            }
-        } catch (Exception e) {
-            LOGGER.error(e.getMessage());
-            throw new RuntimeException(e);
-        }
-        result.setResult("提测成功!");
-        return result;
+            return taskMapper.updateTaskToTest(id, beassignUserId)==1?true:false;
+
     }
 
 
@@ -139,16 +114,11 @@ public class TaskAlreadyServiceImpl implements TaskAlreadyService {
      */
 
     @Override
-    public ExecuteResult<List<Task>> queryTaskByDemandId(Long demandId) {
-        ExecuteResult<List<Task>> result = new ExecuteResult<List<Task>>();
-        try {
-            List<Task> taskList = taskMapper.queryTaskByDemandId(demandId);
-            result.setResult(taskList);
-        } catch (Exception e) {
-            LOGGER.error(e.getMessage());
-            throw new RuntimeException(e);
-        }
-        return result;
+    public List<Task> queryTaskByDemandId(Long demandId) {
+
+        List<Task> taskList = taskMapper.queryTaskByDemandId(demandId);
+
+        return taskList;
     }
 
     /**
