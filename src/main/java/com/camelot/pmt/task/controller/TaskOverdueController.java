@@ -196,5 +196,29 @@ public class TaskOverdueController {
             return ApiResponse.error();
         }
     }
+    
+    /**
+     * <p>
+     * Description:通过项目ID查询延期延期任务列表
+     * </p>
+     * 
+     * @param
+     * @return {"status": {"message": "请求处理成功.","code": 200}, "data": {userModel}]
+     */
+    @ApiOperation(value = "通过项目ID查询延期延期任务列表", notes = "通过项目ID查询延期延期任务列表")
+    @RequestMapping(value = "/queryOverdueTaskByProjectId", method = RequestMethod.POST)
+    public JSONObject queryOverdueTaskByProjectId(
+            @ApiParam(name = "projectId", value = "项目Id", required = true) @RequestParam(required = true) String projectId) {
+        ExecuteResult<Map<String, Object>> result = new ExecuteResult<Map<String, Object>>();
+        try {
+            result = taskService.queryOverdueTaskByProjectId(projectId);
+            if (result.isSuccess()) {
+                return ApiResponse.success(result.getResult());
+            }
+            return ApiResponse.error();
+        } catch (Exception e) {
+            return ApiResponse.error();
+        }
+    }
 
 }

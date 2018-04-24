@@ -231,5 +231,30 @@ public class TaskOverdueServiceImpl implements TaskOverdueService {
         }
 
     }
+    
+    /**
+     * 通过项目ID查询延期延期任务列表
+     */
+    @Override
+    public ExecuteResult<Map<String, Object>> queryOverdueTaskByProjectId(String projectId) {
+    	ExecuteResult<Map<String, Object>> result = new ExecuteResult<Map<String, Object>>();
+        try {
+            // 通过项目ID查询延时列表
+            List<Map<String, Object>> delayedTaskReminderList = taskMapper
+                    .querydelayedTaskReminderList(projectId);
+            // 通过项目ID查询延期列表
+            List<Map<String, Object>> deferredTaskRemindersList = taskMapper
+                    .querydeferredTaskRemindersList(projectId);
+            HashMap<String, Object> map = new HashMap<String, Object>();
+            map.put("delayedTaskReminderList", delayedTaskReminderList);
+            map.put("deferredTaskRemindersList",deferredTaskRemindersList);
+            result.setResult(map);
+            return result;
+
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
 
 }
