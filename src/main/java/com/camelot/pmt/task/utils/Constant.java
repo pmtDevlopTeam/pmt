@@ -81,7 +81,9 @@ public class Constant {
         /** 关闭任务 */
         CLOSETASK("关闭任务"),
         /** 提测任务 */
-        MEASUREMENT("提测任务");
+        MEASUREMENT("提测任务"),
+        /** 重做任务 */
+        REDOTASK("重做任务");
         private String value;
 
         TaskLogOperationButton(String value) {

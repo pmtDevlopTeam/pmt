@@ -38,7 +38,14 @@ public class TaskAlreadyServiceImpl implements TaskAlreadyService {
     @Override
     public boolean updateTaskAlreadyToRunning(Long id) {
 
-           return taskMapper.updateTaskAlreadyToRunning(id)==1?true:false;
+           boolean flag = false;
+           int i = taskMapper.updateTaskAlreadyToRunning(id);
+           if(i == 1){
+               taskLogService.insertTaskLog(id,Constant.TaskLogOperationButton.REDOTASK.getValue(),"重做了任务");
+               flag = true;
+               return flag;
+           }
+           return flag;
     }
 
     /**
@@ -58,8 +65,10 @@ public class TaskAlreadyServiceImpl implements TaskAlreadyService {
             String beassignUserId = taskMapper.queryTaskToTestByDemandId(demandId);
             // 进行任务的状态更改(根据id去更改任务的状态)
             int i = taskMapper.updateTaskToTest(id, beassignUserId);
-            if(i>0){
-                taskLogService.addTaskLogList(id,"提测");
+            Task task = new Task();
+            task.setId(id);
+            if(i == 1){
+                taskLogService.insertTaskLog(id,Constant.TaskLogOperationButton.MEASUREMENT.getValue(),"提测了任务");
                 flag = true;
                 return flag;
             }
