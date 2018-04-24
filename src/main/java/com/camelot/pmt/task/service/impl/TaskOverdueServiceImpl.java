@@ -185,21 +185,16 @@ public class TaskOverdueServiceImpl implements TaskOverdueService {
     }
 
     /**
-     * 延时任务列表
+     * 延期任务列表
      */
     @Override
-    public ExecuteResult<Map<String, Object>> deferredTaskRemindersList(Integer leadtime, Integer delaytime) {
+    public ExecuteResult<Map<String, Object>> deferredTaskRemindersList( Integer delaytime) {
         ExecuteResult<Map<String, Object>> result = new ExecuteResult<Map<String, Object>>();
         try {
-            // 查询超时提前列表
-            leadtime = leadtime * (-1);
-            List<Map<String, Object>> leaddeferredTaskRemindersList = taskMapper
-                    .queryleaddeferredTaskRemindersList(leadtime);
-            // 查询超时延后列表
+            // 查询延期延后列表
             List<Map<String, Object>> deferredTaskRemindersList = taskMapper
                     .querydelaytimedeferredTaskRemindersList(delaytime);
             HashMap<String, Object> map = new HashMap<String, Object>();
-            map.put("leaddeferredTaskRemindersList", leaddeferredTaskRemindersList);
             map.put("deferredTaskRemindersList", deferredTaskRemindersList);
             result.setResult(map);
             return result;
@@ -211,17 +206,17 @@ public class TaskOverdueServiceImpl implements TaskOverdueService {
     }
 
     /**
-     * 延期任务列表
+     * 延时任务列表
      */
     @Override
     public ExecuteResult<Map<String, Object>> delayedTaskReminderList(Integer leadtime, Integer delaytime) {
         ExecuteResult<Map<String, Object>> result = new ExecuteResult<Map<String, Object>>();
         try {
-            // 查询延期提前列表
+            // 查询延时提前列表
             leadtime = leadtime * (-1);
             List<Map<String, Object>> leaddelayedTaskReminderList = taskMapper
                     .queryleaddelayedTaskReminderList(leadtime);
-            // 查询延期延后列表
+            // 查询延时后列表
             List<Map<String, Object>> delaydelayedTaskReminderList = taskMapper
                     .querydelaydelayedTaskReminderList(delaytime);
             HashMap<String, Object> map = new HashMap<String, Object>();

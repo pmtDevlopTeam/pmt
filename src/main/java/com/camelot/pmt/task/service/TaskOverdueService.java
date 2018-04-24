@@ -60,6 +60,6 @@ public interface TaskOverdueService {
      * leadtime @param @param delaytime @param @return @return
      * ExecuteResult<PageInfo<Map<String,Object>>> @throws
      */
-    ExecuteResult<Map<String, Object>> deferredTaskRemindersList(Integer leadtime, Integer delaytime);
+    ExecuteResult<Map<String, Object>> deferredTaskRemindersList(Integer delaytime);
 
 }

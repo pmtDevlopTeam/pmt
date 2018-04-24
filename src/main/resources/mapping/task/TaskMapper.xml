@@ -784,7 +784,7 @@
     </select>
     <!--myp结束-->
     
-   <!--  超时提前列表 -->
+   <!--  延期提前列表 -->
     <select id="queryleaddeferredTaskRemindersList" parameterType="int" resultType="map">
 		select * from (
 		select t.id,t.task_num,t.priority,t.task_name,t.assign_user_id,t.task_type,p.id as pid,p.project_name,
@@ -796,7 +796,7 @@
 		) f where elapsed_time <![CDATA[ >=  ]]> #{leadtime} and elapsed_time <![CDATA[ <= ]]> 0 and status = 0
     </select>
     
-    <!--  超时延后列表 -->
+    <!--  延期延后列表 -->
     <select id="querydelaytimedeferredTaskRemindersList" parameterType="int" resultType="map">
 	    select * from (
 		select t.id,t.task_num,t.priority,t.task_name,t.assign_user_id,t.task_type,p.id as pid,p.project_name,
@@ -809,7 +809,7 @@
     </select>
 
 
-	 <!--  延期提前列表 -->
+	 <!--  延时提前列表 -->
     <select id="queryleaddelayedTaskReminderList" parameterType="int" resultType="map">
 		select * from (
 		select t.id,t.task_num,t.priority,t.task_name,t.assign_user_id,t.task_type,p.id as pid,p.project_name,
@@ -821,7 +821,7 @@
 		) f where elapsed_time <![CDATA[ >= ]]> #{leadtime} and elapsed_time <![CDATA[ <= ]]> 0 and status = 1
     </select>
     
-    <!--  延期延后列表 -->
+    <!--  延时延后列表 -->
     <select id="querydelaydelayedTaskReminderList" parameterType="int" resultType="map">
 	    select * from (
 		select t.id,t.task_num,t.priority,t.task_name,t.assign_user_id,t.task_type,p.id as pid,p.project_name,
