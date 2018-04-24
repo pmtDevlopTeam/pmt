@@ -571,26 +571,11 @@
             and t.demand_id = #{demandId,jdbcType=BIGINT}
         </if>
     </select>
-    <!--zsf-->
-    <!--查询已完成的任务-->
-    <select id="listTaskAlready" resultMap="BaseResultMap" parameterType="String">
-        SELECT
-        <include refid="selectAllRunningTaskByUserId" />
-        FROM task ta
-        LEFT JOIN demand de ON ta.demand_id = de.id
-        LEFT JOIN project_main pro ON ta.project_id = pro.id
-        LEFT JOIN platform_user pl ON ta.assign_user_id = pl.user_id
-        LEFT JOIN platform_user pl2 ON ta.beassign_user_id = pl2.user_id
-        WHERE ta.status = 2 AND ta.beassign_user_id = #{id}
-        ORDER BY ta.create_time DESC, ta.priority DESC
-    </select>
     <!-- zsf-->
     <!--重做-->
-    <update id="updateTaskAlreadyToRunning" parameterType="java.util.List">
+    <update id="updateTaskAlreadyToRunning" parameterType="java.lang.Long">
         UPDATE task SET status = 1 WHERE
-        <foreach collection="list" item="aid" open="(" close=")" separator="or">
-            id = #{aid}
-        </foreach> AND status = 2
+            id = #{id}
     </update>
     <!-- zsf-->
     <!--提测-->

@@ -18,14 +18,12 @@ public interface TaskMapper {
     /**
      * 将任务进行关闭操作 myp
      */
-    // int updateRunningToClose(List list);
     int updateRunningToClose(Long id);
 
     /**
      * 将正在进行的任务进行完成操作 myp
      */
-    void updateRunningToAlready(Long id);
-    // List<Task> queryRunningToAlready(List list);
+    int updateRunningToAlready(Long id);
 
     /**
      * 点击完成时，修改实际完成时间和实际工时 myp
@@ -66,10 +64,6 @@ public interface TaskMapper {
      */
     List<Task> queryTaskByTask(@Param("task") Task task, @Param("ids") String[] ids);
 
-    /**
-     * 查询已完成的任务，根据时间和优先级进行排序 myp
-     */
-    List<Task> listTaskAlready(String id);
 
     /**
      * @author: zlh
@@ -224,11 +218,11 @@ public interface TaskMapper {
 
     /**
      *
-     * @Title: updateTaskPendingToDelay @Description:
-     * TODO(我的待办任务转为延期,会将该节点及节点下的所有子节点变为延期状态) @param @param taskId
+     * @Title: updateTaskAlreadyToRunning @Description:
+     * TODO(重做) @param id
      * status @param @return 设定文件 @return JSONObject 返回类型 @throws
      */
-    void updateTaskAlreadyToRunning(List<Long> list);
+    int updateTaskAlreadyToRunning(Long id);
 
     /**
      *
@@ -340,7 +334,7 @@ public interface TaskMapper {
      * 查询出我的任务
      * @Title: queryMyAllTask
      * @Description: TODO
-     * @param @param taskNum,taskName,projectId,demandId,id
+     * @param @param Task task
      * @param @return
      * @return List<Task>
      * @throws
@@ -351,7 +345,7 @@ public interface TaskMapper {
      * 查询出我的任务 -- 流转到测试的开发任务
      * @Title: queryMyAlreadyTask
      * @Description: TODO
-     * @param @param taskNum,taskName,projectId,demandId,id
+     * @param @param Task task
      * @param @return
      * @return List<Task>
      * @throws
