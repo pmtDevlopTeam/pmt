@@ -12,21 +12,13 @@ import com.camelot.pmt.task.model.TaskLog;
 import com.camelot.pmt.task.service.TaskFileService;
 import com.camelot.pmt.task.service.TaskLogService;
 import com.camelot.pmt.task.service.TaskManagerService;
-import com.camelot.pmt.task.utils.FileUtils;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpSession;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -215,61 +207,21 @@ public class TaskManagerServiceImpl implements TaskManagerService {
      *
      * @param id
      *            需要修改的任务id
-     * @param userId
-     *            负责人的id
      * @return boolean
      * @author zlh
      * @date 11:36 2018/4/12
      */
     @Override
-    public boolean updateBeAssignUserById(Long id, String userId) {
+    public boolean updateBeAssignUserById(Long id) {
         try {
             // check参数
-            if (id == null && userId == null || "".equals(userId)) {
+            if (id == null) {
                 throw new RuntimeException("参数错误");
             }
 
-            // 检测权限
             Task task = taskMapper.queryTaskById(id);
-            String createUserName = task.getCreateUser().getUsername();
-            String beAssignUsername = task.getBeassignUser().getUsername();
             User user = (User) ShiroUtils.getSessionAttribute("user");
-            if (!user.getUsername().equals(createUserName) && !user.getUsername().equals(beAssignUsername)) {
-                throw new RuntimeException("没有权限");
-            }
-
-            task.getBeassignUser().setUserId(userId);
-            int updateTaskByIdResult = taskMapper.updateTaskById(task);
-            return updateTaskByIdResult == 1 ? true : false;
-        } catch (Exception e) {
-            LOGGER.error(e.getMessage());
-            throw new RuntimeException(e);
-        }
-    }
-
-    /**
-     * 指派（验证是否有项目经理角色权限）
-     *
-     * @param id
-     *            需要修改的任务id
-     * @param userId
-     *            负责人的id
-     * @return boolean
-     * @author zlh
-     * @date 11:36 2018/4/12
-     */
-    @Override
-    public boolean updateBeAssignUserByIdCheckPower(HttpSession session) {
-        try {
-            Long id = (Long) session.getAttribute("id");
-            String userId = (String) session.getAttribute("userId");
-            // check参数
-            if (id == null && userId == null || "".equals(userId)) {
-                throw new RuntimeException("参数错误");
-            }
-
-            Task task = taskMapper.queryTaskById(id);
-            task.getBeassignUser().setUserId(userId);
+            task.getBeassignUser().setUserId(user.getUserId());
             int updateTaskByIdResult = taskMapper.updateTaskById(task);
             return updateTaskByIdResult == 1 ? true : false;
         } catch (Exception e) {
@@ -352,7 +304,7 @@ public class TaskManagerServiceImpl implements TaskManagerService {
                     already = new ArrayList<>();
                     already.add(task);
                 }
-                if ("4".equals(status)) {
+                if ("3".equals(status)) {
                     close = new ArrayList<>();
                     close.add(task);
                 }
@@ -417,7 +369,7 @@ public class TaskManagerServiceImpl implements TaskManagerService {
                     already = new ArrayList<>();
                     already.add(task1);
                 }
-                if ("4".equals(status)) {
+                if ("3".equals(status)) {
                     close = new ArrayList<>();
                     close.add(task1);
                 }
