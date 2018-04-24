@@ -1,19 +1,17 @@
 package com.camelot.pmt.task.service.impl;
 
-import com.baomidou.mybatisplus.plugins.pagination.PageHelper;
-import com.camelot.pmt.common.ExecuteResult;
-import com.camelot.pmt.task.mapper.TaskLogMapper;
 import com.camelot.pmt.task.mapper.TaskMapper;
 import com.camelot.pmt.task.model.Task;
 import com.camelot.pmt.task.service.TaskAlreadyService;
+import com.camelot.pmt.task.service.TaskLogService;
 import com.camelot.pmt.task.utils.Constant;
-import com.github.pagehelper.PageInfo;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class TaskAlreadyServiceImpl implements TaskAlreadyService {
@@ -22,49 +20,62 @@ public class TaskAlreadyServiceImpl implements TaskAlreadyService {
     private TaskMapper taskMapper;
 
     @Autowired
-    private TaskLogMapper taskLogMapper;
+    private TaskLogService taskLogService;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(TaskAlreadyServiceImpl.class);
 
     /**
      * TODO重做(我的任务状态转为正在进行)
      *
-     * @param Long
+     * @param
      *            id
-     * @return ExecuteResult<String>
+     * @return boolean
      */
 
     @Override
     public boolean updateTaskAlreadyToRunning(Long id) {
 
-           return taskMapper.updateTaskAlreadyToRunning(id)==1?true:false;
+           boolean flag = false;
+           int i = taskMapper.updateTaskAlreadyToRunning(id);
+           if(i == 1){
+               taskLogService.insertTaskLog(id,Constant.TaskLogOperationButton.REDOTASK.getValue(),"重做了任务");
+               flag = true;
+               return flag;
+           }
+           return flag;
     }
 
     /**
      * 根据任务ID 提测
      *
-     * @param Long
+     * @param
      *            id
-     * @return ExecuteResult<String>
+     * @return boolean
      */
 
     @Override
     public boolean updateTaskToTest(Long id) {
-
+            Boolean flag = false;
             // 根据任务ID去查需求ID
             Long demandId = taskMapper.queryTaskByTaskId(id);
             // 根据需求ID查出当前需求下的测试人员ID
             String beassignUserId = taskMapper.queryTaskToTestByDemandId(demandId);
             // 进行任务的状态更改(根据id去更改任务的状态)
-            return taskMapper.updateTaskToTest(id, beassignUserId)==1?true:false;
-
+            int i = taskMapper.updateTaskToTest(id, beassignUserId);
+            Task task = new Task();
+            task.setId(id);
+            if(i == 1){
+                taskLogService.insertTaskLog(id,Constant.TaskLogOperationButton.MEASUREMENT.getValue(),"提测了任务");
+                flag = true;
+                return flag;
+            }
+            return flag;
     }
 
 
     /**
      * 查询未完成任务的个数
      *
-     * @param Long
+     * @param
      *            projectId, String userId
      * @return int
      */
@@ -77,9 +88,9 @@ public class TaskAlreadyServiceImpl implements TaskAlreadyService {
     /**
      * 根据需求ID 查询任务列表
      *
-     * @param long
+     * @param
      *            demandId
-     * @return ExecuteResult<List<Task>>
+     * @return List<Task>
      */
 
     @Override
@@ -93,9 +104,9 @@ public class TaskAlreadyServiceImpl implements TaskAlreadyService {
     /**
      * 查询我的任务
      *
-     * @param :String taskNum, String taskName ,Long projectId ,Long demandId,String id
+     * @param : task
      *
-     * @return ExecuteResult<Map<String,Object>>
+     * @return Map<String,Object>
      */
 
     @Override

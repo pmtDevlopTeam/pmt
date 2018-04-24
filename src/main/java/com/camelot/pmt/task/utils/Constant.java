@@ -37,7 +37,9 @@ public class Constant {
         /** 开发任务 */
         DEVELOPMENTTASK("1"),
         /** 测试任务 */
-        TESTTASK("2");
+        TESTTASK("2"),
+        /**设计任务 */
+        DESIGN("3");
         private String value;
 
         TaskType(String value) {
@@ -67,21 +69,23 @@ public class Constant {
     /** 任务日志按钮类型 */
     public enum TaskLogOperationButton {
         /** 新建任务 */
-    	CREATETASK("新建任务"),
+    	CREATETASK("新建"),
     	/** 评估任务 */
-    	EVALUATION("评估任务"),
+    	EVALUATION("评估"),
     	/** 开始任务 */
-    	UPDATETASK("修改任务"),
+    	UPDATETASK("修改"),
     	/** 修改任务 */
-    	DELETETASK("删除任务"),
+    	DELETETASK("删除"),
     	/** 开始任务 */
-        STARTTASK("开始任务"),
+        STARTTASK("开始"),
         /** 完成任务 */
-        COMPLETETASK("完成任务"),
+        COMPLETETASK("完成"),
         /** 关闭任务 */
-        CLOSETASK("关闭任务"),
+        CLOSETASK("关闭"),
         /** 提测任务 */
-        MEASUREMENT("提测任务");
+        MEASUREMENT("提测"),
+        /** 重做任务 */
+        REDOTASK("重做");
         private String value;
 
         TaskLogOperationButton(String value) {

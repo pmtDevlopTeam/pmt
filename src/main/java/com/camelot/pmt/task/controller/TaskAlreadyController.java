@@ -3,7 +3,6 @@ package com.camelot.pmt.task.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.camelot.pmt.common.APIStatus;
 import com.camelot.pmt.common.ApiResponse;
-import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.platform.model.User;
 import com.camelot.pmt.platform.shiro.ShiroUtils;
 import com.camelot.pmt.task.model.Task;
@@ -11,12 +10,10 @@ import com.camelot.pmt.task.model.TaskLog;
 import com.camelot.pmt.task.service.TaskAlreadyService;
 import com.camelot.pmt.task.service.TaskLogService;
 import com.camelot.pmt.task.service.TaskManagerService;
-import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -47,7 +44,7 @@ public class TaskAlreadyController {
     /**
      * (我的已完成任务转为正在进行) 重做功能 updateTaskAlreadyToRunning
      *
-     * @param Long
+     * @param
      *            id
      * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
@@ -74,7 +71,7 @@ public class TaskAlreadyController {
     /**
      * 我的已办 提测功能 updateTaskToTest
      *
-     * @param Long
+     * @param
      *            id
      * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
@@ -102,7 +99,7 @@ public class TaskAlreadyController {
     /**
      * 查询单个任务明细 queryTaskById
      *
-     * @param Long
+     * @param
      *            id
      * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
@@ -112,8 +109,8 @@ public class TaskAlreadyController {
     public JSONObject queryTaskById(
             @ApiParam(name = "id", value = "任务id", required = true) @RequestParam(required = true) Long id) {
         try {
-            Map<String, Object> result = taskManagerService.queryTaskById(id);
-            return ApiResponse.success(result);
+            Map<String, Object> map = taskManagerService.queryTaskById(id);
+            return ApiResponse.success(map);
         } catch (Exception e) {
             logger.error(e.getMessage());
             return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
@@ -123,7 +120,7 @@ public class TaskAlreadyController {
     /**
      * 查询任务历史记录 重做页面 queryTaskLogList
      *
-     * @param Long
+     * @param
      *            id
      * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
@@ -144,8 +141,8 @@ public class TaskAlreadyController {
     /**
      * 查询任务历史记录 提测页面 queryTaskLogList
      *
-     * @param Long
-     *            id
+     * @param
+     *          id
      * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
 
@@ -166,7 +163,7 @@ public class TaskAlreadyController {
     /**
      * 查询所有的任务 queryTaskAlready
      *
-     * @param
+     * @param task
      * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
     @ApiOperation(value = "查询所有的任务", notes = "查询所有的任务")

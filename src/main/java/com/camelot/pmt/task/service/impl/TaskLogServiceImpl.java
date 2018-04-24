@@ -1,6 +1,8 @@
 package com.camelot.pmt.task.service.impl;
 
 import com.camelot.pmt.common.ExecuteResult;
+import com.camelot.pmt.platform.model.User;
+import com.camelot.pmt.platform.shiro.ShiroUtils;
 import com.camelot.pmt.task.mapper.TaskLogMapper;
 import com.camelot.pmt.task.mapper.TaskMapper;
 import com.camelot.pmt.task.model.Task;
@@ -72,16 +74,16 @@ public class TaskLogServiceImpl implements TaskLogService {
                 return flag;
             }
 
-            Task taskAll = taskMapper.queryTaskAllById(taskId);
             TaskLog taskLog = new TaskLog();
+            User user = (User) ShiroUtils.getSessionAttribute("user");
             Date date = new Date();
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            taskLog.setTaskId(taskAll.getId());
-            taskLog.setUserId(taskAll.getBeassignUser().getUserId());
+            taskLog.setTaskId(taskId);
+            taskLog.setUserId(user.getUserId());
             taskLog.setOperationButton(button);
             taskLog.setOperationTime(date);
             taskLog.setOperationDescribe(
-                    dateFormat.format(date) + "\t" + taskAll.getBeassignUser().getUsername() + "\t" + peration);
+                    dateFormat.format(date) + "\t" + user.getUsername() + "\t" + peration);
             int count = taskLogMapper.insertTaskLog(taskLog);
 
             if (count > 0) {

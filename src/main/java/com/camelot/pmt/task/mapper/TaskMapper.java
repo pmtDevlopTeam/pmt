@@ -53,56 +53,61 @@ public interface TaskMapper {
     Task selectTaskById(Long id);
 
     /**
-     * @author: zlh
-     * @param:
-     * @description: 查询所有任务列表
-     * @date: 16:54 2018/4/9
+     * 查询所有任务列表
+     *
+     * @author zlh
+     * @date 16:54 2018/4/9
      */
     List<Task> queryAllTask();
 
     /**
-     * @author: zlh
+     * 根据条件查询任务
+     *
+     * @author zlh
      * @param task
      *            模糊查询的条件
-     * @description: 根据条件查询任务
-     * @return
+     * @return Task
      */
     List<Task> queryTaskByTask(@Param("task") Task task, @Param("ids") String[] ids);
 
 
     /**
-     * @author: zlh
-     * @param: taskManager
+     * 新增任务
+     *
+     * @author zlh
+     * @param task
      *             插入任务的数据
-     * @description: 新增任务
-     * @date: 9:07 2018/4/12
+     * @date 9:07 2018/4/12
      */
-    int insertTask(Task task);
+    int addTask(Task task);
 
     /**
-     * @author: zlh
-     * @param: taskManager
+     * 根据任务id修改任务
+     *
+     * @author zlh
+     * @param task
      *             需要修改的任务数据
-     * @description: 根据任务id修改任务
-     * @date: 10:18 2018/4/12
+     * @date 10:18 2018/4/12
      */
     int updateTaskById(Task task);
 
     /**
-     * @author: zlh
-     * @param: id
+     * 根据任务id查询任务详情
+     *
+     * @author zlh
+     * @param id
      *             任务id
-     * @description: 根据任务id查询任务详情
-     * @date: 17:08 2018/4/12
+     * @date 17:08 2018/4/12
      */
     Task queryTaskById(Long id);
 
     /**
-     * @author: zlh
-     * @param: id
+     * 根据任务删除id
+     *
+     * @author zlh
+     * @param id
      *             需要删除的任务的id
-     * @description: 根据任务删除id
-     * @date: 17:22 2018/4/12
+     * @date 17:22 2018/4/12
      */
     int deleteTaskById(Long id);
 
@@ -356,4 +361,26 @@ public interface TaskMapper {
      * @throws
      */
     List<Task> queryMyAlreadyTask(Task task);
+    
+    /**
+     * 通过项目ID查询延时列表
+    * @Title: querydelayedTaskReminderList
+    * @Description: TODO
+    * @param @param projectId
+    * @param @return
+    * @return List<Map<String,Object>> 
+    * @throws
+     */
+	List<Map<String, Object>> querydelayedTaskReminderList(String projectId);
+	
+	/**
+	 * 通过项目ID查询延期列表
+	* @Title: querydeferredTaskRemindersList
+	* @Description: TODO
+	* @param @param projectId
+	* @param @return
+	* @return List<Map<String,Object>> 
+	* @throws
+	 */
+	List<Map<String, Object>> querydeferredTaskRemindersList(String projectId);
 }
