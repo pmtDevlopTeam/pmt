@@ -119,10 +119,10 @@ public class TaskOverdueController {
     }
 
     /**
-     * 查询延期任务列表 @Title: delayedTaskReminderList @Description: TODO @param @param
+     * 查询延时任务列表 @Title: delayedTaskReminderList @Description: TODO @param @param
      * leadtime @param @param delaytime @param @return @return JSONObject @throws
      */
-    @ApiOperation(value = "查询延期任务列表", notes = "查询延期任务列表")
+    @ApiOperation(value = "查询延时任务列表", notes = "查询延时任务列表")
     @ApiImplicitParams({
             @ApiImplicitParam(dataType = "Integer", name = "leadtime", paramType = "query", value = "提前提醒天数", required = true),
             @ApiImplicitParam(dataType = "Integer", name = "delaytime", paramType = "query", value = "延后提醒天数", required = true) })
@@ -147,23 +147,22 @@ public class TaskOverdueController {
     }
 
     /**
-     * 查询延时任务列表 @Title: deferredTaskRemindersList @Description: TODO @param @param
+     * 查询延期任务列表 @Title: deferredTaskRemindersList @Description: TODO @param @param
      * leadtime @param @param delaytime @param @return @return JSONObject @throws
      */
-    @ApiOperation(value = "查询延时任务列表", notes = "查询延时任务列表")
+    @ApiOperation(value = "查询延期任务列表", notes = "查询延期任务列表")
     @ApiImplicitParams({
-            @ApiImplicitParam(dataType = "Integer", name = "leadtime", paramType = "query", value = "提前提醒天数", required = true),
             @ApiImplicitParam(dataType = "Integer", name = "delaytime", paramType = "query", value = "延后提醒天数", required = true) })
     @RequestMapping(value = "/deferredTaskRemindersList", method = RequestMethod.POST)
-    public JSONObject deferredTaskRemindersList(@RequestParam(required = true) Integer leadtime,
+    public JSONObject deferredTaskRemindersList(
             @RequestParam(required = true) Integer delaytime) {
         ExecuteResult<Map<String, Object>> result = new ExecuteResult<Map<String, Object>>();
         try {
-            if (leadtime == null && "".equals(leadtime) || delaytime == null && "".equals(delaytime)) {
+            if ( delaytime == null && "".equals(delaytime)) {
 
                 return ApiResponse.errorPara();
             }
-            result = taskService.deferredTaskRemindersList(leadtime, delaytime);
+            result = taskService.deferredTaskRemindersList( delaytime);
             if (result.isSuccess()) {
                 return ApiResponse.success(result.getResult());
             }

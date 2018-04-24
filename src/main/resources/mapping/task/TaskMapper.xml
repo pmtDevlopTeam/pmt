@@ -563,9 +563,9 @@
         <include refid="ShowAllTasks_Column_List" />
         from
         task t
-        INNER JOIN platform_user a ON a.user_id = t.assign_user_id
-        INNER JOIN platform_user b ON b.user_id = t.beassign_user_id
-        INNER JOIN platform_user c ON c.user_id = t.create_user_id
+        LEFT JOIN platform_user a ON a.user_id = t.assign_user_id
+        LEFT JOIN platform_user b ON b.user_id = t.beassign_user_id
+        LEFT JOIN platform_user c ON c.user_id = t.create_user_id
         where 1 = 1
         <if test="demandId != null">
             and t.demand_id = #{demandId,jdbcType=BIGINT}
@@ -614,10 +614,10 @@
         SELECT
         <include refid="ShowAllTasks_Column_List" />
         FROM task t
-        INNER JOIN task_log l ON t.id = l.task_id
-        INNER JOIN platform_user a ON a.user_id = t.assign_user_id
-        INNER JOIN platform_user b ON b.user_id = t.beassign_user_id
-        INNER JOIN platform_user c ON c.user_id = t.create_user_id
+        LEFT JOIN task_log l ON t.id = l.task_id
+        LEFT JOIN platform_user a ON a.user_id = t.assign_user_id
+        LEFT JOIN platform_user b ON b.user_id = t.beassign_user_id
+        LEFT JOIN platform_user c ON c.user_id = t.create_user_id
         LEFT JOIN project_main p ON t.project_id = p.id
         LEFT JOIN demand d ON t.demand_id = d.id
         WHERE  t.task_type='2' AND l.operation_button = '提测'
@@ -784,7 +784,7 @@
     </select>
     <!--myp结束-->
     
-   <!--  超时提前列表 -->
+   <!--  延期提前列表 -->
     <select id="queryleaddeferredTaskRemindersList" parameterType="int" resultType="map">
 		select * from (
 		select t.id,t.task_num,t.priority,t.task_name,t.assign_user_id,t.task_type,p.id as pid,p.project_name,
@@ -796,7 +796,7 @@
 		) f where elapsed_time <![CDATA[ >=  ]]> #{leadtime} and elapsed_time <![CDATA[ <= ]]> 0 and status = 0
     </select>
     
-    <!--  超时延后列表 -->
+    <!--  延期延后列表 -->
     <select id="querydelaytimedeferredTaskRemindersList" parameterType="int" resultType="map">
 	    select * from (
 		select t.id,t.task_num,t.priority,t.task_name,t.assign_user_id,t.task_type,p.id as pid,p.project_name,
@@ -809,7 +809,7 @@
     </select>
 
 
-	 <!--  延期提前列表 -->
+	 <!--  延时提前列表 -->
     <select id="queryleaddelayedTaskReminderList" parameterType="int" resultType="map">
 		select * from (
 		select t.id,t.task_num,t.priority,t.task_name,t.assign_user_id,t.task_type,p.id as pid,p.project_name,
@@ -821,7 +821,7 @@
 		) f where elapsed_time <![CDATA[ >= ]]> #{leadtime} and elapsed_time <![CDATA[ <= ]]> 0 and status = 1
     </select>
     
-    <!--  延期延后列表 -->
+    <!--  延时延后列表 -->
     <select id="querydelaydelayedTaskReminderList" parameterType="int" resultType="map">
 	    select * from (
 		select t.id,t.task_num,t.priority,t.task_name,t.assign_user_id,t.task_type,p.id as pid,p.project_name,

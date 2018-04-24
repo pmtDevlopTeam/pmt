@@ -11,7 +11,8 @@ import java.util.Map;
 public interface TaskMapper {
 
     /**
-     * 查询正在进行的任务，根据时间和优先级进行排序 myp
+     * 查询正在进行的任务，根据时间和优先级进行排序
+     * myp
      */
     List<Task> queryTaskRunning(Task task);
 
@@ -21,12 +22,14 @@ public interface TaskMapper {
     int updateRunningToClose(Long id);
 
     /**
-     * 将正在进行的任务进行完成操作 myp
+     * 将正在进行的任务进行完成操作
+     * myp
      */
     int updateRunningToAlready(Long id);
 
     /**
-     * 点击完成时，修改实际完成时间和实际工时 myp
+     * 点击完成时，修改实际完成时间和实际工时
+     * myp
      */
     int updateInfact_hourAndActual_end_time(Task task);
 
@@ -36,14 +39,16 @@ public interface TaskMapper {
     int addAttachment(TaskFile taskFile);
 
     /**
-     * 根据任务id查询所有的次id的子任务 myp
+     * 根据任务id查询所有的次id的子任务
+     * myp
      */
     List<Task> queryByPId(Long pid);
 
     Task queryTaskAllById(Long id);
 
     /**
-     * 根据id查询任务明细 myp
+     * 根据id查询任务明细
+     * myp
      */
     Task selectTaskById(Long id);
 
@@ -294,14 +299,14 @@ public interface TaskMapper {
     int updateTaskToTest(Long id);
 
     /**
-     * 查询延时提前列表 @Title: queryleaddeferredTaskRemindersList @Description:
+     * 查询延期提前列表 @Title: queryleaddeferredTaskRemindersList @Description:
      * TODO @param @param leadtime @param @return @return
      * List<Map<String,Object>> @throws
      */
     List<Map<String, Object>> queryleaddeferredTaskRemindersList(Integer leadtime);
 
     /**
-     * 查询延时延后列表 @Title: querydelaytimedeferredTaskRemindersList @Description:
+     * 查询延期延后列表 @Title: querydelaytimedeferredTaskRemindersList @Description:
      * TODO @param @param delaytime @param @return @return
      * List<Map<String,Object>> @throws
      */
@@ -322,14 +327,14 @@ public interface TaskMapper {
             @Param("modifyTime") Date modifyTime);
 
     /**
-     * 延期提前列表 @Title: queryleaddelayedTaskReminderList @Description:
+     * 延时提前列表 @Title: queryleaddelayedTaskReminderList @Description:
      * TODO @param @param leadtime @param @return @return
      * List<Map<String,Object>> @throws
      */
     List<Map<String, Object>> queryleaddelayedTaskReminderList(Integer leadtime);
 
     /**
-     * 延期延后列表 @Title: querydelaydelayedTaskReminderList @Description:
+     * 延时延后列表 @Title: querydelaydelayedTaskReminderList @Description:
      * TODO @param @param delaytime @param @return @return
      * List<Map<String,Object>> @throws
      */

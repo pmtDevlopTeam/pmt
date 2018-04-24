@@ -85,14 +85,10 @@ public class TaskRunningServiceImpl implements TaskRunningService {
      * @auth myp
      */
     @Override
-    public Boolean updateRunningToAlready(Task ptask, TaskFile taskFile) {
+    public Boolean updateRunningToAlready(Task ptask) {
         Boolean flag = false;
-        taskFile.setSourceId(ptask.getId());
-        taskFile.setAttachmentSource("任务");
         int i = taskMapper.updateRunningToAlready(ptask.getId());
         if(i>0){
-            taskMapper.updateInfact_hourAndActual_end_time(ptask);
-            taskMapper.addAttachment(taskFile);
             addTaskLog(ptask.getId(), "完成");
             flag = true;
             return flag;

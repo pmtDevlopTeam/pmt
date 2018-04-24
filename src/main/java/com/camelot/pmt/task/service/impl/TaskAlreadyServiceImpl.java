@@ -101,34 +101,36 @@ public class TaskAlreadyServiceImpl implements TaskAlreadyService {
     @Override
     public Map<String, Object> queryMyAllTask(Task task) {
 
-        List PendingList = new ArrayList();
-        List RunningList = new ArrayList();
-        List AlreadyList = new ArrayList();
-        List CloseList = new ArrayList();
+        List pendingList = new ArrayList();
+        List runningList = new ArrayList();
+        List alreadyList = new ArrayList();
+        List closeList = new ArrayList();
         List<Task> taskList = taskMapper.queryMyAllTask(task);
         List<Task> taskAlreadyList  = taskMapper.queryMyAlreadyTask(task);
-        AlreadyList.add(taskAlreadyList);
+        for(int j = 0 ;j < taskAlreadyList.size() ;j++ ){
+            alreadyList.add(taskAlreadyList.get(j));
+        }
         for(int i = 0 ;i < taskList.size() ;i++ ){
             if(Constant.TaskStatus.PENDINHG.getValue().equals(taskList.get(i).getStatus())){
-                PendingList.add(taskList.get(i));
+                pendingList.add(taskList.get(i));
             };
             if(Constant.TaskStatus.RUNING.getValue().equals(taskList.get(i).getStatus())){
-                RunningList.add(taskList.get(i));
-                System.out.println(RunningList);
+                runningList.add(taskList.get(i));
             };
             if(Constant.TaskStatus.ALREADY.getValue().equals(taskList.get(i).getStatus())){
-                AlreadyList.add(taskList.get(i));
+                alreadyList.add(taskList.get(i));
             };
             if(Constant.TaskStatus.CLOSE.getValue().equals(taskList.get(i).getStatus())){
-                CloseList.add(taskList.get(i));
+                closeList.add(taskList.get(i));
             }
         }
         Map<String, Object> map = new HashMap<>();
-        map.put("PendingList",PendingList);
-        map.put("RunningList",RunningList);
-        map.put("AlreadyList",AlreadyList);
-        map.put("CloseList",CloseList);
+        map.put("pendingList",pendingList);
+        map.put("runningList",runningList);
+        map.put("alreadyList",alreadyList);
+        map.put("closeList",closeList);
         return map;
     }
 
 }
+
