@@ -7,20 +7,20 @@ import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.enums.IdType;
 
 public class DictItem implements Serializable {
+	/**
+	 * @Description:字典项表
+	 *
+	 * @author pmt
+	 * @since 2018-04-11
+	 */
+	private static final long serialVersionUID = 1L; 
     /**
-     * @Description:字典项表
-     *
-     * @author pmt
-     * @since 2018-04-11
-     */
-    private static final long serialVersionUID = 1L;
-    /**
-     * 默认索引 不可作用于业务
+     * 默认索引 不可作用于业务 
      */
     @TableId(value = "id", type = IdType.AUTO)
-    private Long id;
+	private Long id;
     /**
-     * 字典ID
+     * 字典ID 
      */
     private String dictId;
     /**
@@ -63,132 +63,158 @@ public class DictItem implements Serializable {
      * 修改人
      */
     private String modifyUserId;
+    /**
+     * 用户对象信息
+     */
+    private User user;
+    /**
+     * 字典对象信息
+     */
+    private Dict dict;
+    
+    
+	public Dict getDict() {
+		return dict;
+	}
 
-    public DictItem() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
+	public void setDict(Dict dict) {
+		this.dict = dict;
+	}
 
-    public DictItem(Long id, String dictId, String dictItemId, String dictItemName, String dictItemCode,
-            String dictItemValue, String state, Integer sortNum, Date createTime, Date modifyTime, String createUserId,
-            String modifyUserId) {
-        super();
-        this.id = id;
-        this.dictId = dictId;
-        this.dictItemId = dictItemId;
-        this.dictItemName = dictItemName;
-        this.dictItemCode = dictItemCode;
-        this.dictItemValue = dictItemValue;
-        this.state = state;
-        this.sortNum = sortNum;
-        this.createTime = createTime;
-        this.modifyTime = modifyTime;
-        this.createUserId = createUserId;
-        this.modifyUserId = modifyUserId;
-    }
+	public User getUser() {
+		return user;
+	}
 
-    public Long getId() {
-        return id;
-    }
+	public void setUser(User user) {
+		this.user = user;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public DictItem() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 
-    public String getDictId() {
-        return dictId;
-    }
+	public DictItem(Long id, String dictId, String dictItemId, String dictItemName, String dictItemCode,
+			String dictItemValue, String state, Integer sortNum, Date createTime, Date modifyTime, String createUserId,
+			String modifyUserId) {
+		super();
+		this.id = id;
+		this.dictId = dictId;
+		this.dictItemId = dictItemId;
+		this.dictItemName = dictItemName;
+		this.dictItemCode = dictItemCode;
+		this.dictItemValue = dictItemValue;
+		this.state = state;
+		this.sortNum = sortNum;
+		this.createTime = createTime;
+		this.modifyTime = modifyTime;
+		this.createUserId = createUserId;
+		this.modifyUserId = modifyUserId;
+	}
 
-    public void setDictId(String dictId) {
-        this.dictId = dictId;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public String getDictItemId() {
-        return dictItemId;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public void setDictItemId(String dictItemId) {
-        this.dictItemId = dictItemId;
-    }
+	public String getDictId() {
+		return dictId;
+	}
 
-    public String getDictItemName() {
-        return dictItemName;
-    }
+	public void setDictId(String dictId) {
+		this.dictId = dictId;
+	}
 
-    public void setDictItemName(String dictItemName) {
-        this.dictItemName = dictItemName;
-    }
+	public String getDictItemId() {
+		return dictItemId;
+	}
 
-    public String getDictItemCode() {
-        return dictItemCode;
-    }
+	public void setDictItemId(String dictItemId) {
+		this.dictItemId = dictItemId;
+	}
 
-    public void setDictItemCode(String dictItemCode) {
-        this.dictItemCode = dictItemCode;
-    }
+	public String getDictItemName() {
+		return dictItemName;
+	}
 
-    public String getDictItemValue() {
-        return dictItemValue;
-    }
+	public void setDictItemName(String dictItemName) {
+		this.dictItemName = dictItemName;
+	}
 
-    public void setDictItemValue(String dictItemValue) {
-        this.dictItemValue = dictItemValue;
-    }
+	public String getDictItemCode() {
+		return dictItemCode;
+	}
 
-    public String getState() {
-        return state;
-    }
+	public void setDictItemCode(String dictItemCode) {
+		this.dictItemCode = dictItemCode;
+	}
 
-    public void setState(String state) {
-        this.state = state;
-    }
+	public String getDictItemValue() {
+		return dictItemValue;
+	}
 
-    public Integer getSortNum() {
-        return sortNum;
-    }
+	public void setDictItemValue(String dictItemValue) {
+		this.dictItemValue = dictItemValue;
+	}
 
-    public void setSortNum(Integer sortNum) {
-        this.sortNum = sortNum;
-    }
+	public String getState() {
+		return state;
+	}
 
-    public Date getCreateTime() {
-        return createTime;
-    }
+	public void setState(String state) {
+		this.state = state;
+	}
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
+	public Integer getSortNum() {
+		return sortNum;
+	}
 
-    public Date getModifyTime() {
-        return modifyTime;
-    }
+	public void setSortNum(Integer sortNum) {
+		this.sortNum = sortNum;
+	}
 
-    public void setModifyTime(Date modifyTime) {
-        this.modifyTime = modifyTime;
-    }
+	public Date getCreateTime() {
+		return createTime;
+	}
 
-    public String getCreateUserId() {
-        return createUserId;
-    }
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
 
-    public void setCreateUserId(String createUserId) {
-        this.createUserId = createUserId;
-    }
+	public Date getModifyTime() {
+		return modifyTime;
+	}
 
-    public String getModifyUserId() {
-        return modifyUserId;
-    }
+	public void setModifyTime(Date modifyTime) {
+		this.modifyTime = modifyTime;
+	}
 
-    public void setModifyUserId(String modifyUserId) {
-        this.modifyUserId = modifyUserId;
-    }
+	public String getCreateUserId() {
+		return createUserId;
+	}
 
-    @Override
-    public String toString() {
-        return "DictItem [id=" + id + ", dictId=" + dictId + ", dictItemId=" + dictItemId + ", dictItemName="
-                + dictItemName + ", dictItemCode=" + dictItemCode + ", dictItemValue=" + dictItemValue + ", state="
-                + state + ", sortNum=" + sortNum + ", createTime=" + createTime + ", modifyTime=" + modifyTime
-                + ", createUserId=" + createUserId + ", modifyUserId=" + modifyUserId + "]";
-    }
+	public void setCreateUserId(String createUserId) {
+		this.createUserId = createUserId;
+	}
 
+	public String getModifyUserId() {
+		return modifyUserId;
+	}
+
+	public void setModifyUserId(String modifyUserId) {
+		this.modifyUserId = modifyUserId;
+	}
+
+	@Override
+	public String toString() {
+		return "DictItem [id=" + id + ", dictId=" + dictId + ", dictItemId=" + dictItemId + ", dictItemName="
+				+ dictItemName + ", dictItemCode=" + dictItemCode + ", dictItemValue=" + dictItemValue + ", state="
+				+ state + ", sortNum=" + sortNum + ", createTime=" + createTime + ", modifyTime=" + modifyTime
+				+ ", createUserId=" + createUserId + ", modifyUserId=" + modifyUserId + "]";
+	}
+    
+    
 }

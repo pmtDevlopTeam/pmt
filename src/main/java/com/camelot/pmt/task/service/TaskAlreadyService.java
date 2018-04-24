@@ -5,6 +5,7 @@ import com.camelot.pmt.task.model.Task;
 import com.github.pagehelper.PageInfo;
 
 import java.util.List;
+import java.util.Map;
 
 public interface TaskAlreadyService {
 
@@ -57,5 +58,16 @@ public interface TaskAlreadyService {
      */
 
     ExecuteResult<List<Task>> queryTaskByDemandId(Long demandId);
+
+
+    /**
+     * 查询我的任务
+     *
+     * @param Task task
+     *
+     * @return ExecuteResult<Map<String,Object>>
+     */
+
+    Map<String,Object> queryMyAllTask(Task task);
 
 }

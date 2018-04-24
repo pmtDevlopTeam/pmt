@@ -6,14 +6,14 @@ import com.camelot.pmt.task.mapper.TaskLogMapper;
 import com.camelot.pmt.task.mapper.TaskMapper;
 import com.camelot.pmt.task.model.Task;
 import com.camelot.pmt.task.service.TaskAlreadyService;
+import com.camelot.pmt.task.utils.Constant;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class TaskAlreadyServiceImpl implements TaskAlreadyService {
@@ -169,6 +169,47 @@ public class TaskAlreadyServiceImpl implements TaskAlreadyService {
             throw new RuntimeException(e);
         }
         return result;
+    }
+
+    /**
+     * 查询我的任务
+     *
+     * @param :String taskNum, String taskName ,Long projectId ,Long demandId,String id
+     *
+     * @return ExecuteResult<Map<String,Object>>
+     */
+
+    @Override
+    public Map<String, Object> queryMyAllTask(Task task) {
+
+        List PendingList = new ArrayList();
+        List RunningList = new ArrayList();
+        List AlreadyList = new ArrayList();
+        List CloseList = new ArrayList();
+        List<Task> taskList = taskMapper.queryMyAllTask(task);
+        List<Task> taskAlreadyList  = taskMapper.queryMyAlreadyTask(task);
+        AlreadyList.add(taskAlreadyList);
+        for(int i = 0 ;i < taskList.size() ;i++ ){
+            if(Constant.TaskStatus.PENDINHG.getValue().equals(taskList.get(i).getStatus())){
+                PendingList.add(taskList.get(i));
+            };
+            if(Constant.TaskStatus.RUNING.getValue().equals(taskList.get(i).getStatus())){
+                RunningList.add(taskList.get(i));
+                System.out.println(RunningList);
+            };
+            if(Constant.TaskStatus.ALREADY.getValue().equals(taskList.get(i).getStatus())){
+                AlreadyList.add(taskList.get(i));
+            };
+            if(Constant.TaskStatus.CLOSE.getValue().equals(taskList.get(i).getStatus())){
+                CloseList.add(taskList.get(i));
+            }
+        }
+        Map<String, Object> map = new HashMap<>();
+        map.put("PendingList",PendingList);
+        map.put("RunningList",RunningList);
+        map.put("AlreadyList",AlreadyList);
+        map.put("CloseList",CloseList);
+        return map;
     }
 
 }
