@@ -112,8 +112,8 @@ public class TaskAlreadyController {
     public JSONObject queryTaskById(
             @ApiParam(name = "id", value = "任务id", required = true) @RequestParam(required = true) Long id) {
         try {
-            Map<String, Object> result = taskManagerService.queryTaskById(id);
-            return ApiResponse.success(result);
+            Map<String, Object> map = taskManagerService.queryTaskById(id);
+            return ApiResponse.success(map);
         } catch (Exception e) {
             logger.error(e.getMessage());
             return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
