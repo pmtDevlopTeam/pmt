@@ -9,6 +9,7 @@ import com.camelot.pmt.task.mapper.TaskMapper;
 import com.camelot.pmt.task.model.Task;
 import com.camelot.pmt.task.model.TaskFile;
 import com.camelot.pmt.task.model.TaskLog;
+import com.camelot.pmt.task.service.TaskLogService;
 import com.camelot.pmt.task.service.TaskRunningService;
 import com.camelot.pmt.task.utils.Constant;
 import com.camelot.pmt.task.utils.DateUtils;
@@ -41,6 +42,9 @@ public class TaskRunningServiceImpl implements TaskRunningService {
     @Autowired
     private TaskLogMapper taskLogMapper;
 
+    @Autowired
+    private TaskLogService taskLogService;
+
     private static final Logger LOGGER = LoggerFactory.getLogger(TaskRunningServiceImpl.class);
 
     /**
@@ -70,7 +74,7 @@ public class TaskRunningServiceImpl implements TaskRunningService {
         Boolean flag = false;
         int i = taskMapper.updateRunningToClose(id);
         if(i>0){
-            addTaskLog(id, "关闭");
+            taskLogService.insertTaskLog(id, Constant.TaskLogOperationButton.CLOSETASK.getValue(), "修改任务状态由：“正在进行”转换为“关闭”");
             flag = true;
             return flag;
         }
@@ -89,26 +93,11 @@ public class TaskRunningServiceImpl implements TaskRunningService {
         Boolean flag = false;
         int i = taskMapper.updateRunningToAlready(ptask.getId());
         if(i>0){
-            addTaskLog(ptask.getId(), "完成");
+            taskLogService.insertTaskLog(ptask.getId(), Constant.TaskLogOperationButton.COMPLETETASK.getValue(), "修改任务状态由：“正在进行”转换为“完成”");
             flag = true;
             return flag;
         }
         return flag;
-    }
-
-    // 操作成功后添加操作记录
-    private void addTaskLog(Long id, String peration) {
-        Task taskAll = taskMapper.queryTaskAllById(id);
-        TaskLog taskLog = new TaskLog();
-        Date date = new Date();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        taskLog.setTaskId(taskAll.getId());
-        taskLog.setUserId(taskAll.getBeassignUser().getUserId());
-        taskLog.setOperationButton(peration);
-        taskLog.setOperationTime(date);
-        taskLog.setOperationDescribe(
-                dateFormat.format(date) + "\t" + taskAll.getBeassignUser().getUsername() + "\t" + peration);
-        taskLogMapper.insertTaskLog(taskLog);
     }
 
 }
