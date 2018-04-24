@@ -37,7 +37,7 @@ public class LogAspect<T> {
         Log log = new Log();
         log.setLogOperationUserId(userId);
         log.setLogOperationType("删除");
-        log.setLogContent(keyWord + ":" + name);
+        log.setLogContent(keyWord + "删除:" + name);
         log.setLogType("0");
         long date = new Date().getTime();
         log.setLogOperationTime(new Date(date));
