@@ -12,6 +12,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.platform.common.BaseState;
+import com.camelot.pmt.platform.log.LogAspect;
 import com.camelot.pmt.platform.mapper.UserMapper;
 import com.camelot.pmt.platform.model.User;
 import com.camelot.pmt.platform.model.vo.UserVo;
@@ -30,8 +31,8 @@ import javax.servlet.http.Cookie;
  * 
  * @Title:  UserServiceImpl.java
  * @Description: TODO(用户操作实现层)
- * @author: jh
- * @date:  2018年2月5日 下午3:12:12
+ * @author: maple
+ * @date:  2018年4月5日 下午3:12:12
  */
 @Service
 @Primary
@@ -43,6 +44,9 @@ public class UserServiceImpl implements UserService{
     
     @Autowired
     private MailService mailService;
+    
+    @Autowired
+    private LogAspect logAspect;
 
     /**
      * <p>Description:[新增用户]<p>
@@ -91,6 +95,7 @@ public class UserServiceImpl implements UserService{
 				userMapper.addUserRole(user);
 			}
 		}
+		logAspect.insertAddLog(user, "用户", loginUser.getUserId());
 		// 5.通过邮件发送新添加的用户信息
 		return "添加用户成功！";
 	}
@@ -105,7 +110,8 @@ public class UserServiceImpl implements UserService{
 	 */
 	@Override
 	public String updateUserDetailsByUserId(User user) {
-		
+		//更新前的用户详情
+		UserVo beforeUpdate = userMapper.queryUserDetailsByUserId(user.getUserId()).get(0);
 		User loginUser = (User) ShiroUtils.getSessionAttribute("user");
 		user.setModifyUserId(loginUser.getUserId());
 		// 1.判断用户表需要更新的字段
@@ -160,6 +166,9 @@ public class UserServiceImpl implements UserService{
 				}
 			}
 		}
+		//更新后的用户详情
+		UserVo afterUpate = userMapper.queryUserDetailsByUserId(user.getUserId()).get(0);
+		logAspect.insertUpdateLog(afterUpate, beforeUpdate, "用户", loginUser.getUserId());
 		return "更新用户成功！";
 	}
 
@@ -220,7 +229,6 @@ public class UserServiceImpl implements UserService{
 		} else {
 			return "两次新密码输入不一致！";
 		}
-
 		return "修改密码成功！";
 	}
 	
@@ -350,6 +358,8 @@ public class UserServiceImpl implements UserService{
 	 */
 	@Override
 	public boolean activateUserStateByUserId(User user) {
+		//更新前的用户
+		User beforeUpdate = userMapper.queryUserByUserId(user.getUserId());
 		//1.激活用户状态
 		User loginUser = (User) ShiroUtils.getSessionAttribute("user");
 		user.setModifyUserId(loginUser.getUserId());
@@ -358,7 +368,10 @@ public class UserServiceImpl implements UserService{
 		User dbUserInfoResult = userMapper.queryUserInfoById(user.getUserId());
 		//2.激活成功后，再重新生成密码，将生成的密码和其他用户信息发送到用户邮箱
 		String emaliContent = sendEmaliContent(user);
-		mailService.sendSimpleMail(dbUserInfoResult.getUserMail(), "项目管理账号激活信息", emaliContent);
+		mailService.sendSimpleMail(dbUserInfoResult.getUserMail(), "PMT项目管理系统账号激活信息", emaliContent);
+		//更新后的用户
+		User afterUpate = userMapper.queryUserByUserId(user.getUserId());
+		logAspect.insertUpdateLog(afterUpate, beforeUpdate, "用户", loginUser.getUserId());
 		return activateResult == 1 ? true : false;
 	}
 
@@ -373,10 +386,16 @@ public class UserServiceImpl implements UserService{
 	 */
 	@Override
 	public boolean disableUserStateByUserId(User user) {
+		//更新前的用户
+		User beforeUpdate = userMapper.queryUserByUserId(user.getUserId());
 		User loginUser = (User) ShiroUtils.getSessionAttribute("user");
 		user.setModifyUserId(loginUser.getUserId());
 		user.setState(BaseState.ONE);
-		return userMapper.updateUserStateByUserId(user) == 1 ? true : false;
+		int disableResult = userMapper.updateUserStateByUserId(user);
+		//更新后的用户
+		User afterUpate = userMapper.queryUserByUserId(user.getUserId());
+		logAspect.insertUpdateLog(afterUpate, beforeUpdate, "用户", loginUser.getUserId());
+		return disableResult == 1 ? true : false;
 	}
 	
 	
