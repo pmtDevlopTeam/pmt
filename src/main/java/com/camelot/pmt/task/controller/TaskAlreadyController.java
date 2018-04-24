@@ -90,10 +90,10 @@ public class TaskAlreadyController {
             @ApiParam(name = "id", value = "任务ID", required = true) @RequestParam(required = true) Long id) {
         ExecuteResult<String> result = new ExecuteResult<String>();
         try {
-            Long userLoginId = Long.valueOf(1);
-            // 检查用户是否登录，需要去session中获取用户登录信息
-            if (StringUtils.isEmpty(userLoginId)) {
-                return ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
+            // 获取当前登录人
+            User user = (User) ShiroUtils.getSessionAttribute("user");
+            if (null == user) {
+                return ApiResponse.jsonData(APIStatus.INVALIDSESSION_LOGINOUTTIME);
             }
             // 更新我的任务为关闭
             result = taskAlreadyService.updateTaskToTest(id);
@@ -171,13 +171,9 @@ public class TaskAlreadyController {
     @RequestMapping(value = "/queryToRedoPage", method = RequestMethod.GET)
     public JSONObject queryToRedoPage(
             @ApiParam(name = "id", value = "任务id", required = true) @RequestParam(required = true) Long id) {
-        ExecuteResult<List<TaskLog>> result = null;
         try {
-            result = taskLogService.queryTaskLogList(id);
-            if (result.isSuccess()) {
-                return ApiResponse.success(result.getResult());
-            }
-            return ApiResponse.error();
+            List<TaskLog> result = taskLogService.queryTaskLogList(id);
+                return ApiResponse.success(result);
         } catch (Exception e) {
             return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
         }
@@ -195,13 +191,9 @@ public class TaskAlreadyController {
     @RequestMapping(value = "/queryToTestPage", method = RequestMethod.GET)
     public JSONObject queryToTestPage(
             @ApiParam(name = "id", value = "任务id", required = true) @RequestParam(required = true) Long id) {
-        ExecuteResult<List<TaskLog>> result = null;
         try {
-            result = taskLogService.queryTaskLogList(id);
-            if (result.isSuccess()) {
-                return ApiResponse.success(result.getResult());
-            }
-            return ApiResponse.error();
+            List<TaskLog> result = taskLogService.queryTaskLogList(id);
+                return ApiResponse.success(result);
         } catch (Exception e) {
             return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
         }
@@ -222,7 +214,6 @@ public class TaskAlreadyController {
             @ApiImplicitParam(dataType = "String", name = "taskNum", paramType = "query", value = "任务编号"),
             @ApiImplicitParam(dataType = "Demand", name = "demand.id", paramType = "query", value = "需求编号")})
     public JSONObject queryMyAllTask(@ApiIgnore Task task) {
-        String userLoginId = String.valueOf(1);
         try {
             // 获取当前登录人
             User user = (User) ShiroUtils.getSessionAttribute("user");

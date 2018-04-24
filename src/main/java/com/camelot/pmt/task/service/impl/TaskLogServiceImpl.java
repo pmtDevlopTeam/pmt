@@ -102,16 +102,11 @@ public class TaskLogServiceImpl implements TaskLogService {
      * 任务流转记录查询
      */
     @Override
-    public ExecuteResult<List<TaskLog>> queryTaskLogList(Long id) {
-        ExecuteResult<List<TaskLog>> result = new ExecuteResult<List<TaskLog>>();
-        try {
-            List<TaskLog> tasklog = taskLogMapper.queryTaskLogList(id);
-            result.setResult(tasklog);
-        } catch (Exception e) {
-            LOGGER.error(e.getMessage());
-            throw new RuntimeException(e);
-        }
-        return result;
+    public List<TaskLog> queryTaskLogList(Long id) {
+
+        List<TaskLog> tasklog = taskLogMapper.queryTaskLogList(id);
+
+        return tasklog;
     }
 
     @Override

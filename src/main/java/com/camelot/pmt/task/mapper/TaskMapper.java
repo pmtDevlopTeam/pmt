@@ -340,7 +340,7 @@ public interface TaskMapper {
      * 查询出我的任务
      * @Title: queryMyAllTask
      * @Description: TODO
-     * @param @param taskNum,taskName,projectId,demandId,id
+     * @param @param Task task
      * @param @return
      * @return List<Task>
      * @throws
@@ -351,7 +351,7 @@ public interface TaskMapper {
      * 查询出我的任务 -- 流转到测试的开发任务
      * @Title: queryMyAlreadyTask
      * @Description: TODO
-     * @param @param taskNum,taskName,projectId,demandId,id
+     * @param @param Task task
      * @param @return
      * @return List<Task>
      * @throws
