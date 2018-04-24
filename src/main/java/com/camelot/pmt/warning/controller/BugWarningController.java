@@ -51,7 +51,6 @@ public class BugWarningController {
 	    public JSONObject addbugWarning(@ApiIgnore BugWarning bugWarning) {
 			boolean flag = false;
 			try {
-					Integer count=bugWarningService.queryBugCount(Long.parseLong("666"));
 					flag = bugWarningService.addBugWarning(bugWarning);
 		            if (flag) {
 		                return ApiResponse.success();
