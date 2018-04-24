@@ -257,9 +257,8 @@ public class TaskManagerServiceImpl implements TaskManagerService {
             taskFile.setAttachmentSource("任务");
             // 添加附件信息到map
             map.put("TaskFile", taskFileService.queryByTaskFile(taskFile));
-            ExecuteResult<List<TaskLog>> logList = taskLogService.queryTaskLogList(id);
+            List<TaskLog> logs = taskLogService.queryTaskLogList(id);
             // 添加日志信息到map
-            List<TaskLog> logs = logList.getResult();
             map.put("log", logs);
 
             return map;
