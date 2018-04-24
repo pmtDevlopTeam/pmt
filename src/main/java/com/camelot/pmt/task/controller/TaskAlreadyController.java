@@ -115,6 +115,7 @@ public class TaskAlreadyController {
             Map<String, Object> result = taskManagerService.queryTaskById(id);
             return ApiResponse.success(result);
         } catch (Exception e) {
+            logger.error(e.getMessage());
             return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
         }
     }
@@ -132,9 +133,10 @@ public class TaskAlreadyController {
     public JSONObject queryToRedoPage(
             @ApiParam(name = "id", value = "任务id", required = true) @RequestParam(required = true) Long id) {
         try {
-            List<TaskLog> result = taskLogService.queryTaskLogList(id);
-                return ApiResponse.success(result);
+            List<TaskLog> taskLogList = taskLogService.queryTaskLogList(id);
+                return ApiResponse.success(taskLogList);
         } catch (Exception e) {
+            logger.error(e.getMessage());
             return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
         }
     }
@@ -152,9 +154,10 @@ public class TaskAlreadyController {
     public JSONObject queryToTestPage(
             @ApiParam(name = "id", value = "任务id", required = true) @RequestParam(required = true) Long id) {
         try {
-            List<TaskLog> result = taskLogService.queryTaskLogList(id);
-                return ApiResponse.success(result);
+            List<TaskLog> taskLogList = taskLogService.queryTaskLogList(id);
+                return ApiResponse.success(taskLogList);
         } catch (Exception e) {
+            logger.error(e.getMessage());
             return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
         }
     }
@@ -181,8 +184,8 @@ public class TaskAlreadyController {
                 return ApiResponse.jsonData(APIStatus.INVALIDSESSION_LOGINOUTTIME);
             }
             task.setBeassignUser(user);
-            Map<String , Object> result = taskAlreadyService.queryMyAllTask(task);
-            return ApiResponse.success(result);
+            Map<String , Object> map = taskAlreadyService.queryMyAllTask(task);
+            return ApiResponse.success(map);
         } catch (Exception e) {
             logger.error(e.getMessage());
             return ApiResponse.jsonData(APIStatus.ERROR_500);
