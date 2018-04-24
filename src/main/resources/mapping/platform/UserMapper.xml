@@ -286,6 +286,21 @@
 			</set>
 		where user_id = #{userId} 
 	</update>
+	
+	<!-- 更新用户状态 -->
+	<update id="updateUserStateByUserId" parameterType="com.camelot.pmt.platform.model.User" >
+		update platform_user
+		    <set>
+				<if test = "state != null ">
+					state = #{state},
+				</if>
+				<if test = "modifyUserId != null ">
+					modify_user_id = #{modifyUserId}
+				</if>
+			</set>
+		where user_id = #{userId} 
+	</update>
+	
 	<!-- 检查用户表登录账号是否存在 -->
 	 <select id="queryUserIsExistByLoginCode" resultMap="userModel" parameterType="java.lang.String" >
         select <include refid="userColumns"/> from platform_user where login_code = #{loginCode}
