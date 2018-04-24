@@ -732,7 +732,7 @@
         <if test="demand != null and demand.id !=null">
             and t.demand_id = #{demand.id,jdbcType=CHAR}
         </if>
-        ORDER BY t.create_time DESC, t.priority DESC
+        ORDER BY t.create_time ASC, t.priority ASC
     </select>
     <!--根据父级id查询所有的子任务-->
     <select id="queryByPId" parameterType="Long" resultType="com.camelot.pmt.task.model.Task">
