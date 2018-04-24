@@ -22,7 +22,7 @@ public interface TaskManagerService {
      * @date 9:10 2018/4/12
      * @return boolean
      */
-    boolean insertTask(Task task);
+    boolean addTask(Task task);
 
     /**
      * 根据id删除任务

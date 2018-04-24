@@ -57,7 +57,7 @@ public class TaskManagerController {
             @ApiImplicitParam(dataType = "String", name = "taskDescribe", paramType = "form", value = "任务描述") })
     public JSONObject addTask(@ApiIgnore Task task) {
         try {
-            boolean result = taskManagerService.insertTask(task);
+            boolean result = taskManagerService.addTask(task);
             if (result) {
                 return ApiResponse.success();
             }

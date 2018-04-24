@@ -248,7 +248,7 @@
 
     <!--zlh-->
     <!--插入任务-->
-    <insert id="insertTask" parameterType="com.camelot.pmt.task.model.Task">
+    <insert id="addTask" parameterType="com.camelot.pmt.task.model.Task">
         <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
             SELECT LAST_INSERT_ID()
         </selectKey>

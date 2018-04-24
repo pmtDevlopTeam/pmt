@@ -74,7 +74,7 @@ public interface TaskMapper {
      *             插入任务的数据
      * @date 9:07 2018/4/12
      */
-    int insertTask(Task task);
+    int addTask(Task task);
 
     /**
      * 根据任务id修改任务

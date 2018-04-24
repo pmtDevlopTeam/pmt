@@ -12,6 +12,7 @@ import com.camelot.pmt.task.model.TaskLog;
 import com.camelot.pmt.task.service.TaskFileService;
 import com.camelot.pmt.task.service.TaskLogService;
 import com.camelot.pmt.task.service.TaskManagerService;
+import com.camelot.pmt.task.utils.Constant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +61,7 @@ public class TaskManagerServiceImpl implements TaskManagerService {
      * @date 9:10 2018/4/12
      */
     @Override
-    public boolean insertTask(Task task) {
+    public boolean addTask(Task task) {
         try {
             // check参数
             if (task == null) {
@@ -73,7 +74,7 @@ public class TaskManagerServiceImpl implements TaskManagerService {
             String userId = user.getUserId();
             user.setUserId(userId);
             task.setCreateUser(user);
-            int insertTaskResult = taskMapper.insertTask(task);
+            int insertTaskResult = taskMapper.addTask(task);
             return (insertTaskResult == 1) ? true : false;
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
@@ -219,9 +220,10 @@ public class TaskManagerServiceImpl implements TaskManagerService {
                 throw new RuntimeException("参数错误");
             }
 
-            Task task = taskMapper.queryTaskById(id);
+            Task task = new Task();
+            task.setId(id);
             User user = (User) ShiroUtils.getSessionAttribute("user");
-            task.getBeassignUser().setUserId(user.getUserId());
+            task.setBeassignUser(user);
             int updateTaskByIdResult = taskMapper.updateTaskById(task);
             return updateTaskByIdResult == 1 ? true : false;
         } catch (Exception e) {
