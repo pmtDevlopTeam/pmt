@@ -6,6 +6,7 @@ import com.camelot.pmt.task.mapper.TaskLogMapper;
 import com.camelot.pmt.task.mapper.TaskMapper;
 import com.camelot.pmt.task.model.Task;
 import com.camelot.pmt.task.service.TaskAlreadyService;
+import com.camelot.pmt.task.service.TaskLogService;
 import com.camelot.pmt.task.utils.Constant;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
@@ -22,7 +23,7 @@ public class TaskAlreadyServiceImpl implements TaskAlreadyService {
     private TaskMapper taskMapper;
 
     @Autowired
-    private TaskLogMapper taskLogMapper;
+    private TaskLogService taskLogService;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TaskAlreadyServiceImpl.class);
 
@@ -37,7 +38,14 @@ public class TaskAlreadyServiceImpl implements TaskAlreadyService {
     @Override
     public boolean updateTaskAlreadyToRunning(Long id) {
 
-           return taskMapper.updateTaskAlreadyToRunning(id)==1?true:false;
+           boolean flag = false;
+           int i = taskMapper.updateTaskAlreadyToRunning(id);
+           if(i == 1){
+               taskLogService.insertTaskLog(id,Constant.TaskLogOperationButton.REDOTASK.getValue(),"重做了任务");
+               flag = true;
+               return flag;
+           }
+           return flag;
     }
 
     /**
@@ -50,14 +58,21 @@ public class TaskAlreadyServiceImpl implements TaskAlreadyService {
 
     @Override
     public boolean updateTaskToTest(Long id) {
-
+            Boolean flag = false;
             // 根据任务ID去查需求ID
             Long demandId = taskMapper.queryTaskByTaskId(id);
             // 根据需求ID查出当前需求下的测试人员ID
             String beassignUserId = taskMapper.queryTaskToTestByDemandId(demandId);
             // 进行任务的状态更改(根据id去更改任务的状态)
-            return taskMapper.updateTaskToTest(id, beassignUserId)==1?true:false;
-
+            int i = taskMapper.updateTaskToTest(id, beassignUserId);
+            Task task = new Task();
+            task.setId(id);
+            if(i == 1){
+                taskLogService.insertTaskLog(id,Constant.TaskLogOperationButton.MEASUREMENT.getValue(),"提测了任务");
+                flag = true;
+                return flag;
+            }
+            return flag;
     }
 
 

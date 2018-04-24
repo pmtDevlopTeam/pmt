@@ -5,8 +5,6 @@ import com.camelot.pmt.common.APIStatus;
 import com.camelot.pmt.common.ApiResponse;
 import com.camelot.pmt.task.model.Task;
 import com.camelot.pmt.task.service.TaskManagerService;
-import com.camelot.pmt.task.service.TaskRunningService;
-import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -18,11 +16,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
 
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Map;
 
@@ -62,7 +57,7 @@ public class TaskManagerController {
             @ApiImplicitParam(dataType = "String", name = "taskDescribe", paramType = "form", value = "任务描述") })
     public JSONObject addTask(@ApiIgnore Task task) {
         try {
-            boolean result = taskManagerService.insertTask(task);
+            boolean result = taskManagerService.addTask(task);
             if (result) {
                 return ApiResponse.success();
             }
@@ -105,7 +100,7 @@ public class TaskManagerController {
      * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
     @PostMapping(value = "/updateTask")
-    @ApiOperation(value = "评估任务接口", notes = "编辑任务接口")
+    @ApiOperation(value = "评估任务接口", notes = "评估任务接口")
     @ApiImplicitParams({
             @ApiImplicitParam(dataType = "Long", name = "id", paramType = "form", value = "任务id", required = true),
             @ApiImplicitParam(dataType = "Long", name = "demand.id", paramType = "form", value = "需求id", required = true),
@@ -129,17 +124,17 @@ public class TaskManagerController {
     }
 
     /**
-     * 修改任务确认变更接口（修改）
+     * 修改任务需求变更接口（修改）
      *
      * @param task
      *            修改的数据
      * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
     @PostMapping(value = "/updateDemandChangeByTask")
-    @ApiOperation(value = "确认变更接口", notes = "确认变更接口")
+    @ApiOperation(value = "需求是否变更接口", notes = "需求是否变更接口")
     @ApiImplicitParams({
             @ApiImplicitParam(dataType = "Long", name = "id", paramType = "form", value = "任务id", required = true),
-            @ApiImplicitParam(dataType = "String", name = "demandChange", paramType = "form", value = "是否变更", required = true) })
+            @ApiImplicitParam(dataType = "String", name = "demandChange", paramType = "form", value = "是否变更 1是 0否", required = true) })
     public JSONObject updateDemandChangeByTask(@ApiIgnore Task task) {
         try {
             boolean result = taskManagerService.updateDemandChangeByTask(task);
@@ -180,60 +175,23 @@ public class TaskManagerController {
     }
 
     /**
-     * 修改任务指派接口-验证是否有普通权限（任务的创建人、负责人）（修改）
+     * 任务认领接口（修改）
      *
      * @param id
      *            任务id
      * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
     @PostMapping(value = "/updateBeAssignUserById")
-    @ApiOperation(value = "修改任务接口-指派", notes = "给任务添加负责人")
+    @ApiOperation(value = "修改任务接口-认领", notes = "给任务添加负责人")
     @ApiImplicitParams({
-            @ApiImplicitParam(dataType = "Long", name = "id", paramType = "form", value = "任务id", required = true),
-            @ApiImplicitParam(dataType = "String", name = "userId", paramType = "form", value = "被指派人id", required = true) })
-    public JSONObject updateBeAssignUserById(Long id, String userId, HttpServletResponse response,
-            HttpSession session) {
+            @ApiImplicitParam(dataType = "Long", name = "id", paramType = "form", value = "任务id", required = true)})
+    public JSONObject updateBeAssignUserById(Long id) {
         try {
-            boolean result = taskManagerService.updateBeAssignUserById(id, userId);
+            boolean result = taskManagerService.updateBeAssignUserById(id);
             if (result) {
                 return ApiResponse.success();
             }
-            /**
-             * 因为指派的权限要求 创建人和负责人 和项目经理角色可以操作 正常逻辑是无法通过
-             */
-            session.setAttribute("id", id);
-            session.setAttribute("userId", userId);
-            response.sendRedirect("/task/taskManager/updateBeAssignUserByIdCheckPower");
             return ApiResponse.error("修改异常");
-        } catch (Exception e) {
-            logger.error(e.getMessage());
-            return ApiResponse.jsonData(APIStatus.ERROR_500);
-        }
-    }
-
-    /**
-     * 修改任务指派接口-验证是否有项目经理权限（修改）
-     *
-     * @param session
-     *            session
-     * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
-     */
-    @PostMapping(value = "/updateBeAssignUserByIdCheckPower")
-    @ApiOperation(value = "修改任务接口-指派", notes = "给任务添加负责人")
-    @ApiImplicitParams({
-            @ApiImplicitParam(dataType = "Long", name = "id", paramType = "form", value = "任务id", required = true),
-            @ApiImplicitParam(dataType = "String", name = "userId", paramType = "form", value = "被指派人id", required = true) })
-    public JSONObject updateBeAssignUserByIdCheckPower(HttpSession session) {
-        try {
-
-            boolean result = taskManagerService.updateBeAssignUserByIdCheckPower(session);
-            /**
-             * 因为指派的权限要求 创建人和负责人 和项目经理角色可以操作 正常逻辑是无法通过
-             */
-            if (result) {
-                return ApiResponse.success();
-            }
-            return ApiResponse.error();
         } catch (Exception e) {
             logger.error(e.getMessage());
             return ApiResponse.jsonData(APIStatus.ERROR_500);
@@ -262,12 +220,8 @@ public class TaskManagerController {
     }
 
     /**
-     * 查询任务接口（查询）
+     * 查询所有任务接口（查询）
      *
-     * @param page
-     *            当前页
-     * @param rows
-     *            显示几条
      * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
     @GetMapping(value = "/queryAllTask")
