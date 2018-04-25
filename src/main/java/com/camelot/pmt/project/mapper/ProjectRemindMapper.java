@@ -38,4 +38,8 @@ public interface ProjectRemindMapper {
      * @mbggenerated
      */
     int updateByPrimaryKey(ProjectRemind record);
+
+    int deleteByProjectId(Long projectId);
+
+    ProjectRemind queryByProjectId(Long projectId);
 }

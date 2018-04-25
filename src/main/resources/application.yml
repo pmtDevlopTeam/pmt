@@ -1,10 +1,10 @@
 server:
   port: 8080
 
-#
-#flyway:
-#  baselineOnMigrate: true
-#  locations: db/schema, db/data
+
+flyway:
+  baselineOnMigrate: true
+  locations: db/schema, db/data
 
 
 spring:

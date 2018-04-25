@@ -150,4 +150,16 @@
       remark = #{remark,jdbcType=INTEGER}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  <!-- 根据项目id删除提醒内容子表 -->
+  <delete id="deleteByProjectId" parameterType="java.lang.Long">
+  	delete from remind_content_child
+    where project_id = #{projectId,jdbcType=BIGINT}
+  </delete>
+  <!-- 根据提醒内容id查询子内容信息 -->
+  <select id="queryByContentId" resultMap="BaseResultMap" parameterType="java.lang.Long">
+    select 
+    <include refid="Base_Column_List" />
+    from remind_content_child
+    where content_id = #{contentId,jdbcType=BIGINT}
+  </select>
 </mapper>

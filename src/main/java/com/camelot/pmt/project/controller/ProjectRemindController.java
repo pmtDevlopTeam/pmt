@@ -1,11 +1,14 @@
 package com.camelot.pmt.project.controller;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +29,7 @@ import com.camelot.pmt.project.service.ProjectRemindService;
  */
 @RestController
 @Api(value = "项目管理-项目提醒模块", description = "项目管理-项目提醒模块控制器类")
-@RequestMapping("/project/ProjectRemind")
+@RequestMapping("/project/projectRemind")
 public class ProjectRemindController {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -59,6 +62,29 @@ public class ProjectRemindController {
         } catch (Exception e) {
             logger.error("------新增项目提醒------" + e.getMessage());
             return ApiResponse.error();
+        }
+    }
+    
+    /**
+     * 根据项目id查询项目提醒信息
+     *
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "项目提醒信息查看", notes = "根据项目Id查看项目提醒信息")
+    @GetMapping(value = "/queryById")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "projectId", value = "项目id", required = true, paramType = "query", dataType = "Long")})
+    public JSONObject queryProjectRemindByProjectId(Long projectId) {
+        try {
+            if((null == projectId)||(0 == projectId)){
+                return ApiResponse.errorPara("请求参数异常");
+            }
+            RemindModel remindModel = projectRemindService.queryProjectRemindByProjectId(projectId);
+            return ApiResponse.success(remindModel);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return ApiResponse.jsonData(APIStatus.ERROR_500);
         }
     }
 }

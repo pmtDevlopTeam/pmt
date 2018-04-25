@@ -1,5 +1,7 @@
 package com.camelot.pmt.project.mapper;
 
+import java.util.List;
+
 import com.camelot.pmt.project.model.RemindContent;
 
 public interface RemindContentMapper {
@@ -38,4 +40,8 @@ public interface RemindContentMapper {
      * @mbggenerated
      */
     int updateByPrimaryKey(RemindContent record);
+
+    int deleteByProjectId(Long projectId);
+
+    List<RemindContent> queryByProjectId(Long projectId);
 }

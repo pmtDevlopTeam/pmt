@@ -16,5 +16,5 @@ create_user_id   VARCHAR(32) NOT NULL
 COMMENT '创建人id',
 create_time      DATETIME    NOT NULL
 COMMENT '创建时间'
-)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
 COMMENT '提醒日志表';
