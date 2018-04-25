@@ -618,6 +618,18 @@ public class OrgServiceImpl implements OrgService {
 		}
 		List<String> userIds = Arrays.asList(orgToUser.getUserIds());
 		orgMapper.deleteOrgToUserByOrgId(orgToUser.getOrgId());
+		Org org = orgMapper.queryOrgByOrgId(orgToUser.getOrgId());
+		if (!StringUtils.isEmpty(org.getOrgLeader())) {
+			OrgToUser otu = new OrgToUser();
+			otu.setUserId(org.getOrgLeader());
+			otu.setOrgId(orgToUser.getOrgId());
+			long date = new Date().getTime();
+			otu.setCreateTime(org.getCreateTime());
+			otu.setModifyTime(org.getModifyTime());
+			otu.setCreateUserId(org.getCreatUserId());
+			otu.setModifyUserId(org.getModifyUserId());
+			orgMapper.updateOrgToUser(otu);
+		}
 		for (String ids : userIds) {
 			User userAfter = userMapper.queryUserByUserId(ids);
 			stringBuffer2+= userAfter.getUsername()+",";
