@@ -24,61 +24,57 @@ public class TaskAlreadyServiceImpl implements TaskAlreadyService {
     @Autowired
     private TaskLogService taskLogService;
 
-
     /**
      * TODO重做(我的任务状态转为正在进行)
      *
-     * @param
-     *            id
+     * @param id
      * @return boolean
      */
 
     @Override
     public boolean updateTaskAlreadyToRunning(Long id) {
 
-           boolean flag = false;
-           int i = taskMapper.updateTaskAlreadyToRunning(id);
-           if(i == 1){
-               taskLogService.insertTaskLog(id,Constant.TaskLogOperationButton.REDOTASK.getValue(),"重做了任务");
-               flag = true;
-               return flag;
-           }
-           return flag;
+        boolean flag = false;
+        int i = taskMapper.updateTaskAlreadyToRunning(id);
+        if (i == 1) {
+            taskLogService.insertTaskLog(id, Constant.TaskLogOperationButton.REDOTASK.getValue(), "重做了任务");
+            flag = true;
+            return flag;
+        }
+        return flag;
     }
 
     /**
      * 根据任务ID 提测
      *
-     * @param
-     *            id
+     * @param id
      * @return boolean
      */
 
     @Override
     public boolean updateTaskToTest(Long id) {
-            Boolean flag = false;
-            // 根据任务ID去查需求ID
-            Long demandId = taskMapper.queryTaskByTaskId(id);
-            // 根据需求ID查出当前需求下的测试人员ID
-            String beassignUserId = taskMapper.queryTaskToTestByDemandId(demandId);
-            // 进行任务的状态更改(根据id去更改任务的状态)
-            int i = taskMapper.updateTaskToTest(id, beassignUserId);
-            Task task = new Task();
-            task.setId(id);
-            if(i == 1){
-                taskLogService.insertTaskLog(id,Constant.TaskLogOperationButton.MEASUREMENT.getValue(),"提测了任务");
-                flag = true;
-                return flag;
-            }
+        Boolean flag = false;
+        // 根据任务ID去查需求ID
+        Long demandId = taskMapper.queryTaskByTaskId(id);
+        // 根据需求ID查出当前需求下的测试人员ID
+        String beassignUserId = taskMapper.queryTaskToTestByDemandId(demandId);
+        // 进行任务的状态更改(根据id去更改任务的状态)
+        int i = taskMapper.updateTaskToTest(id, beassignUserId);
+        Task task = new Task();
+        task.setId(id);
+        if (i == 1) {
+            taskLogService.insertTaskLog(id, Constant.TaskLogOperationButton.MEASUREMENT.getValue(), "提测了任务");
+            flag = true;
             return flag;
+        }
+        return flag;
     }
-
 
     /**
      * 查询未完成任务的个数
      *
-     * @param
-     *            projectId, String userId
+     * @param projectId,
+     *            String userId
      * @return int
      */
     @Override
@@ -90,8 +86,7 @@ public class TaskAlreadyServiceImpl implements TaskAlreadyService {
     /**
      * 根据需求ID 查询任务列表
      *
-     * @param
-     *            demandId
+     * @param demandId
      * @return List<Task>
      */
 
@@ -106,7 +101,8 @@ public class TaskAlreadyServiceImpl implements TaskAlreadyService {
     /**
      * 查询我的任务
      *
-     * @param : task
+     * @param :
+     *            task
      *
      * @return Map<String,Object>
      */
@@ -119,29 +115,32 @@ public class TaskAlreadyServiceImpl implements TaskAlreadyService {
         List alreadyList = new ArrayList();
         List closeList = new ArrayList();
         List<Task> taskList = taskMapper.queryMyAllTask(task);
-        List<Task> taskAlreadyList  = taskMapper.queryMyAlreadyTask(task);
-        for(int j = 0 ;j < taskAlreadyList.size() ;j++ ){
+        List<Task> taskAlreadyList = taskMapper.queryMyAlreadyTask(task);
+        for (int j = 0; j < taskAlreadyList.size(); j++) {
             alreadyList.add(taskAlreadyList.get(j));
         }
-        for(int i = 0 ;i < taskList.size() ;i++ ){
-            if(Constant.TaskStatus.PENDINHG.getValue().equals(taskList.get(i).getStatus())){
+        for (int i = 0; i < taskList.size(); i++) {
+            if (Constant.TaskStatus.PENDINHG.getValue().equals(taskList.get(i).getStatus())) {
                 pendingList.add(taskList.get(i));
-            };
-            if(Constant.TaskStatus.RUNING.getValue().equals(taskList.get(i).getStatus())){
+            }
+            ;
+            if (Constant.TaskStatus.RUNING.getValue().equals(taskList.get(i).getStatus())) {
                 runningList.add(taskList.get(i));
-            };
-            if(Constant.TaskStatus.ALREADY.getValue().equals(taskList.get(i).getStatus())){
+            }
+            ;
+            if (Constant.TaskStatus.ALREADY.getValue().equals(taskList.get(i).getStatus())) {
                 alreadyList.add(taskList.get(i));
-            };
-            if(Constant.TaskStatus.CLOSE.getValue().equals(taskList.get(i).getStatus())){
+            }
+            ;
+            if (Constant.TaskStatus.CLOSE.getValue().equals(taskList.get(i).getStatus())) {
                 closeList.add(taskList.get(i));
             }
         }
         Map<String, Object> map = new HashMap<>();
-        map.put("pendingList",pendingList);
-        map.put("runningList",runningList);
-        map.put("alreadyList",alreadyList);
-        map.put("closeList",closeList);
+        map.put("pendingList", pendingList);
+        map.put("runningList", runningList);
+        map.put("alreadyList", alreadyList);
+        map.put("closeList", closeList);
         return map;
     }
 
@@ -167,4 +166,3 @@ public class TaskAlreadyServiceImpl implements TaskAlreadyService {
     }
 
 }
-

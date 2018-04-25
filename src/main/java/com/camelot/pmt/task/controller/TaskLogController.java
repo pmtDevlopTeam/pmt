@@ -34,7 +34,7 @@ import java.util.List;
 @RequestMapping("/tasklog")
 public class TaskLogController {
 
-    //日志
+    // 日志
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
@@ -74,7 +74,7 @@ public class TaskLogController {
             @ApiParam(name = "id", value = "任务id", required = true) @RequestParam(required = true) Long id) {
         try {
             List<TaskLog> taskLogList = taskLogService.queryTaskLogList(id);
-                return ApiResponse.success(taskLogList);
+            return ApiResponse.success(taskLogList);
         } catch (Exception e) {
             logger.error(e.getMessage());
             return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());

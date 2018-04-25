@@ -439,4 +439,37 @@
 	<select id="queryParantDemandById" parameterType="long" resultType="java.lang.String">
 		select demand_num from demand where id =#{pid,jdbcType=BIGINT}
 	</select>
+	<!-- 批量插入需求 -->
+	<insert id="insertDemandList" parameterType="com.camelot.pmt.project.model.Demand" useGeneratedKeys="true" keyProperty="id">
+		insert into demand (id, pid,
+		project_id,
+		demand_name, demand_num, demand_status,
+		demand_level,
+		demand_source, source_remark,
+		create_user_id, create_time,
+		modify_user_id,
+		modify_time,demand_desc,close_reason,demand_need,
+		review_time,review_results,assigned_to,reviewed_with,
+		review_remark,reasons_rejection
+		)
+		values 
+		<foreach collection="list" item="item" separator=",">
+		(#{item.id,jdbcType=BIGINT},
+		#{item.pid,jdbcType=BIGINT},
+		#{item.projectId,jdbcType=BIGINT},
+		#{item.demandName,jdbcType=VARCHAR}, #{item.demandNum,jdbcType=VARCHAR},
+		#{item.demandStatus,jdbcType=CHAR},
+		#{item.demandLevel,jdbcType=CHAR},
+		#{item.demandSource,jdbcType=VARCHAR},
+		#{item.sourceRemark,jdbcType=VARCHAR},
+		#{item.createUserId,jdbcType=VARCHAR}, #{item.createTime,jdbcType=TIMESTAMP},
+		#{item.modifyUserId,jdbcType=VARCHAR},
+		#{item.modifyTime,jdbcType=TIMESTAMP},
+		#{item.demandDesc,jdbcType=LONGVARCHAR},
+		#{item.closeReason,jdbcType=LONGVARCHAR},
+		#{item.demandNeed,jdbcType=CHAR},#{item.reviewTime,jdbcType=TIMESTAMP},#{item.reviewResults,jdbcType=VARCHAR},#{item.assignedTo,jdbcType=VARCHAR},
+		#{item.reviewedWith,jdbcType=VARCHAR},#{item.reviewRemark,jdbcType=VARCHAR},#{item.reasonsRejection,jdbcType=VARCHAR}
+		)
+		</foreach>
+	</insert>
 </mapper>

@@ -58,7 +58,7 @@ public class TaskPendingController {
     /**
      * 
      * @Title: queryTaskByTaskId @Description: TODO(查询taskId下的所有子节点) @param @param
-     * taskId @param @return 设定文件 @return JSONObject 返回类型 @throws
+     *         taskId @param @return 设定文件 @return JSONObject 返回类型 @throws
      */
     @ApiOperation(value = "查询任务详情", notes = "查询任务详情")
     @RequestMapping(value = "/queryTaskNodeById", method = RequestMethod.POST)
@@ -82,7 +82,7 @@ public class TaskPendingController {
     /**
      * 
      * @Title: queryMyPendingTaskList @Description: TODO(查询整个任务列表) @param @return
-     * 设定文件 @return JSONObject 返回类型 @throws
+     *         设定文件 @return JSONObject 返回类型 @throws
      */
     @ApiOperation(value = "查询我的待办全部的任务列表", notes = "查询我的待办全部的任务列表")
     @ApiImplicitParams({
@@ -116,8 +116,8 @@ public class TaskPendingController {
     /**
      * 
      * @Title: updateTaskPendingToRuning @Description:
-     * TODO(我的待办任务转为正在进行) @param @param taskId @param @return 设定文件 @return
-     * JSONObject 返回类型 @throws
+     *         TODO(我的待办任务转为正在进行) @param @param taskId @param @return 设定文件 @return
+     *         JSONObject 返回类型 @throws
      */
     @ApiOperation(value = "我的待办任务转为正在进行", notes = "我的待办任务转为正在进行")
     @RequestMapping(value = "/updateTaskPendingToRunning", method = RequestMethod.POST)
@@ -130,7 +130,8 @@ public class TaskPendingController {
                 return ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
             }
             // 更新我的待办任务为正在进行中
-            String result = taskPendingService.updateTaskPendingToStatus(id, TaskStatus.RUNING.getValue(),user.getUserId());
+            String result = taskPendingService.updateTaskPendingToStatus(id, TaskStatus.RUNING.getValue(),
+                    user.getUserId());
             // 判断是否成功
             if (result != null) {
                 return ApiResponse.jsonData(APIStatus.OK_200, result);
@@ -162,7 +163,8 @@ public class TaskPendingController {
                 return ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
             }
             // 更新我的待办任务为正在进行中
-            String result = taskPendingService.updateTaskPendingToStatus(id, TaskStatus.CLOSE.getValue(),user.getUserId());
+            String result = taskPendingService.updateTaskPendingToStatus(id, TaskStatus.CLOSE.getValue(),
+                    user.getUserId());
             // 判断是否成功
             if (StringUtil.isNotEmpty(result)) {
                 return ApiResponse.jsonData(APIStatus.OK_200, result);
@@ -178,7 +180,7 @@ public class TaskPendingController {
     /**
      * 
      * @Title: queryAllTaskList @Description: TODO(查询整个任务列表) @param @return
-     * 设定文件 @return JSONObject 返回类型 @throws
+     *         设定文件 @return JSONObject 返回类型 @throws
      */
     @Deprecated
     @ApiOperation(value = "勿调用，查询我的全部的任务列表", notes = "勿调用，查询我的全部的任务列表")
@@ -249,8 +251,8 @@ public class TaskPendingController {
     /**
      * 
      * @Title: assignTask @Description: TODO(指派任务:更新指派人和被指派人标识号) @param @param
-     * assignUserId @param @param beassignUserId @param @return 设定文件 @return
-     * JSONObject 返回类型 @throws
+     *         assignUserId @param @param beassignUserId @param @return 设定文件 @return
+     *         JSONObject 返回类型 @throws
      */
     @Deprecated
     @ApiOperation(value = "指派任务-更新指派人和被指派人标识号", notes = "指派任务-更新指派人和被指派人标识号")
@@ -281,7 +283,7 @@ public class TaskPendingController {
 
     /**
      * @Title: updateTaskPending @Description: TODO(修改待办任务) @param @param
-     * task @param @return 设定文件 @return JSONObject 返回类型 @throws
+     *         task @param @return 设定文件 @return JSONObject 返回类型 @throws
      */
     @Deprecated
     @ApiOperation(value = "勿调用，修改待办任务", notes = "勿调用，修改待办任务")

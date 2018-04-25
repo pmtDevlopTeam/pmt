@@ -11,8 +11,7 @@ import java.util.Map;
 public interface TaskMapper {
 
     /**
-     * 查询正在进行的任务，根据时间和优先级进行排序
-     * myp
+     * 查询正在进行的任务，根据时间和优先级进行排序 myp
      */
     List<Task> queryTaskRunning(Task task);
 
@@ -22,14 +21,12 @@ public interface TaskMapper {
     int updateRunningToClose(Long id);
 
     /**
-     * 将正在进行的任务进行完成操作
-     * myp
+     * 将正在进行的任务进行完成操作 myp
      */
     int updateRunningToAlready(Long id);
 
     /**
-     * 点击完成时，修改实际完成时间和实际工时
-     * myp
+     * 点击完成时，修改实际完成时间和实际工时 myp
      */
     int updateInfact_hourAndActual_end_time(Task task);
 
@@ -39,16 +36,14 @@ public interface TaskMapper {
     int addAttachment(TaskFile taskFile);
 
     /**
-     * 根据任务id查询所有的次id的子任务
-     * myp
+     * 根据任务id查询所有的次id的子任务 myp
      */
     List<Task> queryByPId(Long pid);
 
     Task queryTaskAllById(Long id);
 
     /**
-     * 根据id查询任务明细
-     * myp
+     * 根据id查询任务明细 myp
      */
     Task selectTaskById(Long id);
 
@@ -70,13 +65,12 @@ public interface TaskMapper {
      */
     List<Task> queryTaskByTask(@Param("task") Task task, @Param("ids") String[] ids);
 
-
     /**
      * 新增任务
      *
      * @author zlh
      * @param task
-     *             插入任务的数据
+     *            插入任务的数据
      * @date 9:07 2018/4/12
      */
     int addTask(Task task);
@@ -86,7 +80,7 @@ public interface TaskMapper {
      *
      * @author zlh
      * @param task
-     *             需要修改的任务数据
+     *            需要修改的任务数据
      * @date 10:18 2018/4/12
      */
     int updateTaskById(Task task);
@@ -96,7 +90,7 @@ public interface TaskMapper {
      *
      * @author zlh
      * @param id
-     *             任务id
+     *            任务id
      * @date 17:08 2018/4/12
      */
     Task queryTaskById(Long id);
@@ -106,10 +100,12 @@ public interface TaskMapper {
      *
      * @author zlh
      * @param id
-     *             需要删除的任务的id
+     *            需要删除的任务的id
      * @date 17:22 2018/4/12
      */
     int deleteTaskById(Long id);
+
+    String querySequence();
 
     /**
      * 查询延期任务个数 @Title: queryCount @Description: TODO @param @return @return
@@ -125,120 +121,120 @@ public interface TaskMapper {
 
     /**
      * @author: gxl @Title: insertTaskNodeId @Description: TODO(新增任务) @param @param
-     * task @param @return 设定文件 @return int 返回类型 @throws
+     *          task @param @return 设定文件 @return int 返回类型 @throws
      */
     int insertTaskNodeById(Task task);
 
     /**
      * @author: gxl @Title: updateTaskNodeId @Description: TODO(修改任务) @param @param
-     * task @param @return 设定文件 @return int 返回类型 @throws
+     *          task @param @return 设定文件 @return int 返回类型 @throws
      */
     int updateTaskNodeById(Task task);
 
     /**
      * @author: gxl @Title: queryTaskNodeById @Description: TODO(查询任务) @param @param
-     * id @param @return 设定文件 @return Task 返回类型 @throws
+     *          id @param @return 设定文件 @return Task 返回类型 @throws
      */
     Task queryTaskNodeById(Long id);
 
     /**
      * @author: gxl @Title: deleteTaskNodeById @Description:
-     * TODO(这里用一句话描述这个方法的作用) @param @param id @param @return 设定文件 @return int
-     * 返回类型 @throws
+     *          TODO(这里用一句话描述这个方法的作用) @param @param id @param @return 设定文件 @return
+     *          int 返回类型 @throws
      */
     int deleteTaskNodeById(Long id);
 
     /**
      * @author: gxl @Title: queryMyTaskTreeByTaskId @Description:
-     * TODO(查询taskId下的一级子节点) @param @param id status beassignUserId @param @return
-     * 设定文件 @return List<Task> 返回类型 @throws
+     *          TODO(查询taskId下的一级子节点) @param @param id status
+     *          beassignUserId @param @return 设定文件 @return List<Task> 返回类型 @throws
      */
     List<Task> queryMyTaskListNodeByParentId(@Param("id") Long id, @Param("status") String status,
             @Param("beassignUserId") Long beassignUserId);
 
     /**
      * @author: gxl @Title: queryTaskListNodeByParentId @Description:
-     * TODO(查询taskId下的一级子节点) @param @param id status @param @return 设定文件 @return
-     * List<Task> 返回类型 @throws
+     *          TODO(查询taskId下的一级子节点) @param @param id status @param @return
+     *          设定文件 @return List<Task> 返回类型 @throws
      */
     List<Task> queryTaskListNodeByParentId(@Param("id") Long id, @Param("status") String status);
 
     /**
      * @author: gxl @Title: queryAllTaskList @Description:
-     * TODO(查询整个任务表) @param @return 设定文件 @return List<Task> 返回类型 @throws
+     *          TODO(查询整个任务表) @param @return 设定文件 @return List<Task> 返回类型 @throws
      */
     List<Task> queryAllTaskList(Task task);
 
     /**
      *
      * @Title: queryMyPendingTaskList @Description:
-     * TODO(查询我的待办Task任务列表) @param @param task @param @return 设定文件 @return
-     * List<Task> 返回类型 @throws
+     *         TODO(查询我的待办Task任务列表) @param @param task @param @return 设定文件 @return
+     *         List<Task> 返回类型 @throws
      */
     List<Task> queryMyPendingTaskList(Task task);
 
     /**
      * @author: gxl @Title: queryTopTaskNameList @Description:
-     * TODO(查询顶级我的待办任务) @param @return 设定文件 @return List<Task> 返回类型 @throws
+     *          TODO(查询顶级我的待办任务) @param @return 设定文件 @return List<Task> 返回类型 @throws
      */
     List<Task> queryTopTaskNameList(@Param("status") String status, @Param("userId") Long userId);
 
     /**
      * @author: gxl @Title: updateTaskPendingToDelay @Description:
-     * TODO(我的待办任务转为延期,会将该节点及节点下的所有子节点变为延期状态) @param @param taskId
-     * taskType @param @return 设定文件 @return JSONObject 返回类型 @throws
+     *          TODO(我的待办任务转为延期,会将该节点及节点下的所有子节点变为延期状态) @param @param taskId
+     *          taskType @param @return 设定文件 @return JSONObject 返回类型 @throws
      */
     void updateTaskPendingToDelay(@Param("id") Long id, @Param("status") String status,
             @Param("delayDescribe") String delayDescribe, @Param("estimateStartTime") Date estimateStartTime);
 
     /**
      * @author: gxl @Title: updateTaskStatus @Description:
-     * TODO(修改任务状态) @param @param taskId status @param @return 设定文件 @return int
-     * 返回类型 @throws
+     *          TODO(修改任务状态) @param @param taskId status @param @return 设定文件 @return
+     *          int 返回类型 @throws
      */
     void updateTaskStatus(@Param("id") Long id, @Param("status") String status,@Param("modifyUserId") String modifyUserId,@Param("modifyTime") Date modifyTime);
 
     /**
      * @author: gxl @Title: taskParentId @Description:
-     * TODO(设置父Id为null) @param @param id @param @return 设定文件 @return int
-     * 返回类型 @throws
+     *          TODO(设置父Id为null) @param @param id @param @return 设定文件 @return int
+     *          返回类型 @throws
      */
     void updateTaskParentIdIsNull(@Param("id") Long id);
 
     /**
      * @author: gxl @Title: updateTaskToAssign @Description:
-     * TODO(更新指派人和被指派人标识号) @param @param id @param @param assignUserId @param @param
-     * beassignUserId @param @return 设定文件 @return int 返回类型 @throws
+     *          TODO(更新指派人和被指派人标识号) @param @param id @param @param
+     *          assignUserId @param @param beassignUserId @param @return
+     *          设定文件 @return int 返回类型 @throws
      */
     void updateTaskToAssign(@Param("id") Long id, @Param("assignUserId") Long assignUserId,
             @Param("beassignUserId") Long beassignUserId);
 
     /**
      * @Title: updateTaskPending @Description: TODO(修改待办任务) @param @param
-     * task @param @return 设定文件 @return JSONObject 返回类型 @throws
+     *         task @param @return 设定文件 @return JSONObject 返回类型 @throws
      */
     void updateTaskPending(@Param("id") Long id, @Param("taskDescribe") String taskDescribe);
 
     /**
      * @author: gxl @Title: queryParentTaskNodeById @Description:
-     * TODO(查询根据任务Id查询父级任务对象) @param @param taskParentId @param @return 设定文件 @return
-     * Task 返回类型 @throws
+     *          TODO(查询根据任务Id查询父级任务对象) @param @param taskParentId @param @return
+     *          设定文件 @return Task 返回类型 @throws
      */
     Task queryParentTaskNodeById(Long id);
 
     /**
      *
-     * @Title: updateTaskAlreadyToRunning @Description:
-     * TODO(重做) @param id
-     * status @param @return 设定文件 @return JSONObject 返回类型 @throws
+     * @Title: updateTaskAlreadyToRunning @Description: TODO(重做) @param id
+     *         status @param @return 设定文件 @return JSONObject 返回类型 @throws
      */
     int updateTaskAlreadyToRunning(Long id);
 
     /**
      *
      * @Title: updateTaskPendingToRuning @Description:
-     * TODO(我的待办任务转为正在进行) @param @param taskId @param @return 设定文件 @return int
-     * 返回类型 @throws
+     *         TODO(我的待办任务转为正在进行) @param @param taskId @param @return 设定文件 @return
+     *         int 返回类型 @throws
      */
     void updateTaskToClose(Long id, String status);
 
@@ -341,48 +337,30 @@ public interface TaskMapper {
     List<Map<String, Object>> querydelaydelayedTaskReminderList(Integer delaytime);
 
     /**
-     * 查询出我的任务
-     * @Title: queryMyAllTask
-     * @Description: TODO
-     * @param @param Task task
-     * @param @return
-     * @return List<Task>
-     * @throws
+     * 查询出我的任务 @Title: queryMyAllTask @Description: TODO @param @param Task
+     * task @param @return @return List<Task> @throws
      */
     List<Task> queryMyAllTask(Task task);
 
     /**
-     * 查询出我的任务 -- 流转到测试的开发任务
-     * @Title: queryMyAlreadyTask
-     * @Description: TODO
-     * @param @param Task task
-     * @param @return
-     * @return List<Task>
-     * @throws
+     * 查询出我的任务 -- 流转到测试的开发任务 @Title: queryMyAlreadyTask @Description:
+     * TODO @param @param Task task @param @return @return List<Task> @throws
      */
     List<Task> queryMyAlreadyTask(Task task);
-    
+
     /**
-     * 通过项目ID查询延时列表
-    * @Title: querydelayedTaskReminderList
-    * @Description: TODO
-    * @param @param projectId
-    * @param @return
-    * @return List<Map<String,Object>> 
-    * @throws
+     * 通过项目ID查询延时列表 @Title: querydelayedTaskReminderList @Description:
+     * TODO @param @param projectId @param @return @return
+     * List<Map<String,Object>> @throws
      */
-	List<Map<String, Object>> querydelayedTaskReminderList(String projectId);
-	
-	/**
-	 * 通过项目ID查询延期列表
-	* @Title: querydeferredTaskRemindersList
-	* @Description: TODO
-	* @param @param projectId
-	* @param @return
-	* @return List<Map<String,Object>> 
-	* @throws
-	 */
-	List<Map<String, Object>> querydeferredTaskRemindersList(String projectId);
+    List<Map<String, Object>> querydelayedTaskReminderList(String projectId);
+
+    /**
+     * 通过项目ID查询延期列表 @Title: querydeferredTaskRemindersList @Description:
+     * TODO @param @param projectId @param @return @return
+     * List<Map<String,Object>> @throws
+     */
+    List<Map<String, Object>> querydeferredTaskRemindersList(String projectId);
 
     /**
      * 查询出我的已办任务

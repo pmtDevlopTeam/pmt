@@ -1,0 +1,1 @@
+INSERT INTO pmt.bug_warning (project_id, bug_min_num, bug_max_num, status, create_user_id, create_time, modify_user_id, modify_time, del_flag) VALUES (1, 10, 30, 1, null, null, null, null, 0);

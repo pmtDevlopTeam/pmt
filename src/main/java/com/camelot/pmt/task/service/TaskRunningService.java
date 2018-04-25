@@ -21,7 +21,6 @@ public interface TaskRunningService {
      */
     List<Task> queryTaskRunning(Task task);
 
-
     /**
      * 修改任务关闭接口
      *

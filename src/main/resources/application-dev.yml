@@ -4,8 +4,8 @@ server:
 spring:
     datasource:
         name: test
-        url: jdbc:mysql://172.21.127.81:3306/pmt?useUnicode=true&characterEncoding=utf8
-        username: root
+        url: jdbc:mysql://127.0.0.1:3306/pmt?useUnicode=true&characterEncoding=utf8
+        username: camelot
         password: camelot!123
         # 使用druid数据源
         type: com.alibaba.druid.pool.DruidDataSource

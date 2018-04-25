@@ -184,7 +184,7 @@ public class TaskManagerController {
     @PostMapping(value = "/updateBeAssignUserById")
     @ApiOperation(value = "修改任务接口-认领", notes = "给任务添加负责人")
     @ApiImplicitParams({
-            @ApiImplicitParam(dataType = "Long", name = "id", paramType = "form", value = "任务id", required = true)})
+            @ApiImplicitParam(dataType = "Long", name = "id", paramType = "form", value = "任务id", required = true) })
     public JSONObject updateBeAssignUserById(Long id) {
         try {
             boolean result = taskManagerService.updateBeAssignUserById(id);

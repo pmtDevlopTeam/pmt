@@ -3,6 +3,7 @@ package com.camelot.pmt.project.controller;
 import com.camelot.pmt.platform.model.User;
 import com.camelot.pmt.platform.shiro.ShiroUtils;
 import com.github.pagehelper.PageInfo;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -19,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.*;
+
 import springfox.documentation.annotations.ApiIgnore;
 
 import com.alibaba.fastjson.JSONObject;
@@ -71,6 +73,9 @@ public class DemandController {
             if (null == user) {
                 return ApiResponse.jsonData(APIStatus.INVALIDSESSION_LOGINOUTTIME);
             }
+            if (null == demand) {
+                return ApiResponse.errorPara("请求参数异常");
+            }
             Date currentDate = new Date();
             demand.setCreateTime(currentDate);
             demand.setCreateUserId(user.getUserId());
@@ -81,7 +86,7 @@ public class DemandController {
             }
             // 设置新增需求状态01:未开始
             demand.setDemandStatus("01");
-            flag = demandService.save(demand, user);
+            flag = demandService.addDemand(demand, user);
             if (flag) {
                 return ApiResponse.success("添加成功");
             }
@@ -340,6 +345,36 @@ public class DemandController {
         } catch (Exception e) {
             logger.error(e.getMessage());
             return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
+        }
+    }
+
+    /**
+     * 需求状态（未激活/已激活/已关闭/已变更）
+     *
+     * @param demand
+     * @return
+     */
+    @ApiOperation(value = "新增级联需求", notes = "新增级联需求")
+    @PostMapping(value = "/demand/addDemandList")
+    public JSONObject addDemandList(@RequestBody DemandVO demandVO) {
+        boolean flag = false;
+        try {
+            // 获取当前登录人
+            User user = (User) ShiroUtils.getSessionAttribute("user");
+            if (null == user) {
+                return ApiResponse.jsonData(APIStatus.INVALIDSESSION_LOGINOUTTIME);
+            }
+            if ((null == demandVO) || (null == demandVO.getDemand())) {
+                return ApiResponse.errorPara("请求参数异常");
+            }
+            flag = demandService.addDemandList(demandVO, user);
+            if (flag) {
+                return ApiResponse.success("添加成功");
+            }
+            return ApiResponse.error();
+        } catch (Exception e) {
+            logger.error("------需求级联新增------" + e.getMessage());
+            return ApiResponse.error();
         }
     }
 

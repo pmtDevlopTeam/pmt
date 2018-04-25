@@ -85,8 +85,8 @@ public class Org implements Serializable {
 	
 	/**
 	 * 用户对象
-	 */
-	private User user;
+	 *//*
+	private User user;*/
 	
 
 	public String getUserId() {
@@ -219,13 +219,13 @@ public class Org implements Serializable {
 		this.orgLeader = orgLeader;
 	}
 
-	public User getUser() {
+	/*public User getUser() {
 		return user;
 	}
 
 	public void setUser(User user) {
 		this.user = user;
-	}
+	}*/
 
 	public String getCreatOrgUsername() {
 		return creatOrgUsername;

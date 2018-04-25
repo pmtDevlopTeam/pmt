@@ -154,15 +154,14 @@ public class TaskOverdueController {
     @ApiImplicitParams({
             @ApiImplicitParam(dataType = "Integer", name = "delaytime", paramType = "query", value = "延后提醒天数", required = true) })
     @RequestMapping(value = "/deferredTaskRemindersList", method = RequestMethod.POST)
-    public JSONObject deferredTaskRemindersList(
-            @RequestParam(required = true) Integer delaytime) {
+    public JSONObject deferredTaskRemindersList(@RequestParam(required = true) Integer delaytime) {
         ExecuteResult<Map<String, Object>> result = new ExecuteResult<Map<String, Object>>();
         try {
-            if ( delaytime == null && "".equals(delaytime)) {
+            if (delaytime == null && "".equals(delaytime)) {
 
                 return ApiResponse.errorPara();
             }
-            result = taskService.deferredTaskRemindersList( delaytime);
+            result = taskService.deferredTaskRemindersList(delaytime);
             if (result.isSuccess()) {
                 return ApiResponse.success(result.getResult());
             }
@@ -196,7 +195,7 @@ public class TaskOverdueController {
             return ApiResponse.error();
         }
     }
-    
+
     /**
      * <p>
      * Description:通过项目ID查询延期延期任务列表
