@@ -17,6 +17,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
 import com.camelot.pmt.common.APIStatus;
 import com.camelot.pmt.common.ApiResponse;
+import com.camelot.pmt.platform.model.User;
+import com.camelot.pmt.platform.shiro.ShiroUtils;
 import com.camelot.pmt.testmanage.bugmanage.model.BugHistory;
 import com.camelot.pmt.testmanage.bugmanage.model.BugManage;
 import com.camelot.pmt.testmanage.bugmanage.model.SelectBugManage;
@@ -75,18 +77,22 @@ public class BugManageController {
             @ApiImplicitParam(name = "stepsReproduce", value = "重现步骤", required = false, paramType = "form", dataType = "String") })
     @PostMapping(value = "/addBugManage")
     public JSONObject addBugManage(@ApiIgnore BugManage bugManage) {
-        boolean flag = false;
-        try {
-            flag = bugManageService.addBugManage(bugManage);
-            if (flag) {
-                return ApiResponse.success();
-            }
-            return ApiResponse.error("添加bug异常");
-        } catch (Exception e) {
-            e.printStackTrace();
-            logger.error(e.getMessage());
-            return ApiResponse.jsonData(APIStatus.ERROR_500);
-        }
+    	boolean flag = false;
+		try {
+			 	User user = (User) ShiroUtils.getSessionAttribute("user");
+	            if (null == user) {
+	                return ApiResponse.jsonData(APIStatus.INVALIDSESSION_LOGINOUTTIME);
+	            }
+				flag = bugManageService.addBugManage(bugManage,user);
+	            if (flag) {
+	                return ApiResponse.success();
+	            }
+	            return ApiResponse.error("添加bug异常");
+	        } catch (Exception e) {
+	        	e.printStackTrace();
+	        	 logger.error(e.getMessage());
+	             return ApiResponse.jsonData(APIStatus.ERROR_500);
+	        }
     }
 
     /**
@@ -122,17 +128,21 @@ public class BugManageController {
             @ApiImplicitParam(name = "closeTime", value = "关闭日期", required = false, paramType = "form", dataType = "String") })
     @PostMapping(value = "/updateBugManage")
     public JSONObject updateBugManage(@ApiIgnore BugManage bugManage) {
-        boolean flag = false;
+    	boolean flag = false;
         try {
-            // 调用修改bug接口
-            flag = bugManageService.updateBugManage(bugManage);
-            if (flag) {
-                return ApiResponse.success();
+        	User user = (User) ShiroUtils.getSessionAttribute("user");
+            if (null == user) {
+                return ApiResponse.jsonData(APIStatus.INVALIDSESSION_LOGINOUTTIME);
+            }
+            //调用修改bug接口
+            flag = bugManageService.updateBugManage(bugManage,user);
+            if(flag){
+            	 return ApiResponse.success();
             }
             return ApiResponse.error("修改bug异常");
         } catch (Exception e) {
-            logger.error(e.getMessage());
-            return ApiResponse.jsonData(APIStatus.ERROR_500);
+        	 logger.error(e.getMessage());
+             return ApiResponse.jsonData(APIStatus.ERROR_500);
         }
     }
 
@@ -141,17 +151,21 @@ public class BugManageController {
             @ApiImplicitParam(name = "id", value = "bugId", required = true, paramType = "form", dataType = "Long") })
     @PostMapping(value = "/updateBugStatusRevoke")
     public JSONObject updateBugStatusRevoke(@ApiIgnore BugManage bugManage) {
-        boolean flag = false;
+    	boolean flag = false;
         try {
-            // 调用撤销bug接口
-            flag = bugManageService.updateBugStatusRevoke(bugManage);
-            if (flag) {
-                return ApiResponse.success();
+        	User user = (User) ShiroUtils.getSessionAttribute("user");
+            if (null == user) {
+                return ApiResponse.jsonData(APIStatus.INVALIDSESSION_LOGINOUTTIME);
+            }
+            //调用撤销bug接口
+        	flag = bugManageService.updateBugStatusRevoke(bugManage,user);
+        	 if(flag){
+            	 return ApiResponse.success();
             }
             return ApiResponse.error("撤销bug异常");
         } catch (Exception e) {
-            logger.error(e.getMessage());
-            return ApiResponse.jsonData(APIStatus.ERROR_500);
+        	 logger.error(e.getMessage());
+             return ApiResponse.jsonData(APIStatus.ERROR_500);
         }
     }
 
@@ -161,17 +175,21 @@ public class BugManageController {
             @ApiImplicitParam(name = "bugDescribe", value = "备注", required = false, paramType = "form", dataType = "String") })
     @PostMapping(value = "/updateBugStatusClose")
     public JSONObject updateBugStatusClose(@ApiIgnore BugManage bugManage) {
-        boolean flag = false;
-        try {
-            // 调用关闭bug接口
-            flag = bugManageService.updateBugStatusClose(bugManage);
-            if (flag) {
-                return ApiResponse.success();
+    	boolean flag = false;
+		try {
+			//调用关闭bug接口
+			User user = (User) ShiroUtils.getSessionAttribute("user");
+            if (null == user) {
+                return ApiResponse.jsonData(APIStatus.INVALIDSESSION_LOGINOUTTIME);
+            }
+			flag = bugManageService.updateBugStatusClose(bugManage,user);
+			 if(flag){
+            	 return ApiResponse.success();
             }
             return ApiResponse.error("修改异常");
         } catch (Exception e) {
-            logger.error(e.getMessage());
-            return ApiResponse.jsonData(APIStatus.ERROR_500);
+        	 logger.error(e.getMessage());
+             return ApiResponse.jsonData(APIStatus.ERROR_500);
         }
     }
 
@@ -184,17 +202,21 @@ public class BugManageController {
             @ApiImplicitParam(name = "bugDescribe", value = "备注", required = false, paramType = "form", dataType = "String") })
     @PostMapping(value = "/updateBugStatusYes")
     public JSONObject updateBugStatusYes(@ApiIgnore BugManage bugManage) {
-        boolean flag = false;
-        try {
-            // 调用添加bug接口
-            flag = bugManageService.updateBugStatusYes(bugManage);
-            if (flag) {
-                return ApiResponse.success();
+    	boolean flag = false;
+		try {
+			User user = (User) ShiroUtils.getSessionAttribute("user");
+            if (null == user) {
+                return ApiResponse.jsonData(APIStatus.INVALIDSESSION_LOGINOUTTIME);
+            }
+			//调用添加bug接口
+			flag = bugManageService.updateBugStatusYes(bugManage,user);
+			 if(flag){
+            	 return ApiResponse.success();
             }
             return ApiResponse.error("确认bug异常");
         } catch (Exception e) {
-            logger.error(e.getMessage());
-            return ApiResponse.jsonData(APIStatus.ERROR_500);
+        	 logger.error(e.getMessage());
+             return ApiResponse.jsonData(APIStatus.ERROR_500);
         }
     }
 
@@ -205,17 +227,21 @@ public class BugManageController {
             @ApiImplicitParam(name = "bugDescribe", value = "备注", required = false, paramType = "form", dataType = "String") })
     @PostMapping(value = "/updateBugAssign")
     public JSONObject updateBugAssign(@ApiIgnore BugManage bugManage) {
-        boolean flag = false;
-        try {
-            // 调用添加bug接口
-            flag = bugManageService.updateBugAssign(bugManage);
-            if (flag) {
-                return ApiResponse.success();
+    	boolean flag = false;
+		try {
+			User user = (User) ShiroUtils.getSessionAttribute("user");
+            if (null == user) {
+                return ApiResponse.jsonData(APIStatus.INVALIDSESSION_LOGINOUTTIME);
+            }
+			//调用添加bug接口
+			flag = bugManageService.updateBugAssign(bugManage,user);
+			 if(flag){
+            	 return ApiResponse.success();
             }
             return ApiResponse.error("确认bug异常");
         } catch (Exception e) {
-            logger.error(e.getMessage());
-            return ApiResponse.jsonData(APIStatus.ERROR_500);
+        	 logger.error(e.getMessage());
+             return ApiResponse.jsonData(APIStatus.ERROR_500);
         }
     }
 
@@ -228,17 +254,21 @@ public class BugManageController {
             @ApiImplicitParam(name = "bugDescribe", value = "备注", required = false, paramType = "form", dataType = "String") })
     @PostMapping(value = "/updateBugSolve")
     public JSONObject updateBugSolve(@ApiIgnore BugManage bugManage) {
-        boolean flag = false;
-        try {
-            // 调用添加bug接口
-            flag = bugManageService.updateBugSolve(bugManage);
-            if (flag) {
-                return ApiResponse.success();
+    	boolean flag = false;
+		try {
+			User user = (User) ShiroUtils.getSessionAttribute("user");
+            if (null == user) {
+                return ApiResponse.jsonData(APIStatus.INVALIDSESSION_LOGINOUTTIME);
+            }
+			//调用添加bug接口
+			flag = bugManageService.updateBugSolve(bugManage,user);
+			 if(flag){
+            	 return ApiResponse.success();
             }
             return ApiResponse.error("确认bug异常");
         } catch (Exception e) {
-            logger.error(e.getMessage());
-            return ApiResponse.jsonData(APIStatus.ERROR_500);
+        	 logger.error(e.getMessage());
+             return ApiResponse.jsonData(APIStatus.ERROR_500);
         }
     }
 
@@ -256,38 +286,42 @@ public class BugManageController {
     public JSONObject queryUsersByPage(@RequestParam(defaultValue = "10") Integer pageSize,
             @RequestParam(defaultValue = "1") Integer currentPage, Integer status, String qStartTime, String qEndTime,
             String bugStatus, String bugTitle, String bugNo, String projectId) {
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("currentPage", currentPage);
-        map.put("pageSize", pageSize);
-        map.put("projectId", projectId);
-        // 用户id
-        // map.put("userId", 1);
-        if (status != null) {
-            map.put("status", status);
+    	User user = (User) ShiroUtils.getSessionAttribute("user");
+        if (null == user) {
+            return ApiResponse.jsonData(APIStatus.INVALIDSESSION_LOGINOUTTIME);
         }
-        if (!StringUtils.isEmpty(qStartTime)) {
-            map.put("qStartTime", qStartTime);
-        }
-        if (!StringUtils.isEmpty(qEndTime)) {
-            map.put("qEndTime", qEndTime);
-        }
-        if (!StringUtils.isEmpty(bugStatus)) {
-            map.put("bugStatus", bugStatus);
-        }
-        if (!StringUtils.isEmpty(bugTitle)) {
-            map.put("bugTitle", bugTitle);
-        }
-        if (!StringUtils.isEmpty(bugNo)) {
-            map.put("bugNo", bugNo);
-        }
+    	 Map<String,Object> map=new HashMap<String,Object>();
+		 map.put("currentPage", currentPage);
+		 map.put("pageSize", pageSize);
+		 map.put("projectId", projectId);
+		 //用户id
+		 map.put("userId",user.getUserId());
+		 if(status!=null){
+			 map.put("status",status);
+		 }
+		 if(!StringUtils.isEmpty(qStartTime)){
+			 map.put("qStartTime",qStartTime);
+		 }
+		 if(!StringUtils.isEmpty(qEndTime)){
+			 map.put("qEndTime",qEndTime);
+		 }
+		 if(!StringUtils.isEmpty(bugStatus)){
+			 map.put("bugStatus",bugStatus);
+		 }
+		 if(!StringUtils.isEmpty(bugTitle)){
+			 map.put("bugTitle",bugTitle);
+		 }
+		 if(!StringUtils.isEmpty(bugNo)){
+			 map.put("bugNo", bugNo);
+		 }
         try {
-            // 调用查询bug分页接口
-            List<SelectBugManage> selectCondition = bugManageService.queryBugManageCondition(map);
-            PageInfo<SelectBugManage> result = new PageInfo<SelectBugManage>(selectCondition);
+            //调用查询bug分页接口
+             List<SelectBugManage> selectCondition = bugManageService.queryBugManageCondition(map);
+             PageInfo<SelectBugManage> result = new PageInfo<SelectBugManage>(selectCondition);
             // 成功返回
-            return ApiResponse.success(result);
+             return ApiResponse.success(result);
         } catch (Exception e) {
-            logger.error(e.getMessage());
+        	logger.error(e.getMessage());
             return ApiResponse.jsonData(APIStatus.ERROR_500);
         }
     }
@@ -305,9 +339,13 @@ public class BugManageController {
     @RequestMapping(value = "/queryBugHistoryAll", method = RequestMethod.GET)
     public JSONObject queryBugHistoryAll(
             @ApiParam(name = "bugId", value = "bugId", required = true) @RequestParam(required = true) Long bugId) {
-        try {
-            List<BugHistory> result = bugHistoryService.queryBugHistoryAll(bugId);
-            return ApiResponse.success(result);
+    	try {
+    		User user = (User) ShiroUtils.getSessionAttribute("user");
+            if (null == user) {
+                return ApiResponse.jsonData(APIStatus.INVALIDSESSION_LOGINOUTTIME);
+            }
+        	List<BugHistory> result =bugHistoryService.queryBugHistoryAll(bugId);
+        	 return ApiResponse.success(result);
         } catch (Exception e) {
             return ApiResponse.error();
         }
@@ -323,13 +361,17 @@ public class BugManageController {
     @RequestMapping(value = "getBugById", method = RequestMethod.GET)
     public JSONObject getBugById(
             @ApiParam(name = "id", value = "bugId", required = true) @RequestParam(required = true) Long id) {
-        try {
-            BugManage result = bugManageService.queryBugById(id);
-            return ApiResponse.success(result);
-        } catch (Exception e) {
-            logger.error(e.getMessage());
-            return ApiResponse.jsonData(APIStatus.ERROR_500);
-        }
+    	 try {
+	        	User user = (User) ShiroUtils.getSessionAttribute("user");
+	            if (null == user) {
+	                return ApiResponse.jsonData(APIStatus.INVALIDSESSION_LOGINOUTTIME);
+	            }
+	        	BugManage result = bugManageService.queryBugById(id);
+	            return ApiResponse.success(result);
+	        } catch (Exception e) {
+	        	logger.error(e.getMessage());
+	            return ApiResponse.jsonData(APIStatus.ERROR_500);
+	        }
     }
 
 }

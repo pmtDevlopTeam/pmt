@@ -3,11 +3,9 @@ package com.camelot.pmt.testmanage.bugmanage.service;
 import java.util.List;
 import java.util.Map;
 
-import com.camelot.pmt.common.ExecuteResult;
-import com.camelot.pmt.platform.model.Menu;
+import com.camelot.pmt.platform.model.User;
 import com.camelot.pmt.testmanage.bugmanage.model.BugManage;
 import com.camelot.pmt.testmanage.bugmanage.model.SelectBugManage;
-import com.github.pagehelper.PageInfo;
 
 /**
  *
@@ -23,7 +21,7 @@ public interface BugManageService {
      *            menu
      * @return ExecuteResult<Menu>
      */
-    boolean addBugManage(BugManage bugManage);
+    boolean addBugManage(BugManage bugManage,User user);
 
     /**
      * 修改bug
@@ -31,7 +29,7 @@ public interface BugManageService {
      * @param
      * @return
      */
-    boolean updateBugManage(BugManage bugManage);
+    boolean updateBugManage(BugManage bugManage,User user);
 
     /**
      * 撤销bug
@@ -39,7 +37,7 @@ public interface BugManageService {
      * @param
      * @return
      */
-    boolean updateBugStatusRevoke(BugManage bugManage);
+    boolean updateBugStatusRevoke(BugManage bugManage,User user);
 
     /**
      * 关闭bug
@@ -47,7 +45,7 @@ public interface BugManageService {
      * @param
      * @return
      */
-    boolean updateBugStatusClose(BugManage bugManage);
+    boolean updateBugStatusClose(BugManage bugManage,User user);
 
     /**
      * 确认bug
@@ -55,7 +53,7 @@ public interface BugManageService {
      * @param
      * @return
      */
-    boolean updateBugStatusYes(BugManage bugManage);
+    boolean updateBugStatusYes(BugManage bugManage,User user);
 
     /**
      * 指派bug
@@ -63,7 +61,7 @@ public interface BugManageService {
      * @param
      * @return
      */
-    boolean updateBugAssign(BugManage bugManage);
+    boolean updateBugAssign(BugManage bugManage,User user);
 
     /**
      * 解决bug
@@ -71,7 +69,7 @@ public interface BugManageService {
      * @param
      * @return
      */
-    boolean updateBugSolve(BugManage bugManage);
+    boolean updateBugSolve(BugManage bugManage,User user);
 
     /**
      * 根据id查询bug
