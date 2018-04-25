@@ -111,6 +111,8 @@ public interface TaskMapper {
      */
     int deleteTaskById(Long id);
 
+    String querySequence();
+
     /**
      * 查询延期任务个数 @Title: queryCount @Description: TODO @param @return @return
      * Long @throws

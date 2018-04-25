@@ -67,6 +67,8 @@ public class TaskManagerServiceImpl implements TaskManagerService {
             if (task == null) {
                 throw new RuntimeException("参数错误");
             }
+            String num = taskMapper.querySequence();
+            task.setTaskNum(num);
             // 默认状态
             task.setStatus("0");
             // 根据当前登录用户查询的用户userid

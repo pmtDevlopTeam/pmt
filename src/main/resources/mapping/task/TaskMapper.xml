@@ -308,6 +308,10 @@
         WHERE id = #{id,jdbcType=BIGINT}
     </delete>
 
+    <select id="querySequence" resultType="java.lang.String">
+        select _nextval('task_num') from dual
+    </select>
+
   <!-- gxl start -->
   	<!--查询任务-->
     <select id="queryTaskNodeById" resultMap="BaseResultMap" parameterType="long">
