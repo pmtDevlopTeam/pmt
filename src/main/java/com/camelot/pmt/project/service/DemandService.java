@@ -11,7 +11,7 @@ import com.camelot.pmt.project.model.DemandVO;
 import com.github.pagehelper.PageInfo;
 
 public interface DemandService {
-    boolean save(Demand demand, User user);
+    boolean addDemand(Demand demand, User user);
 
     List<Demand> queryByPage(Demand demand, Integer pageSize, Integer currentPage);
 
@@ -51,4 +51,11 @@ public interface DemandService {
     PageInfo<Map<String, Object>> queryDemandBugQuoteById(Long demandId, Integer pageSize, Integer currentPage);
 
     boolean updateByReview(Demand demand, User user);
+
+    /**
+     * 新增级联需求
+     *@param
+     *@return 
+     */
+    boolean addDemandList(DemandVO demandVO, User user);
 }

@@ -1,20 +1,24 @@
 package com.camelot.pmt.project.service.impl;
 
-import java.util.Date;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.camelot.pmt.project.mapper.VersionMapper;
+import com.camelot.pmt.project.mapper.VersionOperationLogMapper;
 import com.camelot.pmt.project.model.Version;
+import com.camelot.pmt.project.model.VersionOperationLog;
 import com.camelot.pmt.project.model.VersionVo;
 import com.camelot.pmt.project.service.VersionService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.sun.org.apache.bcel.internal.generic.NEW;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @Package: com.camelot.pmt.project.service.impl
@@ -27,7 +31,8 @@ import org.apache.commons.lang3.StringUtils;
 public class VersionServiceImpl implements VersionService {
     @Autowired
     private VersionMapper versionMapper;
-
+    @Autowired
+    private VersionOperationLogMapper versionOperationLogMapper;
     /**
      * @Description: 添加版本信息
      * @param: version
@@ -49,7 +54,7 @@ public class VersionServiceImpl implements VersionService {
         version.setEndTime(versionVo.getEndTime());
         version.setRemarks(versionVo.getRemarks());
         // 设置版本编号
-        version.setVersion(getVersionCode(projectId, versionType));
+        version.setVersionCode(versionVo.getVersionCode());
         // 项目id
         version.setProjectId(projectId);
         // 添加人id
@@ -88,7 +93,6 @@ public class VersionServiceImpl implements VersionService {
         }
         return versionMapper.updateByPrimaryKeySelective(version) == 1 ? true : false;
     }
-
     /**
      * @Description: 根据指定id查询版本信息
      * @param: version
@@ -100,7 +104,16 @@ public class VersionServiceImpl implements VersionService {
     public VersionVo queryVersionInfoById(Long versionId) {
         return assembleProductListVo(versionMapper.selectByPrimaryKey(versionId));
     }
-
+    /**
+      * @Description: 根据项目id，查询下一版本编号--用于新增版本编号回显
+      * @param:
+      * @return:
+      * @author: xueyj
+      * @date: 2018/4/20 10:57
+      */
+    public Map<String,String> queryVerCodeByPorIdAndVerType(Long projectId){
+        return getVersionCodeList(projectId);
+    }
     /**
      * @Description: 根据指定id修改version信息
      * @param:
@@ -142,7 +155,7 @@ public class VersionServiceImpl implements VersionService {
      * @date: 2018/4/13 18:30
      */
     @Override
-    public List<VersionVo> queryVerListByProId(Long projectId, VersionVo versionVo) {
+    public List<VersionVo> queryVerListByProIdAndParms(Long projectId, VersionVo versionVo) {
         List<Version> versionList = versionMapper.selectVersionListByProIdAndPram(projectId, versionVo);
         List<VersionVo> versionVoList = Lists.newArrayList();
         for (Version versionItem : versionList) {
@@ -179,7 +192,22 @@ public class VersionServiceImpl implements VersionService {
         pageResult.setList(versionVoList);
         return pageResult;
     }
-
+    /**
+     * @Description: 根据项目id,版本编号查询版本信息--用于新增时是否允许添加
+     * @param:
+     * @return:
+     * @author: xueyj
+     * @date: 2018/4/17 10:34
+     */
+    @Override
+    public boolean queryVerListByProIdAndVerCode(Long projectId,String versionCode){
+       boolean flag = true;
+        List<Version> versionList = versionMapper.selectVerListByProIdAndVerCode(projectId, versionCode);
+        if(versionList.size() > 0){
+            flag=false;
+        }
+        return flag;
+    }
     /**
      * 根据不同的版本状态自动生成不同的版本编号
      *
@@ -193,24 +221,17 @@ public class VersionServiceImpl implements VersionService {
         List<Version> versionList = versionMapper.queryListByProIdAndVerType(projectId, versionType);
         if (versionList.size() > 0) {
             // 获取最后添加版本信息的版本编号
-            versionCode = versionList.get(0).getVersion();
-        }
-        if (("type01".equals(versionType))) {
-            // 若版本code为空则设置默认值，否则根据规则进行递增
-            if (versionCode == null) {
-                versionCode = "1.0.0";
-                return versionCode;
-            } else {
+            versionCode = versionList.get(0).getVersionCode();
+            if (("type01".equals(versionType))) {
+                versionCode = generateVersionCode(versionCode);
+            }else if (("type02".equals(versionType))){
                 versionCode = generateVersionCode(versionCode);
             }
-        }
-        if ("type02".equals(versionType)) {
-            // 若版本code为空则设置默认值，否则根据规则进行递增
-            if (versionCode == null) {
+        }else{
+            if (("type01".equals(versionType))) {
+                versionCode = "1.0.0";
+            }else if(("type02".equals(versionType))){
                 versionCode = "0.0.1";
-                return versionCode;
-            } else {
-                versionCode = generateVersionCode(versionCode);
             }
         }
         return versionCode;
@@ -264,6 +285,24 @@ public class VersionServiceImpl implements VersionService {
         versionVo.setEndTime(version.getEndTime());
         // 备注
         versionVo.setRemarks(version.getRemarks());
+        // 仓库url
+        versionVo.setVersionRepositoryUrl(version.getVersionRepositoryUrl());
+        // 分支
+        versionVo.setVersionRepositoryBranch(version.getVersionRepositoryBranch());
+        // 仓库id
+        versionVo.setVersionRepositoryId(version.getVersionRepositoryId());
         return versionVo;
+    }
+
+    /**
+     * 根据项目id，生成下一版本编号--用于新增版本编号回显
+     * @param projectId
+     * @return
+     */
+    private Map<String,String> getVersionCodeList(Long projectId){
+        Map<String,String> versionCodeMap = Maps.newHashMap();
+        versionCodeMap.put("type01",getVersionCode(projectId,"type01"));
+        versionCodeMap.put("type02",getVersionCode(projectId,"type02"));
+        return versionCodeMap;
     }
 }

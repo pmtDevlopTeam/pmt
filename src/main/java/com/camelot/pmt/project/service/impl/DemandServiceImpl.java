@@ -37,21 +37,11 @@ public class DemandServiceImpl implements DemandService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean save(Demand demand, User user) {
+    public boolean addDemand(Demand demand, User user) {
         boolean flag = false;
         try {
-            String demandNum = "01";
-            // 查询是否已有同级别需求
-            String num = demandMapper.queryMaxDemandNumByDemand(demand);
-            String parantNum = demandMapper.queryParantDemandById(demand.getPid());
-            if (null != num) {
-                demandNum = IncrementNumber.getIncreNum(num.substring(num.lastIndexOf(".") + 1));// 最后一位
-            }
-            if (null != parantNum) {
-                demand.setDemandNum(parantNum + "." + demandNum);
-            } else {
-                demand.setDemandNum(demandNum);
-            }
+            String demandNum = queryDemandNum(demand);
+            demand.setDemandNum(demandNum);
             int resultCount = demandMapper.insert(demand);
             if (resultCount > 0) {
                 DemandOperate demandOperate = new DemandOperate();
@@ -304,5 +294,86 @@ public class DemandServiceImpl implements DemandService {
             throw new RuntimeException(e);
         }
         return flag;
+    }
+
+    /**
+     * 新增级联需求
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean addDemandList(DemandVO demandVO, User user) {
+        boolean flag = false;
+        Demand demand = demandVO.getDemand();
+        Date currentDate = new Date();
+        demand.setCreateTime(currentDate);
+        demand.setCreateUserId(user.getUserId());
+        demand.setModifyUserId(user.getUserId());
+        demand.setModifyTime(currentDate);
+        try {
+            String demandNum = queryDemandNum(demand);
+            demand.setDemandNum(demandNum.toString());
+            int resultCount = demandMapper.insert(demand);
+            if (resultCount > 0) {
+                Long pid = demand.getId();//返回的主键id
+                List<Demand> demandList = demandVO.getDemandList();
+                if((null != demandList)&&(demandList.size()>0)){
+                    //2级需求列表
+                    String snum = "00";
+                    for (Demand demand2 : demandList) {
+                        if(null != demand2){
+                            snum = IncrementNumber.getIncreNum(snum);
+                            demand2.setDemandNum(demandNum + "."+snum);
+                            demand2.setPid(pid);
+                            demand2.setCreateTime(currentDate);
+                            demand2.setCreateUserId(user.getUserId());
+                            demand2.setModifyUserId(user.getUserId());
+                            demand2.setModifyTime(currentDate);
+                        }
+                        
+                    }
+                    resultCount = demandMapper.insertDemandList(demandList); 
+                }
+                DemandOperate demandOperate = new DemandOperate();
+                demandOperate.setCreateUserId(demand.getCreateUserId());
+                demandOperate.setCreateTime(demand.getCreateTime());
+                demandOperate.setDemandId(demand.getId());
+                demandOperate.setOperateDesc(user.getUsername() + "创建");
+                // 常规操作
+                demandOperate.setRunType("01");
+                demandOperateMapper.insert(demandOperate);
+            }
+            flag = true;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return flag;
+    }
+    
+    /**
+     * 获取需求编号
+     *@param  Demand demand
+     *@return demandNum
+     */
+    private String queryDemandNum(Demand demand){
+        String demandNum = "01";
+        // 查询是否已有同级别需求
+        if("1".equals(demand.getDemandLevel())){
+            demandNum = demandMapper.queryMaxDemandNumByDemand(demand);
+            if((null!= demandNum)&&(!"".equals(demandNum))){
+                demandNum = IncrementNumber.getIncreNum(demandNum);
+            }else{
+                demandNum = "01";
+            }
+        }
+        String num = demandMapper.queryMaxDemandNumByDemand(demand);
+        String parantNum = demandMapper.queryParantDemandById(demand.getPid());
+        if (null != num) {
+            demandNum = IncrementNumber.getIncreNum(num.substring(num.lastIndexOf(".") + 1));// 最后一位
+        }
+        if (null != parantNum) {
+            return (parantNum + "." + demandNum);
+        } else {
+            return (demandNum);
+        }
     }
 }
