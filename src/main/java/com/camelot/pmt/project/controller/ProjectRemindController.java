@@ -29,7 +29,7 @@ import com.camelot.pmt.project.service.ProjectRemindService;
  */
 @RestController
 @Api(value = "项目管理-项目提醒模块", description = "项目管理-项目提醒模块控制器类")
-@RequestMapping("/project/ProjectRemind")
+@RequestMapping("/project/projectRemind")
 public class ProjectRemindController {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -72,7 +72,7 @@ public class ProjectRemindController {
      * @return
      */
     @ApiOperation(value = "项目提醒信息查看", notes = "根据项目Id查看项目提醒信息")
-    @GetMapping(value = "/demand/queryById")
+    @GetMapping(value = "/queryById")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "projectId", value = "项目id", required = true, paramType = "query", dataType = "Long")})
     public JSONObject queryProjectRemindByProjectId(Long projectId) {
