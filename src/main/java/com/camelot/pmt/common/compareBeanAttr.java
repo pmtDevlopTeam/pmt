@@ -55,13 +55,13 @@ public class compareBeanAttr {
                 if (xmlElement.name().equals("default")) {
                     System.out.println("属性【" + attrName + "】注解使用的name是默认值: " + xmlElement.name());
                 } else {
-                    if (oldValue.equals(newValue)) {
+                    if (oldValue!=null&&newValue!=null&&oldValue.equals(newValue)) {
                         continue;
                     }
                     if (null == oldValue) {
-                        str += xmlElement.name() + ":" + "    更改为     " + newValue + "\t\n";
+                        str += xmlElement.name() + ":" + "更改为"+ newValue + "。 ";
                     } else {
-                        str += xmlElement.name() + ":" + "  由    " + oldValue + "    更改为      " + newValue + "\t\n";
+                        str += xmlElement.name() + ":" + "由 " +oldValue+ "更改为" + newValue + "。 ";
                     }
 
                 }

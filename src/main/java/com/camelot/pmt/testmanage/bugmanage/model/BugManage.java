@@ -1,66 +1,98 @@
 package com.camelot.pmt.testmanage.bugmanage.model;
 
-public class BugManage {
-    private Long id;
+import javax.xml.bind.annotation.XmlElement;
 
+public class BugManage {
+	@XmlElement(name = "default")
+    private Long id;
+	@XmlElement(name = "default")
     private String bugNo;
     // 标题
+    @XmlElement(name = "bug标题")
     private String bugTitle;
     // 项目ID
+    @XmlElement(name = "项目")
     private Long projectId;
     // 相关需求ID
+    @XmlElement(name = "需求")
     private Long demandId;
     // 相关任务ID
+    @XmlElement(name = "任务")
     private Long taskId;
     // 一级需求ID
+    @XmlElement(name = "一级需求")
     private Long demand1Id;
     // 指派人
+    @XmlElement(name = "指派给")
     private String designatedId;
     // 影响版本ID
+    @XmlElement(name = "影响版本")
     private Long versionId;
     // bug类型
+    @XmlElement(name = "bug类型")
     private String bugType;
     // 测试终端
+    @XmlElement(name = "测试终端")
     private String caseTerminal;
     // 测试环境
+    @XmlElement(name = "测试环境")
     private String caseEnvironment;
     // bug级别（优先级）
+    @XmlElement(name = "bug级别")
     private String bugLevel;
     // 状态（0未确认 1已确认 2已解决 3已关闭 4已撤销）
+    @XmlElement(name = "bug状态")
     private String bugStatus;
     // 创建者
+    @XmlElement(name = "default")
     private String createUserId;
     // 创建时间
+    @XmlElement(name = "default")
     private String createTime;
     // 截止日期
+    @XmlElement(name = "截至日期")
     private String endTime;
     // 更新者
+    @XmlElement(name = "default")
     private String modifyUserId;
     // 更新时间
+    @XmlElement(name = "default")
     private String modifyTime;
     // 删除标记
+    @XmlElement(name = "default")
     private String delFlag;
     // 重现步骤
+    @XmlElement(name = "重现步骤")
     private String stepsReproduce;
     // 解决时间
+    @XmlElement(name = "解决时间")
     private String solveTime;
     // 解决方案
+    @XmlElement(name = "解决方案")
     private Integer solveProgram;
     // 解决人
+    @XmlElement(name = "解决人")
     private String solveId;
     // 关闭时间
+    @XmlElement(name = "关闭时间")
     private String closeTime;
     // 关闭人
+    @XmlElement(name = "关闭人")
     private String closeId;
     // 严重程度
+    @XmlElement(name = "严重程度")
     private String seriousDegree;
     // 关闭原因
+    @XmlElement(name = "关闭原因")
     private String closeReason;
     // 用例ID
+    @XmlElement(name = "用例")
     private Long caseId;
     // 备注
+    @XmlElement(name = "备注")
     private String bugDescribe;
     // 关闭状态（正常，不正常）
+    @XmlElement(name = "default")
     private String closeStauts;
 
     public Long getId() {
