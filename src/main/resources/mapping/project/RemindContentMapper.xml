@@ -22,7 +22,7 @@
     delete from remind_content
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="RemindContent" >
+  <insert id="insert" parameterType="RemindContent" useGeneratedKeys="true" keyProperty="id">
     insert into remind_content (id, project_id, remind_id, 
       content_code, create_user_id, create_time
       )
@@ -30,7 +30,7 @@
       #{contentCode,jdbcType=CHAR}, #{createUserId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}
       )
   </insert>
-  <insert id="insertSelective" parameterType="RemindContent" >
+  <insert id="insertSelective" parameterType="RemindContent" useGeneratedKeys="true" keyProperty="id">
     insert into remind_content
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >

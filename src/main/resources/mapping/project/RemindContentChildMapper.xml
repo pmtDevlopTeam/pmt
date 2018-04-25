@@ -27,7 +27,7 @@
     delete from remind_content_child
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="RemindContentChild" >
+  <insert id="insert" parameterType="RemindContentChild" useGeneratedKeys="true" keyProperty="id">
     insert into remind_content_child (id, project_id, content_id, 
       name, code, method_url, 
       create_user_id, create_time, delay_remind_days, 
@@ -37,7 +37,7 @@
       #{createUserId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{delayRemindDays,jdbcType=INTEGER}, 
       #{remark,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="RemindContentChild" >
+  <insert id="insertSelective" parameterType="RemindContentChild" useGeneratedKeys="true" keyProperty="id">
     insert into remind_content_child
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >

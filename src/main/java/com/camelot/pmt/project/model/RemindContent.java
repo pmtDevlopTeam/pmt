@@ -1,6 +1,7 @@
 package com.camelot.pmt.project.model;
 
 import java.util.Date;
+import java.util.List;
 
 public class RemindContent {
     /**
@@ -32,6 +33,19 @@ public class RemindContent {
      * 创建时间
      */
     private Date createTime;
+    
+    /**
+     * 提醒文本子内容
+     */
+    private List<RemindContentChild> remindContentChildList;
+
+    public List<RemindContentChild> getRemindContentChildList() {
+        return remindContentChildList;
+    }
+
+    public void setRemindContentChildList(List<RemindContentChild> remindContentChildList) {
+        this.remindContentChildList = remindContentChildList;
+    }
 
     /**
      * 主键
