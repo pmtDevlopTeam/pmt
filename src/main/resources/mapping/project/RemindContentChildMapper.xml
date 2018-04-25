@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.camelot.pmt.project.mapper.remindContentChildMapper" >
-  <resultMap id="BaseResultMap" type="remindContentChild" >
+<mapper namespace="com.camelot.pmt.project.mapper.RemindContentChildMapper" >
+  <resultMap id="BaseResultMap" type="RemindContentChild" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="project_id" property="projectId" jdbcType="BIGINT" />
     <result column="content_id" property="contentId" jdbcType="BIGINT" />
@@ -27,7 +27,7 @@
     delete from remind_content_child
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="remindContentChild" >
+  <insert id="insert" parameterType="RemindContentChild" >
     insert into remind_content_child (id, project_id, content_id, 
       name, code, method_url, 
       create_user_id, create_time, delay_remind_days, 
@@ -37,7 +37,7 @@
       #{createUserId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{delayRemindDays,jdbcType=INTEGER}, 
       #{remark,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="remindContentChild" >
+  <insert id="insertSelective" parameterType="RemindContentChild" >
     insert into remind_content_child
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -104,7 +104,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="remindContentChild" >
+  <update id="updateByPrimaryKeySelective" parameterType="RemindContentChild" >
     update remind_content_child
     <set >
       <if test="projectId != null" >
@@ -137,7 +137,7 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="remindContentChild" >
+  <update id="updateByPrimaryKey" parameterType="RemindContentChild" >
     update remind_content_child
     set project_id = #{projectId,jdbcType=BIGINT},
       content_id = #{contentId,jdbcType=BIGINT},

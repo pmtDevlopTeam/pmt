@@ -35,6 +35,7 @@ public class RemindContent {
 
     /**
      * 主键
+     * 
      * @return id 主键
      */
     public Long getId() {
@@ -43,7 +44,9 @@ public class RemindContent {
 
     /**
      * 主键
-     * @param id 主键
+     * 
+     * @param id
+     *            主键
      */
     public void setId(Long id) {
         this.id = id;
@@ -51,6 +54,7 @@ public class RemindContent {
 
     /**
      * 项目id
+     * 
      * @return project_id 项目id
      */
     public Long getProjectId() {
@@ -59,7 +63,9 @@ public class RemindContent {
 
     /**
      * 项目id
-     * @param projectId 项目id
+     * 
+     * @param projectId
+     *            项目id
      */
     public void setProjectId(Long projectId) {
         this.projectId = projectId;
@@ -67,6 +73,7 @@ public class RemindContent {
 
     /**
      * 主表id
+     * 
      * @return remind_id 主表id
      */
     public Long getRemindId() {
@@ -75,7 +82,9 @@ public class RemindContent {
 
     /**
      * 主表id
-     * @param remindId 主表id
+     * 
+     * @param remindId
+     *            主表id
      */
     public void setRemindId(Long remindId) {
         this.remindId = remindId;
@@ -83,6 +92,7 @@ public class RemindContent {
 
     /**
      * 内容编号
+     * 
      * @return content_code 内容编号
      */
     public String getContentCode() {
@@ -91,7 +101,9 @@ public class RemindContent {
 
     /**
      * 内容编号
-     * @param contentCode 内容编号
+     * 
+     * @param contentCode
+     *            内容编号
      */
     public void setContentCode(String contentCode) {
         this.contentCode = contentCode == null ? null : contentCode.trim();
@@ -99,6 +111,7 @@ public class RemindContent {
 
     /**
      * 创建人id
+     * 
      * @return create_user_id 创建人id
      */
     public String getCreateUserId() {
@@ -107,7 +120,9 @@ public class RemindContent {
 
     /**
      * 创建人id
-     * @param createUserId 创建人id
+     * 
+     * @param createUserId
+     *            创建人id
      */
     public void setCreateUserId(String createUserId) {
         this.createUserId = createUserId == null ? null : createUserId.trim();
@@ -115,6 +130,7 @@ public class RemindContent {
 
     /**
      * 创建时间
+     * 
      * @return create_time 创建时间
      */
     public Date getCreateTime() {
@@ -123,7 +139,9 @@ public class RemindContent {
 
     /**
      * 创建时间
-     * @param createTime 创建时间
+     * 
+     * @param createTime
+     *            创建时间
      */
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;

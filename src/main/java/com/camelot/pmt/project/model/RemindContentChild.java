@@ -55,6 +55,7 @@ public class RemindContentChild {
 
     /**
      * 主键
+     * 
      * @return id 主键
      */
     public Long getId() {
@@ -63,7 +64,9 @@ public class RemindContentChild {
 
     /**
      * 主键
-     * @param id 主键
+     * 
+     * @param id
+     *            主键
      */
     public void setId(Long id) {
         this.id = id;
@@ -71,6 +74,7 @@ public class RemindContentChild {
 
     /**
      * 项目id
+     * 
      * @return project_id 项目id
      */
     public Long getProjectId() {
@@ -79,7 +83,9 @@ public class RemindContentChild {
 
     /**
      * 项目id
-     * @param projectId 项目id
+     * 
+     * @param projectId
+     *            项目id
      */
     public void setProjectId(Long projectId) {
         this.projectId = projectId;
@@ -87,6 +93,7 @@ public class RemindContentChild {
 
     /**
      * 内容表id
+     * 
      * @return content_id 内容表id
      */
     public Long getContentId() {
@@ -95,7 +102,9 @@ public class RemindContentChild {
 
     /**
      * 内容表id
-     * @param contentId 内容表id
+     * 
+     * @param contentId
+     *            内容表id
      */
     public void setContentId(Long contentId) {
         this.contentId = contentId;
@@ -103,6 +112,7 @@ public class RemindContentChild {
 
     /**
      * 编码名称
+     * 
      * @return name 编码名称
      */
     public String getName() {
@@ -111,7 +121,9 @@ public class RemindContentChild {
 
     /**
      * 编码名称
-     * @param name 编码名称
+     * 
+     * @param name
+     *            编码名称
      */
     public void setName(String name) {
         this.name = name == null ? null : name.trim();
@@ -119,6 +131,7 @@ public class RemindContentChild {
 
     /**
      * 编码
+     * 
      * @return code 编码
      */
     public String getCode() {
@@ -127,7 +140,9 @@ public class RemindContentChild {
 
     /**
      * 编码
-     * @param code 编码
+     * 
+     * @param code
+     *            编码
      */
     public void setCode(String code) {
         this.code = code == null ? null : code.trim();
@@ -135,6 +150,7 @@ public class RemindContentChild {
 
     /**
      * 方法url
+     * 
      * @return method_url 方法url
      */
     public String getMethodUrl() {
@@ -143,7 +159,9 @@ public class RemindContentChild {
 
     /**
      * 方法url
-     * @param methodUrl 方法url
+     * 
+     * @param methodUrl
+     *            方法url
      */
     public void setMethodUrl(String methodUrl) {
         this.methodUrl = methodUrl == null ? null : methodUrl.trim();
@@ -151,6 +169,7 @@ public class RemindContentChild {
 
     /**
      * 创建人id
+     * 
      * @return create_user_id 创建人id
      */
     public String getCreateUserId() {
@@ -159,7 +178,9 @@ public class RemindContentChild {
 
     /**
      * 创建人id
-     * @param createUserId 创建人id
+     * 
+     * @param createUserId
+     *            创建人id
      */
     public void setCreateUserId(String createUserId) {
         this.createUserId = createUserId == null ? null : createUserId.trim();
@@ -167,6 +188,7 @@ public class RemindContentChild {
 
     /**
      * 创建时间
+     * 
      * @return create_time 创建时间
      */
     public Date getCreateTime() {
@@ -175,7 +197,9 @@ public class RemindContentChild {
 
     /**
      * 创建时间
-     * @param createTime 创建时间
+     * 
+     * @param createTime
+     *            创建时间
      */
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
@@ -183,6 +207,7 @@ public class RemindContentChild {
 
     /**
      * 延期提醒天数
+     * 
      * @return delay_remind_days 延期提醒天数
      */
     public Integer getDelayRemindDays() {
@@ -191,7 +216,9 @@ public class RemindContentChild {
 
     /**
      * 延期提醒天数
-     * @param delayRemindDays 延期提醒天数
+     * 
+     * @param delayRemindDays
+     *            延期提醒天数
      */
     public void setDelayRemindDays(Integer delayRemindDays) {
         this.delayRemindDays = delayRemindDays;
@@ -199,6 +226,7 @@ public class RemindContentChild {
 
     /**
      * 备注
+     * 
      * @return remark 备注
      */
     public Integer getRemark() {
@@ -207,7 +235,9 @@ public class RemindContentChild {
 
     /**
      * 备注
-     * @param remark 备注
+     * 
+     * @param remark
+     *            备注
      */
     public void setRemark(Integer remark) {
         this.remark = remark;

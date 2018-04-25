@@ -28,8 +28,7 @@ import java.util.Map;
 @Api(value = "我的工作台-我的已办-接口", description = "我的工作台-我的已办-接口")
 public class TaskAlreadyController {
 
-
-    //日志
+    // 日志
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
@@ -44,8 +43,7 @@ public class TaskAlreadyController {
     /**
      * (我的已完成任务转为正在进行) 重做功能 updateTaskAlreadyToRunning
      *
-     * @param
-     *            id
+     * @param id
      * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
 
@@ -58,7 +56,7 @@ public class TaskAlreadyController {
             // 更新我的任务为关闭
             flag = taskAlreadyService.updateTaskAlreadyToRunning(id);
             // 判断是否成功
-            if(flag){
+            if (flag) {
                 return ApiResponse.success();
             }
             return ApiResponse.error("添加异常");
@@ -71,8 +69,7 @@ public class TaskAlreadyController {
     /**
      * 我的已办 提测功能 updateTaskToTest
      *
-     * @param
-     *            id
+     * @param id
      * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
 
@@ -85,7 +82,7 @@ public class TaskAlreadyController {
             // 更新我的任务为关闭
             flag = taskAlreadyService.updateTaskToTest(id);
             // 判断是否成功
-            if(flag){
+            if (flag) {
                 return ApiResponse.success();
             }
             return ApiResponse.error("添加异常");
@@ -95,12 +92,10 @@ public class TaskAlreadyController {
         }
     }
 
-
     /**
      * 查询单个任务明细 queryTaskById
      *
-     * @param
-     *            id
+     * @param id
      * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
 
@@ -120,8 +115,7 @@ public class TaskAlreadyController {
     /**
      * 查询任务历史记录 重做页面 queryTaskLogList
      *
-     * @param
-     *            id
+     * @param id
      * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
 
@@ -131,7 +125,7 @@ public class TaskAlreadyController {
             @ApiParam(name = "id", value = "任务id", required = true) @RequestParam(required = true) Long id) {
         try {
             List<TaskLog> taskLogList = taskLogService.queryTaskLogList(id);
-                return ApiResponse.success(taskLogList);
+            return ApiResponse.success(taskLogList);
         } catch (Exception e) {
             logger.error(e.getMessage());
             return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
@@ -141,8 +135,7 @@ public class TaskAlreadyController {
     /**
      * 查询任务历史记录 提测页面 queryTaskLogList
      *
-     * @param
-     *          id
+     * @param id
      * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
 
@@ -152,13 +145,12 @@ public class TaskAlreadyController {
             @ApiParam(name = "id", value = "任务id", required = true) @RequestParam(required = true) Long id) {
         try {
             List<TaskLog> taskLogList = taskLogService.queryTaskLogList(id);
-                return ApiResponse.success(taskLogList);
+            return ApiResponse.success(taskLogList);
         } catch (Exception e) {
             logger.error(e.getMessage());
             return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
         }
     }
-
 
     /**
      * 查询所有的任务 queryTaskAlready
@@ -172,7 +164,7 @@ public class TaskAlreadyController {
             @ApiImplicitParam(dataType = "ProjectMain", name = "project.id", paramType = "query", value = "项目编号"),
             @ApiImplicitParam(dataType = "String", name = "taskName", paramType = "query", value = "任务名称"),
             @ApiImplicitParam(dataType = "String", name = "taskNum", paramType = "query", value = "任务编号"),
-            @ApiImplicitParam(dataType = "Demand", name = "demand.id", paramType = "query", value = "需求编号")})
+            @ApiImplicitParam(dataType = "Demand", name = "demand.id", paramType = "query", value = "需求编号") })
     public JSONObject queryMyAllTask(@ApiIgnore Task task) {
         try {
             // 获取当前登录人
@@ -181,7 +173,7 @@ public class TaskAlreadyController {
                 return ApiResponse.jsonData(APIStatus.INVALIDSESSION_LOGINOUTTIME);
             }
             task.setBeassignUser(user);
-            Map<String , Object> map = taskAlreadyService.queryMyAllTask(task);
+            Map<String, Object> map = taskAlreadyService.queryMyAllTask(task);
             return ApiResponse.success(map);
         } catch (Exception e) {
             logger.error(e.getMessage());

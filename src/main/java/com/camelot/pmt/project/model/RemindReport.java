@@ -40,6 +40,7 @@ public class RemindReport {
 
     /**
      * 主键
+     * 
      * @return id 主键
      */
     public Long getId() {
@@ -48,7 +49,9 @@ public class RemindReport {
 
     /**
      * 主键
-     * @param id 主键
+     * 
+     * @param id
+     *            主键
      */
     public void setId(Long id) {
         this.id = id;
@@ -56,6 +59,7 @@ public class RemindReport {
 
     /**
      * 项目id
+     * 
      * @return project_id 项目id
      */
     public Long getProjectId() {
@@ -64,7 +68,9 @@ public class RemindReport {
 
     /**
      * 项目id
-     * @param projectId 项目id
+     * 
+     * @param projectId
+     *            项目id
      */
     public void setProjectId(Long projectId) {
         this.projectId = projectId;
@@ -72,6 +78,7 @@ public class RemindReport {
 
     /**
      * 提醒类型
+     * 
      * @return remind_type 提醒类型
      */
     public String getRemindType() {
@@ -80,7 +87,9 @@ public class RemindReport {
 
     /**
      * 提醒类型
-     * @param remindType 提醒类型
+     * 
+     * @param remindType
+     *            提醒类型
      */
     public void setRemindType(String remindType) {
         this.remindType = remindType == null ? null : remindType.trim();
@@ -88,6 +97,7 @@ public class RemindReport {
 
     /**
      * 提醒频次
+     * 
      * @return remind_frequency 提醒频次
      */
     public String getRemindFrequency() {
@@ -96,7 +106,9 @@ public class RemindReport {
 
     /**
      * 提醒频次
-     * @param remindFrequency 提醒频次
+     * 
+     * @param remindFrequency
+     *            提醒频次
      */
     public void setRemindFrequency(String remindFrequency) {
         this.remindFrequency = remindFrequency == null ? null : remindFrequency.trim();
@@ -104,6 +116,7 @@ public class RemindReport {
 
     /**
      * 创建人id
+     * 
      * @return create_user_id 创建人id
      */
     public String getCreateUserId() {
@@ -112,7 +125,9 @@ public class RemindReport {
 
     /**
      * 创建人id
-     * @param createUserId 创建人id
+     * 
+     * @param createUserId
+     *            创建人id
      */
     public void setCreateUserId(String createUserId) {
         this.createUserId = createUserId == null ? null : createUserId.trim();
@@ -120,6 +135,7 @@ public class RemindReport {
 
     /**
      * 创建时间
+     * 
      * @return create_time 创建时间
      */
     public Date getCreateTime() {
@@ -128,7 +144,9 @@ public class RemindReport {
 
     /**
      * 创建时间
-     * @param createTime 创建时间
+     * 
+     * @param createTime
+     *            创建时间
      */
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
@@ -136,6 +154,7 @@ public class RemindReport {
 
     /**
      * 日报内容
+     * 
      * @return daily_content 日报内容
      */
     public String getDailyContent() {
@@ -144,7 +163,9 @@ public class RemindReport {
 
     /**
      * 日报内容
-     * @param dailyContent 日报内容
+     * 
+     * @param dailyContent
+     *            日报内容
      */
     public void setDailyContent(String dailyContent) {
         this.dailyContent = dailyContent == null ? null : dailyContent.trim();

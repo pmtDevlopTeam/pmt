@@ -10,8 +10,7 @@ public interface TaskAlreadyService {
     /**
      * TODO重做(我的任务状态转为正在进行)
      *
-     * @param
-     *            id
+     * @param id
      * @return boolean
      */
 
@@ -20,19 +19,17 @@ public interface TaskAlreadyService {
     /**
      * 根据任务ID 提测
      *
-     * @param
-     *            id
-     * @return   boolean
+     * @param id
+     * @return boolean
      */
 
     boolean updateTaskToTest(Long id);
 
-
     /**
      * 查询未完成任务的个数
      *
-     * @param
-     *            projectId, String userId
+     * @param projectId,
+     *            String userId
      * @return int
      */
 
@@ -41,22 +38,20 @@ public interface TaskAlreadyService {
     /**
      * 根据需求ID 查询任务列表
      *
-     * @param
-     *            demandId
+     * @param demandId
      * @return List<Task>
      */
 
     List<Task> queryTaskByDemandId(Long demandId);
 
-
     /**
      * 查询我的任务
      *
-     * @param  task
+     * @param task
      *
      * @return Map<String,Object>
      */
 
-    Map<String,Object> queryMyAllTask(Task task);
+    Map<String, Object> queryMyAllTask(Task task);
 
 }
