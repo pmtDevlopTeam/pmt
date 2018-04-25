@@ -1,47 +1,37 @@
 package com.camelot.pmt.task.service;
 
-import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.task.model.Task;
-import com.github.pagehelper.PageInfo;
 
 import java.util.List;
+import java.util.Map;
 
 public interface TaskAlreadyService {
 
     /**
      * TODO重做(我的任务状态转为正在进行)
      *
-     * @param Long
+     * @param
      *            id
-     * @return ExecuteResult<String>
+     * @return boolean
      */
 
-    ExecuteResult<String> updateTaskAlreadyToRunning(Long id);
+    boolean updateTaskAlreadyToRunning(Long id);
 
     /**
      * 根据任务ID 提测
      *
-     * @param Long
+     * @param
      *            id
-     * @return ExecuteResult<String>
+     * @return   boolean
      */
 
-    ExecuteResult<String> updateTaskToTest(Long id);
+    boolean updateTaskToTest(Long id);
 
-    /**
-     * 查询我的已办任务列表
-     *
-     * @param Long
-     *            id
-     * @return ExecuteResult<PageInfo<Task>>
-     */
-
-    ExecuteResult<PageInfo<Task>> queryTaskAlready(Integer page, Integer rows, String id);
 
     /**
      * 查询未完成任务的个数
      *
-     * @param Long
+     * @param
      *            projectId, String userId
      * @return int
      */
@@ -51,11 +41,22 @@ public interface TaskAlreadyService {
     /**
      * 根据需求ID 查询任务列表
      *
-     * @param long
+     * @param
      *            demandId
-     * @return ExecuteResult<List<Task>>
+     * @return List<Task>
      */
 
-    ExecuteResult<List<Task>> queryTaskByDemandId(Long demandId);
+    List<Task> queryTaskByDemandId(Long demandId);
+
+
+    /**
+     * 查询我的任务
+     *
+     * @param  task
+     *
+     * @return Map<String,Object>
+     */
+
+    Map<String,Object> queryMyAllTask(Task task);
 
 }

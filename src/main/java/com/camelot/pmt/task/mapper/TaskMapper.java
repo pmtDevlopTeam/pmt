@@ -11,24 +11,25 @@ import java.util.Map;
 public interface TaskMapper {
 
     /**
-     * 查询正在进行的任务，根据时间和优先级进行排序 myp
+     * 查询正在进行的任务，根据时间和优先级进行排序
+     * myp
      */
     List<Task> queryTaskRunning(Task task);
 
     /**
      * 将任务进行关闭操作 myp
      */
-    // int updateRunningToClose(List list);
     int updateRunningToClose(Long id);
 
     /**
-     * 将正在进行的任务进行完成操作 myp
+     * 将正在进行的任务进行完成操作
+     * myp
      */
-    void updateRunningToAlready(Long id);
-    // List<Task> queryRunningToAlready(List list);
+    int updateRunningToAlready(Long id);
 
     /**
-     * 点击完成时，修改实际完成时间和实际工时 myp
+     * 点击完成时，修改实际完成时间和实际工时
+     * myp
      */
     int updateInfact_hourAndActual_end_time(Task task);
 
@@ -38,72 +39,75 @@ public interface TaskMapper {
     int addAttachment(TaskFile taskFile);
 
     /**
-     * 根据任务id查询所有的次id的子任务 myp
+     * 根据任务id查询所有的次id的子任务
+     * myp
      */
     List<Task> queryByPId(Long pid);
 
     Task queryTaskAllById(Long id);
 
     /**
-     * 根据id查询任务明细 myp
+     * 根据id查询任务明细
+     * myp
      */
     Task selectTaskById(Long id);
 
     /**
-     * @author: zlh
-     * @param:
-     * @description: 查询所有任务列表
-     * @date: 16:54 2018/4/9
+     * 查询所有任务列表
+     *
+     * @author zlh
+     * @date 16:54 2018/4/9
      */
     List<Task> queryAllTask();
 
     /**
-     * @author: zlh
+     * 根据条件查询任务
+     *
+     * @author zlh
      * @param task
      *            模糊查询的条件
-     * @description: 根据条件查询任务
-     * @return
+     * @return Task
      */
     List<Task> queryTaskByTask(@Param("task") Task task, @Param("ids") String[] ids);
 
-    /**
-     * 查询已完成的任务，根据时间和优先级进行排序 myp
-     */
-    List<Task> listTaskAlready(String id);
 
     /**
-     * @author: zlh
-     * @param: taskManager
+     * 新增任务
+     *
+     * @author zlh
+     * @param task
      *             插入任务的数据
-     * @description: 新增任务
-     * @date: 9:07 2018/4/12
+     * @date 9:07 2018/4/12
      */
-    int insertTask(Task task);
+    int addTask(Task task);
 
     /**
-     * @author: zlh
-     * @param: taskManager
+     * 根据任务id修改任务
+     *
+     * @author zlh
+     * @param task
      *             需要修改的任务数据
-     * @description: 根据任务id修改任务
-     * @date: 10:18 2018/4/12
+     * @date 10:18 2018/4/12
      */
     int updateTaskById(Task task);
 
     /**
-     * @author: zlh
-     * @param: id
+     * 根据任务id查询任务详情
+     *
+     * @author zlh
+     * @param id
      *             任务id
-     * @description: 根据任务id查询任务详情
-     * @date: 17:08 2018/4/12
+     * @date 17:08 2018/4/12
      */
     Task queryTaskById(Long id);
 
     /**
-     * @author: zlh
-     * @param: id
+     * 根据任务删除id
+     *
+     * @author zlh
+     * @param id
      *             需要删除的任务的id
-     * @description: 根据任务删除id
-     * @date: 17:22 2018/4/12
+     * @date 17:22 2018/4/12
      */
     int deleteTaskById(Long id);
 
@@ -192,7 +196,7 @@ public interface TaskMapper {
      * TODO(修改任务状态) @param @param taskId status @param @return 设定文件 @return int
      * 返回类型 @throws
      */
-    void updateTaskStatus(@Param("id") Long id, @Param("status") String status);
+    void updateTaskStatus(@Param("id") Long id, @Param("status") String status,@Param("modifyUserId") String modifyUserId,@Param("modifyTime") Date modifyTime);
 
     /**
      * @author: gxl @Title: taskParentId @Description:
@@ -224,11 +228,11 @@ public interface TaskMapper {
 
     /**
      *
-     * @Title: updateTaskPendingToDelay @Description:
-     * TODO(我的待办任务转为延期,会将该节点及节点下的所有子节点变为延期状态) @param @param taskId
+     * @Title: updateTaskAlreadyToRunning @Description:
+     * TODO(重做) @param id
      * status @param @return 设定文件 @return JSONObject 返回类型 @throws
      */
-    void updateTaskAlreadyToRunning(List<Long> list);
+    int updateTaskAlreadyToRunning(Long id);
 
     /**
      *
@@ -295,14 +299,14 @@ public interface TaskMapper {
     int updateTaskToTest(Long id);
 
     /**
-     * 查询延时提前列表 @Title: queryleaddeferredTaskRemindersList @Description:
+     * 查询延期提前列表 @Title: queryleaddeferredTaskRemindersList @Description:
      * TODO @param @param leadtime @param @return @return
      * List<Map<String,Object>> @throws
      */
     List<Map<String, Object>> queryleaddeferredTaskRemindersList(Integer leadtime);
 
     /**
-     * 查询延时延后列表 @Title: querydelaytimedeferredTaskRemindersList @Description:
+     * 查询延期延后列表 @Title: querydelaytimedeferredTaskRemindersList @Description:
      * TODO @param @param delaytime @param @return @return
      * List<Map<String,Object>> @throws
      */
@@ -323,17 +327,60 @@ public interface TaskMapper {
             @Param("modifyTime") Date modifyTime);
 
     /**
-     * 延期提前列表 @Title: queryleaddelayedTaskReminderList @Description:
+     * 延时提前列表 @Title: queryleaddelayedTaskReminderList @Description:
      * TODO @param @param leadtime @param @return @return
      * List<Map<String,Object>> @throws
      */
     List<Map<String, Object>> queryleaddelayedTaskReminderList(Integer leadtime);
 
     /**
-     * 延期延后列表 @Title: querydelaydelayedTaskReminderList @Description:
+     * 延时延后列表 @Title: querydelaydelayedTaskReminderList @Description:
      * TODO @param @param delaytime @param @return @return
      * List<Map<String,Object>> @throws
      */
     List<Map<String, Object>> querydelaydelayedTaskReminderList(Integer delaytime);
 
+    /**
+     * 查询出我的任务
+     * @Title: queryMyAllTask
+     * @Description: TODO
+     * @param @param Task task
+     * @param @return
+     * @return List<Task>
+     * @throws
+     */
+    List<Task> queryMyAllTask(Task task);
+
+    /**
+     * 查询出我的任务 -- 流转到测试的开发任务
+     * @Title: queryMyAlreadyTask
+     * @Description: TODO
+     * @param @param Task task
+     * @param @return
+     * @return List<Task>
+     * @throws
+     */
+    List<Task> queryMyAlreadyTask(Task task);
+    
+    /**
+     * 通过项目ID查询延时列表
+    * @Title: querydelayedTaskReminderList
+    * @Description: TODO
+    * @param @param projectId
+    * @param @return
+    * @return List<Map<String,Object>> 
+    * @throws
+     */
+	List<Map<String, Object>> querydelayedTaskReminderList(String projectId);
+	
+	/**
+	 * 通过项目ID查询延期列表
+	* @Title: querydeferredTaskRemindersList
+	* @Description: TODO
+	* @param @param projectId
+	* @param @return
+	* @return List<Map<String,Object>> 
+	* @throws
+	 */
+	List<Map<String, Object>> querydeferredTaskRemindersList(String projectId);
 }

@@ -119,10 +119,10 @@ public class TaskOverdueController {
     }
 
     /**
-     * 查询延期任务列表 @Title: delayedTaskReminderList @Description: TODO @param @param
+     * 查询延时任务列表 @Title: delayedTaskReminderList @Description: TODO @param @param
      * leadtime @param @param delaytime @param @return @return JSONObject @throws
      */
-    @ApiOperation(value = "查询延期任务列表", notes = "查询延期任务列表")
+    @ApiOperation(value = "查询延时任务列表", notes = "查询延时任务列表")
     @ApiImplicitParams({
             @ApiImplicitParam(dataType = "Integer", name = "leadtime", paramType = "query", value = "提前提醒天数", required = true),
             @ApiImplicitParam(dataType = "Integer", name = "delaytime", paramType = "query", value = "延后提醒天数", required = true) })
@@ -147,23 +147,22 @@ public class TaskOverdueController {
     }
 
     /**
-     * 查询延时任务列表 @Title: deferredTaskRemindersList @Description: TODO @param @param
+     * 查询延期任务列表 @Title: deferredTaskRemindersList @Description: TODO @param @param
      * leadtime @param @param delaytime @param @return @return JSONObject @throws
      */
-    @ApiOperation(value = "查询延时任务列表", notes = "查询延时任务列表")
+    @ApiOperation(value = "查询延期任务列表", notes = "查询延期任务列表")
     @ApiImplicitParams({
-            @ApiImplicitParam(dataType = "Integer", name = "leadtime", paramType = "query", value = "提前提醒天数", required = true),
             @ApiImplicitParam(dataType = "Integer", name = "delaytime", paramType = "query", value = "延后提醒天数", required = true) })
     @RequestMapping(value = "/deferredTaskRemindersList", method = RequestMethod.POST)
-    public JSONObject deferredTaskRemindersList(@RequestParam(required = true) Integer leadtime,
+    public JSONObject deferredTaskRemindersList(
             @RequestParam(required = true) Integer delaytime) {
         ExecuteResult<Map<String, Object>> result = new ExecuteResult<Map<String, Object>>();
         try {
-            if (leadtime == null && "".equals(leadtime) || delaytime == null && "".equals(delaytime)) {
+            if ( delaytime == null && "".equals(delaytime)) {
 
                 return ApiResponse.errorPara();
             }
-            result = taskService.deferredTaskRemindersList(leadtime, delaytime);
+            result = taskService.deferredTaskRemindersList( delaytime);
             if (result.isSuccess()) {
                 return ApiResponse.success(result.getResult());
             }
@@ -189,6 +188,30 @@ public class TaskOverdueController {
         ExecuteResult<Map<String, Object>> result = new ExecuteResult<Map<String, Object>>();
         try {
             result = taskService.queryOverdueTaskDetailByTaskId(taskId);
+            if (result.isSuccess()) {
+                return ApiResponse.success(result.getResult());
+            }
+            return ApiResponse.error();
+        } catch (Exception e) {
+            return ApiResponse.error();
+        }
+    }
+    
+    /**
+     * <p>
+     * Description:通过项目ID查询延期延期任务列表
+     * </p>
+     * 
+     * @param
+     * @return {"status": {"message": "请求处理成功.","code": 200}, "data": {userModel}]
+     */
+    @ApiOperation(value = "通过项目ID查询延期延期任务列表", notes = "通过项目ID查询延期延期任务列表")
+    @RequestMapping(value = "/queryOverdueTaskByProjectId", method = RequestMethod.POST)
+    public JSONObject queryOverdueTaskByProjectId(
+            @ApiParam(name = "projectId", value = "项目Id", required = true) @RequestParam(required = true) String projectId) {
+        ExecuteResult<Map<String, Object>> result = new ExecuteResult<Map<String, Object>>();
+        try {
+            result = taskService.queryOverdueTaskByProjectId(projectId);
             if (result.isSuccess()) {
                 return ApiResponse.success(result.getResult());
             }

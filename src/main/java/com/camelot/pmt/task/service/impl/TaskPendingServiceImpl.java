@@ -8,6 +8,8 @@ import com.camelot.pmt.task.model.TaskFile;
 import com.camelot.pmt.task.service.TaskFileService;
 import com.camelot.pmt.task.service.TaskLogService;
 import com.camelot.pmt.task.service.TaskPendingService;
+import com.camelot.pmt.task.utils.Constant;
+import com.camelot.pmt.task.utils.Constant.TaskLogOperationButton;
 import com.camelot.pmt.task.utils.Constant.TaskStatus;
 import com.github.pagehelper.PageInfo;
 import com.camelot.pmt.task.utils.RRException;
@@ -120,25 +122,25 @@ public class TaskPendingServiceImpl implements TaskPendingService {
      */
     @Override
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public String updateTaskPendingToStatus(Long id, String taskStatus) {
+    public String updateTaskPendingToStatus(Long id, String taskStatus,String modifyUserId) {
         String result = new String();
         try {
-            if (id == null) {
+            if (id == null || modifyUserId == null) {
                 result = "传入的参数有误!";
                 return result;
             }
             // 此处判断是为了防止接口误调用导致数据错误的接口的一层保护
             if (TaskStatus.RUNING.getValue().equals(taskStatus)) {
                 // 根据id更新待办任务状态为正在进行
-                taskMapper.updateTaskStatus(id, TaskStatus.RUNING.getValue());
+                taskMapper.updateTaskStatus(id, TaskStatus.RUNING.getValue(),modifyUserId,new Date());
                 // 日志记录
-                taskLogService.insertTaskLog(id, "开始任务", "修改任务状态由：“待办”转换为“正在进行”");
+                taskLogService.insertTaskLog(id, TaskLogOperationButton.STARTTASK.getValue(), "修改任务状态由：“待办”转换为“正在进行”");
                 result = "修改任务状态为正在进行成功!";
             } else if (TaskStatus.CLOSE.getValue().equals(taskStatus)) {
                 // 根据id更新待办任务状态为关闭
-                taskMapper.updateTaskStatus(id, TaskStatus.CLOSE.getValue());
+                taskMapper.updateTaskStatus(id, TaskStatus.CLOSE.getValue(),modifyUserId,new Date());
                 // 日志记录
-                taskLogService.insertTaskLog(id, "关闭任务", "修改任务状态由：“待办”转换为“关闭”");
+                taskLogService.insertTaskLog(id, TaskLogOperationButton.CLOSETASK.getValue(), "修改任务状态由：“待办”转换为“关闭”");
                 result = "修改任务状态为关闭成功!";
             }
         } catch (Exception e) {
@@ -169,7 +171,7 @@ public class TaskPendingServiceImpl implements TaskPendingService {
             // 判断状态是否为待办，如果是待办更新为正在进行
             if (taskObj != null && TaskStatus.PENDINHG.getValue().equals(taskStatus)) {
                 // 根据id更新任务状态为正在进行
-                taskMapper.updateTaskStatus(id, TaskStatus.RUNING.getValue());
+                //taskMapper.updateTaskStatus(id, TaskStatus.RUNING.getValue());
                 if (taskObj.getTaskParentId() != null) {
                     // 查询taskId下的所有子节点
                     Task parentTaskNodes = taskMapper.queryParentTaskNodeById(taskObj.getTaskParentId());
@@ -207,8 +209,8 @@ public class TaskPendingServiceImpl implements TaskPendingService {
             if (TaskStatus.PENDINHG.getValue().equals(taskStatus)) {
                 // 格式化日期格式为yyyy-mm-dd,根据id更新待办任务状态为延期
                 if (!TaskStatus.CLOSE.getValue().equals(taskStatus)) {
-                    taskMapper.updateTaskPendingToDelay(id, TaskStatus.OVERDUE.getValue(), delayDescribe,
-                            estimateStartTime);
+                    //taskMapper.updateTaskPendingToDelay(id, TaskStatus.OVERDUE.getValue(), delayDescribe,
+                            //estimateStartTime);
                 }
                 // 查询taskId下的所有子节点
                 List<Task> childTaskNodes = taskMapper.queryTaskListNodeByParentId(id, null);

@@ -92,7 +92,7 @@ public interface OrgMapper {
     /**
      * 组织机构与用户的绑定(关系到用户 )
      **/
-    int updateOrgToUser(Org org);
+    int updateOrgToUser(OrgToUser orgToUser);
 
     /**
      * 删除组织机构与用户的已绑定(关系到用户 )

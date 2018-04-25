@@ -60,6 +60,17 @@ public interface TaskOverdueService {
      * leadtime @param @param delaytime @param @return @return
      * ExecuteResult<PageInfo<Map<String,Object>>> @throws
      */
-    ExecuteResult<Map<String, Object>> deferredTaskRemindersList(Integer leadtime, Integer delaytime);
+    ExecuteResult<Map<String, Object>> deferredTaskRemindersList(Integer delaytime);
+    
+    /**
+     * 通过项目ID查询延期延期任务列表
+    * @Title: queryOverdueTaskByProjectId
+    * @Description: TODO
+    * @param @param projectId
+    * @param @return
+    * @return ExecuteResult<Map<String,Object>> 
+    * @throws
+     */
+	ExecuteResult<Map<String, Object>> queryOverdueTaskByProjectId(String projectId);
 
 }

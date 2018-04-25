@@ -22,15 +22,15 @@ public interface TaskLogService {
 
     /**
      * 添加日志 @Title: insertTaskLog @Description: TODO @param @param
-     * tasklog @param @return @return ExecuteResult<String> @throws
+     * tasklog @param @return @return Boolean @throws
      */
-    ExecuteResult<String> insertTaskLog(Long taskId, String button, String peration);
+    Boolean insertTaskLog(Long taskId, String button, String peration);
 
     /**
      * 查询日志 @Title: queryTaskLogList @Description: TODO @param @param
      * tasklog @param @return @return ExecuteResult<String> @throws
      */
-    ExecuteResult<List<TaskLog>> queryTaskLogList(Long id);
+    List<TaskLog> queryTaskLogList(Long id);
 
     /**
      * 添加操作日志日志，需要传任务的id，操作名称 @Title: queryTaskLogList @Description:

@@ -19,15 +19,8 @@ public interface TaskRunningService {
      * @author myp
      * @since 2018-04-08
      */
-    ExecuteResult<List<Task>> queryTaskRunning(Task task);
+    List<Task> queryTaskRunning(Task task);
 
-    /**
-     * 根据id查询任务
-     *
-     * @author myp
-     * @since 2018-04-08
-     */
-    ExecuteResult<Task> queryTaskById(Long id);
 
     /**
      * 修改任务关闭接口
@@ -35,7 +28,7 @@ public interface TaskRunningService {
      * @author myp
      * @since 2018-04-08
      */
-    ExecuteResult<String> updateRunningToClose(Long id);
+    Boolean updateRunningToClose(Long id);
 
     /**
      * 修改任务完成接口
@@ -43,5 +36,5 @@ public interface TaskRunningService {
      * @author myp
      * @since 2018-04-08
      */
-    ExecuteResult<String> updateRunningToAlready(Task ptask, TaskFile taskFile);
+    Boolean updateRunningToAlready(Task ptask);
 }

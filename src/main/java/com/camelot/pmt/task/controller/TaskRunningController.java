@@ -58,7 +58,6 @@ public class TaskRunningController {
             @ApiImplicitParam(dataType = "String", name = "taskNum", paramType = "query", value = "任务编号"),
             @ApiImplicitParam(dataType = "Demand", name = "demand.id", paramType = "query", value = "需求编号") })
     public JSONObject queryTaskRunning(@ApiIgnore Task task) {
-        ExecuteResult<List<Task>> result = new ExecuteResult<List<Task>>();
         try {
             // 获取当前登录人
             User user = (User) ShiroUtils.getSessionAttribute("user");
@@ -66,11 +65,8 @@ public class TaskRunningController {
                 return ApiResponse.jsonData(APIStatus.INVALIDSESSION_LOGINOUTTIME);
             }
             task.setBeassignUser(user);
-            result = taskRunningService.queryTaskRunning(task);
-            if (result.isSuccess()) {
-                return ApiResponse.success(result.getResult());
-            }
-            return ApiResponse.error();
+            List<Task> tlist = taskRunningService.queryTaskRunning(task);
+            return ApiResponse.success(tlist);
         } catch (Exception e) {
             return ApiResponse.error();
         }
@@ -104,20 +100,10 @@ public class TaskRunningController {
     @RequestMapping(value = "/updateTaskToClose", method = RequestMethod.GET)
     public JSONObject updateTaskToClose(
             @ApiParam(name = "id", value = "任务标识号", required = true) @RequestParam(required = true) Long id) {
-        ExecuteResult<String> result = new ExecuteResult<String>();
         try {
-            Long userLoginId = Long.valueOf(1);
-            // 检查用户是否登录，需要去session中获取用户登录信息
-            if (StringUtils.isEmpty(userLoginId)) {
-                return ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
-            }
             // 更新我的任务为关闭
-            result = taskRunningService.updateRunningToClose(id);
-            // 判断是否成功
-            if (result.isSuccess()) {
-                return ApiResponse.jsonData(APIStatus.OK_200, result.getResult());
-            }
-            return ApiResponse.jsonData(APIStatus.ERROR_500, result.getResult());
+            Boolean result = taskRunningService.updateRunningToClose(id);
+            return ApiResponse.jsonData(APIStatus.OK_200, result);
         } catch (Exception e) {
             // 异常
             return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
@@ -133,21 +119,12 @@ public class TaskRunningController {
     @ApiOperation(value = "我的正在进行任务转为已完成、实现完成功能", notes = "我的正在进行任务转为已完成、实现完成功能")
     @RequestMapping(value = "/updateTaskRunningToAlready", method = RequestMethod.POST)
     @ApiImplicitParams({
-            @ApiImplicitParam(dataType = "Long", name = "id", paramType = "form", value = "任务id", required = true),
-            @ApiImplicitParam(dataType = "Long", name = "infactHour", paramType = "form", value = "任务实际工时", required = true),
-            @ApiImplicitParam(dataType = "date", name = "actualEndTime", paramType = "form", value = " 实际完成时间yyyy/MM/dd hh:MM:ss", required = true),
-            @ApiImplicitParam(dataType = "String", name = "attachmentUrl", paramType = "form", value = "附件的路径url", required = true),
-            @ApiImplicitParam(dataType = "String", name = "attachmentTile", paramType = "form", value = "附件名称", required = true) })
-    public JSONObject updateTaskRunningToAlready(@ApiIgnore Task task, @ApiIgnore TaskFile taskFile) {
-        ExecuteResult<String> result = new ExecuteResult<String>();
+            @ApiImplicitParam(dataType = "Long", name = "id", paramType = "form", value = "任务id", required = true) })
+    public JSONObject updateTaskRunningToAlready(@ApiIgnore Task task) {
         try {
             // 更新我的正在进行任务为完成
-            result = taskRunningService.updateRunningToAlready(task, taskFile);
-            // 判断是否成功
-            if (result.isSuccess()) {
-                return ApiResponse.jsonData(APIStatus.OK_200, result.getResult());
-            }
-            return ApiResponse.jsonData(APIStatus.ERROR_500, result.getResult());
+            Boolean result = taskRunningService.updateRunningToAlready(task);
+            return ApiResponse.jsonData(APIStatus.OK_200, result);
         } catch (Exception e) {
             // 异常
             return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());

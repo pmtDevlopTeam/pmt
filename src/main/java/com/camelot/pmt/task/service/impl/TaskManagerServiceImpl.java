@@ -12,21 +12,14 @@ import com.camelot.pmt.task.model.TaskLog;
 import com.camelot.pmt.task.service.TaskFileService;
 import com.camelot.pmt.task.service.TaskLogService;
 import com.camelot.pmt.task.service.TaskManagerService;
-import com.camelot.pmt.task.utils.FileUtils;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
+import com.camelot.pmt.task.utils.Constant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpSession;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -68,37 +61,21 @@ public class TaskManagerServiceImpl implements TaskManagerService {
      * @date 9:10 2018/4/12
      */
     @Override
-    public boolean insertTask(Task task, MultipartFile file) {
+    public boolean addTask(Task task) {
         try {
             // check参数
             if (task == null) {
+                throw new RuntimeException("参数错误");
             }
-            // 默认状态下任务状态为未开始 0为未开始的状态码
+            // 默认状态
             task.setStatus("0");
-            User user = (User) ShiroUtils.getSessionAttribute("user");
-            // 这个是根据当前登录用户查询的用户userid
+            // 根据当前登录用户查询的用户userid
+            User user = (User)ShiroUtils.getSessionAttribute("user");
             String userId = user.getUserId();
             user.setUserId(userId);
             task.setCreateUser(user);
-            int insertTaskResult = taskMapper.insertTask(task);
-            // 如果任务有附件，上传附件
-            if (file != null) {
-                String filePath = "D:/upload/";
-                FileUtils.uploadFile(file, filePath);
-
-                TaskFile taskFile = new TaskFile();
-                // 附件名称
-                taskFile.setAttachmentTile(file.getOriginalFilename());
-                // 附件路径
-                taskFile.setAttachmentUrl(filePath);
-                // 附件来源
-                taskFile.setAttachmentSource("任务");
-                // 来源id
-                taskFile.setSourceId(task.getId());
-
-                boolean insertTaskFileResult = taskFileService.insert(taskFile);
-                return (insertTaskFileResult && insertTaskResult == 1) ? true : false;
-            }
+            int insertTaskResult = taskMapper.addTask(task);
+            taskLogService.insertTaskLog(task.getId(),Constant.TaskLogOperationButton.CREATETASK.getValue(),"新增了任务");
             return (insertTaskResult == 1) ? true : false;
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
@@ -127,21 +104,18 @@ public class TaskManagerServiceImpl implements TaskManagerService {
             String createUserName = task.getCreateUser().getUsername();
             String status = task.getStatus();
             User user = (User) ShiroUtils.getSessionAttribute("user");
-            // 只有创建人本人可以操作
             if (!user.getUsername().equals(createUserName)) {
                 throw new RuntimeException("没有权限");
             }
-            // 已经指派的任务只能关闭不能删除
             if (task.getBeassignUser() != null) {
                 throw new RuntimeException("已指派的任务不能删除");
             }
-            // 已经开始的任务不能删除
             if (!"0".equals(status)) {
                 throw new RuntimeException("已开始的任务不能删除");
             }
             // 删除任务
             int deleteTaskByIdResult = taskMapper.deleteTaskById(id);
-
+            taskLogService.insertTaskLog(id,Constant.TaskLogOperationButton.DELETETASK.getValue(),"删除了任务");
             return deleteTaskByIdResult == 1 ? true : false;
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
@@ -164,14 +138,9 @@ public class TaskManagerServiceImpl implements TaskManagerService {
             if (task == null) {
                 throw new RuntimeException("参数错误");
             }
-            // 检查权限
-            Task task2 = taskMapper.queryTaskById(task.getId());
-            String createUserName = task2.getCreateUser().getUsername();
-            User user = (User) ShiroUtils.getSessionAttribute("user");
-            if (!user.getUsername().equals(createUserName)) {
-                throw new RuntimeException("没有权限");
-            }
+
             int updateTaskByIdResult = taskMapper.updateTaskById(task);
+            taskLogService.insertTaskLog(task.getId(),Constant.TaskLogOperationButton.UPDATETASK.getValue(),"修改了任务");
             return (updateTaskByIdResult == 1) ? true : false;
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
@@ -195,6 +164,7 @@ public class TaskManagerServiceImpl implements TaskManagerService {
                 throw new RuntimeException("参数错误");
             }
             int updateTaskByIdResult = taskMapper.updateTaskById(task);
+            taskLogService.insertTaskLog(task.getId(),Constant.TaskLogOperationButton.UPDATETASK.getValue(),"变更了需求");
             return updateTaskByIdResult == 1 ? true : false;
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
@@ -230,6 +200,7 @@ public class TaskManagerServiceImpl implements TaskManagerService {
 
             // 业务操作
             int updateTaskByIdResult = taskMapper.updateTaskById(task);
+            taskLogService.insertTaskLog(task.getId(),Constant.TaskLogOperationButton.UPDATETASK.getValue(),"更改了预期完成时间");
             return updateTaskByIdResult == 1 ? true : false;
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
@@ -238,66 +209,28 @@ public class TaskManagerServiceImpl implements TaskManagerService {
     }
 
     /**
-     * 指派
+     * 认领
      *
      * @param id
      *            需要修改的任务id
-     * @param userId
-     *            负责人的id
      * @return boolean
      * @author zlh
      * @date 11:36 2018/4/12
      */
     @Override
-    public boolean updateBeAssignUserById(Long id, String userId) {
+    public boolean updateBeAssignUserById(Long id) {
         try {
             // check参数
-            if (id == null && userId == null || "".equals(userId)) {
+            if (id == null) {
                 throw new RuntimeException("参数错误");
             }
 
-            // 检测权限
-            Task task = taskMapper.queryTaskById(id);
-            String createUserName = task.getCreateUser().getUsername();
-            String beAssignUsername = task.getBeassignUser().getUsername();
+            Task task = new Task();
+            task.setId(id);
             User user = (User) ShiroUtils.getSessionAttribute("user");
-            if (!user.getUsername().equals(createUserName) && !user.getUsername().equals(beAssignUsername)) {
-                throw new RuntimeException("没有权限");
-            }
-
-            task.getBeassignUser().setUserId(userId);
+            task.setBeassignUser(user);
             int updateTaskByIdResult = taskMapper.updateTaskById(task);
-            return updateTaskByIdResult == 1 ? true : false;
-        } catch (Exception e) {
-            LOGGER.error(e.getMessage());
-            throw new RuntimeException(e);
-        }
-    }
-
-    /**
-     * 指派（验证是否有项目经理角色权限）
-     *
-     * @param id
-     *            需要修改的任务id
-     * @param userId
-     *            负责人的id
-     * @return boolean
-     * @author zlh
-     * @date 11:36 2018/4/12
-     */
-    @Override
-    public boolean updateBeAssignUserByIdCheckPower(HttpSession session) {
-        try {
-            Long id = (Long) session.getAttribute("id");
-            String userId = (String) session.getAttribute("userId");
-            // check参数
-            if (id == null && userId == null || "".equals(userId)) {
-                throw new RuntimeException("参数错误");
-            }
-
-            Task task = taskMapper.queryTaskById(id);
-            task.getBeassignUser().setUserId(userId);
-            int updateTaskByIdResult = taskMapper.updateTaskById(task);
+            taskLogService.insertTaskLog(task.getId(),Constant.TaskLogOperationButton.UPDATETASK.getValue(),"认领了任务");
             return updateTaskByIdResult == 1 ? true : false;
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
@@ -332,10 +265,8 @@ public class TaskManagerServiceImpl implements TaskManagerService {
             taskFile.setAttachmentSource("任务");
             // 添加附件信息到map
             map.put("TaskFile", taskFileService.queryByTaskFile(taskFile));
-            ExecuteResult<List<TaskLog>> logList = taskLogService.queryTaskLogList(id);
-
+            List<TaskLog> logs = taskLogService.queryTaskLogList(id);
             // 添加日志信息到map
-            List<TaskLog> logs = logList.getResult();
             map.put("log", logs);
 
             return map;
@@ -358,12 +289,38 @@ public class TaskManagerServiceImpl implements TaskManagerService {
      */
     @Override
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public PageInfo<Task> queryAllTask(Integer page, Integer rows) {
+    public Map<String, List<Task>> queryAllTask() {
+        Map<String, List<Task>> map = new HashMap<>();
+        List<Task> pending = null;
+        List<Task> running = null;
+        List<Task> already = null;
+        List<Task> close = null;
         try {
-            PageHelper.startPage(page, rows);
             List<Task> tasks = taskMapper.queryAllTask();
-            PageInfo<Task> pageInfo = new PageInfo<>(tasks);
-            return pageInfo;
+            for (Task task : tasks) {
+                String status = task.getStatus();
+                if ("0".equals(status)) {
+                    pending = new ArrayList<>();
+                    pending.add(task);
+                }
+                if ("1".equals(status)) {
+                    running = new ArrayList<>();
+                    running.add(task);
+                }
+                if ("2".equals(status)) {
+                    already = new ArrayList<>();
+                    already.add(task);
+                }
+                if ("3".equals(status)) {
+                    close = new ArrayList<>();
+                    close.add(task);
+                }
+            }
+            map.put("pending",pending);
+            map.put("running",running);
+            map.put("already",already);
+            map.put("close",close);
+            return map;
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
             throw new RuntimeException(e);
@@ -373,40 +330,62 @@ public class TaskManagerServiceImpl implements TaskManagerService {
     /**
      * 根据条件查询任务
      *
-     * @param task
-     *            模糊查询的条件
-     * @param page
-     *            当前页
-     * @param rows
-     *            一页有几行
+     * @param task 模糊查询的条件
      * @return PageInfo<Task>
      * @author zlh
      */
     @Override
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public PageInfo<Task> queryTaskByTask(Task task, Integer page, Integer rows) {
+    public Map<String, List<Task>> queryTaskByTask(Task task) {
+        Map<String, List<Task>> map = new HashMap<>();
+        List<Task> pending = null;
+        List<Task> running = null;
+        List<Task> already = null;
+        List<Task> close = null;
         try {
             // 检查参数
             if (task == null) {
                 throw new RuntimeException("参数错误");
             }
+
             String[] ids = null;
+            // 如果负责人条件非空，则根据username查询userId
             if (task.getBeassignUser() != null) {
-                // 如果负责人条件非空，则根据username查询userId
                 List<User> users = userService.queryUsersByUserName(task.getBeassignUser().getUsername());
                 if (users.isEmpty()) {
                     return null;
                 }
-                // 赋值给string数组传给DAO层
                 ids = new String[users.size()];
                 for (int i = 0; i < users.size(); i++) {
                     ids[i] = users.get(i).getUserId();
                 }
             }
-            // PageHelper.startPage(page, rows);(分页加上会报错，不知道为什么)
+
             List<Task> tasks = taskMapper.queryTaskByTask(task, ids);
-            PageInfo<Task> pageInfo = new PageInfo<>(tasks);
-            return pageInfo;
+            for (Task task1 : tasks) {
+                String status = task1.getStatus();
+                if ("0".equals(status)) {
+                    pending = new ArrayList<>();
+                    pending.add(task1);
+                }
+                if ("1".equals(status)) {
+                    running = new ArrayList<>();
+                    running.add(task1);
+                }
+                if ("2".equals(status)) {
+                    already = new ArrayList<>();
+                    already.add(task1);
+                }
+                if ("3".equals(status)) {
+                    close = new ArrayList<>();
+                    close.add(task1);
+                }
+            }
+            map.put("pending",pending);
+            map.put("running",running);
+            map.put("already",already);
+            map.put("close",close);
+            return map;
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
             throw new RuntimeException(e);
