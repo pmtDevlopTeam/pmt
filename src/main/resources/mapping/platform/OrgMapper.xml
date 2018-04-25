@@ -18,19 +18,6 @@
 		<result column="org_leader" property="orgLeader" />
 		<result column="parentOrgname" property="parentOrgname" />
 		<result column="orgLeadername" property="orgLeadername" />
-		<association property="user"
-			javaType="com.camelot.pmt.platform.model.User">
-			<result property="id" column="id" />
-			<result property="userId" column="user_id" />
-			<result property="loginCode" column="login_code" />
-			<result property="password" column="password" />
-			<result property="username" column="user_name" />
-			<result property="state" column="state" />
-			<result property="createTime" column="create_time" />
-			<result property="modifyTime" column="modify_time" />
-			<result property="createUserId" column="create_user_id" />
-			<result property="modifyUserId" column="modify_user_id" />
-		</association>
 	</resultMap>
 	<resultMap id="OrgAndUserresultMap" type="com.camelot.pmt.platform.model.OrgToUser">
 		<id column="id" property="id" />
@@ -41,10 +28,6 @@
 		<result column="create_user_id" property="createUserId" />
 		<result column="modify_user_id" property="modifyUserId" />
 	</resultMap>
-
-
-
-
 	<sql id="Base_Column_List">
 		id,parent_id,org_id,org_name,state,create_time,modify_time,sort_num,org_code,create_user_id,modify_user_id,org_leader
 	</sql>
@@ -148,6 +131,8 @@
 		LEFT
 		JOIN platform_user pu
 		ON p.org_leader=pu.user_id
+		order by p.parent_id
+		asc,p.sort_num desc
 	</select>
 
 	<select id="queryOrgByParameters" parameterType="Org" resultMap="BaseResultMap">
@@ -198,7 +183,7 @@
 				and orgLeadername LIKE CONCAT('%',#{orgLeadername},'%')
 			</if>
 		</where>
-		order by parent_id asc,sort_num desc
+		order by p.parent_id asc,p.sort_num desc
 	</select>
 
 
@@ -224,7 +209,8 @@
 		LEFT
 		JOIN platform_user pu
 		ON p.org_leader=pu.user_id
-		WHERE p.org_id = #{orgId}
+		WHERE p.org_id =
+		#{orgId}
 	</select>
 
 	<delete id="deleteOrgByUserIdAndOrgId" parameterType="String">
