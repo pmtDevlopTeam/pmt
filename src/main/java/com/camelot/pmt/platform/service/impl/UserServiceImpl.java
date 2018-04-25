@@ -23,7 +23,7 @@ import java.util.List;
 /**
  * 
  * @Title: UserServiceImpl.java
- * @Description: TODO(用户操作实现层)
+ * @Description: 用户操作
  * @author: maple
  * @date: 2018年4月5日 下午3:12:12
  */
