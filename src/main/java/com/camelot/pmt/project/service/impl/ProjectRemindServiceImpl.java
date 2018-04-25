@@ -42,6 +42,7 @@ public class ProjectRemindServiceImpl implements ProjectRemindService {
         try {
             ProjectRemind projectRemind = remindModel.getProjectRemind();//项目提醒主体
             List<RemindContent> remindContentList = remindModel.getRemindContentList();//项目提醒内容
+            deleteProjectRemind(projectRemind.getProjectId());//删除项目提醒相关表
             String userId = user.getUserId();
             projectRemind.setCreateUserId(userId);
             projectRemind.setCreateTime(nowDate);
@@ -84,5 +85,45 @@ public class ProjectRemindServiceImpl implements ProjectRemindService {
             throw new RuntimeException(e);
         }
     }
+    
+    /**
+     * 删除项目提醒模块
+     */
+    private int deleteProjectRemind(Long projectId){
+        int count = 0;
+        count += projectRemindMapper.deleteByProjectId(projectId);
+        count += remindContentMapper.deleteByProjectId(projectId);
+        count += remindContentChildMapper.deleteByProjectId(projectId);
+        return count;
+    }
 
+    /**
+     * 根据项目id查询项目提醒信息
+     */
+    @Override
+    public RemindModel queryProjectRemindByProjectId(Long projectId) {
+        RemindModel remindModel = new RemindModel();
+        try {
+            ProjectRemind projectRemind = projectRemindMapper.queryByProjectId(projectId);
+            if(null == projectRemind){
+                return remindModel;
+            }
+            remindModel.setProjectRemind(projectRemind);//项目提醒主表内容
+            //根据项目id查询所有的内容表
+            List<RemindContent> remindContentList = remindContentMapper.queryByProjectId(projectId);
+            if((null == remindContentList)||(remindContentList.size()<=0)){
+                return remindModel;
+            }
+            for (RemindContent remindContent : remindContentList) {
+                remindContent.getId();
+                List<RemindContentChild> remindContentChildList = remindContentChildMapper.queryByContentId(remindContent.getId());
+                remindContent.setRemindContentChildList(remindContentChildList);
+            }
+            remindModel.setRemindContentList(remindContentList);
+            
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return remindModel;
+    }
 }

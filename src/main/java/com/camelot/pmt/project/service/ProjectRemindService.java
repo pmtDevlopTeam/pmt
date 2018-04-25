@@ -16,4 +16,6 @@ public interface ProjectRemindService {
 
     boolean addProjectRemind(RemindModel remindModel, User user);
 
+    RemindModel queryProjectRemindByProjectId(Long projectId);
+
 }

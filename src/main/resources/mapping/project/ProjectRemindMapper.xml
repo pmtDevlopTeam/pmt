@@ -126,4 +126,16 @@
       create_time = #{createTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  <!-- 根据项目id删除提醒主表 -->
+  <delete id="deleteByProjectId" parameterType="java.lang.Long">
+  	delete from project_remind
+    where project_id = #{projectId,jdbcType=BIGINT}
+  </delete>
+  <!-- 根据项目id查询项目提醒主表信息 -->
+  <select id="queryByProjectId" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from project_remind
+    where project_id = #{projectId,jdbcType=BIGINT}
+  </select>
 </mapper>
