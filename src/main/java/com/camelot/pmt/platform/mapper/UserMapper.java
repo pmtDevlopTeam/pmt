@@ -190,6 +190,16 @@ public interface UserMapper {
     
     /**
      * 
+     * Description:[连表查询获取用户列表]
+     * @param UserVo userVo
+     * @return  List<UserVo>
+     * @author [maple]
+     * 2018年4月13日下午3:06:37
+     */
+    List<UserVo> queryUserDetailsByUserId(String userId);
+    
+    /**
+     * 
      * Description:[获取所有的用户信息表 记录]
      * @return List<User>
      * @author [maple]

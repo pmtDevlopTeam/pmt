@@ -363,4 +363,26 @@ public interface TaskMapper {
      * @throws
      */
     List<Task> queryMyAlreadyTask(Task task);
+    
+    /**
+     * 通过项目ID查询延时列表
+    * @Title: querydelayedTaskReminderList
+    * @Description: TODO
+    * @param @param projectId
+    * @param @return
+    * @return List<Map<String,Object>> 
+    * @throws
+     */
+	List<Map<String, Object>> querydelayedTaskReminderList(String projectId);
+	
+	/**
+	 * 通过项目ID查询延期列表
+	* @Title: querydeferredTaskRemindersList
+	* @Description: TODO
+	* @param @param projectId
+	* @param @return
+	* @return List<Map<String,Object>> 
+	* @throws
+	 */
+	List<Map<String, Object>> querydeferredTaskRemindersList(String projectId);
 }

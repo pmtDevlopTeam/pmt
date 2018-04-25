@@ -141,8 +141,6 @@ public class UserController {
     		@ApiImplicitParam(
     				name="loginCode",value="登录账号",required=false,paramType="form",dataType="String"),
     		@ApiImplicitParam(
-    				name="state",value="用户状态",required=false,paramType="form",dataType="String"),
-    		@ApiImplicitParam(
     				name="userPhone",value="用户电话",required=false,paramType="form",dataType="String"),
     		@ApiImplicitParam(
     				name="userMail",value="用户邮箱",required=false,paramType="form",dataType="String"),
@@ -354,7 +352,7 @@ public class UserController {
      * @return {"status": {"message": "请求处理成功.","code": 200}, "data": {更新用户成功!}]
      */
     @ApiOperation(value="检查用户旧密码", notes="检查用户旧密码")
-    @RequestMapping(value = "user/checkoldUserPassword",method = RequestMethod.POST)
+    @RequestMapping(value = "user/checkOldUserPassword",method = RequestMethod.POST)
     public JSONObject checkoldUserPassword(@ApiParam(name="password",value = "用户旧密码", required = true) @RequestParam(required = true) String password) {
 		try {
 	    	boolean result = service.checkOldUserPassword(password);

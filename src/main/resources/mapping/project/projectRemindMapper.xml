@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.camelot.pmt.mapper.projectRemindMapper" >
+  <resultMap id="BaseResultMap" type="com.camelot.pmt.entity.projectRemind" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="project_id" property="projectId" jdbcType="BIGINT" />
+    <result column="remind_type" property="remindType" jdbcType="CHAR" />
+    <result column="remind_status" property="remindStatus" jdbcType="CHAR" />
+    <result column="remind_frequency" property="remindFrequency" jdbcType="CHAR" />
+    <result column="project_role_id" property="projectRoleId" jdbcType="VARCHAR" />
+    <result column="create_user_id" property="createUserId" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, project_id, remind_type, remind_status, remind_frequency, project_role_id, create_user_id, 
+    create_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from project_remind
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from project_remind
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.camelot.pmt.entity.projectRemind" >
+    insert into project_remind (id, project_id, remind_type, 
+      remind_status, remind_frequency, project_role_id, 
+      create_user_id, create_time)
+    values (#{id,jdbcType=BIGINT}, #{projectId,jdbcType=BIGINT}, #{remindType,jdbcType=CHAR}, 
+      #{remindStatus,jdbcType=CHAR}, #{remindFrequency,jdbcType=CHAR}, #{projectRoleId,jdbcType=VARCHAR}, 
+      #{createUserId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.camelot.pmt.entity.projectRemind" >
+    insert into project_remind
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="projectId != null" >
+        project_id,
+      </if>
+      <if test="remindType != null" >
+        remind_type,
+      </if>
+      <if test="remindStatus != null" >
+        remind_status,
+      </if>
+      <if test="remindFrequency != null" >
+        remind_frequency,
+      </if>
+      <if test="projectRoleId != null" >
+        project_role_id,
+      </if>
+      <if test="createUserId != null" >
+        create_user_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="projectId != null" >
+        #{projectId,jdbcType=BIGINT},
+      </if>
+      <if test="remindType != null" >
+        #{remindType,jdbcType=CHAR},
+      </if>
+      <if test="remindStatus != null" >
+        #{remindStatus,jdbcType=CHAR},
+      </if>
+      <if test="remindFrequency != null" >
+        #{remindFrequency,jdbcType=CHAR},
+      </if>
+      <if test="projectRoleId != null" >
+        #{projectRoleId,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null" >
+        #{createUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.camelot.pmt.entity.projectRemind" >
+    update project_remind
+    <set >
+      <if test="projectId != null" >
+        project_id = #{projectId,jdbcType=BIGINT},
+      </if>
+      <if test="remindType != null" >
+        remind_type = #{remindType,jdbcType=CHAR},
+      </if>
+      <if test="remindStatus != null" >
+        remind_status = #{remindStatus,jdbcType=CHAR},
+      </if>
+      <if test="remindFrequency != null" >
+        remind_frequency = #{remindFrequency,jdbcType=CHAR},
+      </if>
+      <if test="projectRoleId != null" >
+        project_role_id = #{projectRoleId,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null" >
+        create_user_id = #{createUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.camelot.pmt.entity.projectRemind" >
+    update project_remind
+    set project_id = #{projectId,jdbcType=BIGINT},
+      remind_type = #{remindType,jdbcType=CHAR},
+      remind_status = #{remindStatus,jdbcType=CHAR},
+      remind_frequency = #{remindFrequency,jdbcType=CHAR},
+      project_role_id = #{projectRoleId,jdbcType=VARCHAR},
+      create_user_id = #{createUserId,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
