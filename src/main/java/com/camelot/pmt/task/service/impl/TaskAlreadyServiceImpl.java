@@ -1,10 +1,12 @@
 package com.camelot.pmt.task.service.impl;
 
+import com.baomidou.mybatisplus.plugins.pagination.PageHelper;
 import com.camelot.pmt.task.mapper.TaskMapper;
 import com.camelot.pmt.task.model.Task;
 import com.camelot.pmt.task.service.TaskAlreadyService;
 import com.camelot.pmt.task.service.TaskLogService;
 import com.camelot.pmt.task.utils.Constant;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -141,6 +143,27 @@ public class TaskAlreadyServiceImpl implements TaskAlreadyService {
         map.put("alreadyList",alreadyList);
         map.put("closeList",closeList);
         return map;
+    }
+
+
+    /**
+     * 查询我的已办任务
+     *
+     * @param : task
+     *
+     * @return PageInfo<Task>
+     */
+
+    @Override
+    public PageInfo<Task> queryTaskAlready(Integer page, Integer rows,Task task) {
+               // 利用PageHelper进行分页
+                PageHelper.startPage(page, rows);
+               // 根据用户id查询全部的已完成的任务
+                List<Task> list = taskMapper.listTaskAlready(task);
+                // 分页之后的结果集
+                PageInfo<Task> clist = new PageInfo(list);
+               // 返回结果集
+                return clist;
     }
 
 }

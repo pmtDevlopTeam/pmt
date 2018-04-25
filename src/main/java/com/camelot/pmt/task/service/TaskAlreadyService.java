@@ -1,6 +1,8 @@
 package com.camelot.pmt.task.service;
 
+import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.task.model.Task;
+import com.github.pagehelper.PageInfo;
 
 import java.util.List;
 import java.util.Map;
@@ -58,5 +60,15 @@ public interface TaskAlreadyService {
      */
 
     Map<String,Object> queryMyAllTask(Task task);
+
+    /**
+     * 查询我的已办任务列表
+     *
+     * @param Integer page, Integer rows, Task task
+     *
+     * @return PageInfo<Task>
+     */
+
+    PageInfo<Task> queryTaskAlready(Integer page, Integer rows, Task task);
 
 }

@@ -383,4 +383,15 @@ public interface TaskMapper {
 	* @throws
 	 */
 	List<Map<String, Object>> querydeferredTaskRemindersList(String projectId);
+
+    /**
+     * 查询出我的已办任务
+     * @Title: listTaskAlready
+     * @Description: TODO
+     * @param @param Task task
+     * @param @return
+     * @return List<Task>
+     * @throws
+     */
+    List<Task> listTaskAlready(Task task);
 }

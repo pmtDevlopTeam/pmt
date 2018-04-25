@@ -10,6 +10,7 @@ import com.camelot.pmt.task.model.TaskLog;
 import com.camelot.pmt.task.service.TaskAlreadyService;
 import com.camelot.pmt.task.service.TaskLogService;
 import com.camelot.pmt.task.service.TaskManagerService;
+import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -186,6 +187,39 @@ public class TaskAlreadyController {
         } catch (Exception e) {
             logger.error(e.getMessage());
             return ApiResponse.jsonData(APIStatus.ERROR_500);
+        }
+    }
+
+
+    /**
+     * 查询所有已完成的任务 queryTaskAlready
+     *
+     * @param
+     * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
+     */
+    @ApiOperation(value = "查询所有已完成的任务", notes = "查询所有已完成的任务")
+    @RequestMapping(value = "/queryTaskAlready", method = RequestMethod.GET)
+    @ApiImplicitParams({
+            @ApiImplicitParam(dataType = "ProjectMain", name = "project.id", paramType = "query", value = "项目编号"),
+            @ApiImplicitParam(dataType = "String", name = "taskName", paramType = "query", value = "任务名称"),
+            @ApiImplicitParam(dataType = "String", name = "taskNum", paramType = "query", value = "任务编号"),
+            @ApiImplicitParam(dataType = "Demand", name = "demand.id", paramType = "query", value = "需求编号"),
+            @ApiImplicitParam(dataType = "Integer",name = "page" , required = true, paramType = "query",value = "页码"),
+            @ApiImplicitParam(dataType = "Integer",name = "rows" , required = true, paramType = "query",value = "每页数量")
+    })
+    public JSONObject queryTaskAlready(@ApiIgnore Task task, Integer page, Integer rows) {
+        try {
+            // 获取当前登录人
+            User user = (User) ShiroUtils.getSessionAttribute("user");
+            if (null == user) {
+                return ApiResponse.jsonData(APIStatus.INVALIDSESSION_LOGINOUTTIME);
+            }
+            task.setBeassignUser(user);
+            PageInfo<Task> taskAlreadyList = taskAlreadyService.queryTaskAlready(page, rows,task);
+            return ApiResponse.success(taskAlreadyList);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return ApiResponse.error();
         }
     }
 
