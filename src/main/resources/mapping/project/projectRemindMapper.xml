@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.camelot.pmt.mapper.projectRemindMapper" >
-  <resultMap id="BaseResultMap" type="com.camelot.pmt.entity.projectRemind" >
+<mapper namespace="com.camelot.pmt.project.mapper.projectRemindMapper" >
+  <resultMap id="BaseResultMap" type="projectRemind" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="project_id" property="projectId" jdbcType="BIGINT" />
     <result column="remind_type" property="remindType" jdbcType="CHAR" />
@@ -25,7 +25,7 @@
     delete from project_remind
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.camelot.pmt.entity.projectRemind" >
+  <insert id="insert" parameterType="projectRemind" >
     insert into project_remind (id, project_id, remind_type, 
       remind_status, remind_frequency, project_role_id, 
       create_user_id, create_time)
@@ -33,7 +33,7 @@
       #{remindStatus,jdbcType=CHAR}, #{remindFrequency,jdbcType=CHAR}, #{projectRoleId,jdbcType=VARCHAR}, 
       #{createUserId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.camelot.pmt.entity.projectRemind" >
+  <insert id="insertSelective" parameterType="projectRemind" >
     insert into project_remind
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -88,7 +88,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.camelot.pmt.entity.projectRemind" >
+  <update id="updateByPrimaryKeySelective" parameterType="projectRemind" >
     update project_remind
     <set >
       <if test="projectId != null" >
@@ -115,7 +115,7 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.camelot.pmt.entity.projectRemind" >
+  <update id="updateByPrimaryKey" parameterType="projectRemind" >
     update project_remind
     set project_id = #{projectId,jdbcType=BIGINT},
       remind_type = #{remindType,jdbcType=CHAR},

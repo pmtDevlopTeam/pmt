@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.camelot.pmt.mapper.remindReportMapper" >
-  <resultMap id="BaseResultMap" type="com.camelot.pmt.entity.remindReport" >
+<mapper namespace="com.camelot.pmt.project.mapper.remindReportMapper" >
+  <resultMap id="BaseResultMap" type="remindReport" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="project_id" property="projectId" jdbcType="BIGINT" />
     <result column="remind_type" property="remindType" jdbcType="CHAR" />
@@ -9,7 +9,7 @@
     <result column="create_user_id" property="createUserId" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
   </resultMap>
-  <resultMap id="ResultMapWithBLOBs" type="com.camelot.pmt.entity.remindReport" extends="BaseResultMap" >
+  <resultMap id="ResultMapWithBLOBs" type="remindReport" extends="BaseResultMap" >
     <result column="daily_content" property="dailyContent" jdbcType="LONGVARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
@@ -30,7 +30,7 @@
     delete from remind_report
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.camelot.pmt.entity.remindReport" >
+  <insert id="insert" parameterType="remindReport" >
     insert into remind_report (id, project_id, remind_type, 
       remind_frequency, create_user_id, create_time, 
       daily_content)
@@ -38,7 +38,7 @@
       #{remindFrequency,jdbcType=CHAR}, #{createUserId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
       #{dailyContent,jdbcType=LONGVARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.camelot.pmt.entity.remindReport" >
+  <insert id="insertSelective" parameterType="remindReport" >
     insert into remind_report
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -87,7 +87,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.camelot.pmt.entity.remindReport" >
+  <update id="updateByPrimaryKeySelective" parameterType="remindReport" >
     update remind_report
     <set >
       <if test="projectId != null" >
@@ -111,7 +111,7 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.camelot.pmt.entity.remindReport" >
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="remindReport" >
     update remind_report
     set project_id = #{projectId,jdbcType=BIGINT},
       remind_type = #{remindType,jdbcType=CHAR},
@@ -121,7 +121,7 @@
       daily_content = #{dailyContent,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.camelot.pmt.entity.remindReport" >
+  <update id="updateByPrimaryKey" parameterType="remindReport" >
     update remind_report
     set project_id = #{projectId,jdbcType=BIGINT},
       remind_type = #{remindType,jdbcType=CHAR},
