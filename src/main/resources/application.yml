@@ -1,10 +1,10 @@
 server:
   port: 8080
 
-
-flyway:
-  baselineOnMigrate: true
-  locations: db/schema, db/data
+#
+#flyway:
+#  baselineOnMigrate: true
+#  locations: db/schema, db/data
 
 
 spring:
@@ -61,16 +61,5 @@ pagehelper:
   supportMethodsArguments: true
   params: count=countSql
 
-
-# dev
----
-
-spring:
-  profiles: dev
-  datasource:
-    name: dev
-    url: jdbc:mysql://127.0.0.1:3306/pmt?useUnicode=true&characterEncoding=utf8
-    username: camelot
-    password: camelot!123
 
 
