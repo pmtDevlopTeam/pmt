@@ -82,6 +82,11 @@ public class ProjectMain implements Serializable {
     private String projectDesc;
 
     /**
+     * 项目可见性
+     */
+    private String projectVisible;
+
+    /**
      * 主键
      * 
      * @return id 主键
@@ -308,4 +313,13 @@ public class ProjectMain implements Serializable {
     public void setProjectDesc(String projectDesc) {
         this.projectDesc = projectDesc == null ? null : projectDesc.trim();
     }
+
+    public String getProjectVisible() {
+        return projectVisible;
+    }
+
+    public void setProjectVisible(String projectVisible) {
+        this.projectVisible = projectVisible == null ? null : projectVisible.trim();
+    }
+
 }

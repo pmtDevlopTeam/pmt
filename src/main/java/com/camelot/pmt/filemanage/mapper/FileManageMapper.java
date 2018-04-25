@@ -27,7 +27,7 @@ public interface FileManageMapper {
 
     List<FileManage> queryFileByGroupId(FileManageGroup fileManageGroup);// 根据组id查询
 
-    List selectFileManagerByGroupId(Long id);// 根据组id查询
+    List<Long> queryFileIdByGroupId(Long id);// 根据组id查询
 
     int deleteBatchFileById(List fileManagerIds);// 根据id进行批量删除
 

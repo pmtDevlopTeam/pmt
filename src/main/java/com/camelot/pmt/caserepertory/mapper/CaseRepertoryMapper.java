@@ -49,4 +49,6 @@ public interface CaseRepertoryMapper {
 
     List<CaseRepertory> selectCondition(CaseRepertory caseRepertory);
 
+    String querySequence(String name);
+
 }

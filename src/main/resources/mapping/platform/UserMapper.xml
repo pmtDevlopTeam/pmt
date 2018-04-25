@@ -27,6 +27,7 @@
         <result property="orgName" column="orgName"/>
         <result property="roleName" column="roleName"/>
         <result property="userPhone" column="userPhone"/>
+        <result property="userMail" column="userMail"/>
         <result property="state" column="state"/>
         <result property="roleId" column="roleId"/>
     </resultMap>
@@ -272,6 +273,34 @@
 		where user_id = #{userId} 
 	</update>
 	
+	<!-- 重置密码 -->
+	<update id="updateUserPasswordByUserId" parameterType="com.camelot.pmt.platform.model.User" >
+		update platform_user
+		    <set>
+				<if test = "password != null ">
+					password = #{password},
+				</if>
+				<if test = "modifyUserId != null ">
+					modify_user_id = #{modifyUserId}
+				</if>
+			</set>
+		where user_id = #{userId} 
+	</update>
+	
+	<!-- 更新用户状态 -->
+	<update id="updateUserStateByUserId" parameterType="com.camelot.pmt.platform.model.User" >
+		update platform_user
+		    <set>
+				<if test = "state != null ">
+					state = #{state},
+				</if>
+				<if test = "modifyUserId != null ">
+					modify_user_id = #{modifyUserId}
+				</if>
+			</set>
+		where user_id = #{userId} 
+	</update>
+	
 	<!-- 检查用户表登录账号是否存在 -->
 	 <select id="queryUserIsExistByLoginCode" resultMap="userModel" parameterType="java.lang.String" >
         select <include refid="userColumns"/> from platform_user where login_code = #{loginCode}
@@ -315,12 +344,12 @@
 	
 	<!--根据用户名模糊查询，获取用户对象-->
 	<select id="queryUsersByUserName" resultMap="userModel" parameterType="java.lang.String">
-		select <include refid="userColumnsNoPassword"/> from platform_user where user_name LIKE  CONCAT('%',#{username},'%')
+		select <include refid="userColumnsNoPassword"/> from platform_user where user_name LIKE CONCAT('%',#{username},'%')
 	</select>
 	
 	<!--查询所有用户,不分页-->
 	<select id="queryAllUsers" resultMap="userModel">
-		select <include refid="userColumnsNoPassword"/> from platform_user
+		select <include refid="userColumnsNoPassword"/> from platform_user where state = 0
 	</select>
 	
 	<!--查询所有用户详情表,不分页-->
@@ -365,59 +394,136 @@
 
 	<!-- 用户列表展示，多表关联结果集 -->
 	<select id="queryUsersList" resultMap="userVoResultMap" parameterType="com.camelot.pmt.platform.model.vo.UserVo">
-	SELECT
-	m.userIds userId,
-	m.userJobNums userJobNum,
-	m.userNames username,
-	m.loginCodes loginCode,
-	m.orgName orgName,
-	pr.role_name roleName,
-	m.userPhones userPhone,
-	m.stateses state,
-	pr.role_id roleId
-	FROM
-	(
-	SELECT
-	t.userName userNames,
-	t.loginCode loginCodes,
-	t.userJobNum userJobNums,
-	t.states stateses,
-	t.userPhone userPhones,
-	t.userId userIds,
-	po.org_name orgName
-	FROM
-	(
-	SELECT
-	u.user_name userName,
-	u.login_code loginCode,
-	ui.user_job_num userJobNum,
-	u.state states,
-	ui.user_phone userPhone,
-	u.user_id userId
-	FROM
-	platform_user u
-	JOIN platform_user_info ui ON u.user_id = ui.user_id
-	) t
-	JOIN platform_user_org puo ON t.userId = puo.user_id
-	JOIN platform_org po ON puo.org_id = po.org_id
-	) m
-	JOIN platform_user_role pur ON m.userIds = pur.user_id
-	JOIN platform_role pr ON pur.role_id = pr.role_id
-	<where>
-		<if test="userJobNum != null">
-			m.userJobNums = #{userJobNum}
-		</if>
-		<if test="userName != null">
-			AND m.userNames = #{userName}
-		</if>
-		<if test="roleId != null">
-			AND pr.role_id = #{roleId}
-		</if>
-		<if test="state != null">
-			AND m.stateses = #{state}
-		</if>
-    </where>
-    </select>
+		SELECT
+		m.userIds userId,
+		m.userJobNums userJobNum,
+		m.userNames username,
+		m.loginCodes loginCode,
+		m.orgName orgName,
+		pr.role_name roleName,
+		m.userPhones userPhone,
+		m.userMails userMail,
+		m.stateses state,
+		pr.role_id roleId
+		FROM
+		(
+		SELECT
+		t.userName
+		userNames,
+		t.loginCode loginCodes,
+		t.userJobNum userJobNums,
+		t.states
+		stateses,
+		t.userPhone userPhones,
+		t.userMail userMails,
+		t.userId userIds,
+		po.org_name orgName
+		FROM
+		(
+		SELECT
+		u.user_name
+		userName,
+		u.login_code loginCode,
+		ui.user_job_num userJobNum,
+		u.state
+		states,
+		ui.user_phone userPhone,
+		ui.user_mail userMail,
+		u.user_id
+		userId
+		FROM
+		platform_user u
+		JOIN platform_user_info
+		ui ON u.user_id =
+		ui.user_id
+		) t
+		JOIN platform_user_org puo ON t.userId =
+		puo.user_id
+		JOIN
+		platform_org po ON puo.org_id = po.org_id
+		) m
+		JOIN
+		platform_user_role pur
+		ON m.userIds = pur.user_id
+		JOIN platform_role pr
+		ON pur.role_id =
+		pr.role_id
+			<where>
+				<if test="userId != null">
+					m.userIds = #{userId}
+				</if>
+				<if test="userJobNum != null">
+					AND m.userJobNums LIKE CONCAT('%',#{userJobNum},'%')
+				</if>
+				<if test="userName != null">
+					AND m.userNames LIKE CONCAT('%',#{userName},'%')
+				</if>
+				<if test="roleId != null">
+					AND pr.role_id = #{roleId}
+				</if>
+				<if test="state != null">
+					AND m.stateses = #{state}
+				</if>
+			</where>
+	</select>
+	
+	<!-- 根据userId获取单个用户详情 -->
+	<select id="queryUserDetailsByUserId" resultMap="userVoResultMap" parameterType="java.lang.String">
+		SELECT
+		m.userIds userId,
+		m.userJobNums userJobNum,
+		m.userNames username,
+		m.loginCodes loginCode,
+		m.orgName orgName,
+		pr.role_name roleName,
+		m.userPhones userPhone,
+		m.userMails userMail,
+		m.stateses state,
+		pr.role_id roleId
+		FROM
+		(
+		SELECT
+		t.userName
+		userNames,
+		t.loginCode loginCodes,
+		t.userJobNum userJobNums,
+		t.states
+		stateses,
+		t.userPhone userPhones,
+		t.userMail userMails,
+		t.userId userIds,
+		po.org_name orgName
+		FROM
+		(
+		SELECT
+		u.user_name
+		userName,
+		u.login_code loginCode,
+		ui.user_job_num userJobNum,
+		u.state
+		states,
+		ui.user_phone userPhone,
+		ui.user_mail userMail,
+		u.user_id
+		userId
+		FROM
+		platform_user u
+		JOIN platform_user_info
+		ui ON u.user_id =
+		ui.user_id
+		) t
+		JOIN platform_user_org puo ON t.userId =
+		puo.user_id
+		JOIN
+		platform_org po ON puo.org_id = po.org_id
+		) m
+		JOIN
+		platform_user_role pur
+		ON m.userIds = pur.user_id
+		JOIN platform_role pr
+		ON pur.role_id =
+		pr.role_id where m.userIds = #{userId}
+	</select>
     
    
     

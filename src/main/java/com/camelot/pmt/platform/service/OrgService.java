@@ -2,10 +2,6 @@ package com.camelot.pmt.platform.service;
 
 import java.util.List;
 
-import com.alibaba.fastjson.JSONObject;
-import com.camelot.pmt.common.DataGrid;
-import com.camelot.pmt.common.ExecuteResult;
-import com.camelot.pmt.common.Pager;
 import com.camelot.pmt.platform.model.Org;
 import com.camelot.pmt.platform.model.OrgToUser;
 import com.camelot.pmt.platform.model.User;
@@ -57,7 +53,7 @@ public interface OrgService {
      * @param org
      * @return
      */
-    PageInfo queryOrgsByPage(int pageNum, int pageSize);
+    PageInfo<Org> queryOrgsByPage(int pageNum, int pageSize);
 
     /**
      * 查询多个子部门
@@ -72,20 +68,9 @@ public interface OrgService {
     String deleteOrgSubByOrgId(String orgId);
 
     /**
-     * 组织机构列表详情(关系到用户 即部门负责人)
-     */
-    List<OrgToUser> queryOrgsDetail();
-
-    /**
-     * 组织机构 根据orgId查看详情(关系到用户 即部门负责人)
-     */
-
-    List<OrgToUser> queryOrgsDetailByOrgId(String orgId);
-
-    /**
      * 组织机构与用户的绑定(关系到用户 )
      **/
-    String addOrgToUser(Org org);
+    String addOrgToUser(OrgToUser orgToUser);
 
     /**
      * 组织机构与用户的绑定 根据orgId查询所有用户(关系到用户 )
@@ -102,7 +87,7 @@ public interface OrgService {
      * @param orgId,orgCode,orgname
      * @return List<Org>
      **/
-    PageInfo queryOrgInfo(Org org, int pageNum, int pageSize);
+    PageInfo<Org> queryOrgInfo(Org org, int pageNum, int pageSize);
 
     /**
      * 修改组织机构的状态
@@ -122,6 +107,6 @@ public interface OrgService {
      * @return JSONObject
      * 
      **/
-    String updateOrgToUser(Org org);
+    String updateOrgToUser(OrgToUser orgToUser);
 
 }

@@ -21,14 +21,20 @@ public interface TaskLogService {
     ExecuteResult<String> insertTaskLog(TaskLog tasklog);
 
     /**
+     * 添加日志 @Title: insertTaskLog @Description: TODO @param @param
+     * tasklog @param @return @return Boolean @throws
+     */
+    Boolean insertTaskLog(Long taskId, String button, String peration);
+
+    /**
      * 查询日志 @Title: queryTaskLogList @Description: TODO @param @param
      * tasklog @param @return @return ExecuteResult<String> @throws
      */
-    ExecuteResult<List<TaskLog>> queryTaskLogList(Long id);
+    List<TaskLog> queryTaskLogList(Long id);
 
     /**
      * 添加操作日志日志，需要传任务的id，操作名称 @Title: queryTaskLogList @Description:
      * TODO @param @param tasklog @return ExecuteResult<String> @throws
      */
-    void queryTaskLogList(Long id, String peration);
+    void addTaskLogList(Long id, String peration);
 }

@@ -7,6 +7,8 @@ import com.camelot.pmt.caserepertory.model.CaseRepertory;
 import com.camelot.pmt.caserepertory.model.CaseRepertoryStep;
 import com.camelot.pmt.caserepertory.service.CaseRepertoryService;
 import com.camelot.pmt.common.ExecuteResult;
+import com.camelot.pmt.platform.model.User;
+import com.camelot.pmt.platform.shiro.ShiroUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
@@ -31,20 +33,26 @@ public class CaseRepertoryServiceImpl implements CaseRepertoryService {
     @Autowired
     private CaseRepertoryStepMapper caseRepertoryStepMapper;
 
+    @Autowired
+    private ShiroUtils shiroUtils;
+
     @Override
     @Transactional
     public boolean addCaseRepertoryByCaseid(String ids) {
         String[] params = ids.split(",");
         int result1 = 0;
+        User user = (User) shiroUtils.getSessionAttribute("user");
         for (int i = 0; i < params.length; i++) {
             String param = params[i].toString().trim();
             long param1 = Long.parseLong(param);
             CaseRepertory caseRepertory = new CaseRepertory();
             caseRepertory.setId(param1);
-            caseRepertory.setCreateUserId("12");
+            caseRepertory.setCreateUserId(user.getUserId());
             caseRepertory.setCreateTime(new Date());
-            caseRepertory.setModifyUserId("12");
+            caseRepertory.setModifyUserId(user.getUserId());
             caseRepertory.setModifyTime(new Date());
+            String num1 = caseRepertoryMapper.querySequence("caser_num");
+            caseRepertory.setNum(num1);
             // 复制数据到用例库主表并返回主键id
             result1 = caseRepertoryMapper.addCaseRepertoryByCaseid(caseRepertory);
             // 复制步骤数到用例库步骤表中并且更新父id为 result1
@@ -61,15 +69,16 @@ public class CaseRepertoryServiceImpl implements CaseRepertoryService {
     @Transactional
     public boolean addUserCaseByCaseRepertoryid(String ids) {
         int result1 = 0;
+        User user = (User) shiroUtils.getSessionAttribute("user");
         String[] params = ids.split(",");
         for (int i = 0; i < params.length; i++) {
             String param = params[i].toString().trim();
             long param1 = Long.parseLong(param);
             CaseRepertory caseRepertory = new CaseRepertory();
             caseRepertory.setId(param1);
-            caseRepertory.setCreateUserId("12");
+            caseRepertory.setCreateUserId(user.getUserId());
             caseRepertory.setCreateTime(new Date());
-            caseRepertory.setModifyUserId("12");
+            caseRepertory.setModifyUserId(user.getUserId());
             caseRepertory.setModifyTime(new Date());
             // 复制数据到用例主表并返回主键id
             result1 = caseRepertoryMapper.addUserCaseByCaseRepertoryid(caseRepertory);
@@ -93,19 +102,24 @@ public class CaseRepertoryServiceImpl implements CaseRepertoryService {
     @Transactional
     public boolean addCaseRepertory(CaseRepertory caseRepertory) {
         // 新增用例
-        caseRepertory.setCreateUserId("12");
+        User user = (User) shiroUtils.getSessionAttribute("user");
+        caseRepertory.setCreateUserId(user.getUserId());
         caseRepertory.setCreateTime(new Date());
-        caseRepertory.setModifyUserId("12");
+        caseRepertory.setModifyUserId(user.getUserId());
         caseRepertory.setModifyTime(new Date());
+        String num1 = caseRepertoryMapper.querySequence("caser_num");
+        caseRepertory.setNum(num1);
         int result = caseRepertoryMapper.insertSelective(caseRepertory);
         // mybatis返回主键,并设置外键
         Long id = caseRepertory.getId();
         List<CaseRepertoryStep> list = caseRepertory.getDetail();
-        for (CaseRepertoryStep caseRepertoryStep : list) {
-            caseRepertoryStep.setUseCaseId(id);
-        }
         // 批量新增用例步骤
-        caseRepertoryStepMapper.insertBatch(list);
+        if (list.size() > 0) {
+            for (CaseRepertoryStep caseRepertoryStep : list) {
+                caseRepertoryStep.setUseCaseId(id);
+            }
+            caseRepertoryStepMapper.insertBatch(list);
+        }
         return result > 0 ? true : false;
 
     }
@@ -158,7 +172,8 @@ public class CaseRepertoryServiceImpl implements CaseRepertoryService {
     @Transactional
     public boolean updateCaseRepertory(CaseRepertory caseRepertory) {
         // 更新用例库
-        caseRepertory.setModifyUserId("12");
+        User user = (User) shiroUtils.getSessionAttribute("user");
+        caseRepertory.setModifyUserId(user.getUserId());
         caseRepertory.setModifyTime(new Date());
         int result = caseRepertoryMapper.updateByPrimaryKeySelective(caseRepertory);
         // 过滤出删除的步骤

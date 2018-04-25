@@ -55,25 +55,21 @@ public class ProjectMainServiceImpl implements ProjectMainService {
     private UseCaseMapper useCaseMapper;
 
     /**
-     * 保存项目表以及相关表的方法
+     * 新增项目
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public int addProject(String userId, String projectName, String projectStatus, Date startTime, Date endTime,
-            String projectDesc, Integer budgetaryHours) {
+    public int addProject(String projectName, String projectStatus, String projectDesc) {
         int projectMainNum = 0;
         int projectOperateNum = 0;
-        int projectBudgetNum = 0;
         try {
             // 保存projectMain
             User user = (User) ShiroUtils.getSessionAttribute("user");
             if (user != null && user.getUserId() != null) {
                 ProjectMain projectMain = new ProjectMain();
-                projectMain.setUserId(userId);
+                projectMain.setUserId(user.getUserId());
                 projectMain.setProjectName(projectName);
                 projectMain.setProjectStatus(projectStatus);
-                projectMain.setStartTime(startTime);
-                projectMain.setEndTime(endTime);
                 projectMain.setProjectDesc(projectDesc);
                 projectMain.setCreateUserId(user.getUserId());
                 projectMain.setModifyUserId(user.getUserId());
@@ -95,16 +91,7 @@ public class ProjectMainServiceImpl implements ProjectMainService {
                 projectOperate.setOperateDesc(sdf.format(new Date()) + "    新增：    "
                         + GetJsonFormat.getJsonFormat(JSON.toJSON(compareT).toString()));
                 projectOperateNum = projectOperateMapper.addProjectOperate(projectOperate);
-                // 保存projectBudget
-                ProjectBudget projectBudget = new ProjectBudget();
-                projectBudget.setProjectId(projectMain.getId());
-                projectBudget.setCreateUserId(user.getUserId());
-                projectBudget.setModifyUserId(user.getUserId());
-                projectBudget.setCreateTime(new Date());
-                projectBudget.setModifyTime(new Date());
-                projectBudget.setBudgetaryHours(budgetaryHours);
-                projectBudgetNum = projectBudgetMapper.addProjectBudget(projectBudget);
-                if (projectMainNum > 0 && projectOperateNum > 0 && projectBudgetNum > 0) {
+                if (projectMainNum > 0 && projectOperateNum > 0) {
                     return 1;
                 }
                 throw new BussinessException("新增项目失败");
@@ -190,21 +177,23 @@ public class ProjectMainServiceImpl implements ProjectMainService {
     }
 
     /**
-     * 按照主键id进行修改
+     * 按主键id对项目进行编辑
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public int updateByPrimaryKeySelective(Long id, String userId, String projectName, String projectStatus,
-            String projectDesc, Date startTime, Date endTime) {
+            String projectDesc, Date startTime, Date endTime, Integer budgetaryHours, String projectVisible) {
         int projectMainNum = 0;
         int projectOperateNum = 0;
+        int projectBudgetNum = 0;
         try {
             User user = (User) ShiroUtils.getSessionAttribute("user");
             if (user != null && user.getUserId() != null) {
                 // 更新前的数据
                 ProjectMain projectMain = projectMainMapper.queryByPrimaryKey(id);
                 projectMainNum = projectMainMapper.updateByPrimaryKeySelective(id, userId, user.getUserId(), new Date(),
-                        projectName, projectStatus, projectDesc, startTime, endTime);
+                        projectName, projectStatus, projectDesc, startTime, endTime, projectVisible);
+                // 保存项目操作表数据
                 ProjectOperate projectOperate = new ProjectOperate();
                 projectOperate.setCreateTime(new Date());
                 projectOperate.setProjectId(id);
@@ -217,10 +206,19 @@ public class ProjectMainServiceImpl implements ProjectMainService {
                 projectOperate.setOperateDesc(sdf.format(new Date()) + "    根据id进行更新：    "
                         + GetJsonFormat.getJsonFormat(JSON.toJSON(compareT).toString()));
                 projectOperateNum = projectOperateMapper.addProjectOperate(projectOperate);
-                if (projectMainNum > 0 && projectOperateNum > 0) {
+                // 保存projectBudget
+                ProjectBudget projectBudget = new ProjectBudget();
+                projectBudget.setProjectId(id);
+                projectBudget.setCreateUserId(user.getUserId());
+                projectBudget.setModifyUserId(user.getUserId());
+                projectBudget.setCreateTime(new Date());
+                projectBudget.setModifyTime(new Date());
+                projectBudget.setBudgetaryHours(budgetaryHours);
+                projectBudgetNum = projectBudgetMapper.addProjectBudget(projectBudget);
+                if (projectMainNum > 0 && projectOperateNum > 0 && projectBudgetNum > 0) {
                     return 1;
                 }
-                throw new BussinessException("根据id更新失败");
+                throw new BussinessException("按主键id对项目进行编辑");
             }
         } catch (Exception e) {
             logger.error(e.getMessage());
@@ -345,7 +343,7 @@ public class ProjectMainServiceImpl implements ProjectMainService {
     }
 
     /**
-     * 分页查询
+     * 分页查询所有项目
      */
     @Override
     public List<ProjectMain> queryAllByPage(Integer currentPage, Integer pageSize) {
@@ -404,4 +402,58 @@ public class ProjectMainServiceImpl implements ProjectMainService {
         }
         return 0;
     }
+
+    /**
+     * 分页查询所有项目（包括个人私有的+公开的项目）
+     */
+    @Override
+    public List<ProjectMain> queryAllPublicAndPrivate(Integer currentPage, Integer pageSize) {
+        PageHelper.startPage(currentPage, pageSize);
+        try {
+            List<ProjectMain> list = projectMainMapper.queryAllPublicAndPrivate();
+            if (list.size() > 0) {
+                return list;
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
+
+    /**
+     * 根据用户id,查询每个项目成员参加的项目
+     */
+    @Override
+    public List<ProjectMain> queryByUserIdPersonal(String userId) {
+        try {
+            List<ProjectMain> list = projectMainMapper.queryByUserIdPersonal(userId);
+            if (list.size() > 0) {
+                return list;
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+        return null;
+
+    }
+
+    /**
+     * 查询所有公开项目
+     */
+    @Override
+    public List<ProjectMain> queryAllByPublic() {
+        try {
+            List<ProjectMain> list = projectMainMapper.queryAllByPublic();
+            if (list.size() > 0) {
+                return list;
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
+
 }

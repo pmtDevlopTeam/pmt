@@ -3,15 +3,19 @@ package com.camelot.pmt.task.service.impl;
 import com.camelot.pmt.task.mapper.TaskFileMapper;
 import com.camelot.pmt.task.model.TaskFile;
 import com.camelot.pmt.task.service.TaskFileService;
+import com.camelot.pmt.task.utils.Constant;
+import com.camelot.pmt.task.utils.Constant.AttachmentSource;
+import com.camelot.pmt.task.utils.UploadUtils;
+import org.apache.commons.lang3.StringUtils;
+import com.camelot.pmt.task.utils.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
-
+import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
 
 /**
  * 附件相关接口
@@ -38,6 +42,7 @@ public class TaskFileServiceImpl implements TaskFileService {
      * @date 10:21 2018/4/17
      */
     @Override
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public boolean insert(TaskFile taskFile) {
         try {
             // check参数
@@ -76,59 +81,66 @@ public class TaskFileServiceImpl implements TaskFileService {
     }
 
     /**
+     * 
+     * @Title: update @Description: TODO(修改附件上传) @param @param taskId @param @return
+     * 设定文件 @return JSONObject 返回类型 @throws
+     */
+    @Override
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
+    public boolean addOrupdate(Long id, TaskFile taskFile, MultipartFile file) {
+        try {
+            // check参数
+            if (id == null || taskFile == null || file == null) {
+                throw new RuntimeException("数据参数不能为空");
+            }
+            int result = 0;
+            TaskFile taskObj = taskFileMapper.queryByTaskFile(taskFile);
+            // 判断file是否存在
+            if (taskObj == null) {
+                taskFile.setAttachmentUrl(Constant.localPath);
+                taskFile.setAttachmentSource(AttachmentSource.TASK.getValue());
+                taskFile.setAttachmentTile(file.getOriginalFilename());
+                taskFile.setSourceId(id);
+                taskFileMapper.insert(taskFile);
+            } else {
+                String oldPath = taskObj.getAttachmentUrl() + "\\" + taskObj.getAttachmentTile();
+                // 删除原文件
+                UploadUtils.deleteFile(oldPath);
+                taskObj.setAttachmentTile(file.getOriginalFilename());
+                taskObj.setAttachmentUrl(Constant.localPath);
+            }
+            // 上传新文件
+            String path = UploadUtils.uploadFile(file);
+            if (!StringUtils.isEmpty(path)) {
+                result = taskFileMapper.update(taskObj);
+            }
+            return result == 1 ? true : false;
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
      * 附件下载
      *
      * @param taskFile
      *            参数
-     * @return TaskFile
      * @author zlh
      * @date 17:03 2018/4/17
      */
     @Override
     public boolean download(TaskFile taskFile, HttpServletResponse response) {
-        String fileName = taskFile.getAttachmentTile();
-        String path = taskFile.getAttachmentUrl();
-        if (StringUtils.isEmpty(fileName) && StringUtils.isEmpty(path)) {
-            throw new RuntimeException("参数错误");
-        }
-        File file = new File(path, fileName);
-        if (file.exists()) {
-            response.setHeader("content-type", "application/octet-stream");
-            response.setContentType("application/octet-stream");
-            response.setHeader("Content-Disposition", "attachment;filename=" + fileName);
-            byte[] buffer = new byte[1024];
-            FileInputStream fis = null;
-            BufferedInputStream bis = null;
-            try {
-                fis = new FileInputStream(file);
-                bis = new BufferedInputStream(fis);
-                OutputStream os = response.getOutputStream();
-                int i = bis.read(buffer);
-                while (i != -1) {
-                    os.write(buffer, 0, i);
-                    i = bis.read(buffer);
-                }
-                return true;
-            } catch (Exception e) {
-                LOGGER.error(e.getMessage());
-                throw new RuntimeException("下载失败");
-            } finally {
-                if (bis != null) {
-                    try {
-                        bis.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-                if (fis != null) {
-                    try {
-                        fis.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
+        try {
+            String fileName = taskFile.getAttachmentTile();
+            String path = taskFile.getAttachmentUrl();
+            if (StringUtils.isEmpty(fileName) && StringUtils.isEmpty(path)) {
+                throw new RuntimeException("参数错误");
             }
+            FileUtils.downloadFile(response, path, fileName);
+            return true;
+        } catch (Exception e) {
+            throw new RuntimeException("下载失败");
         }
-        throw new RuntimeException("文件不存在");
     }
 }

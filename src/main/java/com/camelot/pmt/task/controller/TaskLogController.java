@@ -10,6 +10,8 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -31,6 +33,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/tasklog")
 public class TaskLogController {
+
+    //日志
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private TaskLogService taskLogService;
@@ -67,14 +72,11 @@ public class TaskLogController {
     @RequestMapping(value = "/queryTaskLogList", method = RequestMethod.GET)
     public JSONObject queryTaskLogList(
             @ApiParam(name = "id", value = "任务id", required = true) @RequestParam(required = true) Long id) {
-        ExecuteResult<List<TaskLog>> result = null;
         try {
-            result = taskLogService.queryTaskLogList(id);
-            if (result.isSuccess()) {
-                return ApiResponse.success(result.getResult());
-            }
-            return ApiResponse.error();
+            List<TaskLog> taskLogList = taskLogService.queryTaskLogList(id);
+                return ApiResponse.success(taskLogList);
         } catch (Exception e) {
+            logger.error(e.getMessage());
             return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
         }
     }

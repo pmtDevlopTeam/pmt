@@ -59,7 +59,7 @@ public class UseCaseController {
     @ApiOperation(value = "新增用例")
     @PostMapping(value = "userCase/addUseCase")
     public JSONObject addUseCase(HttpServletRequest request,
-            @ApiParam(value = "useCase", required = true) UseCase useCase) {
+            @RequestBody @ApiParam(value = "useCase", required = true) UseCase useCase) {
         try {
             User user = (User) request.getSession().getAttribute("user");
             boolean flag = UseCaseService.addUseCase(user, useCase);
@@ -109,7 +109,7 @@ public class UseCaseController {
     @ApiOperation(value = "编辑用例")
     @PostMapping(value = "userCase/updateUserCase")
     public JSONObject updateUserCase(HttpServletRequest request,
-            @ApiIgnore @ApiParam(value = "useCase", required = true) UseCase useCase) {
+            @RequestBody @ApiParam(value = "useCase", required = true) UseCase useCase) {
         try {
             User user = (User) shiroUtils.getSessionAttribute("user");
             // 调用修改接口

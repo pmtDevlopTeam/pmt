@@ -30,6 +30,9 @@ public class UserVo implements Serializable {
     // 用户电话
     private String userPhone;
 
+    // 用户邮箱
+    private String userMail;
+
     // 用户状态（0启用，1禁用）
     private String state;
 
@@ -41,7 +44,7 @@ public class UserVo implements Serializable {
     }
 
     public UserVo(String userId, String userJobNum, String userName, String loginCode, String orgName, String roleName,
-            String userPhone, String state) {
+            String userPhone, String userMail, String state, String roleId) {
         super();
         this.userId = userId;
         this.userJobNum = userJobNum;
@@ -50,7 +53,9 @@ public class UserVo implements Serializable {
         this.orgName = orgName;
         this.roleName = roleName;
         this.userPhone = userPhone;
+        this.userMail = userMail;
         this.state = state;
+        this.roleId = roleId;
     }
 
     public String getUserId() {
@@ -107,6 +112,14 @@ public class UserVo implements Serializable {
 
     public void setUserPhone(String userPhone) {
         this.userPhone = userPhone;
+    }
+
+    public String getUserMail() {
+        return userMail;
+    }
+
+    public void setUserMail(String userMail) {
+        this.userMail = userMail;
     }
 
     public String getState() {

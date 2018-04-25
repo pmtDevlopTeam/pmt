@@ -1,6 +1,8 @@
 package com.camelot.pmt.task.service.impl;
 
 import com.camelot.pmt.common.ExecuteResult;
+import com.camelot.pmt.platform.model.User;
+import com.camelot.pmt.platform.shiro.ShiroUtils;
 import com.camelot.pmt.task.mapper.TaskLogMapper;
 import com.camelot.pmt.task.mapper.TaskMapper;
 import com.camelot.pmt.task.model.Task;
@@ -62,23 +64,52 @@ public class TaskLogServiceImpl implements TaskLogService {
     }
 
     /**
-     * 任务流转记录查询
+     * 添加日志记录
      */
     @Override
-    public ExecuteResult<List<TaskLog>> queryTaskLogList(Long id) {
-        ExecuteResult<List<TaskLog>> result = new ExecuteResult<List<TaskLog>>();
+    public Boolean insertTaskLog(Long taskId, String button, String peration) {
+    	Boolean flag = false;
         try {
-            List<TaskLog> tasklog = taskLogMapper.queryTaskLogList(id);
-            result.setResult(tasklog);
+            if (taskId == null) {
+                return flag;
+            }
+
+            TaskLog taskLog = new TaskLog();
+            User user = (User) ShiroUtils.getSessionAttribute("user");
+            Date date = new Date();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            taskLog.setTaskId(taskId);
+            taskLog.setUserId(user.getUserId());
+            taskLog.setOperationButton(button);
+            taskLog.setOperationTime(date);
+            taskLog.setOperationDescribe(
+                    dateFormat.format(date) + "\t" + user.getUsername() + "\t" + peration);
+            int count = taskLogMapper.insertTaskLog(taskLog);
+
+            if (count > 0) {
+            	flag=true;
+            }
+
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
             throw new RuntimeException(e);
         }
-        return result;
+        return flag;
+    }
+
+    /**
+     * 任务流转记录查询
+     */
+    @Override
+    public List<TaskLog> queryTaskLogList(Long id) {
+
+        List<TaskLog> tasklog = taskLogMapper.queryTaskLogList(id);
+
+        return tasklog;
     }
 
     @Override
-    public void queryTaskLogList(Long id, String peration) {
+    public void addTaskLogList(Long id, String peration) {
         ExecuteResult<List<TaskLog>> result = new ExecuteResult<List<TaskLog>>();
         try {
             Task taskAll = taskMapper.queryTaskAllById(id);

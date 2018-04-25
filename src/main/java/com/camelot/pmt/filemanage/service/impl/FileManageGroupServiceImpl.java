@@ -1,8 +1,13 @@
 package com.camelot.pmt.filemanage.service.impl;
 
-import java.util.Date;
-import java.util.List;
-
+import com.camelot.pmt.filemanage.mapper.FileManageGroupMapper;
+import com.camelot.pmt.filemanage.mapper.FileManageMapper;
+import com.camelot.pmt.filemanage.model.FileManageGroup;
+import com.camelot.pmt.filemanage.service.FileManageGroupService;
+import com.camelot.pmt.common.ApiResponse;
+import com.camelot.pmt.common.ExecuteResult;
+import com.camelot.pmt.platform.model.User;
+import com.camelot.pmt.platform.shiro.ShiroUtils;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,12 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.camelot.pmt.filemanage.mapper.FileManageGroupMapper;
-import com.camelot.pmt.filemanage.mapper.FileManageMapper;
-import com.camelot.pmt.filemanage.model.FileManageGroup;
-import com.camelot.pmt.filemanage.service.FileManageGroupService;
-import com.camelot.pmt.platform.model.User;
-import com.camelot.pmt.platform.shiro.ShiroUtils;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -74,11 +76,11 @@ public class FileManageGroupServiceImpl implements FileManageGroupService {
     }
 
     public Boolean deleteFileGroupAndFileById(Long id) {// 删除文件夹和文件
-        List<Long> fileManageGroupIds = fileManageGroupMapper.selectFileManagerGroupByParentId(id);// 获取子文件夹的id
+        List<Long> fileManageGroupIds = fileManageGroupMapper.queryFileManagerGroupByParentId(id);// 获取子文件夹的id
         if (fileManageGroupIds.size() > 0) {
             fileManageGroupMapper.deleteBatchFileGroupById(fileManageGroupIds);// 批量删除文件夹
         }
-        List fileManagerIds = fileManageMapper.selectFileManagerByGroupId(id);// 查询文件夹下的所有文件id
+        List fileManagerIds = fileManageMapper.queryFileIdByGroupId(id);// 查询文件夹下的所有文件id
         if (fileManagerIds.size() > 0) {
             fileManageMapper.deleteBatchFileById(fileManagerIds);// 删除文件夹下的文档
         }

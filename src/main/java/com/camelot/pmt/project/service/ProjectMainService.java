@@ -20,22 +20,17 @@ public interface ProjectMainService {
     ProjectMain queryByPrimaryKey(Long id);
 
     /**
-     * 保存立项时相关联表数据
+     * 新建项目时，保存数据
      * 
-     * @param userId
      * @param projectName
      * @param projectStatus
-     * @param startTime
-     * @param endTime
      * @param projectDesc
-     * @param budgetaryHours
      * @return
      */
-    int addProject(String userId, String projectName, String projectStatus, Date startTime, Date endTime,
-            String projectDesc, Integer budgetaryHours);
+    int addProject(String projectName, String projectStatus, String projectDesc);
 
     /**
-     * 分页查询
+     * 分页查询所有
      * 
      * @param pageSize
      * @param currentPage
@@ -76,7 +71,7 @@ public interface ProjectMainService {
     List<ProjectMain> queryByModifyUserId(String modifyUserId);
 
     /**
-     * 按主键id进行更新
+     * 按主键id对项目进行编辑
      * 
      * @param id
      * @param userId
@@ -85,10 +80,12 @@ public interface ProjectMainService {
      * @param projectDesc
      * @param startTime
      * @param endTime
+     * @param budgetaryHours
+     * @param projectVisible
      * @return
      */
     int updateByPrimaryKeySelective(Long id, String userId, String projectName, String projectStatus,
-            String projectDesc, Date startTime, Date endTime);
+            String projectDesc, Date startTime, Date endTime, Integer budgetaryHours, String projectVisible);
 
     /**
      * 挂起项目 只有开始的项目才可以挂起
@@ -121,5 +118,29 @@ public interface ProjectMainService {
      */
     int updateByProjectById(Long id, String projectStatus, String userStatus, String demandStatus, String closeReason,
             String status, String caseStatus);
+
+    /**
+     * 查询所有项目（包括个人私有的+公开的项目）
+     * 
+     * @param currentPage
+     * @param pageSize
+     * @return
+     */
+    List<ProjectMain> queryAllPublicAndPrivate(Integer currentPage, Integer pageSize);
+
+    /**
+     * 根据用户id,查询每个项目成员参加的项目
+     * 
+     * @param userId
+     * @return
+     */
+    List<ProjectMain> queryByUserIdPersonal(String userId);
+
+    /**
+     * 查询所有公开项目
+     * 
+     * @return
+     */
+    List<ProjectMain> queryAllByPublic();
 
 }

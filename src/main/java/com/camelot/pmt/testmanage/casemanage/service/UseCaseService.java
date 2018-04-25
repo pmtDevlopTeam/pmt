@@ -3,8 +3,7 @@ package com.camelot.pmt.testmanage.casemanage.service;
 import java.util.List;
 import java.util.Map;
 
-import com.camelot.pmt.caserepertory.PageBean;
-import com.camelot.pmt.common.ExecuteResult;
+import com.alibaba.fastjson.JSONObject;
 import com.camelot.pmt.platform.model.User;
 import com.camelot.pmt.testmanage.casemanage.model.UseCase;
 
@@ -34,7 +33,7 @@ public interface UseCaseService {
      * @param id
      * @return
      */
-    UseCase queryUseCaseByUseCaseId(Long id);
+    JSONObject queryUseCaseByUseCaseId(Long id);
 
     /**
      * 修改用例状态

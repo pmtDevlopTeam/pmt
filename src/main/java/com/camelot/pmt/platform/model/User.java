@@ -2,6 +2,7 @@ package com.camelot.pmt.platform.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 public class User implements Serializable {
 
@@ -27,11 +28,19 @@ public class User implements Serializable {
      */
     private String password;
     /**
+     * 新密码
+     */
+    private String newPassword;
+    /**
+     * 第二次新密码
+     */
+    private String secondNewPassword;
+    /**
      * 用户名称
      */
     private String username;
     /**
-     * 用户状态 0（默认）启用 1 停用 2 锁定'
+     * 用户状态 0（默认）启用 1 停用
      */
     private String state;
     /**
@@ -87,14 +96,16 @@ public class User implements Serializable {
         super();
     }
 
-    public User(Long id, String userId, String loginCode, String password, String username, String state,
-            Date createTime, Date modifyTime, String createUserId, String modifyUserId, String userJobNum,
-            String userPhone, String userMail, String orgId, String roleId) {
+    public User(Long id, String userId, String loginCode, String password, String newPassword, String secondNewPassword,
+            String username, String state, Date createTime, Date modifyTime, String createUserId, String modifyUserId,
+            String userJobNum, String userPhone, String userMail, String orgId, String roleId, String[] roleIds) {
         super();
         this.id = id;
         this.userId = userId;
         this.loginCode = loginCode;
         this.password = password;
+        this.newPassword = newPassword;
+        this.secondNewPassword = secondNewPassword;
         this.username = username;
         this.state = state;
         this.createTime = createTime;
@@ -106,6 +117,7 @@ public class User implements Serializable {
         this.userMail = userMail;
         this.orgId = orgId;
         this.roleId = roleId;
+        this.roleIds = roleIds;
     }
 
     public Long getId() {
@@ -138,6 +150,22 @@ public class User implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getNewPassword() {
+        return newPassword;
+    }
+
+    public void setNewPassword(String newPassword) {
+        this.newPassword = newPassword;
+    }
+
+    public String getSecondNewPassword() {
+        return secondNewPassword;
+    }
+
+    public void setSecondNewPassword(String secondNewPassword) {
+        this.secondNewPassword = secondNewPassword;
     }
 
     public String getUsername() {
