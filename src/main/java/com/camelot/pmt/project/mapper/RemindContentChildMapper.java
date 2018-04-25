@@ -1,8 +1,8 @@
 package com.camelot.pmt.project.mapper;
 
-import com.camelot.pmt.project.model.remindContentChild;
+import com.camelot.pmt.project.model.RemindContentChild;
 
-public interface remindContentChildMapper {
+public interface RemindContentChildMapper {
     /**
      *
      * @mbggenerated
@@ -13,29 +13,29 @@ public interface remindContentChildMapper {
      *
      * @mbggenerated
      */
-    int insert(remindContentChild record);
+    int insert(RemindContentChild record);
 
     /**
      *
      * @mbggenerated
      */
-    int insertSelective(remindContentChild record);
+    int insertSelective(RemindContentChild record);
 
     /**
      *
      * @mbggenerated
      */
-    remindContentChild selectByPrimaryKey(Long id);
+    RemindContentChild selectByPrimaryKey(Long id);
 
     /**
      *
      * @mbggenerated
      */
-    int updateByPrimaryKeySelective(remindContentChild record);
+    int updateByPrimaryKeySelective(RemindContentChild record);
 
     /**
      *
      * @mbggenerated
      */
-    int updateByPrimaryKey(remindContentChild record);
+    int updateByPrimaryKey(RemindContentChild record);
 }

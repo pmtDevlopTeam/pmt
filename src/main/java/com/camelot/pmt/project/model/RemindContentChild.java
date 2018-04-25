@@ -2,7 +2,7 @@ package com.camelot.pmt.project.model;
 
 import java.util.Date;
 
-public class remindContentChild {
+public class RemindContentChild {
     /**
      * 主键
      */

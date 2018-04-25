@@ -1,8 +1,8 @@
 package com.camelot.pmt.project.mapper;
 
-import com.camelot.pmt.project.model.remindReport;
+import com.camelot.pmt.project.model.RemindReport;
 
-public interface remindReportMapper {
+public interface RemindReportMapper {
     /**
      *
      * @mbggenerated
@@ -13,35 +13,35 @@ public interface remindReportMapper {
      *
      * @mbggenerated
      */
-    int insert(remindReport record);
+    int insert(RemindReport record);
 
     /**
      *
      * @mbggenerated
      */
-    int insertSelective(remindReport record);
+    int insertSelective(RemindReport record);
 
     /**
      *
      * @mbggenerated
      */
-    remindReport selectByPrimaryKey(Long id);
+    RemindReport selectByPrimaryKey(Long id);
 
     /**
      *
      * @mbggenerated
      */
-    int updateByPrimaryKeySelective(remindReport record);
+    int updateByPrimaryKeySelective(RemindReport record);
 
     /**
      *
      * @mbggenerated
      */
-    int updateByPrimaryKeyWithBLOBs(remindReport record);
+    int updateByPrimaryKeyWithBLOBs(RemindReport record);
 
     /**
      *
      * @mbggenerated
      */
-    int updateByPrimaryKey(remindReport record);
+    int updateByPrimaryKey(RemindReport record);
 }

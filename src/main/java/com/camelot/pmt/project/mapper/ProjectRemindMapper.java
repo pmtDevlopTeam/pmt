@@ -1,8 +1,8 @@
 package com.camelot.pmt.project.mapper;
 
-import com.camelot.pmt.project.model.projectRemind;
+import com.camelot.pmt.project.model.ProjectRemind;
 
-public interface projectRemindMapper {
+public interface ProjectRemindMapper {
     /**
      *
      * @mbggenerated
@@ -13,29 +13,29 @@ public interface projectRemindMapper {
      *
      * @mbggenerated
      */
-    int insert(projectRemind record);
+    int insert(ProjectRemind record);
 
     /**
      *
      * @mbggenerated
      */
-    int insertSelective(projectRemind record);
+    int insertSelective(ProjectRemind record);
 
     /**
      *
      * @mbggenerated
      */
-    projectRemind selectByPrimaryKey(Long id);
+    ProjectRemind selectByPrimaryKey(Long id);
 
     /**
      *
      * @mbggenerated
      */
-    int updateByPrimaryKeySelective(projectRemind record);
+    int updateByPrimaryKeySelective(ProjectRemind record);
 
     /**
      *
      * @mbggenerated
      */
-    int updateByPrimaryKey(projectRemind record);
+    int updateByPrimaryKey(ProjectRemind record);
 }

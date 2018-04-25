@@ -2,7 +2,7 @@ package com.camelot.pmt.project.model;
 
 import java.util.Date;
 
-public class projectRemind {
+public class ProjectRemind {
     /**
      * 主键
      */
