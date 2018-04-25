@@ -42,7 +42,7 @@ public class OrgServiceImpl implements OrgService {
 
 	/**
 	 * 查询部门列表
-	 * 
+	 *
 	 * @return
 	 */
 	@Override
@@ -83,7 +83,7 @@ public class OrgServiceImpl implements OrgService {
 
 	/**
 	 * 新增部门
-	 * 
+	 *
 	 * @param org
 	 * @return
 	 */
@@ -140,7 +140,7 @@ public class OrgServiceImpl implements OrgService {
 
 	/**
 	 * 生成code
-	 * 
+	 *
 	 * @param org
 	 * @return
 	 */
@@ -193,7 +193,7 @@ public class OrgServiceImpl implements OrgService {
 
 	/**
 	 * 修改部门
-	 * 
+	 *
 	 * @param org
 	 * @return
 	 */
@@ -283,7 +283,7 @@ public class OrgServiceImpl implements OrgService {
 
 	/**
 	 * 子部递归门生成部门编号
-	 * 
+	 *
 	 * @param org
 	 */
 	private void updateCode(Org org) {
@@ -307,7 +307,7 @@ public class OrgServiceImpl implements OrgService {
 
 	/**
 	 * 父级部门的状态被修改，自己部门的状态递归出来一并修改
-	 * 
+	 *
 	 * @param org
 	 */
 	private String updateState(Org org) {
@@ -349,7 +349,7 @@ public class OrgServiceImpl implements OrgService {
 
 	/**
 	 * 删除部门
-	 * 
+	 *
 	 * @param orgId
 	 * @return
 	 */
@@ -373,7 +373,7 @@ public class OrgServiceImpl implements OrgService {
 
 	/**
 	 * 查询单个部门
-	 * 
+	 *
 	 * @return
 	 */
 	@Override
@@ -393,7 +393,7 @@ public class OrgServiceImpl implements OrgService {
 
 	/**
 	 * 分页查询部门列表
-	 * 
+	 *
 	 * @param org
 	 * @return
 	 */
@@ -417,7 +417,7 @@ public class OrgServiceImpl implements OrgService {
 
 	/**
 	 * 查询多个子部门 递归查询本节点的id及孩子节点的id
-	 * 
+	 *
 	 * @param OrgId
 	 * @return
 	 */
