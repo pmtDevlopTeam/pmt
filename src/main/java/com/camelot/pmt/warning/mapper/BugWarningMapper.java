@@ -1,6 +1,10 @@
 package com.camelot.pmt.warning.mapper;
 
+import java.util.List;
+import java.util.Map;
+
 import com.camelot.pmt.warning.model.BugWarning;
+import com.camelot.pmt.warning.model.BugWarningVo;
 
 public interface BugWarningMapper {
     /**
@@ -53,4 +57,7 @@ public interface BugWarningMapper {
     
     
     Integer queryBugCount(Long projectId);
+    
+    
+    List<Map<String,Object>>queryWarningByprojectIdAndRoleId(BugWarningVo bugWarningVo);
 }
