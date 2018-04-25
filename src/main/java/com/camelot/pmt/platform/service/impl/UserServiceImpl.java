@@ -1,16 +1,12 @@
 package com.camelot.pmt.platform.service.impl;
 
 import org.apache.shiro.crypto.hash.Sha256Hash;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
-import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.platform.common.BaseState;
+import com.camelot.pmt.platform.common.Modular;
 import com.camelot.pmt.platform.log.LogAspect;
 import com.camelot.pmt.platform.mapper.UserMapper;
 import com.camelot.pmt.platform.model.User;
@@ -21,10 +17,8 @@ import com.camelot.pmt.platform.shiro.ShiroUtils;
 import com.camelot.pmt.util.UUIDUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-
 import java.util.List;
 
-import javax.servlet.http.Cookie;
 
 /**
  * 
@@ -58,49 +52,49 @@ public class UserServiceImpl implements UserService {
     @Override
     public String addUser(User user) {
 
-        User loginUser = (User) ShiroUtils.getSessionAttribute("user");
-        // 1.插入用户表
-        String userId = UUIDUtil.getUUID();
-        user.setUserId(userId);
-        String inputPassword = user.getPassword();
-        String encryptPassword = "";
-        if (StringUtils.isEmpty(inputPassword)) {
-            encryptPassword = encryptUserPassword(gereratePassword());
-        } else {
-            encryptPassword = encryptUserPassword(inputPassword);
-        }
-        user.setPassword(encryptPassword);
-        user.setCreateUserId(loginUser.getUserId());
-        user.setModifyUserId(loginUser.getUserId());
-        user.setState(BaseState.ONE);
-        // 2.插入用户信息表
-        // 检查用户名是否存在，不存在的话再插入用户表
-        User dbModel = userMapper.queryUserIsExistByLoginCode(user.getLoginCode());
-        if (dbModel != null) {
-            return "该用户已经存在！";
-        }
-        long checkCount = userMapper.checkUserExistByUserJobNum(user.getUserJobNum());
-        if (checkCount == 1) {
-            return "该用员工号已经存在！";
-        }
-        userMapper.addUser(user);
-        userMapper.addUserInfo(user);
-        // 3.如果指定了部门，就插入用户组织表
-        if (!StringUtils.isEmpty(user.getOrgId())) {
-            userMapper.addUserOrg(user);
-        }
-        // 4.如果指定了角色，就插入用户角色表
-        if (user.getRoleIds() != null && user.getRoleIds().length != 0) {
-            String[] roleIds = user.getRoleIds();
-            for (String roleId : roleIds) {
-                user.setRoleId(roleId);
-                userMapper.addUserRole(user);
-            }
-        }
-        logAspect.insertAddLog(user, "用户", loginUser.getUserId());
-        // 5.通过邮件发送新添加的用户信息
-        return "添加用户成功！";
-    }
+		User loginUser = (User) ShiroUtils.getSessionAttribute("user");
+		// 1.插入用户表
+		String userId = UUIDUtil.getUUID();
+		user.setUserId(userId);
+		String inputPassword = user.getPassword();
+		String encryptPassword = "";
+		if(StringUtils.isEmpty(inputPassword)) {
+			encryptPassword = encryptUserPassword(gereratePassword());
+		}else {
+			encryptPassword = encryptUserPassword(inputPassword);
+		}
+		user.setPassword(encryptPassword);
+		user.setCreateUserId(loginUser.getUserId());
+		user.setModifyUserId(loginUser.getUserId());
+		user.setState(BaseState.ONE);
+		// 2.插入用户信息表
+		// 检查用户名是否存在，不存在的话再插入用户表
+		User dbModel = userMapper.queryUserIsExistByLoginCode(user.getLoginCode());
+		if (dbModel != null) {
+			return "该用户已经存在！";
+		}
+		long checkCount = userMapper.checkUserExistByUserJobNum(user.getUserJobNum());
+		if (checkCount == 1) {
+			return "该用员工号已经存在！";
+		}
+		userMapper.addUser(user);
+		userMapper.addUserInfo(user);
+		// 3.如果指定了部门，就插入用户组织表
+		if (!StringUtils.isEmpty(user.getOrgId())) {
+			userMapper.addUserOrg(user);
+		}
+		// 4.如果指定了角色，就插入用户角色表
+		if (user.getRoleIds() != null && user.getRoleIds().length != 0) {
+			String[] roleIds = user.getRoleIds();
+			for (String roleId : roleIds) {
+				user.setRoleId(roleId);
+				userMapper.addUserRole(user);
+			}
+		}
+		logAspect.insertAddLog(user, Modular.USER, loginUser.getUserId());
+		// 5.通过邮件发送新添加的用户信息
+		return "添加用户成功！";
+	}
 
     /**
      * 
@@ -143,35 +137,34 @@ public class UserServiceImpl implements UserService {
                     return "更新用户失败！";
                 }
             }
-
-        }
-        // 4.用户信角色表更新
-        if (user.getRoleIds() != null && user.getRoleIds().length != 0) {
-            String[] roleIds = user.getRoleIds();
-            // 检查用户角色表是否存在该用户
-            long checkCount = userMapper.checkUserRoleIsExistByUserId(user.getUserId());
-            if (checkCount <= 0) {
-                for (String roleId : roleIds) {
-                    user.setRoleId(roleId);
-                    user.setCreateUserId(user.getModifyUserId());
-                    userMapper.addUserRole(user);
-                }
-            } else {
-                // 如果存在该用户，先删除后，再添加一遍
-                String userRoleCreateUserId = userMapper.queryUserRoleCreateUserByUserId(user.getUserId());
-                userMapper.deleteUserRoleByUserId(user.getUserId());
-                user.setCreateUserId(userRoleCreateUserId);
-                for (String roleId : roleIds) {
-                    user.setRoleId(roleId);
-                    userMapper.addUserRole(user);
-                }
-            }
-        }
-        // 更新后的用户详情
-        UserVo afterUpate = userMapper.queryUserDetailsByUserId(user.getUserId()).get(0);
-        logAspect.insertUpdateLog(afterUpate, beforeUpdate, "用户", loginUser.getUserId());
-        return "更新用户成功！";
-    }
+		}
+		// 4.用户信角色表更新
+		if (user.getRoleIds() != null && user.getRoleIds().length != 0) {
+			String[] roleIds = user.getRoleIds();
+			// 检查用户角色表是否存在该用户
+			long checkCount = userMapper.checkUserRoleIsExistByUserId(user.getUserId());
+			if (checkCount <= 0) {
+				for (String roleId : roleIds) {
+					user.setRoleId(roleId);
+					user.setCreateUserId(user.getModifyUserId());
+					userMapper.addUserRole(user);
+				}
+			} else {
+				// 如果存在该用户，先删除后，再添加一遍
+				String userRoleCreateUserId = userMapper.queryUserRoleCreateUserByUserId(user.getUserId());
+				userMapper.deleteUserRoleByUserId(user.getUserId());
+				user.setCreateUserId(userRoleCreateUserId);
+				for (String roleId : roleIds) {
+					user.setRoleId(roleId);
+					userMapper.addUserRole(user);
+				}
+			}
+		}
+		//更新后的用户详情
+		UserVo afterUpate = userMapper.queryUserDetailsByUserId(user.getUserId()).get(0);
+		logAspect.insertUpdateLog(afterUpate, beforeUpdate, Modular.USER, loginUser.getUserId());
+		return "更新用户成功！";
+	}
 
     /**
      * 
@@ -351,100 +344,98 @@ public class UserServiceImpl implements UserService {
         return encryptPassword.equals(dbPassword);
     }
 
-    /**
-     * 
-     * Description:[激活一个用户并发送账号信息到用户邮箱]
-     * 
-     * @param String
-     *            password
-     * @return String
-     * @author [maple] 2018年4月23日下午2:39:08
-     */
-    @Override
-    public boolean activateUserStateByUserId(User user) {
-        // 更新前的用户
-        User beforeUpdate = userMapper.queryUserByUserId(user.getUserId());
-        // 1.激活用户状态
-        User loginUser = (User) ShiroUtils.getSessionAttribute("user");
-        user.setModifyUserId(loginUser.getUserId());
-        user.setState(BaseState.ZERO);
-        int activateResult = userMapper.updateUserStateByUserId(user);
-        User dbUserInfoResult = userMapper.queryUserInfoById(user.getUserId());
-        // 2.激活成功后，再重新生成密码，将生成的密码和其他用户信息发送到用户邮箱
-        String emaliContent = sendEmaliContent(user);
-        mailService.sendSimpleMail(dbUserInfoResult.getUserMail(), "PMT项目管理系统账号激活信息", emaliContent);
-        // 更新后的用户
-        User afterUpate = userMapper.queryUserByUserId(user.getUserId());
-        logAspect.insertUpdateLog(afterUpate, beforeUpdate, "用户", loginUser.getUserId());
-        return activateResult == 1 ? true : false;
-    }
+   
+	/**
+	 * 
+	 * Description:[激活一个用户并发送账号信息到用户邮箱]
+	 * @param String password
+	 * @return String
+	 * @author [maple]
+	 * 2018年4月23日下午2:39:08
+	 */
+	@Override
+	public boolean activateUserStateByUserId(User user) {
+		//更新前的用户
+		User beforeUpdate = userMapper.queryUserByUserId(user.getUserId());
+		//1.激活用户状态
+		User loginUser = (User) ShiroUtils.getSessionAttribute("user");
+		user.setModifyUserId(loginUser.getUserId());
+		user.setState(BaseState.ZERO);
+		int activateResult = userMapper.updateUserStateByUserId(user);
+		User dbUserInfoResult = userMapper.queryUserInfoById(user.getUserId());
+		//2.激活成功后，再重新生成密码，将生成的密码和其他用户信息发送到用户邮箱
+		String emaliContent = sendEmaliContent(user);
+		mailService.sendSimpleMail(dbUserInfoResult.getUserMail(), Modular.MAIL_SUBJECT, emaliContent);
+		//更新后的用户
+		User afterUpate = userMapper.queryUserByUserId(user.getUserId());
+		logAspect.insertUpdateLog(afterUpate, beforeUpdate, Modular.USER, loginUser.getUserId());
+		return activateResult == 1 ? true : false;
+	}
+	
+	/**
+	 * 
+	 * Description:[禁用一个用户]
+	 * @param String password
+	 * @return String
+	 * @author [maple]
+	 * 2018年4月23日下午2:39:08
+	 */
+	@Override
+	public boolean disableUserStateByUserId(User user) {
+		//更新前的用户
+		User beforeUpdate = userMapper.queryUserByUserId(user.getUserId());
+		User loginUser = (User) ShiroUtils.getSessionAttribute("user");
+		user.setModifyUserId(loginUser.getUserId());
+		user.setState(BaseState.ONE);
+		int disableResult = userMapper.updateUserStateByUserId(user);
+		//更新后的用户
+		User afterUpate = userMapper.queryUserByUserId(user.getUserId());
+		logAspect.insertUpdateLog(afterUpate, beforeUpdate, Modular.USER, loginUser.getUserId());
+		return disableResult == 1 ? true : false;
+	}
+	
+	
+	/**
+	 * 
+	 * Description:[生成发送邮件的内容]
+	 * @param User user
+	 * @return String
+	 * @author [maple]
+	 * 2018年4月23日下午5:01:44
+	 */
+	public String sendEmaliContent(User user) {
+		User dbUserResult = userMapper.queryUserByUserId(user.getUserId());
+		String generatePassword = updateResetUserPasswordByUserId(user);
+		String content = "尊敬的 " + dbUserResult.getUsername() + ":\n" + "    您好！" + "您的项目管理系统登录的账号为：" + dbUserResult.getLoginCode() + "， 密码为： "+ generatePassword +" \n"
+				+"    请妥善保管您的账号信息，如有遗失，请及时修改密码或联系管理员重置您的密码！ \n" + "                                                                                        PMT项目团队 ";
+		return content;
+	}
+	
 
-    /**
-     * 
-     * Description:[禁用一个用户]
-     * 
-     * @param String
-     *            password
-     * @return String
-     * @author [maple] 2018年4月23日下午2:39:08
-     */
-    @Override
-    public boolean disableUserStateByUserId(User user) {
-        // 更新前的用户
-        User beforeUpdate = userMapper.queryUserByUserId(user.getUserId());
-        User loginUser = (User) ShiroUtils.getSessionAttribute("user");
-        user.setModifyUserId(loginUser.getUserId());
-        user.setState(BaseState.ONE);
-        int disableResult = userMapper.updateUserStateByUserId(user);
-        // 更新后的用户
-        User afterUpate = userMapper.queryUserByUserId(user.getUserId());
-        logAspect.insertUpdateLog(afterUpate, beforeUpdate, "用户", loginUser.getUserId());
-        return disableResult == 1 ? true : false;
-    }
-
-    /**
-     * 
-     * Description:[生成发送邮件的内容]
-     * 
-     * @param User
-     *            user
-     * @return String
-     * @author [maple] 2018年4月23日下午5:01:44
-     */
-    public String sendEmaliContent(User user) {
-        User dbUserResult = userMapper.queryUserByUserId(user.getUserId());
-        String generatePassword = updateResetUserPasswordByUserId(user);
-        String content = "尊敬的 " + dbUserResult.getUsername() + ":\n" + "    您好！" + "您的项目管理系统登录的账号为："
-                + dbUserResult.getLoginCode() + "， 密码为： " + generatePassword + " \n"
-                + "    请妥善保管您的账号信息，如有遗失，请及时更新密码或联系管理员重置您的密码！ \n"
-                + "                                                                                        PMT项目团队 ";
-        return content;
-    }
-
-    /**
-     * 
-     * Description:[随机生成6位明文密码]
-     * 
-     * @return String
-     * @author [maple] 2018年4月23日下午2:36:12
-     */
-    public String gereratePassword() {
-        String random = UUIDUtil.getUUID();
-        String generatePassword = random.substring(0, 6);
-        return generatePassword;
-    }
-
-    /**
-     * 
-     * Description:[加密用户明文密码]
-     * 
-     * @param String
-     *            password
-     * @return String
-     * @author [maple] 2018年4月23日下午2:39:08
-     */
-    public String encryptUserPassword(String password) {
-        return new Sha256Hash(password).toHex();
-    }
+	/**
+	 * 
+	 * Description:[随机生成6位明文密码]
+	 * @return String
+	 * @author [maple]
+	 * 2018年4月23日下午2:36:12
+	 */
+	public String gereratePassword() {
+		String random = UUIDUtil.getUUID();
+		String generatePassword = random.substring(0, 6);
+		return generatePassword;
+	}
+	
+	
+	/**
+	 * 
+	 * Description:[加密用户明文密码]
+	 * @param String password
+	 * @return String
+	 * @author [maple]
+	 * 2018年4月23日下午2:39:08
+	 */
+	public String encryptUserPassword(String password) {
+		return new Sha256Hash(password).toHex();
+	}
 
 }
