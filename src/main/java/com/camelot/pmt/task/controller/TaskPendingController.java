@@ -130,13 +130,13 @@ public class TaskPendingController {
                 return ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
             }
             // 更新我的待办任务为正在进行中
-            String result = taskPendingService.updateTaskPendingToStatus(id, TaskStatus.RUNING.getValue(),
+            Boolean result = taskPendingService.updateTaskPendingToStatus(id, TaskStatus.RUNING.getValue(),
                     user.getUserId());
             // 判断是否成功
-            if (result != null) {
-                return ApiResponse.jsonData(APIStatus.OK_200, result);
+            if (result) {
+                return ApiResponse.jsonData(APIStatus.OK_200);
             }
-            return ApiResponse.jsonData(APIStatus.ERROR_500, result);
+            return ApiResponse.jsonData(APIStatus.ERROR_500);
         } catch (Exception e) {
             logger.error(e.getMessage());
             // 异常
@@ -163,13 +163,13 @@ public class TaskPendingController {
                 return ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
             }
             // 更新我的待办任务为正在进行中
-            String result = taskPendingService.updateTaskPendingToStatus(id, TaskStatus.CLOSE.getValue(),
+            Boolean flag = taskPendingService.updateTaskPendingToStatus(id, TaskStatus.CLOSE.getValue(),
                     user.getUserId());
             // 判断是否成功
-            if (StringUtil.isNotEmpty(result)) {
-                return ApiResponse.jsonData(APIStatus.OK_200, result);
+            if (flag) {
+                return ApiResponse.jsonData(APIStatus.OK_200);
             }
-            return ApiResponse.jsonData(APIStatus.ERROR_500, result);
+            return ApiResponse.jsonData(APIStatus.ERROR_500);
         } catch (Exception e) {
             logger.error(e.getMessage());
             // 异常
