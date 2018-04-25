@@ -1,6 +1,7 @@
 package com.camelot.pmt.task.service;
 
 import com.camelot.pmt.task.model.Task;
+import com.github.pagehelper.PageInfo;
 
 import java.util.List;
 import java.util.Map;
@@ -109,5 +110,37 @@ public interface TaskManagerService {
      * @return PageInfo<Task>
      */
     Map<String, List<Task>> queryTaskByTask(Task task);
+
+    /**
+     * 查询所有状态为正在进行的任务
+     *
+     * @author zlh
+     * @date 15:54 2018/4/25
+     */
+    PageInfo<Task> queryTaskByStatusRunning(int page, int rows, Long id);
+
+    /**
+     * 查询所有状态为待办的任务
+     *
+     * @author zlh
+     * @date 15:54 2018/4/25
+     */
+    PageInfo<Task> queryTaskByStatusPending(int page, int rows, Long id);
+
+    /**
+     * 查询所有状态为已办的任务
+     *
+     * @author zlh
+     * @date 15:54 2018/4/25
+     */
+    PageInfo<Task> queryTaskByStatusAlready(int page, int rows, Long id);
+
+    /**
+     * 查询所有状态为关闭的任务
+     *
+     * @author zlh
+     * @date 15:54 2018/4/25
+     */
+    PageInfo<Task> queryTaskByStatusClose(int page, int rows, Long id);
 
 }
