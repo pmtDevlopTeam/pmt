@@ -162,4 +162,11 @@
     from remind_content_child
     where content_id = #{contentId,jdbcType=BIGINT}
   </select>
+  <!-- 批量根据内容id删除子内容 -->
+  <delete id="deleteByContentId" parameterType="java.lang.Long">
+  	delete from remind_content_child where 
+    <foreach collection="list" open="(" close=")" separator="or" item="item">
+		content_id = #{item.contentId,jdbcType=BIGINT}
+	</foreach>
+  </delete>
 </mapper>
