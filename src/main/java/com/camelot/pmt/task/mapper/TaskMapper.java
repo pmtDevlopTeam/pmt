@@ -228,7 +228,7 @@ public interface TaskMapper {
      * @Title: updateTaskAlreadyToRunning @Description: TODO(重做) @param id
      *         status @param @return 设定文件 @return JSONObject 返回类型 @throws
      */
-    int updateTaskAlreadyToRunning(Long id);
+    int updateTaskAlreadyToRunning(@Param("id") Long id , @Param("status") String status);
 
     /**
      *
@@ -278,7 +278,8 @@ public interface TaskMapper {
      * 根据任务Id修改状态 @Title: updateTaskOverdueStatus @Description: TODO @param @param
      * taskId @param @return @return int @throws
      */
-    int updateTaskToTest(@Param("id") Long id, @Param("beassignUserId") String beassignUserId);
+    int updateTaskToTest(@Param("id") Long id, @Param("beassignUserId") String beassignUserId,@Param("taskType")
+                         String taskType ,@Param("status") String Status);
 
     /**
      * 根据任务Id查询需求ID @Title: updateTaskOverdueStatus @Description: TODO @param @param
@@ -290,9 +291,7 @@ public interface TaskMapper {
      * 根据需求Id查询当前需求的测试人员ID @Title: updateTaskOverdueStatus @Description:
      * TODO @param @param taskId @param @return @return int @throws
      */
-    String queryTaskToTestByDemandId(Long demandId);
-
-    int updateTaskToTest(Long id);
+    String queryTaskToTestByDemandId(@Param("demandId") Long demandId,@Param("taskType")String taskType);
 
     /**
      * 查询延期提前列表 @Title: queryleaddeferredTaskRemindersList @Description:
