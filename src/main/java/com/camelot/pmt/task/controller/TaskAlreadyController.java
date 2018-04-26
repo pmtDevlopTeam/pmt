@@ -54,6 +54,10 @@ public class TaskAlreadyController {
             @ApiParam(name = "id", value = "任务ID", required = true) @RequestParam(required = true) Long id) {
         boolean flag = false;
         try {
+            User user = (User) ShiroUtils.getSessionAttribute("user");
+            if (null == user) {
+                return ApiResponse.jsonData(APIStatus.INVALIDSESSION_LOGINOUTTIME);
+            }
             // 更新我的任务为关闭
             flag = taskAlreadyService.updateTaskAlreadyToRunning(id);
             // 判断是否成功
@@ -80,6 +84,10 @@ public class TaskAlreadyController {
             @ApiParam(name = "id", value = "任务ID", required = true) @RequestParam(required = true) Long id) {
         boolean flag = false;
         try {
+            User user = (User) ShiroUtils.getSessionAttribute("user");
+            if (null == user) {
+                return ApiResponse.jsonData(APIStatus.INVALIDSESSION_LOGINOUTTIME);
+            }
             // 更新我的任务为关闭
             flag = taskAlreadyService.updateTaskToTest(id);
             // 判断是否成功
@@ -100,11 +108,16 @@ public class TaskAlreadyController {
      * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
 
+    @Deprecated
     @ApiOperation(value = "根据id查询单个任务明细", notes = "根据id查询单个任务明细")
     @RequestMapping(value = "queryTaskById", method = RequestMethod.GET)
     public JSONObject queryTaskById(
             @ApiParam(name = "id", value = "任务id", required = true) @RequestParam(required = true) Long id) {
         try {
+            User user = (User) ShiroUtils.getSessionAttribute("user");
+            if (null == user) {
+                return ApiResponse.jsonData(APIStatus.INVALIDSESSION_LOGINOUTTIME);
+            }
             Map<String, Object> map = taskManagerService.queryTaskById(id);
             return ApiResponse.success(map);
         } catch (Exception e) {
@@ -120,11 +133,16 @@ public class TaskAlreadyController {
      * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
 
+    @Deprecated
     @ApiOperation(value = "查询任务历史记录-重做页面", notes = "查询任务历史记录-重做页面")
     @RequestMapping(value = "/queryToRedoPage", method = RequestMethod.GET)
     public JSONObject queryToRedoPage(
             @ApiParam(name = "id", value = "任务id", required = true) @RequestParam(required = true) Long id) {
         try {
+            User user = (User) ShiroUtils.getSessionAttribute("user");
+            if (null == user) {
+                return ApiResponse.jsonData(APIStatus.INVALIDSESSION_LOGINOUTTIME);
+            }
             List<TaskLog> taskLogList = taskLogService.queryTaskLogList(id);
             return ApiResponse.success(taskLogList);
         } catch (Exception e) {
@@ -140,11 +158,16 @@ public class TaskAlreadyController {
      * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
 
+    @Deprecated
     @ApiOperation(value = "查询任务历史记录-提测页面", notes = "查询任务历史记录-提测页面")
     @RequestMapping(value = "/queryToTestPage", method = RequestMethod.GET)
     public JSONObject queryToTestPage(
             @ApiParam(name = "id", value = "任务id", required = true) @RequestParam(required = true) Long id) {
         try {
+            User user = (User) ShiroUtils.getSessionAttribute("user");
+            if (null == user) {
+                return ApiResponse.jsonData(APIStatus.INVALIDSESSION_LOGINOUTTIME);
+            }
             List<TaskLog> taskLogList = taskLogService.queryTaskLogList(id);
             return ApiResponse.success(taskLogList);
         } catch (Exception e) {
@@ -159,7 +182,8 @@ public class TaskAlreadyController {
      * @param task
      * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
-    @ApiOperation(value = "查询所有的任务", notes = "查询所有的任务")
+    @Deprecated
+    @ApiOperation(value = "查询我的所有的任务", notes = "查询我的所有的任务")
     @RequestMapping(value = "/queryMyAllTask", method = RequestMethod.GET)
     @ApiImplicitParams({
             @ApiImplicitParam(dataType = "ProjectMain", name = "project.id", paramType = "query", value = "项目编号"),
@@ -189,7 +213,7 @@ public class TaskAlreadyController {
      * @param
      * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
-    @ApiOperation(value = "查询所有已完成的任务", notes = "查询所有已完成的任务")
+    @ApiOperation(value = "查询我的已完成的任务", notes = "查询我的已完成的任务")
     @RequestMapping(value = "/queryTaskAlready", method = RequestMethod.GET)
     @ApiImplicitParams({
             @ApiImplicitParam(dataType = "ProjectMain", name = "project.id", paramType = "query", value = "项目编号"),
