@@ -143,4 +143,44 @@ public interface TaskManagerService {
      */
     PageInfo<Task> queryTaskByStatusClose(int page, int rows, Long id);
 
+    /**
+     * 查询所有可认领的任务
+     *
+     * @author zlh
+     * @return List<Task>
+     */
+    List<Task> queryTaskByBeAssignIsNull();
+
+    /**
+     * 组合条件查询所有状态为正在进行的任务
+     *
+     * @author zlh
+     * @date 15:54 2018/4/25
+     */
+    PageInfo<Task> queryTaskStatusRunningByTask(Task task, int page, int rows);
+
+    /**
+     * 组合条件查询所有状态为待办的任务
+     *
+     * @author zlh
+     * @date 15:54 2018/4/25
+     */
+    PageInfo<Task> queryTaskStatusPendingByTask(Task task, int page, int rows);
+
+    /**
+     * 组合条件查询所有状态为已办的任务
+     *
+     * @author zlh
+     * @date 15:54 2018/4/25
+     */
+    PageInfo<Task> queryTaskStatusAlreadyByTask(Task task, int page, int rows);
+
+    /**
+     * 组合条件查询所有状态为关闭的任务
+     *
+     * @author zlh
+     * @date 15:54 2018/4/25
+     */
+    PageInfo<Task> queryTaskStatusCloseByTask(Task task, int page, int rows);
+
 }

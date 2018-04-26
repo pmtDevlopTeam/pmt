@@ -354,4 +354,20 @@ public class TaskManagerController {
         }
     }
 
+    /**
+     * 查询所有可认领的任务
+     *
+     * @author zlh
+     */
+    @GetMapping(value = "/queryTaskByBeAssignIsNull")
+    @ApiOperation(value = "查询所有可认领的任务", notes = "查询所有可认领的任务")
+    public JSONObject queryTaskByBeAssignIsNull() {
+        try {
+            List<Task> result = taskManagerService.queryTaskByBeAssignIsNull();
+            return ApiResponse.success(result);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return ApiResponse.jsonData(APIStatus.ERROR_500);
+        }
+    }
 }

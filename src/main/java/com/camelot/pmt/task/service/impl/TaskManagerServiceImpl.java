@@ -472,4 +472,102 @@ public class TaskManagerServiceImpl implements TaskManagerService {
         }
     }
 
+    /**
+     * 查询所有可认领的任务
+     *
+     * @author zlh
+     * @return List<Task>
+     */
+    @Override
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
+    public List<Task> queryTaskByBeAssignIsNull() {
+        try {
+            List<Task> tasks = taskMapper.queryTaskByBeAssignIsNull();
+            return tasks;
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 组合条件查询所有状态为正在进行的任务
+     *
+     * @author zlh
+     * @date 15:54 2018/4/25
+     */
+    @Override
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
+    public PageInfo<Task> queryTaskStatusRunningByTask(Task task, int page, int rows) {
+        try {
+            PageHelper.startPage(page, rows);
+            List<Task> tasks = taskMapper.queryTaskStatusRunningByTask(task);
+            PageInfo<Task> pageInfo = new PageInfo<>(tasks);
+            return pageInfo;
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 组合条件查询所有状态为待办的任务
+     *
+     * @author zlh
+     * @date 15:54 2018/4/25
+     */
+    @Override
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
+    public PageInfo<Task> queryTaskStatusPendingByTask(Task task, int page, int rows) {
+        try {
+            PageHelper.startPage(page, rows);
+            List<Task> tasks = taskMapper.queryTaskStatusPendingByTask(task);
+            PageInfo<Task> pageInfo = new PageInfo<>(tasks);
+            return pageInfo;
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 组合条件查询所有状态为已办的任务
+     *
+     * @author zlh
+     * @date 15:54 2018/4/25
+     */
+    @Override
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
+    public PageInfo<Task> queryTaskStatusAlreadyByTask(Task task, int page, int rows) {
+        try {
+            PageHelper.startPage(page, rows);
+            List<Task> tasks = taskMapper.queryTaskStatusAlreadyByTask(task);
+            PageInfo<Task> pageInfo = new PageInfo<>(tasks);
+            return pageInfo;
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 组合条件查询所有状态为关闭的任务
+     *
+     * @author zlh
+     * @date 15:54 2018/4/25
+     */
+    @Override
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
+    public PageInfo<Task> queryTaskStatusCloseByTask(Task task, int page, int rows) {
+        try {
+            PageHelper.startPage(page, rows);
+            List<Task> tasks = taskMapper.queryTaskStatusCloseByTask(task);
+            PageInfo<Task> pageInfo = new PageInfo<>(tasks);
+            return pageInfo;
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+
 }

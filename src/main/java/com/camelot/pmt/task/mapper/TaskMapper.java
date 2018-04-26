@@ -147,6 +147,46 @@ public interface TaskMapper {
     List<Task> queryTaskByStatusClose(Long id);
 
     /**
+     * 组合条件查询所有状态为正在进行的任务
+     *
+     * @author zlh
+     * @date 15:54 2018/4/25
+     */
+    List<Task> queryTaskStatusRunningByTask(Task task);
+
+    /**
+     * 组合条件查询所有状态为待办的任务
+     *
+     * @author zlh
+     * @date 15:54 2018/4/25
+     */
+    List<Task> queryTaskStatusPendingByTask(Task task);
+
+    /**
+     * 组合条件查询所有状态为已办的任务
+     *
+     * @author zlh
+     * @date 15:54 2018/4/25
+     */
+    List<Task> queryTaskStatusAlreadyByTask(Task task);
+
+    /**
+     * 组合条件查询所有状态为关闭的任务
+     *
+     * @author zlh
+     * @date 15:54 2018/4/25
+     */
+    List<Task> queryTaskStatusCloseByTask(Task task);
+
+
+    /**
+     * 查询所有可认领的任务
+     *
+     * @author zlh
+     */
+    List<Task> queryTaskByBeAssignIsNull();
+
+    /**
      * 查询延期任务个数 @Title: queryCount @Description: TODO @param @return @return
      * Long @throws
      */
