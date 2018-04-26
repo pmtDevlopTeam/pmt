@@ -48,6 +48,36 @@ public interface TaskMapper {
     Task selectTaskById(Long id);
 
     /**
+     * 新增任务
+     *
+     * @author zlh
+     * @param task
+     *            插入任务的数据
+     * @date 9:07 2018/4/12
+     */
+    int addTask(Task task);
+
+    /**
+     * 根据任务删除id
+     *
+     * @author zlh
+     * @param id
+     *             需要删除的任务的id
+     * @date 17:22 2018/4/12
+     */
+    int deleteTaskById(Long id);
+
+    /**
+     * 根据任务id修改任务
+     *
+     * @author zlh
+     * @param task
+     *            需要修改的任务数据
+     * @date 10:18 2018/4/12
+     */
+    int updateTaskById(Task task);
+
+    /**
      * 查询所有任务列表
      *
      * @author zlh
@@ -66,26 +96,6 @@ public interface TaskMapper {
     List<Task> queryTaskByTask(@Param("task") Task task, @Param("ids") String[] ids);
 
     /**
-     * 新增任务
-     *
-     * @author zlh
-     * @param task
-     *            插入任务的数据
-     * @date 9:07 2018/4/12
-     */
-    int addTask(Task task);
-
-    /**
-     * 根据任务id修改任务
-     *
-     * @author zlh
-     * @param task
-     *            需要修改的任务数据
-     * @date 10:18 2018/4/12
-     */
-    int updateTaskById(Task task);
-
-    /**
      * 根据任务id查询任务详情
      *
      * @author zlh
@@ -96,16 +106,45 @@ public interface TaskMapper {
     Task queryTaskById(Long id);
 
     /**
-     * 根据任务删除id
+     * 查询下一个任务序列编号
      *
      * @author zlh
-     * @param id
-     *            需要删除的任务的id
-     * @date 17:22 2018/4/12
+     * @date 14:43 2018/4/25
+     * @return String
      */
-    int deleteTaskById(Long id);
-
     String querySequence();
+
+    /**
+     * 查询所有状态为正在进行的任务
+     *
+     * @author zlh
+     * @date 15:54 2018/4/25
+     */
+    List<Task> queryTaskByStatusRunning(Long id);
+
+    /**
+     * 查询所有状态为待办的任务
+     *
+     * @author zlh
+     * @date 15:54 2018/4/25
+     */
+    List<Task> queryTaskByStatusPending(Long id);
+
+    /**
+     * 查询所有状态为已办的任务
+     *
+     * @author zlh
+     * @date 15:54 2018/4/25
+     */
+    List<Task> queryTaskByStatusAlready(Long id);
+
+    /**
+     * 查询所有状态为关闭的任务
+     *
+     * @author zlh
+     * @date 15:54 2018/4/25
+     */
+    List<Task> queryTaskByStatusClose(Long id);
 
     /**
      * 查询延期任务个数 @Title: queryCount @Description: TODO @param @return @return

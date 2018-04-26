@@ -5,6 +5,7 @@ import com.camelot.pmt.common.APIStatus;
 import com.camelot.pmt.common.ApiResponse;
 import com.camelot.pmt.task.model.Task;
 import com.camelot.pmt.task.service.TaskManagerService;
+import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -104,8 +105,9 @@ public class TaskManagerController {
     @ApiImplicitParams({
             @ApiImplicitParam(dataType = "Long", name = "id", paramType = "form", value = "任务id", required = true),
             @ApiImplicitParam(dataType = "Long", name = "demand.id", paramType = "form", value = "需求id", required = true),
-            @ApiImplicitParam(dataType = "Long", name = "estimateHour", paramType = "form", value = "任务预计工时", required = true),
+            @ApiImplicitParam(dataType = "Long", name = "estimateHour", paramType = "form", value = "任务预计工时"),
             @ApiImplicitParam(dataType = "String", name = "priority", paramType = "form", value = "任务优先级", required = true),
+            @ApiImplicitParam(dataType = "String", name = "taskMileage", paramType = "form", value = "是否里程"),
             @ApiImplicitParam(dataType = "date", name = "estimateStartTime", paramType = "form", value = " 预计开始时间格式yyyy/MM/dd", required = true),
             @ApiImplicitParam(dataType = "date", name = "estimateEndTime", paramType = "form", value = "预计结束时间格式yyyy/MM/dd", required = true),
             @ApiImplicitParam(dataType = "String", name = "beassignUser.userId", paramType = "form", value = "负责人id", required = true),
@@ -251,9 +253,100 @@ public class TaskManagerController {
             @ApiImplicitParam(dataType = "String", name = "status", paramType = "query", value = "任务状态"),
             @ApiImplicitParam(dataType = "User", name = "beassignUser.username", paramType = "query", value = "负责人") })
     public JSONObject queryTaskByTask(@ApiIgnore Task task) {
-        System.out.println(task);
         try {
             Map<String, List<Task>> result = taskManagerService.queryTaskByTask(task);
+            return ApiResponse.success(result);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return ApiResponse.jsonData(APIStatus.ERROR_500);
+        }
+    }
+
+    /**
+     * 查询所有状态为正在进行的任务
+     *
+     * @author zlh
+     * @date 15:54 2018/4/25
+     */
+    @GetMapping(value = "/queryTaskByStatusRunning")
+    @ApiOperation(value = "查询所有状态为正在进行的任务", notes = "查询所有状态为正在进行的任务")
+    @ApiImplicitParams({
+            @ApiImplicitParam(dataType = "int", name = "page", paramType = "query", value = "当前页", required = true),
+            @ApiImplicitParam(dataType = "int", name = "rows", paramType = "query", value = "显示几行", required = true),
+            @ApiImplicitParam(dataType = "Long", name = "id", paramType = "query", value = "项目id", required = true)
+    })
+    public JSONObject queryTaskByStatusRunning(int page, int rows, Long id) {
+        try {
+            PageInfo<Task> result = taskManagerService.queryTaskByStatusRunning(page, rows, id);
+            return ApiResponse.success(result);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return ApiResponse.jsonData(APIStatus.ERROR_500);
+        }
+    }
+
+    /**
+     * 查询所有状态为待办的任务
+     *
+     * @author zlh
+     * @date 15:54 2018/4/25
+     */
+    @GetMapping(value = "/queryTaskByStatusPending")
+    @ApiOperation(value = "查询所有状态为待办的任务", notes = "查询所有状态为待办的任务")
+    @ApiImplicitParams({
+            @ApiImplicitParam(dataType = "int", name = "page", paramType = "query", value = "当前页", required = true),
+            @ApiImplicitParam(dataType = "int", name = "rows", paramType = "query", value = "显示几行", required = true),
+            @ApiImplicitParam(dataType = "Long", name = "id", paramType = "query", value = "项目id", required = true)
+    })
+    public JSONObject queryTaskByStatusPending(int page, int rows, Long id) {
+        try {
+            PageInfo<Task> result = taskManagerService.queryTaskByStatusPending(page, rows, id);
+            return ApiResponse.success(result);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return ApiResponse.jsonData(APIStatus.ERROR_500);
+        }
+    }
+
+    /**
+     * 查询所有状态为已办的任务
+     *
+     * @author zlh
+     * @date 15:54 2018/4/25
+     */
+    @GetMapping(value = "/queryTaskByStatusAlready")
+    @ApiOperation(value = "查询所有状态为已办的任务", notes = "查询所有状态为已办的任务")
+    @ApiImplicitParams({
+            @ApiImplicitParam(dataType = "int", name = "page", paramType = "query", value = "当前页", required = true),
+            @ApiImplicitParam(dataType = "int", name = "rows", paramType = "query", value = "显示几行", required = true),
+            @ApiImplicitParam(dataType = "Long", name = "id", paramType = "query", value = "项目id", required = true)
+    })
+    public JSONObject queryTaskByStatusAlready(int page, int rows, Long id) {
+        try {
+            PageInfo<Task> result = taskManagerService.queryTaskByStatusAlready(page, rows, id);
+            return ApiResponse.success(result);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return ApiResponse.jsonData(APIStatus.ERROR_500);
+        }
+    }
+
+    /**
+     * 查询所有状态为关闭的任务
+     *
+     * @author zlh
+     * @date 15:54 2018/4/25
+     */
+    @GetMapping(value = "/queryTaskByStatusClose")
+    @ApiOperation(value = "查询所有状态为关闭的任务", notes = "查询所有状态为关闭的任务")
+    @ApiImplicitParams({
+            @ApiImplicitParam(dataType = "int", name = "page", paramType = "query", value = "当前页", required = true),
+            @ApiImplicitParam(dataType = "int", name = "rows", paramType = "query", value = "显示几行", required = true),
+            @ApiImplicitParam(dataType = "Long", name = "id", paramType = "query", value = "项目id", required = true)
+    })
+    public JSONObject queryTaskByStatusClose(int page, int rows, Long id) {
+        try {
+            PageInfo<Task> result = taskManagerService.queryTaskByStatusClose(page, rows, id);
             return ApiResponse.success(result);
         } catch (Exception e) {
             logger.error(e.getMessage());

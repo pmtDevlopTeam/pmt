@@ -42,4 +42,6 @@ public interface ProjectRemindMapper {
     int deleteByProjectId(Long projectId);
 
     ProjectRemind queryByProjectId(Long projectId);
+
+    ProjectRemind queryByProjectRemind(ProjectRemind projectRemind);
 }

@@ -44,4 +44,8 @@ public interface RemindContentMapper {
     int deleteByProjectId(Long projectId);
 
     List<RemindContent> queryByProjectId(Long projectId);
+
+    List<RemindContent> queryByRemindId(Long remindId);
+
+    int deleteByRemindIdList(List<RemindContent> remindContentList);
 }

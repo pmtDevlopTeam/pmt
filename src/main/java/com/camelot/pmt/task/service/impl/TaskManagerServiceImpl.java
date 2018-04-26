@@ -13,6 +13,8 @@ import com.camelot.pmt.task.service.TaskFileService;
 import com.camelot.pmt.task.service.TaskLogService;
 import com.camelot.pmt.task.service.TaskManagerService;
 import com.camelot.pmt.task.utils.Constant;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -262,12 +264,6 @@ public class TaskManagerServiceImpl implements TaskManagerService {
             Task task = taskMapper.queryTaskById(id);
             map.put("Task", task);
 
-            // 附件
-            TaskFile taskFile = new TaskFile();
-            taskFile.setSourceId(id);
-            taskFile.setAttachmentSource("任务");
-            // 添加附件信息到map
-            map.put("TaskFile", taskFileService.queryByTaskFile(taskFile));
             List<TaskLog> logs = taskLogService.queryTaskLogList(id);
             // 添加日志信息到map
             map.put("log", logs);
@@ -390,6 +386,86 @@ public class TaskManagerServiceImpl implements TaskManagerService {
             map.put("already", already);
             map.put("close", close);
             return map;
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 查询所有状态为正在进行的任务
+     *
+     * @author zlh
+     * @date 15:54 2018/4/25
+     */
+    @Override
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
+    public PageInfo<Task> queryTaskByStatusRunning(int page, int rows, Long id) {
+        try {
+            PageHelper.startPage(page, rows);
+            List<Task> tasks = taskMapper.queryTaskByStatusRunning(id);
+            PageInfo<Task> pageInfo = new PageInfo<>(tasks);
+            return pageInfo;
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 查询所有状态为待办的任务
+     *
+     * @author zlh
+     * @date 15:54 2018/4/25
+     */
+    @Override
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
+    public PageInfo<Task> queryTaskByStatusPending(int page, int rows, Long id) {
+        try {
+            PageHelper.startPage(page, rows);
+            List<Task> tasks = taskMapper.queryTaskByStatusPending(id);
+            PageInfo<Task> pageInfo = new PageInfo<>(tasks);
+            return pageInfo;
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 查询所有状态为已办的任务
+     *
+     * @author zlh
+     * @date 15:54 2018/4/25
+     */
+    @Override
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
+    public PageInfo<Task> queryTaskByStatusAlready(int page, int rows, Long id) {
+        try {
+            PageHelper.startPage(page, rows);
+            List<Task> tasks = taskMapper.queryTaskByStatusAlready(id);
+            PageInfo<Task> pageInfo = new PageInfo<>(tasks);
+            return pageInfo;
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 查询所有状态为关闭的任务
+     *
+     * @author zlh
+     * @date 15:54 2018/4/25
+     */
+    @Override
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
+    public PageInfo<Task> queryTaskByStatusClose(int page, int rows, Long id) {
+        try {
+            PageHelper.startPage(page, rows);
+            List<Task> tasks = taskMapper.queryTaskByStatusClose(id);
+            PageInfo<Task> pageInfo = new PageInfo<>(tasks);
+            return pageInfo;
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
             throw new RuntimeException(e);

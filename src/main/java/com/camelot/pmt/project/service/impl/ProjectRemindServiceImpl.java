@@ -1,5 +1,6 @@
 package com.camelot.pmt.project.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -42,7 +43,7 @@ public class ProjectRemindServiceImpl implements ProjectRemindService {
         try {
             ProjectRemind projectRemind = remindModel.getProjectRemind();//项目提醒主体
             List<RemindContent> remindContentList = remindModel.getRemindContentList();//项目提醒内容
-            deleteProjectRemind(projectRemind.getProjectId());//删除项目提醒相关表
+            deleteProjectRemind(projectRemind);//删除项目提醒相关表
             String userId = user.getUserId();
             projectRemind.setCreateUserId(userId);
             projectRemind.setCreateTime(nowDate);
@@ -89,28 +90,45 @@ public class ProjectRemindServiceImpl implements ProjectRemindService {
     /**
      * 删除项目提醒模块
      */
-    private int deleteProjectRemind(Long projectId){
+    private int deleteProjectRemind(ProjectRemind projectRemind){
         int count = 0;
-        count += projectRemindMapper.deleteByProjectId(projectId);
-        count += remindContentMapper.deleteByProjectId(projectId);
-        count += remindContentChildMapper.deleteByProjectId(projectId);
+        ProjectRemind remind = projectRemindMapper.queryByProjectRemind(projectRemind);
+        //查询所有文本中remind_id
+        if(null != remind){
+            Long remindId = remind.getId();
+            List<RemindContent> remindContentList = remindContentMapper.queryByRemindId(remindId);
+            List<RemindContentChild> remindContentChildList = new ArrayList<RemindContentChild>();
+            if((null != remindContentList)&&(remindContentList.size()>0)){
+                for (RemindContent remindContent : remindContentList) {
+                    List<RemindContentChild> tempList = remindContentChildMapper.queryByContentId(remindContent.getId());
+                    remindContentChildList.addAll(tempList);
+                }
+            }
+            count += projectRemindMapper.deleteByPrimaryKey(remindId);
+            count += remindContentMapper.deleteByRemindIdList(remindContentList);
+            count += remindContentChildMapper.deleteByContentId(remindContentChildList);
+        }
+        
         return count;
     }
 
     /**
-     * 根据项目id查询项目提醒信息
+     * 根据项目id&&成员角色id查询项目提醒信息
      */
     @Override
-    public RemindModel queryProjectRemindByProjectId(Long projectId) {
+    public RemindModel queryProjectRemindByProjectId(Long projectId,String projectRoleId) {
         RemindModel remindModel = new RemindModel();
+        ProjectRemind remind = new ProjectRemind();
+        remind.setProjectId(projectId);
+        remind.setProjectRoleId(projectRoleId);
         try {
-            ProjectRemind projectRemind = projectRemindMapper.queryByProjectId(projectId);
+            ProjectRemind projectRemind = projectRemindMapper.queryByProjectRemind(remind);
             if(null == projectRemind){
                 return remindModel;
             }
             remindModel.setProjectRemind(projectRemind);//项目提醒主表内容
             //根据项目id查询所有的内容表
-            List<RemindContent> remindContentList = remindContentMapper.queryByProjectId(projectId);
+            List<RemindContent> remindContentList = remindContentMapper.queryByRemindId(projectRemind.getId());
             if((null == remindContentList)||(remindContentList.size()<=0)){
                 return remindModel;
             }

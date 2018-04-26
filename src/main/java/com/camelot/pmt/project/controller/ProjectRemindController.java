@@ -61,6 +61,7 @@ public class ProjectRemindController {
             return ApiResponse.error();
         } catch (Exception e) {
             logger.error("------新增项目提醒------" + e.getMessage());
+            e.printStackTrace();
             return ApiResponse.error();
         }
     }
@@ -74,13 +75,14 @@ public class ProjectRemindController {
     @ApiOperation(value = "项目提醒信息查看", notes = "根据项目Id查看项目提醒信息")
     @GetMapping(value = "/queryById")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "projectId", value = "项目id", required = true, paramType = "query", dataType = "Long")})
-    public JSONObject queryProjectRemindByProjectId(Long projectId) {
+            @ApiImplicitParam(name = "projectId", value = "项目id", required = true, paramType = "query", dataType = "Long"),
+            @ApiImplicitParam(name = "projectRoleId", value = "提醒角色id", required = true, paramType = "query", dataType = "String")})
+    public JSONObject queryProjectRemindByProjectId(Long projectId,String projectRoleId) {
         try {
             if((null == projectId)||(0 == projectId)){
                 return ApiResponse.errorPara("请求参数异常");
             }
-            RemindModel remindModel = projectRemindService.queryProjectRemindByProjectId(projectId);
+            RemindModel remindModel = projectRemindService.queryProjectRemindByProjectId(projectId,projectRoleId);
             return ApiResponse.success(remindModel);
         } catch (Exception e) {
             logger.error(e.getMessage());

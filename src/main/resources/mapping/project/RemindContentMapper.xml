@@ -115,5 +115,18 @@
     from remind_content
     where project_id = #{projectId,jdbcType=BIGINT}
   </select>
-  
+  <!-- 根据提醒id查询所有的提醒文本内容 -->
+  <select id="queryByRemindId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  	select 
+    <include refid="Base_Column_List" />
+    from remind_content
+    where remind_id = #{remindId,jdbcType=BIGINT}
+  </select>
+  <!-- 根据contentId批量删除 -->
+  <delete id="deleteByRemindIdList" parameterType="java.lang.Long">
+  	delete from remind_content where 
+    <foreach collection="list" open="(" close=")" separator="or" item="item">
+		remind_id = #{item.remindId,jdbcType=BIGINT}
+	</foreach>
+  </delete>
 </mapper>

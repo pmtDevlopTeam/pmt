@@ -44,4 +44,6 @@ public interface RemindContentChildMapper {
     int deleteByProjectId(Long projectId);
 
     List<RemindContentChild> queryByContentId(Long id);
+
+    int deleteByContentId(List<RemindContentChild> remindContentChildList);
 }
