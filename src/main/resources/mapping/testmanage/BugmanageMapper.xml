@@ -912,29 +912,29 @@
 	
 	<!-- bug统计:当天生产的bug -->
 	<select id="queryCreateTB" resultType="Integer">
-		select count(*) from bug_manage where date(create_time) = curdate() ;
+		select count(*) from bug_manage where date(create_time) = curdate() and  project_id=#{projectId} ;
 	</select>
 	<!-- bug统计：当天解决的bug -->
 	<select id="querySolveTB" resultType="Integer">
-		select count(*) from bug_manage where date(create_time) = curdate() and bug_status='2';
+		select count(*) from bug_manage where date(create_time) = curdate() and bug_status='2' and  project_id=#{projectId};
 	</select>
 	
 	<select id="queryBugTJ" resultType="Integer">
 		<!-- bug统计：所有bug数量 -->
 		<if test="status==1">
-			select count(*) from bug_manage 
+			select count(*) from bug_manage where  project_id=#{projectId}
 		</if>
 		<!-- bug统计：已解决bug数量 -->
 		<if test="status==2">
-			select count(*) from bug_manage where bug_status='2' 
+			select count(*) from bug_manage where bug_status='2' and  project_id=#{projectId};
 		</if>
 		<!-- bug统计：未解决bug数量 -->
 		<if test="status==3">
-			select count(*) from bug_manage where bug_status in('0','1','2') 
+			select count(*) from bug_manage where bug_status in('0','1','2') and  project_id=#{projectId};
 		</if>
 		<!-- bug统计：其他状态bug数量-->
 		<if test="status==4">
-			select count(*) from bug_manage where bug_status in('3','4') 
+			select count(*) from bug_manage where bug_status in('3','4')  and  project_id=#{projectId};
 		</if>
 	</select>
 	

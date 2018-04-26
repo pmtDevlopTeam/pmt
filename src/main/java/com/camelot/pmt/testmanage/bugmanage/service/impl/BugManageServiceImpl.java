@@ -464,15 +464,15 @@ public class BugManageServiceImpl implements BugManageService {
      * @return
      */
 	@Override
-	public Integer queryCreateTB() {
-		return bugManageMapper.queryCreateTB();
+	public Integer queryCreateTB(Long projectId) {
+		return bugManageMapper.queryCreateTB(projectId);
 	}
 	 /**
      * 当日已解决bug
      */
 	@Override
-	public Integer querySolveTB() {
-		return bugManageMapper.querySolveTB();
+	public Integer querySolveTB(Long projectId) {
+		return bugManageMapper.querySolveTB(projectId);
 	}
 	 /**
      * bug统计

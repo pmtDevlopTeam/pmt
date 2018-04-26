@@ -104,12 +104,12 @@ public interface BugManageMapper {
      * 当日生产的bug
      * @return
      */
-    Integer queryCreateTB();
+    Integer queryCreateTB(Long projectId);
     
     /**
      * 当日已解决bug
      */
-    Integer querySolveTB();
+    Integer querySolveTB(Long projectId);
     
     /**
      * bug统计

@@ -383,13 +383,13 @@ public class BugManageController {
      */
     @ApiOperation(value = "当日生产的bug数量", notes = "当日生产的bug数量")
     @RequestMapping(value = "queryCreateTB", method = RequestMethod.GET)
-    public JSONObject queryCreateTB() {
+    public JSONObject queryCreateTB( @ApiParam(name = "projectId", value = "projectId", required = true) @RequestParam(required = true) Long projectId) {
     	try {
     		User user = (User) ShiroUtils.getSessionAttribute("user");
     		if (null == user) {
     			return ApiResponse.jsonData(APIStatus.INVALIDSESSION_LOGINOUTTIME);
     		}
-    		Integer result = bugManageService.queryCreateTB();
+    		Integer result = bugManageService.queryCreateTB(projectId);
     		return ApiResponse.success(result);
     	} catch (Exception e) {
     		logger.error(e.getMessage());
@@ -405,13 +405,13 @@ public class BugManageController {
      */
     @ApiOperation(value = "当日已解决bug数量", notes = "当日已解决bug数量")
     @RequestMapping(value = "querySolveTB", method = RequestMethod.GET)
-    public JSONObject querySolveTB() {
+    public JSONObject querySolveTB( @ApiParam(name = "projectId", value = "projectId", required = true) @RequestParam(required = true) Long projectId) {
     	try {
     		User user = (User) ShiroUtils.getSessionAttribute("user");
     		if (null == user) {
     			return ApiResponse.jsonData(APIStatus.INVALIDSESSION_LOGINOUTTIME);
     		}
-    		Integer result = bugManageService.querySolveTB();
+    		Integer result = bugManageService.querySolveTB(projectId);
     		return ApiResponse.success(result);
     	} catch (Exception e) {
     		logger.error(e.getMessage());
@@ -426,9 +426,12 @@ public class BugManageController {
      * @param userId
      * @return
      */
-    @ApiOperation(value = "bug统计(1.所有bug数量 2.已解决bug数量 3.未解决bug数量  4.其他状态bug数量)", notes = "bug统计(1.所有bug数量 2.已解决bug数量 3.未解决bug数量  4.其他状态bug数量)")
+    @ApiOperation(value = "bug统计", notes = "bug统计")
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "status", value = "选择功能(1.所有bug数量 2.已解决bug数量 3.未解决bug数量  4.其他状态bug数量)", required = true, paramType = "query", dataType = "status"),
+        @ApiImplicitParam(name = "projectId", value = "项目id", required = true, paramType = "query", dataType = "Long") })
     @RequestMapping(value = "queryBugTJ", method = RequestMethod.GET)
-    public JSONObject queryBugTJ(String status) {
+    public JSONObject queryBugTJ(@RequestParam(required = true) String status, @RequestParam(required = true) Long projectId) {
     	try {
     		User user = (User) ShiroUtils.getSessionAttribute("user");
     		if (null == user) {
@@ -436,6 +439,7 @@ public class BugManageController {
     		}
     		Map<String,Object> map=new HashMap<String,Object>();
     		map.put("status",status);
+    		map.put("projectId", projectId);
     		Integer result = bugManageService.queryBugTJ(map);
     		return ApiResponse.success(result);
     	} catch (Exception e) {
