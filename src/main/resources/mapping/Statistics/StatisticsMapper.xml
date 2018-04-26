@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.camelot.pmt.Statistics.mapper.StatisticsMapper">
+  <select id="statisticsUserCase" parameterType="Long" resultType="com.camelot.pmt.Statistics.model.StatisticsUserCase">
+select d.demand_name dmandName, count(u.id) acount from use_case u left join demand d on u.demand_id=d.id and u.project_id=d.project_id where d.project_id=#{prentId} GROUP by d.id
+  </select>
+  <select id="statisticsVersionUserCase" parameterType="Long" resultType="com.camelot.pmt.Statistics.model.StatisticsUserCase">
+    select v.version_code version,count(u.version_id) acount from version v left join use_case u ON u.version_id=v.id
+    where v.project_id=#{projectId} GROUP BY v.version_code
+  </select>
+  <select id="statisticsUserCaseByType" parameterType="Long" resultType="com.camelot.pmt.Statistics.model.StatisticsUserCase">
+    select u.case_type caseType,count(u.id) acount from use_case u where u.project_id=#{projectId} GROUP BY u.case_type
+  </select>
+</mapper>
