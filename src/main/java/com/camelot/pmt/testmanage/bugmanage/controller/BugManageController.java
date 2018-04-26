@@ -22,6 +22,7 @@ import com.camelot.pmt.platform.shiro.ShiroUtils;
 import com.camelot.pmt.testmanage.bugmanage.model.BugHistory;
 import com.camelot.pmt.testmanage.bugmanage.model.BugManage;
 import com.camelot.pmt.testmanage.bugmanage.model.SelectBugManage;
+import com.camelot.pmt.testmanage.bugmanage.model.SelectBugManageCount;
 import com.camelot.pmt.testmanage.bugmanage.service.BugHistoryService;
 import com.camelot.pmt.testmanage.bugmanage.service.BugManageService;
 import com.github.pagehelper.PageInfo;
@@ -372,6 +373,122 @@ public class BugManageController {
 	        	logger.error(e.getMessage());
 	            return ApiResponse.jsonData(APIStatus.ERROR_500);
 	        }
+    }
+    
+    /**
+     * 当日生产的bug数量
+     * 
+     * @param userId
+     * @return
+     */
+    @ApiOperation(value = "当日生产的bug数量", notes = "当日生产的bug数量")
+    @RequestMapping(value = "queryCreateTB", method = RequestMethod.GET)
+    public JSONObject queryCreateTB() {
+    	try {
+    		User user = (User) ShiroUtils.getSessionAttribute("user");
+    		if (null == user) {
+    			return ApiResponse.jsonData(APIStatus.INVALIDSESSION_LOGINOUTTIME);
+    		}
+    		Integer result = bugManageService.queryCreateTB();
+    		return ApiResponse.success(result);
+    	} catch (Exception e) {
+    		logger.error(e.getMessage());
+    		return ApiResponse.jsonData(APIStatus.ERROR_500);
+    	}
+    }
+    
+    /**
+     * 当日已解决bug数量
+     * 
+     * @param userId
+     * @return
+     */
+    @ApiOperation(value = "当日已解决bug数量", notes = "当日已解决bug数量")
+    @RequestMapping(value = "querySolveTB", method = RequestMethod.GET)
+    public JSONObject querySolveTB() {
+    	try {
+    		User user = (User) ShiroUtils.getSessionAttribute("user");
+    		if (null == user) {
+    			return ApiResponse.jsonData(APIStatus.INVALIDSESSION_LOGINOUTTIME);
+    		}
+    		Integer result = bugManageService.querySolveTB();
+    		return ApiResponse.success(result);
+    	} catch (Exception e) {
+    		logger.error(e.getMessage());
+    		return ApiResponse.jsonData(APIStatus.ERROR_500);
+    	}
+    }
+    
+    
+    /**
+     * bug统计
+     * 
+     * @param userId
+     * @return
+     */
+    @ApiOperation(value = "bug统计(1.所有bug数量 2.已解决bug数量 3.未解决bug数量  4.其他状态bug数量)", notes = "bug统计(1.所有bug数量 2.已解决bug数量 3.未解决bug数量  4.其他状态bug数量)")
+    @RequestMapping(value = "queryBugTJ", method = RequestMethod.GET)
+    public JSONObject queryBugTJ(String status) {
+    	try {
+    		User user = (User) ShiroUtils.getSessionAttribute("user");
+    		if (null == user) {
+    			return ApiResponse.jsonData(APIStatus.INVALIDSESSION_LOGINOUTTIME);
+    		}
+    		Map<String,Object> map=new HashMap<String,Object>();
+    		map.put("status",status);
+    		Integer result = bugManageService.queryBugTJ(map);
+    		return ApiResponse.success(result);
+    	} catch (Exception e) {
+    		logger.error(e.getMessage());
+    		return ApiResponse.jsonData(APIStatus.ERROR_500);
+    	}
+    }
+    
+    /**
+     * 根据项目统计出任务bug
+     * 
+     * @param userId
+     * @return
+     */
+    @ApiOperation(value = "根据项目统计出任务bug", notes = "根据项目统计出任务bug")
+    @RequestMapping(value = "queryCountBugTask", method = RequestMethod.GET)
+    public JSONObject queryCountBugTask(
+            @ApiParam(name = "projectId", value = "projectId", required = true) @RequestParam(required = true) Long projectId) {
+    	 try {
+	        	User user = (User) ShiroUtils.getSessionAttribute("user");
+	            if (null == user) {
+	                return ApiResponse.jsonData(APIStatus.INVALIDSESSION_LOGINOUTTIME);
+	            }
+	            List<SelectBugManageCount>  result = bugManageService.queryCountBugTask(projectId);
+	            return ApiResponse.success(result);
+	        } catch (Exception e) {
+	        	logger.error(e.getMessage());
+	            return ApiResponse.jsonData(APIStatus.ERROR_500);
+	        }
+    }
+    
+    
+    /**
+     * 根据任务统计出负责人bug
+     * 
+     * @param userId
+     * @return
+     */
+    @ApiOperation(value = "根据任务统计出负责人bug", notes = "根据任务统计出负责人bug")
+    @RequestMapping(value = "queryCountBugDesignated", method = RequestMethod.GET)
+    public JSONObject queryCountBugDesignated(
+    		@ApiParam(name = "taskId", value = "taskId", required = true) @RequestParam(required = true) Long taskId) {
+    	try {
+    		User user = (User) ShiroUtils.getSessionAttribute("user");
+    		if (null == user) {
+    			return ApiResponse.jsonData(APIStatus.INVALIDSESSION_LOGINOUTTIME);
+    		}
+    		List<SelectBugManageCount> result = bugManageService.queryCountBugDesignated(taskId);
+    		return ApiResponse.success(result);
+    	} catch (Exception e) {
+    		logger.error(e.getMessage());
+    		return ApiResponse.jsonData(APIStatus.ERROR_500);
+    	}
     }
 
 }

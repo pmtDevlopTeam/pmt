@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.camelot.pmt.testmanage.bugmanage.model.BugManage;
 import com.camelot.pmt.testmanage.bugmanage.model.SelectBugManage;
+import com.camelot.pmt.testmanage.bugmanage.model.SelectBugManageCount;
 
 @Mapper
 public interface BugManageMapper {
@@ -98,5 +99,36 @@ public interface BugManageMapper {
      * @return
      */
     SelectBugManage queryBugLimit();
+    
+    /**
+     * 当日生产的bug
+     * @return
+     */
+    Integer queryCreateTB();
+    
+    /**
+     * 当日已解决bug
+     */
+    Integer querySolveTB();
+    
+    /**
+     * bug统计
+     */
+    Integer queryBugTJ(Map<String,Object> map);
+	    
+    /**
+     * 根据项目统计出任务bug
+     * @param projectId
+     * @return
+     */
+    List<SelectBugManageCount> queryCountBugTask(Long projectId);
+    /**
+     * 根据任务统计出负责人bug
+     * @param taskId
+     * @return
+     */
+    List<SelectBugManageCount> queryCountBugDesignated(Long taskId);
+    
+    
 
 }

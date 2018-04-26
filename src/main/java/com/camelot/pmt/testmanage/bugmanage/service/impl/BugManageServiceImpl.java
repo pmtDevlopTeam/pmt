@@ -21,6 +21,7 @@ import com.camelot.pmt.testmanage.bugmanage.mapper.BugManageMapper;
 import com.camelot.pmt.testmanage.bugmanage.model.BugHistory;
 import com.camelot.pmt.testmanage.bugmanage.model.BugManage;
 import com.camelot.pmt.testmanage.bugmanage.model.SelectBugManage;
+import com.camelot.pmt.testmanage.bugmanage.model.SelectBugManageCount;
 import com.camelot.pmt.testmanage.bugmanage.service.BugManageService;
 import com.github.pagehelper.PageHelper;
 
@@ -456,6 +457,48 @@ public class BugManageServiceImpl implements BugManageService {
 	    	bugHistory.setOperationFunction(operation);
 	    	bugHistory.setOperationRecord(operateDesc);
 	    	bugHistoryMapper.addBugHistory(bugHistory);
+	}
+	
+	/**
+     * 当日生产的bug
+     * @return
+     */
+	@Override
+	public Integer queryCreateTB() {
+		return bugManageMapper.queryCreateTB();
+	}
+	 /**
+     * 当日已解决bug
+     */
+	@Override
+	public Integer querySolveTB() {
+		return bugManageMapper.querySolveTB();
+	}
+	 /**
+     * bug统计
+     */
+	@Override
+	public Integer queryBugTJ(Map<String, Object> map) {
+		return bugManageMapper.queryBugTJ(map);
+	}
+	
+	/**
+     * 根据项目统计出任务bug
+     * @param projectId
+     * @return
+     */
+	@Override
+	public List<SelectBugManageCount> queryCountBugTask(Long projectId) {
+		return bugManageMapper.queryCountBugTask(projectId);
+	}
+	 /**
+     * 根据任务统计出负责人bug
+     * @param taskId
+     * @return
+     */
+	@Override
+	public List<SelectBugManageCount> queryCountBugDesignated(Long taskId) {
+		return bugManageMapper.queryCountBugDesignated(taskId);
 	}
 
 

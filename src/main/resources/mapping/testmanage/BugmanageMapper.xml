@@ -50,6 +50,14 @@
 		<result column="bug_level" jdbcType="VARCHAR" property="bugLevel" />
 	</resultMap>
 	
+	<resultMap id="SelectBaseCountMap"
+		type="com.camelot.pmt.testmanage.bugmanage.model.SelectBugManageCount">
+		<id column="id" jdbcType="BIGINT" property="id" />
+		<result column="task_id" jdbcType="BIGINT" property="taskId" />
+		<result column="designated_id" jdbcType="VARCHAR" property="designatedId" />
+		<result column="bugCount" jdbcType="BIGINT" property="bugCount" />
+	</resultMap>
+	
 	<sql id="Base_Column_List">
 		id, bug_title, bug_no,project_id, demand_id, task_id, designated_id,
 		version_id, bug_type,
@@ -900,6 +908,43 @@
 	<select id="queryBugLimit" resultMap="SelectBaseResultMap">
 		select id,bug_no,bug_title,serious_degree,create_user_id,designated_id,solve_id,bug_status,bug_level
 		from bug_manage  order by id desc limit 1
+	</select>
+	
+	<!-- bug统计:当天生产的bug -->
+	<select id="queryCreateTB" resultType="Integer">
+		select count(*) from bug_manage where date(create_time) = curdate() ;
+	</select>
+	<!-- bug统计：当天解决的bug -->
+	<select id="querySolveTB" resultType="Integer">
+		select count(*) from bug_manage where date(create_time) = curdate() and bug_status='2';
+	</select>
+	
+	<select id="queryBugTJ" resultType="Integer">
+		<!-- bug统计：所有bug数量 -->
+		<if test="status==1">
+			select count(*) from bug_manage 
+		</if>
+		<!-- bug统计：已解决bug数量 -->
+		<if test="status==2">
+			select count(*) from bug_manage where bug_status='2' 
+		</if>
+		<!-- bug统计：未解决bug数量 -->
+		<if test="status==3">
+			select count(*) from bug_manage where bug_status in('0','1','2') 
+		</if>
+		<!-- bug统计：其他状态bug数量-->
+		<if test="status==4">
+			select count(*) from bug_manage where bug_status in('3','4') 
+		</if>
+	</select>
+	
+	<!-- 根据项目统计出任务bug -->
+	<select id="queryCountBugTask" resultMap="SelectBaseCountMap">
+		select task_id,count(task_id) as bugCount from bug_manage where project_id=#{projectId} GROUP BY task_id 
+	</select>
+	<!-- 根据任务统计出负责人bug -->
+	<select id="queryCountBugDesignated" resultMap="SelectBaseCountMap">
+		select designated_id,count(designated_id) as bugCount from bug_manage where task_id=#{taskId} GROUP BY designated_id 
 	</select>
 	
 	
