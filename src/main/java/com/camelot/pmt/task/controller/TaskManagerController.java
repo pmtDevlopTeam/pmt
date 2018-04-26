@@ -105,8 +105,9 @@ public class TaskManagerController {
     @ApiImplicitParams({
             @ApiImplicitParam(dataType = "Long", name = "id", paramType = "form", value = "任务id", required = true),
             @ApiImplicitParam(dataType = "Long", name = "demand.id", paramType = "form", value = "需求id", required = true),
-            @ApiImplicitParam(dataType = "Long", name = "estimateHour", paramType = "form", value = "任务预计工时", required = true),
+            @ApiImplicitParam(dataType = "Long", name = "estimateHour", paramType = "form", value = "任务预计工时"),
             @ApiImplicitParam(dataType = "String", name = "priority", paramType = "form", value = "任务优先级", required = true),
+            @ApiImplicitParam(dataType = "String", name = "taskMileage", paramType = "form", value = "是否里程"),
             @ApiImplicitParam(dataType = "date", name = "estimateStartTime", paramType = "form", value = " 预计开始时间格式yyyy/MM/dd", required = true),
             @ApiImplicitParam(dataType = "date", name = "estimateEndTime", paramType = "form", value = "预计结束时间格式yyyy/MM/dd", required = true),
             @ApiImplicitParam(dataType = "String", name = "beassignUser.userId", paramType = "form", value = "负责人id", required = true),
