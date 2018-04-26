@@ -1,4 +1,4 @@
-package com.camelot.pmt.task;
+package com.camelot.pmt.task.controller;
 
 import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.platform.model.User;
