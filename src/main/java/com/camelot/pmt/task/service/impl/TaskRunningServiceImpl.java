@@ -73,8 +73,9 @@ public class TaskRunningServiceImpl implements TaskRunningService {
     public Boolean updateRunningToClose(Long id) {
         Boolean flag = false;
         int i = taskMapper.updateRunningToClose(id);
-        if(i>0){
-            taskLogService.insertTaskLog(id, Constant.TaskLogOperationButton.CLOSETASK.getValue(), "修改任务状态由：“正在进行”转换为“关闭”");
+        if (i > 0) {
+            taskLogService.insertTaskLog(id, Constant.TaskLogOperationButton.CLOSETASK.getValue(),
+                    "修改任务状态由：“正在进行”转换为“关闭”");
             flag = true;
             return flag;
         }
@@ -92,8 +93,9 @@ public class TaskRunningServiceImpl implements TaskRunningService {
     public Boolean updateRunningToAlready(Task ptask) {
         Boolean flag = false;
         int i = taskMapper.updateRunningToAlready(ptask.getId());
-        if(i>0){
-            taskLogService.insertTaskLog(ptask.getId(), Constant.TaskLogOperationButton.COMPLETETASK.getValue(), "修改任务状态由：“正在进行”转换为“完成”");
+        if (i > 0) {
+            taskLogService.insertTaskLog(ptask.getId(), Constant.TaskLogOperationButton.COMPLETETASK.getValue(),
+                    "修改任务状态由：“正在进行”转换为“完成”");
             flag = true;
             return flag;
         }

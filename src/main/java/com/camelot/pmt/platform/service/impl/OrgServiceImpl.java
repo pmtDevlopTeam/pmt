@@ -36,13 +36,13 @@ public class OrgServiceImpl implements OrgService {
 
 	@Autowired
 	private UserMapper userMapper;
-	
+
 	@Autowired
-    private LogAspect logAspect;
+	private LogAspect logAspect;
 
 	/**
 	 * 查询部门列表
-	 * 
+	 *
 	 * @return
 	 */
 	@Override
@@ -83,7 +83,7 @@ public class OrgServiceImpl implements OrgService {
 
 	/**
 	 * 新增部门
-	 * 
+	 *
 	 * @param org
 	 * @return
 	 */
@@ -106,7 +106,7 @@ public class OrgServiceImpl implements OrgService {
 		int nums = orgMapper.addOrg(org);
 		if (!StringUtils.isEmpty(org.getOrgLeader())) {
 			OrgToUser orgToUser = orgMapper.queryOrgAndUserByOrgIdAndUserId(org.getOrgLeader(), org.getOrgId());
-			if (orgToUser==null) {
+			if (orgToUser == null) {
 				OrgToUser otu = new OrgToUser();
 				otu.setOrgId(org.getOrgId());
 				otu.setUserId(org.getOrgLeader());
@@ -117,9 +117,9 @@ public class OrgServiceImpl implements OrgService {
 				otu.setModifyTime(new Date(date));
 				orgMapper.updateOrgToUser(otu);
 			}
-			if (nums >0 ) {
+			if (nums > 0) {
 				result = "添加部门成功!";
-				//添加日志
+				// 添加日志
 				logAspect.insertAddLog(org, Modular.ORG, org.getCreatUserId());
 				return result;
 			} else {
@@ -128,7 +128,7 @@ public class OrgServiceImpl implements OrgService {
 			}
 		}
 		if (nums > 0) {
-			//添加日志
+			// 添加日志
 			logAspect.insertAddLog(org, Modular.ORG, org.getCreatUserId());
 			result = "添加部门成功!";
 			return result;
@@ -140,7 +140,7 @@ public class OrgServiceImpl implements OrgService {
 
 	/**
 	 * 生成code
-	 * 
+	 *
 	 * @param org
 	 * @return
 	 */
@@ -193,7 +193,7 @@ public class OrgServiceImpl implements OrgService {
 
 	/**
 	 * 修改部门
-	 * 
+	 *
 	 * @param org
 	 * @return
 	 */
@@ -204,21 +204,20 @@ public class OrgServiceImpl implements OrgService {
 		Org orgBefore = orgMapper.queryOrgByOrgId(org.getOrgId());
 		if (org.getParentId().equals(orgBefore.getParentId())) {
 			if (StringUtils.isEmpty(org.getOrgLeader())) {
-				num=orgMapper.updateOrgByOrgId(org);
+				num = orgMapper.updateOrgByOrgId(org);
 				orgMapper.deleteOrgByUserIdAndOrgId(orgBefore.getOrgLeader(), org.getOrgId());
 				Org orgAfter = orgMapper.queryOrgByOrgId(org.getOrgId());
-				if (num>0) {
-					//添加日志
-					orgAfter.setUser(null);
-					orgBefore.setUser(null);
+				if (num > 0) {
+					// 添加日志
+
 					logAspect.insertUpdateLog(orgAfter, orgBefore, Modular.ORG, org.getModifyUserId());
 					updateState(org);
 					return "部门修改成功";
-				}else{
+				} else {
 					return "部门修改失败";
 				}
-				 
-			}else{
+
+			} else {
 				OrgToUser otu = new OrgToUser();
 				otu.setOrgId(org.getOrgId());
 				otu.setUserId(org.getOrgLeader());
@@ -230,14 +229,13 @@ public class OrgServiceImpl implements OrgService {
 				val = orgMapper.updateOrgToUser(otu);
 				num = orgMapper.updateOrgByOrgId(org);
 				Org orgAfter = orgMapper.queryOrgByOrgId(org.getOrgId());
-				if (val>0 && num >0) {
-					//添加日志
-					orgAfter.setUser(null);
-					orgBefore.setUser(null);
+				if (val > 0 && num > 0) {
+					// 添加日志
+
 					logAspect.insertUpdateLog(orgAfter, orgBefore, Modular.ORG, org.getModifyUserId());
-				   updateState(org);
+					updateState(org);
 					return "修改部门成功";
-				}else{
+				} else {
 					return "修改部门成功";
 				}
 			}
@@ -247,18 +245,17 @@ public class OrgServiceImpl implements OrgService {
 				num = orgMapper.updateOrgByOrgId(org);
 				Org orgAfter = orgMapper.queryOrgByOrgId(org.getOrgId());
 				orgMapper.deleteOrgByUserIdAndOrgId(orgBefore.getOrgLeader(), org.getOrgId());
-				if (num>0) {
-					//添加日志
-					orgAfter.setUser(null);
-					orgBefore.setUser(null);
+				if (num > 0) {
+					// 添加日志
+
 					logAspect.insertUpdateLog(orgAfter, orgBefore, Modular.ORG, org.getModifyUserId());
 					updateCode(org);
 					updateState(org);
 					return "部门修改成功";
-				}else{
+				} else {
 					return "部门修改失败";
 				}
-			}else{
+			} else {
 				OrgToUser otu = new OrgToUser();
 				otu.setOrgId(org.getOrgId());
 				otu.setUserId(org.getOrgLeader());
@@ -270,15 +267,14 @@ public class OrgServiceImpl implements OrgService {
 				val = orgMapper.updateOrgToUser(otu);
 				num = orgMapper.updateOrgByOrgId(org);
 				Org orgAfter = orgMapper.queryOrgByOrgId(org.getOrgId());
-				if (val>0 && num >0) {
-					//添加日志
-					orgAfter.setUser(null);
-					orgBefore.setUser(null);
+				if (val > 0 && num > 0) {
+					// 添加日志
+
 					logAspect.insertUpdateLog(orgAfter, orgBefore, Modular.ORG, org.getModifyUserId());
 					updateCode(org);
 					updateState(org);
 					return "修改部门成功";
-				}else{
+				} else {
 					return "修改部门成功";
 				}
 			}
@@ -287,7 +283,7 @@ public class OrgServiceImpl implements OrgService {
 
 	/**
 	 * 子部递归门生成部门编号
-	 * 
+	 *
 	 * @param org
 	 */
 	private void updateCode(Org org) {
@@ -311,7 +307,7 @@ public class OrgServiceImpl implements OrgService {
 
 	/**
 	 * 父级部门的状态被修改，自己部门的状态递归出来一并修改
-	 * 
+	 *
 	 * @param org
 	 */
 	private String updateState(Org org) {
@@ -324,10 +320,9 @@ public class OrgServiceImpl implements OrgService {
 				orgItem.setState(org.getState());
 				int num = orgMapper.updateOrgByOrgId(orgItem);
 				Org orgAfter = orgMapper.queryOrgByOrgId(orgItem.getOrgId());
-				if (num>0) {
-					//添加日志
-					orgAfter.setUser(null);
-					orgOld.setUser(null);
+				if (num > 0) {
+					// 添加日志
+
 					logAspect.insertUpdateLog(orgAfter, orgOld, Modular.ORG, org.getModifyUserId());
 				}
 				updateState(orgItem);
@@ -336,6 +331,7 @@ public class OrgServiceImpl implements OrgService {
 		}
 
 	}
+
 	private String updateStates(Org org) {
 		List<Org> OrgList = orgMapper.queryOrgSubByParentId(org.getOrgId());
 		if (CollectionUtils.isEmpty(OrgList)) {
@@ -350,12 +346,10 @@ public class OrgServiceImpl implements OrgService {
 		}
 
 	}
-	
-	
 
 	/**
 	 * 删除部门
-	 * 
+	 *
 	 * @param orgId
 	 * @return
 	 */
@@ -364,11 +358,11 @@ public class OrgServiceImpl implements OrgService {
 		String result = "";
 		Org orgObj = orgMapper.queryOrgByOrgId(org.getOrgId());
 		if (!StringUtils.isEmpty(orgObj.getOrgLeader())) {
-			 orgMapper.deleteOrgByUserIdAndOrgId(orgObj.getOrgLeader(), orgObj.getOrgId());
+			orgMapper.deleteOrgByUserIdAndOrgId(orgObj.getOrgLeader(), orgObj.getOrgId());
 		}
 		int count = orgMapper.deleteOrgByOrgId(org.getOrgId());
-		if (count > 0 ) {
-			//添加日志
+		if (count > 0) {
+			// 添加日志
 			logAspect.insertDeleteLog(Modular.ORG, orgObj.getModifyUserId(), orgObj.getOrgname());
 			result = "删除部门成功";
 		} else {
@@ -379,7 +373,7 @@ public class OrgServiceImpl implements OrgService {
 
 	/**
 	 * 查询单个部门
-	 * 
+	 *
 	 * @return
 	 */
 	@Override
@@ -399,7 +393,7 @@ public class OrgServiceImpl implements OrgService {
 
 	/**
 	 * 分页查询部门列表
-	 * 
+	 *
 	 * @param org
 	 * @return
 	 */
@@ -423,7 +417,7 @@ public class OrgServiceImpl implements OrgService {
 
 	/**
 	 * 查询多个子部门 递归查询本节点的id及孩子节点的id
-	 * 
+	 *
 	 * @param OrgId
 	 * @return
 	 */
@@ -483,15 +477,15 @@ public class OrgServiceImpl implements OrgService {
 	 */
 	@Override
 	public String deleteOrgSubByOrgId(String orgId) {
-		int num =0;
+		int num = 0;
 		List<Org> OrgList = orgMapper.queryOrgSubByParentId(orgId);
 		Org org = orgMapper.queryOrgByOrgId(orgId);
 		if (CollectionUtils.isEmpty(OrgList)) {
 			if (!StringUtils.isEmpty(org.getOrgLeader())) {
-				num=orgMapper.deleteOrgByOrgId(orgId);
+				num = orgMapper.deleteOrgByOrgId(orgId);
 				orgMapper.deleteOrgByUserIdAndOrgId(org.getOrgLeader(), orgId);
-			}else{
-				num=orgMapper.deleteOrgByOrgId(orgId);
+			} else {
+				num = orgMapper.deleteOrgByOrgId(orgId);
 			}
 		} else {
 			num = orgMapper.deleteOrgByOrgId(orgId);
@@ -502,11 +496,11 @@ public class OrgServiceImpl implements OrgService {
 				deleteOrgSubByOrgId(orgObj.getOrgId());
 			}
 		}
-		if (num>0) {
-			//添加日志
+		if (num > 0) {
+			// 添加日志
 			logAspect.insertDeleteLog(Modular.ORG, org.getModifyUserId(), org.getOrgname());
 			return "删除本部门以及子部门成功";
-		}else{
+		} else {
 			return "删除本部门以及子部门失败";
 		}
 	}
@@ -523,9 +517,9 @@ public class OrgServiceImpl implements OrgService {
 			if (orgAndUser != null) {
 				orgMapper.deleteOrgByUserIdAndOrgId(ids, orgToUser.getOrgId());
 			}
-			 user = userMapper.queryUserByUserId(ids);
-			 stringBuffer += user.getUsername() + ",";
-			 orgObj = orgMapper.queryOrgByOrgId(orgToUser.getOrgId());
+			user = userMapper.queryUserByUserId(ids);
+			stringBuffer += user.getUsername() + ",";
+			orgObj = orgMapper.queryOrgByOrgId(orgToUser.getOrgId());
 			if (user == null) {
 				return "传入的用户参数不正确";
 			} else if (orgObj == null) {
@@ -543,8 +537,7 @@ public class OrgServiceImpl implements OrgService {
 			}
 		}
 		if (count > 0) {
-			logAspect.insertBindingLog("无用户",stringBuffer, Modular.ORGtOUSER,
-					orgToUser.getCreateUserId());
+			logAspect.insertBindingLog(stringBuffer, "添加新用户用户", Modular.ORGTOUSER, orgToUser.getCreateUserId());
 			return "部门和用户绑定成功";
 		} else {
 			return "部门和用户绑定失败";
@@ -592,18 +585,18 @@ public class OrgServiceImpl implements OrgService {
 		Org orgBefore = orgMapper.queryOrgByOrgId(org.getOrgId());
 		int num = orgMapper.updateOrgByOrgIdAndState(org);
 		Org orgAfter = orgMapper.queryOrgByOrgId(org.getOrgId());
-		if (num>0) {
-			//添加日志
-			orgAfter.setUser(null);
-			orgBefore.setUser(null);
+		if (num > 0) {
+			// 添加日志
+			/*
+			 * orgAfter.setUser(null); orgBefore.setUser(null);
+			 */
 			logAspect.insertUpdateLog(orgAfter, orgBefore, Modular.ORG, org.getModifyUserId());
 			updateState(org);
 			return "部门状态修改成功";
-		}else{
+		} else {
 			return "部门状态修改成功";
 		}
-		
-		
+
 	}
 
 	@Override
@@ -611,10 +604,10 @@ public class OrgServiceImpl implements OrgService {
 		int count = 0;
 		String stringBuffer1 = "";
 		String stringBuffer2 = "";
-		List<OrgToUser> orgToUserBefore= orgMapper.queryOrgAndUserByOrgId(orgToUser.getOrgId());
+		List<OrgToUser> orgToUserBefore = orgMapper.queryOrgAndUserByOrgId(orgToUser.getOrgId());
 		for (OrgToUser orgToUser2 : orgToUserBefore) {
 			User userBefore = userMapper.queryUserByUserId(orgToUser2.getUserId());
-			stringBuffer1+= userBefore.getUsername()+",";
+			stringBuffer1 += userBefore.getUsername() + ",";
 		}
 		List<String> userIds = Arrays.asList(orgToUser.getUserIds());
 		orgMapper.deleteOrgToUserByOrgId(orgToUser.getOrgId());
@@ -632,7 +625,7 @@ public class OrgServiceImpl implements OrgService {
 		}
 		for (String ids : userIds) {
 			User userAfter = userMapper.queryUserByUserId(ids);
-			stringBuffer2+= userAfter.getUsername()+",";
+			stringBuffer2 += userAfter.getUsername() + ",";
 			Org orgObj = orgMapper.queryOrgByOrgId(orgToUser.getOrgId());
 			if (userAfter == null) {
 				return "传入的用户参数不正确";
@@ -651,8 +644,7 @@ public class OrgServiceImpl implements OrgService {
 			}
 		}
 		if (count > 0) {
-			logAspect.insertBindingLog(stringBuffer2,stringBuffer1 , Modular.ORGtOUSER,
-					orgToUser.getCreateUserId());
+			logAspect.insertBindingLog(stringBuffer2, stringBuffer1, Modular.ORGTOUSER, orgToUser.getCreateUserId());
 			return "部门和用户修改成功";
 		} else {
 			return "部门和用户修改失败";

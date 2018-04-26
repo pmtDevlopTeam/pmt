@@ -47,7 +47,19 @@ public class VersionVo {
     /**
      * 版本编号
      */
-    private String version;
+    private String versionCode;
+    /**
+     * 版本仓库地址
+     */
+    private String versionRepositoryUrl;
+    /**
+     * 版本仓库分支
+     */
+    private String versionRepositoryBranch;
+    /**
+     * 版本仓库id
+     */
+    private String versionRepositoryId;
 
     /**
      * id
@@ -168,17 +180,41 @@ public class VersionVo {
      *
      * @return version 版本编号
      */
-    public String getVersion() {
-        return version;
+    public String getVersionCode() {
+        return versionCode;
     }
 
     /**
      * 版本编号
      *
-     * @param version
+     * @param versionCode
      *            版本编号
      */
-    public void setVersion(String version) {
-        this.version = version == null ? null : version.trim();
+    public void setVersionCode(String versionCode) {
+        this.versionCode = versionCode == null ? null : versionCode.trim();
+    }
+
+    public String getVersionRepositoryUrl() {
+        return versionRepositoryUrl;
+    }
+
+    public void setVersionRepositoryUrl(String versionRepositoryUrl) {
+        this.versionRepositoryUrl = versionRepositoryUrl == null ? null : versionRepositoryUrl.trim();
+    }
+
+    public String getVersionRepositoryBranch() {
+        return versionRepositoryBranch;
+    }
+
+    public void setVersionRepositoryBranch(String versionRepositoryBranch) {
+        this.versionRepositoryBranch = versionRepositoryBranch == null ? null : versionRepositoryBranch.trim();
+    }
+
+    public String getVersionRepositoryId() {
+        return versionRepositoryId;
+    }
+
+    public void setVersionRepositoryId(String versionRepositoryId) {
+        this.versionRepositoryId = versionRepositoryId == null ? null : versionRepositoryId.trim();
     }
 }

@@ -68,7 +68,7 @@ public class TaskLogServiceImpl implements TaskLogService {
      */
     @Override
     public Boolean insertTaskLog(Long taskId, String button, String peration) {
-    	Boolean flag = false;
+        Boolean flag = false;
         try {
             if (taskId == null) {
                 return flag;
@@ -82,12 +82,11 @@ public class TaskLogServiceImpl implements TaskLogService {
             taskLog.setUserId(user.getUserId());
             taskLog.setOperationButton(button);
             taskLog.setOperationTime(date);
-            taskLog.setOperationDescribe(
-                    dateFormat.format(date) + "\t" + user.getUsername() + "\t" + peration);
+            taskLog.setOperationDescribe(dateFormat.format(date) + "\t" + user.getUsername() + "\t" + peration);
             int count = taskLogMapper.insertTaskLog(taskLog);
 
             if (count > 0) {
-            	flag=true;
+                flag = true;
             }
 
         } catch (Exception e) {

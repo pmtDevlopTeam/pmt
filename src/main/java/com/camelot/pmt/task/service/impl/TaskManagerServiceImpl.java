@@ -74,12 +74,12 @@ public class TaskManagerServiceImpl implements TaskManagerService {
             // 默认状态
             task.setStatus("0");
             // 根据当前登录用户查询的用户userid
-            User user = (User)ShiroUtils.getSessionAttribute("user");
+            User user = (User) ShiroUtils.getSessionAttribute("user");
             String userId = user.getUserId();
             user.setUserId(userId);
             task.setCreateUser(user);
             int insertTaskResult = taskMapper.addTask(task);
-            taskLogService.insertTaskLog(task.getId(),Constant.TaskLogOperationButton.CREATETASK.getValue(),"新增了任务");
+            taskLogService.insertTaskLog(task.getId(), Constant.TaskLogOperationButton.CREATETASK.getValue(), "新增了任务");
             return (insertTaskResult == 1) ? true : false;
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
@@ -119,7 +119,7 @@ public class TaskManagerServiceImpl implements TaskManagerService {
             }
             // 删除任务
             int deleteTaskByIdResult = taskMapper.deleteTaskById(id);
-            taskLogService.insertTaskLog(id,Constant.TaskLogOperationButton.DELETETASK.getValue(),"删除了任务");
+            taskLogService.insertTaskLog(id, Constant.TaskLogOperationButton.DELETETASK.getValue(), "删除了任务");
             return deleteTaskByIdResult == 1 ? true : false;
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
@@ -144,7 +144,7 @@ public class TaskManagerServiceImpl implements TaskManagerService {
             }
 
             int updateTaskByIdResult = taskMapper.updateTaskById(task);
-            taskLogService.insertTaskLog(task.getId(),Constant.TaskLogOperationButton.UPDATETASK.getValue(),"修改了任务");
+            taskLogService.insertTaskLog(task.getId(), Constant.TaskLogOperationButton.UPDATETASK.getValue(), "修改了任务");
             return (updateTaskByIdResult == 1) ? true : false;
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
@@ -168,7 +168,7 @@ public class TaskManagerServiceImpl implements TaskManagerService {
                 throw new RuntimeException("参数错误");
             }
             int updateTaskByIdResult = taskMapper.updateTaskById(task);
-            taskLogService.insertTaskLog(task.getId(),Constant.TaskLogOperationButton.UPDATETASK.getValue(),"变更了需求");
+            taskLogService.insertTaskLog(task.getId(), Constant.TaskLogOperationButton.UPDATETASK.getValue(), "变更了需求");
             return updateTaskByIdResult == 1 ? true : false;
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
@@ -204,7 +204,8 @@ public class TaskManagerServiceImpl implements TaskManagerService {
 
             // 业务操作
             int updateTaskByIdResult = taskMapper.updateTaskById(task);
-            taskLogService.insertTaskLog(task.getId(),Constant.TaskLogOperationButton.UPDATETASK.getValue(),"更改了预期完成时间");
+            taskLogService.insertTaskLog(task.getId(), Constant.TaskLogOperationButton.UPDATETASK.getValue(),
+                    "更改了预期完成时间");
             return updateTaskByIdResult == 1 ? true : false;
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
@@ -234,7 +235,7 @@ public class TaskManagerServiceImpl implements TaskManagerService {
             User user = (User) ShiroUtils.getSessionAttribute("user");
             task.setBeassignUser(user);
             int updateTaskByIdResult = taskMapper.updateTaskById(task);
-            taskLogService.insertTaskLog(task.getId(),Constant.TaskLogOperationButton.UPDATETASK.getValue(),"认领了任务");
+            taskLogService.insertTaskLog(task.getId(), Constant.TaskLogOperationButton.UPDATETASK.getValue(), "认领了任务");
             return updateTaskByIdResult == 1 ? true : false;
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
@@ -263,12 +264,6 @@ public class TaskManagerServiceImpl implements TaskManagerService {
             Task task = taskMapper.queryTaskById(id);
             map.put("Task", task);
 
-            // 附件
-            TaskFile taskFile = new TaskFile();
-            taskFile.setSourceId(id);
-            taskFile.setAttachmentSource("任务");
-            // 添加附件信息到map
-            map.put("TaskFile", taskFileService.queryByTaskFile(taskFile));
             List<TaskLog> logs = taskLogService.queryTaskLogList(id);
             // 添加日志信息到map
             map.put("log", logs);
@@ -320,10 +315,10 @@ public class TaskManagerServiceImpl implements TaskManagerService {
                     close.add(task);
                 }
             }
-            map.put("pending",pending);
-            map.put("running",running);
-            map.put("already",already);
-            map.put("close",close);
+            map.put("pending", pending);
+            map.put("running", running);
+            map.put("already", already);
+            map.put("close", close);
             return map;
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
@@ -334,7 +329,8 @@ public class TaskManagerServiceImpl implements TaskManagerService {
     /**
      * 根据条件查询任务
      *
-     * @param task 模糊查询的条件
+     * @param task
+     *            模糊查询的条件
      * @return PageInfo<Task>
      * @author zlh
      */
@@ -385,10 +381,10 @@ public class TaskManagerServiceImpl implements TaskManagerService {
                     close.add(task1);
                 }
             }
-            map.put("pending",pending);
-            map.put("running",running);
-            map.put("already",already);
-            map.put("close",close);
+            map.put("pending", pending);
+            map.put("running", running);
+            map.put("already", already);
+            map.put("close", close);
             return map;
         } catch (Exception e) {
             LOGGER.error(e.getMessage());

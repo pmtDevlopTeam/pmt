@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.camelot.pmt.project.mapper.RemindContentMapper" >
+  <resultMap id="BaseResultMap" type="RemindContent" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="project_id" property="projectId" jdbcType="BIGINT" />
+    <result column="remind_id" property="remindId" jdbcType="BIGINT" />
+    <result column="content_code" property="contentCode" jdbcType="CHAR" />
+    <result column="create_user_id" property="createUserId" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, project_id, remind_id, content_code, create_user_id, create_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from remind_content
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from remind_content
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="RemindContent" useGeneratedKeys="true" keyProperty="id">
+    insert into remind_content (id, project_id, remind_id, 
+      content_code, create_user_id, create_time
+      )
+    values (#{id,jdbcType=BIGINT}, #{projectId,jdbcType=BIGINT}, #{remindId,jdbcType=BIGINT}, 
+      #{contentCode,jdbcType=CHAR}, #{createUserId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="RemindContent" useGeneratedKeys="true" keyProperty="id">
+    insert into remind_content
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="projectId != null" >
+        project_id,
+      </if>
+      <if test="remindId != null" >
+        remind_id,
+      </if>
+      <if test="contentCode != null" >
+        content_code,
+      </if>
+      <if test="createUserId != null" >
+        create_user_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="projectId != null" >
+        #{projectId,jdbcType=BIGINT},
+      </if>
+      <if test="remindId != null" >
+        #{remindId,jdbcType=BIGINT},
+      </if>
+      <if test="contentCode != null" >
+        #{contentCode,jdbcType=CHAR},
+      </if>
+      <if test="createUserId != null" >
+        #{createUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="RemindContent" >
+    update remind_content
+    <set >
+      <if test="projectId != null" >
+        project_id = #{projectId,jdbcType=BIGINT},
+      </if>
+      <if test="remindId != null" >
+        remind_id = #{remindId,jdbcType=BIGINT},
+      </if>
+      <if test="contentCode != null" >
+        content_code = #{contentCode,jdbcType=CHAR},
+      </if>
+      <if test="createUserId != null" >
+        create_user_id = #{createUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="RemindContent" >
+    update remind_content
+    set project_id = #{projectId,jdbcType=BIGINT},
+      remind_id = #{remindId,jdbcType=BIGINT},
+      content_code = #{contentCode,jdbcType=CHAR},
+      create_user_id = #{createUserId,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <!-- 根据项目id删除提醒内容子表 -->
+  <delete id="deleteByProjectId" parameterType="java.lang.Long">
+  	delete from remind_content
+    where project_id = #{projectId,jdbcType=BIGINT}
+  </delete>
+  <!-- 根据项目id查询所有的内容表信息 -->
+  <select id="queryByProjectId" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from remind_content
+    where project_id = #{projectId,jdbcType=BIGINT}
+  </select>
+  
+</mapper>

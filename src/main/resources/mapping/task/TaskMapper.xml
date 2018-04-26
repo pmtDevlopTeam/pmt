@@ -666,7 +666,7 @@
     </select>
     <!--zsf-->
     <!--查询我的测试任务、已完成-->
-    <select id="queryMyAlreadyTask" resultMap="BaseResultMap" >
+    <select id="queryMyAlreadyTask" resultMap="BaseResultMap" parameterType="com.camelot.pmt.task.model.Task">
         SELECT
         <include refid="ShowAllTasks_Column_List" />
         FROM task t
@@ -690,7 +690,58 @@
         <if test="demand != null and demand.id !=null">
             and t.demand_id = #{demand.id,jdbcType=CHAR}
         </if>
-        GROUP BY t.id
+        ORDER BY t.create_time DESC, t.priority DESC
+    </select>
+    <!--zsf-->
+    <!--查询我的已办-->
+    <select id="listTaskAlready" resultMap="BaseResultMap" parameterType="com.camelot.pmt.task.model.Task">
+        ( SELECT
+        <include refid="ShowAllTasks_Column_List" />
+        FROM task t
+        LEFT JOIN platform_user a ON t.assign_user_id = a.user_id
+        LEFT JOIN platform_user b ON t.beassign_user_id = b.user_id
+        LEFT JOIN platform_user c on t.create_user_id = c.user_id
+        LEFT JOIN project_main p ON t.project_id = p.id
+        LEFT JOIN demand d ON t.demand_id = d.id
+        WHERE t.beassign_user_id = #{ beassignUser.userId,jdbcType=CHAR} and status = 2
+        <if test="taskNum != null and  taskNum != '' " >
+            and t.task_num = #{taskNum,jdbcType=CHAR}
+        </if>
+        <if test="taskName != null and  taskName != '' ">
+            and t.task_name LIKE  "%"#{taskName,jdbcType=CHAR}"%"
+        </if>
+        <if test="project != null and project.id !=null">
+            and t.project_id = #{project.id,jdbcType=CHAR}
+        </if>
+        <if test="demand != null and demand.id !=null">
+            and t.demand_id = #{demand.id,jdbcType=CHAR}
+        </if>
+        ORDER BY t.create_time DESC, t.priority DESC)
+        UNION
+        (SELECT
+        <include refid="ShowAllTasks_Column_List" />
+        FROM task t
+        LEFT JOIN task_log l ON t.id = l.task_id
+        LEFT JOIN platform_user a ON a.user_id = t.assign_user_id
+        LEFT JOIN platform_user b ON b.user_id = t.beassign_user_id
+        LEFT JOIN platform_user c ON c.user_id = t.create_user_id
+        LEFT JOIN project_main p ON t.project_id = p.id
+        LEFT JOIN demand d ON t.demand_id = d.id
+        WHERE  t.task_type='2' AND l.operation_button = '提测'
+        AND l.user_id = #{ beassignUser.userId,jdbcType=CHAR}
+        <if test="taskNum != null and  taskNum != '' " >
+            and t.task_num = #{taskNum,jdbcType=CHAR}
+        </if>
+        <if test="taskName != null and  taskName != '' ">
+            and t.task_name LIKE  "%"#{taskName,jdbcType=CHAR}"%"
+        </if>
+        <if test="project != null and project.id !=null">
+            and t.project_id = #{project.id,jdbcType=CHAR}
+        </if>
+        <if test="demand != null and demand.id !=null">
+            and t.demand_id = #{demand.id,jdbcType=CHAR}
+        </if>
+        ORDER BY t.create_time DESC, t.priority DESC)
     </select>
     <!--zsf结束-->
 
