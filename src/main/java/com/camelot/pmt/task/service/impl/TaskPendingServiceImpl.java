@@ -122,12 +122,11 @@ public class TaskPendingServiceImpl implements TaskPendingService {
      */
     @Override
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public String updateTaskPendingToStatus(Long id, String taskStatus, String modifyUserId) {
-        String result = new String();
+    public Boolean updateTaskPendingToStatus(Long id, String taskStatus, String modifyUserId) {
+    	Boolean flag = false;
         try {
             if (id == null || modifyUserId == null) {
-                result = "传入的参数有误!";
-                return result;
+                return false;
             }
             // 此处判断是为了防止接口误调用导致数据错误的接口的一层保护
             if (TaskStatus.RUNING.getValue().equals(taskStatus)) {
@@ -135,19 +134,19 @@ public class TaskPendingServiceImpl implements TaskPendingService {
                 taskMapper.updateTaskStatus(id, TaskStatus.RUNING.getValue(), modifyUserId, new Date());
                 // 日志记录
                 taskLogService.insertTaskLog(id, TaskLogOperationButton.STARTTASK.getValue(), "修改任务状态由：“待办”转换为“正在进行”");
-                result = "修改任务状态为正在进行成功!";
+                flag = true;
             } else if (TaskStatus.CLOSE.getValue().equals(taskStatus)) {
                 // 根据id更新待办任务状态为关闭
                 taskMapper.updateTaskStatus(id, TaskStatus.CLOSE.getValue(), modifyUserId, new Date());
                 // 日志记录
                 taskLogService.insertTaskLog(id, TaskLogOperationButton.CLOSETASK.getValue(), "修改任务状态由：“待办”转换为“关闭”");
-                result = "修改任务状态为关闭成功!";
+                flag = true;
             }
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
             throw new RRException(e.getMessage(), e);
         }
-        return result;
+        return flag;
     }
 
     /**

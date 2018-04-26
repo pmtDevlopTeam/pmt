@@ -192,8 +192,7 @@ public interface TaskMapper {
      *          TODO(修改任务状态) @param @param taskId status @param @return 设定文件 @return
      *          int 返回类型 @throws
      */
-    void updateTaskStatus(@Param("id") Long id, @Param("status") String status,
-            @Param("modifyUserId") String modifyUserId, @Param("modifyTime") Date modifyTime);
+    void updateTaskStatus(@Param("id") Long id, @Param("status") String status,@Param("modifyUserId") String modifyUserId,@Param("modifyTime") Date modifyTime);
 
     /**
      * @author: gxl @Title: taskParentId @Description:
@@ -362,4 +361,15 @@ public interface TaskMapper {
      * List<Map<String,Object>> @throws
      */
     List<Map<String, Object>> querydeferredTaskRemindersList(String projectId);
+
+    /**
+     * 查询出我的已办任务
+     * @Title: listTaskAlready
+     * @Description: TODO
+     * @param @param Task task
+     * @param @return
+     * @return List<Task>
+     * @throws
+     */
+    List<Task> listTaskAlready(Task task);
 }
