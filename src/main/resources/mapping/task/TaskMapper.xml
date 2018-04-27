@@ -455,10 +455,10 @@
 		</if>
 		
 		<if test="estimateStartTime != null">
-			and t.estimate_start_time >= #{estimateStartTime,jdbcType=TIMESTAMP}
+			and t.estimate_start_time = #{estimateStartTime,jdbcType=TIMESTAMP}
 		</if>
 		<if test="estimateEndTime != null">
-			and t.estimate_end_time <= #{estimateEndTime,jdbcType=TIMESTAMP}
+			and t.estimate_end_time = #{estimateEndTime,jdbcType=TIMESTAMP}
 		</if>
 		
 		<if test="project != null and project.id !=null">
