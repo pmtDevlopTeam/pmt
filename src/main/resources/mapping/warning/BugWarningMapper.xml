@@ -143,4 +143,27 @@
 		where pr.project_id=#{projectId} and b.bug_status=1 and bw.role_id =#{roleId} and bw.num is not null)yy where
 		yy.val>yy.num
 	</select>
+	
+	<select id="queryWarningByprojectId" parameterType="com.camelot.pmt.warning.model.BugWarningVo"
+		resultType="map">
+		select yy.user_mail,yy.user_name from(select pr.id,bw.num
+		,u.user_name ,pr.user_pro_role,
+		(TO_DAYS(date_format(now(),'%Y-%m-%d %H:%i:%S'))-TO_DAYS(b.create_time)) AS val ,fo.user_mail from
+		bug_manage  b LEFT JOIN project_user pr on
+		b.designated_id=pr.user_id and b.project_id=pr.project_id
+		LEFT JOIN platform_user u on pr.user_id=u.user_id
+		LEFT JOIN
+		bug_warning bw on pr.user_pro_role=bw.role_id and pr.project_id=bw.project_id
+		LEFT JOIN platform_user_info fo on u.user_id=fo.user_id
+		where pr.project_id=#{projectId} and b.bug_status=1  and bw.num is not null)yy where
+		yy.val>yy.num
+	</select>
+	
+	<select id="queryjlList" parameterType="com.camelot.pmt.warning.model.BugWarningVo"
+		resultType="map">
+		select ul.user_name,fo.user_mail from project_user u LEFT JOIN  platform_user ul
+		ON u.user_id=ul.user_id
+ 		LEFT JOIN platform_user_info fo 
+ 		on u.user_id=fo.user_id where  u.project_id=#{projectId} and u.user_pro_role=#{roleId}
+	</select>
 </mapper>

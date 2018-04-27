@@ -60,4 +60,8 @@ public interface BugWarningMapper {
     
     
     List<Map<String,Object>>queryWarningByprojectIdAndRoleId(BugWarningVo bugWarningVo);
+    
+    List<Map<String,Object>> queryWarningByprojectId(BugWarningVo bugWarningVo);
+    
+    List<Map<String,Object>> queryjlList(BugWarningVo bugWarningVo);
 }

@@ -13,4 +13,5 @@ public interface BugWarningService {
 	 Integer queryBugCount(Long projectId);
 	 
 	 Map<String,List<String>> queryWarningByprojectIdAndRoleId(BugWarningVo bugWarningVo);
+	 
 }
