@@ -691,7 +691,7 @@
     </select>
     <!--zsf-->
     <!--查询我的已办-->
-    <select id="listTaskAlready" resultMap="BaseResultMap" parameterType="com.camelot.pmt.task.model.Task">
+    <select id="listTaskAlready" resultMap="BaseResultMap">
         SELECT
         <include refid="ShowAllTasks_Column_List" />
         FROM task t
@@ -700,18 +700,18 @@
         LEFT JOIN platform_user c on t.create_user_id = c.user_id
         LEFT JOIN project_main p ON t.project_id = p.id
         LEFT JOIN demand d ON t.demand_id = d.id
-        WHERE t.beassign_user_id = #{ beassignUser.userId,jdbcType=CHAR} and status = #{status}
-        <if test="taskNum != null and  taskNum != '' " >
-            and t.task_num = #{taskNum,jdbcType=CHAR}
+        WHERE t.beassign_user_id = #{ task.beassignUser.userId,jdbcType=CHAR} and status = #{task.status}
+        <if test="task.taskNum != null and  task.taskNum != '' " >
+            and t.task_num LIKE  "%"#{task.taskNum,jdbcType=VARCHAR}"%"
         </if>
-        <if test="taskName != null and  taskName != '' ">
-            and t.task_name LIKE  "%"#{taskName,jdbcType=CHAR}"%"
+        <if test="task.taskName != null and  task.taskName != '' ">
+            and t.task_name LIKE  "%"#{task.taskName,jdbcType=VARCHAR}"%"
         </if>
-        <if test="project != null and project.id !=null">
-            and t.project_id = #{project.id,jdbcType=CHAR}
+        <if test="task.project != null and task.project.id !=null">
+            and t.project_id = #{task.project.id,jdbcType=BIGINT}
         </if>
-        <if test="demand != null and demand.id !=null">
-            and t.demand_id = #{demand.id,jdbcType=CHAR}
+        <if test="task.demand != null and task.demand.id !=null">
+            and t.demand_id = #{task.demand.id,jdbcType=BIGINT}
         </if>
         UNION
         SELECT
@@ -723,21 +723,22 @@
         LEFT JOIN platform_user c ON c.user_id = t.create_user_id
         LEFT JOIN project_main p ON t.project_id = p.id
         LEFT JOIN demand d ON t.demand_id = d.id
-        WHERE  t.task_type= #{taskType} AND l.operation_button = '提测'
-        AND l.user_id = #{ beassignUser.userId,jdbcType=CHAR}
-        <if test="taskNum != null and  taskNum != '' " >
-            and t.task_num = #{taskNum,jdbcType=CHAR}
+        WHERE  t.task_type= #{task.taskType} AND l.operation_button = #{operationButton}
+        AND l.user_id = #{ task.beassignUser.userId,jdbcType=CHAR}
+        <if test="task.taskNum != null and  task.taskNum != '' " >
+            and t.task_num LIKE  "%"#{task.taskNum,jdbcType=VARCHAR}"%"
         </if>
-        <if test="taskName != null and  taskName != '' ">
-            and t.task_name LIKE  "%"#{taskName,jdbcType=CHAR}"%"
+        <if test="task.taskName != null and  task.taskName != '' ">
+            and t.task_name LIKE  "%"#{task.taskName,jdbcType=VARCHAR}"%"
         </if>
-        <if test="project != null and project.id !=null">
-            and t.project_id = #{project.id,jdbcType=CHAR}
+        <if test="task.project != null and task.project.id !=null">
+            and t.project_id = #{task.project.id,jdbcType=BIGINT}
         </if>
-        <if test="demand != null and demand.id !=null">
-            and t.demand_id = #{demand.id,jdbcType=CHAR}
+        <if test="task.demand != null and task.demand.id !=null">
+            and t.demand_id = #{task.demand.id,jdbcType=BIGINT}
         </if>
-        ORDER BY create_time DESC, priority DESC
+        group by t.id
+        ORDER BY create_time DESC, priority DESC limit #{page} ,#{rows}
     </select>
     <!--zsf结束-->
 

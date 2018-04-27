@@ -160,11 +160,14 @@ public class TaskAlreadyServiceImpl implements TaskAlreadyService {
                // 根据用户id查询全部的已完成的任务
                 task.setStatus(Constant.TaskStatus.ALREADY.getValue());
                 task.setTaskType(Constant.TaskType.TESTTASK.getValue());
-                List<Task> list = taskMapper.listTaskAlready(task);
+                List<Task> list = taskMapper.listTaskAlready(task,page-1,rows,Constant.TaskLogOperationButton.MEASUREMENT.getValue());
                 // 分页之后的结果集
                 PageInfo<Task> clist = new PageInfo<>(list);
                // 返回结果集
                 return clist;
+
+
+
     }
 
 }
