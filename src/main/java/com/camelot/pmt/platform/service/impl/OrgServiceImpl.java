@@ -46,18 +46,17 @@ public class OrgServiceImpl implements OrgService {
 	 * @return
 	 */
 	@Override
-	public List<Tree<Org>> queryAllOrgs() {
+	public List<Tree<Org>> queryAllOrg() {
 		List<Tree<Org>> list = null;
 		List<Tree<Org>> trees = new ArrayList<Tree<Org>>();
 		List<Org> queryAllOrg = orgMapper.queryAllOrg();
-
 		if (!CollectionUtils.isEmpty(queryAllOrg)) {
 			for (Org org : queryAllOrg) {
 				if (!StringUtils.isEmpty(org.getOrgLeader())) {
 					User user = userMapper.queryUserByUserId(org.getOrgLeader());
-					org.setOrgLeadername(user.getUsername());
-				} else {
-					org.setOrgLeadername(null);
+					if ("1".equals(user.getState())) {
+						org.setOrgLeadername(null);
+					}
 				}
 				User user = userMapper.queryUserByUserId(org.getCreatUserId());
 				Tree<Org> tree = new Tree<Org>();
@@ -381,10 +380,10 @@ public class OrgServiceImpl implements OrgService {
 		Org orgObject = orgMapper.queryOrgByOrgId(orgId);
 		if (!StringUtils.isEmpty(orgObject.getOrgLeader())) {
 			User user = userMapper.queryUserByUserId(orgObject.getOrgLeader());
-			orgObject.setOrgLeadername(user.getUsername());
-		} else {
-			orgObject.setOrgLeadername(null);
-		}
+			if ("1".equals(user.getState())) {
+				orgObject.setOrgLeadername(null);
+			}
+		} 
 		if (orgObject != null) {
 			return orgObject;
 		}
@@ -403,6 +402,14 @@ public class OrgServiceImpl implements OrgService {
 		List<Org> list = orgMapper.queryOrgsByPage();
 		List<Org> listItem = new ArrayList<Org>();
 		for (Org org : list) {
+			if (StringUtils.isEmpty(org.getOrgLeader())) {
+				org.setOrgLeadername("");
+			} else {
+				User userObj = userMapper.queryUserByUserId(org.getOrgLeader());
+				if ("1".equals(userObj.getState())) {
+					org.setOrgLeadername(null);
+				}
+			}
 			User user = userMapper.queryUserByUserId(org.getCreatUserId());
 			org.setCreatOrgUsername(user.getUsername());
 			listItem.add(org);
@@ -429,6 +436,12 @@ public class OrgServiceImpl implements OrgService {
 		findChildCategory(orgListItem, OrgId);
 		if (!CollectionUtils.isEmpty(orgListItem)) {
 			for (Org org : orgListItem) {
+				if (!StringUtils.isEmpty(org.getOrgLeader())) {
+					User user = userMapper.queryUserByUserId(org.getOrgLeader());
+					if ("1".equals(user.getState())) {
+						org.setOrgLeadername(null);
+					}
+				} 
 				User user = userMapper.queryUserByUserId(org.getCreatUserId());
 				Tree<Org> tree = new Tree<Org>();
 				tree.setId(org.getOrgId());
@@ -455,10 +468,10 @@ public class OrgServiceImpl implements OrgService {
 		Org org = orgMapper.queryOrgByOrgId(orgId);
 		if (!StringUtils.isEmpty(org.getOrgLeader())) {
 			User user = userMapper.queryUserByUserId(org.getOrgLeader());
-			org.setOrgLeadername(user.getUsername());
-		} else {
-			org.setOrgLeadername(null);
-		}
+			if ("1".equals(user.getState())) {
+				org.setOrgLeadername("");
+			}
+		} 
 		if (org != null) {
 			orgListItem.add(org);
 		}
@@ -568,12 +581,16 @@ public class OrgServiceImpl implements OrgService {
 		List<Org> listItem = new ArrayList<Org>();
 		if (!CollectionUtils.isEmpty(orgsList)) {
 			for (Org orgObj : orgsList) {
+				if (!StringUtils.isEmpty(orgObj.getOrgLeader())) {
+					User userObj = userMapper.queryUserByUserId(orgObj.getOrgLeader());
+					if ("1".equals(userObj.getState())) {
+						orgObj.setOrgLeadername(null);
+					}
+				} 
 				User user = userMapper.queryUserByUserId(orgObj.getCreatUserId());
 				orgObj.setCreatOrgUsername(user.getUsername());
 				listItem.add(orgObj);
 			}
-		} else {
-			return null;
 		}
 		PageInfo<Org> pageResult = new PageInfo<Org>(listItem);
 		pageResult.setList(listItem);
@@ -587,9 +604,6 @@ public class OrgServiceImpl implements OrgService {
 		Org orgAfter = orgMapper.queryOrgByOrgId(org.getOrgId());
 		if (num > 0) {
 			// 添加日志
-			/*
-			 * orgAfter.setUser(null); orgBefore.setUser(null);
-			 */
 			logAspect.insertUpdateLog(orgAfter, orgBefore, Modular.ORG, org.getModifyUserId());
 			updateState(org);
 			return "部门状态修改成功";

@@ -102,7 +102,7 @@ public class OrgController {
     public JSONObject queryOrgAll() {
         List<Tree<Org>> result = new ArrayList<Tree<Org>>();
         try {
-            result = orgService.queryAllOrgs();
+            result = orgService.queryAllOrg();
             return ApiResponse.success(result);
         } catch (Exception e) {
             logger.error(e.getMessage());
@@ -401,7 +401,6 @@ public class OrgController {
             @ApiImplicitParam(name = "pageSize", value = "每页数量", defaultValue = "10", required = true, paramType = "query", dataType = "int") })
 
     public JSONObject queryOrgInfo(@ApiIgnore Org org, int pageNum, int pageSize) {
-        PageInfo result = new PageInfo();
         try {
             return ApiResponse.success(orgService.queryOrgInfo(org, pageNum, pageSize));
         } catch (Exception e) {
