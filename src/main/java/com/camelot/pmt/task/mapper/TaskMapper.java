@@ -409,5 +409,6 @@ public interface TaskMapper {
      * @return List<Task>
      * @throws
      */
-    List<Task> listTaskAlready(Task task);
+    List<Task> listTaskAlready(@Param("task") Task task ,@Param("page")Integer page, @Param("rows")Integer rows,
+                               @Param("operationButton")String operationButton);
 }
