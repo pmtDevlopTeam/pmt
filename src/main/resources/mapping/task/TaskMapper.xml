@@ -503,11 +503,19 @@
 		<if test="taskName != null">
 			and t.task_name like CONCAT('%',#{taskName,jdbcType=CHAR},'%') 
 		</if>
+		
+		<if test="estimateStartTime != null">
+			and t.estimate_start_time &gt;= #{estimateStartTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="estimateEndTime != null">
+			and t.estimate_end_time &lt;= #{estimateEndTime,jdbcType=TIMESTAMP}
+		</if>
+		
 		<if test="project != null and project.id !=null">
 			and t.project_id = #{project.id,jdbcType=CHAR}
 		</if>
 		<if test="priority != null">
-			and t.priority = #{priority,jdbcType=CHAR}
+			and t.priority like CONCAT('%',#{priority,jdbcType=CHAR},'%')
 		</if>
 		<if test="assignUser != null and assignUser.userId != null">
 			and t.assign_user_id = #{assignUser.userId,jdbcType=CHAR}

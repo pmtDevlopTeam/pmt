@@ -61,7 +61,7 @@ public interface TaskPendingService {
      *         TODO(查询我的待办Task任务列表) @param @return 设定文件 @return List<Task>
      *         返回类型 @throws
      */
-    List<Task> queryMyPendingTaskList(Task task);
+    PageInfo<Task> queryMyPendingTaskList(Task task,Integer page, Integer rows);
 
     /**
      * 
