@@ -75,16 +75,19 @@ public class TaskPendingServiceImpl implements TaskPendingService {
      *         ExecuteResult<List<Task>> 返回类型 @throws
      */
     @Override
-    public List<Task> queryMyPendingTaskList(Task task) {
-        List<Task> result = new ArrayList<Task>();
+    public PageInfo<Task> queryMyPendingTaskList(Task task,Integer page, Integer rows) {
+    	PageInfo<Task> pageInfo;
         try {
+        	//分页初始化
+        	PageHelper.startPage(page,rows);
             // 查询所有的Task任务列表
-            result = taskMapper.queryMyPendingTaskList(task);
+        	List<Task> allTaskList = taskMapper.queryMyPendingTaskList(task);
+            pageInfo = new PageInfo<Task>(allTaskList);
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
             throw new RRException(e.getMessage(), e);
         }
-        return result;
+        return pageInfo;
     }
 
     /**
