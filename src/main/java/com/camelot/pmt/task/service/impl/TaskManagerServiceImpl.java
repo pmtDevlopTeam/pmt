@@ -266,9 +266,9 @@ public class TaskManagerServiceImpl implements TaskManagerService {
             Task task = taskMapper.queryTaskById(id);
             map.put("Task", task);
 
-            List<TaskLog> logs = taskLogService.queryTaskLogList(id);
+            //PageInfo<TaskLog> logs = taskLogService.queryTaskLogList(id,1,10);
             // 添加日志信息到map
-            map.put("log", logs);
+            //map.put("log", logs);
 
             return map;
         } catch (Exception e) {

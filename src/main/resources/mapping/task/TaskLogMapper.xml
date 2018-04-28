@@ -106,7 +106,13 @@
   </update>
   <!--zsf-->
   <select id="queryTaskLogList" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-   SELECT t.*,p.user_name FROM task_log t,platform_user p WHERE t.user_id = p.user_id AND  t.task_id = #{id,jdbcType=BIGINT}
+  SELECT t.id,t.task_id,t.user_id,t.operation_time,t.operation_button,t.operation_describe 
+	FROM task_log t INNER JOIN platform_user p on p.user_id = t.user_id 
+	where 1=1
+	<if test="id != null" >
+	  and t.task_id = #{id,jdbcType=BIGINT} 
+	</if>
+	ORDER BY t.operation_describe desc
   </select>
 
   <insert id="insertTaskLog" parameterType="com.camelot.pmt.task.model.TaskLog">

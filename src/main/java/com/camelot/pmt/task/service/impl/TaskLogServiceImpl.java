@@ -1,5 +1,6 @@
 package com.camelot.pmt.task.service.impl;
 
+import com.baomidou.mybatisplus.plugins.pagination.PageHelper;
 import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.platform.model.User;
 import com.camelot.pmt.platform.shiro.ShiroUtils;
@@ -8,6 +9,9 @@ import com.camelot.pmt.task.mapper.TaskMapper;
 import com.camelot.pmt.task.model.Task;
 import com.camelot.pmt.task.model.TaskLog;
 import com.camelot.pmt.task.service.TaskLogService;
+import com.camelot.pmt.task.utils.RRException;
+import com.github.pagehelper.PageInfo;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -100,11 +104,18 @@ public class TaskLogServiceImpl implements TaskLogService {
      * 任务流转记录查询
      */
     @Override
-    public List<TaskLog> queryTaskLogList(Long id) {
-
-        List<TaskLog> tasklog = taskLogMapper.queryTaskLogList(id);
-
-        return tasklog;
+    public PageInfo<TaskLog> queryTaskLogList(Long id,Integer page, Integer rows) {
+    	PageInfo<TaskLog> pageInfo;
+    	try {
+        	//分页初始化
+        	PageHelper.startPage(page,rows);
+        	List<TaskLog> tasklog = taskLogMapper.queryTaskLogList(id);
+        	pageInfo = new PageInfo<TaskLog>(tasklog);
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
+            throw new RRException(e.getMessage(), e);
+        }
+        return pageInfo;
     }
 
     @Override

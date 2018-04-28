@@ -2,6 +2,7 @@ package com.camelot.pmt.task.service;
 
 import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.task.model.TaskLog;
+import com.github.pagehelper.PageInfo;
 
 import java.util.List;
 
@@ -30,7 +31,7 @@ public interface TaskLogService {
      * 查询日志 @Title: queryTaskLogList @Description: TODO @param @param
      * tasklog @param @return @return ExecuteResult<String> @throws
      */
-    List<TaskLog> queryTaskLogList(Long id);
+    PageInfo<TaskLog> queryTaskLogList(Long id,Integer page, Integer rows);
 
     /**
      * 添加操作日志日志，需要传任务的id，操作名称 @Title: queryTaskLogList @Description:

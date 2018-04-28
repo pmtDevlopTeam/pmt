@@ -4,6 +4,8 @@ import com.camelot.pmt.task.model.TaskLog;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 public interface TaskLogMapper {
     int deleteByPrimaryKey(Long id);
 
@@ -25,5 +27,5 @@ public interface TaskLogMapper {
     /**
      * 任务流转记录查询
      */
-    List<TaskLog> queryTaskLogList(Long id);
+    List<TaskLog> queryTaskLogList(@Param("id") Long id);
 }

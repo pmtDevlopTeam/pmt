@@ -4,8 +4,12 @@ import com.alibaba.fastjson.JSONObject;
 import com.camelot.pmt.common.APIStatus;
 import com.camelot.pmt.common.ApiResponse;
 import com.camelot.pmt.common.ExecuteResult;
+import com.camelot.pmt.platform.model.User;
+import com.camelot.pmt.platform.shiro.ShiroUtils;
 import com.camelot.pmt.task.model.TaskLog;
 import com.camelot.pmt.task.service.TaskLogService;
+import com.github.pagehelper.PageInfo;
+
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -51,7 +55,11 @@ public class TaskLogController {
     public JSONObject insertTaskLog(@ApiIgnore TaskLog tasklog) {
         ExecuteResult<String> result = new ExecuteResult<String>();
         try {
-            if (tasklog == null) {
+        	User user = (User) ShiroUtils.getSessionAttribute("user");
+            // 检查用户是否登录，需要去session中获取用户登录信息
+            if (user == null) {
+                return ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
+            }else if (tasklog == null) {
                 return ApiResponse.errorPara();
             }
             // 调用接口进行更新
@@ -69,11 +77,18 @@ public class TaskLogController {
      *         JSONObject @throws myp
      */
     @ApiOperation(value = "查询任务历史记录", notes = "查询任务历史记录")
-    @RequestMapping(value = "/queryTaskLogList", method = RequestMethod.GET)
+    @RequestMapping(value = "/queryTaskLogList", method = RequestMethod.POST)
     public JSONObject queryTaskLogList(
-            @ApiParam(name = "id", value = "任务id", required = true) @RequestParam(required = true) Long id) {
+            @ApiParam(name = "id", value = "任务id", required = false) @RequestParam(required = false) Long id,
+			@ApiParam(name = "page", value = "页码", required = true) @RequestParam(required = true) Integer page,
+			@ApiParam(name = "rows", value = "每页数量", required = true) @RequestParam(required = true) Integer rows) {
         try {
-            List<TaskLog> taskLogList = taskLogService.queryTaskLogList(id);
+        	User user = (User) ShiroUtils.getSessionAttribute("user");
+            // 检查用户是否登录，需要去session中获取用户登录信息
+            if (user == null) {
+                return ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
+            }
+        	PageInfo<TaskLog> taskLogList = taskLogService.queryTaskLogList(id,page,rows);
             return ApiResponse.success(taskLogList);
         } catch (Exception e) {
             logger.error(e.getMessage());
