@@ -34,6 +34,8 @@ target/
 # Android Studio
 *.iml
 .idea/
+.idea
+pmt.iml
 .gradle
 build/
 
