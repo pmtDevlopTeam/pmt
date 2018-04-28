@@ -12,6 +12,8 @@ CREATE TABLE platform_org
   COMMENT '部门编号(唯一)',
   org_name       VARCHAR(32)                        NOT NULL
   COMMENT '部门名称',
+  org_leader   varchar(32) DEFAULT ''             
+  COMMENT '部门负责人',
   state          VARCHAR(8) DEFAULT '0'             NOT NULL
   COMMENT '部门状态  0（默认）启用 1 停用 2 锁定',
   sort_num       INT DEFAULT '1000'                 NULL

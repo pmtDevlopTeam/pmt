@@ -9,7 +9,7 @@ flyway:
 
 spring:
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/pmt?useUnicode=true&characterEncoding=utf8
+    url: jdbc:mysql://localhost:3306/pmt?useUnicode=true&characterEncoding=utf8
     username: camelot
     password: camelot!123
     # 使用druid数据源

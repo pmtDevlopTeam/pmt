@@ -14,7 +14,7 @@ public interface OrgService {
      * 
      * @return ExecuteResult<List<Org>>
      */
-    List<Tree<Org>> queryAllOrgs();
+    List<Tree<Org>> queryAllOrg();
 
     /**
      * 查询单个部门

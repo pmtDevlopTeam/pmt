@@ -35,7 +35,7 @@ public class TaskAlreadyServiceImpl implements TaskAlreadyService {
     public boolean updateTaskAlreadyToRunning(Long id) {
 
         boolean flag = false;
-        int i = taskMapper.updateTaskAlreadyToRunning(id);
+        int i = taskMapper.updateTaskAlreadyToRunning(id,Constant.TaskStatus.RUNING.getValue());
         if (i == 1) {
             taskLogService.insertTaskLog(id, Constant.TaskLogOperationButton.REDOTASK.getValue(), "重做了任务");
             flag = true;
@@ -57,9 +57,9 @@ public class TaskAlreadyServiceImpl implements TaskAlreadyService {
         // 根据任务ID去查需求ID
         Long demandId = taskMapper.queryTaskByTaskId(id);
         // 根据需求ID查出当前需求下的测试人员ID
-        String beassignUserId = taskMapper.queryTaskToTestByDemandId(demandId);
+        String beassignUserId = taskMapper.queryTaskToTestByDemandId(demandId,Constant.TaskType.TESTTASK.getValue());
         // 进行任务的状态更改(根据id去更改任务的状态)
-        int i = taskMapper.updateTaskToTest(id, beassignUserId);
+        int i = taskMapper.updateTaskToTest(id, beassignUserId,Constant.TaskType.TESTTASK.getValue(),Constant.TaskStatus.PENDINHG.getValue());
         Task task = new Task();
         task.setId(id);
         if (i == 1) {
@@ -158,11 +158,16 @@ public class TaskAlreadyServiceImpl implements TaskAlreadyService {
                // 利用PageHelper进行分页
                 PageHelper.startPage(page, rows);
                // 根据用户id查询全部的已完成的任务
-                List<Task> list = taskMapper.listTaskAlready(task);
+                task.setStatus(Constant.TaskStatus.ALREADY.getValue());
+                task.setTaskType(Constant.TaskType.TESTTASK.getValue());
+                List<Task> list = taskMapper.listTaskAlready(task,page-1,rows,Constant.TaskLogOperationButton.MEASUREMENT.getValue());
                 // 分页之后的结果集
                 PageInfo<Task> clist = new PageInfo<>(list);
                // 返回结果集
                 return clist;
+
+
+
     }
 
 }
