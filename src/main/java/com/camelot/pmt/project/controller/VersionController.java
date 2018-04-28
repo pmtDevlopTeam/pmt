@@ -302,7 +302,7 @@ public class VersionController {
         try {
             User user = (User) ShiroUtils.getSessionAttribute("user");
             if (user != null) {
-                PageInfo pageInfo = versionService.queryVerListByPageAndProId(page, rows, projectId, versionVo);
+                PageInfo<?> pageInfo = versionService.queryVerListByPageAndProId(page, rows, projectId, versionVo);
                 return ApiResponse.success(pageInfo);
             } else {
                 return ApiResponse.error("用户未登录，请登录！");

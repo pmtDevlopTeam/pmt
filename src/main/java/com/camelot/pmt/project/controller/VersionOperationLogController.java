@@ -102,7 +102,7 @@ public class VersionOperationLogController {
         try {
             User user = (User) ShiroUtils.getSessionAttribute("user");
             if (user != null) {
-                PageInfo pageInfo = versionOperationLogService.queryversionOperationLogByPageAndParms(page, rows,
+                PageInfo<?> pageInfo = versionOperationLogService.queryversionOperationLogByPageAndParms(page, rows,
                         versionOperationLog);
                 return ApiResponse.success(pageInfo);
             } else {
