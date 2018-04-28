@@ -405,6 +405,5 @@ public interface TaskMapper {
      * 查询出我的已办任务 @Title: listTaskAlready @Description: TODO @param @param Task
      * task @param @return @return List<Task> @throws
      */
-    List<Task> listTaskAlready(@Param("task") Task task ,@Param("page")Integer page, @Param("rows")Integer rows,
-                               @Param("operationButton")String operationButton);
+    List<Task> listTaskAlready(Task task);
 }

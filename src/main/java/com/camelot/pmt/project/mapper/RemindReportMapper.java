@@ -6,6 +6,9 @@ import org.apache.ibatis.annotations.Param;
 
 import com.camelot.pmt.project.model.RemindReport;
 
+import java.util.List;
+import java.util.Map;
+
 public interface RemindReportMapper {
     /**
      *
@@ -50,4 +53,10 @@ public interface RemindReportMapper {
      * @mbggenerated
      */
     int updateByPrimaryKey(RemindReport record);
+
+    /**
+     * 根据项目Id和提醒主记录id查询出所对应的日报记录
+     * @return
+     */
+    List<RemindReport> queryRemindReportListByProIdAndDate(Map map);
 }
