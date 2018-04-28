@@ -359,7 +359,7 @@ public class DemandServiceImpl implements DemandService {
     private String queryDemandNum(Demand demand) {
         String demandNum = "01";
         // 查询是否已有同级别需求
-        if ("1".equals(demand.getDemandLevel())) {
+        if ("1".equals(demand.getDemandNeed())) {
             demandNum = demandMapper.queryMaxDemandNumByDemand(demand);
             if ((null != demandNum) && (!"".equals(demandNum))) {
                 demandNum = IncrementNumber.getIncreNum(demandNum);
@@ -377,5 +377,36 @@ public class DemandServiceImpl implements DemandService {
         } else {
             return (demandNum);
         }
+    }
+
+    /**
+     * 添加需求并返回主键id
+     * 
+     * @param Demand demand User user
+     * @return demandId
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Long addDemandAndReturnId(Demand demand, User user) {
+        Long demandId = 0L;
+        try {
+            String demandNum = queryDemandNum(demand);
+            demand.setDemandNum(demandNum);
+            int resultCount = demandMapper.insert(demand);
+            demandId = demand.getId();
+            if (resultCount > 0) {
+                DemandOperate demandOperate = new DemandOperate();
+                demandOperate.setCreateUserId(demand.getCreateUserId());
+                demandOperate.setCreateTime(demand.getCreateTime());
+                demandOperate.setDemandId(demand.getId());
+                demandOperate.setOperateDesc(user.getUsername() + "创建");
+                // 常规操作
+                demandOperate.setRunType("01");
+                demandOperateMapper.insert(demandOperate);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return demandId;
     }
 }
