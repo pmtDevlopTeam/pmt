@@ -1,5 +1,6 @@
 package com.camelot.pmt.task.service.impl;
 
+import com.camelot.pmt.common.ApiResponse;
 import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.platform.model.User;
 import com.camelot.pmt.platform.service.RoleToUserService;
@@ -21,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -500,8 +502,25 @@ public class TaskManagerServiceImpl implements TaskManagerService {
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public PageInfo<Task> queryTaskStatusRunningByTask(Task task, int page, int rows) {
         try {
+            task.setStatus(Constant.TaskStatus.RUNING.getValue());
+            String taskName = task.getTaskName();
+            if (!StringUtils.isEmpty(taskName) && !"".equals(taskName)) {
+                task.setTaskName("%"+taskName+"%");
+            }
+            String[] ids = null;
+            // 如果负责人条件非空，则根据username查询userId
+            if (task.getBeassignUser() != null) {
+                List<User> users = userService.queryUsersByUserName(task.getBeassignUser().getUsername());
+                if (users.isEmpty()) {
+                    return null;
+                }
+                ids = new String[users.size()];
+                for (int i = 0; i < users.size(); i++) {
+                    ids[i] = users.get(i).getUserId();
+                }
+            }
             PageHelper.startPage(page, rows);
-            List<Task> tasks = taskMapper.queryTaskStatusRunningByTask(task);
+            List<Task> tasks = taskMapper.queryTaskStatusRunningByTask(task, ids);
             PageInfo<Task> pageInfo = new PageInfo<>(tasks);
             return pageInfo;
         } catch (Exception e) {
@@ -520,8 +539,25 @@ public class TaskManagerServiceImpl implements TaskManagerService {
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public PageInfo<Task> queryTaskStatusPendingByTask(Task task, int page, int rows) {
         try {
+            task.setStatus(Constant.TaskStatus.PENDINHG.getValue());
+            String taskName = task.getTaskName();
+            if (!StringUtils.isEmpty(taskName) && !"".equals(taskName)) {
+                task.setTaskName("%"+taskName+"%");
+            }
+            String[] ids = null;
+            // 如果负责人条件非空，则根据username查询userId
+            if (task.getBeassignUser() != null) {
+                List<User> users = userService.queryUsersByUserName(task.getBeassignUser().getUsername());
+                if (users.isEmpty()) {
+                    return null;
+                }
+                ids = new String[users.size()];
+                for (int i = 0; i < users.size(); i++) {
+                    ids[i] = users.get(i).getUserId();
+                }
+            }
             PageHelper.startPage(page, rows);
-            List<Task> tasks = taskMapper.queryTaskStatusPendingByTask(task);
+            List<Task> tasks = taskMapper.queryTaskStatusPendingByTask(task, ids);
             PageInfo<Task> pageInfo = new PageInfo<>(tasks);
             return pageInfo;
         } catch (Exception e) {
@@ -540,8 +576,25 @@ public class TaskManagerServiceImpl implements TaskManagerService {
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public PageInfo<Task> queryTaskStatusAlreadyByTask(Task task, int page, int rows) {
         try {
+            task.setStatus(Constant.TaskStatus.ALREADY.getValue());
+            String taskName = task.getTaskName();
+            if (!StringUtils.isEmpty(taskName) && !"".equals(taskName)) {
+                task.setTaskName("%"+taskName+"%");
+            }
+            String[] ids = null;
+            // 如果负责人条件非空，则根据username查询userId
+            if (task.getBeassignUser() != null) {
+                List<User> users = userService.queryUsersByUserName(task.getBeassignUser().getUsername());
+                if (users.isEmpty()) {
+                    return null;
+                }
+                ids = new String[users.size()];
+                for (int i = 0; i < users.size(); i++) {
+                    ids[i] = users.get(i).getUserId();
+                }
+            }
             PageHelper.startPage(page, rows);
-            List<Task> tasks = taskMapper.queryTaskStatusAlreadyByTask(task);
+            List<Task> tasks = taskMapper.queryTaskStatusAlreadyByTask(task, ids);
             PageInfo<Task> pageInfo = new PageInfo<>(tasks);
             return pageInfo;
         } catch (Exception e) {
@@ -560,8 +613,25 @@ public class TaskManagerServiceImpl implements TaskManagerService {
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public PageInfo<Task> queryTaskStatusCloseByTask(Task task, int page, int rows) {
         try {
+            task.setStatus(Constant.TaskStatus.CLOSE.getValue());
+            String taskName = task.getTaskName();
+            if (!StringUtils.isEmpty(taskName) && !"".equals(taskName)) {
+                task.setTaskName("%"+taskName+"%");
+            }
+            String[] ids = null;
+            // 如果负责人条件非空，则根据username查询userId
+            if (task.getBeassignUser() != null) {
+                List<User> users = userService.queryUsersByUserName(task.getBeassignUser().getUsername());
+                if (users.isEmpty()) {
+                    return null;
+                }
+                ids = new String[users.size()];
+                for (int i = 0; i < users.size(); i++) {
+                    ids[i] = users.get(i).getUserId();
+                }
+            }
             PageHelper.startPage(page, rows);
-            List<Task> tasks = taskMapper.queryTaskStatusCloseByTask(task);
+            List<Task> tasks = taskMapper.queryTaskStatusCloseByTask(task, ids);
             PageInfo<Task> pageInfo = new PageInfo<>(tasks);
             return pageInfo;
         } catch (Exception e) {

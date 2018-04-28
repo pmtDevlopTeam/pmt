@@ -259,7 +259,7 @@
 
     <!--zlh-->
     <!--条件组合查询-->
-    <select id="queryTaskByTask" resultMap="BaseResultMap">
+    <select id="queryTaskByTask" resultMap="BaseResultMap" parameterType="com.camelot.pmt.task.model.Task">
         SELECT
         <include refid="TaskManager_ShowTasks_Column_List" />
         from task t LEFT JOIN platform_user a ON t.assign_user_id = a.user_id
@@ -270,13 +270,13 @@
             <if test="task.taskType != null">and t.task_type = #{task.taskType}</if>
             <if test="task.actualEndTime != null">and Date(t.actual_end_time) = #{task.actualEndTime}</if>
             <if test="task.taskName != null">and t.task_name LIKE "%"#{task.taskName}"%"</if>
-            <if test="task.status != null">and t.status = #{task.status}</if>
             <if test="ids != null">
                 and t.beassign_user_id in
                 <foreach collection="ids" item="idd" open="(" close=")" separator=",">
                     #{idd}
                 </foreach>
             </if>
+            and t.project_id = #{task.project.id}
         </where>
     </select>
 
@@ -363,12 +363,114 @@
         WHERE t.status = '3' and t.project_id = #{id}
     </select>
 
+    <!--zlh-->
+    <!--查询所有可认领的任务-->
     <select id="queryTaskByBeAssignIsNull" resultMap="BaseResultMap">
         SELECT
         task_num,task_name,priority
         FROM task
         WHERE beassign_user_id IS NULL
         ORDER BY priority
+    </select>
+
+    <!--zlh-->
+    <!--组合条件查询所有状态为正在进行的任务-->
+    <select id="queryTaskStatusRunningByTask" resultMap="BaseResultMap">
+        SELECT
+        <include refid="TaskManager_ShowTasks_Column_List" />
+        from task t LEFT JOIN platform_user a ON t.assign_user_id = a.user_id
+        LEFT JOIN platform_user b ON t.beassign_user_id = b.user_id
+        LEFT JOIN platform_user c on t.create_user_id = c.user_id
+        LEFT JOIN project_main p ON t.project_id = p.id
+        <where>
+            <if test="task.taskType != null">and t.task_type = #{task.taskType}</if>
+            <if test="task.actualEndTime != null">and Date(t.actual_start_time) &gt;= #{task.actualEndTime}</if>
+            <if test="task.actualEndTime != null">and Date(t.actual_end_time) &lt;= #{task.actualEndTime}</if>
+            <if test="task.taskName != null">and t.task_name LIKE #{task.taskName}</if>
+            <if test="task.status != null">and t.status = #{task.status}</if>
+            <if test="ids != null">
+                and t.beassign_user_id in
+                <foreach collection="ids" item="idd" open="(" close=")" separator=",">
+                    #{idd}
+                </foreach>
+            </if>
+            and t.project_id = #{task.project.id}
+        </where>
+    </select>
+
+    <!--zlh-->
+    <!--组合条件查询所有状态为待办的任务-->
+    <select id="queryTaskStatusPendingByTask" resultMap="BaseResultMap">
+        SELECT
+        <include refid="TaskManager_ShowTasks_Column_List" />
+        from task t LEFT JOIN platform_user a ON t.assign_user_id = a.user_id
+        LEFT JOIN platform_user b ON t.beassign_user_id = b.user_id
+        LEFT JOIN platform_user c on t.create_user_id = c.user_id
+        LEFT JOIN project_main p ON t.project_id = p.id
+        <where>
+            <if test="task.taskType != null">and t.task_type = #{task.taskType}</if>
+            <if test="task.actualEndTime != null">and Date(t.actual_start_time) &gt;= #{task.actualEndTime}</if>
+            <if test="task.actualEndTime != null">and Date(t.actual_end_time) &lt;= #{task.actualEndTime}</if>
+            <if test="task.taskName != null">and t.task_name LIKE #{task.taskName}</if>
+            <if test="task.status != null">and t.status = #{task.status}</if>
+            <if test="ids != null">
+                and t.beassign_user_id in
+                <foreach collection="ids" item="idd" open="(" close=")" separator=",">
+                    #{idd}
+                </foreach>
+            </if>
+            and t.project_id = #{task.project.id}
+        </where>
+    </select>
+
+    <!--zlh-->
+    <!--组合条件查询所有状态为已办的任务-->
+    <select id="queryTaskStatusAlreadyByTask" resultMap="BaseResultMap">
+        SELECT
+        <include refid="TaskManager_ShowTasks_Column_List" />
+        from task t LEFT JOIN platform_user a ON t.assign_user_id = a.user_id
+        LEFT JOIN platform_user b ON t.beassign_user_id = b.user_id
+        LEFT JOIN platform_user c on t.create_user_id = c.user_id
+        LEFT JOIN project_main p ON t.project_id = p.id
+        <where>
+            <if test="task.taskType != null">and t.task_type = #{task.taskType}</if>
+            <if test="task.actualEndTime != null">and Date(t.actual_start_time) &gt;= #{task.actualEndTime}</if>
+            <if test="task.actualEndTime != null">and Date(t.actual_end_time) &lt;= #{task.actualEndTime}</if>
+            <if test="task.taskName != null">and t.task_name LIKE #{task.taskName}</if>
+            <if test="task.status != null">and t.status = #{task.status}</if>
+            <if test="ids != null">
+                and t.beassign_user_id in
+                <foreach collection="ids" item="idd" open="(" close=")" separator=",">
+                    #{idd}
+                </foreach>
+            </if>
+            and t.project_id = #{task.project.id}
+        </where>
+    </select>
+
+    <!--zlh-->
+    <!--组合条件查询所有状态为关闭的任务-->
+    <select id="queryTaskStatusCloseByTask" resultMap="BaseResultMap">
+        SELECT
+        <include refid="TaskManager_ShowTasks_Column_List" />
+        from task t LEFT JOIN platform_user a ON t.assign_user_id = a.user_id
+        LEFT JOIN platform_user b ON t.beassign_user_id = b.user_id
+        LEFT JOIN platform_user c on t.create_user_id = c.user_id
+        LEFT JOIN project_main p ON t.project_id = p.id
+        <where>
+            <if test="task.taskType != null">and t.task_type = #{task.taskType}</if>
+            <if test="task.actualEndTime != null">and Date(t.actual_start_time) &gt;= #{task.actualEndTime}</if>
+            <if test="task.actualEndTime != null">and Date(t.actual_end_time) &lt;= #{task.actualEndTime}</if>
+            <if test="task.taskName != null">and t.task_name LIKE #{task.taskName}</if>
+            <if test="task.status != null">and t.status = #{task.status}</if>
+            <if test="ids != null">
+                and t.beassign_user_id in
+                <foreach collection="ids" item="idd" open="(" close=")" separator=",">
+                    #{idd}
+                </foreach>
+            </if>
+            and t.project_id = #{task.project.id}
+        </where>
     </select>
 
   <!-- gxl start -->

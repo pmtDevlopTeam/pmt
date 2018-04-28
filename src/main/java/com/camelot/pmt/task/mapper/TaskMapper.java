@@ -152,7 +152,7 @@ public interface TaskMapper {
      * @author zlh
      * @date 15:54 2018/4/25
      */
-    List<Task> queryTaskStatusRunningByTask(Task task);
+    List<Task> queryTaskStatusRunningByTask(@Param("task") Task task, @Param("ids") String[] ids);
 
     /**
      * 组合条件查询所有状态为待办的任务
@@ -160,7 +160,7 @@ public interface TaskMapper {
      * @author zlh
      * @date 15:54 2018/4/25
      */
-    List<Task> queryTaskStatusPendingByTask(Task task);
+    List<Task> queryTaskStatusPendingByTask(@Param("task") Task task, @Param("ids") String[] ids);
 
     /**
      * 组合条件查询所有状态为已办的任务
@@ -168,7 +168,7 @@ public interface TaskMapper {
      * @author zlh
      * @date 15:54 2018/4/25
      */
-    List<Task> queryTaskStatusAlreadyByTask(Task task);
+    List<Task> queryTaskStatusAlreadyByTask(@Param("task") Task task, @Param("ids") String[] ids);
 
     /**
      * 组合条件查询所有状态为关闭的任务
@@ -176,7 +176,7 @@ public interface TaskMapper {
      * @author zlh
      * @date 15:54 2018/4/25
      */
-    List<Task> queryTaskStatusCloseByTask(Task task);
+    List<Task> queryTaskStatusCloseByTask(@Param("task") Task task, @Param("ids") String[] ids);
 
 
     /**
