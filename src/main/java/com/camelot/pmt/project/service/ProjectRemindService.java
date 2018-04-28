@@ -4,7 +4,10 @@
  */
 package com.camelot.pmt.project.service;
 
+import java.util.List;
+
 import com.camelot.pmt.platform.model.User;
+import com.camelot.pmt.project.model.ProjectRemind;
 import com.camelot.pmt.project.model.RemindModel;
 
 /**
@@ -18,4 +21,13 @@ public interface ProjectRemindService {
 
     RemindModel queryProjectRemindByProjectId(Long projectId, String projectRoleId);
 
+    /**
+     * 根据项目id 角色id 提醒状态查询数据
+     * 
+     * @param projectId
+     * @param projectRoleId
+     * @param remindStatus
+     * @return
+     */
+    List<ProjectRemind> queryByProjectIdAndRemindStatus(Long projectId, String projectRoleId, String remindStatus);
 }

@@ -1,3 +1,9 @@
+<<<<<<< HEAD
+/target/
+=======
 ##ignore this file##
 .idea/
 pmt.iml
+/target/
+/bin/
+>>>>>>> branch 'four_team' of https://github.com/pmtDevlopTeam/pmt.git

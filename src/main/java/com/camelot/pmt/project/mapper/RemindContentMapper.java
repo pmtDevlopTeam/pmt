@@ -2,6 +2,8 @@ package com.camelot.pmt.project.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.camelot.pmt.project.model.RemindContent;
 
 public interface RemindContentMapper {
@@ -48,4 +50,14 @@ public interface RemindContentMapper {
     List<RemindContent> queryByRemindId(Long remindId);
 
     int deleteByRemindIdList(List<RemindContent> remindContentList);
+
+    /**
+     * 根据项目id、提醒id查询
+     * 
+     * @param projectId
+     * @param remindId
+     * @return
+     */
+    List<RemindContent> queryByProjectIdAndByRemindId(@Param("projectId") Long projectId,
+            @Param("remindId") Long remindId);
 }

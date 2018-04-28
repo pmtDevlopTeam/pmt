@@ -169,4 +169,12 @@
 		content_id = #{item.contentId,jdbcType=BIGINT}
 	</foreach>
   </delete>
+  <!-- 根据项目id、提醒内容id查询子内容信息 -->
+  <select id="queryByProjectIdAndByContentId" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from remind_content_child
+    where project_id = #{projectId,jdbcType=BIGINT}
+    and content_id = #{contentId,jdbcType=BIGINT}
+  </select>
 </mapper>

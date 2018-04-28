@@ -59,4 +59,12 @@ public interface DemandService {
      * @return
      */
     boolean addDemandList(DemandVO demandVO, User user);
+
+    /**
+     * 新增需求并返回主键id
+     * 
+     * @param
+     * @return
+     */
+    Long addDemandAndReturnId(Demand demand, User user);
 }

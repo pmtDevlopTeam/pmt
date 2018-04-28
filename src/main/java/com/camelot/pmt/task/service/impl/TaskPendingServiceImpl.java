@@ -75,13 +75,13 @@ public class TaskPendingServiceImpl implements TaskPendingService {
      *         ExecuteResult<List<Task>> 返回类型 @throws
      */
     @Override
-    public PageInfo<Task> queryMyPendingTaskList(Task task,Integer page, Integer rows) {
-    	PageInfo<Task> pageInfo;
+    public PageInfo<Task> queryMyPendingTaskList(Task task, Integer page, Integer rows) {
+        PageInfo<Task> pageInfo;
         try {
-        	//分页初始化
-        	PageHelper.startPage(page,rows);
+            // 分页初始化
+            PageHelper.startPage(page, rows);
             // 查询所有的Task任务列表
-        	List<Task> allTaskList = taskMapper.queryMyPendingTaskList(task);
+            List<Task> allTaskList = taskMapper.queryMyPendingTaskList(task);
             pageInfo = new PageInfo<Task>(allTaskList);
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
@@ -126,7 +126,7 @@ public class TaskPendingServiceImpl implements TaskPendingService {
     @Override
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public Boolean updateTaskPendingToStatus(Long id, String taskStatus, String modifyUserId) {
-    	Boolean flag = false;
+        Boolean flag = false;
         try {
             if (id == null || modifyUserId == null) {
                 return false;

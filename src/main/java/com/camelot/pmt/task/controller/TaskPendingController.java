@@ -94,10 +94,9 @@ public class TaskPendingController {
             @ApiImplicitParam(name = "priority", value = "优先级", required = false, paramType = "form", dataType = "String"),
             @ApiImplicitParam(name = "assignUser.userId", value = "指派人标识号", required = false, paramType = "form", dataType = "String") })
     @RequestMapping(value = "/queryMyPendingTaskList", method = RequestMethod.POST)
-    public JSONObject queryMyPendingTaskList(
-    		@ApiIgnore Task task,
-			@ApiParam(name = "page", value = "页码", required = true) @RequestParam(required = true) Integer page,
-			@ApiParam(name = "rows", value = "每页数量", required = true) @RequestParam(required = true) Integer rows) {
+    public JSONObject queryMyPendingTaskList(@ApiIgnore Task task,
+            @ApiParam(name = "page", value = "页码", required = true) @RequestParam(required = true) Integer page,
+            @ApiParam(name = "rows", value = "每页数量", required = true) @RequestParam(required = true) Integer rows) {
         try {
             User user = (User) ShiroUtils.getSessionAttribute("user");
             // 检查用户是否登录，需要去session中获取用户登录信息
@@ -109,7 +108,7 @@ public class TaskPendingController {
             userL.setUserId(user.getUserId());
             task.setBeassignUser(userL);
             task.setStatus(TaskStatus.PENDINHG.getValue());
-            PageInfo<Task> result = taskPendingService.queryMyPendingTaskList(task,page,rows);
+            PageInfo<Task> result = taskPendingService.queryMyPendingTaskList(task, page, rows);
             return ApiResponse.jsonData(APIStatus.OK_200, result);
         } catch (Exception e) {
             logger.error(e.getMessage());

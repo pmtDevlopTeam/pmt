@@ -206,7 +206,6 @@ public class TaskAlreadyController {
         }
     }
 
-
     /**
      * 查询所有已完成的任务 queryTaskAlready
      *
@@ -220,9 +219,8 @@ public class TaskAlreadyController {
             @ApiImplicitParam(dataType = "String", name = "taskName", paramType = "query", value = "任务名称"),
             @ApiImplicitParam(dataType = "String", name = "taskNum", paramType = "query", value = "任务编号"),
             @ApiImplicitParam(dataType = "Demand", name = "demand.id", paramType = "query", value = "需求编号"),
-            @ApiImplicitParam(dataType = "Integer",name = "page" , required = true, paramType = "query",value = "页码"),
-            @ApiImplicitParam(dataType = "Integer",name = "rows" , required = true, paramType = "query",value = "每页数量")
-    })
+            @ApiImplicitParam(dataType = "Integer", name = "page", required = true, paramType = "query", value = "页码"),
+            @ApiImplicitParam(dataType = "Integer", name = "rows", required = true, paramType = "query", value = "每页数量") })
     public JSONObject queryTaskAlready(@ApiIgnore Task task, Integer page, Integer rows) {
         try {
             // 获取当前登录人
@@ -231,7 +229,7 @@ public class TaskAlreadyController {
                 return ApiResponse.jsonData(APIStatus.INVALIDSESSION_LOGINOUTTIME);
             }
             task.setBeassignUser(user);
-            PageInfo<Task> taskAlreadyList = taskAlreadyService.queryTaskAlready(page, rows,task);
+            PageInfo<Task> taskAlreadyList = taskAlreadyService.queryTaskAlready(page, rows, task);
             return ApiResponse.success(taskAlreadyList);
         } catch (Exception e) {
             logger.error(e.getMessage());

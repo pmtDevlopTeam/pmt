@@ -273,8 +273,7 @@ public class TaskManagerController {
     @ApiImplicitParams({
             @ApiImplicitParam(dataType = "int", name = "page", paramType = "query", value = "当前页", required = true),
             @ApiImplicitParam(dataType = "int", name = "rows", paramType = "query", value = "显示几行", required = true),
-            @ApiImplicitParam(dataType = "Long", name = "id", paramType = "query", value = "项目id", required = true)
-    })
+            @ApiImplicitParam(dataType = "Long", name = "id", paramType = "query", value = "项目id", required = true) })
     public JSONObject queryTaskByStatusRunning(int page, int rows, Long id) {
         try {
             PageInfo<Task> result = taskManagerService.queryTaskByStatusRunning(page, rows, id);
@@ -296,8 +295,7 @@ public class TaskManagerController {
     @ApiImplicitParams({
             @ApiImplicitParam(dataType = "int", name = "page", paramType = "query", value = "当前页", required = true),
             @ApiImplicitParam(dataType = "int", name = "rows", paramType = "query", value = "显示几行", required = true),
-            @ApiImplicitParam(dataType = "Long", name = "id", paramType = "query", value = "项目id", required = true)
-    })
+            @ApiImplicitParam(dataType = "Long", name = "id", paramType = "query", value = "项目id", required = true) })
     public JSONObject queryTaskByStatusPending(int page, int rows, Long id) {
         try {
             PageInfo<Task> result = taskManagerService.queryTaskByStatusPending(page, rows, id);
@@ -319,8 +317,7 @@ public class TaskManagerController {
     @ApiImplicitParams({
             @ApiImplicitParam(dataType = "int", name = "page", paramType = "query", value = "当前页", required = true),
             @ApiImplicitParam(dataType = "int", name = "rows", paramType = "query", value = "显示几行", required = true),
-            @ApiImplicitParam(dataType = "Long", name = "id", paramType = "query", value = "项目id", required = true)
-    })
+            @ApiImplicitParam(dataType = "Long", name = "id", paramType = "query", value = "项目id", required = true) })
     public JSONObject queryTaskByStatusAlready(int page, int rows, Long id) {
         try {
             PageInfo<Task> result = taskManagerService.queryTaskByStatusAlready(page, rows, id);
@@ -342,8 +339,7 @@ public class TaskManagerController {
     @ApiImplicitParams({
             @ApiImplicitParam(dataType = "int", name = "page", paramType = "query", value = "当前页", required = true),
             @ApiImplicitParam(dataType = "int", name = "rows", paramType = "query", value = "显示几行", required = true),
-            @ApiImplicitParam(dataType = "Long", name = "id", paramType = "query", value = "项目id", required = true)
-    })
+            @ApiImplicitParam(dataType = "Long", name = "id", paramType = "query", value = "项目id", required = true) })
     public JSONObject queryTaskByStatusClose(int page, int rows, Long id) {
         try {
             PageInfo<Task> result = taskManagerService.queryTaskByStatusClose(page, rows, id);

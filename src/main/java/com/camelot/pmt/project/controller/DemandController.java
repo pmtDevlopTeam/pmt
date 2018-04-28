@@ -378,6 +378,56 @@ public class DemandController {
         }
     }
 
+    /**
+     * 需求状态（未激活/已激活/已关闭/已变更）
+     *
+     * @param demand
+     * @return
+     */
+    @ApiOperation(value = "新增单个需求并返回主键id", notes = "新增单个需求并返回主键id")
+    @PostMapping(value = "/demand/addDemandAndReturnId")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "pid", value = "所属一级需求id", required = false, paramType = "query", dataType = "Long", defaultValue = "0"),
+            @ApiImplicitParam(name = "projectId", value = "项目id", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "demandName", value = "需求名称", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "demandSource", value = "需求来源", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "demandLevel", value = "优先级", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "sourceRemark", value = "需求来源备注", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "assignedTo", value = "指派给", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "demandNeed", value = "需求层级(默认一级)", required = true, paramType = "query", dataType = "String", defaultValue = "1"),
+            @ApiImplicitParam(name = "reviewedWith", value = "由谁评审(人员user_id用逗号拼接)", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "demandDesc", value = "需求描述", required = false, paramType = "query", dataType = "String") })
+    public JSONObject addDemandAndReturnId(@ApiIgnore Demand demand) {
+        try {
+            // 获取当前登录人
+            User user = (User) ShiroUtils.getSessionAttribute("user");
+            if (null == user) {
+                return ApiResponse.jsonData(APIStatus.INVALIDSESSION_LOGINOUTTIME);
+            }
+            if (null == demand) {
+                return ApiResponse.errorPara("请求参数异常");
+            }
+            Date currentDate = new Date();
+            demand.setCreateTime(currentDate);
+            demand.setCreateUserId(user.getUserId());
+            demand.setModifyUserId(user.getUserId());
+            demand.setModifyTime(currentDate);
+            if (null == demand.getPid()) {
+                demand.setPid(0l);
+            }
+            // 设置新增需求状态01:未开始
+            demand.setDemandStatus("01");
+            Long demandId = demandService.addDemandAndReturnId(demand, user);
+            if (demandId > 0) {
+                return ApiResponse.success(demandId);
+            }
+            return ApiResponse.error();
+        } catch (Exception e) {
+            logger.error("------需求新增------" + e.getMessage());
+            return ApiResponse.error();
+        }
+    }
+
     @InitBinder
     public void initBinder(ServletRequestDataBinder binder) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");

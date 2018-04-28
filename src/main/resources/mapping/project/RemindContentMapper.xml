@@ -129,4 +129,12 @@
 		remind_id = #{item.remindId,jdbcType=BIGINT}
 	</foreach>
   </delete>
+  <!-- 根据项目id、提醒id查询 -->
+  <select id="queryByProjectIdAndByRemindId" resultMap="BaseResultMap">
+  	select 
+    <include refid="Base_Column_List" />
+    from remind_content
+    where project_id = #{projectId,jdbcType=BIGINT}
+    and remind_id = #{remindId,jdbcType=BIGINT}
+  </select>
 </mapper>

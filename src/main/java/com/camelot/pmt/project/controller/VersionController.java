@@ -1,9 +1,20 @@
 package com.camelot.pmt.project.controller;
 
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.alibaba.fastjson.JSONObject;
 import com.camelot.pmt.common.APIStatus;
 import com.camelot.pmt.common.ApiResponse;
-import com.camelot.pmt.common.Pager;
 import com.camelot.pmt.platform.model.User;
 import com.camelot.pmt.platform.shiro.ShiroUtils;
 import com.camelot.pmt.project.mapper.ProjectMainMapper;
@@ -13,21 +24,12 @@ import com.camelot.pmt.project.model.VersionVo;
 import com.camelot.pmt.project.service.VersionOperationLogService;
 import com.camelot.pmt.project.service.VersionService;
 import com.github.pagehelper.PageInfo;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
-
-import javax.annotation.Resource;
-import java.util.List;
-import java.util.Map;
 
 /**
  * @Package: com.camelot.pmt.project.controller
@@ -300,7 +302,7 @@ public class VersionController {
         try {
             User user = (User) ShiroUtils.getSessionAttribute("user");
             if (user != null) {
-                PageInfo pageInfo = versionService.queryVerListByPageAndProId(page, rows, projectId, versionVo);
+                PageInfo<?> pageInfo = versionService.queryVerListByPageAndProId(page, rows, projectId, versionVo);
                 return ApiResponse.success(pageInfo);
             } else {
                 return ApiResponse.error("用户未登录，请登录！");

@@ -12,8 +12,9 @@ import java.util.*;
  * @date: 2018-04-27 16:45
  */
 public class GetDateUtil {
-    public static SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    //获取当天的开始时间
+    public static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+    // 获取当天的开始时间
     public static java.util.Date getDayBegin() {
         Calendar cal = new GregorianCalendar();
         cal.set(Calendar.HOUR_OF_DAY, 0);
@@ -22,7 +23,8 @@ public class GetDateUtil {
         cal.set(Calendar.MILLISECOND, 0);
         return cal.getTime();
     }
-    //获取当天的结束时间
+
+    // 获取当天的结束时间
     public static java.util.Date getDayEnd() {
         Calendar cal = new GregorianCalendar();
         cal.set(Calendar.HOUR_OF_DAY, 23);
@@ -30,29 +32,34 @@ public class GetDateUtil {
         cal.set(Calendar.SECOND, 59);
         return cal.getTime();
     }
-    //获取昨天的开始时间
+
+    // 获取昨天的开始时间
     public static Date getBeginDayOfYesterday() {
         Calendar cal = new GregorianCalendar();
         cal.setTime(getDayBegin());
         cal.add(Calendar.DAY_OF_MONTH, -1);
         return cal.getTime();
     }
-    //获取昨天的结束时间
+
+    // 获取昨天的结束时间
     public static Date getEndDayOfYesterDay() {
         Calendar cal = new GregorianCalendar();
         cal.setTime(getDayEnd());
         cal.add(Calendar.DAY_OF_MONTH, -1);
         return cal.getTime();
     }
-    //获取昨天的开始时间
+
+    // 获取昨天的开始时间
     public static String getStringBeginDayOfYesterday() {
         return sdf.format(getBeginDayOfYesterday());
     }
-    //获取昨天的结束时间
+
+    // 获取昨天的结束时间
     public static String getStringEndDayOfYesterDay() {
         return sdf.format(getEndDayOfYesterDay());
     }
-    //获取明天的开始时间
+
+    // 获取明天的开始时间
     public static Date getBeginDayOfTomorrow() {
         Calendar cal = new GregorianCalendar();
         cal.setTime(getDayBegin());
@@ -60,14 +67,16 @@ public class GetDateUtil {
 
         return cal.getTime();
     }
-    //获取明天的结束时间
+
+    // 获取明天的结束时间
     public static Date getEndDayOfTomorrow() {
         Calendar cal = new GregorianCalendar();
         cal.setTime(getDayEnd());
         cal.add(Calendar.DAY_OF_MONTH, 1);
         return cal.getTime();
     }
-    //获取本周的开始时间
+
+    // 获取本周的开始时间
     public static Date getBeginDayOfWeek() {
         Date date = new Date();
         if (date == null) {
@@ -82,24 +91,28 @@ public class GetDateUtil {
         cal.add(Calendar.DATE, 2 - dayofweek);
         return getDayStartTime(cal.getTime());
     }
-    //获取本周的结束时间
-    public static Date getEndDayOfWeek(){
+
+    // 获取本周的结束时间
+    public static Date getEndDayOfWeek() {
         Calendar cal = Calendar.getInstance();
         cal.setTime(getBeginDayOfWeek());
         cal.add(Calendar.DAY_OF_WEEK, 6);
         Date weekEndSta = cal.getTime();
         return getDayEndTime(weekEndSta);
     }
+
     // 获取本周开始时间
     public static String getStringBeginDayOfWeek() {
         return sdf.format(getBeginDayOfWeek());
     }
+
     // 获取本周结束时间
     public static String getStringEndDayOfWeek() {
         return sdf.format(getEndDayOfWeek());
     }
+
     // 获取上周开始时间
-    public static Date getBeginDayOfLastWeek(){
+    public static Date getBeginDayOfLastWeek() {
         Date date = new Date();
         if (date == null) {
             return null;
@@ -113,29 +126,34 @@ public class GetDateUtil {
         cal.add(Calendar.DATE, 2 - dayofweek - 7);
         return getDayStartTime(cal.getTime());
     }
+
     // 获取上周结束时间
-    public static Date getEndDayOfLastWeek(){
+    public static Date getEndDayOfLastWeek() {
         Calendar cal = Calendar.getInstance();
         cal.setTime(getBeginDayOfLastWeek());
         cal.add(Calendar.DAY_OF_WEEK, 6);
         Date weekEndSta = cal.getTime();
         return getDayEndTime(weekEndSta);
     }
+
     // 获取上周开始时间
     public static String getStringBeginDayOfLastWeek() {
         return sdf.format(getBeginDayOfLastWeek());
     }
+
     // 获取上周结束时间
     public static String getStringEndDayOfLastWeek() {
         return sdf.format(getEndDayOfLastWeek());
     }
-    //获取本月的开始时间
+
+    // 获取本月的开始时间
     public static Date getBeginDayOfMonth() {
         Calendar calendar = Calendar.getInstance();
         calendar.set(getNowYear(), getNowMonth() - 1, 1);
         return getDayStartTime(calendar.getTime());
     }
-    //获取本月的结束时间
+
+    // 获取本月的结束时间
     public static Date getEndDayOfMonth() {
         Calendar calendar = Calendar.getInstance();
         calendar.set(getNowYear(), getNowMonth() - 1, 1);
@@ -143,21 +161,25 @@ public class GetDateUtil {
         calendar.set(getNowYear(), getNowMonth() - 1, day);
         return getDayEndTime(calendar.getTime());
     }
-    //获取本月的开始时间
+
+    // 获取本月的开始时间
     public static String getStringBeginDayOfMonth() {
         return sdf.format(getBeginDayOfMonth());
     }
-    //获取本月的结束时间
+
+    // 获取本月的结束时间
     public static String getStringEndDayOfMonth() {
         return sdf.format(getEndDayOfMonth());
     }
+
     // 获取上月的开始时间
     public static Date getBeginDayOfLastMonth() {
         Calendar calendar = Calendar.getInstance();
         calendar.set(getNowYear(), getNowMonth() - 2, 1);
         return getDayStartTime(calendar.getTime());
     }
-    //获取上月的结束时间
+
+    // 获取上月的结束时间
     public static Date getEndDayOfLastMonth() {
         Calendar calendar = Calendar.getInstance();
         calendar.set(getNowYear(), getNowMonth() - 2, 1);
@@ -165,15 +187,18 @@ public class GetDateUtil {
         calendar.set(getNowYear(), getNowMonth() - 2, day);
         return getDayEndTime(calendar.getTime());
     }
+
     // 获取上月的开始时间
     public static String getStringBeginDayOfLastMonth() {
         return sdf.format(getBeginDayOfLastMonth());
     }
+
     // 获取上月的结束时间
     public static String getStringEndDayOfLastMonth() {
         return sdf.format(getEndDayOfLastMonth());
     }
-    //获取本年的开始时间
+
+    // 获取本年的开始时间
     public static java.util.Date getBeginDayOfYear() {
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.YEAR, getNowYear());
@@ -183,7 +208,8 @@ public class GetDateUtil {
 
         return getDayStartTime(cal.getTime());
     }
-    //获取本年的结束时间
+
+    // 获取本年的结束时间
     public static java.util.Date getEndDayOfYear() {
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.YEAR, getNowYear());
@@ -191,57 +217,67 @@ public class GetDateUtil {
         cal.set(Calendar.DATE, 31);
         return getDayEndTime(cal.getTime());
     }
-    //获取某个日期的开始时间
+
+    // 获取某个日期的开始时间
     public static Timestamp getDayStartTime(Date d) {
         Calendar calendar = Calendar.getInstance();
-        if(null != d) calendar.setTime(d);
-        calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),    calendar.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
+        if (null != d)
+            calendar.setTime(d);
+        calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), 0,
+                0, 0);
         calendar.set(Calendar.MILLISECOND, 0);
         return new Timestamp(calendar.getTimeInMillis());
     }
-    //获取某个日期的结束时间
+
+    // 获取某个日期的结束时间
     public static Timestamp getDayEndTime(Date d) {
         Calendar calendar = Calendar.getInstance();
-        if(null != d) calendar.setTime(d);
-        calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),    calendar.get(Calendar.DAY_OF_MONTH), 23, 59, 59);
+        if (null != d)
+            calendar.setTime(d);
+        calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), 23,
+                59, 59);
         calendar.set(Calendar.MILLISECOND, 999);
         return new Timestamp(calendar.getTimeInMillis());
     }
-    //获取今年是哪一年
+
+    // 获取今年是哪一年
     public static Integer getNowYear() {
         Date date = new Date();
         GregorianCalendar gc = (GregorianCalendar) Calendar.getInstance();
         gc.setTime(date);
         return Integer.valueOf(gc.get(1));
     }
-    //获取本月是哪一月
+
+    // 获取本月是哪一月
     public static int getNowMonth() {
         Date date = new Date();
         GregorianCalendar gc = (GregorianCalendar) Calendar.getInstance();
         gc.setTime(date);
         return gc.get(2) + 1;
     }
-    //两个日期相减得到的天数
+
+    // 两个日期相减得到的天数
     public static int getDiffDays(Date beginDate, Date endDate) {
 
         if (beginDate == null || endDate == null) {
             throw new IllegalArgumentException("getDiffDays param is null!");
         }
 
-        long diff = (endDate.getTime() - beginDate.getTime())
-                / (1000 * 60 * 60 * 24);
+        long diff = (endDate.getTime() - beginDate.getTime()) / (1000 * 60 * 60 * 24);
 
         int days = new Long(diff).intValue();
 
         return days;
     }
-    //两个日期相减得到的毫秒数
+
+    // 两个日期相减得到的毫秒数
     public static long dateDiff(Date beginDate, Date endDate) {
         long date1ms = beginDate.getTime();
         long date2ms = endDate.getTime();
         return date2ms - date1ms;
     }
-    //获取两个日期中的最大日期
+
+    // 获取两个日期中的最大日期
     public static Date max(Date beginDate, Date endDate) {
         if (beginDate == null) {
             return endDate;
@@ -254,7 +290,8 @@ public class GetDateUtil {
         }
         return endDate;
     }
-    //获取两个日期中的最小日期
+
+    // 获取两个日期中的最小日期
     public static Date min(Date beginDate, Date endDate) {
         if (beginDate == null) {
             return endDate;
@@ -267,7 +304,8 @@ public class GetDateUtil {
         }
         return beginDate;
     }
-    //返回某月该季度的第一个月
+
+    // 返回某月该季度的第一个月
     public static Date getFirstSeasonDate(Date date) {
         final int[] SEASON = { 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4 };
         Calendar cal = Calendar.getInstance();
@@ -276,23 +314,25 @@ public class GetDateUtil {
         cal.set(Calendar.MONTH, sean * 3 - 3);
         return cal.getTime();
     }
-    //返回某个日期下几天的日期
+
+    // 返回某个日期下几天的日期
     public static Date getNextDay(Date date, int i) {
         Calendar cal = new GregorianCalendar();
         cal.setTime(date);
         cal.set(Calendar.DATE, cal.get(Calendar.DATE) + i);
         return cal.getTime();
     }
-    //返回某个日期前几天的日期
+
+    // 返回某个日期前几天的日期
     public static Date getFrontDay(Date date, int i) {
         Calendar cal = new GregorianCalendar();
         cal.setTime(date);
         cal.set(Calendar.DATE, cal.get(Calendar.DATE) - i);
         return cal.getTime();
     }
-    //获取某年某月到某年某月按天的切片日期集合（间隔天数的日期集合）
-    public static List getTimeList(int beginYear, int beginMonth, int endYear,
-                                   int endMonth, int k) {
+
+    // 获取某年某月到某年某月按天的切片日期集合（间隔天数的日期集合）
+    public static List getTimeList(int beginYear, int beginMonth, int endYear, int endMonth, int k) {
         List list = new ArrayList();
         if (beginYear == endYear) {
             for (int j = beginMonth; j <= endMonth; j++) {
@@ -317,7 +357,8 @@ public class GetDateUtil {
         }
         return list;
     }
-    //获取某年某月按天切片日期集合（某个月间隔多少天的日期集合）
+
+    // 获取某年某月按天切片日期集合（某个月间隔多少天的日期集合）
     public static List getTimeList(int beginYear, int beginMonth, int k) {
         List list = new ArrayList();
         Calendar begincal = new GregorianCalendar(beginYear, beginMonth, 1);
@@ -330,14 +371,15 @@ public class GetDateUtil {
         list.add(begincal.getTime());
         return list;
     }
-    //获取某年某月的第一天日期
+
+    // 获取某年某月的第一天日期
     public static Date getStartMonthDate(int year, int month) {
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, month - 1, 1);
         return calendar.getTime();
     }
 
-    //获取某年某月的最后一天日期
+    // 获取某年某月的最后一天日期
     public static Date getEndMonthDate(int year, int month) {
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, month - 1, 1);

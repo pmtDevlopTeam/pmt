@@ -46,30 +46,30 @@ public class UserController {
      *            userModel
      * @return {"status": {"message": "请求处理成功.","code": 200}, "data": {添加用户成功!}]
      */
-	@ApiOperation(value = "添加用户", notes = "添加用户")
-	@ApiImplicitParams({
-			@ApiImplicitParam(name = "userJobNum", value = "用户工号", required = true, paramType = "form", dataType = "String"),
-			@ApiImplicitParam(name = "username", value = "用户名称", required = true, paramType = "form", dataType = "String"),
-			@ApiImplicitParam(name = "orgId", value = "用户所属部门ID", required = false, paramType = "form", dataType = "String"),
-			@ApiImplicitParam(name = "roleIds", value = "用户角色IDS", required = false, paramType = "form", dataType = "String"),
-			@ApiImplicitParam(name = "loginCode", value = "登录账号", required = true, paramType = "form", dataType = "String"),
-			@ApiImplicitParam(name = "userPhone", value = "用户电话", required = true, paramType = "form", dataType = "String"),
-			@ApiImplicitParam(name = "userMail", value = "用户邮箱", required = true, paramType = "form", dataType = "String") })
-	@RequestMapping(value = "user/addUser", method = RequestMethod.POST)
-	public JSONObject addUser(@ApiIgnore User userModel) {
-		try {
-			if (StringUtils.isEmpty(userModel.getUserJobNum()) || StringUtils.isEmpty(userModel.getUsername())
-					|| StringUtils.isEmpty(userModel.getLoginCode()) || StringUtils.isEmpty(userModel.getUserPhone())
-					|| StringUtils.isEmpty(userModel.getUserMail())) {
-				return ApiResponse.jsonData(APIStatus.ERROR_400);
-			}
-			String result = service.addUser(userModel);
-			return ApiResponse.success(result);
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			return ApiResponse.error();
-		}
-	}
+    @ApiOperation(value = "添加用户", notes = "添加用户")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userJobNum", value = "用户工号", required = true, paramType = "form", dataType = "String"),
+            @ApiImplicitParam(name = "username", value = "用户名称", required = true, paramType = "form", dataType = "String"),
+            @ApiImplicitParam(name = "orgId", value = "用户所属部门ID", required = false, paramType = "form", dataType = "String"),
+            @ApiImplicitParam(name = "roleIds", value = "用户角色IDS", required = false, paramType = "form", dataType = "String"),
+            @ApiImplicitParam(name = "loginCode", value = "登录账号", required = true, paramType = "form", dataType = "String"),
+            @ApiImplicitParam(name = "userPhone", value = "用户电话", required = true, paramType = "form", dataType = "String"),
+            @ApiImplicitParam(name = "userMail", value = "用户邮箱", required = true, paramType = "form", dataType = "String") })
+    @RequestMapping(value = "user/addUser", method = RequestMethod.POST)
+    public JSONObject addUser(@ApiIgnore User userModel) {
+        try {
+            if (StringUtils.isEmpty(userModel.getUserJobNum()) || StringUtils.isEmpty(userModel.getUsername())
+                    || StringUtils.isEmpty(userModel.getLoginCode()) || StringUtils.isEmpty(userModel.getUserPhone())
+                    || StringUtils.isEmpty(userModel.getUserMail())) {
+                return ApiResponse.jsonData(APIStatus.ERROR_400);
+            }
+            String result = service.addUser(userModel);
+            return ApiResponse.success(result);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return ApiResponse.error();
+        }
+    }
 
     /**
      * <p>
@@ -85,9 +85,9 @@ public class UserController {
     @RequestMapping(value = "user/activateUser", method = RequestMethod.POST)
     public JSONObject activateUserStateByUserId(@ApiIgnore User userModel) {
         try {
-        	if (StringUtils.isEmpty(userModel.getUserId())) {
-				return ApiResponse.jsonData(APIStatus.ERROR_400);
-			}
+            if (StringUtils.isEmpty(userModel.getUserId())) {
+                return ApiResponse.jsonData(APIStatus.ERROR_400);
+            }
             boolean result = service.activateUserStateByUserId(userModel);
             if (result) {
                 return ApiResponse.success("激活用户成功！");
@@ -113,9 +113,9 @@ public class UserController {
     @RequestMapping(value = "user/disableUser", method = RequestMethod.POST)
     public JSONObject disableUserStateByUserId(@ApiIgnore User userModel) {
         try {
-        	if (StringUtils.isEmpty(userModel.getUserId())) {
-				return ApiResponse.jsonData(APIStatus.ERROR_400);
-			}
+            if (StringUtils.isEmpty(userModel.getUserId())) {
+                return ApiResponse.jsonData(APIStatus.ERROR_400);
+            }
             boolean result = service.disableUserStateByUserId(userModel);
             if (result) {
                 return ApiResponse.success("禁用用户成功！");
@@ -174,9 +174,10 @@ public class UserController {
     @RequestMapping(value = "user/updateUserPasswordByUserId", method = RequestMethod.POST)
     public JSONObject updateUserPasswordByUserId(@ApiIgnore User userModel) {
         try {
-        	 if (StringUtils.isEmpty(userModel.getNewPassword()) || StringUtils.isEmpty(userModel.getSecondNewPassword())) {
-                 return ApiResponse.jsonData(APIStatus.ERROR_400);
-             }
+            if (StringUtils.isEmpty(userModel.getNewPassword())
+                    || StringUtils.isEmpty(userModel.getSecondNewPassword())) {
+                return ApiResponse.jsonData(APIStatus.ERROR_400);
+            }
             String result = service.updateUserPasswordByUserId(userModel);
             return ApiResponse.success(result);
         } catch (Exception e) {
@@ -348,21 +349,21 @@ public class UserController {
      */
     @ApiOperation(value = "检查用户旧密码", notes = "检查用户旧密码")
     @RequestMapping(value = "user/checkOldUserPassword", method = RequestMethod.POST)
-	public JSONObject checkoldUserPassword(
-			@ApiParam(name = "password", value = "用户旧密码", required = true) @RequestParam(required = true) String password) {
-		try {
-			if (StringUtils.isEmpty(password)) {
+    public JSONObject checkoldUserPassword(
+            @ApiParam(name = "password", value = "用户旧密码", required = true) @RequestParam(required = true) String password) {
+        try {
+            if (StringUtils.isEmpty(password)) {
                 return ApiResponse.jsonData(APIStatus.ERROR_400);
             }
-			boolean result = service.checkOldUserPassword(password);
-			if (!result) {
-				return ApiResponse.success("旧密码不正确！");
-			}
-			return ApiResponse.success();
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			return ApiResponse.error();
-		}
-	}
+            boolean result = service.checkOldUserPassword(password);
+            if (!result) {
+                return ApiResponse.success("旧密码不正确！");
+            }
+            return ApiResponse.success();
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return ApiResponse.error();
+        }
+    }
 
 }

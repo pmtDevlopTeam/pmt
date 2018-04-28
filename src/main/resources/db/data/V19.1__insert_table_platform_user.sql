@@ -1,0 +1,2 @@
+INSERT INTO platform_user (id,user_id,login_code,password,user_name,state,create_time,create_user_id,modify_time,modify_user_id)
+values(39,'6b3bac4eddcb47b4954b289f3ebb430f','aaa','9834876dcfb05cb167a5c24953eba58c4ac89b1adf57f28f2f9d09af107ee8f0','S丰巢','0','2018-04-18 09:55:45','aa','2018-04-18 09:55:45','aa')
