@@ -145,4 +145,13 @@
     from project_remind
     where project_id = #{projectId,jdbcType=BIGINT} and project_role_id = #{projectRoleId,jdbcType=VARCHAR}
   </select>
+  <!-- 根据项目id、成员角色id、提醒状态查询提醒主表信息 -->
+  <select id="queryByProjectIdAndRemindStatus" resultMap="BaseResultMap">
+  	select 
+    <include refid="Base_Column_List" />
+    from project_remind
+    where project_id = #{projectId,jdbcType=BIGINT} 
+    and project_role_id = #{projectRoleId,jdbcType=VARCHAR}
+    and remind_status = #{remindStatus,jdbcType=CHAR}
+  </select>
 </mapper>

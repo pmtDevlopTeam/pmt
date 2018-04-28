@@ -2,14 +2,14 @@ server:
   port: 8080
 
 
-flyway:
-  baselineOnMigrate: true
-  locations: db/schema, db/data
+#flyway:
+#  baselineOnMigrate: true
+#  locations: db/schema, db/data
 
 
 spring:
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/pmt?useUnicode=true&characterEncoding=utf8
+    url: jdbc:mysql://127.0.0.1:3306/pmt01?useUnicode=true&characterEncoding=utf8
     username: camelot
     password: camelot!123
     # 使用druid数据源

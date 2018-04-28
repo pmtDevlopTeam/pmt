@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,13 +27,14 @@ import com.camelot.pmt.project.service.ProjectRemindService;
  */
 @Service
 public class ProjectRemindServiceImpl implements ProjectRemindService {
-
+    private static final Logger logger = LoggerFactory.getLogger(ProjectRemindServiceImpl.class);
     @Autowired
     ProjectRemindMapper projectRemindMapper;
     @Autowired
     RemindContentMapper remindContentMapper;
     @Autowired
     RemindContentChildMapper remindContentChildMapper;
+
     /**
      * 添加项目提醒
      */
@@ -41,32 +44,32 @@ public class ProjectRemindServiceImpl implements ProjectRemindService {
         Date nowDate = new Date();
         int count = 0;
         try {
-            ProjectRemind projectRemind = remindModel.getProjectRemind();//项目提醒主体
-            List<RemindContent> remindContentList = remindModel.getRemindContentList();//项目提醒内容
-            deleteProjectRemind(projectRemind);//删除项目提醒相关表
+            ProjectRemind projectRemind = remindModel.getProjectRemind();// 项目提醒主体
+            List<RemindContent> remindContentList = remindModel.getRemindContentList();// 项目提醒内容
+            deleteProjectRemind(projectRemind);// 删除项目提醒相关表
             String userId = user.getUserId();
             projectRemind.setCreateUserId(userId);
             projectRemind.setCreateTime(nowDate);
             count = projectRemindMapper.insert(projectRemind);
-            if(count <= 0){
+            if (count <= 0) {
                 return false;
             }
             Long reportId = projectRemind.getId();
-            if((null != remindContentList)&&(remindContentList.size()>0)){
+            if ((null != remindContentList) && (remindContentList.size() > 0)) {
                 for (RemindContent remindContent : remindContentList) {
-                    if(null != remindContent){
+                    if (null != remindContent) {
                         remindContent.setRemindId(reportId);
                         remindContent.setCreateUserId(userId);
                         remindContent.setCreateTime(nowDate);
                         count = remindContentMapper.insert(remindContent);
-                        if(count <= 0){
+                        if (count <= 0) {
                             return false;
                         }
                         Long contentId = remindContent.getId();
                         List<RemindContentChild> remindContentChildList = remindContent.getRemindContentChildList();
-                        if(remindContentChildList.size()>0){
+                        if (remindContentChildList.size() > 0) {
                             for (RemindContentChild remindContentChild : remindContentChildList) {
-                                if(null != remindContentChild){
+                                if (null != remindContentChild) {
                                     remindContentChild.setContentId(contentId);
                                     remindContentChild.setCreateUserId(userId);
                                     remindContentChild.setCreateTime(nowDate);
@@ -77,30 +80,31 @@ public class ProjectRemindServiceImpl implements ProjectRemindService {
                     }
                 }
             }
-            if(count <= 0){
+            if (count <= 0) {
                 return false;
-            }else{
+            } else {
                 return true;
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
-    
+
     /**
      * 删除项目提醒模块
      */
-    private int deleteProjectRemind(ProjectRemind projectRemind){
+    private int deleteProjectRemind(ProjectRemind projectRemind) {
         int count = 0;
         ProjectRemind remind = projectRemindMapper.queryByProjectRemind(projectRemind);
-        //查询所有文本中remind_id
-        if(null != remind){
+        // 查询所有文本中remind_id
+        if (null != remind) {
             Long remindId = remind.getId();
             List<RemindContent> remindContentList = remindContentMapper.queryByRemindId(remindId);
             List<RemindContentChild> remindContentChildList = new ArrayList<RemindContentChild>();
-            if((null != remindContentList)&&(remindContentList.size()>0)){
+            if ((null != remindContentList) && (remindContentList.size() > 0)) {
                 for (RemindContent remindContent : remindContentList) {
-                    List<RemindContentChild> tempList = remindContentChildMapper.queryByContentId(remindContent.getId());
+                    List<RemindContentChild> tempList = remindContentChildMapper
+                            .queryByContentId(remindContent.getId());
                     remindContentChildList.addAll(tempList);
                 }
             }
@@ -108,7 +112,7 @@ public class ProjectRemindServiceImpl implements ProjectRemindService {
             count += remindContentMapper.deleteByRemindIdList(remindContentList);
             count += remindContentChildMapper.deleteByContentId(remindContentChildList);
         }
-        
+
         return count;
     }
 
@@ -116,32 +120,53 @@ public class ProjectRemindServiceImpl implements ProjectRemindService {
      * 根据项目id&&成员角色id查询项目提醒信息
      */
     @Override
-    public RemindModel queryProjectRemindByProjectId(Long projectId,String projectRoleId) {
+    public RemindModel queryProjectRemindByProjectId(Long projectId, String projectRoleId) {
         RemindModel remindModel = new RemindModel();
         ProjectRemind remind = new ProjectRemind();
         remind.setProjectId(projectId);
         remind.setProjectRoleId(projectRoleId);
         try {
             ProjectRemind projectRemind = projectRemindMapper.queryByProjectRemind(remind);
-            if(null == projectRemind){
+            if (null == projectRemind) {
                 return remindModel;
             }
-            remindModel.setProjectRemind(projectRemind);//项目提醒主表内容
-            //根据项目id查询所有的内容表
+            remindModel.setProjectRemind(projectRemind);// 项目提醒主表内容
+            // 根据项目id查询所有的内容表
             List<RemindContent> remindContentList = remindContentMapper.queryByRemindId(projectRemind.getId());
-            if((null == remindContentList)||(remindContentList.size()<=0)){
+            if ((null == remindContentList) || (remindContentList.size() <= 0)) {
                 return remindModel;
             }
             for (RemindContent remindContent : remindContentList) {
                 remindContent.getId();
-                List<RemindContentChild> remindContentChildList = remindContentChildMapper.queryByContentId(remindContent.getId());
+                List<RemindContentChild> remindContentChildList = remindContentChildMapper
+                        .queryByContentId(remindContent.getId());
                 remindContent.setRemindContentChildList(remindContentChildList);
             }
             remindModel.setRemindContentList(remindContentList);
-            
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
         return remindModel;
+    }
+
+    /**
+     * 根据项目id 角色id 提醒状态查询数据
+     */
+    @Override
+    public List<ProjectRemind> queryByProjectIdAndRemindStatus(Long projectId, String projectRoleId,
+            String remindStatus) {
+
+        try {
+            List<ProjectRemind> list = projectRemindMapper.queryByProjectIdAndRemindStatus(projectId, projectRoleId,
+                    remindStatus);
+            if (list.size() > 0) {
+                return list;
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+        return null;
     }
 }

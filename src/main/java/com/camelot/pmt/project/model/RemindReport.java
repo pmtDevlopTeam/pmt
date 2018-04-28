@@ -1,8 +1,18 @@
 package com.camelot.pmt.project.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class RemindReport {
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+public class RemindReport implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     /**
      * 主键
      */
@@ -12,6 +22,11 @@ public class RemindReport {
      * 项目id
      */
     private Long projectId;
+
+    /**
+     * 提醒主表id
+     */
+    private Long remindId;
 
     /**
      * 提醒类型
@@ -31,6 +46,8 @@ public class RemindReport {
     /**
      * 创建时间
      */
+    @DateTimeFormat(pattern = "yyyy-MM-ddHH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date createTime;
 
     /**
@@ -74,6 +91,20 @@ public class RemindReport {
      */
     public void setProjectId(Long projectId) {
         this.projectId = projectId;
+    }
+
+    /**
+     * 提醒主表id
+     * 
+     * @param remindId
+     *            提醒主表id
+     */
+    public Long getRemindId() {
+        return remindId;
+    }
+
+    public void setRemindId(Long remindId) {
+        this.remindId = remindId;
     }
 
     /**

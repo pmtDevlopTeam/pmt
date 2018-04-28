@@ -1,5 +1,9 @@
 package com.camelot.pmt.project.mapper;
 
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
 import com.camelot.pmt.project.model.RemindReport;
 
 public interface RemindReportMapper {
@@ -16,10 +20,12 @@ public interface RemindReportMapper {
     int insert(RemindReport record);
 
     /**
-     *
-     * @mbggenerated
+     * 新增实体
+     * 
+     * @param remindReports
+     * @return
      */
-    int insertSelective(RemindReport record);
+    int addRemindReport(@Param("remindReports") List<RemindReport> remindReports);
 
     /**
      *

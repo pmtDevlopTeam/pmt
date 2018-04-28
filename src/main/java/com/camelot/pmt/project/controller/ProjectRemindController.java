@@ -1,10 +1,5 @@
 package com.camelot.pmt.project.controller;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +17,11 @@ import com.camelot.pmt.platform.shiro.ShiroUtils;
 import com.camelot.pmt.project.model.RemindModel;
 import com.camelot.pmt.project.service.ProjectRemindService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+
 /**
  * @author lixk
  * @Description: 项目提醒模块
@@ -33,12 +33,14 @@ import com.camelot.pmt.project.service.ProjectRemindService;
 public class ProjectRemindController {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
-    
+
     @Autowired
     ProjectRemindService projectRemindService;
+
     /**
      *
-     * @param RemindModel remindModel
+     * @param RemindModel
+     *            remindModel
      * @return
      */
     @ApiOperation(value = "新增项目提醒", notes = "新增项目提醒")
@@ -51,7 +53,7 @@ public class ProjectRemindController {
             if (null == user) {
                 return ApiResponse.jsonData(APIStatus.INVALIDSESSION_LOGINOUTTIME);
             }
-            if((null == remindModel)||(null == remindModel.getProjectRemind())){
+            if ((null == remindModel) || (null == remindModel.getProjectRemind())) {
                 return ApiResponse.errorPara("请求参数异常");
             }
             flag = projectRemindService.addProjectRemind(remindModel, user);
@@ -65,7 +67,7 @@ public class ProjectRemindController {
             return ApiResponse.error();
         }
     }
-    
+
     /**
      * 根据项目id查询项目提醒信息
      *
@@ -76,13 +78,13 @@ public class ProjectRemindController {
     @GetMapping(value = "/queryById")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "projectId", value = "项目id", required = true, paramType = "query", dataType = "Long"),
-            @ApiImplicitParam(name = "projectRoleId", value = "提醒角色id", required = true, paramType = "query", dataType = "String")})
-    public JSONObject queryProjectRemindByProjectId(Long projectId,String projectRoleId) {
+            @ApiImplicitParam(name = "projectRoleId", value = "提醒角色id", required = true, paramType = "query", dataType = "String") })
+    public JSONObject queryProjectRemindByProjectId(Long projectId, String projectRoleId) {
         try {
-            if((null == projectId)||(0 == projectId)){
+            if ((null == projectId) || (0 == projectId)) {
                 return ApiResponse.errorPara("请求参数异常");
             }
-            RemindModel remindModel = projectRemindService.queryProjectRemindByProjectId(projectId,projectRoleId);
+            RemindModel remindModel = projectRemindService.queryProjectRemindByProjectId(projectId, projectRoleId);
             return ApiResponse.success(remindModel);
         } catch (Exception e) {
             logger.error(e.getMessage());
