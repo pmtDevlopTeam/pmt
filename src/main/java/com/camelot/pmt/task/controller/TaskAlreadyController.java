@@ -143,8 +143,9 @@ public class TaskAlreadyController {
             if (null == user) {
                 return ApiResponse.jsonData(APIStatus.INVALIDSESSION_LOGINOUTTIME);
             }
-            List<TaskLog> taskLogList = taskLogService.queryTaskLogList(id);
-            return ApiResponse.success(taskLogList);
+            //List<TaskLog> taskLogList = taskLogService.queryTaskLogList(id);
+            //return ApiResponse.success(taskLogList);
+            return null;
         } catch (Exception e) {
             logger.error(e.getMessage());
             return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
@@ -168,8 +169,9 @@ public class TaskAlreadyController {
             if (null == user) {
                 return ApiResponse.jsonData(APIStatus.INVALIDSESSION_LOGINOUTTIME);
             }
-            List<TaskLog> taskLogList = taskLogService.queryTaskLogList(id);
-            return ApiResponse.success(taskLogList);
+            //List<TaskLog> taskLogList = taskLogService.queryTaskLogList(id);
+            //return ApiResponse.success(taskLogList);
+            return null;
         } catch (Exception e) {
             logger.error(e.getMessage());
             return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
