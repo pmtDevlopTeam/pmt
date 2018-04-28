@@ -18,7 +18,7 @@ public class SendRequestUtil {
     @Autowired
     private  HttpServletRequest request;
     public String sendRequest(String url, String param)  throws Exception{
-        String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+"/platform/version/queryVersionInfoById?versionId=6";
+        String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+url;
         OkHttpClient httpClient = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(basePath)
