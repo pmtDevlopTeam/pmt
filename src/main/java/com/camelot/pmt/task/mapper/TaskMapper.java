@@ -62,7 +62,7 @@ public interface TaskMapper {
      *
      * @author zlh
      * @param id
-     *             需要删除的任务的id
+     *            需要删除的任务的id
      * @date 17:22 2018/4/12
      */
     int deleteTaskById(Long id);
@@ -231,7 +231,8 @@ public interface TaskMapper {
      *          TODO(修改任务状态) @param @param taskId status @param @return 设定文件 @return
      *          int 返回类型 @throws
      */
-    void updateTaskStatus(@Param("id") Long id, @Param("status") String status,@Param("modifyUserId") String modifyUserId,@Param("modifyTime") Date modifyTime);
+    void updateTaskStatus(@Param("id") Long id, @Param("status") String status,
+            @Param("modifyUserId") String modifyUserId, @Param("modifyTime") Date modifyTime);
 
     /**
      * @author: gxl @Title: taskParentId @Description:
@@ -267,7 +268,7 @@ public interface TaskMapper {
      * @Title: updateTaskAlreadyToRunning @Description: TODO(重做) @param id
      *         status @param @return 设定文件 @return JSONObject 返回类型 @throws
      */
-    int updateTaskAlreadyToRunning(@Param("id") Long id , @Param("status") String status);
+    int updateTaskAlreadyToRunning(@Param("id") Long id, @Param("status") String status);
 
     /**
      *
@@ -317,8 +318,8 @@ public interface TaskMapper {
      * 根据任务Id修改状态 @Title: updateTaskOverdueStatus @Description: TODO @param @param
      * taskId @param @return @return int @throws
      */
-    int updateTaskToTest(@Param("id") Long id, @Param("beassignUserId") String beassignUserId,@Param("taskType")
-                         String taskType ,@Param("status") String Status);
+    int updateTaskToTest(@Param("id") Long id, @Param("beassignUserId") String beassignUserId,
+            @Param("taskType") String taskType, @Param("status") String Status);
 
     /**
      * 根据任务Id查询需求ID @Title: updateTaskOverdueStatus @Description: TODO @param @param
@@ -330,7 +331,7 @@ public interface TaskMapper {
      * 根据需求Id查询当前需求的测试人员ID @Title: updateTaskOverdueStatus @Description:
      * TODO @param @param taskId @param @return @return int @throws
      */
-    String queryTaskToTestByDemandId(@Param("demandId") Long demandId,@Param("taskType")String taskType);
+    String queryTaskToTestByDemandId(@Param("demandId") Long demandId, @Param("taskType") String taskType);
 
     /**
      * 查询延期提前列表 @Title: queryleaddeferredTaskRemindersList @Description:
@@ -401,13 +402,8 @@ public interface TaskMapper {
     List<Map<String, Object>> querydeferredTaskRemindersList(String projectId);
 
     /**
-     * 查询出我的已办任务
-     * @Title: listTaskAlready
-     * @Description: TODO
-     * @param @param Task task
-     * @param @return
-     * @return List<Task>
-     * @throws
+     * 查询出我的已办任务 @Title: listTaskAlready @Description: TODO @param @param Task
+     * task @param @return @return List<Task> @throws
      */
     List<Task> listTaskAlready(Task task);
 }

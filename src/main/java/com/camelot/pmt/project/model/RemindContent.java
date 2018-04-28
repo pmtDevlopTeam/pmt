@@ -33,7 +33,7 @@ public class RemindContent {
      * 创建时间
      */
     private Date createTime;
-    
+
     /**
      * 提醒文本子内容
      */

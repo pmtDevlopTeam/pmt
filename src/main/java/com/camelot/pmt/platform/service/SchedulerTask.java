@@ -8,4 +8,3 @@ package com.camelot.pmt.platform.service;
 public interface SchedulerTask {
 
 }
-

@@ -382,7 +382,8 @@ public class DemandServiceImpl implements DemandService {
     /**
      * 添加需求并返回主键id
      * 
-     * @param Demand demand User user
+     * @param Demand
+     *            demand User user
      * @return demandId
      */
     @Override

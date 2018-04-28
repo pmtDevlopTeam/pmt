@@ -377,7 +377,7 @@ public class DemandController {
             return ApiResponse.error();
         }
     }
-    
+
     /**
      * 需求状态（未激活/已激活/已关闭/已变更）
      *
