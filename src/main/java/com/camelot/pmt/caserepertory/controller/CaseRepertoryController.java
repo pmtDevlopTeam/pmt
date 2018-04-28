@@ -2,9 +2,11 @@ package com.camelot.pmt.caserepertory.controller;
 
 import java.util.List;
 
+import org.hibernate.validator.constraints.Range;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,6 +30,10 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import springfox.documentation.annotations.ApiIgnore;
+
+import javax.validation.Valid;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Pattern;
 
 /**
  * 用例库接口
@@ -95,7 +101,7 @@ public class CaseRepertoryController {
     @ApiOperation(value = "新增用例库用例", notes = "新增单条用例到用例库中")
     @PostMapping
     public JSONObject addCaseRepertory(
-            @RequestBody @ApiParam(value = "caseRepertory", required = true) CaseRepertory caseRepertory) {
+            @RequestBody @ApiParam(value = "caseRepertory", required = true)  @Validated CaseRepertory caseRepertory) {
         try {
             boolean flag = false;
             flag = caseRepertoryService.addCaseRepertory(caseRepertory);
@@ -182,7 +188,7 @@ public class CaseRepertoryController {
      */
     @ApiOperation(value = "根据ID查询用例")
     @GetMapping(value = "{id}")
-    public JSONObject queryCaseRepertoryById(Long id) {
+    public JSONObject queryCaseRepertoryById(@Validated Long id) {
         try {
             CaseRepertory caseRepertory = caseRepertoryService.queryCaseRepertoryById(id);
             return ApiResponse.success(caseRepertory);
@@ -201,9 +207,9 @@ public class CaseRepertoryController {
             @ApiImplicitParam(name = "currentPage", value = "页码", required = true, paramType = "query", dataType = "int"),
             @ApiImplicitParam(name = "pageSize", value = "每页数量", required = true, paramType = "query", dataType = "int"),
             @ApiImplicitParam(name = "caseType", value = "类型", required = true, paramType = "query", dataType = "String"),
-            @ApiImplicitParam(name = "caseTitle", value = "名称", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "caseTitle", value = "名称", required = false, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "applyPhase", value = "试用阶段", required = true, paramType = "query", dataType = "String") })
-    public JSONObject queryCaseRepertoryByPage(@ApiIgnore CaseRepertory caseRepertory,
+    public JSONObject queryCaseRepertoryByPage(@ApiIgnore @Validated  CaseRepertory caseRepertory,
             @RequestParam(defaultValue = "1") Integer pageSize,
             @RequestParam(defaultValue = "10") Integer currentPage) {
         try {

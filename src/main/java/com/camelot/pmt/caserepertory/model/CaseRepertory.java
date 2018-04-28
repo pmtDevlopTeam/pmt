@@ -1,5 +1,9 @@
 package com.camelot.pmt.caserepertory.model;
 
+import org.hibernate.validator.constraints.NotBlank;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Date;
 
@@ -20,6 +24,7 @@ public class CaseRepertory {
      *
      * @mbg.generated
      */
+    @NotBlank(message = "用例库标题不能为空")
     private String caseTitle;
 
     /**
@@ -71,7 +76,7 @@ public class CaseRepertory {
      * @mbg.generated
      */
     private String precondition;
-
+    @Valid
     private List<CaseRepertoryStep> detail;
 
     /**

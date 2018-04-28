@@ -1,5 +1,7 @@
 package com.camelot.pmt.caserepertory.model;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 public class CaseRepertoryStep {
     /**
      *
@@ -17,6 +19,7 @@ public class CaseRepertoryStep {
      *
      * @mbg.generated
      */
+    @NotBlank(message = "步骤名称不能为空")
     private String step;
 
     /**
