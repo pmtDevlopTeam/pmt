@@ -33,7 +33,7 @@ Thumbs.db
 target/
 # Android Studio
 *.iml
-.idea
+.idea/
 .gradle
 build/
 
