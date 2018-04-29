@@ -68,11 +68,11 @@ public interface ProjectMainMapper {
     List<ProjectMain> queryByProjectStatus(String projectStatus);
 
     /**
-     * 分页查询所有公开项目
+     * 分页查询所有（包括个人私有的+公开的项目）
      * 
      * @return
      */
-    List<ProjectMain> queryAllPublicAndPrivate();
+    List<ProjectMain> queryAllPublicAndPrivate(String userId);
 
     /**
      * 分页查询所有

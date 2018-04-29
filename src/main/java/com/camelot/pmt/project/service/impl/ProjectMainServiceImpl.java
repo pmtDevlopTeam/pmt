@@ -1,8 +1,10 @@
 package com.camelot.pmt.project.service.impl;
 
 import java.text.SimpleDateFormat;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -408,15 +410,19 @@ public class ProjectMainServiceImpl implements ProjectMainService {
      */
     @Override
     public List<ProjectMain> queryAllPublicAndPrivate(Integer currentPage, Integer pageSize) {
-        PageHelper.startPage(currentPage, pageSize);
-        try {
-            List<ProjectMain> list = projectMainMapper.queryAllPublicAndPrivate();
-            if (list.size() > 0) {
-                return list;
+
+        User user = (User) ShiroUtils.getSessionAttribute("user");
+        if (user != null && user.getUserId() != null) {
+            PageHelper.startPage(currentPage, pageSize);
+            try {
+                List<ProjectMain> list = projectMainMapper.queryAllPublicAndPrivate(user.getUserId());
+                if (list.size() > 0) {
+                    return list;
+                }
+            } catch (Exception e) {
+                logger.error(e.getMessage());
+                throw new RuntimeException(e);
             }
-        } catch (Exception e) {
-            logger.error(e.getMessage());
-            throw new RuntimeException(e);
         }
         return null;
     }
@@ -425,18 +431,21 @@ public class ProjectMainServiceImpl implements ProjectMainService {
      * 根据用户id,查询每个项目成员参加的项目
      */
     @Override
-    public List<ProjectMain> queryByUserIdPersonal(String userId) {
-        try {
-            List<ProjectMain> list = projectMainMapper.queryByUserIdPersonal(userId);
-            if (list.size() > 0) {
-                return list;
+    public List<ProjectMain> queryByUserIdPersonal() {
+
+        User user = (User) ShiroUtils.getSessionAttribute("user");
+        if (user != null && user.getUserId() != null) {
+            try {
+                List<ProjectMain> list = projectMainMapper.queryByUserIdPersonal(user.getUserId());
+                if (list.size() > 0) {
+                    return list;
+                }
+            } catch (Exception e) {
+                logger.error(e.getMessage());
+                throw new RuntimeException(e);
             }
-        } catch (Exception e) {
-            logger.error(e.getMessage());
-            throw new RuntimeException(e);
         }
         return null;
-
     }
 
     /**
@@ -452,6 +461,38 @@ public class ProjectMainServiceImpl implements ProjectMainService {
         } catch (Exception e) {
             logger.error(e.getMessage());
             throw new RuntimeException(e);
+        }
+        return null;
+    }
+
+    /**
+     * 根据截止时间倒叙查询（包括个人私有的+公开的项目）
+     */
+    @Override
+    public List<ProjectMain> queryAllOrderByEndTime(Integer currentPage, Integer pageSize) {
+
+        User user = (User) ShiroUtils.getSessionAttribute("user");
+        if (user != null && user.getUserId() != null) {
+            PageHelper.startPage(currentPage, pageSize);
+            return projectMainMapper.queryAllPublicAndPrivate(user.getUserId())//
+                    .stream()//
+                    .sorted(Comparator.comparing(ProjectMain::getEndTime)//
+                            .reversed())//
+                    .collect(Collectors.toList());//
+        }
+        return null;
+    }
+
+    /**
+     * 按项目状态分类查询（包括个人私有的+公开的项目）
+     */
+    @Override
+    public List<ProjectMain> queryAllByProjectStatus(String projectStatus) {
+        User user = (User) ShiroUtils.getSessionAttribute("user");
+        if (user != null && user.getUserId() != null) {
+
+            return projectMainMapper.queryAllPublicAndPrivate(user.getUserId()).stream()
+                    .filter(e -> projectStatus.equals(e.getProjectStatus())).collect(Collectors.toList());
         }
         return null;
     }

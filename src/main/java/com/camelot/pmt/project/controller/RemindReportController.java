@@ -23,7 +23,7 @@ import io.swagger.annotations.ApiParam;
  * @date 2018年4月27日
  */
 @RestController
-@RequestMapping(path = "/project", produces = "application/json;charset=utf-8")
+@RequestMapping(path = "/remind", produces = "application/json;charset=utf-8")
 @Api(value = "提醒报告接口", description = "提醒报告接口")
 public class RemindReportController {
     private static final Logger logger = LoggerFactory.getLogger(RemindReportController.class);

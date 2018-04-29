@@ -226,8 +226,8 @@ public class ProjectMainController {
             @ApiParam(value = "负责人Id", required = true) @RequestParam String userId, //
             @ApiParam(value = "项目名称", required = true) @RequestParam String projectName, //
             @ApiParam(value = "项目状态", required = true) @RequestParam String projectStatus, //
-            @ApiParam(value = "开始时间", required = true) @RequestParam @DateTimeFormat(iso = ISO.DATE) Date startTime, //
-            @ApiParam(value = "结束时间", required = true) @RequestParam @DateTimeFormat(iso = ISO.DATE) Date endTime, //
+            @ApiParam(value = "开始时间", required = false) @RequestParam @DateTimeFormat(iso = ISO.DATE) Date startTime, //
+            @ApiParam(value = "结束时间", required = false) @RequestParam @DateTimeFormat(iso = ISO.DATE) Date endTime, //
             @ApiParam(value = "项目描述", required = true) @RequestParam String projectDesc, //
             @ApiParam(value = "预计工时", required = true) @RequestParam Integer budgetaryHours, //
             @ApiParam(value = "项目可见性", required = true) @RequestParam String projectVisible) {
@@ -237,8 +237,8 @@ public class ProjectMainController {
                 id, userId, projectName, projectStatus, startTime, endTime, projectDesc, budgetaryHours,
                 projectVisible);
         if (id == null || StringUtils.isEmpty(userId) || StringUtils.isEmpty(projectName)
-                || StringUtils.isEmpty(projectStatus) || startTime == null || endTime == null
-                || StringUtils.isEmpty(projectDesc) || budgetaryHours == null || StringUtils.isEmpty(projectVisible)) {
+                || StringUtils.isEmpty(projectStatus) || StringUtils.isEmpty(projectDesc) || budgetaryHours == null
+                || StringUtils.isEmpty(projectVisible)) {
             return ApiResponse.errorPara("入参不能为空");
         }
         try {
@@ -355,7 +355,8 @@ public class ProjectMainController {
      */
     @ApiOperation(value = "挂起项目 只有开始的项目才可以挂起", notes = "挂起项目 只有开始的项目才可以挂起")
     @PutMapping(value = "/updateById/suspension")
-    public JSONObject updateByIdSuspension(@ApiParam(value = "id", required = true) @RequestParam Long id, //
+    public JSONObject updateByIdSuspension(//
+            @ApiParam(value = "id", required = true) @RequestParam Long id, //
             @ApiParam(value = "项目状态", required = true) @RequestParam String projectStatus) {
 
         logger.info("入参封装的数据为：id={},projectStatus={}", id, projectStatus);
@@ -376,18 +377,14 @@ public class ProjectMainController {
     /**
      * 根据用户id,查询每个项目成员参加的项目
      * 
-     * @param userId
      * @return
      */
     @ApiOperation(value = "根据用户id,查询每个项目成员参加的项目", notes = "根据用户id,查询每个项目成员参加的项目")
     @GetMapping(value = "/queryByUserIdPersonal")
-    public JSONObject queryByUserIdPersonal(@ApiParam(value = "用户Id", required = true) @RequestParam String userId) {
-        logger.info("入参封装的数据为：userId={}", userId);
-        if (StringUtils.isEmpty(userId)) {
-            return ApiResponse.errorPara("入参不能为空");
-        }
+    public JSONObject queryByUserIdPersonal() {
+
         try {
-            List<ProjectMain> projectMainList = projectMainService.queryByUserIdPersonal(userId);
+            List<ProjectMain> projectMainList = projectMainService.queryByUserIdPersonal();
             if (projectMainList.size() > 0) {
                 return ApiResponse.success(projectMainList);
             }
@@ -441,6 +438,58 @@ public class ProjectMainController {
             return ApiResponse.error("查询所有公开项目数据失败");
         } catch (Exception e) {
             return ApiResponse.error("查询所有公开项目数据出现异常");
+        }
+    }
+
+    /**
+     * 根据截止时间倒叙查询（包括个人私有的+公开的项目）
+     * 
+     * @param currentPage
+     * @param pageSize
+     * @return
+     */
+    @ApiOperation(value = "根据截止时间倒叙查询（包括个人私有的+公开的项目）", notes = "根据截止时间倒叙查询（包括个人私有的+公开的项目）")
+    @GetMapping(value = "/queryAllOrderByEndTime")
+    public JSONObject queryAllOrderByEndTime(//
+            @ApiParam(value = "当前页数", required = true) @RequestParam Integer currentPage, //
+            @ApiParam(value = "每页数量", required = true) @RequestParam Integer pageSize) {
+        logger.info("入参封装的数据为：currentPage={},pageSize={}", currentPage, pageSize);
+        if (currentPage == null || pageSize == null) {
+            return ApiResponse.errorPara("入参不能为空");
+        }
+        try {
+            List<ProjectMain> list = projectMainService.queryAllOrderByEndTime(currentPage, pageSize);
+            if (list.size() > 0) {
+                return ApiResponse.success(list);
+            }
+            return ApiResponse.error("根据时间倒叙查询（包括个人私有的+公开的项目数据失败");
+        } catch (Exception e) {
+            return ApiResponse.error("根据时间倒叙查询（包括个人私有的+公开的项目数据出现异常");
+        }
+    }
+
+    /**
+     * 按项目状态分类查询（包括个人私有的+公开的项目）
+     * 
+     * @param projectStatus
+     * @return
+     */
+    @ApiOperation(value = "按项目状态分类查询（包括个人私有的+公开的项目）", notes = "按项目状态分类查询（包括个人私有的+公开的项目）")
+    @GetMapping(value = "/queryAllByProjectStatus")
+    public JSONObject queryAllByProjectStatus(
+            @ApiParam(value = "项目状态", required = true) @RequestParam String projectStatus) {
+        logger.info("入参封装的数据为：projectStatus={}", projectStatus);
+        if (StringUtils.isEmpty(projectStatus)) {
+            return ApiResponse.errorPara("入参不能为空");
+        }
+        try {
+            List<ProjectMain> projectMainList = projectMainService.queryAllByProjectStatus(projectStatus);
+            if (projectMainList.size() > 0) {
+                return ApiResponse.success(projectMainList);
+            }
+            return ApiResponse.error("按项目状态分类查询（包括个人私有的+公开的项目）失败");
+        } catch (Exception e) {
+            return ApiResponse.error("按项目状态分类查询（包括个人私有的+公开的项目） 出现异常");
         }
     }
 }

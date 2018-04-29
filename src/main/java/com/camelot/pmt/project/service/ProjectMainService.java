@@ -131,10 +131,9 @@ public interface ProjectMainService {
     /**
      * 根据用户id,查询每个项目成员参加的项目
      * 
-     * @param userId
      * @return
      */
-    List<ProjectMain> queryByUserIdPersonal(String userId);
+    List<ProjectMain> queryByUserIdPersonal();
 
     /**
      * 查询所有公开项目
@@ -142,5 +141,22 @@ public interface ProjectMainService {
      * @return
      */
     List<ProjectMain> queryAllByPublic();
+
+    /**
+     * 根据截止时间倒叙查询（包括个人私有的+公开的项目）
+     * 
+     * @param currentPage
+     * @param pageSize
+     * @return
+     */
+    List<ProjectMain> queryAllOrderByEndTime(Integer currentPage, Integer pageSize);
+
+    /**
+     * 按项目状态分类查询（包括个人私有的+公开的项目）
+     * 
+     * @param projectStatus
+     * @return
+     */
+    List<ProjectMain> queryAllByProjectStatus(String projectStatus);
 
 }

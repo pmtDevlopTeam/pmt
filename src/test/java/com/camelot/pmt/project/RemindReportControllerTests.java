@@ -41,7 +41,7 @@ public class RemindReportControllerTests {
     public void testAddRemindReport() throws Exception {
 
         String contentAsString = mockMvc
-                .perform(post("/project/addRemindReport").param("projectId", "1").param("projectRoleId", "r1")
+                .perform(post("/remind/addRemindReport").param("projectId", "1").param("projectRoleId", "r1")
                         .param("remindStatus", "01"))
                 .andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andReturn().getResponse().getContentAsString();
