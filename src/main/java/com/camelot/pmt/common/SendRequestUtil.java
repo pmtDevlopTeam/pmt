@@ -16,15 +16,14 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class SendRequestUtil {
     @Autowired
-    private  HttpServletRequest request;
-    public String sendRequest(String url, String param)  throws Exception{
-        String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+url;
+    private HttpServletRequest request;
+
+    public String sendRequest(String url, String param) throws Exception {
+        String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + url;
         OkHttpClient httpClient = new OkHttpClient();
-        Request request = new Request.Builder()
-                .url(basePath)
-                .build();
+        Request request = new Request.Builder().url(basePath).build();
         Response response = httpClient.newCall(request).execute();
-        System.out.println("============================\n"+response+"\n============================");
+        System.out.println("============================\n" + response + "\n============================");
         return response.body().string(); // 返回的是string 类型，json的mapper可以直接处理
     }
 }

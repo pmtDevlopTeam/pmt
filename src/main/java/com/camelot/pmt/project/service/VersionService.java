@@ -77,7 +77,7 @@ public interface VersionService {
      * @author: xueyj
      * @date: 2018/4/17 10:34
      */
-    PageInfo queryVerListByPageAndProId(int pageNum, int pageSize, Long projectId, VersionVo versionVo);
+    PageInfo<?> queryVerListByPageAndProId(int pageNum, int pageSize, Long projectId, VersionVo versionVo);
 
     /**
      * @Description: 根据项目id,版本编号查询版本信息--用于新增时是否允许添加

@@ -1,9 +1,9 @@
 package com.camelot.pmt.project.service;
 
+import java.util.List;
+
 import com.camelot.pmt.project.model.VersionOperationLog;
 import com.github.pagehelper.PageInfo;
-
-import java.util.List;
 
 /**
  * @Package: com.camelot.pmt.project.service
@@ -47,5 +47,6 @@ public interface VersionOperationLogService {
      * @param versionOperationLog
      * @return
      */
-    PageInfo queryversionOperationLogByPageAndParms(int pageNum, int pageSize, VersionOperationLog versionOperationLog);
+    PageInfo<?> queryversionOperationLogByPageAndParms(int pageNum, int pageSize,
+            VersionOperationLog versionOperationLog);
 }

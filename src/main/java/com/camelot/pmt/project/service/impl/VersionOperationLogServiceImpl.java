@@ -1,15 +1,16 @@
 package com.camelot.pmt.project.service.impl;
 
+import java.util.Date;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.camelot.pmt.project.mapper.VersionOperationLogMapper;
 import com.camelot.pmt.project.model.VersionOperationLog;
 import com.camelot.pmt.project.service.VersionOperationLogService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.Date;
-import java.util.List;
 
 /**
  * @Package: com.camelot.pmt.project.service.impl
@@ -81,7 +82,7 @@ public class VersionOperationLogServiceImpl implements VersionOperationLogServic
      * @date: 2018/4/20 16:21
      */
     @Override
-    public PageInfo queryversionOperationLogByPageAndParms(int pageNum, int pageSize,
+    public PageInfo<?> queryversionOperationLogByPageAndParms(int pageNum, int pageSize,
             VersionOperationLog versionOperationLog) {
         /*
          * pageHelper使用三部曲 1.启动pageHelper分页 startPage -- start 2.填充自己的sql（查询逻辑）

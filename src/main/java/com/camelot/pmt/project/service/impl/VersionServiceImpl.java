@@ -1,24 +1,23 @@
 package com.camelot.pmt.project.service.impl;
 
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.camelot.pmt.project.mapper.VersionMapper;
 import com.camelot.pmt.project.mapper.VersionOperationLogMapper;
 import com.camelot.pmt.project.model.Version;
-import com.camelot.pmt.project.model.VersionOperationLog;
 import com.camelot.pmt.project.model.VersionVo;
 import com.camelot.pmt.project.service.VersionService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.sun.org.apache.bcel.internal.generic.NEW;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
 
 /**
  * @Package: com.camelot.pmt.project.service.impl
