@@ -16,9 +16,9 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class SendRequestUtil {
     @Autowired
-    private HttpServletRequest request;
+    private static HttpServletRequest request;
 
-    public String sendRequest(String url, String param) throws Exception {
+    public static String sendRequest(String url, String param) throws Exception {
         String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + url;
         OkHttpClient httpClient = new OkHttpClient();
         Request request = new Request.Builder().url(basePath).build();

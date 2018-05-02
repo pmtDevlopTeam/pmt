@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.camelot.pmt.common.SendRequestUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.camelot.pmt.common.GetDateUtil;
@@ -20,7 +21,7 @@ import com.camelot.pmt.project.service.SendProjectReminderService;
 /**
  * @Package: com.camelot.pmt.project.service.impl
  * @ClassName: SendProjectReminderServiceImpl
- * @Description: TODO
+ * @Description: 提醒模块--发送邮件/通知
  * @author: xueyj
  * @date: 2018-04-27 16:49
  */
@@ -36,7 +37,7 @@ public class SendProjectReminderServiceImpl implements SendProjectReminderServic
     /**
      * 判断项目是否开启提醒功能
      */
-    public void querySendStatusByProId(Long projectId, String userRoleId) {
+    public void querySendStatusByProId(Long projectId, String userRoleId) throws Exception {
         // 根据项目id，角色id查询项目提醒主表信息
         ProjectRemind projectRemind = new ProjectRemind();
         projectRemind.setProjectId(projectId);
@@ -44,34 +45,58 @@ public class SendProjectReminderServiceImpl implements SendProjectReminderServic
         ProjectRemind queryProjectRemind = projectRemindMapper.queryByProjectRemind(projectRemind);
         // 获取项目提醒状态（01:开启 02:关闭）
         String remindStatus = queryProjectRemind.getRemindStatus();
-        // 提醒频次：01:天/次 02:周/次 03:月/次
-        String remindFrequency = queryProjectRemind.getRemindFrequency();
         // 若项目开启提醒，则根据对应规则组装数据进行提醒
         if ("01".equals(remindStatus)) {
-            // 查询提醒项信息
-            RemindModel remindModel = projectRemindService.queryProjectRemindByProjectId(projectId, userRoleId);
-            // 内容表信息（二级数据）
+            // 提醒频次：01:天/次 02:周/次 03:月/次
+            String remindFrequency = queryProjectRemind.getRemindFrequency();
+            // 根据项目id，角色id，查询用户对应提醒项信息
+            List<RemindContentChild> remindContentChildList = null;
+            // 获取具体提醒项信息，组装获取数据
+            for (RemindContentChild childItem : remindContentChildList) {
+                // 当前方法的code值
+                String code = childItem.getCode();
+                // 当前方法的url路径
+                String methodUrl = childItem.getMethodUrl();
+                // 根据提醒频次,项目id，组装数据
+                queryListByProidAndDate(projectId, remindFrequency,methodUrl);
+
+            }
+            /*RemindModel remindModel = projectRemindService.queryProjectRemindByProjectId(projectId, userRoleId);
+            // 提醒项信息（二级数据）
             List<RemindContent> remindContentList = remindModel.getRemindContentList();
             for (RemindContent item : remindContentList) {
+                //获取提醒项code信息，（若提醒项选择项目日报，模块日报则需单独调用接口）
+                String contentCode = item.getContentCode();
+                    *//*
+                     调用接口是否需要传参（若传参，参数获取方式）
+                     A.传参--字符串/实体
+                     B.参数信息根据当前二级子集获取三级子集，封装参数信息
+
+                // TODO : 调用项目日报查询接口
+                if("01".equals(contentCode)){
+
+                }
+                // TODO ; 调用模块日报查询接口
+                if ("07".equals(contentCode)){
+
+                }  *//*
+                // 提醒项子集信息（三级数据）
                 List<RemindContentChild> remindContentChildList = item.getRemindContentChildList();
+                // 获取具体提醒项信息，组装获取数据
                 for (RemindContentChild childItem : remindContentChildList) {
                     // 当前方法的code值
                     childItem.getCode();
                     // 当前方法的url路径
                     String methodUrl = childItem.getMethodUrl();
-                    // 依据url路径查询数据
-                    queryDataByUrl(methodUrl, projectId, userRoleId);
+                    // 根据提醒频次获取起止时间
+                    String[] split = remindFrequency.split(",");
+
+                    queryListByProidAndDate(projectId, remindFrequency,methodUrl);
 
                 }
-            }
+            }*/
         }
     }
-
-    public Map queryDataByUrl(String methodUrl, Long projectId, String userRoleId) {
-        // TODO: 请求路径，获取数据
-        return null;
-    }
-
     /**
      * 发送提醒接口--通知方式：邮件/通知 提醒人，提醒内容，提醒方式
      */
@@ -90,22 +115,69 @@ public class SendProjectReminderServiceImpl implements SendProjectReminderServic
      * 实现步骤： 1.根据项目id，角色id查询对应规则的数据， 2.将对应的数据的项目id，角色id，角色下人员id，email等信息插入日志表，
      */
     public void sendEmail(Long projectId, String remindFrequency) {
-        List<List<RemindReport>> lists = queryListByProidAndDate(projectId, remindFrequency);
+        //List<List<RemindReport>> lists = queryListByProidAndDate(projectId, remindFrequency);
         // 接收人邮箱,主题，内容
         mailService.sendSimpleMail("17090023169@163.com", "恭喜您，奖金100万已到账", "恭喜您，奖金100万已到账");
     }
 
     public void sendNotice(Long projectId, String remindFrequency) {
-        List<List<RemindReport>> lists = queryListByProidAndDate(projectId, remindFrequency);
+        //List<List<RemindReport>> lists = queryListByProidAndDate(projectId, remindFrequency);
     }
 
+    /**
+     * 根据项目id，频次，url查询数据
+     * @param projectId
+     * @param remindFrequency
+     * @param methodUrl
+     */
+    public void queryDataListByParms(Long projectId, String remindFrequency,String methodUrl){
+        try {
+            // 获取数据信息
+            StringBuilder parms = new StringBuilder();
+            // 组装参数信息
+            parms.append("");
+            String[] split = remindFrequency.split(",");
+            for (int i = 0; i < split.length; i++) {
+                if ("01".equals(split[i])) {
+                    // 获取昨天起止时间
+                    String stringBeginDayOfYesterday = GetDateUtil.getStringBeginDayOfYesterday();
+                    String stringEndDayOfYesterDay = GetDateUtil.getStringEndDayOfYesterDay();
+                    String s = SendRequestUtil.sendRequest(methodUrl, parms.toString());;
+                }
+                if ("02".equals(split[i])) {
+                    // 获取上周起止时间
+                    // String stringBeginDayOfLastWeek = GetDateUtil.getStringBeginDayOfLastWeek();
+                    // String stringEndDayOfLastWeek = GetDateUtil.getStringEndDayOfLastWeek();
+                    // 获取本周起止时间
+                    String stringBeginDayOfWeek = GetDateUtil.getStringBeginDayOfWeek();
+                    String stringEndDayOfWeek = GetDateUtil.getStringEndDayOfWeek();
+                    // 获取数据信息
+                    String s = SendRequestUtil.sendRequest(methodUrl, "");;
+                }
+                if ("03".equals(split[i])) {
+                    // 获取上月月起止时间
+                    // String stringBeginDayOfLastMonth =
+                    // GetDateUtil.getStringBeginDayOfLastMonth();
+                    // String stringEndDayOfLastMonth = GetDateUtil.getStringEndDayOfLastMonth();
+                    // 获取本月起止时间
+                    GetDateUtil.getStringBeginDayOfWeek();
+                    String stringBeginDayOfMonth = GetDateUtil.getStringBeginDayOfMonth();
+                    String stringEndDayOfMonth = GetDateUtil.getStringEndDayOfMonth();
+                    // 获取数据信息
+                    String s = SendRequestUtil.sendRequest(methodUrl, "");;
+                }
+            }
+        } catch (Exception e) {   
+            e.printStackTrace();
+        }
+    }
     /**
      * 根据项目id，发送频次查询日志记录信息
      * 
      * @param projectId
      * @param remindFrequency
      */
-    public List<List<RemindReport>> queryListByProidAndDate(Long projectId, String remindFrequency) {
+    public List<List<RemindReport>> queryListByProidAndDate(Long projectId, String remindFrequency,String methodUrl) {
         List<List<RemindReport>> datalists = new ArrayList<List<RemindReport>>();
         // 按发送频次获取发送数据（日报：昨日数据，周报;当前时间所在周起止时间(或上一周起止时间)，月报;当前时间所在月份的起始时间（或上一月份的起止时间））
         String[] split = remindFrequency.split(",");
