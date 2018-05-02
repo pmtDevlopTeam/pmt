@@ -4,13 +4,17 @@ import com.camelot.pmt.platform.common.Modular;
 import com.camelot.pmt.platform.log.LogAspect;
 import com.camelot.pmt.platform.mapper.RoleMapper;
 import com.camelot.pmt.platform.model.Role;
+import com.camelot.pmt.platform.model.User;
+import com.camelot.pmt.platform.model.vo.RoleVo;
 import com.camelot.pmt.platform.service.RoleService;
+import com.camelot.pmt.platform.service.UserService;
 import com.camelot.pmt.util.BuildTree;
 import com.camelot.pmt.util.Tree;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -30,32 +34,29 @@ public class RoleServiceImpl implements RoleService {
     @Autowired
     private LogAspect logAspect;
 
+    @Autowired
+    private UserService userService;
+
     /**
      * 查询角色集合
      *
      * @return ExecuteResult<List<Role>>
      */
     @Override
-    public List<Tree<Role>> queryAllRole() {
-        List<Tree<Role>> trees = new ArrayList<Tree<Role>>();
+    public List<RoleVo> queryAllRole() {
+        List<RoleVo> roleVos = new ArrayList<RoleVo>();
         List<Role> list = roleMapper.queryAllRole();
         if (CollectionUtils.isEmpty(list)) {
             return null;
         }
         for (Role role : list) {
-            Tree<Role> tree = new Tree<Role>();
-            tree.setId(role.getRoleId());
-            tree.setParentId(role.getParentId());
-            tree.setText(role.getRoleName());
-            Map<String, Object> attributes = new HashMap<>(16);
-            attributes.put("state", role.getState());
-            attributes.put("createTime", role.getCreateTime());
-            attributes.put("modifyTime", role.getModifyTime());
-            tree.setAttributes(attributes);
-            trees.add(tree);
+            RoleVo roleVo = new RoleVo();
+            User user = userService.queryUserByUserId(role.getCreateUserId());
+            roleVo.setCreateUserNmae(user.getUsername());
+            BeanUtils.copyProperties(role, roleVo);
+            roleVos.add(roleVo);
         }
-        List<Tree<Role>> treeList = BuildTree.buildList(trees, "0");
-        return treeList;
+        return roleVos;
     }
 
     /**
