@@ -537,7 +537,7 @@ public class TaskManagerServiceImpl implements TaskManagerService {
      */
     @Override
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public PageInfo<Task> queryTaskStatusPendingByTask(Task task, int page, int rows) {
+    public PageInfo<Task> queryTaskStatusPendingByTask(Task task, String status, int page, int rows) {
         try {
             task.setStatus(Constant.TaskStatus.PENDINHG.getValue());
             String taskName = task.getTaskName();
@@ -557,7 +557,7 @@ public class TaskManagerServiceImpl implements TaskManagerService {
                 }
             }
             PageHelper.startPage(page, rows);
-            List<Task> tasks = taskMapper.queryTaskStatusPendingByTask(task, ids);
+            List<Task> tasks = taskMapper.queryTaskStatusPendingByTask(task, status, ids);
             PageInfo<Task> pageInfo = new PageInfo<>(tasks);
             return pageInfo;
         } catch (Exception e) {
@@ -593,7 +593,7 @@ public class TaskManagerServiceImpl implements TaskManagerService {
                     ids[i] = users.get(i).getUserId();
                 }
             }
-            PageHelper.startPage(page, rows);
+//            PageHelper.startPage(page, rows);
             List<Task> tasks = taskMapper.queryTaskStatusAlreadyByTask(task, ids);
             PageInfo<Task> pageInfo = new PageInfo<>(tasks);
             return pageInfo;

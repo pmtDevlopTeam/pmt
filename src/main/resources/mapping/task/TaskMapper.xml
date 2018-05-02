@@ -42,8 +42,8 @@
             <if test="taskNum != null">#{taskNum,jdbcType=VARCHAR},</if>
             <if test="taskName != null">#{taskName,jdbcType=VARCHAR},</if>
             <if test="taskParentId != null">#{taskParentId,jdbcType=BIGINT},</if>
-            <if test="project != null">#{projectId,jdbcType=BIGINT},</if>
-            <if test="demand != null">#{demandId,jdbcType=BIGINT},</if>
+            <if test="project != null">#{project.id,jdbcType=BIGINT},</if>
+            <if test="demand != null">#{demand.id,jdbcType=BIGINT},</if>
             <if test="priority != null">#{priority,jdbcType=CHAR},</if>
             <if test="assignUser != null">#{assignUser.userId,jdbcType=VARCHAR},</if>
             <if test="beassignUser != null">#{beassignUser.userId,jdbcType=VARCHAR},</if>
@@ -384,7 +384,7 @@
         LEFT JOIN project_main p ON t.project_id = p.id
         <where>
             <if test="task.taskType != null">and t.task_type = #{task.taskType}</if>
-            <if test="task.actualEndTime != null">and Date(t.actual_start_time) &gt;= #{task.actualEndTime}</if>
+            <if test="task.actualEndTime != null">and Date(t.actual_start_time) &gt;= #{task.actualStartTime}</if>
             <if test="task.actualEndTime != null">and Date(t.actual_end_time) &lt;= #{task.actualEndTime}</if>
             <if test="task.taskName != null">and t.task_name LIKE #{task.taskName}</if>
             <if test="task.status != null">and t.status = #{task.status}</if>
@@ -399,7 +399,7 @@
     </select>
 
     <!--zlh-->
-    <!--组合条件查询所有状态为待办的任务-->
+    <!--组合条件查询所有状态为待办的任务 status 01代表可认领 02 待评估-->
     <select id="queryTaskStatusPendingByTask" resultMap="BaseResultMap">
         SELECT
         <include refid="TaskManager_ShowTasks_Column_List" />
@@ -408,8 +408,10 @@
         LEFT JOIN platform_user c on t.create_user_id = c.user_id
         LEFT JOIN project_main p ON t.project_id = p.id
         <where>
+            <if test="status == 01">and t.beassign_user_id IS NULL</if>
+            <if test="status == 02">and t.estimate_hour IS NOT NULL </if>
             <if test="task.taskType != null">and t.task_type = #{task.taskType}</if>
-            <if test="task.actualEndTime != null">and Date(t.actual_start_time) &gt;= #{task.actualEndTime}</if>
+            <if test="task.actualEndTime != null">and Date(t.actual_start_time) &gt;= #{task.actualStartTime}</if>
             <if test="task.actualEndTime != null">and Date(t.actual_end_time) &lt;= #{task.actualEndTime}</if>
             <if test="task.taskName != null">and t.task_name LIKE #{task.taskName}</if>
             <if test="task.status != null">and t.status = #{task.status}</if>
@@ -434,7 +436,7 @@
         LEFT JOIN project_main p ON t.project_id = p.id
         <where>
             <if test="task.taskType != null">and t.task_type = #{task.taskType}</if>
-            <if test="task.actualEndTime != null">and Date(t.actual_start_time) &gt;= #{task.actualEndTime}</if>
+            <if test="task.actualEndTime != null">and Date(t.actual_start_time) &gt;= #{task.actualStartTime}</if>
             <if test="task.actualEndTime != null">and Date(t.actual_end_time) &lt;= #{task.actualEndTime}</if>
             <if test="task.taskName != null">and t.task_name LIKE #{task.taskName}</if>
             <if test="task.status != null">and t.status = #{task.status}</if>
@@ -446,6 +448,15 @@
             </if>
             and t.project_id = #{task.project.id}
         </where>
+        UNION
+        SELECT
+        <include refid="TaskManager_ShowTasks_Column_List" />
+        from task t LEFT JOIN task_log log ON t.id = log.task_id
+        LEFT JOIN platform_user a ON t.assign_user_id = a.user_id
+        LEFT JOIN platform_user b ON t.beassign_user_id = b.user_id
+        LEFT JOIN platform_user c on t.create_user_id = c.user_id
+        LEFT JOIN project_main p ON t.project_id = p.id
+        WHERE log.operation_button = '提测'
     </select>
 
     <!--zlh-->
@@ -459,7 +470,7 @@
         LEFT JOIN project_main p ON t.project_id = p.id
         <where>
             <if test="task.taskType != null">and t.task_type = #{task.taskType}</if>
-            <if test="task.actualEndTime != null">and Date(t.actual_start_time) &gt;= #{task.actualEndTime}</if>
+            <if test="task.actualEndTime != null">and Date(t.actual_start_time) &gt;= #{task.actualStartTime}</if>
             <if test="task.actualEndTime != null">and Date(t.actual_end_time) &lt;= #{task.actualEndTime}</if>
             <if test="task.taskName != null">and t.task_name LIKE #{task.taskName}</if>
             <if test="task.status != null">and t.status = #{task.status}</if>

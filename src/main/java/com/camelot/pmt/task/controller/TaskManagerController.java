@@ -358,7 +358,8 @@ public class TaskManagerController {
             @ApiImplicitParam(dataType = "String", name = "taskType", paramType = "query", value = "任务类型"),
             @ApiImplicitParam(dataType = "int", name = "page", paramType = "query", value = "当前页", required = true),
             @ApiImplicitParam(dataType = "int", name = "rows", paramType = "query", value = "显示几行", required = true),
-            @ApiImplicitParam(dataType = "date", name = "actualEndTime", paramType = "query", value = "日期格式yyyy/MM/dd"),
+            @ApiImplicitParam(dataType = "date", name = "actualStartTime", paramType = "query", value = "开始日期格式"),
+            @ApiImplicitParam(dataType = "date", name = "actualEndTime", paramType = "query", value = "结束日期格式"),
             @ApiImplicitParam(dataType = "String", name = "taskName", paramType = "query", value = "任务名称"),
             @ApiImplicitParam(dataType = "User", name = "beassignUser.username", paramType = "query", value = "负责人"),
             @ApiImplicitParam(dataType = "Long", name = "project.id", paramType = "query", value = "项目id")
@@ -385,14 +386,16 @@ public class TaskManagerController {
             @ApiImplicitParam(dataType = "String", name = "taskType", paramType = "query", value = "任务类型"),
             @ApiImplicitParam(dataType = "int", name = "page", paramType = "query", value = "当前页", required = true),
             @ApiImplicitParam(dataType = "int", name = "rows", paramType = "query", value = "显示几行", required = true),
-            @ApiImplicitParam(dataType = "date", name = "actualEndTime", paramType = "query", value = "截止日期格式yyyy/MM/dd"),
+            @ApiImplicitParam(dataType = "date", name = "actualStartTime", paramType = "query", value = "开始日期格式"),
+            @ApiImplicitParam(dataType = "date", name = "actualEndTime", paramType = "query", value = "结束日期格式"),
             @ApiImplicitParam(dataType = "String", name = "taskName", paramType = "query", value = "任务名称"),
             @ApiImplicitParam(dataType = "User", name = "beassignUser.username", paramType = "query", value = "负责人"),
-            @ApiImplicitParam(dataType = "Long", name = "project.id", paramType = "query", value = "项目id")
+            @ApiImplicitParam(dataType = "Long", name = "project.id", paramType = "query", value = "项目id"),
+            @ApiImplicitParam(dataType = "String", name = "status", paramType = "query", value = "筛选条件")
     })
-    public JSONObject queryTaskStatusPendingByTask(@ApiIgnore Task task, int page, int rows) {
+    public JSONObject queryTaskStatusPendingByTask(@ApiIgnore Task task, String status, int page, int rows) {
         try {
-            PageInfo<Task> result = taskManagerService.queryTaskStatusPendingByTask(task, page, rows);
+            PageInfo<Task> result = taskManagerService.queryTaskStatusPendingByTask(task, status, page, rows);
             return ApiResponse.success(result);
         } catch (Exception e) {
             logger.error(e.getMessage());
@@ -412,7 +415,8 @@ public class TaskManagerController {
             @ApiImplicitParam(dataType = "String", name = "taskType", paramType = "query", value = "任务类型"),
             @ApiImplicitParam(dataType = "int", name = "page", paramType = "query", value = "当前页", required = true),
             @ApiImplicitParam(dataType = "int", name = "rows", paramType = "query", value = "显示几行", required = true),
-            @ApiImplicitParam(dataType = "date", name = "actualEndTime", paramType = "query", value = "截止日期格式yyyy/MM/dd"),
+            @ApiImplicitParam(dataType = "date", name = "actualStartTime", paramType = "query", value = "开始日期格式"),
+            @ApiImplicitParam(dataType = "date", name = "actualEndTime", paramType = "query", value = "结束日期格式"),
             @ApiImplicitParam(dataType = "String", name = "taskName", paramType = "query", value = "任务名称"),
             @ApiImplicitParam(dataType = "User", name = "beassignUser.username", paramType = "query", value = "负责人"),
             @ApiImplicitParam(dataType = "Long", name = "project.id", paramType = "query", value = "项目id")
@@ -439,7 +443,8 @@ public class TaskManagerController {
             @ApiImplicitParam(dataType = "String", name = "taskType", paramType = "query", value = "任务类型"),
             @ApiImplicitParam(dataType = "int", name = "page", paramType = "query", value = "当前页", required = true),
             @ApiImplicitParam(dataType = "int", name = "rows", paramType = "query", value = "显示几行", required = true),
-            @ApiImplicitParam(dataType = "date", name = "actualEndTime", paramType = "query", value = "截止日期格式yyyy/MM/dd"),
+            @ApiImplicitParam(dataType = "date", name = "actualStartTime", paramType = "query", value = "开始日期格式"),
+            @ApiImplicitParam(dataType = "date", name = "actualEndTime", paramType = "query", value = "结束日期格式"),
             @ApiImplicitParam(dataType = "String", name = "taskName", paramType = "query", value = "任务名称"),
             @ApiImplicitParam(dataType = "User", name = "beassignUser.username", paramType = "query", value = "负责人"),
             @ApiImplicitParam(dataType = "Long", name = "project.id", paramType = "query", value = "项目id")

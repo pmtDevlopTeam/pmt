@@ -160,7 +160,7 @@ public interface TaskMapper {
      * @author zlh
      * @date 15:54 2018/4/25
      */
-    List<Task> queryTaskStatusPendingByTask(@Param("task") Task task, @Param("ids") String[] ids);
+    List<Task> queryTaskStatusPendingByTask(@Param("task") Task task, @Param("status") String status, @Param("ids") String[] ids);
 
     /**
      * 组合条件查询所有状态为已办的任务

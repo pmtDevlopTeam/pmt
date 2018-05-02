@@ -165,7 +165,7 @@ public interface TaskManagerService {
      * @author zlh
      * @date 15:54 2018/4/25
      */
-    PageInfo<Task> queryTaskStatusPendingByTask(Task task, int page, int rows);
+    PageInfo<Task> queryTaskStatusPendingByTask(Task task, String status, int page, int rows);
 
     /**
      * 组合条件查询所有状态为已办的任务
