@@ -1,11 +1,12 @@
 package com.camelot.pmt.common;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Random;
+
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * @ClassName: CommonsUtil
@@ -63,4 +64,9 @@ public class CommonsUtil {
         return result;
     }
 
+    public static long createID() {
+        Random random = new Random();
+        long t1 = 0x7FFFFFFF & System.currentTimeMillis();
+        return t1 << 32 | Math.abs(random.nextInt());
+    }
 }

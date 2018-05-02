@@ -54,6 +54,18 @@ public class RemindContentChild {
     private Integer remark;
 
     /**
+     * 角色id
+     */
+    private String projectRoleId;
+    public String getProjectRoleId() {
+        return projectRoleId;
+    }
+
+    public void setProjectRoleId(String projectRoleId) {
+        this.projectRoleId = projectRoleId;
+    }
+
+    /**
      * 主键
      * 
      * @return id 主键

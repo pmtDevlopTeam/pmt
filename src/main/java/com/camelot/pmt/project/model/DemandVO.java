@@ -17,6 +17,25 @@ public class DemandVO {
 
     private List<Demand> demandList;
 
+    private List<Demand> demandTwoList;
+    private List<Demand> demandThreeList;
+    
+    public List<Demand> getDemandTwoList() {
+        return demandTwoList;
+    }
+
+    public void setDemandTwoList(List<Demand> demandTwoList) {
+        this.demandTwoList = demandTwoList;
+    }
+
+    public List<Demand> getDemandThreeList() {
+        return demandThreeList;
+    }
+
+    public void setDemandThreeList(List<Demand> demandThreeList) {
+        this.demandThreeList = demandThreeList;
+    }
+
     public List<Demand> getDemandList() {
         return demandList;
     }

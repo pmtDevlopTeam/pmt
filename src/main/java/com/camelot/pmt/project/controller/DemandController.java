@@ -428,6 +428,37 @@ public class DemandController {
         }
     }
 
+    /**
+     * 需求状态（未激活/已激活/已关闭/已变更）
+     *
+     * @param demand
+     * @return
+     */
+    @ApiOperation(value = "三级新增级联需求", notes = "新增三级级联需求")
+    @PostMapping(value = "/demand/addthreeDemandList")
+    public JSONObject addThreeDemandList(@RequestBody DemandVO demandVO) {
+        boolean flag = false;
+        try {
+            // 获取当前登录人
+            User user = (User) ShiroUtils.getSessionAttribute("user");
+            if (null == user) {
+                return ApiResponse.jsonData(APIStatus.INVALIDSESSION_LOGINOUTTIME);
+            }
+            if ((null == demandVO) || (null == demandVO.getDemand())) {
+                return ApiResponse.errorPara("请求参数异常");
+            }
+            flag = demandService.addThreeDemandList(demandVO, user);
+            if (flag) {
+                return ApiResponse.success("添加成功");
+            }
+            return ApiResponse.error();
+        } catch (Exception e) {
+            logger.error("------需求级联新增------" + e.getMessage());
+            e.printStackTrace();
+            return ApiResponse.error();
+        }
+    }
+    
     @InitBinder
     public void initBinder(ServletRequestDataBinder binder) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
