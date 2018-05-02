@@ -67,6 +67,11 @@ public interface BugManageMapper {
      * @return
      */
     int updateBugSolve(BugManage record);
+    
+    /**
+     * 激活bug
+     */
+    int updateBugActivation(BugManage record);
 
     /**
      * 根据id查询bug

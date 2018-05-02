@@ -71,6 +71,12 @@ public interface BugManageService {
      * @return
      */
     boolean updateBugSolve(BugManage bugManage,User user);
+    
+    
+    /**
+     * 激活bug
+     */
+    boolean updateBugActivation(BugManage record,User user);
 
     /**
      * 根据id查询bug

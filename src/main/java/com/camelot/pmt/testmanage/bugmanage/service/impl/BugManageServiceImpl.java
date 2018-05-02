@@ -386,8 +386,47 @@ public class BugManageServiceImpl implements BugManageService {
 		}
 		return flag;
 	}
-
 	
+	
+	/**
+	 * 激活bug
+	 */
+	@Transactional(rollbackFor = Exception.class)
+	public boolean updateBugActivation(BugManage bugManage,User user) {
+		
+		boolean flag=false;
+		// 判断传入的bug对象是否为空
+		if (bugManage == null || bugManage.getId() == null) {
+			// 传入参数错误
+			return false;
+		}
+		try{
+			BugManage currentBugManage = bugManageMapper.queryBugById(bugManage.getId());
+			if(currentBugManage!=null){
+				if(currentBugManage.getBugActivationcount()==null){
+					bugManage.setBugActivationcount(1L);
+				}else{
+					bugManage.setBugActivationcount(currentBugManage.getBugActivationcount()+1);
+				}
+				
+			}
+			
+			// 更新时间
+			bugManage.setModifyTime(DateUtils.format(new Date(), DateUtils.DATE_TIME_PATTERN));
+			// 更新人*
+			bugManage.setModifyUserId(user.getUserId());
+			Object obj = compareBeanAttr.compareBeanAttr(BugManage.class, bugManage, currentBugManage,
+					new String[] { "id" });
+			String operateDesc = (String) obj;
+			int updateBugActivation = bugManageMapper.updateBugActivation(bugManage);
+			if(updateBugActivation>0){
+				function(bugManage,user,"更新",operateDesc);
+				flag=true;
+			}}catch(Exception e){
+				e.printStackTrace();
+			}
+			return flag;
+	}
 	
 	/**
 	 * 根据id查询bug
@@ -500,6 +539,7 @@ public class BugManageServiceImpl implements BugManageService {
 	public List<SelectBugManageCount> queryCountBugDesignated(Long taskId) {
 		return bugManageMapper.queryCountBugDesignated(taskId);
 	}
+	
 
 
 }

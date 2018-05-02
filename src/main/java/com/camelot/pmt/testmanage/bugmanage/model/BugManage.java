@@ -1,6 +1,9 @@
 package com.camelot.pmt.testmanage.bugmanage.model;
 
+import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlElement;
+
+import org.hibernate.validator.constraints.NotBlank;
 
 public class BugManage {
 	@XmlElement(name = "default")
@@ -14,6 +17,7 @@ public class BugManage {
     @XmlElement(name = "项目")
     private Long projectId;
     // 相关需求ID
+    @NotNull(message = "需求id不能为空")	
     @XmlElement(name = "需求")
     private Long demandId;
     // 相关任务ID
@@ -29,6 +33,7 @@ public class BugManage {
     @XmlElement(name = "影响版本")
     private Long versionId;
     // bug类型
+    @NotBlank(message="bug类型不能为空")
     @XmlElement(name = "bug类型")
     private String bugType;
     // 测试终端
@@ -94,6 +99,8 @@ public class BugManage {
     // 关闭状态（正常，不正常）
     @XmlElement(name = "default")
     private String closeStauts;
+    @XmlElement(name = "激活次数")
+    private Long bugActivationcount;
 
     public Long getId() {
         return id;
@@ -342,19 +349,30 @@ public class BugManage {
     public void setDemand1Id(Long demand1Id) {
         this.demand1Id = demand1Id;
     }
+    
 
-    @Override
-    public String toString() {
-        return "BugManage [id=" + id + ", bugNo=" + bugNo + ", bugTitle=" + bugTitle + ", projectId=" + projectId
-                + ", demandId=" + demandId + ", taskId=" + taskId + ", demand1Id=" + demand1Id + ", designatedId="
-                + designatedId + ", versionId=" + versionId + ", bugType=" + bugType + ", caseTerminal=" + caseTerminal
-                + ", caseEnvironment=" + caseEnvironment + ", bugLevel=" + bugLevel + ", bugStatus=" + bugStatus
-                + ", createUserId=" + createUserId + ", createTime=" + createTime + ", endTime=" + endTime
-                + ", modifyUserId=" + modifyUserId + ", modifyTime=" + modifyTime + ", delFlag=" + delFlag
-                + ", stepsReproduce=" + stepsReproduce + ", solveTime=" + solveTime + ", solveProgram=" + solveProgram
-                + ", solveId=" + solveId + ", closeTime=" + closeTime + ", closeId=" + closeId + ", seriousDegree="
-                + seriousDegree + ", closeReason=" + closeReason + ", caseId=" + caseId + ", bugDescribe=" + bugDescribe
-                + ", closeStauts=" + closeStauts + "]";
-    }
+	public Long getBugActivationcount() {
+		return bugActivationcount;
+	}
+
+	public void setBugActivationcount(Long bugActivationcount) {
+		this.bugActivationcount = bugActivationcount;
+	}
+
+	@Override
+	public String toString() {
+		return "BugManage [id=" + id + ", bugNo=" + bugNo + ", bugTitle=" + bugTitle + ", projectId=" + projectId
+				+ ", demandId=" + demandId + ", taskId=" + taskId + ", demand1Id=" + demand1Id + ", designatedId="
+				+ designatedId + ", versionId=" + versionId + ", bugType=" + bugType + ", caseTerminal=" + caseTerminal
+				+ ", caseEnvironment=" + caseEnvironment + ", bugLevel=" + bugLevel + ", bugStatus=" + bugStatus
+				+ ", createUserId=" + createUserId + ", createTime=" + createTime + ", endTime=" + endTime
+				+ ", modifyUserId=" + modifyUserId + ", modifyTime=" + modifyTime + ", delFlag=" + delFlag
+				+ ", stepsReproduce=" + stepsReproduce + ", solveTime=" + solveTime + ", solveProgram=" + solveProgram
+				+ ", solveId=" + solveId + ", closeTime=" + closeTime + ", closeId=" + closeId + ", seriousDegree="
+				+ seriousDegree + ", closeReason=" + closeReason + ", caseId=" + caseId + ", bugDescribe=" + bugDescribe
+				+ ", closeStauts=" + closeStauts + ", bugActivationcount=" + bugActivationcount + "]";
+	}
+
+
 
 }

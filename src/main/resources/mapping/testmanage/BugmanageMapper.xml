@@ -34,6 +34,7 @@
 		<result column="case_id" jdbcType="BIGINT" property="caseId" />
 		<result column="bug_describe" jdbcType="VARCHAR" property="bugDescribe" />
 		<result column="close_stauts" jdbcType="VARCHAR" property="closeStauts" />
+		<result column="bug_activationcount" jdbcType="BIGINT" property="bugActivationcount" />
 	</resultMap>
 	
 	
@@ -76,7 +77,7 @@
 		id,create_user_id,bug_title,DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%s') as create_time,version_id,
 		solve_id,solve_program,close_id,DATE_FORMAT(close_time,'%Y-%m-%d %H:%i:%s') as close_time,
 		project_id,demand_id,case_id,task_id,demand1_id,bug_type,serious_degree,bug_level,bug_status,
-		designated_id,DATE_FORMAT(end_time,'%Y-%m-%d %H:%i:%s') as end_time,case_environment,case_terminal
+		designated_id,DATE_FORMAT(end_time,'%Y-%m-%d %H:%i:%s') as end_time,case_environment,case_terminal,bug_activationcount
 	</sql>
 	
 	<!-- 添加bug -->
@@ -844,6 +845,14 @@
 		,bug_status=2
 		where id = #{id,jdbcType=BIGINT}
 	</update>
+	
+	<!-- bug激活 -->
+	<update id="updateBugActivation">
+		update bug_manage set bug_status=0,bug_activationcount=#{bugActivationcount},
+		modify_time=#{modifyTime},modify_user_id=#{modifyUserId}
+		where id=#{id}
+	</update>
+	
 	<select id="queryBugById" resultMap="BaseResultMap">
 		select
 		<include refid="Base_Column_GET" />

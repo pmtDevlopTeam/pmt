@@ -59,7 +59,7 @@ public class compareBeanAttr {
                         continue;
                     }
                     if (null == oldValue) {
-                        str += xmlElement.name() + ":" + "更改为"+ newValue + "。 ";
+                        str += xmlElement.name() + ":" +"由 " +"''"+ "更改为"+ newValue + "。 ";
                     } else {
                         str += xmlElement.name() + ":" + "由 " +oldValue+ "更改为" + newValue + "。 ";
                     }

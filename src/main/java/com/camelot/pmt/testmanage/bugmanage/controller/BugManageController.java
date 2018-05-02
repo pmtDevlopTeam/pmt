@@ -7,6 +7,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -77,7 +78,7 @@ public class BugManageController {
             @ApiImplicitParam(name = "seriousDegree", value = "严重程度", required = false, paramType = "form", dataType = "String"),
             @ApiImplicitParam(name = "stepsReproduce", value = "重现步骤", required = false, paramType = "form", dataType = "String") })
     @PostMapping(value = "/addBugManage")
-    public JSONObject addBugManage(@ApiIgnore BugManage bugManage) {
+    public JSONObject addBugManage(@ApiIgnore @Validated BugManage bugManage) {
     	boolean flag = false;
 		try {
 			 	User user = (User) ShiroUtils.getSessionAttribute("user");
@@ -271,6 +272,29 @@ public class BugManageController {
         	 logger.error(e.getMessage());
              return ApiResponse.jsonData(APIStatus.ERROR_500);
         }
+    }
+    
+    @ApiOperation(value = "激活bug", notes = "激活bug")
+    @ApiImplicitParams({
+    	@ApiImplicitParam(name = "id", value = "bugId", required = true, paramType = "form", dataType = "Long") })
+    @PostMapping(value = "/updateBugActivation")
+    public JSONObject updateBugActivation(@ApiIgnore BugManage bugManage) {
+    	boolean flag = false;
+    	try {
+    		User user = (User) ShiroUtils.getSessionAttribute("user");
+    		if (null == user) {
+    			return ApiResponse.jsonData(APIStatus.INVALIDSESSION_LOGINOUTTIME);
+    		}
+    		//调用添加bug接口
+    		flag = bugManageService.updateBugActivation(bugManage,user);
+    		if(flag){
+    			return ApiResponse.success();
+    		}
+    		return ApiResponse.error("激活bug异常");
+    	} catch (Exception e) {
+    		logger.error(e.getMessage());
+    		return ApiResponse.jsonData(APIStatus.ERROR_500);
+    	}
     }
 
     @ApiOperation(value = "分页获取bug列表", notes = "分页获取bug列表")
