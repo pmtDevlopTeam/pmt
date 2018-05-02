@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.camelot.pmt.common.CommonsUtil;
 import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.common.IncrementNumber;
 import com.camelot.pmt.common.compareBeanAttr;
@@ -42,6 +43,7 @@ public class DemandServiceImpl implements DemandService {
         try {
             String demandNum = queryDemandNum(demand);
             demand.setDemandNum(demandNum);
+            demand.setId(CommonsUtil.createID());
             int resultCount = demandMapper.insert(demand);
             if (resultCount > 0) {
                 DemandOperate demandOperate = new DemandOperate();
@@ -409,5 +411,72 @@ public class DemandServiceImpl implements DemandService {
             throw new RuntimeException(e);
         }
         return demandId;
+    }
+
+    @Override
+    public boolean addThreeDemandList(DemandVO demandVO, User user) {
+
+        Demand demand = demandVO.getDemand();//一级需求
+        List<Demand> demandTwoList = demandVO.getDemandTwoList();
+        List<Demand> demandThreeList = demandVO.getDemandThreeList();
+        List<Demand> demandList = new ArrayList<>();//用于批量插入需求
+        boolean flag = false;
+        try {
+            String userId = user.getUserId();
+            Date currentDate = new Date();
+            String demandNum = queryDemandNum(demand);
+            Long id = CommonsUtil.createID();//一级需求id
+            demand.setId(id);
+            demand.setDemandNum(demandNum);
+            demand.setCreateTime(currentDate);
+            demand.setCreateUserId(userId);
+            demandList.add(demand);
+            int demand2Num = -1;
+            if((null!=demandTwoList)&&(demandTwoList.size()>0)){//二级
+                for (Demand demand2 : demandTwoList) {
+                    demand2Num++;
+                    demand2.setDemandNum(demandNum+"."+IncrementNumber.getIncreNum(demand2Num+""));//需求编号----------
+                    demand2.setCreateTime(currentDate);
+                    demand2.setCreateUserId(userId);
+                    Long demand2Id = CommonsUtil.createID();//二级需求id
+                    demand2.setId(demand2Id);
+                    Long pid2 = demand2.getPid();//虚拟pid
+                    demand2.setPid(id);//数据库实际保存的pid
+                    demandList.add(demand2);
+                    int demand3Num = -1;
+                    if((null!=demandThreeList)&&(demandThreeList.size()>0)){
+                        for (Demand demand3 : demandThreeList) {
+                            Long pid3 = demand3.getPid();//虚拟三级pid
+                            if(pid3 == pid2){
+                                demand3Num++;
+                                demand3.setDemandNum(demand2.getDemandNum()+"."+IncrementNumber.getIncreNum(demand3Num+""));//需求编号----------
+                                demand3.setPid(demand2Id);
+                                demand3.setCreateTime(currentDate);
+                                demand3.setCreateUserId(userId);
+                                demand3.setId(CommonsUtil.createID());;//二级需求id
+                                demandList.add(demand3);
+                            }else{
+                                continue;
+                            }
+                        }
+                    }
+                }
+            }
+            int resultCount = demandMapper.insertDemandList(demandList);
+            if (resultCount > 0) {
+                DemandOperate demandOperate = new DemandOperate();
+                demandOperate.setCreateUserId(demand.getCreateUserId());
+                demandOperate.setCreateTime(demand.getCreateTime());
+                demandOperate.setDemandId(demand.getId());
+                demandOperate.setOperateDesc(user.getUsername() + "创建");
+                 // 常规操作
+                demandOperate.setRunType("01");
+                demandOperateMapper.insert(demandOperate);
+            }
+            flag = true;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return flag;
     }
 }

@@ -67,4 +67,6 @@ public interface DemandService {
      * @return
      */
     Long addDemandAndReturnId(Demand demand, User user);
+
+    boolean addThreeDemandList(DemandVO demandVO, User user);
 }
