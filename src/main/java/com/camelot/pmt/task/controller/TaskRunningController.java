@@ -53,11 +53,13 @@ public class TaskRunningController {
     @ApiOperation(value = "查询所有正在进行的任务", notes = "查询所有正在进行的任务")
     @RequestMapping(value = "/queryTaskRunning", method = RequestMethod.GET)
     @ApiImplicitParams({
+            @ApiImplicitParam(dataType = "int", name = "page", paramType = "query", value = "当前页", required = true),
+            @ApiImplicitParam(dataType = "int", name = "rows", paramType = "query", value = "显示几行", required = true),
             @ApiImplicitParam(dataType = "ProjectMain", name = "project.id", paramType = "query", value = "项目编号"),
             @ApiImplicitParam(dataType = "String", name = "taskName", paramType = "query", value = "任务名称"),
             @ApiImplicitParam(dataType = "String", name = "taskNum", paramType = "query", value = "任务编号"),
             @ApiImplicitParam(dataType = "Demand", name = "demand.id", paramType = "query", value = "需求编号") })
-    public JSONObject queryTaskRunning(@ApiIgnore Task task) {
+    public JSONObject queryTaskRunning(@ApiIgnore Task task,int page, int rows) {
         try {
             // 获取当前登录人
             User user = (User) ShiroUtils.getSessionAttribute("user");
@@ -65,7 +67,7 @@ public class TaskRunningController {
                 return ApiResponse.jsonData(APIStatus.INVALIDSESSION_LOGINOUTTIME);
             }
             task.setBeassignUser(user);
-            List<Task> tlist = taskRunningService.queryTaskRunning(task);
+            PageInfo<Task> tlist = taskRunningService.queryTaskRunning(page,rows,task);
             return ApiResponse.success(tlist);
         } catch (Exception e) {
             return ApiResponse.error();
