@@ -1,9 +1,12 @@
-<<<<<<< HEAD
 /target/
-=======
-##ignore this file##
+
+/.classpath
+/.project
+/README.md
+/mvnw
+/mvnw.cmd
+/.settings/
+/.mvn/
+/doc/
 .idea/
 pmt.iml
-/target/
-/bin/
->>>>>>> branch 'four_team' of https://github.com/pmtDevlopTeam/pmt.git
