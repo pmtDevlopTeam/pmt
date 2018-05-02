@@ -19,13 +19,13 @@ public interface TaskRunningService {
      * @author myp
      * @since 2018-04-08
      */
-    List<Task> queryTaskRunning(Task task);
+    PageInfo<Task> queryTaskRunning(int page, int rows,Task task);
 
     /**
      * 修改任务关闭接口
      *
      * @author myp
-     * @since 2018-04-08
+     * @since 2018-04-13
      */
     Boolean updateRunningToClose(Long id);
 
@@ -33,7 +33,16 @@ public interface TaskRunningService {
      * 修改任务完成接口
      *
      * @author myp
-     * @since 2018-04-08
+     * @since 2018-04-19
      */
     Boolean updateRunningToAlready(Task ptask);
+
+
+    /**
+     * 根据项目id查询完成的任务总条数
+     *
+     * @author myp
+     * @since 2018-05-02
+     */
+    Long queryTaskCountById(Long proid);
 }

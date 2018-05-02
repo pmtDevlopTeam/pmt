@@ -3,6 +3,7 @@ package com.camelot.pmt.platform.service;
 import java.util.List;
 
 import com.camelot.pmt.platform.model.Role;
+import com.camelot.pmt.platform.model.vo.RoleVo;
 import com.camelot.pmt.util.Tree;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
@@ -43,7 +44,7 @@ public interface RoleService {
      *
      * @return ExecuteResult<List<Role>>
      */
-    List<Tree<Role>> queryAllRole();
+    List<RoleVo> queryAllRole();
 
     /**
      * 验证角色名称是否可用

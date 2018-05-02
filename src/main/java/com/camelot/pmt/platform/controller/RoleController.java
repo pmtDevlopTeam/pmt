@@ -2,6 +2,7 @@ package com.camelot.pmt.platform.controller;
 
 import java.util.List;
 
+import com.camelot.pmt.platform.model.vo.RoleVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -155,7 +156,7 @@ public class RoleController {
     @GetMapping(value = "/queryAllRoleList")
     public JSONObject queryAllRoleList() {
         try {
-            List<Tree<Role>> list = roleService.queryAllRole();
+            List<RoleVo> list = roleService.queryAllRole();
             return ApiResponse.jsonData(APIStatus.OK_200, list);
         } catch (Exception e) {
             logger.error(e.getMessage());

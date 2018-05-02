@@ -26,6 +26,11 @@ public interface TaskMapper {
     int updateRunningToAlready(Long id);
 
     /**
+     * 根据项目id查询完成的任务总条数  myp
+     */
+    Long queryTaskCountById(Long proid);
+
+    /**
      * 点击完成时，修改实际完成时间和实际工时 myp
      */
     int updateInfact_hourAndActual_end_time(Task task);

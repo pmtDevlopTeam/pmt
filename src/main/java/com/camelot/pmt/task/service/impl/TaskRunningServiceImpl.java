@@ -56,10 +56,16 @@ public class TaskRunningServiceImpl implements TaskRunningService {
      * @auth myp
      */
     @Override
-    public List<Task> queryTaskRunning(Task task) {
-        // 根据用户id查询全部的正在进行的任务
-        List<Task> list = taskMapper.queryTaskRunning(task);
-        return list;
+    public PageInfo<Task> queryTaskRunning(int page, int rows, Task task) {
+        try {
+            com.github.pagehelper.PageHelper.startPage(page, rows);
+            List<Task> tasks = taskMapper.queryTaskRunning(task);
+            PageInfo<Task> pageInfo = new PageInfo<>(tasks);
+            return pageInfo;
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -100,6 +106,18 @@ public class TaskRunningServiceImpl implements TaskRunningService {
             return flag;
         }
         return flag;
+    }
+
+    /**
+     * @Title: updateRunningToClose
+     * @Description: TODO(根据项目id查询完成的任务总条数)
+     * @param proid
+     * @return JSONObject 返回类型
+     * @auth myp
+     */
+    @Override
+    public Long queryTaskCountById(Long proid) {
+        return taskMapper.queryTaskCountById(proid);
     }
 
 }
