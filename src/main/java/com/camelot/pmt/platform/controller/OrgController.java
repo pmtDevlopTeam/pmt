@@ -56,6 +56,7 @@ public class OrgController {
     @ApiOperation(value = "根据orgId查询单个部门机构", notes = "查询单个部门机构")
     @RequestMapping(value = "/queryOrgByOrgId", method = RequestMethod.POST)
     public JSONObject queryOrgByOrgId(
+    		
             @ApiParam(value = "orgId", required = true) @RequestParam(required = true) String orgId) {
         try {
             if (StringUtils.isEmpty(orgId)) {
@@ -121,7 +122,7 @@ public class OrgController {
             @ApiImplicitParam(name = "parentId", value = "上级部门", required = true, defaultValue = "0", paramType = "form", dataType = "String"),
             @ApiImplicitParam(name = "state", value = "部门状态", required = true, defaultValue = "0", paramType = "form", dataType = "String"),
             @ApiImplicitParam(name = "orgLeader", value = "部门负责人", required = false, paramType = "form", dataType = "String"),
-            @ApiImplicitParam(name = "sortNum", value = "部门排序号", required = true, paramType = "form", dataType = "String")
+            @ApiImplicitParam(name = "sortNum", value = "部门排序号", required = true,defaultValue = "1000", paramType = "form", dataType = "String")
 
     })
     @RequestMapping(value = "/addOrg", method = RequestMethod.POST)
@@ -205,7 +206,7 @@ public class OrgController {
             @ApiImplicitParam(name = "orgId", value = "部门id", required = true, paramType = "form", dataType = "String"),
             @ApiImplicitParam(name = "state", value = "部门状态", required = false, paramType = "form", dataType = "String"),
             @ApiImplicitParam(name = "orgLeader", value = "部门负责人", required = false, paramType = "form", dataType = "String"),
-            @ApiImplicitParam(name = "sortNum", value = "部门排序号", required = false, paramType = "form", dataType = "String") })
+            @ApiImplicitParam(name = "sortNum", value = "部门排序号", required = false,defaultValue="1000", paramType = "form", dataType = "String") })
     @RequestMapping(value = "/updateOrgByOrgId", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject updateOrgByOrgId(@ApiIgnore Org org) {
@@ -408,5 +409,4 @@ public class OrgController {
             return ApiResponse.jsonData(APIStatus.ERROR_500, e.getMessage());
         }
     }
-
 }

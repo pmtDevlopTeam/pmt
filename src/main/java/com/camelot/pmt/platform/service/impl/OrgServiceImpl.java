@@ -88,6 +88,16 @@ public class OrgServiceImpl implements OrgService {
 	 */
 	@Override
 	public String addOrg(Org org) {
+		if (!StringUtils.isEmpty(org.getOrgLeader())) {
+			User user = userMapper.queryUserByUserId(org.getOrgLeader());
+			if (StringUtils.isEmpty(user)) {
+				return "该部门负责人不存在，请重新添加";
+			}
+		}
+		List<Org> orgObjList = orgMapper.queryOrgSubByParentId(org.getParentId());
+		if (CollectionUtils.isEmpty(orgObjList)) {
+			return "该部门的上级部门不存在，请重新添加（0 为顶级部门）";
+		}
 		String result = "";
 		String code = createCode(org);
 		org.setOrgCode(code);
@@ -198,6 +208,20 @@ public class OrgServiceImpl implements OrgService {
 	 */
 	@Override
 	public String updateOrgByOrgId(Org org) {
+		if (!StringUtils.isEmpty(org.getOrgLeader())) {
+			User user = userMapper.queryUserByUserId(org.getOrgLeader());
+			if (StringUtils.isEmpty(user)) {
+				return "修改后的部门负责人不存在，请重新修改";
+			}
+		}
+		List<Org> orgObjList = orgMapper.queryOrgSubByParentId(org.getParentId());
+		if (CollectionUtils.isEmpty(orgObjList)) {
+			return "修改后的上级部门不存在，请重新修改";
+		}
+		int orgnameCheck = orgMapper.checkOrgNameIsExist(org.getOrgname());
+		if (orgnameCheck>0) {
+			return "修改后的部门名称已存在请重新修改";
+		}
 		int num = 0;
 		int val = 0;
 		Org orgBefore = orgMapper.queryOrgByOrgId(org.getOrgId());
@@ -208,7 +232,6 @@ public class OrgServiceImpl implements OrgService {
 				Org orgAfter = orgMapper.queryOrgByOrgId(org.getOrgId());
 				if (num > 0) {
 					// 添加日志
-
 					logAspect.insertUpdateLog(orgAfter, orgBefore, Modular.ORG, org.getModifyUserId());
 					updateState(org);
 					return "部门修改成功";
@@ -246,7 +269,6 @@ public class OrgServiceImpl implements OrgService {
 				orgMapper.deleteOrgByUserIdAndOrgId(orgBefore.getOrgLeader(), org.getOrgId());
 				if (num > 0) {
 					// 添加日志
-
 					logAspect.insertUpdateLog(orgAfter, orgBefore, Modular.ORG, org.getModifyUserId());
 					updateCode(org);
 					updateState(org);
@@ -268,7 +290,6 @@ public class OrgServiceImpl implements OrgService {
 				Org orgAfter = orgMapper.queryOrgByOrgId(org.getOrgId());
 				if (val > 0 && num > 0) {
 					// 添加日志
-
 					logAspect.insertUpdateLog(orgAfter, orgBefore, Modular.ORG, org.getModifyUserId());
 					updateCode(org);
 					updateState(org);
@@ -321,7 +342,6 @@ public class OrgServiceImpl implements OrgService {
 				Org orgAfter = orgMapper.queryOrgByOrgId(orgItem.getOrgId());
 				if (num > 0) {
 					// 添加日志
-
 					logAspect.insertUpdateLog(orgAfter, orgOld, Modular.ORG, org.getModifyUserId());
 				}
 				updateState(orgItem);
@@ -330,22 +350,6 @@ public class OrgServiceImpl implements OrgService {
 		}
 
 	}
-
-	private String updateStates(Org org) {
-		List<Org> OrgList = orgMapper.queryOrgSubByParentId(org.getOrgId());
-		if (CollectionUtils.isEmpty(OrgList)) {
-			return "部门的状态修改成功";
-		} else {
-			for (Org orgItem : OrgList) {
-				orgItem.setState(org.getState());
-				orgMapper.updateOrgByOrgId(orgItem);
-				updateState(orgItem);
-			}
-			return "部门的状态修改成功";
-		}
-
-	}
-
 	/**
 	 * 删除部门
 	 *
@@ -383,7 +387,7 @@ public class OrgServiceImpl implements OrgService {
 			if ("1".equals(user.getState())) {
 				orgObject.setOrgLeadername(null);
 			}
-		} 
+		}
 		if (orgObject != null) {
 			return orgObject;
 		}
@@ -403,7 +407,7 @@ public class OrgServiceImpl implements OrgService {
 		List<Org> listItem = new ArrayList<Org>();
 		for (Org org : list) {
 			if (StringUtils.isEmpty(org.getOrgLeader())) {
-				org.setOrgLeadername("");
+				org.setOrgLeadername(null);
 			} else {
 				User userObj = userMapper.queryUserByUserId(org.getOrgLeader());
 				if ("1".equals(userObj.getState())) {
@@ -441,7 +445,7 @@ public class OrgServiceImpl implements OrgService {
 					if ("1".equals(user.getState())) {
 						org.setOrgLeadername(null);
 					}
-				} 
+				}
 				User user = userMapper.queryUserByUserId(org.getCreatUserId());
 				Tree<Org> tree = new Tree<Org>();
 				tree.setId(org.getOrgId());
@@ -471,7 +475,7 @@ public class OrgServiceImpl implements OrgService {
 			if ("1".equals(user.getState())) {
 				org.setOrgLeadername("");
 			}
-		} 
+		}
 		if (org != null) {
 			orgListItem.add(org);
 		}
@@ -586,7 +590,7 @@ public class OrgServiceImpl implements OrgService {
 					if ("1".equals(userObj.getState())) {
 						orgObj.setOrgLeadername(null);
 					}
-				} 
+				}
 				User user = userMapper.queryUserByUserId(orgObj.getCreatUserId());
 				orgObj.setCreatOrgUsername(user.getUsername());
 				listItem.add(orgObj);

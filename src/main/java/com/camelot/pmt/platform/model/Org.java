@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import javax.validation.constraints.Size;
+
 public class Org implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -18,6 +20,7 @@ public class Org implements Serializable {
 	/**
 	 * 部门唯一11位id
 	 */
+	
 	private String orgId;
 	/**
 	 * 顶级部门 0为顶级部门
