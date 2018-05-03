@@ -19,7 +19,7 @@ public class DemandVO {
 
     private List<Demand> demandTwoList;
     private List<Demand> demandThreeList;
-    
+
     public List<Demand> getDemandTwoList() {
         return demandTwoList;
     }

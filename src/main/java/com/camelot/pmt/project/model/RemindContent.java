@@ -37,11 +37,12 @@ public class RemindContent {
     /**
      * 提醒文本子内容
      */
-    
+
     /**
      * 角色id
      */
     private String projectRoleId;
+
     public String getProjectRoleId() {
         return projectRoleId;
     }
