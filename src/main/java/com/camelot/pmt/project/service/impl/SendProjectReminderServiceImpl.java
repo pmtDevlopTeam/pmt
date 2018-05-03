@@ -1,22 +1,18 @@
 package com.camelot.pmt.project.service.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import com.camelot.pmt.common.SendRequestUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.camelot.pmt.common.GetDateUtil;
+import com.camelot.pmt.common.SendRequestUtil;
 import com.camelot.pmt.platform.service.MailService;
 import com.camelot.pmt.project.mapper.ProjectRemindMapper;
 import com.camelot.pmt.project.model.ProjectRemind;
-import com.camelot.pmt.project.model.RemindContent;
 import com.camelot.pmt.project.model.RemindContentChild;
-import com.camelot.pmt.project.model.RemindModel;
 import com.camelot.pmt.project.model.RemindReport;
 import com.camelot.pmt.project.service.ProjectRemindService;
 import com.camelot.pmt.project.service.SendProjectReminderService;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @Package: com.camelot.pmt.project.service.impl
@@ -30,19 +26,23 @@ public class SendProjectReminderServiceImpl implements SendProjectReminderServic
     @Autowired
     private MailService mailService;
     @Autowired
-    private ProjectRemindMapper projectRemindMapper;
-    @Autowired
     private ProjectRemindService projectRemindService;
 
     /**
-     * 判断项目是否开启提醒功能
+     * 依据提醒状态，发送邮件/通知接口
+     * 1.依据项目id，角色id，查询项目是否开启提醒功能
+     * 2.若项目开启提醒功能，则根据提醒频次，项目id，角色id查询提醒子集（三级数据表），获取对应提醒url，组装数据
+     * 3.发送邮件/通知
+     * @param projectId
+     * @param userRoleId
+     * @throws Exception
      */
-    public void querySendStatusByProId(Long projectId, String userRoleId) throws Exception {
+    public void queryStatusAndSendMsg(Long projectId, String userRoleId) throws Exception {
         // 根据项目id，角色id查询项目提醒主表信息
         ProjectRemind projectRemind = new ProjectRemind();
         projectRemind.setProjectId(projectId);
         projectRemind.setProjectRoleId(userRoleId);
-        ProjectRemind queryProjectRemind = projectRemindMapper.queryByProjectRemind(projectRemind);
+        ProjectRemind queryProjectRemind = projectRemindService.queryProjectRemindByProIdAndUserRoleId(projectRemind);
         // 获取项目提醒状态（01:开启 02:关闭）
         String remindStatus = queryProjectRemind.getRemindStatus();
         // 若项目开启提醒，则根据对应规则组装数据进行提醒
@@ -58,43 +58,9 @@ public class SendProjectReminderServiceImpl implements SendProjectReminderServic
                 // 当前方法的url路径
                 String methodUrl = childItem.getMethodUrl();
                 // 根据提醒频次,项目id，组装数据
-                queryListByProidAndDate(projectId, remindFrequency,methodUrl);
+                queryDataListByParms(projectId, remindFrequency,methodUrl);
 
             }
-            /*RemindModel remindModel = projectRemindService.queryProjectRemindByProjectId(projectId, userRoleId);
-            // 提醒项信息（二级数据）
-            List<RemindContent> remindContentList = remindModel.getRemindContentList();
-            for (RemindContent item : remindContentList) {
-                //获取提醒项code信息，（若提醒项选择项目日报，模块日报则需单独调用接口）
-                String contentCode = item.getContentCode();
-                    *//*
-                     调用接口是否需要传参（若传参，参数获取方式）
-                     A.传参--字符串/实体
-                     B.参数信息根据当前二级子集获取三级子集，封装参数信息
-
-                // TODO : 调用项目日报查询接口
-                if("01".equals(contentCode)){
-
-                }
-                // TODO ; 调用模块日报查询接口
-                if ("07".equals(contentCode)){
-
-                }  *//*
-                // 提醒项子集信息（三级数据）
-                List<RemindContentChild> remindContentChildList = item.getRemindContentChildList();
-                // 获取具体提醒项信息，组装获取数据
-                for (RemindContentChild childItem : remindContentChildList) {
-                    // 当前方法的code值
-                    childItem.getCode();
-                    // 当前方法的url路径
-                    String methodUrl = childItem.getMethodUrl();
-                    // 根据提醒频次获取起止时间
-                    String[] split = remindFrequency.split(",");
-
-                    queryListByProidAndDate(projectId, remindFrequency,methodUrl);
-
-                }
-            }*/
         }
     }
     /**
@@ -142,7 +108,7 @@ public class SendProjectReminderServiceImpl implements SendProjectReminderServic
                     // 获取昨天起止时间
                     String stringBeginDayOfYesterday = GetDateUtil.getStringBeginDayOfYesterday();
                     String stringEndDayOfYesterDay = GetDateUtil.getStringEndDayOfYesterDay();
-                    String s = SendRequestUtil.sendRequest(methodUrl, parms.toString());;
+                    String s = SendRequestUtil.sendRequest(methodUrl, parms.toString());
                 }
                 if ("02".equals(split[i])) {
                     // 获取上周起止时间
@@ -152,7 +118,7 @@ public class SendProjectReminderServiceImpl implements SendProjectReminderServic
                     String stringBeginDayOfWeek = GetDateUtil.getStringBeginDayOfWeek();
                     String stringEndDayOfWeek = GetDateUtil.getStringEndDayOfWeek();
                     // 获取数据信息
-                    String s = SendRequestUtil.sendRequest(methodUrl, "");;
+                    String s = SendRequestUtil.sendRequest(methodUrl, parms.toString());
                 }
                 if ("03".equals(split[i])) {
                     // 获取上月月起止时间
@@ -164,7 +130,7 @@ public class SendProjectReminderServiceImpl implements SendProjectReminderServic
                     String stringBeginDayOfMonth = GetDateUtil.getStringBeginDayOfMonth();
                     String stringEndDayOfMonth = GetDateUtil.getStringEndDayOfMonth();
                     // 获取数据信息
-                    String s = SendRequestUtil.sendRequest(methodUrl, "");;
+                    String s = SendRequestUtil.sendRequest(methodUrl, parms.toString());
                 }
             }
         } catch (Exception e) {   

@@ -19,7 +19,7 @@ public class SendRequestUtil {
     private static HttpServletRequest request;
 
     public static String sendRequest(String url, String param) throws Exception {
-        String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + url;
+        String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + url+"?"+param;
         OkHttpClient httpClient = new OkHttpClient();
         Request request = new Request.Builder().url(basePath).build();
         Response response = httpClient.newCall(request).execute();
