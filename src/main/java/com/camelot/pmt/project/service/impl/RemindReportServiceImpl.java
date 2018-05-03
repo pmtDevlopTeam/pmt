@@ -66,6 +66,12 @@ public class RemindReportServiceImpl implements RemindReportService {
                                                         remindReport.setRemindId(e.getId());
                                                         remindReport.setRemindType(e.getRemindType());
                                                         // 调用生成日报内容接口
+                                                        // 项目进度
+                                                        // 当日bug总数
+                                                        // 当日bug解决数
+                                                        // 任务完成数
+                                                        // 长时间任务延时提示
+                                                        // 拼接成日报保存
                                                         remindReport.setDailyContent(b.getMethodUrl());
                                                         remindReport.setRemindFrequency(e.getRemindFrequency());
                                                         remindReport.setCreateUserId(user.getUserId());
