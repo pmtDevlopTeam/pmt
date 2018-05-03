@@ -8,9 +8,10 @@
     <result column="content_code" property="contentCode" jdbcType="CHAR" />
     <result column="create_user_id" property="createUserId" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="project_role_id" property="projectRoleId" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, project_id, remind_id, content_code, create_user_id, create_time
+    id, project_id, remind_id, content_code, create_user_id, create_time,project_role_id
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -24,11 +25,11 @@
   </delete>
   <insert id="insert" parameterType="RemindContent" useGeneratedKeys="true" keyProperty="id">
     insert into remind_content (id, project_id, remind_id, 
-      content_code, create_user_id, create_time
+      content_code, create_user_id, create_time,project_role_id
       )
     values (#{id,jdbcType=BIGINT}, #{projectId,jdbcType=BIGINT}, #{remindId,jdbcType=BIGINT}, 
       #{contentCode,jdbcType=CHAR}, #{createUserId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}
-      )
+      , #{projectRoleId,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="RemindContent" useGeneratedKeys="true" keyProperty="id">
     insert into remind_content
@@ -51,6 +52,9 @@
       <if test="createTime != null" >
         create_time,
       </if>
+      <if test="projectRoleId != null" >
+        project_role_id,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -70,6 +74,9 @@
       </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="projectRoleId != null" >
+        #{projectRoleId,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -91,6 +98,9 @@
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="projectRoleId != null" >
+        project_role_id = #{projectRoleId,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -100,7 +110,8 @@
       remind_id = #{remindId,jdbcType=BIGINT},
       content_code = #{contentCode,jdbcType=CHAR},
       create_user_id = #{createUserId,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=TIMESTAMP}
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      project_role_id = #{projectRoleId,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
   <!-- 根据项目id删除提醒内容子表 -->

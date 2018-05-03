@@ -37,6 +37,19 @@ public class RemindContent {
     /**
      * 提醒文本子内容
      */
+    
+    /**
+     * 角色id
+     */
+    private String projectRoleId;
+    public String getProjectRoleId() {
+        return projectRoleId;
+    }
+
+    public void setProjectRoleId(String projectRoleId) {
+        this.projectRoleId = projectRoleId;
+    }
+
     private List<RemindContentChild> remindContentChildList;
 
     public List<RemindContentChild> getRemindContentChildList() {
