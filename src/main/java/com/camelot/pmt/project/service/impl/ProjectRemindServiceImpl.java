@@ -169,4 +169,8 @@ public class ProjectRemindServiceImpl implements ProjectRemindService {
         }
         return null;
     }
+    @Override
+    public ProjectRemind queryProjectRemindByProIdAndUserRoleId(ProjectRemind remind){
+        return projectRemindMapper.queryByProjectRemind(remind);
+    }
 }

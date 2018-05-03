@@ -30,4 +30,5 @@ public interface ProjectRemindService {
      * @return
      */
     List<ProjectRemind> queryByProjectIdAndRemindStatus(Long projectId, String projectRoleId, String remindStatus);
+    ProjectRemind queryProjectRemindByProIdAndUserRoleId(ProjectRemind remind);
 }
