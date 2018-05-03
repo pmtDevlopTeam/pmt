@@ -57,6 +57,7 @@ public class RemindContentChild {
      * 角色id
      */
     private String projectRoleId;
+
     public String getProjectRoleId() {
         return projectRoleId;
     }
