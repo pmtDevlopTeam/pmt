@@ -28,11 +28,10 @@ public interface DictItemService {
     /**
      * 根据字典项dictItemId 删除一个字典项
      * 
-     * @param String
-     *            dictItemId
+     * @param DictItem dictItem
      * @return boolean
      */
-    boolean deleteDictItemByDictItemId(String dictItemId);
+    boolean deleteDictItemByDictItemId(DictItem dictItem);
 
     /**
      * 根据字典项dictItemId 修改一个字典项

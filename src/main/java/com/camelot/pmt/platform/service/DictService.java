@@ -26,11 +26,10 @@ public interface DictService {
     /**
      * 根据字典dictId 删除一个字典
      * 
-     * @param String
-     *            dictId
+     * @param Dict dict
      * @return boolean
      */
-    boolean deleteDictByDictId(String dictId);
+    boolean deleteDictByDictId(Dict dict);
 
     /**
      * 根据字典dictId 修改一个字典

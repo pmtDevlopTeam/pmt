@@ -5,9 +5,12 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import com.camelot.pmt.common.ExecuteResult;
+import com.camelot.pmt.platform.common.Modular;
+import com.camelot.pmt.platform.log.LogAspect;
 import com.camelot.pmt.platform.mapper.DictItemMapper;
 import com.camelot.pmt.platform.mapper.DictMapper;
 import com.camelot.pmt.platform.model.Dict;
@@ -30,6 +33,9 @@ public class DictServiceImpl implements DictService {
 
     @Autowired
     DictItemMapper dictItemMapper;
+    
+    @Autowired
+    private LogAspect logAspect;
 
     @Override
     public boolean addDict(Dict dict) {
@@ -37,58 +43,114 @@ public class DictServiceImpl implements DictService {
         dict.setDictId(uuid);
         long date = new Date().getTime();
         dict.setCreateTime(new Date(date));
-        return (dictMapper.addDict(dict) == 1) ? true : false;
+        int num = dictMapper.addDict(dict);
+        if(num == 1) {
+        	// 添加日志
+        	logAspect.insertAddLog(dict, Modular.DICT, dict.getCreateUserId());
+        	return true;
+        }else {
+        	return false;
+        }
     }
 
     @Override
-    public boolean deleteDictByDictId(String dictId) {
-        boolean flag = false;
-        int i = dictMapper.deleteDictByDictId(dictId);
-        dictMapper.deleteDictItemByDictId(dictId);
-        if (i == 1) {
-            flag = true;
+    public boolean deleteDictByDictId(Dict dict) {
+    	Dict dictObj = dictMapper.queryDictByDictId(dict.getDictId());
+        int num = dictMapper.deleteDictByDictId(dict.getDictId());
+        dictMapper.deleteDictItemByDictId(dict.getDictId());
+        if (num == 1) {
+        	// 添加日志
+        	logAspect.insertDeleteLog(Modular.DICT, dict.getModifyUserId(), dictObj.getDictName());
+            return true;
         }
-        return flag;
+        return false;
     }
 
     @Override
     public boolean updateDictByDictId(Dict dict) {
-        if (StringUtils.isEmpty(dict.getDictId())) {
-            return false;
-        }
+
         long date = new Date().getTime();
         dict.setModifyTime(new Date(date));
-        return (dictMapper.updateDictByDictId(dict) == 1) ? true : false;
+        Dict dictBefore = dictMapper.queryDictByDictId(dict.getDictId());
+        int num = dictMapper.updateDictByDictId(dict);
+        if(num == 1) {
+        	Dict dictAfter = dictMapper.queryDictByDictId(dict.getDictId());
+        	// 添加日志
+        	logAspect.insertUpdateLog(dictAfter, dictBefore, Modular.DICT, dict.getModifyUserId());
+        	return true;
+        }else {
+        	return false;
+        }
+        
     }
 
     @Override
     public boolean updateDictByDictIdAndState(Dict dict) {
-        if (StringUtils.isEmpty(dict.getDictId())) {
-            return false;
-        }
         long date = new Date().getTime();
         dict.setModifyTime(new Date(date));
-        return (dictMapper.updateDictByDictIdAndState(dict) == 1) ? true : false;
+        Dict dictBefore = dictMapper.queryDictByDictId(dict.getDictId());
+        int num = dictMapper.updateDictByDictIdAndState(dict);
+        if(num == 1) {
+        	Dict dictAfter = dictMapper.queryDictByDictId(dict.getDictId());
+        	// 添加日志
+        	logAspect.insertUpdateLog(dictAfter, dictBefore, Modular.DICT, dict.getModifyUserId());
+        	return true;
+        }else {
+        	return false;
+        }
+        
     }
 
     @Override
     public boolean updateDictOrDictItemByDictIdAndState(Dict dict) {
-        if (StringUtils.isEmpty(dict.getDictId())) {
-            return false;
-        }
-        long date = new Date().getTime();
+    	long date = new Date().getTime();
         dict.setModifyTime(new Date(date));
-        // 查询字典项List
-        List<DictItem> dictItemList = dictItemMapper.queryDictItemListByDictId(dict.getDictId());
-        for (DictItem dictItem : dictItemList) {
-            dictItem.setState(dict.getState());
-            dictItem.setModifyUserId(dict.getModifyUserId());
-            dictItem.setModifyTime(new Date(date));
-            dictItemMapper.updateDictItemByDictItemIdAndState(dictItem);
+        Dict dictBefore = dictMapper.queryDictByDictId(dict.getDictId());
+//        // 查询字典项List
+//        List<DictItem> dictItemList = dictItemMapper.queryDictItemListByDictId(dict.getDictId());
+//        for (DictItem dictItem : dictItemList) {
+//            dictItem.setState(dict.getState());
+//            dictItem.setModifyUserId(dict.getModifyUserId());
+//            dictItem.setModifyTime(new Date(date));
+//            dictItemMapper.updateDictItemByDictItemIdAndState(dictItem);
+//        }
+        int num = dictMapper.updateDictByDictIdAndState(dict);
+        if(num == 1) {
+        	Dict dictAfter = dictMapper.queryDictByDictId(dict.getDictId());
+        	// 添加日志
+        	logAspect.insertUpdateLog(dictAfter, dictBefore, Modular.DICT, dict.getModifyUserId());
+        	updateDictItemState(dict);
+        	return true;
+        }else {
+        	return false;
         }
-        return (dictMapper.updateDictByDictIdAndState(dict) == 1) ? true : false;
+        
     }
-
+    
+    private boolean updateDictItemState(Dict dict) {
+    	long date = new Date().getTime();
+    	// 查询字典项List
+    	List<DictItem> dictItemList = dictItemMapper.queryDictItemListByDictId(dict.getDictId());
+		if (CollectionUtils.isEmpty(dictItemList)) {
+			return true;
+		}else {
+	    	for (DictItem dictItem : dictItemList) {
+	    		DictItem dictItemBefore = dictItemMapper.queryDictItemByDictItemId(dictItem.getDictItemId());
+	            dictItem.setState(dict.getState());
+	            dictItem.setModifyUserId(dict.getModifyUserId());
+	            dictItem.setModifyTime(new Date(date));
+	            int num = dictItemMapper.updateDictItemByDictItemIdAndState(dictItem);
+	            if(num == 1) {
+		    		DictItem dictItemAfter = dictItemMapper.queryDictItemByDictItemId(dictItem.getDictItemId());
+	            	// 添加日志
+	            	logAspect.insertUpdateLog(dictItemAfter, dictItemBefore, Modular.DICTITEM, dict.getModifyUserId());
+	            }
+	        }
+	    	return true;
+		}
+		
+    }
+    
     @Override
     public Dict queryDictByDictId(String dictId) {
         Dict dict = dictMapper.queryDictByDictId(dictId);

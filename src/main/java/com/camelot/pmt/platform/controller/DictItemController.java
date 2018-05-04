@@ -90,7 +90,7 @@ public class DictItemController {
             // 检查字典是否存在
             Dict dict = dictService.queryDictByDictId(dictItem.getDictId());
             if (dict == null) {
-                result.setResult("字典不重复!");
+                result.setResult("字典为null!");
                 return ApiResponse.success(result.getResult());
             }
             // 检查字典项编码跟字典项名称是否唯一
@@ -121,13 +121,18 @@ public class DictItemController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "dictItemId", value = "字典dictItemId", required = true, paramType = "query", dataType = "String") })
     @RequestMapping(value = "/deleteDictItemByDictItemId", method = RequestMethod.POST)
-    public JSONObject deleteDictItemByDictItemId(@ApiIgnore String dictItemId) {
+    public JSONObject deleteDictItemByDictItemId(@ApiIgnore DictItem dictItem) {
         boolean flag = false;
         try {
-            if (StringUtils.isEmpty(dictItemId)) {
+            User user = (User) ShiroUtils.getSessionAttribute("user");
+            if (StringUtils.isEmpty(user.getUserId())) {
+                ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
+            }
+            if (StringUtils.isEmpty(dictItem.getDictItemId())) {
                 return ApiResponse.errorPara();
             }
-            flag = dictItemService.deleteDictItemByDictItemId(dictItemId);
+            dictItem.setModifyUserId(user.getUserId());
+            flag = dictItemService.deleteDictItemByDictItemId(dictItem);
             if (flag) {
                 return ApiResponse.success();
             }
@@ -162,10 +167,10 @@ public class DictItemController {
             if (StringUtils.isEmpty(user.getUserId())) {
                 ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
             }
-            dictItem.setModifyUserId(user.getUserId());
             if (StringUtils.isEmpty(dictItem.getDictItemId())) {
                 return ApiResponse.errorPara();
             }
+            dictItem.setModifyUserId(user.getUserId());
             // 检查字典项编码跟字典项名称是否唯一
             result = dictItemService.checkDictItemCodeOrDictItemNameIsExistUpdate(dictItem);
             // 如果字典项编码跟字典项名称唯一
@@ -203,10 +208,10 @@ public class DictItemController {
             if (StringUtils.isEmpty(user.getUserId())) {
                 ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
             }
-            dictItem.setModifyUserId(user.getUserId());
             if (StringUtils.isEmpty(dictItem.getDictItemId()) || StringUtils.isEmpty(dictItem.getState())) {
                 return ApiResponse.jsonData(APIStatus.ERROR_400);
             }
+            dictItem.setModifyUserId(user.getUserId());
             flag = dictItemService.updateDictItemByDictItemIdAndState(dictItem);
             if (flag) {
                 return ApiResponse.success();

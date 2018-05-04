@@ -18,7 +18,6 @@ public class Dict implements Serializable {
     /**
      * 默认索引 不可作用于业务
      */
-    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
     /**
      * 字典唯一32位UUID

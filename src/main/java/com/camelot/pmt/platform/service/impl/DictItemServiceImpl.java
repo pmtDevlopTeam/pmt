@@ -13,6 +13,8 @@ import org.springframework.util.StringUtils;
 import com.camelot.pmt.common.DataGrid;
 import com.camelot.pmt.common.ExecuteResult;
 import com.camelot.pmt.common.Pager;
+import com.camelot.pmt.platform.common.Modular;
+import com.camelot.pmt.platform.log.LogAspect;
 import com.camelot.pmt.platform.mapper.DictItemMapper;
 import com.camelot.pmt.platform.model.Dict;
 import com.camelot.pmt.platform.model.DictItem;
@@ -32,6 +34,9 @@ public class DictItemServiceImpl implements DictItemService {
 
     @Autowired
     DictItemMapper dictItemMapper;
+    
+    @Autowired
+    private LogAspect logAspect;
 
     @Override
     public boolean addDictItem(DictItem dictItem) {
@@ -39,27 +44,43 @@ public class DictItemServiceImpl implements DictItemService {
         dictItem.setDictItemId(uuid);
         long date = new Date().getTime();
         dictItem.setCreateTime(new Date(date));
-        return (dictItemMapper.addDictItem(dictItem) == 1) ? true : false;
+        int num = dictItemMapper.addDictItem(dictItem);
+        if(num == 1) {
+        	// 添加日志
+        	logAspect.insertAddLog(dictItem, Modular.DICTITEM, dictItem.getCreateUserId());
+        	return true;
+        }else {
+        	return false;
+        }
     }
 
     @Override
-    public boolean deleteDictItemByDictItemId(String dictItemId) {
-        boolean flag = false;
-        int i = dictItemMapper.deleteDictItemByDictItemId(dictItemId);
-        if (i == 1) {
-            flag = true;
+    public boolean deleteDictItemByDictItemId(DictItem dictItem) {
+    	DictItem dictItemObj = dictItemMapper.queryDictItemByDictItemId(dictItem.getDictItemId());
+        int num = dictItemMapper.deleteDictItemByDictItemId(dictItem.getDictItemId());
+        if (num == 1) {
+        	// 添加日志
+        	logAspect.insertDeleteLog(Modular.DICTITEM, dictItem.getModifyUserId(), dictItemObj.getDictItemName());
+        	return true;
         }
-        return flag;
+        return false;
     }
 
     @Override
     public boolean updateDictItemByDictItemId(DictItem dictItem) {
-        if (StringUtils.isEmpty(dictItem.getDictItemId())) {
-            return false;
-        }
+
         long date = new Date().getTime();
         dictItem.setModifyTime(new Date(date));
-        return (dictItemMapper.updateDictItemByDictItemId(dictItem) == 1) ? true : false;
+        DictItem dictItemBefore = dictItemMapper.queryDictItemByDictItemId(dictItem.getDictItemId() );
+        int num = dictItemMapper.updateDictItemByDictItemId(dictItem);
+        if(num == 1) {
+        	DictItem dictItemAfter = dictItemMapper.queryDictItemByDictItemId(dictItem.getDictItemId() );
+        	// 添加日志
+        	logAspect.insertUpdateLog(dictItemAfter, dictItemBefore, Modular.DICTITEM, dictItem.getModifyUserId() );
+        	return true;
+        }else {
+        	return false;
+        }
     }
 
     @Override
@@ -69,7 +90,16 @@ public class DictItemServiceImpl implements DictItemService {
         }
         long date = new Date().getTime();
         dictItem.setModifyTime(new Date(date));
-        return (dictItemMapper.updateDictItemByDictItemIdAndState(dictItem) == 1) ? true : false;
+        DictItem dictItemBefore = dictItemMapper.queryDictItemByDictItemId(dictItem.getDictItemId());
+        int num = dictItemMapper.updateDictItemByDictItemIdAndState(dictItem);
+        if(num == 1) {
+        	DictItem dictItemAfter = dictItemMapper.queryDictItemByDictItemId(dictItem.getDictItemId());
+        	// 添加日志
+        	logAspect.insertUpdateLog(dictItemAfter, dictItemBefore, Modular.DICTITEM, dictItem.getModifyUserId());
+        	return true;
+        }else {
+        	return false;
+        }
     }
 
     @Override

@@ -98,21 +98,25 @@ public class DictController {
     /**
      * 根据一个字典dictId 删除一个字典
      * 
-     * @param String
-     *            dictId
+     * @param Dict dict
      * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
     @ApiOperation(value = "删除字典接口", notes = "删除单个字典")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "dictId", value = "字典dictId", required = true, paramType = "query", dataType = "String") })
+            @ApiImplicitParam(name = "dictId", value = "字典dictId", required = true, paramType = "form", dataType = "String") })
     @RequestMapping(value = "/deleteDictByDictId", method = RequestMethod.POST)
-    public JSONObject deleteDictByDictId(@ApiIgnore String dictId) {
+    public JSONObject deleteDictByDictId(@ApiIgnore Dict dict) {
         boolean flag = false;
         try {
-            if (StringUtils.isEmpty(dictId)) {
+            User user = (User) ShiroUtils.getSessionAttribute("user");
+            if (StringUtils.isEmpty(user.getUserId())) {
+                ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
+            }
+            if (StringUtils.isEmpty(dict.getDictId())) {
                 return ApiResponse.errorPara();
             }
-            flag = dictService.deleteDictByDictId(dictId);
+            dict.setModifyUserId(user.getUserId());
+            flag = dictService.deleteDictByDictId(dict);
             if (flag) {
                 return ApiResponse.success();
             }
@@ -127,8 +131,7 @@ public class DictController {
     /**
      * 根据一个字典对象 修改一个字典
      * 
-     * @param Dict
-     *            dict
+     * @param Dict dict
      * @return JSONObject {"status":{"code":xxx,"message":"xxx"},"data":{xxx}}
      */
     @ApiOperation(value = "修改字典接口", notes = "修改单个字典")
@@ -147,11 +150,11 @@ public class DictController {
             if (StringUtils.isEmpty(user.getUserId())) {
                 ApiResponse.jsonData(APIStatus.UNAUTHORIZED_401);
             }
-            dict.setModifyUserId(user.getUserId());
             if (StringUtils.isEmpty(dict.getDictCode()) || StringUtils.isEmpty(dict.getDictType())
                     || StringUtils.isEmpty(dict.getDictName()) || StringUtils.isEmpty(dict.getDictId())) {
                 return ApiResponse.errorPara();
             }
+            dict.setModifyUserId(user.getUserId());
             // 检查字典编码跟字典名称是否唯一
             result = dictService.checkDictCodeOrDictNameIsExistUpdate(dict);
             // 如果字典编码跟字典名称唯一

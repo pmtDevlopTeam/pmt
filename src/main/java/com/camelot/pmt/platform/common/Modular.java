@@ -7,5 +7,7 @@ public class Modular {
     public final static String ORGTOUSER = "部门绑定用户";
     public final static String USER = "用户";
     public final static String MAIL_SUBJECT = "PMT项目管理系统账号激活信息";
+    public final static String DICT = "字典";
+    public final static String DICTITEM = "字典项";
 
 }
